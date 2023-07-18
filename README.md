@@ -4,18 +4,57 @@ Provides bonuses to various types of rolls. Some of these are for variable chang
 
 Supports PF1 v9+
 
-### Skill Bonuses
-![image](https://user-images.githubusercontent.com/3664822/183241183-9f899996-6f2a-455a-a711-054039365d31.png)
+### Armor Focus
+// todo
 
-On the skills tab in the top right is a button for modifying your base inspiration die. It defaults to `1d6[Inspiration]`, it's modifiable here because investigators get the option of changing it to a d8 later, or even rolling twice and taking the higher.
+### Caster Level Offset for specified Magic School
+Has a formula input which accepts roll data variables plus a dropdown for selecting the school of magic.
+- You must add a dictionary flag `schoolClOffset` to your buff/feature/etc. Once you add that, the inputs will show up below.
 
-To the right of each skill there's now a cog you can click that will open a menu:
+### Critical Helpers
+Attack's critical variables can now be dynamically adjusted. Crit can be modified with keen. It can also be modified by a static amount to account for certain 3.5 classes or other homebrew. The critical multipler can also be adjusted--this is useful for a Swashbuckler's capstone ability (and any homebrew that needs it).
 
-- Override the base die (only thing I know of that does this is the `Empathy` investigator talent that let's them roll twice and keep the higher, but there could be something else out there, or any homebrew rules)
-- Bonus is for any other permanent bonuses you have that need a die roll
-- the checkbox reads the global skill config inspiration value
+<details>
+  <summary>How to customize crit range or multiplier (click to expand)</summary>
 
-If you have static bonuses, use the built in change system -- this is only necessary to cover a limitation in that you can't have changes based on die rolls -- they're cachced when the buff is turned on. So if you have a 1d6 in a change, and turn the buff on, then it rolls immediately when you turn the buff on and keeps that specific value until the buff is toggled later.
+  #### Keen - boolean flag
+  * `keen-self`
+    * place this flag on an attack/weapon/item/spell/etc. Any action for this Item will have its crit range doubled.
+  * `keen-all`
+    * place this flag on anything in your character to double the crit range of any action
+  * `keen_<id>`
+    * e.g. `keen_7hAXCo6sYfpIqeli`
+    * Place this flag on anything, then when you use either the Item or Action associated with the id, it will be keen
+    * This is useful for when you have a temporary buff that grants a specific weapon Keen
+
+  #### Crit target modifications (dictionary flag)
+  Positive numbers are good, so having a `3` will mean your "crits only on a 20" weapon will now crit on "17 or higher"
+  * `crit-offset-self`
+  * `crit-offset-all`
+  * `crit-offset_<id>`
+    * e.g. `crit-offset_7hAXCo6sYfpIqeli`
+    * individual descriptions same as keen described above
+    * The value of the dictionary flags can be either a number or a formula
+    * if something is effect by both crit-offset and keen, then keen is applied first before an extra crit-offset is applied
+
+  #### Crit multipliers (dictionary flag)
+  * `crit-mult-offset-self`
+  * `crit-mult-offset-all`
+  * `crit-mult-offset_<id>`
+    * e.g. `crit-mult-offset_7hAXCo6sYfpIqeli`
+    * individual descriptions same as keen described above
+    * The value of the dictionary flags can be either a number or a formula
+
+</details>
+
+### Elemental Focus
+Follows the same basic setup as Spell Focus above.
+- You can manually configure it by setting a flag on the feat with a key of `elementalFocus`, `greaterElementalFocus`, or `mythicElementalFocus` and the mod will automatically add the inputs for you below the dictionary flags section.
+- The accepted values are `acid`, `cold`, `electric`, or `fire`.
+- The damage for the spell you're casting must be configured using one of the system's predefined types.
+
+### Fate's Favored
+You can now configure the popular trait `Fate's Favored` to increase luck bonuses. To configure, just add a boolean flag `fatesFavored` to your trait (or any other Item) and it will automatically increase any luck bonuses received from any other Change by 1.
 
 ### Fortune and Misfortune
 ![image](https://github.com/dmrickey/ckl-foundry-modules/assets/3664822/66d2135b-27e4-44de-8098-f6a5ed4572df)
@@ -97,6 +136,25 @@ Fortune and Misfortune can now be added as flags onto your buffs, feats, abiliti
 
 </details>
 
+### Martial Focus
+// todo
+
+### Skill Bonuses
+![image](https://user-images.githubusercontent.com/3664822/183241183-9f899996-6f2a-455a-a711-054039365d31.png)
+
+On the skills tab in the top right is a button for modifying your base inspiration die. It defaults to `1d6[Inspiration]`, it's modifiable here because investigators get the option of changing it to a d8 later, or even rolling twice and taking the higher.
+
+To the right of each skill there's now a cog you can click that will open a menu:
+
+- Override the base die (only thing I know of that does this is the `Empathy` investigator talent that let's them roll twice and keep the higher, but there could be something else out there, or any homebrew rules)
+- Bonus is for any other permanent bonuses you have that need a die roll
+- the checkbox reads the global skill config inspiration value
+
+If you have static bonuses, use the built in change system -- this is only necessary to cover a limitation in that you can't have changes based on die rolls -- they're cachced when the buff is turned on. So if you have a 1d6 in a change, and turn the buff on, then it rolls immediately when you turn the buff on and keeps that specific value until the buff is toggled later.
+
+### Spell DC Bonuses (and penalties)
+Add a new dFlag on any item named `genericSpellDC`, then drop in a number (positive or negative) or a formula and when you next cast a spell on that Actor the DC should be adjusted accordingly.
+
 ### Spell Focus
 ![image](https://user-images.githubusercontent.com/3664822/216522228-0968c234-3b89-47c0-b0e9-addf9accad34.png)
 
@@ -107,60 +165,8 @@ Spell Focus, Greater Spell Focus, and Mythic Spell Focus now all have a drop dow
 - Greater and Mythic options in the dropdown are limited by choices you've made for spell focus. If you want to get around that dropdown limitation, the flag can be manually added per above.
 - Because of a bug in pf1 0.82.5, the save button on the chat card will show the correct DC, but the info note at the bottom of the chat card will your base DC -- this is the same bug that happens if you use a conditional modifier to increase an individual spell's DC.
 
-### Elemental Focus
-Follows the same basic setup as Spell Focus above.
-- You can manually configure it by setting a flag on the feat with a key of `elementalFocus`, `greaterElementalFocus`, or `mythicElementalFocus` and the mod will automatically add the inputs for you below the dictionary flags section.
-- The accepted values are `acid`, `cold`, `electric`, or `fire`.
-- The damage for the spell you're casting must be configured using one of the system's predefined types.
-
-### Spell DC Bonuses (and penalties)
-Add a new dFlag on any item named `genericSpellDC`, then drop in a number (positive or negative) or a formula and when you next cast a spell on that Actor the DC should be adjusted accordingly.
-
-### Caster Level Offset for specified Magic School
-Has a formula input which accepts roll data variables plus a dropdown for selecting the school of magic.
-- You must add a dictionary flag `schoolClOffset` to your buff/feature/etc. Once you add that, the inputs will show up below.
-
-### Critical Helpers
-Attack's critical variables can now be dynamically adjusted. Crit can be modified with keen. It can also be modified by a static amount to account for certain 3.5 classes or other homebrew. The critical multipler can also be adjusted--this is useful for a Swashbuckler's capstone ability (and any homebrew that needs it).
-
-<details>
-  <summary>How to customize crit range or multiplier (click to expand)</summary>
-
-  #### Keen - boolean flag
-  * `keen-self`
-    * place this flag on an attack/weapon/item/spell/etc. Any action for this Item will have its crit range doubled.
-  * `keen-all`
-    * place this flag on anything in your character to double the crit range of any action
-  * `keen_<id>`
-    * e.g. `keen_7hAXCo6sYfpIqeli`
-    * Place this flag on anything, then when you use either the Item or Action associated with the id, it will be keen
-    * This is useful for when you have a temporary buff that grants a specific weapon Keen
-
-  #### Crit target modifications (dictionary flag)
-  #### Positive numbers are good, so having a `3` will mean your "crits only on a 20" weapon will now crit on "17 or higher"
-  * `crit-offset-self`
-  * `crit-offset-all`
-  * `crit-offset_<id>`
-    * e.g. `crit-offset_7hAXCo6sYfpIqeli`
-    * individual descriptions same as keen described above
-    * The value of the dictionary flags can be either a number or a formula
-    * if something is effect by both crit-offset and keen, then keen is applied first before an extra crit-offset is applied
-
-  #### Crit multipliers (dictionary flag)
-  * `crit-mult-offset-self`
-  * `crit-mult-offset-all`
-  * `crit-mult-offset_<id>`
-    * e.g. `crit-mult-offset_7hAXCo6sYfpIqeli`
-    * individual descriptions same as keen described above
-    * The value of the dictionary flags can be either a number or a formula
-
-</details>
-
-### Fate's Favored
-You can now configure the popular trait `Fate's Favored` to increase luck bonuses. To configure, just add a boolean flag `fatesFavored` to your trait (or any other Item) and it will automatically increase any luck bonuses received from any other Change by 1.
-
 ### Versatile Performance
-// be sure to include key, and pictures of configurations
+// todo be sure to include key, and pictures of configurations
 
 ### Weapon Focus
 // todo
