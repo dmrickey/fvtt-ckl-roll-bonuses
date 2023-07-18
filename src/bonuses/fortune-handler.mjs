@@ -147,11 +147,14 @@ const handleFortune = (
     }
 };
 
-const handleInitiative = (
-    /** @type {ActorPF} */ actor,
-    /** @type {string} */ formula,
-) => {
+/**
+ * @param {string} formula
+ * @this {CombatantPF}
+ * @returns
+ */
+function handleInitiative(formula) {
     formula ||= '1d20';
+    const actor = this.actor;
 
     /** BEGIN OVERRIDE */
     // this gets the original formula before "extra" stuff that's this base method adds in case something else is wrapping this method
@@ -189,7 +192,9 @@ const handleInitiative = (
     return parts.filter((p) => p !== null).join(" + ");
 };
 
-Hooks.once('setup', () => libWrapper.register(MODULE_NAME, 'pf1.documents.CombatPF.prototype._getInitiativeFormula', handleInitiative, libWrapper.OVERRIDE));
+Hooks.on('pf1PostReady', () => {
+    Hooks.once('setup', () => libWrapper.register(MODULE_NAME, 'pf1.documents.CombatantPF.prototype._getInitiativeFormula', handleInitiative, libWrapper.OVERRIDE));
+});
 
 // item use does not fire through this hook, so it needs its own dice handling below
 Hooks.on(localHooks.d20Roll, ( /** @type {{ dice?: any; fortuneCount: any; misfortuneCount: any; actionID?: any; }} */ options) => handleFortune(options));
@@ -238,7 +243,7 @@ Hooks.on(localHooks.itemUse, (
             break;
     }
 
-    const count = countBFlags(item.parent?.items, ...fortunesToFind, ...misfortunesToFind);
+    const count = countBFlags(item.actor?.items, ...fortunesToFind, ...misfortunesToFind);
 
     fortunesToFind.forEach((f) => options.fortuneCount += count[f]);
     misfortunesToFind.forEach((f) => options.misfortuneCount += count[f]);
@@ -265,7 +270,7 @@ Hooks.on('pf1PreActorRollSkill', (
     misfortuneCount += count[`${skillMisfortune}_${skillId}`];
 
     options.fortuneCount = fortuneCount;
-    options.misfortuneCount = misfortuneCount;;
+    options.misfortuneCount = misfortuneCount;
 });
 
 Hooks.on('pf1PreActorRollAttack', (
@@ -296,7 +301,7 @@ Hooks.on('pf1PreActorRollAttack', (
     misfortuneCount += count[rangeMisfortune];
 
     options.fortuneCount = fortuneCount;
-    options.misfortuneCount = misfortuneCount;;
+    options.misfortuneCount = misfortuneCount;
 });
 
 Hooks.on('pf1PreActorRollBab', (
@@ -314,13 +319,13 @@ Hooks.on('pf1PreActorRollBab', (
     misfortuneCount += count[babMisfortune];
 
     options.fortuneCount = fortuneCount;
-    options.misfortuneCount = misfortuneCount;;
+    options.misfortuneCount = misfortuneCount;
 });
 
 Hooks.on('pf1PreActorRollCl', (
     /** @type {{ items: EmbeddedCollection<ItemPF>; }} */ actor,
+    /** @type {{ rollData: RollData; fortuneCount: number; misfortuneCount: number; }} */ options,
     /** @type {string | number} */ bookId,
-    /** @type {{ rollData: RollData; fortuneCount: number; misfortuneCount: number; }} */ options
 ) => {
     let fortuneCount = 0;
     let misfortuneCount = 0;
@@ -344,7 +349,7 @@ Hooks.on('pf1PreActorRollCl', (
     idMisfortunes.forEach((id) => misfortuneCount += count[id]);
 
     options.fortuneCount = fortuneCount;
-    options.misfortuneCount = misfortuneCount;;
+    options.misfortuneCount = misfortuneCount;
 });
 
 Hooks.on('pf1PreActorRollConcentration', (
@@ -374,7 +379,7 @@ Hooks.on('pf1PreActorRollConcentration', (
     idMisfortunes.forEach((id) => misfortuneCount += count[id]);
 
     options.fortuneCount = fortuneCount;
-    options.misfortuneCount = misfortuneCount;;
+    options.misfortuneCount = misfortuneCount;
 });
 
 const handleAbility = (
@@ -396,14 +401,9 @@ const handleAbility = (
     misfortuneCount += count[`${abilityMisfortune}_${ability}`];
 
     options.fortuneCount = fortuneCount;
-    options.misfortuneCount = misfortuneCount;;
+    options.misfortuneCount = misfortuneCount;
 };
-// Hooks.on('pf1PreActorRollAbility', handleAbility); // does not work in 0.82.5
-Hooks.on(localHooks.rollAbilityTest, (
-    /** @type {ActorPF} */ actor,
-    /** @type {keyof Abilities} */ abilityId,
-    /** @type {{ fortuneCount: number; misfortuneCount: number; }} */ options,
-) => handleAbility(actor, options, abilityId));
+Hooks.on('pf1PreActorRollAbility', handleAbility);
 
 const handleCmb = (
     /** @type {{ items: EmbeddedCollection<ItemPF>; }} */ actor,
@@ -424,10 +424,9 @@ const handleCmb = (
     misfortuneCount += count[cmbMisfortune];
 
     options.fortuneCount = fortuneCount;
-    options.misfortuneCount = misfortuneCount;;
+    options.misfortuneCount = misfortuneCount;
 };
-// Hooks.on('pf1PreActorRollCmb', handleCmb); // does not work in 0.82.5
-Hooks.on(localHooks.rollCMB, handleCmb);
+Hooks.on('pf1PreActorRollCmb', handleCmb);
 
 const handleSavingThrow = (
     /** @type {ActorPF} */ actor,
@@ -448,11 +447,6 @@ const handleSavingThrow = (
     misfortuneCount += count[`${saveMisfortune}_${savingThrowId}`];
 
     options.fortuneCount = fortuneCount;
-    options.misfortuneCount = misfortuneCount;;
+    options.misfortuneCount = misfortuneCount;
 };
-// Hooks.on('pf1PreActorRollSave', handleSavingThrow); // does not work in 0.82.5
-Hooks.on(localHooks.rollSavingThrow, (
-    /** @type {ActorPF} */ actor,
-    /** @type {keyof SavingThrows} */ savingThrowId,
-    /** @type {{ fortuneCount: number; misfortuneCount: number; }} */ options,
-) => handleSavingThrow(actor, options, savingThrowId));
+Hooks.on('pf1PreActorRollSave', handleSavingThrow);

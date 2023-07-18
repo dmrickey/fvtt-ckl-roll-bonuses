@@ -1,10 +1,9 @@
-import { getDocDFlags } from "../util/flag-helpers.mjs";
-import { registerItemHint } from "../util/item-hints.mjs";
-import { localize } from "../util/localize.mjs";
+import { getDocDFlags } from "../../util/flag-helpers.mjs";
+import { registerItemHint } from "../../util/item-hints.mjs";
+import { localize } from "../../util/localize.mjs";
 
 const key = 'genericSpellDC'
 
-// register keen
 registerItemHint((hintcls, actor, item, _data) => {
     const flag = item.getItemDictionaryFlag(key);
     if (!flag) {

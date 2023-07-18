@@ -1,9 +1,10 @@
-import { MODULE_NAME } from "../consts.mjs";
-import { addElementToRollBonus } from "../roll-bonus-on-actor-sheet.mjs";
-import { getDocDFlags } from "../util/flag-helpers.mjs";
-import { registerItemHint } from "../util/item-hints.mjs";
-import { registerSetting } from "../util/settings.mjs";
-import { truthiness } from "../util/truthiness.mjs";
+import { MODULE_NAME } from "../../consts.mjs";
+import { addNodeToRollBonus } from "../../roll-bonus-on-actor-sheet.mjs";
+import { intersects } from "../../util/array-intersects.mjs";
+import { getDocDFlags } from "../../util/flag-helpers.mjs";
+import { registerItemHint } from "../../util/item-hints.mjs";
+import { registerSetting } from "../../util/settings.mjs";
+import { truthiness } from "../../util/truthiness.mjs";
 
 const elementalFocusKey = 'elementalFocus';
 const greaterElementalFocusKey = 'greaterElementalFocus';
@@ -35,19 +36,6 @@ const damageElements = [
 ];
 
 /**
- *
- * @param {any[]} a
- * @param {any[]} b
- * @returns True if both arrays share a common element
- */
-const intersects = (a, b) => {
-    const setA = new Set(a);
-    const setB = new Set(b);
-    const overlap = [...setA].filter(x => setB.has(x));
-    return !!overlap.length;
-}
-
-/**
  * @type {Handlebars.TemplateDelegate}
  */
 let focusSelectorTemplate;
@@ -64,7 +52,10 @@ Hooks.on('pf1PreActionUse', (/** @type {ActionUse} */actionUse) => {
     }
 
     const damageTypes = action.data.damage.parts
-        .flatMap(([_, { custom, values }]) => ([...custom.split(';').map(x => x.trim()), ...values]))
+        // @ts-ignore
+        .map(({ type }) => type)
+        // @ts-ignore
+        .flatMap(({ custom, values }) => ([...custom.split(';').map(x => x.trim()), ...values]))
         .filter(truthiness);
 
     const handleFocus = (/** @type {string} */key) => {
@@ -97,7 +88,7 @@ Hooks.on('renderItemSheet', (
      * @type {string | undefined}
      */
     let key;
-    let elements = Object.fromEntries(damageElements.map(k => [k, pf1.config.damageTypes[k]]));;
+    let elements = Object.fromEntries(damageElements.map(k => [k, pf1.registry.damageTypes.get(k)]));
 
     if (name.includes(Settings.elementalFocus) || item?.flags.core?.sourceId.includes(elementalFocusId)) {
         key = elementalFocusKey;
@@ -117,7 +108,7 @@ Hooks.on('renderItemSheet', (
             // @ts-ignore
             const /** @type {string[]}*/ existingElementalFocuses = getDocDFlags(actor, elementalFocusKey);
             existingElementalFocuses.forEach((focus) => {
-                elements[focus] = pf1.config.damageTypes[focus];
+                elements[focus] = pf1.registry.damageTypes.get(focus);
             });
         }
     }
@@ -132,7 +123,11 @@ Hooks.on('renderItemSheet', (
 
     const currentElement = getDocDFlags(item, key)[0];
 
-    const templateData = { elements, element: currentElement };
+    if (Object.keys(elements).length && !currentElement) {
+        item.setItemDictionaryFlag(key, Object.keys(elements)[0]);
+    }
+
+    const templateData = { elements, currentElement };
 
     const div = document.createElement('div');
     div.innerHTML = focusSelectorTemplate(templateData, { allowProtoMethodsByDefault: true, allowProtoPropertiesByDefault: true });
@@ -149,7 +144,7 @@ Hooks.on('renderItemSheet', (
         },
     );
 
-    addElementToRollBonus(html, div);
+    addNodeToRollBonus(html, div);
 });
 
 registerItemHint((hintcls, _actor, item, _data) => {
@@ -163,8 +158,8 @@ registerItemHint((hintcls, _actor, item, _data) => {
         return;
     }
 
-    const label = pf1.config.damageTypes[currentElement] ?? currentElement;
+    const label = pf1.registry.damageTypes.get(`${currentElement}`) ?? currentElement;
 
-    const hint = hintcls.create(label, [], {});
+    const hint = hintcls.create(label.name, [], {});
     return hint;
 });

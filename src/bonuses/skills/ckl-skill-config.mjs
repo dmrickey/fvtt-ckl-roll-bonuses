@@ -1,5 +1,5 @@
-import { MODULE_NAME } from "../consts.mjs";
-import { localize } from "../util/localize.mjs";
+import { MODULE_NAME } from "../../consts.mjs";
+import { localize } from "../../util/localize.mjs";
 
 export class CklSkillConfig {
     static _inspiriationDieKey = 'inspiriationDie';

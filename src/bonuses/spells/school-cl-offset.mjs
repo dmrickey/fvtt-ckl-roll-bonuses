@@ -1,7 +1,7 @@
-import { MODULE_NAME } from "../consts.mjs";
-import { addElementToRollBonus } from "../roll-bonus-on-actor-sheet.mjs";
-import { getDocDFlags, KeyedDFlagHelper } from "../util/flag-helpers.mjs";
-import { registerItemHint } from "../util/item-hints.mjs";
+import { MODULE_NAME } from "../../consts.mjs";
+import { addNodeToRollBonus } from "../../roll-bonus-on-actor-sheet.mjs";
+import { getDocDFlags, KeyedDFlagHelper } from "../../util/flag-helpers.mjs";
+import { registerItemHint } from "../../util/item-hints.mjs";
 
 const schoolClOffset = 'schoolClOffset';
 const schoolClOffsetFormula = 'schoolClOffsetFormula';
@@ -19,7 +19,7 @@ Hooks.once(
 );
 
 Hooks.on('pf1GetRollData', (
-    /** @type {Action} */ action,
+    /** @type {ItemAction} */ action,
     /** @type {RollData} */ rollData
 ) => {
     if (!(action instanceof pf1.components.ItemAction)) {
@@ -27,7 +27,7 @@ Hooks.on('pf1GetRollData', (
     }
 
     const item = action?.item;
-    if (item?.type !== 'spell' || !item.system?.school || !rollData) {
+    if (!(item instanceof pf1.documents.item.ItemSpellPF) || item?.type !== 'spell' || !item.system?.school || !rollData) {
         return;
     }
 
@@ -40,11 +40,12 @@ Hooks.on('pf1GetRollData', (
         return;
     }
 
-    const offsetCl = (/** @type {number} */ value) => {
-        if (rollData.hasOwnProperty('cl')) {
-            rollData.cl ||= 0;
-            rollData.cl += value;
-        }
+    /**
+     * @param {number} value
+     */
+    const offsetCl = (value) => {
+        rollData.cl ||= 0;
+        rollData.cl += value;
     }
 
     const values = matches.map((x) => +x[schoolClOffsetTotal] || 0);
@@ -82,7 +83,11 @@ Hooks.on('renderItemSheet', (
     const currentSchool = getDocDFlags(item, schoolClOffset)[0];
     const formula = getDocDFlags(item, schoolClOffsetFormula)[0];
 
-    const templateData = { spellSchools, school: currentSchool, formula };
+    if (Object.keys(spellSchools).length && !currentSchool) {
+        item.setItemDictionaryFlag(schoolClOffset, Object.keys(spellSchools)[0]);
+    }
+
+    const templateData = { spellSchools, currentSchool, formula };
 
     const div = document.createElement('div');
     div.innerHTML = clOffsetTemplate(templateData, { allowProtoMethodsByDefault: true, allowProtoPropertiesByDefault: true });
@@ -110,7 +115,7 @@ Hooks.on('renderItemSheet', (
         },
     );
 
-    addElementToRollBonus(html, div);
+    addNodeToRollBonus(html, div);
 });
 
 registerItemHint((hintcls, _actor, item, _data) => {

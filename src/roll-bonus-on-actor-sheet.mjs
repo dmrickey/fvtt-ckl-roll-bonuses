@@ -1,8 +1,8 @@
 import { localize } from "./util/localize.mjs";
 
-const headerId = 'ckl-roll-bonus-header';
+const containerId = 'ckl-roll-bonus-container';
 
-const addElementToRollBonus = (
+const addNodeToRollBonus = (
     /** @type {HTMLElement} */ itemSheetHtml,
     /** @type {HTMLDivElement} */ element,
 ) => {
@@ -11,21 +11,26 @@ const addElementToRollBonus = (
         return;
     }
 
-    let header = itemSheetHtml.querySelector(`#${headerId}`);
-    if (!header) {
-        header = document.createElement('h3');
-        header.textContent = localize('rollBonuses');
+    let container = itemSheetHtml.querySelector(`#${containerId}`);
+    if (!container) {
+        container = document.createElement('div');
+        container.id = containerId;
+
+        const header = document.createElement('h3');
+        header.textContent = localize('roll-bonuses');
         header.classList.add('form-header');
-        header.id = headerId;
 
         const icon = document.createElement('i');
         icon.classList.add('fal', 'fa-dice-d20');
 
         header.prepend(icon);
-        flagsContainer.after(header);
+
+        container.appendChild(header);
+
+        flagsContainer.after(container);
     }
 
-    header.after(element);
+    container.appendChild(element);
 }
 
-export { addElementToRollBonus };
+export { addNodeToRollBonus };

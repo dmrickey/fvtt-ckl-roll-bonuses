@@ -156,3 +156,9 @@ Attack's critical variables can now be dynamically adjusted. Crit can be modifie
 
 ## Fate's Favored
 You can now configure the popular trait `Fate's Favored` to increase luck bonuses. To configure, just add a boolean flag `fatesFavored` to your trait (or any other Item) and it will automatically increase any luck bonuses received from any other Change by 1.
+
+## Versatile Performance
+// be sure to include key, and pictures of configurations
+
+## Weapon Focus
+// todo

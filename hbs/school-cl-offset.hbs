@@ -4,9 +4,9 @@
         <input type="text" class="formula" value="{{formula}}" id="school-cl-offset-formula"
             placeholder="{{localize PF1.Formula}}" />
         <select name="school" id="school-cl-offset">
-            {{#select school}}
-            {{#each spellSchools as |name sch|}}
-            <option value="{{sch}}">{{name}}</option>
+            {#select currentSchool}
+            {{#each spellSchools as |name key|}}
+            <option value="{{key}}">{{name}}</option>
             {{/each}}
             {{/select}}
         </select>
