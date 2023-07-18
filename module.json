@@ -28,9 +28,8 @@
                 "type": "system",
                 "manifest": "https://gitlab.com/foundryvtt_pathfinder1e/foundryvtt-pathfinder1/-/releases/permalink/latest/downloads/system.json",
                 "compatibility": {
-                    "minimum": "0.82",
-                    "verified": "0.82.5",
-                    "maximum": "0.82.5"
+                    "minimum": "9.0",
+                    "verified": "9.0"
                 }
             }
         ],
