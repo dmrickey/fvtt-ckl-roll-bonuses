@@ -184,16 +184,24 @@ Spell Focus, Greater Spell Focus, and Mythic Spell Focus now all have a drop dow
 Choose your perform. Choose the two skills it replaces. Whenever you roll those skills they'll automatically use your perform skill.
 
 <details>
-  <summary>How to configure `Versatile PerformanceFocus` (click to expand)</summary>
+  <summary>How to configure Versatile PerformanceFocus (click to expand)</summary>
+
+  - The input will automatically be added for any ability named `Versatile Performance`
+    - This is configurable in the settings for different translations
+    - If it doesn't show up (or you want to use this on a different ability), you can add the dictionary flag `versatile-performance` and the inputs will automatically be added
+  - To configure
+    - choose the perform skill you want to use in the first input
+    - choose the two skills in the next two inputs
+  - This adds a music note icon in the skills list next to the skills that are replaced
+    - You can click on the music note to disable the "perform override" and roll the skill normally. Clicking again resumes the versatile performance functionality.
 
 </details>
-
 
 ## Weapon Focus
 Automatically add +1 to attack rolls to weapons with `Weapon Focus`. Inclues `Greater Weapon Focus` and `Gnomish Weapon Focus`.
 
 <details>
-  <summary>How to configure `Weapon Focus` (click to expand)</summary>
+  <summary>How to configure Weapon Focus (click to expand)</summary>
 
   #### Weapon Focus
   Adds +1 to hit to the chosen weapon types.
