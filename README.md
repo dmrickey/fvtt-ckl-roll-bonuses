@@ -256,7 +256,7 @@ Choose your perform. Choose the two skills it replaces. Whenever you roll those 
 </details>
 
 ## Weapon Focus
-Automatically add +1 to attack rolls to weapons with `Weapon Focus`. Inclues `Greater Weapon Focus` and `Gnomish Weapon Focus`.
+Automatically add +1 to attack rolls to weapons with `Weapon Focus`. Includes `Greater Weapon Focus` and `Gnomish Weapon Focus`.
 
 <details>
   <summary>How to configure Weapon Focus (click to expand)</summary>
