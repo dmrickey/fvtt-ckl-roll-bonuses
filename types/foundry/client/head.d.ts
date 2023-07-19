@@ -14,4 +14,16 @@ declare global {
     let CONFIG: CONFIG;
 
     let Hooks: Hooks;
+
+    let foundry: {
+        utils: {
+            /**
+             *
+             * @param {string} v0
+             * @param {string} v1
+             * @returns True if v0 is newer than v1
+             */
+            isNewerVersion(v0: string, v1: string): boolean;
+        },
+    };
 }

@@ -1,12 +1,17 @@
 {
     "ckl-roll-bonuses": {
+        "armor-focus": "Armor Focus",
         "crit-offset": "Crit Offset ({mod})",
+        "fates-favored": "Fate's Favored",
         "fortune": "Fortune",
         "genericSpellDC": "Spell DC",
+        "greater-weapon-focus": "Greater Weapon Focus",
+        "improved-armor-focus": "Improved Armor Focus",
         "keen": "Keen",
+        "martial-focus": "Martial Focus",
         "misfortune": "Misfortune",
         "ok": "OK",
-        "rollBonuses": "Roll Bonuses",
+        "roll-bonuses": "Roll Bonuses",
         "skills": {
             "config": "Skill Config",
             "inspiration": "Inspiration"
@@ -16,40 +21,94 @@
             "schoolClOffset": "School CL Offset",
             "spellFocusSchool": "Spell Focus School"
         },
+        "versatilePerformance": {
+            "error": "Versatile Performance - invalid skill IDs",
+            "header": "Versatile Performance",
+            "hint": "{base} -> {skills}",
+            "skillTip": "Can be used with Versatile Performance - {base} ({enabled})",
+            "title": "Versatile Performance - {skill}",
+            "label": {
+                "perform": "Perform",
+                "skill1": "Skill 1",
+                "skill2": "Skill 2"
+            }
+        },
+        "weapon-focus": "Weapon Focus",
         "settings": {
+            "armor-focus": {
+                "name": "Armor Focus",
+                "hint": "The name of the 'Armor Focus' feat. This is to support translations without having to translate the mod.",
+                "default": "Armor Focus"
+            },
             "elementalFocus": {
                 "name": "Elemental Focus",
                 "hint": "The name of the 'Elemental Focus' feat. This is to support translations without having to translate the mod.",
                 "default": "Elemental Focus"
+            },
+            "fortuneStacks": {
+                "name": "Fortune Stacks",
+                "hint": "If true (default), multiple fortunes/misfortunes from different sources will stack. So you could potentially end up with 4d20kh. If false, then multiple fortunes/misfortunes will only go to a max of two dice. Multiple misfortune and fortunes affecting the same roll will cancel out (e.g. 3 differnt fortunes vs 2 different misfortunes means you are \"more fortunate\" and will be rolling with a bonus. If you have an equal number of fortune vs misfortune, then you \"break even\" and roll normally.)",
+                "default": true
             },
             "greaterElementalFocus": {
                 "name": "Greater Elemental Focus",
                 "hint": "The 'Greater' adjective, feat names are checked for this plus 'Elemental Focus'. This is to support translations without having to translate the mod.",
                 "default": "Greater"
             },
-            "mythicElementalFocus": {
-                "name": "Mythic Elemental Focus",
-                "hint": "The 'Mythic' adjective, feat names are checked for this plus 'Elemental Focus'. This is to support translations without having to translate the mod.",
-                "default": "Mythic"
-            },
-            "spellFocus": {
-                "name": "Spell Focus",
-                "hint": "The name of the 'Spell Focus' feat. This is to support translations without having to translate the mod.",
-                "default": "Spell Focus"
-            },
             "greaterSpellFocus": {
                 "name": "Greater Spell Focus",
                 "hint": "The 'Greater' adjective, feat names are checked for this plus 'Spell Focus'. This is to support translations without having to translate the mod.",
                 "default": "Greater"
+            },
+            "greater-weapon-focus": {
+                "name": "Greater Weapon Focus",
+                "hint": "The 'Greater' adjective, feat names are checked for this plus 'Weapon Focus'. This is to support translations without having to translate the mod.",
+                "default": "Greater"
+            },
+            "improved-armor-focus": {
+                "name": "Improved Armor Focus",
+                "hint": "The 'Improved' adjective, feat names are checked for this plus 'Armor Focus'. This is to support translations without having to translate the mod.",
+                "default": "Improved"
+            },
+            "martial-focus": {
+                "name": "Martial Focus",
+                "hint": "The name of the 'Martial Focus' feat. This is to support translations without having to translate the mod.",
+                "default": "Martial Focus"
+            },
+            "mythicElementalFocus": {
+                "name": "Mythic Elemental Focus",
+                "hint": "The 'Mythic' adjective, feat names are checked for this plus 'Elemental Focus'. This is to support translations without having to translate the mod.",
+                "default": "Mythic"
             },
             "mythicSpellFocus": {
                 "name": "Mythic Spell Focus",
                 "hint": "The 'Mythic' adjective, feat names are checked for this plus 'Spell Focus'. This is to support translations without having to translate the mod.",
                 "default": "Mythic"
             },
-            "fortuneStacks": {
-                "name": "Fortune Stacks",
-                "hint": "If true (default), multiple fortunes/misfortunes from different sources will stack. So you could potentially end up with 4d20kh. If false, then multiple fortunes/misfortunes will only go to a max of two dice. Multiple misfortune and fortunes affecting the same roll will cancel out (e.g. 3 differnt fortunes vs 2 different misfortunes means you are \"more fortunate\" and will be rolling with a bonus. If you have an equal number of fortune vs misfortune, then you \"break even\" and roll normally.)"
+            "racial-weapon-focus": {
+                "name": "Racial Weapon Focus",
+                "hint": "The name of your 'Racial Spell Focus' feat. Only 'Gnome Weapon Focus' officially exists, but this allows for other racial variations. This is to support translations without having to translate the mod.",
+                "default": "Gnome Weapon Focus"
+            },
+            "racial-weapon-focus-default-race": {
+                "name": "Racial Weapon Focus (default race)",
+                "hint": "The default race to look for. This is to support translations without having to translate the mod.",
+                "default": "Gnomish"
+            },
+            "spellFocus": {
+                "name": "Spell Focus",
+                "hint": "The name of the 'Spell Focus' feat. This is to support translations without having to translate the mod.",
+                "default": "Spell Focus"
+            },
+            "versatile-performance": {
+                "name": "Versatile Performance",
+                "hint": "The name of the 'Versatile Performance' bard ability. This is to support translations without having to translate the mod.",
+                "default": "Versatile Performance"
+            },
+            "weapon-focus": {
+                "name": "Weapon Focus",
+                "hint": "The name of the 'Weapon Focus' feat. This is to support translations without having to translate the mod.",
+                "default": "Weapon Focus"
             }
         }
     }

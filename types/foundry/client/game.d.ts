@@ -6,6 +6,8 @@ interface Game {
         },
     };
 
+    system: { version: string };
+
     /**
      * Client settings which are used to configure application behavior
      */

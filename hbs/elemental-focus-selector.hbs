@@ -1,10 +1,10 @@
 <div class="form-group">
     <label>{{localize 'ckl-roll-bonuses.spells.elementalFocusEnergy'}}</label>
     <div class="form-fields">
-        <select name="school" id="elemental-focus-selector">
-            {{#select element}}
-            {{#each elements as |name elem|}}
-            <option value="{{elem}}">{{name}}</option>
+        <select damageType="school" id="elemental-focus-selector">
+            {{#select currentElement}}
+            {{#each elements as |damageType elem|}}
+            <option value="{{elem}}">{{damageType.name}}</option>
             {{/each}}
             {{/select}}
         </select>

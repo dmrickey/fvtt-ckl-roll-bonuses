@@ -1,11 +1,12 @@
 import { truthiness } from "./truthiness.mjs";
 
 // todo update to use actor.itemFlags.dictionary or item.system.flags.dictionary
+//   can't really do this an support the same feat with different bonuses
 /**
  *
  * @param {BaseDocument} doc - Item or Actor
  * @param {string} key
- * @returns
+ * @returns {(String | number)[]}
  */
 const getDocDFlags = (doc, key) => {
     // if doc is an actor
@@ -18,7 +19,7 @@ const getDocDFlags = (doc, key) => {
 
     // else read the flag off the item
     if (doc instanceof pf1.documents.item.ItemPF) {
-        return [doc.getItemDictionaryFlag(key)].filter(truthiness);
+        return [doc.isActive && doc.getItemDictionaryFlag(key)].filter(truthiness);
     }
 
     return [];
@@ -55,34 +56,6 @@ const getDocDFlagsStartsWith = (doc, keyStart) => {
     return {};
 }
 
-/**
- * @param {ItemDictionaryFlags} dFlags
- * @param {...string} flags
- * @returns {{[key: string]: (number | string)[]}} - { foundKey1: [values from different items], foundKey2: [...], ...}
- */
-const getFlagsFromDFlags = (dFlags, ...flags) => {
-    const /** @type {{[key: string]: (number | string)[]}} */ found = {};
-    for (const item in (dFlags || {})) {
-        flags.forEach((flag) => {
-            if (dFlags[item].hasOwnProperty(flag)) {
-                found[flag] ||= [];
-                found[flag].push(dFlags[item][flag]);
-            }
-        });
-    }
-    return found;
-}
-
-// item.system.flags.boolean - note to self for later
-// todo swap this to actor.itemFlags.boolean[flag].sources.length
-/**
- * Counts the amount of active items that have a given boolean flag
- * @param {ItemPF[]} items
- * @param {string} flag
- * @returns {number} - the count of items that have the given bFlag
- */
-const countBFlag = (items, flag) => (items || []).filter((item) => item.isActive && item.hasItemBooleanFlag(flag)).length;
-
 // todo swap like individual method
 /**
  * Counts the amount of items that have a given boolean flags
@@ -118,11 +91,9 @@ const hasAnyBFlag = (
 ) => flags.some((flag) => !!actor?.itemFlags?.boolean?.[flag]);
 
 export {
-    countBFlag,
     countBFlags,
     getDocDFlags,
     getDocDFlagsStartsWith,
-    getFlagsFromDFlags,
     hasAnyBFlag,
 }
 
@@ -139,24 +110,44 @@ export class KeyedDFlagHelper {
     /** @type {string[]} - The flags*/
     #flags = [];
 
-    // * @returns {Object} - { foundKey1: [values from different items], foundKey2: [...], ...}
+    // todo - maybe 0.83.0 after user is warned when there's a tag collision I can read the dFlags off of the passed in actor
     /**
-     * @param {ItemDictionaryFlags | undefined} dFlags
+     * @param {ItemDictionaryFlags | ActorPF | undefined} dFlags
      * @param {...string} flags
     */
     constructor(dFlags = {}, ...flags) {
         this.#flags = flags;
-        for (const itemTag in (dFlags)) {
-            flags.forEach((flag) => {
-                this.#byFlag[flag] ||= [];
-                if (dFlags[itemTag].hasOwnProperty(flag)) {
-                    const value = dFlags[itemTag][flag];
-                    this.#byFlag[flag].push(value);
 
-                    this.#byItem[itemTag] ||= {};
-                    this.#byItem[itemTag][flag] = value;
+        if (dFlags instanceof pf1.documents.actor.ActorPF) {
+            const actor = dFlags;
+            actor.items.forEach(item => {
+                if (item.isActive) {
+                    flags.forEach((flag) => {
+                        this.#byFlag[flag] ||= [];
+                        if (item.system.flags.dictionary[flag]) {
+                            const value = item.system.flags.dictionary[flag];
+                            this.#byFlag[flag].push(value);
+
+                            this.#byItem[item.system.tag] ||= {};
+                            this.#byItem[item.system.tag][flag] = value;
+                        }
+                    });
                 }
             });
+        }
+        else {
+            for (const itemTag in (dFlags)) {
+                flags.forEach((flag) => {
+                    this.#byFlag[flag] ||= [];
+                    if (dFlags[itemTag].hasOwnProperty(flag)) {
+                        const value = dFlags[itemTag][flag];
+                        this.#byFlag[flag].push(value);
+
+                        this.#byItem[itemTag] ||= {};
+                        this.#byItem[itemTag][flag] = value;
+                    }
+                });
+            }
         }
     }
 
@@ -173,6 +164,15 @@ export class KeyedDFlagHelper {
             }
         });
         return result;
+    }
+
+    /**
+     *
+     * @param {string} flag
+     * @returns {FlagValue[]}
+     */
+    valuesForFlag(flag) {
+        return this.#byFlag[flag] ?? [];
     }
 
     /**

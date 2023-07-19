@@ -2,9 +2,9 @@
     <label>{{localize 'ckl-roll-bonuses.spells.spellFocusSchool'}}</label>
     <div class="form-fields">
         <select name="school" id="spell-focus-selector">
-            {{#select school}}
-            {{#each spellSchools as |name sch|}}
-            <option value="{{sch}}">{{name}}</option>
+            {{#select currentSchool}}
+            {{#each spellSchools as |name key|}}
+            <option value="{{key}}">{{name}}</option>
             {{/each}}
             {{/select}}
         </select>

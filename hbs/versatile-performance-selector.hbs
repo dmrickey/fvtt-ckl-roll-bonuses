@@ -1,0 +1,45 @@
+<div class="form-group versatile-performance-selector">
+    <label>{{localize 'ckl-roll-bonuses.versatilePerformance.header'}}</label>
+    <div class="form-fields">
+        <table>
+            <thead>
+                <tr>
+                    <th>{{localize 'ckl-roll-bonuses.versatilePerformance.label.perform'}}</th>
+                    <th>{{localize 'ckl-roll-bonuses.versatilePerformance.label.skill1'}}</th>
+                    <th>{{localize 'ckl-roll-bonuses.versatilePerformance.label.skill2'}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <select id="vp-base-selector">
+                            {{#select base.id}}
+                            {{#each performs}}
+                            <option value="{{this.id}}">{{this.name}}</option>
+                            {{/each}}
+                            {{/select}}
+                        </select>
+                    </td>
+                    <td>
+                        <select id="vp-skill1-selector">
+                            {{#select skill1.id}}
+                            {{#each allSkills}}
+                            <option value="{{this.id}}">{{this.name}}</option>
+                            {{/each}}
+                            {{/select}}
+                        </select>
+                    </td>
+                    <td>
+                        <select id="vp-skill2-selector">
+                            {{#select skill2.id}}
+                            {{#each allSkills}}
+                            <option value="{{this.id}}">{{this.name}}</option>
+                            {{/each}}
+                            {{/select}}
+                        </select>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

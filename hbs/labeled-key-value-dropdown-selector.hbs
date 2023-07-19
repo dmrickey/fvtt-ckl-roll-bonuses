@@ -1,0 +1,18 @@
+{{!--
+args:
+{
+label: string (label for selector),
+key: string (used for uniquely identifying this selector),
+current: string (key for current choice),
+choices: { key: string, label: string}[]
+}
+--}}
+
+<div class="form-group">
+    <label>{{label}}</label>
+    <div class="form-fields">
+        <select id="key-value-selector-{{key}}">
+            {{selectOptions choices selected=current nameAttr="key" labelAttr="label"}}
+        </select>
+    </div>
+</div>

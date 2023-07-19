@@ -1,8 +1,8 @@
-import { MODULE_NAME } from "../consts.mjs";
-import { addElementToRollBonus } from "../roll-bonus-on-actor-sheet.mjs";
-import { getDocDFlags } from "../util/flag-helpers.mjs";
-import { registerItemHint } from "../util/item-hints.mjs";
-import { registerSetting } from "../util/settings.mjs";
+import { MODULE_NAME } from "../../consts.mjs";
+import { addNodeToRollBonus } from "../../roll-bonus-on-actor-sheet.mjs";
+import { getDocDFlags } from "../../util/flag-helpers.mjs";
+import { registerItemHint } from "../../util/item-hints.mjs";
+import { registerSetting } from "../../util/settings.mjs";
 
 const spellFocusKey = 'spellFocus';
 const greaterSpellFocusKey = 'greaterSpellFocus';
@@ -38,7 +38,7 @@ Hooks.once(
 // before dialog pops up
 Hooks.on('pf1PreActionUse', (/** @type {ActionUse} */actionUse) => {
     const { actor, item, shared } = actionUse;
-    if (item?.type !== 'spell') {
+    if (!(item instanceof pf1.documents.item.ItemSpellPF)) {
         return;
     }
 
@@ -47,7 +47,7 @@ Hooks.on('pf1PreActionUse', (/** @type {ActionUse} */actionUse) => {
      */
     const handleFocus = (key) => {
         const focuses = getDocDFlags(actor, key);
-        const hasFocus = !!focuses.find(f => f === item.system.school);
+        const hasFocus = !!focuses.find(focus => focus === item.system.school);
         if (hasFocus) {
             shared.saveDC += 1;
 
@@ -107,7 +107,11 @@ Hooks.on('renderItemSheet', (
 
     const currentSchool = getDocDFlags(item, key)[0];
 
-    const templateData = { spellSchools, school: currentSchool };
+    if (Object.keys(spellSchools).length && !currentSchool) {
+        item.setItemDictionaryFlag(key, Object.keys(spellSchools)[0]);
+    }
+
+    const templateData = { spellSchools, currentSchool };
 
     const div = document.createElement('div');
     div.innerHTML = focusSelectorTemplate(templateData, { allowProtoMethodsByDefault: true, allowProtoPropertiesByDefault: true });
@@ -123,7 +127,7 @@ Hooks.on('renderItemSheet', (
         },
     );
 
-    addElementToRollBonus(html, div);
+    addNodeToRollBonus(html, div);
 });
 
 registerItemHint((hintcls, _actor, item, _data) => {

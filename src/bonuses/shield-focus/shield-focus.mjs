@@ -7,8 +7,8 @@
 // THIS IS JUST STILL HERE AS EXAMPLES
 // todo add localization
 
-import { hasAnyBFlag } from "../util/flag-helpers.mjs";
-import { registerItemHint } from "../util/item-hints.mjs";
+import { hasAnyBFlag } from "../../util/flag-helpers.mjs";
+import { registerItemHint } from "../../util/item-hints.mjs";
 
 const shieldFocus = 'shieldFocus';
 const improvedShieldFocus = 'improvedShieldFocus';
@@ -33,7 +33,7 @@ registerItemHint((hintcls, actor, item, _data) => {
 function handleShieldFocusRollData(doc, rollData) {
     if (!(doc instanceof pf1.documents.item.ItemEquipmentPF)) return;
 
-    const actor = doc.parentActor;
+    const actor = doc.actor;
     if (!actor) return;
 
     const isShield = doc.isActive && doc.system.slot === 'shield';

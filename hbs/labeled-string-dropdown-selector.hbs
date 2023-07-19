@@ -1,0 +1,22 @@
+{{!--
+args:
+{
+label: string (label for selector),
+key: string (used for uniquely identifying this selector), // todo
+current: string (current choice),
+choices: string[]
+}
+--}}
+
+<div class="form-group">
+    <label>{{label}}</label>
+    <div class="form-fields">
+        <select name="string-selector" id="string-selector-{{key}}">
+            {{#select current}}
+            {{#each choices}}
+            <option value="{{this}}">{{this}}</option>
+            {{/each}}
+            {{/select}}
+        </select>
+    </div>
+</div>
