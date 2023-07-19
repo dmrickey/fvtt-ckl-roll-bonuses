@@ -194,6 +194,7 @@ Choose your perform. Choose the two skills it replaces. Whenever you roll those 
     - choose the two skills in the next two inputs
   - This adds a music note icon in the skills list next to the skills that are replaced
     - You can click on the music note to disable the "perform override" and roll the skill normally. Clicking again resumes the versatile performance functionality.
+
 ![image](https://github.com/dmrickey/fvtt-ckl-roll-bonuses/assets/3664822/d6ad8b53-6d02-45b3-88b5-504678a0d563)
 ![image](https://github.com/dmrickey/fvtt-ckl-roll-bonuses/assets/3664822/3e1b7e9f-8a59-4c35-8219-12478445d598)
 
