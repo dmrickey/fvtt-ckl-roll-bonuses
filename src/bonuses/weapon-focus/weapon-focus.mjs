@@ -7,7 +7,7 @@ import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize } from "../../util/localize.mjs";
 import { registerSetting } from "../../util/settings.mjs";
 import { uniqueArray } from "../../util/unique-array.mjs";
-import { gnomeWeaponFocusId, greaterWeaponFocusId, greaterWeaponFocusKey, weaponFocusId, weaponFocusKey } from "./ids.mjs";
+import { gnomeWeaponFocusId, greaterWeaponFocusId, greaterWeaponFocusKey, racialWeaponFocusKey, weaponFocusId, weaponFocusKey } from "./ids.mjs";
 
 const allKeys = [weaponFocusKey, greaterWeaponFocusKey];
 
@@ -148,8 +148,11 @@ Hooks.on('renderItemSheet', (
      */
     let choices = [];
 
-    const isGreater = (name.includes(Settings.weaponFocus) && name.includes(Settings.greater)) || item?.flags.core?.sourceId.includes(greaterWeaponFocusId);
-    const isRacial = item?.flags.core?.sourceId.includes(gnomeWeaponFocusId);
+    const isGreater = (name.includes(Settings.weaponFocus) && name.includes(Settings.greater))
+        || item?.flags.core?.sourceId.includes(greaterWeaponFocusId)
+        || item.system.flags.dictionary[greaterWeaponFocusKey] !== undefined;
+    const isRacial = item?.flags.core?.sourceId.includes(gnomeWeaponFocusId)
+        || item.system.flags.dictionary[racialWeaponFocusKey] !== undefined;
 
     if (isGreater) {
         key = greaterWeaponFocusKey;
@@ -161,11 +164,6 @@ Hooks.on('renderItemSheet', (
     }
     else if ((name.includes(Settings.weaponFocus) && !isRacial) || item?.flags.core?.sourceId.includes(weaponFocusId)) {
         key = weaponFocusKey;
-        choices = uniqueArray(item.actor?.items
-            ?.filter(
-                /** @returns {item is ItemWeaponPF | ItemAttackPF} */
-                (item) => item.type === 'weapon' || item.type === 'attack')
-            .flatMap((item) => item.system.baseTypes ?? []));
     }
 
     if (!key) {
@@ -174,6 +172,14 @@ Hooks.on('renderItemSheet', (
         if (!key) {
             return;
         }
+    }
+
+    if (key === weaponFocusKey) {
+        choices = uniqueArray(item.actor?.items
+            ?.filter(
+                /** @returns {item is ItemWeaponPF | ItemAttackPF} */
+                (item) => item.type === 'weapon' || item.type === 'attack')
+            .flatMap((item) => item.system.baseTypes ?? []));
     }
 
     const current = item.getItemDictionaryFlag(key);

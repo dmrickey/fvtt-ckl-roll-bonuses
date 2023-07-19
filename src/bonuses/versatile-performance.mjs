@@ -5,9 +5,19 @@ import { addNodeToRollBonus } from "../roll-bonus-on-actor-sheet.mjs";
 import { getDocDFlags } from "../util/flag-helpers.mjs";
 import { registerItemHint } from "../util/item-hints.mjs";
 import { localize } from "../util/localize.mjs";
+import { registerSetting } from "../util/settings.mjs";
 import { truthiness } from "../util/truthiness.mjs";
 
 const key = 'versatile-performance';
+
+registerSetting({ key });
+
+class Settings {
+    static get versatilePerformance() { return Settings.#getSetting(key); }
+    // @ts-ignore
+    static #getSetting(/** @type {string} */key) { return game.settings.get(MODULE_NAME, key).toLowerCase(); }
+}
+
 const disabledKey = (
     /** @type {string} */ baseId,
     /** @type {string} */ skillId,
@@ -153,7 +163,12 @@ Hooks.on('renderItemSheet', (
 
     const currentVP = item.system.flags.dictionary[key];
     if (!currentVP && currentVP !== '') {
-        return;
+        if (name === Settings.versatilePerformance) {
+            item.setItemDictionaryFlag(key, '');
+        }
+        else {
+            return;
+        }
     }
     const [baseId, ...substitutes] = `${currentVP}`.split(';');
     const [skill1Id, skill2Id] = substitutes;

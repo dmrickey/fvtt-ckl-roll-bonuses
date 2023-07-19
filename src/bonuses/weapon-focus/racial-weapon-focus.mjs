@@ -1,19 +1,21 @@
 import { MODULE_NAME } from "../../consts.mjs";
 import { addNodeToRollBonus } from "../../roll-bonus-on-actor-sheet.mjs";
+import { intersects } from "../../util/array-intersects.mjs";
 import { KeyedDFlagHelper, getDocDFlags } from "../../util/flag-helpers.mjs";
 import { localHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize } from "../../util/localize.mjs";
 import { registerSetting } from "../../util/settings.mjs";
-import { uniqueArray } from "../../util/unique-array.mjs";
 import { gnomeWeaponFocusId, racialWeaponFocusKey, weaponFocusKey } from "./ids.mjs";
 
-const gnomishKey = 'gnomish';
+const defaultRaceKey = 'racial-weapon-focus-default-race';
 
-registerSetting({ key: gnomishKey });
+registerSetting({ key: defaultRaceKey, scope: 'client' });
+registerSetting({ key: racialWeaponFocusKey, scope: 'client' });
 
 class Settings {
-    static get gnomish() { return Settings.#getSetting(gnomishKey); }
+    static get racialWeaponFocus() { return Settings.#getSetting(racialWeaponFocusKey); }
+    static get race() { return Settings.#getSetting(defaultRaceKey); }
     // @ts-ignore
     static #getSetting(/** @type {string} */key) { return game.settings.get(MODULE_NAME, key).toLowerCase(); }
 }
@@ -35,16 +37,12 @@ registerItemHint((hintcls, _actor, item, _data) => {
 registerItemHint((hintcls, actor, item, _data) => {
     if (item.type !== 'attack' && item.type !== 'weapon') return;
 
-    const tags = item.system.tags;
+    const tags = (item.system.tags || []).map((tag) => tag.toLocaleLowerCase());
 
     const helper = new KeyedDFlagHelper(actor, racialWeaponFocusKey);
 
-    let label;
-    if (tags.find(tag => helper.valuesForFlag(racialWeaponFocusKey).includes(tag))) {
-        label = localize(weaponFocusKey);
-    }
-
-    if (label) {
+    if (intersects(tags, helper.valuesForFlag(racialWeaponFocusKey))) {
+        const label = localize(weaponFocusKey);
         return hintcls.create(label, [], {});
     }
 });
@@ -59,7 +57,7 @@ function getAttackSources(item, sources) {
     const actor = item.actor;
     if (!actor) return sources;
 
-    const tags = item.system.tags;
+    const tags = (item.system.tags || []).map((tag) => tag.toLocaleLowerCase());
 
     const helper = new KeyedDFlagHelper(actor, racialWeaponFocusKey);
 
@@ -77,21 +75,13 @@ function getAttackSources(item, sources) {
 Hooks.on(localHooks.itemGetAttackSources, getAttackSources);
 
 /**
- * @type {Handlebars.TemplateDelegate}
- */
-let focusSelectorTemplate;
-Hooks.once(
-    'setup',
-    async () => focusSelectorTemplate = await getTemplate(`modules/${MODULE_NAME}/hbs/racial-weapon-focus-selector.hbs`)
-);
-
-/**
+ * Add weapon focus to attack roll
  * @param {ActionUse} actionUse
  */
 function addWeaponFocusBonus({ actor, item, shared }) {
     if (!actor || !item?.system.tags?.length) return;
 
-    const tags = item.system.tags;
+    const tags = (item.system.tags || []).map((tag) => tag.toLocaleLowerCase());
 
     const helper = new KeyedDFlagHelper(actor, racialWeaponFocusKey);
 
@@ -105,21 +95,33 @@ function addWeaponFocusBonus({ actor, item, shared }) {
 }
 Hooks.on(localHooks.actionUseAlterRollData, addWeaponFocusBonus);
 
+/**
+ * @type {Handlebars.TemplateDelegate}
+ */
+let focusSelectorTemplate;
+Hooks.once(
+    'setup',
+    async () => focusSelectorTemplate = await getTemplate(`modules/${MODULE_NAME}/hbs/racial-weapon-focus-selector.hbs`)
+);
+
 Hooks.on('renderItemSheet', (
     /** @type {{}} */ _app,
     /** @type {[HTMLElement]} */[html],
     /** @type {{ item: ItemPF; }} */ { item },
 ) => {
-    const isRacial = item?.flags.core?.sourceId.includes(gnomeWeaponFocusId) || item.system.flags.dictionary.hasOwnProperty(racialWeaponFocusKey);
+    const name = item?.name?.toLowerCase() ?? '';
+    const isRacial = item?.flags.core?.sourceId.includes(gnomeWeaponFocusId)
+        || item.system.flags.dictionary.hasOwnProperty(racialWeaponFocusKey)
+        || name.includes(Settings.racialWeaponFocus);
     if (!isRacial) return;
 
     const current = item.getItemDictionaryFlag(racialWeaponFocusKey);
 
     if (!current) {
-        item.setItemDictionaryFlag(racialWeaponFocusKey, Settings.gnomish);
+        item.setItemDictionaryFlag(racialWeaponFocusKey, Settings.race);
     }
 
-    const templateData = { current, racialDefault: Settings.gnomish };
+    const templateData = { current, racialDefault: Settings.racialWeaponFocus };
     const div = document.createElement('div');
     div.innerHTML = focusSelectorTemplate(templateData, { allowProtoMethodsByDefault: true, allowProtoPropertiesByDefault: true });
 

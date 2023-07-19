@@ -38,7 +38,7 @@ Hooks.once(
 // before dialog pops up
 Hooks.on('pf1PreActionUse', (/** @type {ActionUse} */actionUse) => {
     const { actor, item, shared } = actionUse;
-    if (item?.type !== 'spell') {
+    if (!(item instanceof pf1.documents.item.ItemSpellPF)) {
         return;
     }
 
@@ -47,7 +47,7 @@ Hooks.on('pf1PreActionUse', (/** @type {ActionUse} */actionUse) => {
      */
     const handleFocus = (key) => {
         const focuses = getDocDFlags(actor, key);
-        const hasFocus = !!focuses.find(f => f === item.system.school);
+        const hasFocus = !!focuses.find(focus => focus === item.system.school);
         if (hasFocus) {
             shared.saveDC += 1;
 

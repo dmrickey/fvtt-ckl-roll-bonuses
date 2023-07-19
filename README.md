@@ -1,6 +1,6 @@
 # Roll Bonuses
 
-Provides bonuses to various types of rolls. Some of these are for variable changes that the system can't handle (like Inspiration). Some are a fake implementation of changes that the system just doesn't support. Support for Mana's mod [Item Hints](https://gitlab.com/koboldworks/pf1/item-hints) has been included.
+Provides bonuses to various types of rolls. Some of these are for variable changes that the system can't handle (like Inspiration). Some are a fake implementation of changes that the system just doesn't support. All configuration is done in the Feat's Advanced Tab (or buff, or any item, etc.). Support for Mana's mod [Item Hints](https://gitlab.com/koboldworks/pf1/item-hints) has been included so that things are automatically tagged in the character sheet.
 
 Supports PF1 v9+
 
@@ -63,7 +63,7 @@ Attack's critical variables can now be dynamically adjusted. Crit can be modifie
 </details>
 
 ## Elemental Focus
-Follows the same basic setup as Spell Focus above.
+Follows the same basic setup as [Spell Focus](#spell-focus).
 - You can manually configure it by setting a flag on the feat with a key of `elementalFocus`, `greaterElementalFocus`, or `mythicElementalFocus` and the mod will automatically add the inputs for you below the dictionary flags section.
 - The accepted values are `acid`, `cold`, `electric`, or `fire`.
 - The damage for the spell you're casting must be configured using one of the system's predefined types.
@@ -181,8 +181,49 @@ Spell Focus, Greater Spell Focus, and Mythic Spell Focus now all have a drop dow
 - Because of a bug in pf1 0.82.5, the save button on the chat card will show the correct DC, but the info note at the bottom of the chat card will your base DC -- this is the same bug that happens if you use a conditional modifier to increase an individual spell's DC.
 
 ## Versatile Performance
-// todo be sure to include key, and pictures of configurations
+Choose your perform. Choose the two skills it replaces. Whenever you roll those skills they'll automatically use your perform skill.
+
+<details>
+  <summary>How to configure `Versatile PerformanceFocus` (click to expand)</summary>
+
+</details>
+
 
 ## Weapon Focus
-// todo
-// include directions for Gnomish Weapon Focus (be sure to say it can be used for any race)
+Automatically add +1 to attack rolls to weapons with `Weapon Focus`. Inclues `Greater Weapon Focus` and `Gnomish Weapon Focus`.
+
+<details>
+  <summary>How to configure `Weapon Focus` (click to expand)</summary>
+
+  #### Weapon Focus
+  Adds +1 to hit to the chosen weapon types.
+  - Will automatically include the select input in the feat advanced tab if the feat is named `Weapon Focus`
+    - This is configurable in the settings to account for different translations
+  - The dropdown will be added automatically if you add a dictionary flag `weapon-focus` to the feat (or any other Item)
+  - The choices are auto populated based on what Attacks and Weapons belong to the actor
+    - The Attacks/Weapons must have their `Equipment Base Types` filled out (this is new in PF1 v9)
+    - If you know exactly what base type you're looking for, you can fill it into the dictionary flag value directly
+
+    <details>
+      <summary>Images for Configured `Weapon Focus` (click to expand)</summary>
+
+
+
+    </details>
+
+  #### Greater Weapon Focus
+  Adds a second +1 on top of `Weapon Focus`
+  - Will automatically include the select input in the feat advanced tab if the feat name includes both `Weapon Focus` and `Greater`
+    - This is configurable in the settings to account for different translations
+  - The dropdown will be added automatically if you add a dictionary flag `greater-weapon-focus` to the feat (or any other Item)
+    - The choices will be based off of any other `Weapon Focus` feats you already have configured.
+
+  #### Racial Weapon Focus
+  Adds +1 to hit to racial weapons - those weapons must have appropriate racial tags.
+  - Will Automatically include the select input in the feat advanced tab if the feat is named `Gnome Weapon Focus` (only official racial weapon feat)
+    - This is configurable in the settings if you want to homebrew a different race
+    - detection for this is kind of messy and it usually also detects it as `Weapon Focus` too. Just delete the weapon focus dictionary flag and it will behave itself once it's already configured for racial weapon focus.
+  - The dropdown will be added automatically if you add the dicationary flag `racial-weapon-focus`
+  - You must type in one of the `tags` that exists on racial weapons. The chosen race must exist on weapons and attacks for this feat to automatically add +1 to attack rolls.
+
+</details>

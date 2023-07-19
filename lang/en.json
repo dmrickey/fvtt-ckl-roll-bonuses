@@ -47,7 +47,8 @@
             },
             "fortuneStacks": {
                 "name": "Fortune Stacks",
-                "hint": "If true (default), multiple fortunes/misfortunes from different sources will stack. So you could potentially end up with 4d20kh. If false, then multiple fortunes/misfortunes will only go to a max of two dice. Multiple misfortune and fortunes affecting the same roll will cancel out (e.g. 3 differnt fortunes vs 2 different misfortunes means you are \"more fortunate\" and will be rolling with a bonus. If you have an equal number of fortune vs misfortune, then you \"break even\" and roll normally.)"
+                "hint": "If true (default), multiple fortunes/misfortunes from different sources will stack. So you could potentially end up with 4d20kh. If false, then multiple fortunes/misfortunes will only go to a max of two dice. Multiple misfortune and fortunes affecting the same roll will cancel out (e.g. 3 differnt fortunes vs 2 different misfortunes means you are \"more fortunate\" and will be rolling with a bonus. If you have an equal number of fortune vs misfortune, then you \"break even\" and roll normally.)",
+                "default": true
             },
             "greaterElementalFocus": {
                 "name": "Greater Elemental Focus",
@@ -84,10 +85,25 @@
                 "hint": "The 'Mythic' adjective, feat names are checked for this plus 'Spell Focus'. This is to support translations without having to translate the mod.",
                 "default": "Mythic"
             },
+            "racial-weapon-focus": {
+                "name": "Racial Weapon Focus",
+                "hint": "The name of your 'Racial Spell Focus' feat. Only 'Gnome Weapon Focus' officially exists, but this allows for other racial variations. This is to support translations without having to translate the mod.",
+                "default": "Gnome Weapon Focus"
+            },
+            "racial-weapon-focus-default-race": {
+                "name": "Racial Weapon Focus (default race)",
+                "hint": "The default race to look for. This is to support translations without having to translate the mod.",
+                "default": "Gnomish"
+            },
             "spellFocus": {
                 "name": "Spell Focus",
                 "hint": "The name of the 'Spell Focus' feat. This is to support translations without having to translate the mod.",
                 "default": "Spell Focus"
+            },
+            "versatile-performance": {
+                "name": "Versatile Performance",
+                "hint": "The name of the 'Versatile Performance' bard ability. This is to support translations without having to translate the mod.",
+                "default": "Versatile Performance"
             },
             "weapon-focus": {
                 "name": "Weapon Focus",
