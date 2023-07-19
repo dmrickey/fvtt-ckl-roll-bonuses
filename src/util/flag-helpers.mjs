@@ -110,46 +110,44 @@ export class KeyedDFlagHelper {
     /** @type {string[]} - The flags*/
     #flags = [];
 
-    // todo swap dFlags for {actor | item} and instead use the above and do a lookup on all items to account for multiple items with the same tag
-    // /**
-    //  * @param {ActorPF} actor
-    //  * @param {...string} flags
-    // */
-    // constructor(actor, ...flags) {
-    //     actor.items.forEach(item => {
-    //         if (item.isActive) {
-    //             flags.forEach((flag) => {
-    //                 this.#byFlag[flag] ||= [];
-    //                 if (item.system.flags.dictionary[flag]) {
-    //                     const value = item.system.flags.dictionary[flag];
-    //                     this.#byFlag[flag].push(value);
-
-    //                     this.#byItem[item.system.tag] ||= {};
-    //                     this.#byItem[item.system.tag][flag] = value;
-    //                 }
-    //             });
-    //         }
-    //     });
-    // }
-
-    // todo - maybe 0.83.0 after user is warned when there's a tag collision
+    // todo - maybe 0.83.0 after user is warned when there's a tag collision I can read the dFlags off of the passed in actor
     /**
-     * @param {ItemDictionaryFlags | undefined} dFlags
+     * @param {ItemDictionaryFlags | ActorPF | undefined} dFlags
      * @param {...string} flags
     */
     constructor(dFlags = {}, ...flags) {
         this.#flags = flags;
-        for (const itemTag in (dFlags)) {
-            flags.forEach((flag) => {
-                this.#byFlag[flag] ||= [];
-                if (dFlags[itemTag].hasOwnProperty(flag)) {
-                    const value = dFlags[itemTag][flag];
-                    this.#byFlag[flag].push(value);
 
-                    this.#byItem[itemTag] ||= {};
-                    this.#byItem[itemTag][flag] = value;
+        if (dFlags instanceof pf1.documents.actor.ActorPF) {
+            const actor = dFlags;
+            actor.items.forEach(item => {
+                if (item.isActive) {
+                    flags.forEach((flag) => {
+                        this.#byFlag[flag] ||= [];
+                        if (item.system.flags.dictionary[flag]) {
+                            const value = item.system.flags.dictionary[flag];
+                            this.#byFlag[flag].push(value);
+
+                            this.#byItem[item.system.tag] ||= {};
+                            this.#byItem[item.system.tag][flag] = value;
+                        }
+                    });
                 }
             });
+        }
+        else {
+            for (const itemTag in (dFlags)) {
+                flags.forEach((flag) => {
+                    this.#byFlag[flag] ||= [];
+                    if (dFlags[itemTag].hasOwnProperty(flag)) {
+                        const value = dFlags[itemTag][flag];
+                        this.#byFlag[flag].push(value);
+
+                        this.#byItem[itemTag] ||= {};
+                        this.#byItem[itemTag][flag] = value;
+                    }
+                });
+            }
         }
     }
 

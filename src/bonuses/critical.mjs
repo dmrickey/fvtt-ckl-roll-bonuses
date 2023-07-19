@@ -74,7 +74,8 @@ Hooks.on('pf1GetRollData', (
             return 2;
         }
 
-        const sum = new KeyedDFlagHelper(rollData.dFlags, critMultOffsetSelf, critMultOffsetAll, critMultOffsetId(action), critMultOffsetId(item))
+        // todo some day change this back to use rollData.dFlags
+        const sum = new KeyedDFlagHelper(action?.actor || rollData.dFlags, critMultOffsetSelf, critMultOffsetAll, critMultOffsetId(action), critMultOffsetId(item))
             .sumAll(rollData);
 
         return rollData.action.ability.critMult + sum;
@@ -100,7 +101,8 @@ Hooks.on('pf1GetRollData', (
             : current;
 
         const flags = [critOffsetAll, critOffsetId(item), critOffsetId(action)];
-        const mod = new KeyedDFlagHelper(rollData.dFlags, ...flags).sumAll(rollData)
+        // todo some day change this back to use rollData.dFlags
+        const mod = new KeyedDFlagHelper(action?.actor || rollData.dFlags, ...flags).sumAll(rollData)
             + RollPF.safeTotal(item.system.flags.dictionary[critOffsetSelf] ?? 0, rollData);
 
         range -= mod;

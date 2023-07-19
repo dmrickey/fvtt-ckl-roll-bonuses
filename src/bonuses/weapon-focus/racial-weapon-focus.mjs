@@ -37,8 +37,7 @@ registerItemHint((hintcls, actor, item, _data) => {
 
     const tags = item.system.tags;
 
-    const dFlags = actor.itemFlags.dictionary;
-    const helper = new KeyedDFlagHelper(dFlags, racialWeaponFocusKey);
+    const helper = new KeyedDFlagHelper(actor, racialWeaponFocusKey);
 
     let label;
     if (tags.find(tag => helper.valuesForFlag(racialWeaponFocusKey).includes(tag))) {
@@ -62,8 +61,7 @@ function getAttackSources(item, sources) {
 
     const tags = item.system.tags;
 
-    const dFlags = actor.itemFlags.dictionary;
-    const helper = new KeyedDFlagHelper(dFlags, racialWeaponFocusKey);
+    const helper = new KeyedDFlagHelper(actor, racialWeaponFocusKey);
 
     const value = tags.find(tag => helper.valuesForFlag(racialWeaponFocusKey).includes(tag))
         ? 1
@@ -95,8 +93,7 @@ function addWeaponFocusBonus({ actor, item, shared }) {
 
     const tags = item.system.tags;
 
-    const dFlags = actor.itemFlags.dictionary;
-    const helper = new KeyedDFlagHelper(dFlags, racialWeaponFocusKey);
+    const helper = new KeyedDFlagHelper(actor, racialWeaponFocusKey);
 
     const value = tags.find(value => helper.valuesForFlag(racialWeaponFocusKey).includes(value))
         ? 1

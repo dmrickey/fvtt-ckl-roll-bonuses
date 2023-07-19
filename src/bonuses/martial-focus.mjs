@@ -32,16 +32,16 @@ registerItemHint((hintcls, _actor, item, _data) => {
 
 // register hint on focused weapon/attack
 registerItemHint((hintcls, actor, item, _data) => {
-    if (!(item instanceof pf1.documents.item.ItemEquipmentPF || item instanceof pf1.documents.item.ItemAttackPF)) {
+    if (!(item instanceof pf1.documents.item.ItemWeaponPF || item instanceof pf1.documents.item.ItemAttackPF)) {
         return;
     }
 
-    if (item instanceof pf1.documents.item.ItemEquipmentPF && !item.system.proficient || !item.system.weaponGroups) {
+    if (item instanceof pf1.documents.item.ItemWeaponPF && !item.system.proficient || !item.system.weaponGroups) {
         return;
     }
 
     const weaponGroups = [...item.system.weaponGroups.value, ...item.system.weaponGroups.custom.split(';')].filter(truthiness);
-    const focuses = new KeyedDFlagHelper(actor.itemFlags.dictionary, key).valuesForFlag(key);
+    const focuses = new KeyedDFlagHelper(actor, key).valuesForFlag(key);
 
     const isFocused = intersects(weaponGroups, focuses);
 
@@ -54,16 +54,16 @@ registerItemHint((hintcls, actor, item, _data) => {
  * @param {ActionUse} actionUse
  */
 function addMartialFocus({ actor, item, shared }) {
-    if (!(item instanceof pf1.documents.item.ItemEquipmentPF || item instanceof pf1.documents.item.ItemAttackPF)) {
+    if (!(item instanceof pf1.documents.item.ItemWeaponPF || item instanceof pf1.documents.item.ItemAttackPF)) {
         return;
     }
-    if (item instanceof pf1.documents.item.ItemEquipmentPF && !item.system.proficient || !item.system.weaponGroups) {
+    if (item instanceof pf1.documents.item.ItemWeaponPF && !item.system.proficient || !item.system.weaponGroups) {
         return;
     }
     if (!actor || !item.system.baseTypes?.length) return;
 
     const weaponGroups = [...item.system.weaponGroups.value, ...item.system.weaponGroups.custom.split(';')].filter(truthiness);
-    const focuses = new KeyedDFlagHelper(actor.itemFlags.dictionary, key).valuesForFlag(key);
+    const focuses = new KeyedDFlagHelper(actor, key).valuesForFlag(key);
 
     const isFocused = intersects(weaponGroups, focuses);
 
@@ -83,7 +83,7 @@ function getAttackSources(item, sources) {
     const actor = item.actor;
     if (!actor) return sources;
 
-    if (!(item instanceof pf1.documents.item.ItemEquipmentPF || item instanceof pf1.documents.item.ItemAttackPF)) {
+    if (!(item instanceof pf1.documents.item.ItemWeaponPF || item instanceof pf1.documents.item.ItemAttackPF)) {
         return sources;
     }
 
@@ -110,7 +110,7 @@ function actionDamageSources({ item }, sources) {
     const actor = item.actor;
     if (!actor) return sources;
 
-    if (!(item instanceof pf1.documents.item.ItemEquipmentPF || item instanceof pf1.documents.item.ItemAttackPF)) {
+    if (!(item instanceof pf1.documents.item.ItemWeaponPF || item instanceof pf1.documents.item.ItemAttackPF)) {
         return sources;
     }
 
@@ -151,18 +151,18 @@ Hooks.on(localHooks.actionDamageSources, actionDamageSources);
 //     }
 
 //     const item = action.item;
-//     if (!(item instanceof pf1.documents.item.ItemEquipmentPF) && !(item instanceof pf1.documents.item.ItemAttackPF)) {
+//     if (!(item instanceof pf1.documents.item.ItemWeaponPF) && !(item instanceof pf1.documents.item.ItemAttackPF)) {
 //         return;
 //     }
 
-//     if ((item instanceof pf1.documents.item.ItemEquipmentPF && !item.system.proficient) || !item.system.weaponGroups) {
+//     if ((item instanceof pf1.documents.item.ItemWeaponPF && !item.system.proficient) || !item.system.weaponGroups) {
 //         return;
 //     }
 //     const actor = action.actor;
 //     if (!actor || !item.system.baseTypes?.length) return;
 
 //     const weaponGroups = [...item.system.weaponGroups.value, ...item.system.weaponGroups.custom.split(';')].filter(truthiness);
-//     const focuses = new KeyedDFlagHelper(actor.itemFlags.dictionary, key).valuesForFlag(key);
+//     const focuses = new KeyedDFlagHelper(actor, key).valuesForFlag(key);
 
 //     const isFocused = intersects(weaponGroups, focuses);
 
@@ -198,8 +198,8 @@ Hooks.on('renderItemSheet', (
     const current = item.getItemDictionaryFlag(key);
 
     const customs = item.actor.items.filter(
-        /** @returns {i is ItemEquipmentPF | ItemAttackPF} */
-        (i) => i instanceof pf1.documents.item.ItemEquipmentPF || i instanceof pf1.documents.item.ItemAttackPF)
+        /** @returns {i is ItemWeaponPF | ItemAttackPF} */
+        (i) => i instanceof pf1.documents.item.ItemWeaponPF || i instanceof pf1.documents.item.ItemAttackPF)
         .flatMap((i) => (i.system.weaponGroups?.custom ?? '').split(';'))
         .filter(truthiness)
         .map((i) => ({ key: i, label: i }));

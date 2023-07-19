@@ -134,6 +134,9 @@ declare global {
     interface ItemFeatPF extends ItemPF {
 
     }
+    interface ItemWeaponPF extends ItemPF {
+        system: SystemWeaponPF,
+    }
 
     interface ItemChange {
         modifier: BonusModifers,
@@ -163,10 +166,14 @@ declare global {
         baseTypes: string[];
         proficient: boolean,
         slot: 'armor' | 'shield',
-        weaponGroups: TraitSelector;
     }
     interface SystemItemSpellPF extends SystemItem {
         school: string;
+    }
+    interface SystemWeaponPF extends SystemItem {
+        baseTypes: string[];
+        proficient: boolean,
+        weaponGroups: TraitSelector;
     }
 
     interface TraitSelector {
@@ -446,11 +453,12 @@ declare global {
                 ActorPF: { new(): ActorPF }
             },
             item: {
-                ItemSpellPF: { new(): ItemSpellPF }
-                ItemPF: { new(): ItemPF }
                 ItemAttackPF: { new(): ItemAttackPF }
                 ItemEquipmentPF: { new(): ItemEquipmentPF }
                 ItemFeatPF: { new(): ItemFeatPF }
+                ItemPF: { new(): ItemPF }
+                ItemSpellPF: { new(): ItemSpellPF }
+                ItemWeaponPF: { new(): ItemWeaponPF }
             }
         };
         registry: {

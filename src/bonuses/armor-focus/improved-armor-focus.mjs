@@ -38,7 +38,7 @@ registerItemHint((hintcls, actor, item, _data) => {
     const baseTypes = item.system.baseTypes;
     if (!baseTypes?.length) return;
 
-    const armorFocuses = new KeyedDFlagHelper(actor.itemFlags.dictionary, key).valuesForFlag(key);
+    const armorFocuses = new KeyedDFlagHelper(actor, key).valuesForFlag(key);
     const isFocused = intersects(armorFocuses, baseTypes);
 
     if (isArmor && isFocused) {
@@ -64,7 +64,7 @@ function handleArmorFocusRollData(doc, rollData) {
     const baseTypes = armor.system.baseTypes;
     if (!baseTypes?.length) return;
 
-    const armorFocuses = new KeyedDFlagHelper(actor.itemFlags.dictionary, key).valuesForFlag(key);
+    const armorFocuses = new KeyedDFlagHelper(actor, key).valuesForFlag(key);
     const isFocused = intersects(armorFocuses, baseTypes);
 
     if (isFocused) {
@@ -79,7 +79,7 @@ Hooks.on('pf1GetRollData', handleArmorFocusRollData);
  * @param {ItemChange[]} tempChanges
  */
 function handleArmorFocusChange(actor, tempChanges) {
-    const armorFocuses = new KeyedDFlagHelper(actor.itemFlags.dictionary, key).valuesForFlag(key);
+    const armorFocuses = new KeyedDFlagHelper(actor, key).valuesForFlag(key);
     if (!armorFocuses.length) return;
 
     const armor =

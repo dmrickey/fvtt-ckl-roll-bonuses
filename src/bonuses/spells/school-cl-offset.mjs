@@ -31,7 +31,8 @@ Hooks.on('pf1GetRollData', (
         return;
     }
 
-    const flags = new KeyedDFlagHelper(rollData.dFlags, schoolClOffset, schoolClOffsetTotal)
+    // todo some day change this back to use rollData.dFlags
+    const flags = new KeyedDFlagHelper(action?.actor || rollData.dFlags, schoolClOffset, schoolClOffsetTotal)
         .getDFlagsWithAllFlagsByItem();
     const matches = Object.values(flags)
         .filter((offset) => offset[schoolClOffset] === item.system.school);

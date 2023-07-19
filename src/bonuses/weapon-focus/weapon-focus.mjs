@@ -1,5 +1,6 @@
 import { MODULE_NAME } from "../../consts.mjs";
 import { addNodeToRollBonus } from "../../roll-bonus-on-actor-sheet.mjs";
+import { intersects } from "../../util/array-intersects.mjs";
 import { KeyedDFlagHelper, getDocDFlags } from "../../util/flag-helpers.mjs";
 import { localHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
@@ -34,7 +35,7 @@ registerItemHint((hintcls, _actor, item, _data) => {
 
 // register hint on focused weapon/attack
 registerItemHint((hintcls, actor, item, _data) => {
-    if (!(item instanceof pf1.documents.item.ItemEquipmentPF || item instanceof pf1.documents.item.ItemAttackPF)) {
+    if (!(item instanceof pf1.documents.item.ItemWeaponPF || item instanceof pf1.documents.item.ItemAttackPF)) {
         return;
     }
 
@@ -42,14 +43,13 @@ registerItemHint((hintcls, actor, item, _data) => {
 
     const baseTypes = item.system.baseTypes;
 
-    const dFlags = actor.itemFlags.dictionary;
-    const helper = new KeyedDFlagHelper(dFlags, weaponFocusKey, greaterWeaponFocusKey);
+    const helper = new KeyedDFlagHelper(actor, weaponFocusKey, greaterWeaponFocusKey);
 
     let label;
-    if (baseTypes.find(value => helper.valuesForFlag(greaterWeaponFocusKey).includes(value))) {
+    if (intersects(baseTypes, helper.valuesForFlag(greaterWeaponFocusKey))) {
         label = localize(greaterWeaponFocusKey);
     }
-    else if (baseTypes.find(value => helper.valuesForFlag(weaponFocusKey).includes(value))) {
+    else if (intersects(baseTypes, helper.valuesForFlag(weaponFocusKey))) {
         label = localize(weaponFocusKey);
     }
 
@@ -68,7 +68,7 @@ function getAttackSources(item, sources) {
     const actor = item.actor;
     if (!actor) return sources;
 
-    if (!(item instanceof pf1.documents.item.ItemEquipmentPF || item instanceof pf1.documents.item.ItemAttackPF)) {
+    if (!(item instanceof pf1.documents.item.ItemWeaponPF || item instanceof pf1.documents.item.ItemAttackPF)) {
         return sources;
     }
 
@@ -100,7 +100,7 @@ Hooks.on(localHooks.itemGetAttackSources, getAttackSources);
  * @param {ActionUse} actionUse
  */
 function addWeaponFocusBonus({ actor, item, shared }) {
-    if (!(item instanceof pf1.documents.item.ItemEquipmentPF || item instanceof pf1.documents.item.ItemAttackPF)) {
+    if (!(item instanceof pf1.documents.item.ItemWeaponPF || item instanceof pf1.documents.item.ItemAttackPF)) {
         return;
     }
     if (!actor || !item.system.baseTypes?.length) return;
@@ -108,8 +108,7 @@ function addWeaponFocusBonus({ actor, item, shared }) {
     const baseTypes = item.system.baseTypes;
     let value = 0;
 
-    const dFlags = actor.itemFlags.dictionary;
-    const helper = new KeyedDFlagHelper(dFlags, weaponFocusKey, greaterWeaponFocusKey);
+    const helper = new KeyedDFlagHelper(actor, weaponFocusKey, greaterWeaponFocusKey);
 
     if (baseTypes.find(value => helper.valuesForFlag(weaponFocusKey).includes(value))) {
         value += 1;
@@ -164,7 +163,7 @@ Hooks.on('renderItemSheet', (
         key = weaponFocusKey;
         choices = uniqueArray(item.actor?.items
             ?.filter(
-                /** @returns {item is ItemEquipmentPF | ItemAttackPF} */
+                /** @returns {item is ItemWeaponPF | ItemAttackPF} */
                 (item) => item.type === 'weapon' || item.type === 'attack')
             .flatMap((item) => item.system.baseTypes ?? []));
     }
