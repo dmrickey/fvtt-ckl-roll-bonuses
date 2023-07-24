@@ -436,6 +436,7 @@ declare global {
                     operator?: 'add' | 'function' | 'set',
                     priority?: number,
                     subTarget: BuffTargets,
+                    /** The evaluation of the formula */
                     value?: string | number,
                 }, parent = null): ItemChange
             },

@@ -34,6 +34,7 @@
             }
         },
         "weapon-focus": "Weapon Focus",
+        "weapon-specialization": "Weapon Specialization",
         "settings": {
             "armor-focus": {
                 "name": "Armor Focus",
@@ -109,6 +110,11 @@
                 "name": "Weapon Focus",
                 "hint": "The name of the 'Weapon Focus' feat. This is to support translations without having to translate the mod.",
                 "default": "Weapon Focus"
+            },
+            "weapon-specialization": {
+                "name": "Weapon Specialization",
+                "hint": "The name of the 'Weapon Specialization' feat. This is to support translations without having to translate the mod.",
+                "default": "Weapon Specialization"
             }
         }
     }

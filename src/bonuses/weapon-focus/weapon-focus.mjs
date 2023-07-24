@@ -39,8 +39,6 @@ registerItemHint((hintcls, actor, item, _data) => {
         return;
     }
 
-    if (item.type !== 'attack' && item.type !== 'weapon') return;
-
     const baseTypes = item.system.baseTypes;
 
     const helper = new KeyedDFlagHelper(actor, weaponFocusKey, greaterWeaponFocusKey);
