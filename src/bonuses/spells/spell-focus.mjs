@@ -69,7 +69,6 @@ Hooks.on('renderItemSheet', (
     /** @type {{ item: ItemPF; }} */ data,
 ) => {
     const { item } = data;
-    const name = item?.name?.toLowerCase() ?? '';
 
     /**
      * @type {string | undefined}
@@ -77,12 +76,14 @@ Hooks.on('renderItemSheet', (
     let key;
     let { spellSchools } = pf1.config;
 
-    if (name.includes(Settings.spellFocus) || item?.flags.core?.sourceId.includes(spellFocusId)) {
+    const name = item?.name?.toLowerCase() ?? '';
+    const sourceId = item?.flags.core?.sourceId ?? '';
+    if (name.includes(Settings.spellFocus) || sourceId.includes(spellFocusId)) {
         key = spellFocusKey;
     }
 
-    const isGreater = (name.includes(Settings.spellFocus) && name.includes(Settings.greater)) || item?.flags.core?.sourceId.includes(greaterSpellFocusId);
-    const isMythic = (name.includes(Settings.spellFocus) && name.includes(Settings.mythic)) || item?.flags.core?.sourceId.includes(mythicSpellFocusId);
+    const isGreater = (name.includes(Settings.spellFocus) && name.includes(Settings.greater)) || sourceId.includes(greaterSpellFocusId);
+    const isMythic = (name.includes(Settings.spellFocus) && name.includes(Settings.mythic)) || sourceId.includes(mythicSpellFocusId);
 
     if (isGreater || isMythic) {
         key = isGreater ? greaterSpellFocusKey : mythicSpellFocusKey;

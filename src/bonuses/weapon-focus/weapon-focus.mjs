@@ -137,7 +137,6 @@ Hooks.on('renderItemSheet', (
     /** @type {[HTMLElement]} */[html],
     /** @type {{ item: ItemPF; }} */ { item },
 ) => {
-    const name = item?.name?.toLowerCase() ?? '';
 
     /**
      * @type {string | undefined}
@@ -148,10 +147,12 @@ Hooks.on('renderItemSheet', (
      */
     let choices = [];
 
+    const name = item?.name?.toLowerCase() ?? '';
+    const sourceId = item?.flags.core?.sourceId ?? '';
     const isGreater = (name.includes(Settings.weaponFocus) && name.includes(Settings.greater))
-        || item?.flags.core?.sourceId.includes(greaterWeaponFocusId)
+        || sourceId.includes(greaterWeaponFocusId)
         || item.system.flags.dictionary[greaterWeaponFocusKey] !== undefined;
-    const isRacial = item?.flags.core?.sourceId.includes(gnomeWeaponFocusId)
+    const isRacial = sourceId.includes(gnomeWeaponFocusId)
         || item.system.flags.dictionary[racialWeaponFocusKey] !== undefined;
 
     if (isGreater) {
@@ -162,7 +163,7 @@ Hooks.on('renderItemSheet', (
             choices = getDocDFlags(actor, weaponFocusKey);
         }
     }
-    else if ((name.includes(Settings.weaponFocus) && !isRacial) || item?.flags.core?.sourceId.includes(weaponFocusId)) {
+    else if ((name.includes(Settings.weaponFocus) && !isRacial) || sourceId.includes(weaponFocusId)) {
         key = weaponFocusKey;
     }
 

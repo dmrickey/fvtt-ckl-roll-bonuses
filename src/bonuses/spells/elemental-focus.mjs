@@ -82,7 +82,6 @@ Hooks.on('renderItemSheet', (
     /** @type {{ item: ItemPF; }} */ data
 ) => {
     const { item } = data;
-    const name = item?.name?.toLowerCase() ?? '';
 
     /**
      * @type {string | undefined}
@@ -90,14 +89,16 @@ Hooks.on('renderItemSheet', (
     let key;
     let elements = Object.fromEntries(damageElements.map(k => [k, pf1.registry.damageTypes.get(k)]));
 
-    if (name.includes(Settings.elementalFocus) || item?.flags.core?.sourceId.includes(elementalFocusId)) {
+    const name = item?.name?.toLowerCase() ?? '';
+    const sourceId = item?.flags.core?.sourceId ?? '';
+    if (name.includes(Settings.elementalFocus) || sourceId.includes(elementalFocusId)) {
         key = elementalFocusKey;
     }
 
     const isGreater = (name.includes(Settings.elementalFocus) && name.includes(Settings.greater))
-        || item?.flags.core?.sourceId.includes(greaterElementalFocusId);
+        || sourceId.includes(greaterElementalFocusId);
     const isMythic = (name.includes(Settings.elementalFocus) && name.includes(Settings.mythic))
-        || item?.flags.core?.sourceId.includes(mythicElementalFocusId);
+        || sourceId.includes(mythicElementalFocusId);
 
     if (isGreater || isMythic) {
         key = isGreater ? greaterElementalFocusKey : mythicElementalFocusKey;

@@ -116,8 +116,8 @@ Hooks.on('renderItemSheet', (
     /** @type {{ item: ItemPF; }} */ { item },
 ) => {
     const name = item?.name?.toLowerCase() ?? '';
-
-    if (!(name === Settings.armorFocus || item.system.flags.dictionary[key] !== undefined || item?.flags.core?.sourceId.includes(compendiumId))) {
+    const sourceId = item?.flags.core?.sourceId ?? '';
+    if (!(name === Settings.armorFocus || item.system.flags.dictionary[key] !== undefined || sourceId.includes(compendiumId))) {
         return;
     }
 

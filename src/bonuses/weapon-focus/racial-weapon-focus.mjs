@@ -110,7 +110,8 @@ Hooks.on('renderItemSheet', (
     /** @type {{ item: ItemPF; }} */ { item },
 ) => {
     const name = item?.name?.toLowerCase() ?? '';
-    const isRacial = item?.flags.core?.sourceId.includes(gnomeWeaponFocusId)
+    const sourceId = item?.flags.core?.sourceId ?? '';
+    const isRacial = sourceId.includes(gnomeWeaponFocusId)
         || item.system.flags.dictionary.hasOwnProperty(racialWeaponFocusKey)
         || name.includes(Settings.racialWeaponFocus);
     if (!isRacial) return;
