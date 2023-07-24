@@ -163,7 +163,9 @@ Hooks.on('renderItemSheet', (
             choices = getDocDFlags(actor, weaponFocusKey);
         }
     }
-    else if ((name.includes(Settings.weaponFocus) && !isRacial) || sourceId.includes(weaponFocusId)) {
+    else if ((name.includes(Settings.weaponFocus) && !isRacial)
+        || sourceId.includes(weaponFocusId)
+    ) {
         key = weaponFocusKey;
     }
 

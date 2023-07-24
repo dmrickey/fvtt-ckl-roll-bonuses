@@ -29,6 +29,10 @@
   - configure an item to give you specific ranks (0.82.5 only gives bonus ranks, not ranks to specific skills)
 
 ## Misc
+### CL adjustment for Specific Damage types
+  - call it `elemental-cl`
+  - See pyromaniac here https://www.aonprd.com/RacesDisplay.aspx?ItemName=Gnome
+### Misc
 - add the formula class to skill inputs
 - consumable buffs - requires later release (waiting on issue #1946) (did not make it into v9)
   - idea is to create a a flag on a buff that will add the bonus in "prehook" (and/or use built in changes) but use the new pf1 v.next posthook to disable the buff when it is consumed
