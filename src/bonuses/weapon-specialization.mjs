@@ -9,10 +9,11 @@ import { localHooks } from "../util/hooks.mjs";
 import { registerItemHint } from "../util/item-hints.mjs";
 import { localize } from "../util/localize.mjs";
 import { registerSetting } from "../util/settings.mjs";
-import { truthiness } from "../util/truthiness.mjs";
 import { uniqueArray } from "../util/unique-array.mjs";
+import { weaponFocusKey } from "./weapon-focus/ids.mjs";
 
 const key = 'weapon-specialization';
+export { key as weaponSpecializationKey };
 const compendiumId = 'YLCvMNeAF9V31m1h';
 
 registerSetting({ key: key });
@@ -164,14 +165,7 @@ Hooks.on('renderItemSheet', (
 
     const current = item.getItemDictionaryFlag(key);
 
-    const weaponTypes = item.actor?.items.filter(
-        /** @returns {i is ItemWeaponPF | ItemAttackPF} */
-        (i) => i instanceof pf1.documents.item.ItemWeaponPF || i instanceof pf1.documents.item.ItemAttackPF)
-        .flatMap((i) => (i.system.baseTypes))
-        .filter(truthiness)
-        ?? [];
-
-    const choices = uniqueArray(weaponTypes).sort();
+    const choices = uniqueArray(new KeyedDFlagHelper(item?.actor, weaponFocusKey).valuesForFlag(weaponFocusKey)).sort();
 
     if (choices.length && !current) {
         item.setItemDictionaryFlag(key, choices[0]);
