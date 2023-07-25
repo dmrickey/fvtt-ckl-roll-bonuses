@@ -181,7 +181,7 @@ Hooks.on('renderItemSheet', (
     const div = document.createElement('div');
     div.innerHTML = focusSelectorTemplate(templateData, { allowProtoMethodsByDefault: true, allowProtoPropertiesByDefault: true });
 
-    const select = div.querySelector(`#key-value-selector-${key}`);
+    const select = div.querySelector(`#string-selector-${key}`);
     select?.addEventListener(
         'change',
         async (event) => {
