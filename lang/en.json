@@ -2,6 +2,7 @@
     "ckl-roll-bonuses": {
         "armor-focus": "Armor Focus",
         "crit-offset": "Crit Offset ({mod})",
+        "elemental-cl": "Element CL Offset",
         "fates-favored": "Fate's Favored",
         "fortune": "Fortune",
         "genericSpellDC": "Spell DC",

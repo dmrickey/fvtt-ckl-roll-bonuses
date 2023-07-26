@@ -9,6 +9,7 @@ Supports PF1 v9+
 - [Armor Focus](#armor-focus)
 - [Caster Level Offset for specified Magic School](#caster-level-offset-for-specified-magic-school)
 - [Critical Helpers](#critical-helpers)
+- [Element CL Bonus](#element-cl-bonus)
 - [Elemental Focus](#elemental-focus)
 - [Fate's Favored](#fates-favored)
 - [Fortune and Misfortune](#fortune-and-misfortune)
@@ -18,6 +19,7 @@ Supports PF1 v9+
 - [Spell Focus](#spell-focus)
 - [Versatile Performance](#versatile-performance)
 - [Weapon Focus](#weapon-focus)
+- [Weapon Specialization](#weapon-specialization)
 
 ## Armor Focus
 Increase the AC of your chosen armor type by +1 (`Armor Focus`) and additionally decrease the ACP by 1 (`Improved Armor Focus`).
@@ -82,6 +84,10 @@ Attack's critical variables can now be dynamically adjusted. Crit can be modifie
     * The value of the dictionary flags can be either a number or a formula
 
 </details>
+
+## Element CL Bonus
+Increase (or decrease) CL for spells that have a specific elemental damage type
+todo - include tidbit about gnome pyromaniac alternate racial trait
 
 ## Elemental Focus
 Increase the DC by +1 of any spell you're casting for a specific element.
@@ -293,3 +299,6 @@ Automatically add +1 to attack rolls to weapons with `Weapon Focus`. Includes `G
   - You must type in one of the `tags` that exists on racial weapons. The chosen race must exist on weapons and attacks for this feat to automatically add +1 to attack rolls.
 
 </details>
+
+## Weapon Specialization
+todo

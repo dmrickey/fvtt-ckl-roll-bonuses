@@ -27,11 +27,9 @@
 ## Skills
 ### Int Headband
   - configure an item to give you specific ranks (0.82.5 only gives bonus ranks, not ranks to specific skills)
+    - See versatile performance for ideas.
 
 ## Misc
-### CL adjustment for Specific Damage types
-  - call it `elemental-cl`
-  - See pyromaniac here https://www.aonprd.com/RacesDisplay.aspx?ItemName=Gnome
 ### Misc
 - add the formula class to skill inputs
 - consumable buffs - requires later release (waiting on issue #1946) (did not make it into v9)
