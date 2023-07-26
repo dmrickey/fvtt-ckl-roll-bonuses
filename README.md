@@ -232,7 +232,16 @@ Various bonuses to skills. You can add Inspiration, change the base die, or add 
 </details>
 
 ## Spell DC Bonuses (for all spells)
-Add a new dFlag on any item named `genericSpellDC`, then drop in a number (positive or negative) or a formula and when you next cast a spell on that Actor the DC should be adjusted accordingly.
+Generic Increase (or decrease) to the DC for all spells. These bonuses (from different abilities) will stack with each other.
+
+<details>
+  <summary>How to configure Spell DC (click to expand)</summary>
+
+  - Add the `genericSpellDC` dictionary flag for the inputs to show up automatically
+  - Input a bonus formula
+  - Because of a bug in pf1 0.82.5, the save button on the chat card will show the correct DC, but the info note at the bottom of the chat card will your base DC -- this is the same bug that happens if you use a conditional modifier to increase an individual spell's DC.
+
+</details>
 
 ## Spell DC Bonuses (for specific schools)
 Generic Increase (or decrease) to the DC for a given spell school. These bonuses (from different abilities) will stack with each other.
