@@ -86,7 +86,7 @@ Attack's critical variables can now be dynamically adjusted. Crit can be modifie
 </details>
 
 ## Element CL Bonus
-Increase (or decrease) CL for spells that have a specific elemental damage type. Useful for specific abilities such as [Gnome's Pyromaniac alternate racial trait](https://www.aonprd.com/RacesDisplay.aspx?ItemName=Gnome#:~:text=and%20illusion%20resistance.-,Pyromaniac,-Source%20Advanced%20Race)
+Increase (or decrease) CL for spells that have a specific elemental damage type. Useful for specific abilities such as [Gnome's Pyromaniac alternate racial trait](https://www.aonprd.com/RacesDisplay.aspx?ItemName=Gnome#:~:text=and%20illusion%20resistance.-,Pyromaniac,-Source%20Advanced%20Race).
 
 <details>
   <summary>How to customize Elemental CL Bonus (click to expand)</summary>
@@ -303,7 +303,7 @@ Automatically add +1 to attack rolls to weapons with `Weapon Focus`. Includes `G
 </details>
 
 ## Weapon Specialization
-Automatically add +2 damage to chosen weapons types for Weapon Specialization and Greater Weapon Specialization
+Automatically add +2 damage to chosen weapons types for `Weapon Specialization` and `Greater Weapon Specialization`.
 
 <details>
   <summary>How to configure Weapon Specialization (click to expand)</summary>
