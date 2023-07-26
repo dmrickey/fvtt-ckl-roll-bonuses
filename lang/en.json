@@ -6,6 +6,7 @@
         "fortune": "Fortune",
         "genericSpellDC": "Spell DC",
         "greater-weapon-focus": "Greater Weapon Focus",
+        "greater-weapon-specialization": "Greater Weapon Specialization",
         "improved-armor-focus": "Improved Armor Focus",
         "keen": "Keen",
         "martial-focus": "Martial Focus",
@@ -64,6 +65,11 @@
             "greater-weapon-focus": {
                 "name": "Greater Weapon Focus",
                 "hint": "The 'Greater' adjective, feat names are checked for this plus 'Weapon Focus'. This is to support translations without having to translate the mod.",
+                "default": "Greater"
+            },
+            "greater-weapon-specialization": {
+                "name": "Greater Weapon Specialization",
+                "hint": "The 'Greater' adjective, feat names are checked for this plus 'Weapon Specialization'. This is to support translations without having to translate the mod.",
                 "default": "Greater"
             },
             "improved-armor-focus": {

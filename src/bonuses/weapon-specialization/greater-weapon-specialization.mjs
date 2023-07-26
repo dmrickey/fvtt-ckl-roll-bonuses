@@ -1,20 +1,19 @@
 // https://www.d20pfsrd.com/feats/combat-feats/weapon-specialization-combat/
-// +2 damage on selected weapon type - requires Weapon Focus with selected weapon
+// +2 damage on selected weapon type - requires Greater Weapon Focus and Weapon Specialization with selected weapon
 
-import { MODULE_NAME } from "../consts.mjs";
-import { addNodeToRollBonus } from "../roll-bonus-on-actor-sheet.mjs";
-import { intersects } from "../util/array-intersects.mjs";
-import { KeyedDFlagHelper, getDocDFlags } from "../util/flag-helpers.mjs";
-import { localHooks } from "../util/hooks.mjs";
-import { registerItemHint } from "../util/item-hints.mjs";
-import { localize } from "../util/localize.mjs";
-import { registerSetting } from "../util/settings.mjs";
-import { uniqueArray } from "../util/unique-array.mjs";
-import { weaponFocusKey } from "./weapon-focus/ids.mjs";
+import { MODULE_NAME } from "../../consts.mjs";
+import { addNodeToRollBonus } from "../../roll-bonus-on-actor-sheet.mjs";
+import { intersection, intersects } from "../../util/array-intersects.mjs";
+import { KeyedDFlagHelper, getDocDFlags } from "../../util/flag-helpers.mjs";
+import { localHooks } from "../../util/hooks.mjs";
+import { registerItemHint } from "../../util/item-hints.mjs";
+import { localize } from "../../util/localize.mjs";
+import { registerSetting } from "../../util/settings.mjs";
+import { greaterWeaponFocusKey } from "../weapon-focus/ids.mjs";
+import { WeaponSpecializationSettings, weaponSpecializationKey } from "./weapon-specialization.mjs";
 
-const key = 'weapon-specialization';
-export { key as weaponSpecializationKey };
-const compendiumId = 'YLCvMNeAF9V31m1h';
+const key = 'greater-weapon-specialization';
+const compendiumId = 'asmQDyDYTtuXg8b4';
 
 registerSetting({ key: key });
 
@@ -46,7 +45,7 @@ registerItemHint((hintcls, actor, item, _data) => {
     const helper = new KeyedDFlagHelper(actor, key);
 
     if (intersects(baseTypes, helper.valuesForFlag(key))) {
-        return hintcls.create(localize(key), [], {});
+        return hintcls.create(`+2 ${localize('PF1.Damage')}`, [], { hint: localize(key) });
     }
 });
 
@@ -159,13 +158,19 @@ Hooks.on('renderItemSheet', (
 ) => {
     const name = item?.name?.toLowerCase() ?? '';
     const sourceId = item?.flags.core?.sourceId ?? '';
-    if (!(name === Settings.weaponSpecialization || item.system.flags.dictionary[key] !== undefined || sourceId.includes(compendiumId))) {
+    if (!((name.includes(WeaponSpecializationSettings.weaponSpecialization) && name.includes(Settings.weaponSpecialization))
+        || item.system.flags.dictionary[key] !== undefined
+        || sourceId.includes(compendiumId))
+    ) {
         return;
     }
 
     const current = item.getItemDictionaryFlag(key);
 
-    const choices = uniqueArray(new KeyedDFlagHelper(item?.actor, weaponFocusKey).valuesForFlag(weaponFocusKey)).sort();
+    const helper = new KeyedDFlagHelper(item?.actor, greaterWeaponFocusKey, weaponSpecializationKey);
+    const focuses = helper.valuesForFlag(greaterWeaponFocusKey);
+    const specs = helper.valuesForFlag(weaponSpecializationKey);
+    const choices = intersection(focuses, specs).sort();
 
     if (choices.length && !current) {
         item.setItemDictionaryFlag(key, choices[0]);
