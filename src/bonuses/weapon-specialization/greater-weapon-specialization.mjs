@@ -152,10 +152,11 @@ Hooks.once(
 );
 
 Hooks.on('renderItemSheet', (
-    /** @type {{}} */ _app,
+    /** @type {{ actor: ActorPF | undefined; }} */ app,
     /** @type {[HTMLElement]} */[html],
     /** @type {{ item: ItemPF; }} */ { item },
 ) => {
+    const { actor } = app;
     const name = item?.name?.toLowerCase() ?? '';
     const sourceId = item?.flags.core?.sourceId ?? '';
     if (!((name.includes(WeaponSpecializationSettings.weaponSpecialization) && name.includes(Settings.weaponSpecialization))
@@ -167,7 +168,7 @@ Hooks.on('renderItemSheet', (
 
     const current = item.getItemDictionaryFlag(key);
 
-    const helper = new KeyedDFlagHelper(item?.actor, greaterWeaponFocusKey, weaponSpecializationKey);
+    const helper = new KeyedDFlagHelper(actor, greaterWeaponFocusKey, weaponSpecializationKey);
     const focuses = helper.valuesForFlag(greaterWeaponFocusKey);
     const specs = helper.valuesForFlag(weaponSpecializationKey);
     const choices = intersection(focuses, specs).sort();

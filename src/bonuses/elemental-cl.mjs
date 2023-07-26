@@ -94,7 +94,6 @@ Hooks.on('renderItemSheet', (
 ) => {
     const { item } = data;
 
-
     if (item.system.flags.dictionary[key] === undefined) {
         return;
     }

@@ -77,7 +77,7 @@ Hooks.on('pf1PreActionUse', (/** @type {ActionUse} */actionUse) => {
 });
 
 Hooks.on('renderItemSheet', (
-    /** @type {{ }} */ _app,
+    /** @type {{ actor: ActorPF | undefined; }} */ app,
     /** @type {[HTMLElement]} */[html],
     /** @type {{ item: ItemPF; }} */ data
 ) => {
@@ -103,7 +103,7 @@ Hooks.on('renderItemSheet', (
     if (isGreater || isMythic) {
         key = isGreater ? greaterElementalFocusKey : mythicElementalFocusKey;
 
-        const actor = item.actor;
+        const { actor } = app;
         if (actor) {
             elements = {};
             // @ts-ignore

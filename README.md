@@ -297,6 +297,7 @@ Choose your perform. Choose the two skills it replaces. Whenever you roll those 
   - The input will automatically be added for any ability named `Versatile Performance`
     - This is configurable in the settings for different translations
     - If it doesn't show up (or you want to use this on a different ability), you can add the dictionary flag `versatile-performance` and the inputs will automatically be added
+      - due to its complexity, the inputs will not show up if you're viewing the item from the 
   - To configure
     - choose the perform skill you want to use in the first input
     - choose the two skills in the next two inputs

@@ -117,10 +117,11 @@ Hooks.once(
 );
 
 Hooks.on('renderItemSheet', (
-    /** @type {{}} */ _app,
+    /** @type {{ actor: ActorPF | undefined; }} */ app,
     /** @type {[HTMLElement]} */[html],
     /** @type {{ item: ItemPF; }} */ { item },
 ) => {
+    const { actor } = app;
     const name = item?.name?.toLowerCase() ?? '';
     const sourceId = item?.flags.core?.sourceId ?? '';
     if (!((name.includes(Settings.armorFocus) && name.includes(Settings.improved))
@@ -131,7 +132,7 @@ Hooks.on('renderItemSheet', (
     }
 
     const current = item.getItemDictionaryFlag(key);
-    const choices = getDocDFlags(item.actor, armorFocusKey);
+    const choices = getDocDFlags(actor, armorFocusKey);
 
     if (choices?.length && !current) {
         item.setItemDictionaryFlag(key, choices[0]);

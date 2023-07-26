@@ -111,10 +111,11 @@ Hooks.once(
 );
 
 Hooks.on('renderItemSheet', (
-    /** @type {{}} */ _app,
+    /** @type {{ actor: ActorPF | undefined; }} */ app,
     /** @type {[HTMLElement]} */[html],
     /** @type {{ item: ItemPF; }} */ { item },
 ) => {
+    const { actor } = app;
     const name = item?.name?.toLowerCase() ?? '';
     const sourceId = item?.flags.core?.sourceId ?? '';
     if (!(name === Settings.armorFocus || item.system.flags.dictionary[key] !== undefined || sourceId.includes(compendiumId))) {
@@ -122,7 +123,7 @@ Hooks.on('renderItemSheet', (
     }
 
     const current = item.getItemDictionaryFlag(key);
-    const choices = uniqueArray(item.actor?.items
+    const choices = uniqueArray(actor?.items
         ?.filter(
             /** @returns {item is ItemEquipmentPF} */
             (item) => item.type === 'equipment'
@@ -130,7 +131,7 @@ Hooks.on('renderItemSheet', (
                 && item.system.slot === 'armor')
         .flatMap((item) => item.system.baseTypes ?? []));
 
-    if (choices?.length && !current) {
+    if (choices.length && !current) {
         item.setItemDictionaryFlag(key, choices[0]);
     }
 

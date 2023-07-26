@@ -159,10 +159,11 @@ Hooks.once(
 );
 
 Hooks.on('renderItemSheet', (
-    /** @type {{}} */ _app,
+    /** @type {{ actor: ActorPF | undefined; }} */ app,
     /** @type {[HTMLElement]} */[html],
     /** @type {{ item: ItemPF; }} */ { item },
 ) => {
+    const { actor } = app;
     const name = item?.name?.toLowerCase() ?? '';
     const sourceId = item?.flags.core?.sourceId ?? '';
     if (!(name === Settings.martialFocus || item.system.flags.dictionary[key] !== undefined || sourceId.includes(compendiumId))) {
@@ -172,7 +173,7 @@ Hooks.on('renderItemSheet', (
     const current = item.getItemDictionaryFlag(key);
 
     const customs = uniqueArray(
-        item.actor?.items
+        actor?.items
             .filter(
                 /** @returns {i is ItemWeaponPF | ItemAttackPF} */
                 (i) => i instanceof pf1.documents.item.ItemWeaponPF || i instanceof pf1.documents.item.ItemAttackPF

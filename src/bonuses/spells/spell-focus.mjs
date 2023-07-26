@@ -64,7 +64,7 @@ Hooks.on('pf1PreActionUse', (/** @type {ActionUse} */actionUse) => {
 });
 
 Hooks.on('renderItemSheet', (
-    /** @type {{}} */ _app,
+    /** @type {{ actor: ActorPF | undefined; }} */ app,
     /** @type {[HTMLElement]} */[html],
     /** @type {{ item: ItemPF; }} */ data,
 ) => {
@@ -88,7 +88,7 @@ Hooks.on('renderItemSheet', (
     if (isGreater || isMythic) {
         key = isGreater ? greaterSpellFocusKey : mythicSpellFocusKey;
 
-        const actor = item.actor;
+        const { actor } = app;
         if (actor) {
             spellSchools = {};
             const existingSpellFocuses = getDocDFlags(actor, spellFocusKey);

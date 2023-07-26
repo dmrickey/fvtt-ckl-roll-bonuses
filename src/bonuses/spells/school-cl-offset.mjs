@@ -96,7 +96,7 @@ Hooks.once(
  * @param {string} html
  */
 Hooks.on('renderItemSheet', (
-    /** @type {{ actor: ActorPF; }} */ app,
+    /** @type {{ actor: ActorPF | undefined; }} */ app,
     /** @type {[HTMLElement]} */[html],
     /** @type {{ item: ItemPF; }} */ data
 ) => {

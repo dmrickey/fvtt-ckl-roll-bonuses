@@ -40,8 +40,9 @@ registerItemHint((hintcls, actor, item, _data) => {
         return;
     }
 
+    // grab the shortest spell name with a matching tag
     const names = actor.items
-        ?.filter((i) => i.system.tag === current)
+        ?.filter((i) => i.system.tag === current && i instanceof pf1.documents.item.ItemSpellPF)
         .sort((x, y) => x.system.tag.length > y.system.tag.length ? 1 : -1)
         ?? [];
     const name = names[0].name;
