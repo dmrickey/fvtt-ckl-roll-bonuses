@@ -18,6 +18,7 @@ Supports PF1 v9+
 - [Spell DC Bonuses (for all spells)](#spell-dc-bonuses-for-all-spells)
 - [Spell DC Bonuses (for specific schools)](#spell-dc-bonuses-for-specific-schools)
 - [Spell Focus](#spell-focus)
+- [Spell Specialization](#spell-specialization)
 - [Versatile Performance](#versatile-performance)
 - [Weapon Focus](#weapon-focus)
 - [Weapon Specialization](#weapon-specialization)
@@ -269,6 +270,21 @@ Spell Focus, Greater Spell Focus, and Mythic Spell Focus now all have a drop dow
   - Because of a bug in pf1 0.82.5, the save button on the chat card will show the correct DC, but the info note at the bottom of the chat card will your base DC -- this is the same bug that happens if you use a conditional modifier to increase an individual spell's DC.
 
   ![image](https://user-images.githubusercontent.com/3664822/216522228-0968c234-3b89-47c0-b0e9-addf9accad34.png)
+
+</details>
+
+## Spell Specialization
+Increase chosen spell CL by +2.
+
+<details>
+  <summary>How to configure Spell Specialization (clicke to expand)</summary>
+
+  - The input will automatically be added for any ability named `Spell Specialization` (configurable in the mod settings)
+  - You can manually add the `spell-specialization` dictionary flag for the input to show up
+  - Only spells in your actor's spellbooks will be available as choices
+    - if you want a different spell that your actor doesn't have, you can manually type the spell `tag` in as the value of the dictionary flag
+  - The spell's `tag` is the key. If you have multiple versions of the same spell in your spellbook and want this to work with all of them, then they all need to have the same `tag`. By default the `tag` is based on the Spell's name. You can customize the `tag` in the Spell's details.
+    - e.g. If your chosen spell if `Fireball` then its tag is `fireball`. If you have duplicate copy of Fireball in your spellbook called `Maximize Fireball`, then by default its tag will be `maximizeFireball`. You will need to customize maximize's tag to match the base spell. Otherwise spell focus will see these as two uniquely separate spells because their tags are different.
 
 </details>
 

@@ -4,7 +4,7 @@ import { getDocDFlags } from "../../util/flag-helpers.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { registerSetting } from "../../util/settings.mjs";
 
-const spellFocusKey = 'spellFocus';
+export const spellFocusKey = 'spellFocus';
 const greaterSpellFocusKey = 'greaterSpellFocus';
 const mythicSpellFocusKey = 'mythicSpellFocus';
 

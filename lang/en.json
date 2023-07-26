@@ -1,6 +1,8 @@
 {
     "ckl-roll-bonuses": {
         "armor-focus": "Armor Focus",
+        "cl-mod": "{mod} CL",
+        "cl-school-mod": "{mod} CL ({school})",
         "crit-offset": "Crit Offset ({mod})",
         "elemental-cl": "Element CL Offset",
         "fates-favored": "Fate's Favored",
@@ -20,6 +22,7 @@
             "config": "Skill Config",
             "inspiration": "Inspiration"
         },
+        "spell-specialization": "Spell Specialization",
         "spells": {
             "elementalFocusEnergy": "Elemental Focus Energy",
             "schoolClOffset": "School CL Offset",
@@ -109,6 +112,11 @@
                 "name": "Spell Focus",
                 "hint": "The name of the 'Spell Focus' feat. This is to support translations without having to translate the mod.",
                 "default": "Spell Focus"
+            },
+            "spell-specialization": {
+                "name": "Spell Specialization",
+                "hint": "The name of the 'Spell Specialization' feat. This is to support translations without having to translate the mod.",
+                "default": "Spell Specialization"
             },
             "versatile-performance": {
                 "name": "Versatile Performance",

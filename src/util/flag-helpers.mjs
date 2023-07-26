@@ -189,7 +189,17 @@ export class KeyedDFlagHelper {
      * @returns {FlagValue[]}
      */
     valuesForFlag(flag) {
-        return this.#byFlag[flag] ?? [];
+        return this.#byFlag[flag]?.filter(truthiness) ?? [];
+    }
+
+    /**
+     * Returns an array of {@link FlagValue}s as {@link String}s.
+     *
+     * @param {string} flag
+     * @returns {string[]}
+     */
+    stringValuesForFlag(flag) {
+        return this.valuesForFlag(flag).map((x) => `${x}`);
     }
 
     /**
