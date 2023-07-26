@@ -3,6 +3,7 @@
 - [Racial Features](#racial-features)
 - [Skills](#skills)
 - [Misc](#misc)
+- [Housekeeping](#housekeeping)
 
 ## Class Features
 ### Gunslinger
@@ -35,4 +36,8 @@
 - consumable buffs - requires later release (waiting on issue #1946) (did not make it into v9)
   - idea is to create a a flag on a buff that will add the bonus in "prehook" (and/or use built in changes) but use the new pf1 v.next posthook to disable the buff when it is consumed
 - create generic methods for generic templates that just pass in data, and a callback for handling the change event
+
+## Housekeeping
 - reduce duplication of `Greater` in so many different settings
+- Removed saved value from CL Offset and calculate the value when needed
+- Add CL attack note to spells

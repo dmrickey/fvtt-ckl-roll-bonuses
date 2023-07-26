@@ -86,8 +86,17 @@ Attack's critical variables can now be dynamically adjusted. Crit can be modifie
 </details>
 
 ## Element CL Bonus
-Increase (or decrease) CL for spells that have a specific elemental damage type
-todo - include tidbit about gnome pyromaniac alternate racial trait
+Increase (or decrease) CL for spells that have a specific elemental damage type. Useful for specific abilities such as [Gnome's Pyromaniac alternate racial trait](https://www.aonprd.com/RacesDisplay.aspx?ItemName=Gnome#:~:text=and%20illusion%20resistance.-,Pyromaniac,-Source%20Advanced%20Race)
+
+<details>
+  <summary>How to customize Elemental CL Bonus (click to expand)</summary>
+
+  - Follows the same basic setup as [Elemental Focus](#elemental-focus) but also includes a formula field.
+  - The inputs will appear automatically after adding the `elemental-cl` dictionary key
+    - The accepted values are `acid`, `cold`, `electric`, or `fire`.
+  - The damage for the spell you're casting must be configured using one of the system's predefined types.
+
+</details>
 
 ## Elemental Focus
 Increase the DC by +1 of any spell you're casting for a specific element.
@@ -276,13 +285,6 @@ Automatically add +1 to attack rolls to weapons with `Weapon Focus`. Includes `G
     - The Attacks/Weapons must have their `Equipment Base Types` filled out (this is new in PF1 v9)
     - If you know exactly what base type you're looking for, you can fill it into the dictionary flag value directly
 
-    <details>
-      <summary>Images for Configured `Weapon Focus` (click to expand)</summary>
-
-
-
-    </details>
-
   #### Greater Weapon Focus
   Adds a second +1 on top of `Weapon Focus`
   - Will automatically include the select input in the feat advanced tab if the feat name includes both `Weapon Focus` and `Greater`
@@ -301,4 +303,23 @@ Automatically add +1 to attack rolls to weapons with `Weapon Focus`. Includes `G
 </details>
 
 ## Weapon Specialization
-todo
+Automatically add +2 damage to chosen weapons types for Weapon Specialization and Greater Weapon Specialization
+
+<details>
+  <summary>How to configure Weapon Specialization (click to expand)</summary>
+
+  #### Weapon Specialization
+  Adds +2 damage to the chosen weapon types.
+  - Will automatically include the select input in the feat advanced tab if the feat is named `Weapon Specialization`
+    - This is configurable in the settings to account for different translations
+  - The dropdown will be added automatically if you add a dictionary flag `weapon-specialization` to the feat (or any other Item)
+  - The choices are auto populated based on all of your configured [Weapon Focus](#weapon-focus) feats
+
+  #### Weapon Specialization
+  Adds an extra +2 damage to the chosen weapon types.
+  - Will automatically include the select input in the feat advanced tab if the feat name includes both `Weapon Specialization` and `Greater`
+    - This is configurable in the settings to account for different translations
+  - The dropdown will be added automatically if you add a dictionary flag `greater-weapon-specialization` to the feat (or any other Item)
+  - The choices are auto populated based on all of your configured `Weapon Specialization` and [Greater Weapon Focus](#weapon-focus) feats
+
+</details>
