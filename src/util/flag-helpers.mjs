@@ -152,16 +152,33 @@ export class KeyedDFlagHelper {
     }
 
     /**
-     *
+     * If the helper was created with 3 flags, then return {@see ItemDictionaryFlags} for only those items that have all three flags
      * @returns {ItemDictionaryFlags}
      */
-    getDFlagsWithAllFlagsByItem() {
+    getItemDictionaryFlagsWithAllFlags() {
         /** @type {ItemDictionaryFlags} */
         const result = {};
         Object.entries(this.#byItem).forEach(([key, value]) => {
             if (Object.keys(value).length === this.#flags.length) {
                 result[key] = value;
             }
+        });
+        return result;
+    }
+
+    /**
+     * @param {string} key
+     * @param {string | number} value
+     * @returns {ItemDictionaryFlags}
+     */
+    getItemDictionaryFlagsWithAllFlagsAndMatchingFlag(key, value) {
+        const all = this.getItemDictionaryFlagsWithAllFlags();
+
+        /** @type {ItemDictionaryFlags} */
+        const result = {};
+        Object.entries(all).forEach(([itemTag, dFlags]) => {
+            if (dFlags[key] === value)
+                result[itemTag] = dFlags;
         });
         return result;
     }

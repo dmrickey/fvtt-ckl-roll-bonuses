@@ -17,6 +17,7 @@ Supports PF1 v9+
 - [Skill Bonuses](#skill-bonuses)
 - [Spell DC Bonuses (and penalties)](#spell-dc-bonuses-and-penalties)
 - [Spell Focus](#spell-focus)
+- [Spell School DC](#spell-school-dc)
 - [Versatile Performance](#versatile-performance)
 - [Weapon Focus](#weapon-focus)
 - [Weapon Specialization](#weapon-specialization)
@@ -247,6 +248,18 @@ Spell Focus, Greater Spell Focus, and Mythic Spell Focus now all have a drop dow
   - Because of a bug in pf1 0.82.5, the save button on the chat card will show the correct DC, but the info note at the bottom of the chat card will your base DC -- this is the same bug that happens if you use a conditional modifier to increase an individual spell's DC.
 
   ![image](https://user-images.githubusercontent.com/3664822/216522228-0968c234-3b89-47c0-b0e9-addf9accad34.png)
+
+</details>
+
+## Spell School DC
+Generic Increase (or decrease) to the DC for a given spell school. These bonuses (from different abilities) will stack with each other.
+
+<details>
+  <summary>How to configure Spell School DC (click to expand)</summary>
+
+  - Add the `school-dc` dictionary flag for the inputs to show up automatically
+  - Input a bonus formula and select a spell school
+  - Because of a bug in pf1 0.82.5, the save button on the chat card will show the correct DC, but the info note at the bottom of the chat card will your base DC -- this is the same bug that happens if you use a conditional modifier to increase an individual spell's DC.
 
 </details>
 

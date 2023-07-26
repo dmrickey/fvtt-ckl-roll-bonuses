@@ -49,7 +49,7 @@ Hooks.on('pf1GetRollData', (
         .filter(truthiness);
 
     const flags = new KeyedDFlagHelper(action?.actor || rollData.dFlags, key, formulaKey)
-        .getDFlagsWithAllFlagsByItem();
+        .getItemDictionaryFlagsWithAllFlags();
     const matches = Object.values(flags)
         .filter((offset) => damageTypes.includes(`${offset[key]}`));
 

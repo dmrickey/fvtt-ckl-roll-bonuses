@@ -2,6 +2,7 @@
 - [Feats](#feats)
 - [Racial Features](#racial-features)
 - [Skills](#skills)
+- [Spells](#spells)
 - [Misc](#misc)
 - [Housekeeping](#housekeeping)
 
@@ -29,6 +30,9 @@
 ### Int Headband
   - configure an item to give you specific ranks (0.82.5 only gives bonus ranks, not ranks to specific skills)
     - See versatile performance for ideas.
+
+## Spells
+### DC by school
 
 ## Misc
 ### Misc
