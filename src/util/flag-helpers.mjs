@@ -114,7 +114,7 @@ export class KeyedDFlagHelper {
     /**
      * @param {ItemDictionaryFlags | ActorPF | undefined} dFlags
      * @param {...string} flags
-    */
+     */
     constructor(dFlags = {}, ...flags) {
         this.#flags = flags;
 
@@ -154,7 +154,7 @@ export class KeyedDFlagHelper {
     /**
      *
      * @returns {ItemDictionaryFlags}
-    */
+     */
     getDFlagsWithAllFlagsByItem() {
         /** @type {ItemDictionaryFlags} */
         const result = {};
@@ -178,7 +178,7 @@ export class KeyedDFlagHelper {
     /**
      * @param {RollData} rollData
      * @returns {{[key: string]: number}}
-    */
+     */
     // @ts-ignore
     #calculateSums(rollData) {
         /** @type {{[key: string]: number}} */
@@ -194,7 +194,7 @@ export class KeyedDFlagHelper {
      * Gets the keyed sums for each flag
      * @param {RollData} rollData
      * @returns {{[key: string]: number}} Totals, keyed by flag
-    */
+     */
     sumEntries(rollData) {
         return this.#sumByFlag ??= this.#calculateSums(rollData ?? {});
     }
@@ -204,7 +204,7 @@ export class KeyedDFlagHelper {
      * @param {string} flag - The flag to fetch the total for
      * @param {RollData} rollData
      * @returns {number} - The total for the given flag
-    */
+     */
     sumOfFlag(flag, rollData) {
         return this.sumEntries(rollData)[flag];
     }
@@ -213,7 +213,7 @@ export class KeyedDFlagHelper {
      * Gets the sum of all values.
      * @param {RollData} rollData
      * @returns {number} - The combined total for all flags
-    */
+     */
     sumAll(rollData) {
         return Object.values(this.sumEntries(rollData)).reduce((sum, current) => sum + current, 0);
     }

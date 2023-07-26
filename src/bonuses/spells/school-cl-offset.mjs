@@ -103,7 +103,7 @@ Hooks.on('renderItemSheet', (
             const newFormula = event.target.value;
             await item.setItemDictionaryFlag(schoolClOffsetFormula, newFormula);
 
-            const newTotal = RollPF.safeTotal(newFormula, actor.getRollData());
+            const newTotal = RollPF.safeTotal(newFormula, actor?.getRollData() ?? {});
             await item.setItemDictionaryFlag(schoolClOffsetTotal, newTotal);
         },
     );
