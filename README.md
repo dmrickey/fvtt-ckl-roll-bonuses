@@ -15,9 +15,9 @@ Supports PF1 v9+
 - [Fortune and Misfortune](#fortune-and-misfortune)
 - [Martial Focus](#martial-focus)
 - [Skill Bonuses](#skill-bonuses)
-- [Spell DC Bonuses (and penalties)](#spell-dc-bonuses-and-penalties)
+- [Spell DC Bonuses (for all spells)](#spell-dc-bonuses-for-all-spells)
+- [Spell DC Bonuses (for specific schools)](#spell-dc-bonuses-for-specific-schools)
 - [Spell Focus](#spell-focus)
-- [Spell School DC](#spell-school-dc)
 - [Versatile Performance](#versatile-performance)
 - [Weapon Focus](#weapon-focus)
 - [Weapon Specialization](#weapon-specialization)
@@ -231,8 +231,20 @@ Various bonuses to skills. You can add Inspiration, change the base die, or add 
 
 </details>
 
-## Spell DC Bonuses (and penalties)
+## Spell DC Bonuses (for all spells)
 Add a new dFlag on any item named `genericSpellDC`, then drop in a number (positive or negative) or a formula and when you next cast a spell on that Actor the DC should be adjusted accordingly.
+
+## Spell DC Bonuses (for specific schools)
+Generic Increase (or decrease) to the DC for a given spell school. These bonuses (from different abilities) will stack with each other.
+
+<details>
+  <summary>How to configure Spell School DC (click to expand)</summary>
+
+  - Add the `school-dc` dictionary flag for the inputs to show up automatically
+  - Input a bonus formula and select a spell school
+  - Because of a bug in pf1 0.82.5, the save button on the chat card will show the correct DC, but the info note at the bottom of the chat card will your base DC -- this is the same bug that happens if you use a conditional modifier to increase an individual spell's DC.
+
+</details>
 
 ## Spell Focus
 
@@ -248,18 +260,6 @@ Spell Focus, Greater Spell Focus, and Mythic Spell Focus now all have a drop dow
   - Because of a bug in pf1 0.82.5, the save button on the chat card will show the correct DC, but the info note at the bottom of the chat card will your base DC -- this is the same bug that happens if you use a conditional modifier to increase an individual spell's DC.
 
   ![image](https://user-images.githubusercontent.com/3664822/216522228-0968c234-3b89-47c0-b0e9-addf9accad34.png)
-
-</details>
-
-## Spell School DC
-Generic Increase (or decrease) to the DC for a given spell school. These bonuses (from different abilities) will stack with each other.
-
-<details>
-  <summary>How to configure Spell School DC (click to expand)</summary>
-
-  - Add the `school-dc` dictionary flag for the inputs to show up automatically
-  - Input a bonus formula and select a spell school
-  - Because of a bug in pf1 0.82.5, the save button on the chat card will show the correct DC, but the info note at the bottom of the chat card will your base DC -- this is the same bug that happens if you use a conditional modifier to increase an individual spell's DC.
 
 </details>
 
