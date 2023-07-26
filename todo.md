@@ -32,7 +32,8 @@
     - See versatile performance for ideas.
 
 ## Spells
-### DC by school
+### Spell Specialization
+- https://www.d20pfsrd.com/feats/general-feats/spell-specialization/
 
 ## Misc
 ### Misc
