@@ -112,7 +112,7 @@ export class KeyedDFlagHelper {
 
     // todo - maybe 0.83.0 after user is warned when there's a tag collision I can read the dFlags off of the passed in actor
     /**
-     * @param {ItemDictionaryFlags | ActorPF | undefined} dFlags
+     * @param {ItemDictionaryFlags | ActorPF | undefined | null} dFlags
      * @param {...string} flags
      */
     constructor(dFlags = {}, ...flags) {

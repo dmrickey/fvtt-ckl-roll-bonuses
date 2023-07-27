@@ -152,13 +152,11 @@ function versatileRollSkill(wrapped, skillId, _options) {
 }
 
 Hooks.on('renderItemSheet', (
-    /** @type {{ actor: ActorPF | undefined; }} */ app,
+    /** @type {ItemSheetPF} */ { actor, item },
     /** @type {[HTMLElement]} */[html],
-    /** @type {{ item: ItemPF; }} */ data
+    /** @type {unknown} */ _data
 ) => {
-    const { item } = data;
     const name = item?.name?.toLowerCase() ?? '';
-    const { actor } = app;
     if (!actor) return;
 
     const currentVP = item.system.flags.dictionary[key];

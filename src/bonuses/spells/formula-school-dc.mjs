@@ -45,11 +45,10 @@ Hooks.once(
 );
 
 Hooks.on('renderItemSheet', (
-    /** @type {{}} */ _app,
+    /** @type {ItemSheetPF} */ { item },
     /** @type {[HTMLElement]} */[html],
-    /** @type {{ item: ItemPF; }} */ data,
+    /** @type {unknown} */ _data
 ) => {
-    const { item } = data;
     const { spellSchools } = pf1.config;
 
     if (item.system.flags.dictionary[key] === undefined) {

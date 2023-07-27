@@ -96,13 +96,10 @@ Hooks.once(
  * @param {string} html
  */
 Hooks.on('renderItemSheet', (
-    /** @type {{ actor: ActorPF | undefined; }} */ app,
+    /** @type {ItemSheetPF} */ { actor, item },
     /** @type {[HTMLElement]} */[html],
-    /** @type {{ item: ItemPF; }} */ data
+    /** @type {unknown} */ _data
 ) => {
-    const { actor } = app;
-    const { item } = data;
-
     const { spellSchools } = pf1.config;
 
     const hasKey = item.system.flags.dictionary[schoolClOffset] !== undefined

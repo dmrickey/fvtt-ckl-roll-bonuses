@@ -88,19 +88,16 @@ Hooks.once(
 );
 
 Hooks.on('renderItemSheet', (
-    /** @type {{ }} */ _app,
+    /** @type {ItemSheetPF} */ { item },
     /** @type {[HTMLElement]} */[html],
-    /** @type {{ item: ItemPF; }} */ data
+    /** @type {unknown} */ _data
 ) => {
-    const { item } = data;
-
     if (item.system.flags.dictionary[key] === undefined) {
         return;
     }
 
     const current = getDocDFlags(item, key)[0];
 
-    // let elements = Object.fromEntries(damageElements.map(k => [k, pf1.registry.damageTypes.get(k)]));
     const choices = damageElements.reduce((acc, cur) => ({ ...acc, [cur]: pf1.registry.damageTypes.get(cur)?.name || cur }), {});
     if (Object.keys(choices).length && !current) {
         item.setItemDictionaryFlag(key, Object.keys(choices)[0]);

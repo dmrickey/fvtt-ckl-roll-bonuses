@@ -425,6 +425,33 @@ declare global {
         static create();
     }
 
+    interface ItemSheetPF {
+        appId: number,
+        editors: { [key: string]: object },
+        filepickers: unknown[],
+        object: ItemPF,
+        options: unknown,
+        position: {
+            height: number,
+            left: number,
+            scale: number,
+            top: number,
+            width: number,
+            zIndex: number,
+        },
+        id: string,
+        actor: ActorPF | null,
+        closing: boolean,
+        document: ItemPF,
+        element: HTMLElement,
+        isEditable: boolean,
+        item: ItemPF,
+        popOut: boolean,
+        rendered: boolean,
+        template: string,
+        title: string,
+    }
+
     interface pf1 {
         components: {
             ItemAction: { new(): ItemAction },

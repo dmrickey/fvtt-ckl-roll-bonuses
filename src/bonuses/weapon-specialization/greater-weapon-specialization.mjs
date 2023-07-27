@@ -152,11 +152,10 @@ Hooks.once(
 );
 
 Hooks.on('renderItemSheet', (
-    /** @type {{ actor: ActorPF | undefined; }} */ app,
+    /** @type {ItemSheetPF} */ { actor, item },
     /** @type {[HTMLElement]} */[html],
-    /** @type {{ item: ItemPF; }} */ { item },
+    /** @type {unknown} */ _data
 ) => {
-    const { actor } = app;
     const name = item?.name?.toLowerCase() ?? '';
     const sourceId = item?.flags.core?.sourceId ?? '';
     if (!((name.includes(WeaponSpecializationSettings.weaponSpecialization) && name.includes(Settings.weaponSpecialization))

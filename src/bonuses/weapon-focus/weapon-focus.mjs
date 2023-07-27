@@ -131,9 +131,9 @@ Hooks.once(
 );
 
 Hooks.on('renderItemSheet', (
-    /** @type {{ actor: ActorPF | undefined; }} */ app,
+    /** @type {ItemSheetPF} */ { actor, item },
     /** @type {[HTMLElement]} */[html],
-    /** @type {{ item: ItemPF; }} */ { item },
+    /** @type {unknown} */ _data
 ) => {
 
     /**
@@ -156,7 +156,6 @@ Hooks.on('renderItemSheet', (
     if (isGreater) {
         key = greaterWeaponFocusKey;
 
-        const { actor } = app;
         if (actor) {
             choices = getDocDFlags(actor, weaponFocusKey);
         }
