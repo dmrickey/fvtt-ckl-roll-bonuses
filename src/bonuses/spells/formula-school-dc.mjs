@@ -28,7 +28,6 @@ Hooks.on('pf1PreActionUse', (/** @type {ActionUse} */actionUse) => {
     }
 
     const helper = new KeyedDFlagHelper(actor, key, formulaKey);
-    debugger;
     const matches = helper.getItemDictionaryFlagsWithAllFlagsAndMatchingFlag(key, item.system.school);
     const formulas = Object.values(matches).map((o) => o[formulaKey])
     const offset = formulas.reduce((acc, cur) => acc + RollPF.safeTotal(cur, actor.getRollData()), 0);

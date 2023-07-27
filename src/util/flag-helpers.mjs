@@ -4,7 +4,7 @@ import { truthiness } from "./truthiness.mjs";
 //   can't really do this an support the same feat with different bonuses
 /**
  *
- * @param {BaseDocument | undefined} doc - Item or Actor
+ * @param {BaseDocument | undefined | null} doc - Item or Actor
  * @param {string} key
  * @returns {(String | number)[]}
  */

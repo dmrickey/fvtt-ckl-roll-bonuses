@@ -282,9 +282,8 @@ Increase chosen spell CL by +2.
   - The input will automatically be added for any ability named `Spell Specialization` (configurable in the mod settings)
   - You can manually add the `spell-specialization` dictionary flag for the input to show up
   - Only spells in your actor's spellbooks will be available as choices
-    - if you want a different spell that your actor doesn't have, you can manually type the spell `tag` in as the value of the dictionary flag
-  - The spell's `tag` is the key. If you have multiple versions of the same spell in your spellbook and want this to work with all of them, then they all need to have the same `tag`. By default the `tag` is based on the Spell's name. You can customize the `tag` in the Spell's details.
-    - e.g. If your chosen spell if `Fireball` then its tag is `fireball`. If you have duplicate copy of Fireball in your spellbook called `Maximize Fireball`, then by default its tag will be `maximizeFireball`. You will need to customize maximize's tag to match the base spell. Otherwise spell focus will see these as two uniquely separate spells because their tags are different.
+    - if you want a different spell that your actor doesn't have, you can manually type the spell's `name` in as the value of the dictionary flag
+  - The spell's `name` is the key. If you have multiple versions of the same spell in your spellbook and want this to work with all of them, then they all need to have the same `name`. Ideally, if you need specialized versions of spells, they'll just be actions under that one spell that already has that name
 
 </details>
 

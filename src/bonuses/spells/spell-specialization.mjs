@@ -7,6 +7,7 @@ import { getDocDFlags, KeyedDFlagHelper } from "../../util/flag-helpers.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize } from "../../util/localize.mjs";
 import { registerSetting } from "../../util/settings.mjs";
+import { uniqueArray } from "../../util/unique-array.mjs";
 import { spellFocusKey } from "./spell-focus.mjs";
 
 const key = 'spell-specialization';
@@ -25,7 +26,7 @@ registerItemHint((hintcls, actor, item, _data) => {
     const helper = new KeyedDFlagHelper(actor, key);
     const specializations = helper.valuesForFlag(key);
 
-    if (!specializations.includes(item?.system?.tag)) {
+    if (!specializations.includes(item?.name)) {
         return;
     }
 
@@ -40,12 +41,13 @@ registerItemHint((hintcls, actor, item, _data) => {
         return;
     }
 
-    // grab the shortest spell name with a matching tag
+    // grab the shortest spell name
     const names = actor.items
-        ?.filter((i) => i.system.tag === current && i instanceof pf1.documents.item.ItemSpellPF)
-        .sort((x, y) => x.system.tag.length > y.system.tag.length ? 1 : -1)
+        ?.filter((i) => i.name === current && i instanceof pf1.documents.item.ItemSpellPF)
+        .map(({ name }) => name)
+        .sort((x, y) => x.length > y.length ? 1 : -1)
         ?? [];
-    const name = names[0].name;
+    const name = names[0];
     if (!name) {
         return;
     }
@@ -70,8 +72,9 @@ Hooks.on('pf1GetRollData', (
         return;
     }
 
-    const current = getDocDFlags(item, key)[0];
-    if (!current || current !== item.system.tag) {
+    const helper = new KeyedDFlagHelper(item.actor, key);
+    const specializations = helper.stringValuesForFlag(key);
+    if (!specializations.includes(item.name)) {
         return;
     }
 
@@ -85,7 +88,7 @@ Hooks.on('pf1GetRollData', (
 let clOffsetTemplate;
 Hooks.once(
     'setup',
-    async () => clOffsetTemplate = await getTemplate(`modules/${MODULE_NAME}/hbs/labeled-key-value-dropdown-selector.hbs`)
+    async () => clOffsetTemplate = await getTemplate(`modules/${MODULE_NAME}/hbs/labeled-string-dropdown-selector.hbs`)
 );
 
 /**
@@ -113,10 +116,10 @@ Hooks.on('renderItemSheet', (
             (spell) => spell instanceof pf1.documents.item.ItemSpellPF
                 && focuses.includes(spell.system.school))
         ?? [];
-    const choices = spellChoices.reduce((acc, curr) => ({ ...acc, [curr.system.tag]: curr.name }), {});
+    const choices = uniqueArray(spellChoices.map(({ name }) => name)).sort();
 
-    if (Object.keys(choices).length && !current) {
-        item.setItemDictionaryFlag(key, Object.keys(choices)[0]);
+    if (choices.length && !current) {
+        item.setItemDictionaryFlag(key, choices[0]);
     }
 
     const templateData = {
@@ -129,7 +132,7 @@ Hooks.on('renderItemSheet', (
     const div = document.createElement('div');
     div.innerHTML = clOffsetTemplate(templateData, { allowProtoMethodsByDefault: true, allowProtoPropertiesByDefault: true });
 
-    const select = div.querySelector(`#key-value-selector-${key}`);
+    const select = div.querySelector(`#string-selector-${key}`);
     select?.addEventListener(
         'change',
         async (event) => {
