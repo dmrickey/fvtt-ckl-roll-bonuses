@@ -159,9 +159,9 @@ Hooks.once(
 );
 
 Hooks.on('renderItemSheet', (
-    /** @type {{}} */ _app,
+    /** @type {ItemSheetPF} */ { actor, item },
     /** @type {[HTMLElement]} */[html],
-    /** @type {{ item: ItemPF; }} */ { item },
+    /** @type {unknown} */ _data
 ) => {
     const name = item?.name?.toLowerCase() ?? '';
     const sourceId = item?.flags.core?.sourceId ?? '';
@@ -172,7 +172,7 @@ Hooks.on('renderItemSheet', (
     const current = item.getItemDictionaryFlag(key);
 
     const customs = uniqueArray(
-        item.actor?.items
+        actor?.items
             .filter(
                 /** @returns {i is ItemWeaponPF | ItemAttackPF} */
                 (i) => i instanceof pf1.documents.item.ItemWeaponPF || i instanceof pf1.documents.item.ItemAttackPF

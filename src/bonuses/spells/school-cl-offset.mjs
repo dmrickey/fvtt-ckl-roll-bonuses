@@ -2,6 +2,7 @@ import { MODULE_NAME } from "../../consts.mjs";
 import { addNodeToRollBonus } from "../../roll-bonus-on-actor-sheet.mjs";
 import { getDocDFlags, KeyedDFlagHelper } from "../../util/flag-helpers.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
+import { localize } from "../../util/localize.mjs";
 
 const schoolClOffset = 'schoolClOffset';
 const schoolClOffsetFormula = 'schoolClOffsetFormula';
@@ -9,14 +10,34 @@ const schoolClOffsetFormula = 'schoolClOffsetFormula';
 // todo get rid of total and just calculate it from roll data as needed (if it can be done without getting stuck in a recursive loop)
 const schoolClOffsetTotal = 'schoolClOffsetTotal';
 
-/**
- * @type {Handlebars.TemplateDelegate}
- */
-let clOffsetTemplate;
-Hooks.once(
-    'setup',
-    async () => clOffsetTemplate = await getTemplate(`modules/${MODULE_NAME}/hbs/school-cl-offset.hbs`)
-);
+// register hint on ability
+registerItemHint((hintcls, _actor, item, _data) => {
+    const currentSchool = getDocDFlags(item, schoolClOffset)[0]?.toString();
+    if (!currentSchool) {
+        return;
+    }
+
+    const { spellSchools } = pf1.config;
+    const total = getDocDFlags(item, schoolClOffsetTotal)[0];
+    if (!total) {
+        return;
+    }
+
+    /**
+     *
+     * @param {number} t
+     * @param {string} s
+     * @returns
+     */
+    const getHint = (t, s) => {
+        const signed = `+${t}`.replace("+-", "-");
+        return localize('cl-school-mod', { mod: signed, school: spellSchools[s] ?? s });
+    }
+    const label = getHint(+total, currentSchool);
+
+    const hint = hintcls.create(label, [], {});
+    return hint;
+});
 
 Hooks.on('pf1GetRollData', (
     /** @type {ItemAction} */ action,
@@ -63,16 +84,22 @@ Hooks.on('pf1GetRollData', (
 });
 
 /**
+ * @type {Handlebars.TemplateDelegate}
+ */
+let clOffsetTemplate;
+Hooks.once(
+    'setup',
+    async () => clOffsetTemplate = await getTemplate(`modules/${MODULE_NAME}/hbs/school-cl-offset.hbs`)
+);
+
+/**
  * @param {string} html
  */
 Hooks.on('renderItemSheet', (
-    /** @type {{ actor: ActorPF; }} */ app,
+    /** @type {ItemSheetPF} */ { actor, item },
     /** @type {[HTMLElement]} */[html],
-    /** @type {{ item: ItemPF; }} */ data
+    /** @type {unknown} */ _data
 ) => {
-    const { actor } = app;
-    const { item } = data;
-
     const { spellSchools } = pf1.config;
 
     const hasKey = item.system.flags.dictionary[schoolClOffset] !== undefined
@@ -117,32 +144,4 @@ Hooks.on('renderItemSheet', (
     );
 
     addNodeToRollBonus(html, div);
-});
-
-registerItemHint((hintcls, _actor, item, _data) => {
-    const currentSchool = getDocDFlags(item, schoolClOffset)[0]?.toString();
-    if (!currentSchool) {
-        return;
-    }
-
-    const { spellSchools } = pf1.config;
-    const total = getDocDFlags(item, schoolClOffsetTotal)[0];
-    if (!total) {
-        return;
-    }
-
-    /**
-     *
-     * @param {number} t
-     * @param {string} s
-     * @returns
-     */
-    const getHint = (t, s) => {
-        const signed = `+${t}`.replace("+-", "-");
-        return `CL ${signed} (${spellSchools[s] ?? s})`;
-    }
-    const label = getHint(+total, currentSchool);
-
-    const hint = hintcls.create(label, [], {});
-    return hint;
 });

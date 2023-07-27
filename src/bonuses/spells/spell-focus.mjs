@@ -4,7 +4,7 @@ import { getDocDFlags } from "../../util/flag-helpers.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { registerSetting } from "../../util/settings.mjs";
 
-const spellFocusKey = 'spellFocus';
+export const spellFocusKey = 'spellFocus';
 const greaterSpellFocusKey = 'greaterSpellFocus';
 const mythicSpellFocusKey = 'mythicSpellFocus';
 
@@ -64,12 +64,10 @@ Hooks.on('pf1PreActionUse', (/** @type {ActionUse} */actionUse) => {
 });
 
 Hooks.on('renderItemSheet', (
-    /** @type {{}} */ _app,
+    /** @type {ItemSheetPF} */ { actor, item },
     /** @type {[HTMLElement]} */[html],
-    /** @type {{ item: ItemPF; }} */ data,
+    /** @type {unknown} */ _data
 ) => {
-    const { item } = data;
-
     /**
      * @type {string | undefined}
      */
@@ -88,7 +86,6 @@ Hooks.on('renderItemSheet', (
     if (isGreater || isMythic) {
         key = isGreater ? greaterSpellFocusKey : mythicSpellFocusKey;
 
-        const actor = item.actor;
         if (actor) {
             spellSchools = {};
             const existingSpellFocuses = getDocDFlags(actor, spellFocusKey);

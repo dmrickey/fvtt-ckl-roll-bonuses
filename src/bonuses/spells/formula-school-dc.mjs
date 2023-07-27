@@ -28,7 +28,6 @@ Hooks.on('pf1PreActionUse', (/** @type {ActionUse} */actionUse) => {
     }
 
     const helper = new KeyedDFlagHelper(actor, key, formulaKey);
-    debugger;
     const matches = helper.getItemDictionaryFlagsWithAllFlagsAndMatchingFlag(key, item.system.school);
     const formulas = Object.values(matches).map((o) => o[formulaKey])
     const offset = formulas.reduce((acc, cur) => acc + RollPF.safeTotal(cur, actor.getRollData()), 0);
@@ -45,11 +44,10 @@ Hooks.once(
 );
 
 Hooks.on('renderItemSheet', (
-    /** @type {{}} */ _app,
+    /** @type {ItemSheetPF} */ { item },
     /** @type {[HTMLElement]} */[html],
-    /** @type {{ item: ItemPF; }} */ data,
+    /** @type {unknown} */ _data
 ) => {
-    const { item } = data;
     const { spellSchools } = pf1.config;
 
     if (item.system.flags.dictionary[key] === undefined) {

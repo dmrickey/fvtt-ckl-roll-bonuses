@@ -18,6 +18,7 @@ Supports PF1 v9+
 - [Spell DC Bonuses (for all spells)](#spell-dc-bonuses-for-all-spells)
 - [Spell DC Bonuses (for specific schools)](#spell-dc-bonuses-for-specific-schools)
 - [Spell Focus](#spell-focus)
+- [Spell Specialization](#spell-specialization)
 - [Versatile Performance](#versatile-performance)
 - [Weapon Focus](#weapon-focus)
 - [Weapon Specialization](#weapon-specialization)
@@ -272,6 +273,20 @@ Spell Focus, Greater Spell Focus, and Mythic Spell Focus now all have a drop dow
 
 </details>
 
+## Spell Specialization
+Increase chosen spell CL by +2.
+
+<details>
+  <summary>How to configure Spell Specialization (clicke to expand)</summary>
+
+  - The input will automatically be added for any ability named `Spell Specialization` (configurable in the mod settings)
+  - You can manually add the `spell-specialization` dictionary flag for the input to show up
+  - Only spells in your actor's spellbooks will be available as choices
+    - if you want a different spell that your actor doesn't have, you can manually type the spell's `name` in as the value of the dictionary flag
+  - The spell's `name` is the key. If you have multiple versions of the same spell in your spellbook and want this to work with all of them, then they all need to have the same `name`. Ideally, if you need specialized versions of spells, they'll just be actions under that one spell that already has that name
+
+</details>
+
 ## Versatile Performance
 Choose your perform. Choose the two skills it replaces. Whenever you roll those skills they'll automatically use your perform skill.
 
@@ -281,6 +296,7 @@ Choose your perform. Choose the two skills it replaces. Whenever you roll those 
   - The input will automatically be added for any ability named `Versatile Performance`
     - This is configurable in the settings for different translations
     - If it doesn't show up (or you want to use this on a different ability), you can add the dictionary flag `versatile-performance` and the inputs will automatically be added
+      - due to its complexity, the inputs will not show up if you're viewing the item from the 
   - To configure
     - choose the perform skill you want to use in the first input
     - choose the two skills in the next two inputs

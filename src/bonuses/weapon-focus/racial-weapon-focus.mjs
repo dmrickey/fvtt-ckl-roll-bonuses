@@ -105,9 +105,9 @@ Hooks.once(
 );
 
 Hooks.on('renderItemSheet', (
-    /** @type {{}} */ _app,
+    /** @type {ItemSheetPF} */ { item },
     /** @type {[HTMLElement]} */[html],
-    /** @type {{ item: ItemPF; }} */ { item },
+    /** @type {unknown} */ _data
 ) => {
     const name = item?.name?.toLowerCase() ?? '';
     const sourceId = item?.flags.core?.sourceId ?? '';

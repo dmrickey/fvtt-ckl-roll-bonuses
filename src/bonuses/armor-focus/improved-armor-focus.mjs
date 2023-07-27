@@ -117,9 +117,9 @@ Hooks.once(
 );
 
 Hooks.on('renderItemSheet', (
-    /** @type {{}} */ _app,
+    /** @type {ItemSheetPF} */ { actor, item },
     /** @type {[HTMLElement]} */[html],
-    /** @type {{ item: ItemPF; }} */ { item },
+    /** @type {unknown} */ _data
 ) => {
     const name = item?.name?.toLowerCase() ?? '';
     const sourceId = item?.flags.core?.sourceId ?? '';
@@ -131,7 +131,7 @@ Hooks.on('renderItemSheet', (
     }
 
     const current = item.getItemDictionaryFlag(key);
-    const choices = getDocDFlags(item.actor, armorFocusKey);
+    const choices = getDocDFlags(actor, armorFocusKey);
 
     if (choices?.length && !current) {
         item.setItemDictionaryFlag(key, choices[0]);

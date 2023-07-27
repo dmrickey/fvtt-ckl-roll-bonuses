@@ -4,4 +4,4 @@
  * @param {T[] | undefined} x
  * @returns {T[]} Array of distinct values from array
  */
-export const uniqueArray = x => x ? [...new Set(x)] : [];
+export const uniqueArray = x => [...new Set(x || [])];

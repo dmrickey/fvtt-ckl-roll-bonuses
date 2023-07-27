@@ -152,9 +152,9 @@ Hooks.once(
 );
 
 Hooks.on('renderItemSheet', (
-    /** @type {{}} */ _app,
+    /** @type {ItemSheetPF} */ { actor, item },
     /** @type {[HTMLElement]} */[html],
-    /** @type {{ item: ItemPF; }} */ { item },
+    /** @type {unknown} */ _data
 ) => {
     const name = item?.name?.toLowerCase() ?? '';
     const sourceId = item?.flags.core?.sourceId ?? '';
@@ -167,7 +167,7 @@ Hooks.on('renderItemSheet', (
 
     const current = item.getItemDictionaryFlag(key);
 
-    const helper = new KeyedDFlagHelper(item?.actor, greaterWeaponFocusKey, weaponSpecializationKey);
+    const helper = new KeyedDFlagHelper(actor, greaterWeaponFocusKey, weaponSpecializationKey);
     const focuses = helper.valuesForFlag(greaterWeaponFocusKey);
     const specs = helper.valuesForFlag(weaponSpecializationKey);
     const choices = intersection(focuses, specs).sort();

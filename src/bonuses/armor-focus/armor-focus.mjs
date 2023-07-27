@@ -111,9 +111,9 @@ Hooks.once(
 );
 
 Hooks.on('renderItemSheet', (
-    /** @type {{}} */ _app,
+    /** @type {ItemSheetPF} */ { actor, item },
     /** @type {[HTMLElement]} */[html],
-    /** @type {{ item: ItemPF; }} */ { item },
+    /** @type {unknown} */ _data
 ) => {
     const name = item?.name?.toLowerCase() ?? '';
     const sourceId = item?.flags.core?.sourceId ?? '';
@@ -122,7 +122,7 @@ Hooks.on('renderItemSheet', (
     }
 
     const current = item.getItemDictionaryFlag(key);
-    const choices = uniqueArray(item.actor?.items
+    const choices = uniqueArray(actor?.items
         ?.filter(
             /** @returns {item is ItemEquipmentPF} */
             (item) => item.type === 'equipment'
@@ -130,7 +130,7 @@ Hooks.on('renderItemSheet', (
                 && item.system.slot === 'armor')
         .flatMap((item) => item.system.baseTypes ?? []));
 
-    if (choices?.length && !current) {
+    if (choices.length && !current) {
         item.setItemDictionaryFlag(key, choices[0]);
     }
 

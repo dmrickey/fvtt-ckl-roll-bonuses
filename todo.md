@@ -48,3 +48,4 @@
 - reduce duplication of `Greater` in so many different settings
 - Removed saved value from CL Offset and calculate the value when needed
 - Add CL attack note to spells
+- Consolidate weapon hints (Weapon Focus, Specialization, Martial) - find a way to make them more concise
