@@ -192,8 +192,8 @@ function handleInitiative(formula) {
     return parts.filter((p) => p !== null).join(" + ");
 };
 
-Hooks.on('pf1PostReady', () => {
-    Hooks.once('setup', () => libWrapper.register(MODULE_NAME, 'pf1.documents.CombatantPF.prototype._getInitiativeFormula', handleInitiative, libWrapper.OVERRIDE));
+Hooks.once('setup', () => {
+    libWrapper.register(MODULE_NAME, 'pf1.documents.CombatantPF.prototype._getInitiativeFormula', handleInitiative, libWrapper.OVERRIDE);
 });
 
 // item use does not fire through this hook, so it needs its own dice handling below
