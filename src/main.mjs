@@ -66,6 +66,20 @@ function itemGetAttackSources(wrapped, actionId) {
 }
 
 /**
+ *
+ * @param {*} wrapped
+ * @param {object} data
+ * @param {Object<string, string>} labels
+ * @param {string[]} props
+ * @param {RollData} rollData
+ * @this {ItemPF}
+ */
+function itemGetTypeChatData(wrapped, data, labels, props, rollData) {
+    wrapped(data, labels, props, rollData);
+    Hooks.call(localHooks.itemGetTypeChatData, this, props, rollData);
+}
+
+/**
  * @param {() => any} wrapped
  * @this {ItemAction}
  */
@@ -83,6 +97,8 @@ Hooks.once('setup', () => {
     libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.damageSources', actionDamageSources, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.dice.d20Roll', d20RollWrapper, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype.getAttackSources', itemGetAttackSources, libWrapper.WRAPPER);
+    libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype.getTypeChatData', itemGetTypeChatData, libWrapper.WRAPPER);
+    libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemSpellPF.prototype.getTypeChatData', itemGetTypeChatData, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype.use', itemUseWrapper, libWrapper.WRAPPER);
 });
 

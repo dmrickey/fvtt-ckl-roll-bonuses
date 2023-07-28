@@ -5,6 +5,7 @@
 - [Spells](#spells)
 - [Misc](#misc)
 - [Housekeeping](#housekeeping)
+- [Checklist for new (and existing features)](#checklist-for-new-and-existing-features)
 
 # ADD IN GAME DOCUMENATION
 
@@ -36,6 +37,10 @@
 ## Spells
 
 ## Misc
+### Deprecation
+- as of v9, PF1 now defers Roll Bonuses. So that means that the `Bonus` on the Skill settings can go away
+- It should create a new Feature with a change that includes the current formula as part of migration for deleting this
+- 
 ### Misc
 - add the formula class to skill inputs
 - consumable buffs - requires later release (waiting on issue #1946) (did not make it into v9)
@@ -47,3 +52,9 @@
 - Removed saved value from CL Offset and calculate the value when needed
 - Add CL attack note to spells
 - Consolidate weapon hints (Weapon Focus, Specialization, Martial) - find a way to make them more concise
+- Remove Inspiration from being added into the dialog and instead create a change as part of rolling the skill
+
+## Checklist for new (and existing features)
+- Has hint on keyed ability
+- Has hint on affected Item (Weapon/Attack/Spell/etc)
+- Has info/attack note

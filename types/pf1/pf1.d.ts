@@ -71,7 +71,7 @@ declare global {
     }
 
     class ChatAttack {
-        action: Action;
+        action: ItemAction;
         attackNotes: string[];
         effectNotes: string[];
         rollData: RollData;
@@ -129,8 +129,10 @@ declare global {
     }
     interface ItemSpellPF extends ItemPF {
         system: SystemItemSpellPF,
-    }
 
+        /** @deprecated Spells don't have tags */
+        tag: string,
+    }
     interface ItemFeatPF extends ItemPF {
 
     }

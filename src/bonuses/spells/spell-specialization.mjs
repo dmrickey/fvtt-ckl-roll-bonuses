@@ -4,16 +4,48 @@
 import { MODULE_NAME } from "../../consts.mjs";
 import { addNodeToRollBonus } from "../../roll-bonus-on-actor-sheet.mjs";
 import { getDocDFlags, KeyedDFlagHelper } from "../../util/flag-helpers.mjs";
+import { localHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize } from "../../util/localize.mjs";
 import { registerSetting } from "../../util/settings.mjs";
+import { truthiness } from "../../util/truthiness.mjs";
 import { uniqueArray } from "../../util/unique-array.mjs";
 import { spellFocusKey } from "./spell-focus.mjs";
 
 const key = 'spell-specialization';
+const exclusionKey = 'spell-specialization-exclusions';
 const compendiumId = 'CO2Qmj0aj76zJsew';
 
 registerSetting({ key: key });
+
+/**
+ * @param {ActorPF} actor
+ * @param {ItemSpellPF} item
+ * @returns {boolean}
+ */
+function isSpecializedSpell(actor, item) {
+    const helper = new KeyedDFlagHelper(actor, key, exclusionKey);
+    const name = item.name?.toLowerCase() ?? '';
+
+    // todo figure out how to move this logic into KeydDFlagHelper
+    const byItems = helper.dictionaryFlagsFromItems;
+    for (let i = 0; i < byItems.length; i++) {
+        const flags = byItems[i];
+
+        const specialization = `${flags[key] || ''}`.toLowerCase();
+        if (!specialization) continue;
+
+        const exceptions = `${flags[exclusionKey] || ''}`.toLowerCase()
+            .split(';')
+            .filter(truthiness)
+            .map((x) => x.trim());
+
+        const matched = !!(name.includes(specialization) && !exceptions.find((except) => name.includes(except)));
+        if (matched) return true;
+    }
+
+    return false;
+}
 
 class Settings {
     static get spellSpecialization() { return Settings.#getSetting(key); }
@@ -21,12 +53,27 @@ class Settings {
     static #getSetting(/** @type {string} */key) { return game.settings.get(MODULE_NAME, key).toLowerCase(); }
 }
 
+Hooks.on(localHooks.itemGetTypeChatData, (
+    /** @type {ItemPF} */ item,
+    /** @type {string[]} */ props,
+    /** @type {RollData} */ _rollData,
+) => {
+    if (!item || !(item instanceof pf1.documents.item.ItemSpellPF)) return;
+    const { actor } = item;
+    if (!actor) return;
+
+    if (isSpecializedSpell(actor, item)) {
+        props.push(localize(key));
+    }
+});
+
 // register hint on spell
 registerItemHint((hintcls, actor, item, _data) => {
-    const helper = new KeyedDFlagHelper(actor, key);
-    const specializations = helper.valuesForFlag(key);
+    if (!(item instanceof pf1.documents.item.ItemSpellPF)) {
+        return;
+    }
 
-    if (!specializations.includes(item?.name)) {
+    if (!isSpecializedSpell(actor, item)) {
         return;
     }
 
@@ -34,25 +81,14 @@ registerItemHint((hintcls, actor, item, _data) => {
     return hint;
 });
 
-// register hint on spell specialization
-registerItemHint((hintcls, actor, item, _data) => {
+// register hint on Spell Specialization
+registerItemHint((hintcls, _actor, item, _data) => {
     const current = getDocDFlags(item, key)[0]?.toString();
     if (!current) {
         return;
     }
 
-    // grab the shortest spell name
-    const names = actor.items
-        ?.filter((i) => i.name === current && i instanceof pf1.documents.item.ItemSpellPF)
-        .map(({ name }) => name)
-        .sort((x, y) => x.length > y.length ? 1 : -1)
-        ?? [];
-    const name = names[0];
-    if (!name) {
-        return;
-    }
-
-    const hint = hintcls.create(name, [], {});
+    const hint = hintcls.create(current, [], {});
     return hint;
 });
 
@@ -72,9 +108,7 @@ Hooks.on('pf1GetRollData', (
         return;
     }
 
-    const helper = new KeyedDFlagHelper(item.actor, key);
-    const specializations = helper.stringValuesForFlag(key);
-    if (!specializations.includes(item.name)) {
+    if (!isSpecializedSpell(item.actor, item)) {
         return;
     }
 

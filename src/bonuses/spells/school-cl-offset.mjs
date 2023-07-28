@@ -3,6 +3,7 @@ import { addNodeToRollBonus } from "../../roll-bonus-on-actor-sheet.mjs";
 import { getDocDFlags, KeyedDFlagHelper } from "../../util/flag-helpers.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize } from "../../util/localize.mjs";
+import { signed } from "../../util/to-signed-string.mjs";
 
 const schoolClOffset = 'schoolClOffset';
 const schoolClOffsetFormula = 'schoolClOffsetFormula';
@@ -30,8 +31,8 @@ registerItemHint((hintcls, _actor, item, _data) => {
      * @returns
      */
     const getHint = (t, s) => {
-        const signed = `+${t}`.replace("+-", "-");
-        return localize('cl-school-mod', { mod: signed, school: spellSchools[s] ?? s });
+        const mod = signed(t);
+        return localize('cl-label-mod', { mod, label: spellSchools[s] ?? s });
     }
     const label = getHint(+total, currentSchool);
 

@@ -283,7 +283,10 @@ Increase chosen spell CL by +2.
   - You can manually add the `spell-specialization` dictionary flag for the input to show up
   - Only spells in your actor's spellbooks will be available as choices
     - if you want a different spell that your actor doesn't have, you can manually type the spell's `name` in as the value of the dictionary flag
-  - The spell's `name` is the key. If you have multiple versions of the same spell in your spellbook and want this to work with all of them, then they all need to have the same `name`. Ideally, if you need specialized versions of spells, they'll just be actions under that one spell that already has that name
+  - The spell's `name` is the key. If you have multiple versions of the same spell in your spellbook and want this to work with all of them, then pick the `name` that is in both items.
+    - e.g. If you have two differnt spells in your spellbook that are the same spell, but one is different because it has metamagic details pre-defined in it, `Fireball` and `Maximized Fireball`, then choose `Fireball` and it will apply to both spells
+  - If `Spell Specialization` is accidentally applying to an extra spell because it includes the chosen spell's name, then you can add exclusionary rules, too. Add the dictionary flag `spell-specialization-exclusions` and add in any extra parts of other spell names that should be excluded - each separate term split by a `;`.
+    - e.g. You have chosen the spell `Alarm`, but also have other spells `Selective Alarm` and `Escape Alarm`. By default those other two will also be specialized. But you can add the exclusion flag with the value `Selective; Escape` and those will now be excluded.
 
 </details>
 

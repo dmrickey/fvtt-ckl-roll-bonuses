@@ -2,7 +2,7 @@
     "ckl-roll-bonuses": {
         "armor-focus": "Armor Focus",
         "cl-mod": "{mod} CL",
-        "cl-school-mod": "{mod} CL ({school})",
+        "cl-label-mod": "{mod} CL ({label})",
         "crit-offset": "Crit Offset ({mod})",
         "elemental-cl": "Element CL Offset",
         "fates-favored": "Fate's Favored",

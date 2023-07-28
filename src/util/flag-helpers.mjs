@@ -152,6 +152,13 @@ export class KeyedDFlagHelper {
     }
 
     /**
+     * @returns {DictionaryFlags[]}
+     */
+    get dictionaryFlagsFromItems() {
+        return Object.values(this.#byItem);
+    }
+
+    /**
      * If the helper was created with 3 flags, then return {@see ItemDictionaryFlags} for only those items that have all three flags
      * @returns {ItemDictionaryFlags}
      */

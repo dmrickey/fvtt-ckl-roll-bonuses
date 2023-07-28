@@ -3,6 +3,7 @@ import { addNodeToRollBonus } from "../roll-bonus-on-actor-sheet.mjs";
 import { KeyedDFlagHelper, getDocDFlags } from "../util/flag-helpers.mjs";
 import { registerItemHint } from "../util/item-hints.mjs";
 import { localize } from "../util/localize.mjs";
+import { signed } from "../util/to-signed-string.mjs";
 import { truthiness } from "../util/truthiness.mjs";
 
 
@@ -16,15 +17,27 @@ const damageElements = [
     'fire'
 ];
 
-registerItemHint((hintcls, _actor, item, _data) => {
+registerItemHint((hintcls, actor, item, _data) => {
     const currentElement = getDocDFlags(item, key)[0];
     if (!currentElement) {
         return;
     }
 
-    const label = pf1.registry.damageTypes.get(`${currentElement}`) ?? currentElement;
+    const formula = getDocDFlags(item, formulaKey)[0];
+    if (!formula) {
+        return;
+    }
 
-    const hint = hintcls.create(label.name, [], {});
+    const total = RollPF.safeTotal(formula, actor?.getRollData() ?? {});
+    if (!total) {
+        return;
+    }
+
+    const mod = signed(total);
+    const element = pf1.registry.damageTypes.get(`${currentElement}`)?.name ?? currentElement;
+    const label = localize('cl-label-mod', { mod, label: element });
+
+    const hint = hintcls.create(label, [], {});
     return hint;
 });
 
