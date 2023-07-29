@@ -26,3 +26,19 @@
 .versatile-performance-selector td select {
     width: 100%;
 }
+
+.sheet itemHints.koboldworks .hint.ckl-acid-green {
+    color: #53c544;
+}
+
+.sheet itemHints.koboldworks .hint.ckl-cold-blue {
+    color: #6897e8;
+}
+
+.sheet itemHints.koboldworks .hint.ckl-electric-yellow {
+    color: #999900;
+}
+
+.sheet itemHints.koboldworks .hint.ckl-fire-red {
+    color: #ff0000;
+}

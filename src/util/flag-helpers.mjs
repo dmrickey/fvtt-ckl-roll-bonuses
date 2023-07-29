@@ -1,4 +1,5 @@
 import { truthiness } from "./truthiness.mjs";
+import { uniqueArray } from "./unique-array.mjs";
 
 // todo update to use actor.itemFlags.dictionary or item.system.flags.dictionary
 //   can't really do this an support the same feat with different bonuses
@@ -110,6 +111,9 @@ export class KeyedDFlagHelper {
     /** @type {string[]} - The flags*/
     #flags = [];
 
+    /** @type {{[key: FlagValue]: string[]}} Keyed by flag value, list of flags containing  */
+    #byValue = {};
+
     // todo - maybe 0.83.0 after user is warned when there's a tag collision I can read the dFlags off of the passed in actor
     /**
      * @param {ItemDictionaryFlags | ActorPF | undefined | null} dFlags
@@ -130,6 +134,9 @@ export class KeyedDFlagHelper {
 
                             this.#byItem[item.system.tag] ||= {};
                             this.#byItem[item.system.tag][flag] = value;
+
+                            this.#byValue[value] ||= [];
+                            this.#byValue[value].push(flag);
                         }
                     });
                 }
@@ -192,6 +199,14 @@ export class KeyedDFlagHelper {
 
     /**
      *
+     * @returns {boolean} - whether or not any flags were found
+     */
+    hasAnyFlags() {
+        return !!Object.values(this.#byFlag).find(x => x.length);
+    }
+
+    /**
+     *
      * @param {string} flag
      * @returns {FlagValue[]}
      */
@@ -207,6 +222,29 @@ export class KeyedDFlagHelper {
      */
     stringValuesForFlag(flag) {
         return this.valuesForFlag(flag).map((x) => `${x}`);
+    }
+
+    /**
+     *
+     * @param {FlagValue} value
+     * @returns {string[]}
+     */
+    keysForValue(value) {
+        return this.#byValue[value] ?? [];
+    }
+
+    /**
+     * Returns an array of {@link FlagValue}s as {@link String}s.
+     *
+     * @returns {string[]}
+     */
+    stringValuesForAllFlags() {
+        return uniqueArray(
+            Object.values(this.#byFlag)
+                .flatMap((x) => x)
+                .filter(truthiness)
+                .map((x) => `${x}`)
+        );
     }
 
     /**
@@ -230,7 +268,8 @@ export class KeyedDFlagHelper {
      * @returns {{[key: string]: number}} Totals, keyed by flag
      */
     sumEntries(rollData) {
-        return this.#sumByFlag ??= this.#calculateSums(rollData ?? {});
+        this.#sumByFlag ??= this.#calculateSums(rollData ?? {});
+        return { ...this.#sumByFlag };
     }
 
     /**

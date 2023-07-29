@@ -17,6 +17,11 @@ const damageElements = [
     'fire'
 ];
 
+// todo register info
+
+// todo register hint on spell
+
+// register hint on ability
 registerItemHint((hintcls, actor, item, _data) => {
     const currentElement = getDocDFlags(item, key)[0];
     if (!currentElement) {

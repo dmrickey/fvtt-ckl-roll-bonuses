@@ -94,7 +94,7 @@ Hooks.on('pf1GetRollData', (
         }
 
         const hasKeen = item.hasItemBooleanFlag(selfKeen)
-            || hasAnyBFlag(item.actor, keenAll, keenId(item), keenId(action));
+            || hasAnyBFlag(action.actor, keenAll, keenId(item), keenId(action));
 
         let range = hasKeen
             ? current * 2 - 21

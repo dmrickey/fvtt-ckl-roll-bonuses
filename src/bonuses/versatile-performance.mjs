@@ -36,7 +36,7 @@ registerItemHint((hintcls, actor, item, _data) => {
     if (!(item instanceof pf1.documents.item.ItemFeatPF)) return;
     const vps = getDocDFlags(item, key);
 
-    const hints = [];
+    const  /** @type {Hint[]} */ hints = [];
 
     try {
         for (let i = 0; i < vps.length; i++) {

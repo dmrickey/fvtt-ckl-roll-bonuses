@@ -1,7 +1,8 @@
 import { MODULE_NAME } from "../../consts.mjs";
 import { addNodeToRollBonus } from "../../roll-bonus-on-actor-sheet.mjs";
-import { getDocDFlags } from "../../util/flag-helpers.mjs";
+import { KeyedDFlagHelper, getDocDFlags } from "../../util/flag-helpers.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
+import { localize } from "../../util/localize.mjs";
 import { registerSetting } from "../../util/settings.mjs";
 
 export const spellFocusKey = 'spellFocus';
@@ -26,19 +27,62 @@ class Settings {
     static #getSetting(/** @type {string} */key) { return game.settings.get(MODULE_NAME, key).toLowerCase(); }
 }
 
-/**
- * @type {Handlebars.TemplateDelegate}
- */
-let focusSelectorTemplate;
-Hooks.once(
-    'setup',
-    async () => focusSelectorTemplate = await getTemplate(`modules/${MODULE_NAME}/hbs/spell-focus-selector.hbs`)
-);
+// todo register info
 
-// before dialog pops up
-Hooks.on('pf1PreActionUse', (/** @type {ActionUse} */actionUse) => {
-    const { actor, item, shared } = actionUse;
+// register hint on focused spell
+registerItemHint((hintcls, actor, item, _data) => {
     if (!(item instanceof pf1.documents.item.ItemSpellPF)) {
+        return;
+    }
+
+    const helper = new KeyedDFlagHelper(actor, spellFocusKey, greaterSpellFocusKey, mythicSpellFocusKey);
+
+    const isFocused = helper.valuesForFlag(spellFocusKey).includes(item.system.school);
+    const isGreater = helper.valuesForFlag(greaterSpellFocusKey).includes(item.system.school);
+    const isMythic = helper.valuesForFlag(mythicSpellFocusKey).includes(item.system.school);
+
+    if (isFocused || isGreater || isMythic) {
+        const tips = []
+        if (isFocused) tips.push(localize(spellFocusKey));
+        if (isGreater) tips.push(localize(greaterSpellFocusKey));
+        if (isMythic) tips.push(localize(mythicSpellFocusKey));
+        return hintcls.create('', [], { icon: 'fas fa-book', hint: tips.join('\n') });
+    }
+});
+
+// register hint on ability
+registerItemHint((hintcls, _actor, item, _data) => {
+    const key = allKeys.find((k) => item.system.flags.dictionary[k] !== undefined);
+    if (!key) {
+        return;
+    }
+
+    const currentSchool = getDocDFlags(item, key)[0];
+    if (!currentSchool) {
+        return;
+    }
+
+    const label = pf1.config.spellSchools[currentSchool] ?? currentSchool;
+
+    const hint = hintcls.create(label, [], {});
+    return hint;
+});
+
+Hooks.on('pf1GetRollData', (
+        /** @type {ItemAction} */ action,
+        /** @type {RollData} */ rollData
+) => {
+    if (!(action instanceof pf1.components.ItemAction)) {
+        return;
+    }
+
+    const { actor } = action;
+    if (!actor) {
+        return;
+    }
+
+    const item = action?.item;
+    if (!(item instanceof pf1.documents.item.ItemSpellPF) || !rollData) {
         return;
     }
 
@@ -49,12 +93,13 @@ Hooks.on('pf1PreActionUse', (/** @type {ActionUse} */actionUse) => {
         const focuses = getDocDFlags(actor, key);
         const hasFocus = !!focuses.find(focus => focus === item.system.school);
         if (hasFocus) {
-            shared.saveDC += 1;
+            rollData.dcBonus ||= 0;
+            rollData.dcBonus += 1;
 
             const mythicFocuses = getDocDFlags(actor, mythicSpellFocusKey);
             const hasMythicFocus = !!mythicFocuses.find(f => f === item.system.school);
             if (hasMythicFocus) {
-                shared.saveDC += 1;
+                rollData.dcBonus += 1;
             }
         }
     }
@@ -62,6 +107,15 @@ Hooks.on('pf1PreActionUse', (/** @type {ActionUse} */actionUse) => {
     handleFocus(spellFocusKey);
     handleFocus(greaterSpellFocusKey);
 });
+
+/**
+ * @type {Handlebars.TemplateDelegate}
+ */
+let focusSelectorTemplate;
+Hooks.once(
+    'setup',
+    async () => focusSelectorTemplate = await getTemplate(`modules/${MODULE_NAME}/hbs/spell-focus-selector.hbs`)
+);
 
 Hooks.on('renderItemSheet', (
     /** @type {ItemSheetPF} */ { actor, item },
@@ -126,21 +180,4 @@ Hooks.on('renderItemSheet', (
     );
 
     addNodeToRollBonus(html, div);
-});
-
-registerItemHint((hintcls, _actor, item, _data) => {
-    const key = allKeys.find((k) => item.system.flags.dictionary[k] !== undefined);
-    if (!key) {
-        return;
-    }
-
-    const currentSchool = getDocDFlags(item, key)[0];
-    if (!currentSchool) {
-        return;
-    }
-
-    const label = pf1.config.spellSchools[currentSchool] ?? currentSchool;
-
-    const hint = hintcls.create(label, [], {});
-    return hint;
 });

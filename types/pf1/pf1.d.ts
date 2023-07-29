@@ -188,7 +188,7 @@ declare global {
         actions: EmbeddedCollection<Action>;
 
         actor: ActorPF;
-        firstAction: Action;
+        firstAction: ItemAction;
         flags: {
             core: {
                 sourceId: string
@@ -268,7 +268,6 @@ declare global {
      * Roll Data used for resolving formulas
      */
     interface RollData {
-        skills: { [key: string]: SkillRollData },
         action: {
             id: string,
             damage: {
@@ -289,6 +288,7 @@ declare global {
             type: number,
         },
         cl: number,
+        dcBonus: number;
         dFlags: ItemDictionaryFlags,
         item: ItemPF,
         shield: {
@@ -297,6 +297,7 @@ declare global {
             total: number,
             type: number,
         },
+        skills: { [key: string]: SkillRollData },
         spells: any,
         // [key: string]: any,
     }

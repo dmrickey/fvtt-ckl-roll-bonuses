@@ -1,8 +1,9 @@
 import { MODULE_NAME } from "../../consts.mjs";
 import { addNodeToRollBonus } from "../../roll-bonus-on-actor-sheet.mjs";
-import { intersects } from "../../util/array-intersects.mjs";
-import { getDocDFlags } from "../../util/flag-helpers.mjs";
+import { intersection, intersects } from "../../util/array-intersects.mjs";
+import { KeyedDFlagHelper, getDocDFlags } from "../../util/flag-helpers.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
+import { localize } from "../../util/localize.mjs";
 import { registerSetting } from "../../util/settings.mjs";
 import { truthiness } from "../../util/truthiness.mjs";
 
@@ -20,6 +21,20 @@ registerSetting({ key: elementalFocusKey });
 registerSetting({ key: greaterElementalFocusKey });
 registerSetting({ key: mythicElementalFocusKey });
 
+const icons = {
+    acid: { icon: 'fas fa-droplet', css: 'ckl-acid-green' },
+    cold: { icon: 'far fa-snowflake', css: 'ckl-cold-blue' },
+    electric: { icon: 'fas fa-bolt-lightning', css: 'ckl-electric-yellow' },
+    fire: { icon: 'fas fa-fire-flame-curved', css: 'ckl-fire-red' },
+};
+
+const damageElements = [
+    'acid',
+    'cold',
+    'electric',
+    'fire'
+];
+
 class Settings {
     static get elementalFocus() { return Settings.#getSetting(elementalFocusKey); }
     static get greater() { return Settings.#getSetting(greaterElementalFocusKey); }
@@ -28,12 +43,94 @@ class Settings {
     static #getSetting(/** @type {string} */key) { return game.settings.get(MODULE_NAME, key).toLowerCase(); }
 }
 
-const damageElements = [
-    'acid',
-    'cold',
-    'electric',
-    'fire'
-];
+// register on focused spell
+registerItemHint((hintcls, actor, item, _data) => {
+    if (!(item instanceof pf1.documents.item.ItemSpellPF)) {
+        return;
+    }
+
+    const action = item.firstAction;
+    if (!action) {
+        return;
+    }
+
+    const helper = new KeyedDFlagHelper(actor, elementalFocusKey, greaterElementalFocusKey, mythicElementalFocusKey);
+
+    const damageTypes = action.data.damage.parts
+        .map(({ type }) => type)
+        .flatMap(({ custom, values }) => ([...custom.split(';').map(x => x.trim()), ...values]))
+        .filter(truthiness);
+
+    const  /** @type {Hint[]} */ hints = [];
+    damageElements.forEach((element) => {
+        if (!damageTypes.includes(element)) {
+            return;
+        }
+
+        const focuses = helper.keysForValue(element);
+        if (focuses.length) {
+            // @ts-ignore
+            const match = icons[element];
+            const hint = hintcls.create('', [match.css], { icon: match.icon, hint: focuses.map((f) => localize(f)).join('\n') });
+            hints.push(hint);
+        }
+    });
+    return hints;
+});
+
+// register on ability
+registerItemHint((hintcls, _actor, item, _data) => {
+    const key = allKeys.find((k) => item.system.flags.dictionary[k] !== undefined);
+    if (!key) {
+        return;
+    }
+
+    const currentElement = getDocDFlags(item, key)[0];
+    if (!currentElement) {
+        return;
+    }
+
+    const label = pf1.registry.damageTypes.get(`${currentElement}`) ?? currentElement;
+
+    const hint = hintcls.create(label.name, [], {});
+    return hint;
+});
+
+// todo register info
+
+// before dialog pops up
+Hooks.on('pf1GetRollData', (
+    /** @type {ItemAction} */ action,
+    /** @type {RollData} */ rollData
+) => {
+    const { item, actor } = action;
+    if (item?.type !== 'spell') {
+        return;
+    }
+
+    const damageTypes = action.data.damage.parts
+        .map(({ type }) => type)
+        .flatMap(({ custom, values }) => ([...custom.split(';').map(x => x.trim()), ...values]))
+        .filter(truthiness);
+
+    const handleFocus = (/** @type {string} */key) => {
+        const focuses = getDocDFlags(actor, key);
+        const hasFocus = intersects(damageTypes, focuses);
+        if (hasFocus) {
+            rollData.dcBonus ||= 0;
+            rollData.dcBonus += 1;
+
+            const mythicFocuses = getDocDFlags(actor, mythicElementalFocusKey);
+            const hasMythicFocus = intersects(damageTypes, mythicFocuses);
+            if (hasMythicFocus) {
+                rollData.dcBonus += 1;
+            }
+        }
+    }
+
+    handleFocus(elementalFocusKey);
+    handleFocus(greaterElementalFocusKey);
+});
 
 /**
  * @type {Handlebars.TemplateDelegate}
@@ -43,38 +140,6 @@ Hooks.once(
     'setup',
     async () => focusSelectorTemplate = await getTemplate(`modules/${MODULE_NAME}/hbs/elemental-focus-selector.hbs`)
 );
-
-// before dialog pops up
-Hooks.on('pf1PreActionUse', (/** @type {ActionUse} */actionUse) => {
-    const { action, actor, item, shared } = actionUse;
-    if (item?.type !== 'spell') {
-        return;
-    }
-
-    const damageTypes = action.data.damage.parts
-        // @ts-ignore
-        .map(({ type }) => type)
-        // @ts-ignore
-        .flatMap(({ custom, values }) => ([...custom.split(';').map(x => x.trim()), ...values]))
-        .filter(truthiness);
-
-    const handleFocus = (/** @type {string} */key) => {
-        const focuses = getDocDFlags(actor, key);
-        const hasFocus = intersects(damageTypes, focuses);
-        if (hasFocus) {
-            shared.saveDC += 1;
-
-            const mythicFocuses = getDocDFlags(actor, mythicElementalFocusKey);
-            const hasMythicFocus = intersects(damageTypes, mythicFocuses);
-            if (hasMythicFocus) {
-                shared.saveDC += 1;
-            }
-        }
-    }
-
-    handleFocus(elementalFocusKey);
-    handleFocus(greaterElementalFocusKey);
-});
 
 Hooks.on('renderItemSheet', (
     /** @type {ItemSheetPF} */ { actor, item },
@@ -143,21 +208,4 @@ Hooks.on('renderItemSheet', (
     );
 
     addNodeToRollBonus(html, div);
-});
-
-registerItemHint((hintcls, _actor, item, _data) => {
-    const key = allKeys.find((k) => item.system.flags.dictionary[k] !== undefined);
-    if (!key) {
-        return;
-    }
-
-    const currentElement = getDocDFlags(item, key)[0];
-    if (!currentElement) {
-        return;
-    }
-
-    const label = pf1.registry.damageTypes.get(`${currentElement}`) ?? currentElement;
-
-    const hint = hintcls.create(label.name, [], {});
-    return hint;
 });
