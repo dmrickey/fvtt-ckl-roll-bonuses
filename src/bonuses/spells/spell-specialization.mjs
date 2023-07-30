@@ -53,6 +53,7 @@ function isSpecializedSpell(actor, item) {
     return false;
 }
 
+// add info to spell card
 Hooks.on(localHooks.itemGetTypeChatData, (
     /** @type {ItemPF} */ item,
     /** @type {string[]} */ props,
@@ -63,7 +64,8 @@ Hooks.on(localHooks.itemGetTypeChatData, (
     if (!actor) return;
 
     if (isSpecializedSpell(actor, item)) {
-        props.push(localize(key));
+        // props.push(localize(key));
+        props.push(localize('cl-label-mod', { mod: '+2', label: localize(key) }));
     }
 });
 

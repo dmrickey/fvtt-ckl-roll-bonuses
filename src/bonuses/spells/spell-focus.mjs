@@ -1,9 +1,11 @@
 import { MODULE_NAME } from "../../consts.mjs";
 import { addNodeToRollBonus } from "../../roll-bonus-on-actor-sheet.mjs";
 import { KeyedDFlagHelper, getDocDFlags } from "../../util/flag-helpers.mjs";
+import { localHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize } from "../../util/localize.mjs";
 import { registerSetting } from "../../util/settings.mjs";
+import { signed } from "../../util/to-signed-string.mjs";
 
 export const spellFocusKey = 'spellFocus';
 const greaterSpellFocusKey = 'greaterSpellFocus';
@@ -27,7 +29,35 @@ class Settings {
     static #getSetting(/** @type {string} */key) { return game.settings.get(MODULE_NAME, key).toLowerCase(); }
 }
 
-// todo register info
+// add Info to chat card
+Hooks.on(localHooks.itemGetTypeChatData, (
+    /** @type {ItemPF} */ item,
+    /** @type {string[]} */ props,
+    /** @type {RollData} */ rollData,
+) => {
+    if (!item || !(item instanceof pf1.documents.item.ItemSpellPF)) return;
+    const { actor } = item;
+    if (!actor) return;
+
+    const action = item.firstAction;
+    if (!action) {
+        return;
+    }
+
+    const helper = new KeyedDFlagHelper(actor, ...allKeys);
+
+    const isFocused = helper.valuesForFlag(spellFocusKey).includes(item.system.school);
+    const isGreater = helper.valuesForFlag(greaterSpellFocusKey).includes(item.system.school);
+    const isMythic = helper.valuesForFlag(mythicSpellFocusKey).includes(item.system.school);
+
+    if (isFocused || isGreater || isMythic) {
+        let bonus = 0;
+        if (isFocused) bonus += 1;
+        if (isGreater) bonus += 1;
+        if (isMythic) bonus *= 2;
+        props.push(localize('dc-label-mod', { mod: signed(bonus), label: localize(spellFocusKey) }));
+    }
+});
 
 // register hint on focused spell
 registerItemHint((hintcls, actor, item, _data) => {
@@ -68,42 +98,54 @@ registerItemHint((hintcls, _actor, item, _data) => {
     return hint;
 });
 
-Hooks.on('pf1GetRollData', (
-        /** @type {ItemAction} */ action,
-        /** @type {RollData} */ rollData
-) => {
+/**
+ * @param {ItemAction} action
+ * @returns {number}
+ */
+function getDcBonus(action) {
     if (!(action instanceof pf1.components.ItemAction)) {
-        return;
+        return 0;
     }
 
     const { actor } = action;
     if (!actor) {
-        return;
+        return 0;
     }
 
-    const item = action?.item;
-    if (!(item instanceof pf1.documents.item.ItemSpellPF) || !rollData) {
-        return;
+    const { item } = action;
+    if (!(item instanceof pf1.documents.item.ItemSpellPF)) {
+        return 0;
     }
 
     const mythicFocuses = getDocDFlags(actor, mythicSpellFocusKey);
     const hasMythicFocus = !!mythicFocuses.find(f => f === item.system.school);
 
-    rollData.dcBonus ||= 0;
+    let bonus = 0;
     const handleFocus = ( /** @type {string} */key) => {
         const focuses = getDocDFlags(actor, key);
         const hasFocus = !!focuses.find(focus => focus === item.system.school);
         if (hasFocus) {
-            rollData.dcBonus += 1;
+            bonus += 1;
 
             if (hasMythicFocus) {
-                rollData.dcBonus += 1;
+                bonus += 1;
             }
         }
     }
 
     handleFocus(spellFocusKey);
     handleFocus(greaterSpellFocusKey);
+
+    return bonus;
+}
+
+Hooks.on('pf1GetRollData', (
+        /** @type {ItemAction} */ action,
+        /** @type {RollData} */ rollData
+) => {
+    const bonus = getDcBonus(action);
+    rollData.dcBonus ||= 0;
+    rollData.dcBonus += bonus;
 });
 
 /**

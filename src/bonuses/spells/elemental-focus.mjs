@@ -45,6 +45,27 @@ class Settings {
     static #getSetting(/** @type {string} */key) { return game.settings.get(MODULE_NAME, key).toLowerCase(); }
 }
 
+// add Info to chat card
+Hooks.on(localHooks.itemGetTypeChatData, (
+    /** @type {ItemPF} */ item,
+    /** @type {string[]} */ props,
+    /** @type {RollData} */ rollData,
+) => {
+    if (!item || !(item instanceof pf1.documents.item.ItemSpellPF)) return;
+    const { actor } = item;
+    if (!actor) return;
+
+    const action = item.firstAction;
+    if (!action) {
+        return;
+    }
+
+    const bonus = getDcBonus(action);
+    if (bonus) {
+        props.push(localize('dc-label-mod', { mod: signed(bonus), label: localize(elementalFocusKey) }));
+    }
+});
+
 // register on focused spell
 registerItemHint((hintcls, actor, item, _data) => {
     if (!(item instanceof pf1.documents.item.ItemSpellPF)) {
@@ -100,44 +121,7 @@ registerItemHint((hintcls, _actor, item, _data) => {
     return hint;
 });
 
-// add Info to chat card
-Hooks.on(localHooks.itemGetTypeChatData, (
-    /** @type {ItemPF} */ item,
-    /** @type {string[]} */ props,
-    /** @type {RollData} */ rollData,
-) => {
-    if (!item || !(item instanceof pf1.documents.item.ItemSpellPF)) return;
-    const { actor } = item;
-    if (!actor) return;
-
-    const action = item.firstAction;
-    if (!action) {
-        return;
-    }
-
-    const helper = new KeyedDFlagHelper(actor, elementalFocusKey, greaterElementalFocusKey, mythicElementalFocusKey);
-
-    const damageTypes = action.data.damage.parts
-        .map(({ type }) => type)
-        .flatMap(({ custom, values }) => ([...custom.split(';').map(x => x.trim()), ...values]))
-        .filter(truthiness);
-
-    for (let i = 0; i < damageElements.length; i++) {
-        const element = damageElements[i];
-        if (!damageTypes.includes(element)) {
-            continue;
-        }
-
-        const focuses = helper.keysForValue(element);
-        if (focuses.length) {
-            props.push(localize(elementalFocusKey));
-            return;
-        }
-    }
-});
-
 /**
- *
  * @param {ItemAction} action
  * @returns {number}
  */

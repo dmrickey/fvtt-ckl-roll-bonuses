@@ -1,9 +1,29 @@
 import { getDocDFlags } from "../../util/flag-helpers.mjs";
+import { localHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize } from "../../util/localize.mjs";
 import { signed } from "../../util/to-signed-string.mjs";
 
 const key = 'genericSpellDC'
+
+// add info to spell card
+Hooks.on(localHooks.itemGetTypeChatData, (
+    /** @type {ItemPF} */ item,
+    /** @type {string[]} */ props,
+    /** @type {RollData} */ _rollData,
+) => {
+    if (!item || !(item instanceof pf1.documents.item.ItemSpellPF)) return;
+    const { actor } = item;
+    if (!actor) return;
+
+    const bonuses = getDocDFlags(actor, key);
+    const bonus = bonuses
+        .map((x) => RollPF.safeTotal(x, actor.getRollData()))
+        .reduce((acc, cur) => acc + cur, 0);
+    if (bonus) {
+        props.push(localize('dc-label-mod', { mod: signed(bonus), label: localize('all-spells') }));
+    }
+});
 
 // register hint on ability
 registerItemHint((hintcls, actor, item, _data) => {
