@@ -4,7 +4,7 @@
 import { addNodeToRollBonus } from "../../roll-bonus-on-actor-sheet.mjs";
 import { armorFocusKey as key } from "./ids.mjs";
 import { intersects } from "../../util/array-intersects.mjs";
-import { KeyedDFlagHelper, getDocDFlags, hasAnyBFlag } from "../../util/flag-helpers.mjs";
+import { KeyedDFlagHelper } from "../../util/flag-helpers.mjs";
 import { localize } from "../../util/localize.mjs";
 import { MODULE_NAME } from "../../consts.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";

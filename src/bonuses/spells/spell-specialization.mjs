@@ -18,6 +18,12 @@ const compendiumId = 'CO2Qmj0aj76zJsew';
 
 registerSetting({ key: key });
 
+class Settings {
+    static get spellSpecialization() { return Settings.#getSetting(key); }
+    // @ts-ignore
+    static #getSetting(/** @type {string} */key) { return game.settings.get(MODULE_NAME, key).toLowerCase(); }
+}
+
 /**
  * @param {ActorPF} actor
  * @param {ItemSpellPF} item
@@ -45,12 +51,6 @@ function isSpecializedSpell(actor, item) {
     }
 
     return false;
-}
-
-class Settings {
-    static get spellSpecialization() { return Settings.#getSetting(key); }
-    // @ts-ignore
-    static #getSetting(/** @type {string} */key) { return game.settings.get(MODULE_NAME, key).toLowerCase(); }
 }
 
 Hooks.on(localHooks.itemGetTypeChatData, (
@@ -134,7 +134,7 @@ Hooks.on('renderItemSheet', (
     /** @type {unknown} */ _data
 ) => {
     const hasKey = item.system.flags.dictionary[key] !== undefined;
-    const hasName = item.name === Settings.spellSpecialization;
+    const hasName = item.name?.toLowerCase() === Settings.spellSpecialization;
     const hasId = !!item?.flags?.core?.sourceId?.includes(compendiumId);
     if (!(hasKey || hasName || hasId)) {
         return;

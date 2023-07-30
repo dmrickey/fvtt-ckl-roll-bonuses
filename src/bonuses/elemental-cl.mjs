@@ -1,6 +1,7 @@
 import { MODULE_NAME } from "../consts.mjs";
 import { addNodeToRollBonus } from "../roll-bonus-on-actor-sheet.mjs";
 import { KeyedDFlagHelper, getDocDFlags } from "../util/flag-helpers.mjs";
+import { localHooks } from "../util/hooks.mjs";
 import { registerItemHint } from "../util/item-hints.mjs";
 import { localize } from "../util/localize.mjs";
 import { signed } from "../util/to-signed-string.mjs";
@@ -17,9 +18,39 @@ const damageElements = [
     'fire'
 ];
 
-// todo register info
+registerItemHint((hintcls, actor, item, _data) => {
+    if (!(item instanceof pf1.documents.item.ItemSpellPF)) {
+        return;
+    }
 
-// todo register hint on spell
+    const action = item.firstAction;
+    if (!action) {
+        return;
+    }
+
+    const damageTypes = action.data.damage.parts
+        .map(({ type }) => type)
+        .flatMap(({ custom, values }) => ([...custom.split(';').map(x => x.trim()), ...values]))
+        .filter(truthiness);
+
+    const flags = new KeyedDFlagHelper(actor, key, formulaKey)
+        .getItemDictionaryFlagsWithAllFlags();
+    const matches = Object.values(flags)
+        .filter((offset) => damageTypes.includes(`${offset[key]}`));
+
+    const offset = matches
+        .map((x) => RollPF.safeTotal(x[formulaKey], actor.getRollData()))
+        .reduce((acc, cur) => acc + cur, 0);
+
+    if (offset) {
+        const elements = matches
+            .map((x) => pf1.registry.damageTypes.get(`${x[key]}`)?.name ?? x[key])
+            .join(', ');
+        const label = localize('cl-label-mod', { mod: signed(offset), label: elements });
+        const hint = hintcls.create(label, [], { hint: localize(key) });
+        return hint;
+    }
+});
 
 // register hint on ability
 registerItemHint((hintcls, actor, item, _data) => {
@@ -42,8 +73,48 @@ registerItemHint((hintcls, actor, item, _data) => {
     const element = pf1.registry.damageTypes.get(`${currentElement}`)?.name ?? currentElement;
     const label = localize('cl-label-mod', { mod, label: element });
 
-    const hint = hintcls.create(label, [], {});
+    const hint = hintcls.create(label, [], { hint: localize(key) });
     return hint;
+});
+
+Hooks.on(localHooks.itemGetTypeChatData, (
+    /** @type {ItemPF} */ item,
+    /** @type {string[]} */ props,
+    /** @type {RollData} */ rollData,
+) => {
+    const { action } = rollData;
+    if (!action) {
+        return;
+    }
+
+    if (!(item instanceof pf1.documents.item.ItemSpellPF)) {
+        return;
+    }
+
+    const damageTypes = action.damage.parts
+        .map(({ type }) => type)
+        .flatMap(({ custom, values }) => ([...custom.split(';').map(x => x.trim()), ...values]))
+        .filter(truthiness);
+
+    const flags = new KeyedDFlagHelper(item?.actor || rollData.dFlags, key, formulaKey)
+        .getItemDictionaryFlagsWithAllFlags();
+    const matches = Object.values(flags)
+        .filter((offset) => damageTypes.includes(`${offset[key]}`));
+
+    if (!matches.length) {
+        return;
+    }
+
+    const offset = matches
+        .map((x) => RollPF.safeTotal(x[formulaKey], rollData) || 0)
+        .reduce((acc, cur) => acc + cur, 0);
+
+    if (offset) {
+        const elements = matches
+            .map((x) => pf1.registry.damageTypes.get(`${x[key]}`)?.name ?? x[key])
+            .join(', ');
+        props.push(localize('cl-label-mod', { mod: signed(offset), label: elements }));
+    }
 });
 
 Hooks.on('pf1GetRollData', (
@@ -60,9 +131,7 @@ Hooks.on('pf1GetRollData', (
     }
 
     const damageTypes = action.data.damage.parts
-        // @ts-ignore
         .map(({ type }) => type)
-        // @ts-ignore
         .flatMap(({ custom, values }) => ([...custom.split(';').map(x => x.trim()), ...values]))
         .filter(truthiness);
 
@@ -75,24 +144,12 @@ Hooks.on('pf1GetRollData', (
         return;
     }
 
-    /**
-     * @param {number} value
-     */
-    const offsetCl = (value) => {
+    const offset = matches
+        .map((x) => RollPF.safeTotal(x[formulaKey], rollData) || 0)
+        .reduce((acc, cur) => acc + cur, 0);
+    if (offset) {
         rollData.cl ||= 0;
-        rollData.cl += value;
-    }
-
-    const values = matches.map((x) => RollPF.safeTotal(x[formulaKey], rollData) || 0);
-
-    const max = Math.max(...values);
-    if (max > 0) {
-        offsetCl(max);
-    }
-
-    const min = Math.min(...values);
-    if (min < 0) {
-        offsetCl(min);
+        rollData.cl += offset;
     }
 });
 

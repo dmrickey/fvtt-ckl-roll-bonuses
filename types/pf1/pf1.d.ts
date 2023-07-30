@@ -178,10 +178,18 @@ declare global {
         weaponGroups: TraitSelector;
     }
 
+    /** used for weapons and attacks */
     interface TraitSelector {
         /** custom entries split by ; */
         custom: string;
         value: string[];
+    }
+
+    /** used for damage parts */
+    interface TraitSelectorValuePlural {
+        /** custom entries split by ; */
+        custom: string;
+        values: string[];
     }
 
     interface ItemPF extends ItemDocument {
@@ -271,7 +279,7 @@ declare global {
         action: {
             id: string,
             damage: {
-                parts: { formula: string, type: TraitSelector }[]
+                parts: { formula: string, type: TraitSelectorValuePlural }[]
             }
             ability: {
                 attack: string;
