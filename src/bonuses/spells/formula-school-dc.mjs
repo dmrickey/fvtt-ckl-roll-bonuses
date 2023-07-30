@@ -28,7 +28,7 @@ Hooks.on(localHooks.itemGetTypeChatData, (
 
     if (offset) {
         const school = pf1.config.spellSchools[item.system.school] ?? item.system.school;
-        props.push(localize('dc-label-mod', { mod: signed(offset), label: school }))
+        props.push(localize('dc-label-mod', { mod: signed(offset), label: school }));
     }
 });
 
@@ -53,32 +53,54 @@ registerItemHint((hintcls, actor, item, _data) => {
 });
 
 // register hint on ability
-registerItemHint((hintcls, _actor, item, _data) => {
+registerItemHint((hintcls, actor, item, _data) => {
     const currentSchool = getDocDFlags(item, key)[0];
     if (!currentSchool) {
         return;
     }
 
+    const formula = getDocDFlags(item, formulaKey)[0];
+    const total = RollPF.safeTotal(formula, actor?.getRollData() ?? {});
+    if (!total) {
+        return;
+    }
+
     const school = pf1.config.spellSchools[currentSchool] ?? currentSchool;
-    const label = localize(`${key}-hint`, { school });
+    const label = localize('dc-label-mod', { mod: signed(total), label: school });
 
     const hint = hintcls.create(label, [], { hint: localize(key) });
     return hint;
 });
 
-// before dialog pops up
-Hooks.on('pf1PreActionUse', (/** @type {ActionUse} */actionUse) => {
-    const { actor, item, shared } = actionUse;
-    if (!(item instanceof pf1.documents.item.ItemSpellPF)) {
+Hooks.on('pf1GetRollData', (
+    /** @type {ItemAction} */ action,
+    /** @type {RollData} */ rollData
+) => {
+    if (!(action instanceof pf1.components.ItemAction)) {
+        return;
+    }
+
+    const { actor } = action;
+    if (!actor) {
+        return;
+    }
+
+    const { item } = action;
+    if (!(item instanceof pf1.documents.item.ItemSpellPF) || !rollData) {
         return;
     }
 
     const helper = new KeyedDFlagHelper(actor, key, formulaKey);
     const matches = helper.getItemDictionaryFlagsWithAllFlagsAndMatchingFlag(key, item.system.school);
     const formulas = Object.values(matches).map((o) => o[formulaKey])
-    const offset = formulas.reduce((acc, cur) => acc + RollPF.safeTotal(cur, actor.getRollData()), 0);
-    shared.saveDC += offset ?? 0;
+    const offset = formulas
+        .map((x) => RollPF.safeTotal(x, rollData))
+        .reduce((acc, cur) => acc + cur, 0);
+
+    rollData.dcBonus ||= 0;
+    rollData.dcBonus += offset;
 });
+
 
 /**
  * @type {Handlebars.TemplateDelegate}

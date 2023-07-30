@@ -2,6 +2,7 @@ import { MODULE_NAME } from "../../consts.mjs";
 import { addNodeToRollBonus } from "../../roll-bonus-on-actor-sheet.mjs";
 import { intersection, intersects } from "../../util/array-intersects.mjs";
 import { KeyedDFlagHelper, getDocDFlags } from "../../util/flag-helpers.mjs";
+import { localHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize } from "../../util/localize.mjs";
 import { registerSetting } from "../../util/settings.mjs";
@@ -96,7 +97,41 @@ registerItemHint((hintcls, _actor, item, _data) => {
     return hint;
 });
 
-// todo register info
+// add Info to chat card
+Hooks.on(localHooks.itemGetTypeChatData, (
+    /** @type {ItemPF} */ item,
+    /** @type {string[]} */ props,
+    /** @type {RollData} */ rollData,
+) => {
+    if (!item || !(item instanceof pf1.documents.item.ItemSpellPF)) return;
+    const { actor } = item;
+    if (!actor) return;
+
+    const action = item.firstAction;
+    if (!action) {
+        return;
+    }
+
+    const helper = new KeyedDFlagHelper(actor, elementalFocusKey, greaterElementalFocusKey, mythicElementalFocusKey);
+
+    const damageTypes = action.data.damage.parts
+        .map(({ type }) => type)
+        .flatMap(({ custom, values }) => ([...custom.split(';').map(x => x.trim()), ...values]))
+        .filter(truthiness);
+
+    for (let i = 0; i < damageElements.length; i++) {
+        const element = damageElements[i];
+        if (!damageTypes.includes(element)) {
+            continue;
+        }
+
+        const focuses = helper.keysForValue(element);
+        if (focuses.length) {
+            props.push(localize(elementalFocusKey));
+            return;
+        }
+    }
+});
 
 // before dialog pops up
 Hooks.on('pf1GetRollData', (
@@ -113,15 +148,16 @@ Hooks.on('pf1GetRollData', (
         .flatMap(({ custom, values }) => ([...custom.split(';').map(x => x.trim()), ...values]))
         .filter(truthiness);
 
+    const mythicFocuses = getDocDFlags(actor, mythicElementalFocusKey);
+    const hasMythicFocus = intersects(damageTypes, mythicFocuses);
+
+    rollData.dcBonus ||= 0;
     const handleFocus = (/** @type {string} */key) => {
         const focuses = getDocDFlags(actor, key);
         const hasFocus = intersects(damageTypes, focuses);
         if (hasFocus) {
-            rollData.dcBonus ||= 0;
             rollData.dcBonus += 1;
 
-            const mythicFocuses = getDocDFlags(actor, mythicElementalFocusKey);
-            const hasMythicFocus = intersects(damageTypes, mythicFocuses);
             if (hasMythicFocus) {
                 rollData.dcBonus += 1;
             }

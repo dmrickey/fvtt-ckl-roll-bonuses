@@ -31,14 +31,14 @@ Hooks.on('pf1GetRollData', (
         return;
     }
 
-    const item = action?.item;
+    const { item } = action;
     if (!(item instanceof pf1.documents.item.ItemSpellPF) || !rollData) {
         return;
     }
 
+    rollData.dcBonus ||= 0;
     const bonuses = getDocDFlags(actor, key);
     bonuses.forEach(bonus => {
-        rollData.dcBonus ||= 0;
-        rollData.dcBonus += RollPF.safeTotal(bonus, actor?.getRollData() ?? {});
+        rollData.dcBonus += RollPF.safeTotal(bonus, rollData);
     });
 });

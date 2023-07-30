@@ -23,7 +23,6 @@
         "ok": "OK",
         "roll-bonuses": "Roll Bonuses",
         "school-dc": "School DC Offset",
-        "school-dc-hint": "{school} DC",
         "spellFocus": "Spell Focus",
         "skills": {
             "config": "Skill Config",

@@ -86,18 +86,16 @@ Hooks.on('pf1GetRollData', (
         return;
     }
 
-    /**
-     * @param {string} key
-     */
-    const handleFocus = (key) => {
+    const mythicFocuses = getDocDFlags(actor, mythicSpellFocusKey);
+    const hasMythicFocus = !!mythicFocuses.find(f => f === item.system.school);
+
+    rollData.dcBonus ||= 0;
+    const handleFocus = ( /** @type {string} */key) => {
         const focuses = getDocDFlags(actor, key);
         const hasFocus = !!focuses.find(focus => focus === item.system.school);
         if (hasFocus) {
-            rollData.dcBonus ||= 0;
             rollData.dcBonus += 1;
 
-            const mythicFocuses = getDocDFlags(actor, mythicSpellFocusKey);
-            const hasMythicFocus = !!mythicFocuses.find(f => f === item.system.school);
             if (hasMythicFocus) {
                 rollData.dcBonus += 1;
             }
