@@ -310,7 +310,7 @@ declare global {
         // [key: string]: any,
     }
 
-    class RollPF {
+    interface RollPF {
         /**
          * Safely get the result of a roll, returns 0 if unsafe.
          * @param formula - The string that should resolve to a number
