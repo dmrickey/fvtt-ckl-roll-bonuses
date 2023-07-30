@@ -1,25 +1,68 @@
 import { MODULE_NAME } from "../../consts.mjs";
 import { addNodeToRollBonus } from "../../roll-bonus-on-actor-sheet.mjs";
 import { getDocDFlags, KeyedDFlagHelper } from "../../util/flag-helpers.mjs";
+import { localHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize } from "../../util/localize.mjs";
 import { signed } from "../../util/to-signed-string.mjs";
 
-const schoolClOffset = 'schoolClOffset';
-const schoolClOffsetFormula = 'schoolClOffsetFormula';
+const key = 'schoolClOffset';
+const formulaKey = 'schoolClOffsetFormula';
 
-// todo get rid of total and just calculate it from roll data as needed (if it can be done without getting stuck in a recursive loop)
-const schoolClOffsetTotal = 'schoolClOffsetTotal';
+// todo add Info to chat card
+Hooks.on(localHooks.itemGetTypeChatData, (
+    /** @type {ItemPF} */ item,
+    /** @type {string[]} */ props,
+    /** @type {RollData} */ _rollData,
+) => {
+    if (!item || !(item instanceof pf1.documents.item.ItemSpellPF)) return;
+    const { actor } = item;
+    if (!actor) return;
+
+    const helper = new KeyedDFlagHelper(actor, key, formulaKey);
+    const matches = helper.getItemDictionaryFlagsWithAllFlagsAndMatchingFlag(key, item.system.school);
+    const formulas = Object.values(matches).map((o) => o[formulaKey])
+    const offset = formulas
+        .map(x => RollPF.safeTotal(x, actor.getRollData()))
+        .reduce((acc, cur) => acc + cur, 0);
+
+    if (offset) {
+        const school = pf1.config.spellSchools[item.system.school] ?? item.system.school;
+        props.push(localize('cl-label-mod', { mod: signed(offset), label: school }));
+    }
+});
+
+
+// register hint on spell
+registerItemHint((hintcls, actor, item, _data) => {
+    if (!item || !(item instanceof pf1.documents.item.ItemSpellPF)) return;
+    if (!actor) return;
+
+    const helper = new KeyedDFlagHelper(actor, key, formulaKey);
+    const matches = helper.getItemDictionaryFlagsWithAllFlagsAndMatchingFlag(key, item.system.school);
+    const formulas = Object.values(matches).map((o) => o[formulaKey])
+    const offset = formulas
+        .map(x => RollPF.safeTotal(x, actor.getRollData()))
+        .reduce((acc, cur) => acc + cur, 0);
+
+    if (offset) {
+        const school = pf1.config.spellSchools[item.system.school] ?? item.system.school;
+        const label = localize('cl-label-mod', { mod: signed(offset), label: school });
+        const hint = hintcls.create(label, [], { hint: localize(key) });
+        return hint;
+    }
+});
 
 // register hint on ability
-registerItemHint((hintcls, _actor, item, _data) => {
-    const currentSchool = getDocDFlags(item, schoolClOffset)[0]?.toString();
+registerItemHint((hintcls, actor, item, _data) => {
+    const currentSchool = getDocDFlags(item, key)[0]?.toString();
     if (!currentSchool) {
         return;
     }
 
     const { spellSchools } = pf1.config;
-    const total = getDocDFlags(item, schoolClOffsetTotal)[0];
+    const formula = getDocDFlags(item, formulaKey)[0];
+    const total = RollPF.safeTotal(formula, actor?.getRollData() ?? {})
     if (!total) {
         return;
     }
@@ -54,34 +97,22 @@ Hooks.on('pf1GetRollData', (
     }
 
     // todo some day change this back to use rollData.dFlags
-    const flags = new KeyedDFlagHelper(action?.actor || rollData.dFlags, schoolClOffset, schoolClOffsetTotal)
+    const flags = new KeyedDFlagHelper(action?.actor || rollData.dFlags, key, formulaKey)
         .getItemDictionaryFlagsWithAllFlags();
     const matches = Object.values(flags)
-        .filter((offset) => offset[schoolClOffset] === item.system.school);
+        .filter((offset) => offset[key] === item.system.school);
 
     if (!matches.length) {
         return;
     }
 
-    /**
-     * @param {number} value
-     */
-    const offsetCl = (value) => {
-        rollData.cl ||= 0;
-        rollData.cl += value;
-    }
+    const formulas = Object.values(matches).map((o) => o[formulaKey])
+    const offset = formulas
+        .map((x) => RollPF.safeTotal(x, rollData))
+        .reduce((acc, cur) => acc + cur, 0);
 
-    const values = matches.map((x) => +x[schoolClOffsetTotal] || 0);
-
-    const max = Math.max(...values);
-    if (max > 0) {
-        offsetCl(max);
-    }
-
-    const min = Math.min(...values);
-    if (min < 0) {
-        offsetCl(min);
-    }
+    rollData.cl ||= 0;
+    rollData.cl += offset;
 });
 
 /**
@@ -103,17 +134,17 @@ Hooks.on('renderItemSheet', (
 ) => {
     const { spellSchools } = pf1.config;
 
-    const hasKey = item.system.flags.dictionary[schoolClOffset] !== undefined
-        || item.system.flags.dictionary[schoolClOffsetFormula] !== undefined;
+    const hasKey = item.system.flags.dictionary[key] !== undefined
+        || item.system.flags.dictionary[formulaKey] !== undefined;
     if (!hasKey) {
         return;
     }
 
-    const currentSchool = getDocDFlags(item, schoolClOffset)[0];
-    const formula = getDocDFlags(item, schoolClOffsetFormula)[0];
+    const currentSchool = getDocDFlags(item, key)[0];
+    const formula = getDocDFlags(item, formulaKey)[0];
 
     if (Object.keys(spellSchools).length && !currentSchool) {
-        item.setItemDictionaryFlag(schoolClOffset, Object.keys(spellSchools)[0]);
+        item.setItemDictionaryFlag(key, Object.keys(spellSchools)[0]);
     }
 
     const templateData = { spellSchools, currentSchool, formula };
@@ -129,7 +160,7 @@ Hooks.on('renderItemSheet', (
         async (event) => {
             // @ts-ignore - target is HTMLInputElement
             const newFormula = event.target.value;
-            await item.setItemDictionaryFlag(schoolClOffsetFormula, newFormula);
+            await item.setItemDictionaryFlag(formulaKey, newFormula);
 
             const newTotal = RollPF.safeTotal(newFormula, actor?.getRollData() ?? {});
             await item.setItemDictionaryFlag(schoolClOffsetTotal, newTotal);
@@ -140,7 +171,7 @@ Hooks.on('renderItemSheet', (
         'change',
         async (event) => {
             // @ts-ignore - target is HTMLInputElement
-            await item.setItemDictionaryFlag(schoolClOffset, event.target.value);
+            await item.setItemDictionaryFlag(key, event.target.value);
         },
     );
 
