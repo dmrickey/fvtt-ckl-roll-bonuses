@@ -6,6 +6,7 @@ import { localHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize } from "../../util/localize.mjs";
 import { registerSetting } from "../../util/settings.mjs";
+import { signed } from "../../util/to-signed-string.mjs";
 import { truthiness } from "../../util/truthiness.mjs";
 
 const elementalFocusKey = 'elementalFocus';
@@ -72,7 +73,9 @@ registerItemHint((hintcls, actor, item, _data) => {
         if (focuses.length) {
             // @ts-ignore
             const match = icons[element];
-            const hint = hintcls.create('', [match.css], { icon: match.icon, hint: focuses.map((f) => localize(f)).join('\n') });
+            const bonus = getDcBonus(action);
+            const tooltip = focuses.map((f) => localize(f)).join('\n') + `\n${localize('dc-mod', { mod: signed(bonus) })}`;
+            const hint = hintcls.create('', [match.css], { icon: match.icon, hint: tooltip });
             hints.push(hint);
         }
     });
@@ -133,14 +136,15 @@ Hooks.on(localHooks.itemGetTypeChatData, (
     }
 });
 
-// before dialog pops up
-Hooks.on('pf1GetRollData', (
-    /** @type {ItemAction} */ action,
-    /** @type {RollData} */ rollData
-) => {
+/**
+ *
+ * @param {ItemAction} action
+ * @returns {number}
+ */
+function getDcBonus(action) {
     const { item, actor } = action;
     if (item?.type !== 'spell') {
-        return;
+        return 0;
     }
 
     const damageTypes = action.data.damage.parts
@@ -151,21 +155,31 @@ Hooks.on('pf1GetRollData', (
     const mythicFocuses = getDocDFlags(actor, mythicElementalFocusKey);
     const hasMythicFocus = intersects(damageTypes, mythicFocuses);
 
-    rollData.dcBonus ||= 0;
+    let bonus = 0;
     const handleFocus = (/** @type {string} */key) => {
         const focuses = getDocDFlags(actor, key);
         const hasFocus = intersects(damageTypes, focuses);
         if (hasFocus) {
-            rollData.dcBonus += 1;
+            bonus += 1;
 
             if (hasMythicFocus) {
-                rollData.dcBonus += 1;
+                bonus += 1;
             }
         }
     }
 
     handleFocus(elementalFocusKey);
     handleFocus(greaterElementalFocusKey);
+
+    return bonus;
+}
+Hooks.on('pf1GetRollData', (
+    /** @type {ItemAction} */ action,
+    /** @type {RollData} */ rollData
+) => {
+    const bonus = getDcBonus(action);
+    rollData.dcBonus ||= 0;
+    rollData.dcBonus += bonus;
 });
 
 /**
@@ -174,7 +188,7 @@ Hooks.on('pf1GetRollData', (
 let focusSelectorTemplate;
 Hooks.once(
     'setup',
-    async () => focusSelectorTemplate = await getTemplate(`modules/${MODULE_NAME}/hbs/elemental-focus-selector.hbs`)
+    async () => focusSelectorTemplate = await getTemplate(`modules/${MODULE_NAME}/hbs/labeled-key-value-dropdown-selector.hbs`)
 );
 
 Hooks.on('renderItemSheet', (
@@ -220,13 +234,14 @@ Hooks.on('renderItemSheet', (
         }
     }
 
-    const currentElement = getDocDFlags(item, key)[0];
+    const current = getDocDFlags(item, key)[0];
 
-    if (Object.keys(elements).length && !currentElement) {
+    if (Object.keys(elements).length && !current) {
         item.setItemDictionaryFlag(key, Object.keys(elements)[0]);
     }
 
-    const templateData = { elements, currentElement };
+    const choices = Object.keys(elements).map((key) => ({ key, label: elements[key].name }));
+    const templateData = { choices, current, label: localize(key), key };
 
     const div = document.createElement('div');
     div.innerHTML = focusSelectorTemplate(templateData, { allowProtoMethodsByDefault: true, allowProtoPropertiesByDefault: true });
