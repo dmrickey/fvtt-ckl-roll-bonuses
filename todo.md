@@ -31,10 +31,22 @@
 
 ## Skills
 ### Int Headband
-  - configure an item to give you specific ranks (0.82.5 only gives bonus ranks, not ranks to specific skills)
-    - See versatile performance for ideas.
+- configure an item to give you specific ranks (0.82.5 only gives bonus ranks, not ranks to specific skills)
+  - See versatile performance for ideas.
 
 ## Spells
+- All Spells
+  - [x] DC Bonus
+  - [ ] CL Bonus
+- By School
+  - [x] DC Bonus
+  - [x] CL Bonus
+  - [x] Spell Focus
+- By Element
+  - [ ] DC Bonus
+  - [x] CL Bonus
+    - [ ] Move to spells folder
+  - [x] Elemental Focus
 
 ## Misc
 ### Deprecation
