@@ -1,5 +1,5 @@
 import { MODULE_NAME } from "../../consts.mjs";
-import { addNodeToRollBonus } from "../../handlebars-handlers/roll-bonus-on-actor-sheet.mjs";
+import { stringSelect } from "../../handlebars-handlers/roll-inputs/string-select.mjs";
 import { intersects } from "../../util/array-intersects.mjs";
 import { KeyedDFlagHelper, getDocDFlags } from "../../util/flag-helpers.mjs";
 import { localHooks } from "../../util/hooks.mjs";
@@ -121,15 +121,6 @@ function addWeaponFocusBonus({ actor, item, shared }) {
 }
 Hooks.on(localHooks.actionUseAlterRollData, addWeaponFocusBonus);
 
-/**
- * @type {Handlebars.TemplateDelegate}
- */
-let focusSelectorTemplate;
-Hooks.once(
-    'setup',
-    async () => focusSelectorTemplate = await getTemplate(`modules/${MODULE_NAME}/hbs/labeled-string-dropdown-selector.hbs`)
-);
-
 Hooks.on('renderItemSheet', (
     /** @type {ItemSheetPF} */ { actor, item },
     /** @type {[HTMLElement]} */[html],
@@ -141,7 +132,7 @@ Hooks.on('renderItemSheet', (
      */
     let key;
     /**
-     * @type {(string | number)[]}
+     * @type {(string)[]}
      */
     let choices = [];
 
@@ -157,7 +148,7 @@ Hooks.on('renderItemSheet', (
         key = greaterWeaponFocusKey;
 
         if (actor) {
-            choices = getDocDFlags(actor, weaponFocusKey);
+            choices = getDocDFlags(actor, weaponFocusKey).map((x) => `${x}`);
         }
     }
     else if ((name.includes(Settings.weaponFocus) && !isRacial)
@@ -184,23 +175,12 @@ Hooks.on('renderItemSheet', (
 
     const current = item.getItemDictionaryFlag(key);
 
-    if (choices?.length && !current) {
-        item.setItemDictionaryFlag(key, choices[0]);
-    }
-
-    const templateData = { choices, current, label: localize(key), key };
-    const div = document.createElement('div');
-    div.innerHTML = focusSelectorTemplate(templateData, { allowProtoMethodsByDefault: true, allowProtoPropertiesByDefault: true });
-
-    const select = div.querySelector(`#string-selector-${key}`);
-    select?.addEventListener(
-        'change',
-        async (event) => {
-            if (!key) return;
-            // @ts-ignore - event.target is HTMLTextAreaElement
-            const /** @type {HTMLTextAreaElement} */ target = event.target;
-            await item.setItemDictionaryFlag(key, target?.value);
-        },
-    );
-    addNodeToRollBonus(html, div);
+    stringSelect({
+        choices,
+        current,
+        item,
+        key,
+        label: localize(key),
+        parent: html
+    });
 });

@@ -35,7 +35,7 @@ registerItemHint((hintcls, actor, item, _data) => {
 
     const value = RollPF.safeTotal(flag, actor?.getRollData() ?? {})
     const mod = signed(value);
-    const hint = hintcls.create(`${localize('dc-mod', { mod })} (${value})`, [], {});
+    const hint = hintcls.create(`${localize('dc-mod', { mod })} (${localize('all-spells')})`, [], {});
     return hint;
 });
 
@@ -76,5 +76,11 @@ Hooks.on('renderItemSheet', (
 
     const current = getDocDFlags(item, key)[0];
 
-    textInput(current, item, key, localize('all-spell-dc'), html);
+    textInput({
+        current,
+        item,
+        key,
+        label: localize('all-spell-dc'),
+        parent: html,
+    });
 });

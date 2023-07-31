@@ -1,5 +1,4 @@
-import { MODULE_NAME } from "../../consts.mjs";
-import { addNodeToRollBonus } from "../../handlebars-handlers/roll-bonus-on-actor-sheet.mjs";
+import { textInputAndKeyValueSelect } from "../../handlebars-handlers/roll-inputs/text-input-and-key-value-select.mjs";
 import { getDocDFlags, KeyedDFlagHelper } from "../../util/flag-helpers.mjs";
 import { localHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
@@ -116,15 +115,6 @@ Hooks.on('pf1GetRollData', (
 });
 
 /**
- * @type {Handlebars.TemplateDelegate}
- */
-let clOffsetTemplate;
-Hooks.once(
-    'setup',
-    async () => clOffsetTemplate = await getTemplate(`modules/${MODULE_NAME}/hbs/school-cl-offset.hbs`)
-);
-
-/**
  * @param {string} html
  */
 Hooks.on('renderItemSheet', (
@@ -140,40 +130,17 @@ Hooks.on('renderItemSheet', (
         return;
     }
 
-    const currentSchool = getDocDFlags(item, key)[0];
+    const current = getDocDFlags(item, key)[0];
     const formula = getDocDFlags(item, formulaKey)[0];
+    const choices = Object.keys(spellSchools)
+        .map((key) => ({ key, label: spellSchools[key] }));
 
-    if (Object.keys(spellSchools).length && !currentSchool) {
-        item.setItemDictionaryFlag(key, Object.keys(spellSchools)[0]);
-    }
-
-    const templateData = { spellSchools, currentSchool, formula };
-
-    const div = document.createElement('div');
-    div.innerHTML = clOffsetTemplate(templateData, { allowProtoMethodsByDefault: true, allowProtoPropertiesByDefault: true });
-
-    const input = div.querySelector('#school-cl-offset-formula');
-    const select = div.querySelector('#school-cl-offset');
-
-    input?.addEventListener(
-        'change',
-        async (event) => {
-            // @ts-ignore - target is HTMLInputElement
-            const newFormula = event.target.value;
-            await item.setItemDictionaryFlag(formulaKey, newFormula);
-
-            const newTotal = RollPF.safeTotal(newFormula, actor?.getRollData() ?? {});
-            await item.setItemDictionaryFlag(schoolClOffsetTotal, newTotal);
-        },
-    );
-
-    select?.addEventListener(
-        'change',
-        async (event) => {
-            // @ts-ignore - target is HTMLInputElement
-            await item.setItemDictionaryFlag(key, event.target.value);
-        },
-    );
-
-    addNodeToRollBonus(html, div);
+    textInputAndKeyValueSelect({
+        text: { current: formula, key: formulaKey },
+        select: { current, choices, key },
+        item,
+        key,
+        label: localize(key),
+        parent: html
+    });
 });

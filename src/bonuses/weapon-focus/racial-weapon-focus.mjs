@@ -1,21 +1,21 @@
 import { MODULE_NAME } from "../../consts.mjs";
-import { addNodeToRollBonus } from "../../handlebars-handlers/roll-bonus-on-actor-sheet.mjs";
+import { textInput } from "../../handlebars-handlers/roll-inputs/text-input.mjs";
 import { intersects } from "../../util/array-intersects.mjs";
-import { KeyedDFlagHelper, getDocDFlags } from "../../util/flag-helpers.mjs";
+import { KeyedDFlagHelper } from "../../util/flag-helpers.mjs";
 import { localHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize } from "../../util/localize.mjs";
 import { registerSetting } from "../../util/settings.mjs";
 import { gnomeWeaponFocusId, racialWeaponFocusKey, weaponFocusKey } from "./ids.mjs";
 
-const defaultRaceKey = 'racial-weapon-focus-default-race';
+const key = 'racial-weapon-focus-default-race';
 
-registerSetting({ key: defaultRaceKey, scope: 'client' });
+registerSetting({ key, scope: 'client' });
 registerSetting({ key: racialWeaponFocusKey, scope: 'client' });
 
 class Settings {
     static get racialWeaponFocus() { return Settings.#getSetting(racialWeaponFocusKey); }
-    static get race() { return Settings.#getSetting(defaultRaceKey); }
+    static get race() { return Settings.#getSetting(key); }
     // @ts-ignore
     static #getSetting(/** @type {string} */key) { return game.settings.get(MODULE_NAME, key).toLowerCase(); }
 }
@@ -95,15 +95,6 @@ function addWeaponFocusBonus({ actor, item, shared }) {
 }
 Hooks.on(localHooks.actionUseAlterRollData, addWeaponFocusBonus);
 
-/**
- * @type {Handlebars.TemplateDelegate}
- */
-let focusSelectorTemplate;
-Hooks.once(
-    'setup',
-    async () => focusSelectorTemplate = await getTemplate(`modules/${MODULE_NAME}/hbs/racial-weapon-focus-selector.hbs`)
-);
-
 Hooks.on('renderItemSheet', (
     /** @type {ItemSheetPF} */ { item },
     /** @type {[HTMLElement]} */[html],
@@ -118,22 +109,13 @@ Hooks.on('renderItemSheet', (
 
     const current = item.getItemDictionaryFlag(racialWeaponFocusKey);
 
-    if (!current) {
-        item.setItemDictionaryFlag(racialWeaponFocusKey, Settings.race);
-    }
-
-    const templateData = { current, racialDefault: Settings.racialWeaponFocus };
-    const div = document.createElement('div');
-    div.innerHTML = focusSelectorTemplate(templateData, { allowProtoMethodsByDefault: true, allowProtoPropertiesByDefault: true });
-
-    const select = div.querySelector('#weapon-focus-selector');
-    select?.addEventListener(
-        'change',
-        async (event) => {
-            // @ts-ignore - event.target is HTMLTextAreaElement
-            const /** @type {HTMLTextAreaElement} */ target = event.target;
-            await item.setItemDictionaryFlag(racialWeaponFocusKey, target?.value);
-        },
-    );
-    addNodeToRollBonus(html, div);
+    textInput({
+        current,
+        item,
+        key,
+        label: localize(key),
+        parent: html,
+    }, {
+        notFormula: true,
+    });
 });

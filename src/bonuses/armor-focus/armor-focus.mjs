@@ -1,7 +1,6 @@
 // armor focus - https://www.d20pfsrd.com/feats/combat-feats/armor-focus-combat/
 // - AC for chosen armor type is increased by one.
 
-import { addNodeToRollBonus } from "../../handlebars-handlers/roll-bonus-on-actor-sheet.mjs";
 import { armorFocusKey as key } from "./ids.mjs";
 import { intersects } from "../../util/array-intersects.mjs";
 import { KeyedDFlagHelper } from "../../util/flag-helpers.mjs";
@@ -10,6 +9,7 @@ import { MODULE_NAME } from "../../consts.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { registerSetting } from "../../util/settings.mjs";
 import { uniqueArray } from "../../util/unique-array.mjs";
+import { stringSelect } from "../../handlebars-handlers/roll-inputs/string-select.mjs";
 
 const compendiumId = 'zBrrZynIB0EXagds';
 
@@ -101,15 +101,6 @@ function handleArmorFocusChange(actor, tempChanges) {
 }
 Hooks.on('pf1GetRollData', handleArmorFocusRollData);
 
-/**
- * @type {Handlebars.TemplateDelegate}
- */
-let focusSelectorTemplate;
-Hooks.once(
-    'setup',
-    async () => focusSelectorTemplate = await getTemplate(`modules/${MODULE_NAME}/hbs/labeled-string-dropdown-selector.hbs`)
-);
-
 Hooks.on('renderItemSheet', (
     /** @type {ItemSheetPF} */ { actor, item },
     /** @type {[HTMLElement]} */[html],
@@ -130,23 +121,12 @@ Hooks.on('renderItemSheet', (
                 && item.system.slot === 'armor')
         .flatMap((item) => item.system.baseTypes ?? []));
 
-    if (choices.length && !current) {
-        item.setItemDictionaryFlag(key, choices[0]);
-    }
-
-    const templateData = { choices, current, label: localize(key), key };
-    const div = document.createElement('div');
-    div.innerHTML = focusSelectorTemplate(templateData, { allowProtoMethodsByDefault: true, allowProtoPropertiesByDefault: true });
-
-    const select = div.querySelector(`#string-selector-${key}`);
-    select?.addEventListener(
-        'change',
-        async (event) => {
-            if (!key) return;
-            // @ts-ignore - event.target is HTMLTextAreaElement
-            const /** @type {HTMLTextAreaElement} */ target = event.target;
-            await item.setItemDictionaryFlag(key, target?.value);
-        },
-    );
-    addNodeToRollBonus(html, div);
+    stringSelect({
+        choices,
+        current,
+        item,
+        key,
+        label: localize(key),
+        parent: html
+    });
 });

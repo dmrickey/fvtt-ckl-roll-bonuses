@@ -10,7 +10,7 @@ declare global {
             }
         ): string;
 
-        let partials: { [key: string]: function(string, object) };
+        let partials: { [key: string]: function(object, { allowProtoMethodsByDefault: true, allowProtoPropertiesByDefault: true }) };
     }
 
     class EmbeddedCollection<T> extends Array<T> {

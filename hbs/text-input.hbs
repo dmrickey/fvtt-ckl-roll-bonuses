@@ -1,6 +1,7 @@
 <div class="form-group roll-bonuses">
     <label>{{label}}</label>
     <div class="form-fields">
-        <input type="text" class="formula" value="{{current}}" id="text-input-{{key}}" placeholder="{{placeholder}}" />
+        <input type="text" {{#unless notFormula}}class="formula" {{/unless}} value="{{current}}" id="text-input-{{key}}"
+            placeholder="{{placeholder}}" />
     </div>
 </div>

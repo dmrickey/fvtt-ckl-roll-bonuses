@@ -2,7 +2,7 @@
 // - ACP for chosen armor is decreased by one.
 
 import { MODULE_NAME } from "../../consts.mjs";
-import { addNodeToRollBonus } from "../../handlebars-handlers/roll-bonus-on-actor-sheet.mjs";
+import { stringSelect } from "../../handlebars-handlers/roll-inputs/string-select.mjs";
 import { intersects } from "../../util/array-intersects.mjs";
 import { KeyedDFlagHelper, getDocDFlags } from "../../util/flag-helpers.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
@@ -107,15 +107,6 @@ function handleArmorFocusChange(actor, tempChanges) {
 }
 Hooks.on('pf1AddDefaultChanges', handleArmorFocusChange);
 
-/**
- * @type {Handlebars.TemplateDelegate}
- */
-let focusSelectorTemplate;
-Hooks.once(
-    'setup',
-    async () => focusSelectorTemplate = await getTemplate(`modules/${MODULE_NAME}/hbs/labeled-string-dropdown-selector.hbs`)
-);
-
 Hooks.on('renderItemSheet', (
     /** @type {ItemSheetPF} */ { actor, item },
     /** @type {[HTMLElement]} */[html],
@@ -131,25 +122,14 @@ Hooks.on('renderItemSheet', (
     }
 
     const current = item.getItemDictionaryFlag(key);
-    const choices = getDocDFlags(actor, armorFocusKey);
+    const choices = getDocDFlags(actor, armorFocusKey).map(x => `${x}`);
 
-    if (choices?.length && !current) {
-        item.setItemDictionaryFlag(key, choices[0]);
-    }
-
-    const templateData = { choices, current, label: localize(key), key };
-    const div = document.createElement('div');
-    div.innerHTML = focusSelectorTemplate(templateData, { allowProtoMethodsByDefault: true, allowProtoPropertiesByDefault: true });
-
-    const select = div.querySelector(`#string-selector-${key}`);
-    select?.addEventListener(
-        'change',
-        async (event) => {
-            if (!key) return;
-            // @ts-ignore - event.target is HTMLTextAreaElement
-            const /** @type {HTMLTextAreaElement} */ target = event.target;
-            await item.setItemDictionaryFlag(key, target?.value);
-        },
-    );
-    addNodeToRollBonus(html, div);
+    stringSelect({
+        choices,
+        current,
+        item,
+        key,
+        label: localize(key),
+        parent: html
+    });
 });

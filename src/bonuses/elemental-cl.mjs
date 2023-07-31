@@ -1,5 +1,4 @@
-import { MODULE_NAME } from "../consts.mjs";
-import { addNodeToRollBonus } from "../handlebars-handlers/roll-bonus-on-actor-sheet.mjs";
+import { textInputAndKeyValueSelect } from "../handlebars-handlers/roll-inputs/text-input-and-key-value-select.mjs";
 import { KeyedDFlagHelper, getDocDFlags } from "../util/flag-helpers.mjs";
 import { localHooks } from "../util/hooks.mjs";
 import { registerItemHint } from "../util/item-hints.mjs";
@@ -153,15 +152,6 @@ Hooks.on('pf1GetRollData', (
     }
 });
 
-/**
- * @type {Handlebars.TemplateDelegate}
- */
-let hbsTemplate;
-Hooks.once(
-    'setup',
-    async () => hbsTemplate = await getTemplate(`modules/${MODULE_NAME}/hbs/labeled-formula-key-value-selector.hbs`)
-);
-
 Hooks.on('renderItemSheet', (
     /** @type {ItemSheetPF} */ { item },
     /** @type {[HTMLElement]} */[html],
@@ -172,41 +162,15 @@ Hooks.on('renderItemSheet', (
     }
 
     const current = getDocDFlags(item, key)[0];
+    const choices = damageElements
+        .map(element => ({ key: element, label: pf1.registry.damageTypes.get(element)?.name || element }));
 
-    const choices = damageElements.reduce((acc, cur) => ({ ...acc, [cur]: pf1.registry.damageTypes.get(cur)?.name || cur }), {});
-    if (Object.keys(choices).length && !current) {
-        item.setItemDictionaryFlag(key, Object.keys(choices)[0]);
-    }
-
-    const templateData = {
-        choices,
-        current,
-        formula: getDocDFlags(item, formulaKey)[0] || '',
+    textInputAndKeyValueSelect({
+        text: { current: getDocDFlags(item, formulaKey)[0] || '', key: formulaKey },
+        select: { current, choices, key },
+        item,
         key,
         label: localize(key),
-    };
-
-    const div = document.createElement('div');
-    div.innerHTML = hbsTemplate(templateData, { allowProtoMethodsByDefault: true, allowProtoPropertiesByDefault: true });
-
-    const input = div.querySelector(`#text-input-${key}`);
-    input?.addEventListener(
-        'change',
-        async (event) => {
-            // @ts-ignore - event.target is HTMLTextAreaElement
-            const /** @type {HTMLTextAreaElement} */ target = event.target;
-            await item.setItemDictionaryFlag(formulaKey, target?.value);
-        },
-    );
-    const select = div.querySelector(`#key-value-selector-${key}`);
-    select?.addEventListener(
-        'change',
-        async (event) => {
-            // @ts-ignore - event.target is HTMLTextAreaElement
-            const /** @type {HTMLTextAreaElement} */ target = event.target;
-            await item.setItemDictionaryFlag(key, target?.value);
-        },
-    );
-
-    addNodeToRollBonus(html, div);
+        parent: html
+    });
 });

@@ -485,7 +485,7 @@ declare global {
             abilities,
             savingThrows: SavingThrows,
             skills,
-            spellSchools
+            spellSchools: { [key: string]: string },
         };
         documents: {
             actor: {

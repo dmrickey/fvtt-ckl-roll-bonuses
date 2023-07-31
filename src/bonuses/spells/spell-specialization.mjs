@@ -2,7 +2,7 @@
 // https://www.d20pfsrd.com/feats/general-feats/spell-specialization/
 
 import { MODULE_NAME } from "../../consts.mjs";
-import { addNodeToRollBonus } from "../../handlebars-handlers/roll-bonus-on-actor-sheet.mjs";
+import { stringSelect } from "../../handlebars-handlers/roll-inputs/string-select.mjs";
 import { getDocDFlags, KeyedDFlagHelper } from "../../util/flag-helpers.mjs";
 import { localHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
@@ -119,15 +119,6 @@ Hooks.on('pf1GetRollData', (
 });
 
 /**
- * @type {Handlebars.TemplateDelegate}
- */
-let clOffsetTemplate;
-Hooks.once(
-    'setup',
-    async () => clOffsetTemplate = await getTemplate(`modules/${MODULE_NAME}/hbs/labeled-string-dropdown-selector.hbs`)
-);
-
-/**
  * @param {string} html
  */
 Hooks.on('renderItemSheet', (
@@ -154,29 +145,12 @@ Hooks.on('renderItemSheet', (
         ?? [];
     const choices = uniqueArray(spellChoices.map(({ name }) => name)).sort();
 
-    if (choices.length && !current) {
-        item.setItemDictionaryFlag(key, choices[0]);
-    }
-
-    const templateData = {
+    stringSelect({
         choices,
         current,
+        item,
         key,
         label: localize(key),
-    };
-
-    const div = document.createElement('div');
-    div.innerHTML = clOffsetTemplate(templateData, { allowProtoMethodsByDefault: true, allowProtoPropertiesByDefault: true });
-
-    const select = div.querySelector(`#string-selector-${key}`);
-    select?.addEventListener(
-        'change',
-        async (event) => {
-            if (!key) return;
-            // @ts-ignore - event.target is HTMLTextAreaElement
-            const /** @type {HTMLTextAreaElement} */ target = event.target;
-            await item.setItemDictionaryFlag(key, target?.value);
-        },
-    );
-    addNodeToRollBonus(html, div);
+        parent: html
+    });
 });

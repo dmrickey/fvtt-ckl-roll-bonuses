@@ -1,6 +1,6 @@
 import { MODULE_NAME } from "../../consts.mjs";
-import { addNodeToRollBonus } from "../../handlebars-handlers/roll-bonus-on-actor-sheet.mjs";
-import { intersection, intersects } from "../../util/array-intersects.mjs";
+import { keyValueSelect } from "../../handlebars-handlers/roll-inputs/key-value-select.mjs";
+import { intersects } from "../../util/array-intersects.mjs";
 import { KeyedDFlagHelper, getDocDFlags } from "../../util/flag-helpers.mjs";
 import { localHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
@@ -166,15 +166,6 @@ Hooks.on('pf1GetRollData', (
     rollData.dcBonus += bonus;
 });
 
-/**
- * @type {Handlebars.TemplateDelegate}
- */
-let focusSelectorTemplate;
-Hooks.once(
-    'setup',
-    async () => focusSelectorTemplate = await getTemplate(`modules/${MODULE_NAME}/hbs/labeled-key-value-dropdown-selector.hbs`)
-);
-
 Hooks.on('renderItemSheet', (
     /** @type {ItemSheetPF} */ { actor, item },
     /** @type {[HTMLElement]} */[html],
@@ -219,28 +210,14 @@ Hooks.on('renderItemSheet', (
     }
 
     const current = getDocDFlags(item, key)[0];
-
-    if (Object.keys(elements).length && !current) {
-        item.setItemDictionaryFlag(key, Object.keys(elements)[0]);
-    }
-
     const choices = Object.keys(elements).map((key) => ({ key, label: elements[key].name }));
-    const templateData = { choices, current, label: localize(key), key };
 
-    const div = document.createElement('div');
-    div.innerHTML = focusSelectorTemplate(templateData, { allowProtoMethodsByDefault: true, allowProtoPropertiesByDefault: true });
-
-    const select = div.querySelector('#elemental-focus-selector');
-    select?.addEventListener(
-        'change',
-        async (event) => {
-            if (!key) return;
-
-            // @ts-ignore - event.target is HTMLTextAreaElement
-            const /** @type {HTMLTextAreaElement} */ target = event.target;
-            await item.setItemDictionaryFlag(key, target?.value);
-        },
-    );
-
-    addNodeToRollBonus(html, div);
+    keyValueSelect({
+        choices,
+        current,
+        item,
+        key,
+        label: localize(key),
+        parent: html
+    });
 });

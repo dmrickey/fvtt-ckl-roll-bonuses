@@ -1,5 +1,5 @@
 import { MODULE_NAME } from "../../consts.mjs";
-import { addNodeToRollBonus } from "../../handlebars-handlers/roll-bonus-on-actor-sheet.mjs";
+import { keyValueSelect } from "../../handlebars-handlers/roll-inputs/key-value-select.mjs";
 import { KeyedDFlagHelper, getDocDFlags } from "../../util/flag-helpers.mjs";
 import { localHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
@@ -159,15 +159,6 @@ Hooks.on('pf1GetRollData', (
     rollData.dcBonus += bonus;
 });
 
-/**
- * @type {Handlebars.TemplateDelegate}
- */
-let focusSelectorTemplate;
-Hooks.once(
-    'setup',
-    async () => focusSelectorTemplate = await getTemplate(`modules/${MODULE_NAME}/hbs/spell-focus-selector.hbs`)
-);
-
 Hooks.on('renderItemSheet', (
     /** @type {ItemSheetPF} */ { actor, item },
     /** @type {[HTMLElement]} */[html],
@@ -208,27 +199,16 @@ Hooks.on('renderItemSheet', (
         }
     }
 
-    const currentSchool = getDocDFlags(item, key)[0];
+    const current = getDocDFlags(item, key)[0];
+    const choices = Object.keys(spellSchools)
+        .map((key) => ({ key, label: spellSchools[key] }));
 
-    if (Object.keys(spellSchools).length && !currentSchool) {
-        item.setItemDictionaryFlag(key, Object.keys(spellSchools)[0]);
-    }
-
-    const templateData = { spellSchools, currentSchool };
-
-    const div = document.createElement('div');
-    div.innerHTML = focusSelectorTemplate(templateData, { allowProtoMethodsByDefault: true, allowProtoPropertiesByDefault: true });
-
-    const select = div.querySelector('#spell-focus-selector');
-    select?.addEventListener(
-        'change',
-        async (event) => {
-            if (!key) return;
-            // @ts-ignore - event.target is HTMLTextAreaElement
-            const /** @type {HTMLTextAreaElement} */ target = event.target;
-            await item.setItemDictionaryFlag(key, target?.value);
-        },
-    );
-
-    addNodeToRollBonus(html, div);
+    keyValueSelect({
+        choices,
+        current,
+        item,
+        key,
+        label: localize(key),
+        parent: html
+    });
 });

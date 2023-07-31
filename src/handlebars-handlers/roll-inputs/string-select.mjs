@@ -3,33 +3,33 @@ import { templates } from "../init.mjs";
 
 /**
  * @param {object} args
+ * @param {string[]} args.choices
  * @param {FlagValue} args.current
  * @param {ItemPF} args.item
  * @param {string} args.key
  * @param {string} args.label
  * @param {HTMLElement} args.parent,
- * @param {object} [o]
- * @param {string} [o.placeholder]
- * @param {boolean} [o.notFormula]
  */
-export function textInput({
+export function stringSelect({
     current,
     item,
     key,
     label,
+    choices,
     parent,
-}, {
-    placeholder = '',
-    notFormula = false,
-} = {}
-) {
-    const template = Handlebars.partials[templates.textInput](
-        { key, label, current, notFormula, placeholder },
+}) {
+    choices.sort();
+    if ((!current && choices.length) || (choices.length === 1 && current !== choices[0])) {
+        item.setItemDictionaryFlag(key, choices[0]);
+    }
+
+    const template = Handlebars.partials[templates.stringSelect](
+        { key, label, current, choices },
         { allowProtoMethodsByDefault: true, allowProtoPropertiesByDefault: true }
     );
     const div = document.createElement('div');
     div.innerHTML = template;
-    const select = div.querySelector(`#text-input-${key}`);
+    const select = div.querySelector(`#string-selector-${key}`);
     select?.addEventListener(
         'change',
         async (event) => {
