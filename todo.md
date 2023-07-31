@@ -47,6 +47,8 @@
   - [x] CL Bonus
     - [ ] Move to spells folder
   - [x] Elemental Focus
+- misc
+  - reorder table of contents to mirror the above checklist
 
 ## Misc
 ### Deprecation
