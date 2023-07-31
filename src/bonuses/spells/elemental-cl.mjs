@@ -1,10 +1,10 @@
-import { textInputAndKeyValueSelect } from "../handlebars-handlers/roll-inputs/text-input-and-key-value-select.mjs";
-import { KeyedDFlagHelper, getDocDFlags } from "../util/flag-helpers.mjs";
-import { localHooks } from "../util/hooks.mjs";
-import { registerItemHint } from "../util/item-hints.mjs";
-import { localize } from "../util/localize.mjs";
-import { signed } from "../util/to-signed-string.mjs";
-import { truthiness } from "../util/truthiness.mjs";
+import { textInputAndKeyValueSelect } from "../../handlebars-handlers/roll-inputs/text-input-and-key-value-select.mjs";
+import { KeyedDFlagHelper, getDocDFlags } from "../../util/flag-helpers.mjs";
+import { localHooks } from "../../util/hooks.mjs";
+import { registerItemHint } from "../../util/item-hints.mjs";
+import { localize } from "../../util/localize.mjs";
+import { signed } from "../../util/to-signed-string.mjs";
+import { truthiness } from "../../util/truthiness.mjs";
 
 
 const key = 'elemental-cl';
@@ -17,6 +17,34 @@ const damageElements = [
     'fire'
 ];
 
+/**
+ *
+ * @param {ItemAction | RollData["action"] | undefined | null} action
+ * @param {ActorPF?} actor
+ * @param {ItemPF?} item
+ */
+function getElementalTypes(
+    action,
+    actor,
+    item,
+) {
+    if (item && !(item instanceof pf1.documents.item.ItemSpellPF)) {
+        return;
+    }
+
+    if (!action) {
+        action = item?.firstAction;
+    }
+
+    const damageTypes = (action instanceof pf1.components.ItemAction ? action.data : action)?.damage.parts
+        .map(({ type }) => type)
+        .flatMap(({ custom, values }) => ([...custom.split(';').map(x => x.trim()), ...values]))
+        .filter(truthiness)
+        ?? [];
+    const subTypes = (item?.types || '');
+}
+
+// register hint on affected spell
 registerItemHint((hintcls, actor, item, _data) => {
     if (!(item instanceof pf1.documents.item.ItemSpellPF)) {
         return;

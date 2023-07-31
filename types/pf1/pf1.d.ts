@@ -1,4 +1,4 @@
-export { }
+export {};
 
 declare global {
     abstract class BaseDocument {
@@ -7,23 +7,18 @@ declare global {
         updateSource(changes: Partial<this>, options?: object);
     }
 
-    abstract class ItemDocument extends BaseDocument { }
+    abstract class ItemDocument extends BaseDocument {}
 
     interface Abilities {
-        str: 'Strength',
-        dex: 'Dexterity',
-        con: 'Constitution',
-        int: 'Intelligence',
-        wis: 'Wisdom',
-        cha: 'Charisma'
+        str: 'Strength';
+        dex: 'Dexterity';
+        con: 'Constitution';
+        int: 'Intelligence';
+        wis: 'Wisdom';
+        cha: 'Charisma';
     }
 
-    type ActionType = 'msak'
-        | 'mwak'
-        | 'rsak'
-        | 'rwak'
-        | 'mcman'
-        | 'rcman'
+    type ActionType = 'msak' | 'mwak' | 'rsak' | 'rwak' | 'mcman' | 'rcman';
 
     class ActorPF extends BaseDocument {
         getSkillInfo(skillId: string): SkillRollData;
@@ -33,16 +28,14 @@ declare global {
          * @param refresh - pass true to force the roll data to recalculate
          * @returns The actor's roll data
          */
-        getRollData(args?: {
-            refresh?: boolean
-        }): RollData;
+        getRollData(args?: { refresh?: boolean }): RollData;
 
         itemFlags: {
             /**
              * The tags for Items that are active with a boolean flag
              */
-            boolean: { [key: string]: { sources: ItemDocument[] } },
-            dictionary: ItemDictionaryFlags,
+            boolean: { [key: string]: { sources: ItemDocument[] } };
+            dictionary: ItemDictionaryFlags;
         };
 
         items: EmbeddedCollection<ItemPF>;
@@ -56,10 +49,10 @@ declare global {
                     subSkills: {
                         [key: string]: {
                             name: string;
-                        }
+                        };
                     };
-                }
-            }
+                };
+            };
         };
     }
 
@@ -90,14 +83,14 @@ declare global {
      * {key: Flag}
      */
     interface DictionaryFlags {
-        [key: string]: FlagValue,
+        [key: string]: FlagValue;
     }
 
     interface ItemDictionaryFlags {
         /**
          * Dictionary flags keyed by Item tags
          */
-        [key: string]: DictionaryFlags,
+        [key: string]: DictionaryFlags;
     }
 
     type FlagValue = string | number;
@@ -115,40 +108,42 @@ declare global {
             };
             actionType: ActionType;
             damage: {
-                parts: { formula: string, type: { custom: string, values: string[], } }[]
-            }
-        }
+                parts: {
+                    formula: string;
+                    type: { custom: string; values: string[] };
+                }[];
+            };
+        };
         item: ItemPF;
     }
 
     interface ItemAttackPF extends ItemPF {
-        system: SystemItemAttackPF,
+        system: SystemItemAttackPF;
     }
     interface ItemEquipmentPF extends ItemPF {
-        system: SystemItemEquipmentPF,
+        system: SystemItemEquipmentPF;
     }
     interface ItemSpellPF extends ItemPF {
-        system: SystemItemSpellPF,
+        system: SystemItemSpellPF;
+        types: string;
 
         /** @deprecated Spells don't have tags */
-        tag: string,
+        tag: string;
     }
-    interface ItemFeatPF extends ItemPF {
-
-    }
+    interface ItemFeatPF extends ItemPF {}
     interface ItemWeaponPF extends ItemPF {
-        system: SystemWeaponPF,
+        system: SystemWeaponPF;
     }
 
     interface ItemChange {
-        modifier: BonusModifers,
+        modifier: BonusModifers;
         parent: undefined | ItemPF;
     }
 
     interface SystemItem {
         broken: boolean;
         flags: {
-            boolean: {},
+            boolean: {};
             dictionary: DictionaryFlags;
         };
         tag: string;
@@ -160,21 +155,21 @@ declare global {
     }
     interface SystemItemEquipmentPF extends SystemItem {
         armor: {
-            acp: number,
-            dex: number | null,
-            enh: number,
-            value: number,
-        },
+            acp: number;
+            dex: number | null;
+            enh: number;
+            value: number;
+        };
         baseTypes: string[];
-        proficient: boolean,
-        slot: 'armor' | 'shield',
+        proficient: boolean;
+        slot: 'armor' | 'shield';
     }
     interface SystemItemSpellPF extends SystemItem {
         school: string;
     }
     interface SystemWeaponPF extends SystemItem {
         baseTypes: string[];
-        proficient: boolean,
+        proficient: boolean;
         weaponGroups: TraitSelector;
     }
 
@@ -199,8 +194,8 @@ declare global {
         firstAction: ItemAction;
         flags: {
             core: {
-                sourceId: string
-            }
+                sourceId: string;
+            };
         };
         id: string;
         isActive: boolean;
@@ -218,7 +213,7 @@ declare global {
         /**
          * Gets value for the given dictionary flag key
          * @param key
-        */
+         */
         getItemDictionaryFlag(key: string): string | number;
 
         // example output
@@ -232,25 +227,25 @@ declare global {
         // }
         /**
          * Gets the Item's dictionary flags.
-        */
+         */
         getItemDictionaryFlags(): DictionaryFlags;
 
         /**
          * Sets teh given dictionary flag on the item
          * @param key
          * @param value
-        */
+         */
         setItemDictionaryFlag(key: string, value: FlagValue);
 
         /**
          * @param key - THe key for the boolean flag
-       * @returns True if the item has the boolean flag
-       */
+         * @returns True if the item has the boolean flag
+         */
         hasItemBooleanFlag(key: string): boolean;
     }
 
     type ItemType =
-        'attack'
+        | 'attack'
         | 'buff'
         | 'class'
         | 'consumable'
@@ -261,15 +256,15 @@ declare global {
         | 'weapon';
 
     interface SkillRollData {
-        ability: keyof Abilities,
-        acp: boolean,
-        changeBonus: number,
-        cs: boolean,
-        rank: number,
-        rt: boolean,
+        ability: keyof Abilities;
+        acp: boolean;
+        changeBonus: number;
+        cs: boolean;
+        rank: number;
+        rt: boolean;
 
-        name?: string,
-        subSkills?: SkillRollData[],
+        name?: string;
+        subSkills?: SkillRollData[];
     }
 
     /**
@@ -277,36 +272,36 @@ declare global {
      */
     interface RollData {
         action: {
-            id: string,
+            id: string;
             damage: {
-                parts: { formula: string, type: TraitSelectorValuePlural }[]
-            }
+                parts: { formula: string; type: TraitSelectorValuePlural }[];
+            };
             ability: {
                 attack: string;
                 critMult: number | string;
                 critRange: number;
                 damage: string;
                 damageMult: number;
-            }
-        },
+            };
+        };
         armor: {
-            ac: number,
-            enh: number,
-            total: number,
-            type: number,
-        },
-        cl: number,
+            ac: number;
+            enh: number;
+            total: number;
+            type: number;
+        };
+        cl: number;
         dcBonus: number;
-        dFlags: ItemDictionaryFlags,
-        item: ItemPF,
+        dFlags: ItemDictionaryFlags;
+        item: ItemPF;
         shield: {
-            ac: number,
-            enh: number,
-            total: number,
-            type: number,
-        },
-        skills: { [key: string]: SkillRollData },
-        spells: any,
+            ac: number;
+            enh: number;
+            total: number;
+            type: number;
+        };
+        skills: { [key: string]: SkillRollData };
+        spells: any;
         // [key: string]: any,
     }
 
@@ -320,7 +315,7 @@ declare global {
     }
 
     type BonusModifers =
-        'alchemical'
+        | 'alchemical'
         | 'base'
         | 'circumstance'
         | 'competence'
@@ -342,7 +337,7 @@ declare global {
         | 'untypedPerm';
 
     type BuffTargets =
-        '~attackCore'
+        | '~attackCore'
         | 'aac'
         | 'ac'
         | 'acpA'
@@ -413,101 +408,107 @@ declare global {
         | 'wounds';
 
     interface DamageType {
-        category: 'physical' | 'energy',
-        color: string,
-        flags: { [key: string]: any },
-        icon: string,
-        isModifier: boolean,
-        name: string,
-        namepsace: 'pf1' | string,
+        category: 'physical' | 'energy';
+        color: string;
+        flags: { [key: string]: any };
+        icon: string;
+        isModifier: boolean;
+        name: string;
+        namepsace: 'pf1' | string;
     }
 
     interface ItemChange {
-        constructor(args: {
-            flavor: string,
-            formula: string | number,
-            modifier: BonusModifers,
-            operator?: 'add' | 'function' | 'set',
-            priority?: number,
-            subTarget: BuffTargets,
-            value?: string | number,
-        }, parent = null);
+        constructor(
+            args: {
+                flavor: string;
+                formula: string | number;
+                modifier: BonusModifers;
+                operator?: 'add' | 'function' | 'set';
+                priority?: number;
+                subTarget: BuffTargets;
+                value?: string | number;
+            },
+            parent = null
+        );
 
         static create();
     }
 
     interface ItemSheetPF {
-        appId: number,
-        editors: { [key: string]: object },
-        filepickers: unknown[],
-        object: ItemPF,
-        options: unknown,
+        appId: number;
+        editors: { [key: string]: object };
+        filepickers: unknown[];
+        object: ItemPF;
+        options: unknown;
         position: {
-            height: number,
-            left: number,
-            scale: number,
-            top: number,
-            width: number,
-            zIndex: number,
-        },
-        id: string,
-        actor: ActorPF | null,
-        closing: boolean,
-        document: ItemPF,
-        element: HTMLElement,
-        isEditable: boolean,
-        item: ItemPF,
-        popOut: boolean,
-        rendered: boolean,
-        template: string,
-        title: string,
+            height: number;
+            left: number;
+            scale: number;
+            top: number;
+            width: number;
+            zIndex: number;
+        };
+        id: string;
+        actor: ActorPF | null;
+        closing: boolean;
+        document: ItemPF;
+        element: HTMLElement;
+        isEditable: boolean;
+        item: ItemPF;
+        popOut: boolean;
+        rendered: boolean;
+        template: string;
+        title: string;
     }
 
     interface pf1 {
         components: {
-            ItemAction: { new(): ItemAction },
+            ItemAction: { new (): ItemAction };
             ItemChange: {
-                new(args: {
-                    flavor: string,
-                    formula: string | number,
-                    modifier: BonusModifers,
-                    operator?: 'add' | 'function' | 'set',
-                    priority?: number,
-                    subTarget: BuffTargets,
-                    /** The evaluation of the formula */
-                    value?: string | number,
-                }, parent = null): ItemChange
-            },
+                new (
+                    args: {
+                        flavor: string;
+                        formula: string | number;
+                        modifier: BonusModifers;
+                        operator?: 'add' | 'function' | 'set';
+                        priority?: number;
+                        subTarget: BuffTargets;
+                        /** The evaluation of the formula */
+                        value?: string | number;
+                    },
+                    parent = null
+                ): ItemChange;
+            };
         };
         config: {
-            weaponGroups: { [key: string]: string },
-            bonusModifiers: BonusModifers,
-            abilities,
-            savingThrows: SavingThrows,
-            skills,
-            spellSchools: { [key: string]: string },
+            weaponGroups: { [key: string]: string };
+            bonusModifiers: BonusModifers;
+            abilities;
+            savingThrows: SavingThrows;
+            skills;
+            spellSchools: { [key: string]: string };
         };
         documents: {
             actor: {
-                ActorPF: { new(): ActorPF }
-            },
+                ActorPF: { new (): ActorPF };
+            };
             item: {
-                ItemAttackPF: { new(): ItemAttackPF }
-                ItemEquipmentPF: { new(): ItemEquipmentPF }
-                ItemFeatPF: { new(): ItemFeatPF }
-                ItemPF: { new(): ItemPF }
-                ItemSpellPF: { new(): ItemSpellPF }
-                ItemWeaponPF: { new(): ItemWeaponPF }
-            }
+                ItemAttackPF: { new (): ItemAttackPF };
+                ItemEquipmentPF: { new (): ItemEquipmentPF };
+                ItemFeatPF: { new (): ItemFeatPF };
+                ItemPF: { new (): ItemPF };
+                ItemSpellPF: { new (): ItemSpellPF };
+                ItemWeaponPF: { new (): ItemWeaponPF };
+            };
         };
         registry: {
-            damageTypes: EmbeddedCollection<DamageType>,
+            damageTypes: EmbeddedCollection<DamageType>;
         };
     }
 
     interface SavingThrows {
-        fort: 'Fortitude',
-        ref: 'Reflex',
-        will: 'Will'
+        fort: 'Fortitude';
+        ref: 'Reflex';
+        will: 'Will';
     }
 }
