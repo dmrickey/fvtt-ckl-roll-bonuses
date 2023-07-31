@@ -78,7 +78,7 @@ Hooks.on('pf1GetRollData', (
         const sum = new KeyedDFlagHelper(action?.actor || rollData.dFlags, critMultOffsetSelf, critMultOffsetAll, critMultOffsetId(action), critMultOffsetId(item))
             .sumAll(rollData);
 
-        return rollData.action.ability.critMult + sum;
+        return +(rollData.action.ability.critMult || 2) + sum;
     };
 
     const mult = calculateMult();

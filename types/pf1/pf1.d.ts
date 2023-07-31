@@ -283,7 +283,7 @@ declare global {
             }
             ability: {
                 attack: string;
-                critMult: number;
+                critMult: number | string;
                 critRange: number;
                 damage: string;
                 damageMult: number;
