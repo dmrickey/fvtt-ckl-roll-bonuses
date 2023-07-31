@@ -2,7 +2,7 @@
 // +1 damage to chosen weapon group with proficient weapon
 
 import { MODULE_NAME } from "../consts.mjs";
-import { addNodeToRollBonus } from "../roll-bonus-on-actor-sheet.mjs";
+import { addNodeToRollBonus } from "../handlebars-handlers/roll-bonus-on-actor-sheet.mjs";
 import { intersects } from "../util/array-intersects.mjs";
 import { KeyedDFlagHelper, getDocDFlags } from "../util/flag-helpers.mjs";
 import { localHooks } from "../util/hooks.mjs";

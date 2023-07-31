@@ -1,4 +1,4 @@
-import { localize } from "./util/localize.mjs";
+import { localize } from "../util/localize.mjs";
 
 const containerId = 'ckl-roll-bonus-container';
 

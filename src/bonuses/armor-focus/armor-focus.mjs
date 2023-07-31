@@ -1,7 +1,7 @@
 // armor focus - https://www.d20pfsrd.com/feats/combat-feats/armor-focus-combat/
 // - AC for chosen armor type is increased by one.
 
-import { addNodeToRollBonus } from "../../roll-bonus-on-actor-sheet.mjs";
+import { addNodeToRollBonus } from "../../handlebars-handlers/roll-bonus-on-actor-sheet.mjs";
 import { armorFocusKey as key } from "./ids.mjs";
 import { intersects } from "../../util/array-intersects.mjs";
 import { KeyedDFlagHelper } from "../../util/flag-helpers.mjs";

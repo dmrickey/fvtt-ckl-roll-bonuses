@@ -2,7 +2,7 @@
 // +2 damage on selected weapon type - requires Greater Weapon Focus and Weapon Specialization with selected weapon
 
 import { MODULE_NAME } from "../../consts.mjs";
-import { addNodeToRollBonus } from "../../roll-bonus-on-actor-sheet.mjs";
+import { addNodeToRollBonus } from "../../handlebars-handlers/roll-bonus-on-actor-sheet.mjs";
 import { intersection, intersects } from "../../util/array-intersects.mjs";
 import { KeyedDFlagHelper, getDocDFlags } from "../../util/flag-helpers.mjs";
 import { localHooks } from "../../util/hooks.mjs";

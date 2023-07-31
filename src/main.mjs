@@ -1,6 +1,7 @@
 import { localHooks } from './util/hooks.mjs';
 import { MODULE_NAME } from './consts.mjs';
 
+import './handlebars-handlers/init.mjs';
 import './util/item-hints.mjs';
 import './bonuses.mjs';
 

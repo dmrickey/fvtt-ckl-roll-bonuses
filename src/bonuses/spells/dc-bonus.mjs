@@ -1,3 +1,4 @@
+import { textInput } from "../../handlebars-handlers/roll-inputs/text-input.mjs";
 import { getDocDFlags } from "../../util/flag-helpers.mjs";
 import { localHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
@@ -61,4 +62,19 @@ Hooks.on('pf1GetRollData', (
     bonuses.forEach(bonus => {
         rollData.dcBonus += RollPF.safeTotal(bonus, rollData);
     });
+});
+
+Hooks.on('renderItemSheet', (
+    /** @type {ItemSheetPF} */ { item },
+    /** @type {[HTMLElement]} */[html],
+    /** @type {unknown} */ _data
+) => {
+    const hasFlag = item.system.flags.dictionary?.hasOwnProperty(key);
+    if (!hasFlag) {
+        return;
+    }
+
+    const current = getDocDFlags(item, key)[0];
+
+    textInput(current, item, key, localize('all-spell-dc'), html);
 });

@@ -1,5 +1,5 @@
 import { MODULE_NAME } from "../../consts.mjs";
-import { addNodeToRollBonus } from "../../roll-bonus-on-actor-sheet.mjs";
+import { addNodeToRollBonus } from "../../handlebars-handlers/roll-bonus-on-actor-sheet.mjs";
 import { KeyedDFlagHelper, getDocDFlags } from "../../util/flag-helpers.mjs";
 import { localHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
@@ -108,7 +108,7 @@ Hooks.on('pf1GetRollData', (
 let focusSelectorTemplate;
 Hooks.once(
     'setup',
-    async () => focusSelectorTemplate = await getTemplate(`modules/${MODULE_NAME}/hbs/labled-formula-key-value-selector.hbs`)
+    async () => focusSelectorTemplate = await getTemplate(`modules/${MODULE_NAME}/hbs/labeled-formula-key-value-selector.hbs`)
 );
 
 Hooks.on('renderItemSheet', (

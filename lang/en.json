@@ -1,6 +1,7 @@
 {
     "ckl-roll-bonuses": {
         "all-spells": "All Spells",
+        "all-spell-dc": "All Spells DC Offset",
         "armor-focus": "Armor Focus",
         "cl-mod": "{mod} CL",
         "cl-label-mod": "{mod} CL ({label})",

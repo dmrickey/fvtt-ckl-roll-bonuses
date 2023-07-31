@@ -1,4 +1,5 @@
 export { }
+
 declare global {
     namespace Handlebars {
         function TemplateDelegate(
@@ -8,6 +9,8 @@ declare global {
                 allowProtoPropertiesByDefault?: boolean,
             }
         ): string;
+
+        let partials: { [key: string]: function(string, object) };
     }
 
     class EmbeddedCollection<T> extends Array<T> {

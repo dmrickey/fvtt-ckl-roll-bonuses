@@ -9,7 +9,7 @@ import { uniqueArray } from "./unique-array.mjs";
  * @param {string} key
  * @param {object} [o]
  * @param {boolean} [o.ignoreActive]
- * @returns {(String | number)[]}
+ * @returns {FlagValue[]}
  */
 const getDocDFlags = (doc, key, { ignoreActive = false } = {}) => {
     // if doc is an actor

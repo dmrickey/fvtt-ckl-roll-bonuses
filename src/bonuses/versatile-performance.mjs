@@ -1,7 +1,7 @@
 // https://www.d20pfsrd.com/classes/core-classes/bard/#Versatile_Performance_Ex
 
 import { MODULE_NAME } from "../consts.mjs";
-import { addNodeToRollBonus } from "../roll-bonus-on-actor-sheet.mjs";
+import { addNodeToRollBonus } from "../handlebars-handlers/roll-bonus-on-actor-sheet.mjs";
 import { getDocDFlags } from "../util/flag-helpers.mjs";
 import { registerItemHint } from "../util/item-hints.mjs";
 import { localize } from "../util/localize.mjs";
