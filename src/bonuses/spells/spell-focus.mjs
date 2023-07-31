@@ -73,9 +73,20 @@ registerItemHint((hintcls, actor, item, _data) => {
 
     if (isFocused || isGreater || isMythic) {
         const tips = []
-        if (isFocused) tips.push(localize(spellFocusKey));
-        if (isGreater) tips.push(localize(greaterSpellFocusKey));
-        if (isMythic) tips.push(localize(mythicSpellFocusKey));
+        let bonus = 0;
+        if (isFocused) {
+            tips.push(localize(spellFocusKey));
+            bonus += 1;
+        }
+        if (isGreater) {
+            tips.push(localize(greaterSpellFocusKey));
+            bonus += 1;
+        }
+        if (isMythic) {
+            tips.push(localize(mythicSpellFocusKey));
+            bonus *= 2;
+        }
+        tips.push(localize('dc-mod', { mod: signed(bonus) }));
         return hintcls.create('', [], { icon: 'fas fa-book', hint: tips.join('\n') });
     }
 });
