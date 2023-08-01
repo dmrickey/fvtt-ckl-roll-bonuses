@@ -353,7 +353,7 @@ Fortune and Misfortune can now be added as flags onto your buffs, feats, abiliti
 Various bonuses to skills. You can add Inspiration, change the base die, or add variable bonuses.
 
 <details>
-  <summary>How to customize Elemental Focus (click to expand)</summary>
+  <summary>How to customize Skills (click to expand)</summary>
 
   <details>
     <summary>Show configuration picture</summary>
