@@ -1,13 +1,18 @@
-- [ADD IN GAME DOCUMENATION](#add-in-game-documenation)
-  - [Class Features](#class-features)
-  - [Feats](#feats)
-  - [Racial Features](#racial-features)
-  - [Skills](#skills)
-  - [Misc](#misc)
-  - [Housekeeping](#housekeeping)
-  - [Checklist for new (and existing features)](#checklist-for-new-and-existing-features)
+- [UI](#ui)
+- [Class Features](#class-features)
+- [Feats](#feats)
+- [Racial Features](#racial-features)
+- [Skills](#skills)
+- [Misc](#misc)
+- [Housekeeping](#housekeeping)
+- [Checklist for new (and existing features)](#checklist-for-new-and-existing-features)
 
-# ADD IN GAME DOCUMENATION
+## UI
+### Add In-Game Documentation
+- create a compendium with details on how to configure each bonus
+  - link to specific compendium page for this bonus when it's detected on the sheet
+- create "id getter" ui for things like keen or fortune (fortune will need a lot more as well)
+- Always show roll bonuses header in the advanced tab, and add a Cog to itself to configure which bonuses should be on this item (useful for bonuses that can't be auto-detected base on the Feat name/id)
 
 ## Class Features
 ### Gunslinger
