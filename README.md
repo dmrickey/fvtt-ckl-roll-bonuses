@@ -368,7 +368,7 @@ Various bonuses to skills. You can add Inspiration, change the base die, or add 
   - ~~Override the base die (only thing I know of that does this is the `Empathy` investigator talent that let's them roll twice and keep the higher, but there could be something else out there, or any homebrew rules)~~
     - `Empathy` can be accomplished via `fortune` by adding `fortune-skill_sen` boolean flag directly on the `Empathy` talent
   - ~~Bonus is for any other permanent bonuses you have that need a die roll~~
-    - PF1 now handles variable skill bonuses. It used to be that if you had `1d6` for a skill change, then it was rolled once and then that was the permanent value for the bonus. As of v9, skill bonuses evaluated on every roll so the system can handle this much better on its own.
+    - PF1 now handles variable skill bonuses. It used to be that if you had `1d6` for a skill change, then it was rolled once and then that was the permanent value for the bonus. As of v9, skill bonuses are evaluated on every roll so the system can handle this much better on its own.
     - This is still useful for the investiagator talent that increases your die from 1d6 to 1d8 as the system doesn't really have a way to link to a single place for "what's my investigator die"
   - ~~the checkbox reads the global skill config inspiration value~~
     - Individual talents (or the Inspiration class ability itself) can simply use PF1's change target to grant a permanent 1d6 bonus to a specific skill
