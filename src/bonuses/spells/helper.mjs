@@ -6,7 +6,7 @@ const regex = /([A-Za-z ])+/g;
  * @returns {string[]}
  */
 export function getSpellTypes(item) {
-    return [...(item?.types || '').matchAll(regex)]
+    return [...(item?.system?.types || '').matchAll(regex)]
         .flatMap(([a]) => a.split('or'))
         .map((a) => a.trim().toLowerCase());
 }

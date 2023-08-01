@@ -129,7 +129,6 @@ declare global {
             domain: { [key: string]: number };
         };
         system: SystemItemSpellPF;
-        types: string;
 
         /** @deprecated Spells don't have tags */
         tag: string;
@@ -170,6 +169,7 @@ declare global {
     }
     interface SystemItemSpellPF extends SystemItem {
         school: string;
+        types: string;
     }
     interface SystemWeaponPF extends SystemItem {
         baseTypes: string[];
