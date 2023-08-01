@@ -1,3 +1,4 @@
+
 - [UI](#ui)
 - [Class Features](#class-features)
 - [Feats](#feats)
@@ -44,6 +45,7 @@
 - Add damage to specific Item/Attack
   - basically configured like fortune
   - saves a list of formula paired with damage types
+- Do something similar for ammo, but make them automatically add damage
 
 ### Deprecation
 - as of v9, PF1 now defers Roll Bonuses. So that means that the `Bonus` on the Skill settings can go away
