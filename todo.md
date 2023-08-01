@@ -1,4 +1,5 @@
 
+
 - [UI](#ui)
 - [Class Features](#class-features)
 - [Feats](#feats)
@@ -42,10 +43,12 @@
 
 ## Misc
 ### Attacks
+- Make "bonuses targeting weapons"
 - Add damage to specific Item/Attack
   - basically configured like fortune
   - saves a list of formula paired with damage types
 - Do something similar for ammo, but make them automatically add damage
+- Add Bane button on chat card to modify the current chat card to add +2 attack and +2d6 damage
 
 ### Deprecation
 - as of v9, PF1 now defers Roll Bonuses. So that means that the `Bonus` on the Skill settings can go away
