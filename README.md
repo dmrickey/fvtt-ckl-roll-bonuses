@@ -1,37 +1,37 @@
 # Roll Bonuses
 
-Provides bonuses to various types of rolls. Some of these are for variable changes that the system can't handle (like Inspiration). Some are a fake implementation of changes that the system just doesn't support. All configuration is done in the Feat's Advanced Tab (or buff, or any item, etc.). Support for Mana's mod [Item Hints](https://gitlab.com/koboldworks/pf1/item-hints) has been included so that things are automatically tagged in the character sheet.
+Provides bonuses to various types of rolls. Some of these are for variable changes that the system can't handle (like Inspiration). Some are a fake implementation of changes that the system just doesn't support. All configuration is done in the Feat's Advanced Tab (or buff, class feature, etc.). Support for Mana's mod [Item Hints](https://gitlab.com/koboldworks/pf1/item-hints) has been included so that things are automatically tagged in the character sheet.
 
 Supports PF1 v9+
 
 ### Table of contents
 
-- [Armor Focus](#armor-focus)
+- [Feats](#feats)
+  - [Armor Focus](#armor-focus)
+  - [Elemental Focus](#elemental-focus)
+  - [Martial Focus](#martial-focus)
+  - [Spell Focus](#spell-focus)
+  - [Spell Specialization](#spell-specialization)
+  - [Weapon Focus](#weapon-focus)
+  - [Weapon Specialization](#weapon-specialization)
 - [Critical Helpers](#critical-helpers)
-- [Elemental Focus](#elemental-focus)
-- [Elemental Spell CL Bonus](#elemental-spell-cl-bonus)
 - [Fate's Favored](#fates-favored)
 - [Fortune and Misfortune](#fortune-and-misfortune)
-- [Martial Focus](#martial-focus)
 - [Skill Bonuses](#skill-bonuses)
-- [Spell Caster Level Offset (for specific elements)](#spell-caster-level-offset-for-specific-elements)
-- [Spell Caster Level Offset (for specific schools)](#spell-caster-level-offset-for-specific-schools)
-- [Spell DC Bonuses (for all spells)](#spell-dc-bonuses-for-all-spells)
-- [Spell DC Bonuses (for specific elements)](#spell-dc-bonuses-for-specific-elements)
-- [Spell DC Bonuses (for specific schools)](#spell-dc-bonuses-for-specific-schools)
-- [Spell Focus](#spell-focus)
-- [Spell Specialization](#spell-specialization)
+- [Spells](#spells)
+  - [Modify Spell Caster Level (all spells, specific school, or specific element)](#modify-spell-caster-level-all-spells-specific-school-or-specific-element)
+  - [Modify Spell DC (all spells, specific school, or specific element)](#modify-spell-dc-all-spells-specific-school-or-specific-element)
 - [Versatile Performance](#versatile-performance)
-- [Weapon Focus](#weapon-focus)
-- [Weapon Specialization](#weapon-specialization)
+ 
+# Feats
 
-## Armor Focus
+## Armor Focus 
 Increase the AC of your chosen armor type by +1 (`Armor Focus`) and additionally decrease the ACP by 1 (`Improved Armor Focus`).
-
+ 
 <details>
   <summary>How to Armor Focus (click to expand)</summary>
 
-  #### Armor Focus
+  ### Armor Focus
   Adds +1 AC to hit to the chosen armor type.
   - Will automatically include the select input in the feat advanced tab if the feat is named `Weapon Focus`
     - This is configurable in the settings to account for different translations
@@ -40,7 +40,7 @@ Increase the AC of your chosen armor type by +1 (`Armor Focus`) and additionally
     - The Armor must have its `Equipment Base Types` filled out (this is new in PF1 v9)
     - If you know exactly what base type you're looking for, you can fill it into the dictionary flag value directly
 
-  #### Improved Armor Focus
+  ### Improved Armor Focus
   Reduced ACP by 1 for the chosen armor type
   - Will automatically include the select input in the feat advanced tab if the feat name includes both `Armor Focus` and `Improved`
     - This is configurable in the settings to account for different translations
@@ -49,7 +49,137 @@ Increase the AC of your chosen armor type by +1 (`Armor Focus`) and additionally
   
 </details>
 
-## Critical Helpers
+---
+
+## Elemental Focus
+Increase the DC by +1 of any spell you're casting for a specific element.
+
+<details>
+  <summary>How to customize Elemental Focus (click to expand)</summary>
+
+  - Follows the same basic setup as [Spell Focus](#spell-focus).
+  - You can manually configure it by setting a flag on the feat with a key of `elementalFocus`, `greaterElementalFocus`, or `mythicElementalFocus` and the mod will automatically add the inputs for you below the dictionary flags section.
+  - The accepted values are `acid`, `cold`, `electric`, or `fire`.
+  - The damage for the spell you're casting must be configured using one of the system's predefined types.
+
+</details>
+
+---
+
+## Martial Focus
+Automatically increase damage by +1 for any weapon in the chosen weapon group.
+
+<details>
+  <summary>How to configure Martial Focus (click to expand)</summary>
+
+  - Will automatically include the select input in the feat advanced tab if the feat is named `Martial Focus`
+    - This is configurable in the settings to account for different translations
+  - The dropdown will be added automatically if you add a dictionary flag `martial-focus` to the feat (or any other Item)
+  - The choices are auto populated based on what Attacks and Weapons belong to the actor
+    - The Attacks/Weapons must have their `Weapon Groups` filled out (this is new in PF1 v9)
+  - It will also include any custom weapon groups found on any attack or weapon within the actor's inventory.
+
+</details>
+
+---
+
+## Spell Focus
+
+Spell Focus, Greater Spell Focus, and Mythic Spell Focus now all have a drop down on the advanced tab that lets you select a school. When you cast a spell of that school, the DC will automatically be increased.
+
+<details>
+  <summary>How to configure Spell Focus (click to expand)</summary>
+
+  - The feat name has to match the mod configuration (already set up to match the expected English feat names) _*or*_ if it's one of those two feats added to your character sheet from the compendium (it doesn't matter if it's been renamed if it was added from a compendium).
+    - If the drop down doesn't show up because the name does not exactly match, or some other reason, you can still add a dictionary flag with the name `spellFocus`/`greaterSpellFocus` and the mod will automatically add the inputs for you below the dictionary flags section.
+    - Also handles Mythic Spell Focus, if the auto-dropdown doesn't show up, you can add the flag `mythicSpellFocus` following the same rules outline above
+  - Greater and Mythic options in the dropdown are limited by choices you've made for spell focus. If you want to get around that dropdown limitation, the flag can be manually added per above.
+  - Because of a bug in pf1 0.82.5, the save button on the chat card will show the correct DC, but the info note at the bottom of the chat card will your base DC -- this is the same bug that happens if you use a conditional modifier to increase an individual spell's DC.
+
+  ![image](https://user-images.githubusercontent.com/3664822/216522228-0968c234-3b89-47c0-b0e9-addf9accad34.png)
+
+</details>
+
+---
+
+## Spell Specialization
+Increase chosen spell CL by +2.
+
+<details>
+  <summary>How to configure Spell Specialization (clicke to expand)</summary>
+
+  - The input will automatically be added for any ability named `Spell Specialization` (configurable in the mod settings)
+  - You can manually add the `spell-specialization` dictionary flag for the input to show up
+  - Only spells in your actor's spellbooks will be available as choices
+    - if you want a different spell that your actor doesn't have, you can manually type the spell's `name` in as the value of the dictionary flag
+  - The spell's `name` is the key. If you have multiple versions of the same spell in your spellbook and want this to work with all of them, then pick the `name` that is in both items.
+    - e.g. If you have two differnt spells in your spellbook that are the same spell, but one is different because it has metamagic details pre-defined in it, `Fireball` and `Maximized Fireball`, then choose `Fireball` and it will apply to both spells
+  - If `Spell Specialization` is accidentally applying to an extra spell because it includes the chosen spell's name, then you can add exclusionary rules, too. Add the dictionary flag `spell-specialization-exclusions` and add in any extra parts of other spell names that should be excluded - each separate term split by a `;`.
+    - e.g. You have chosen the spell `Alarm`, but also have other spells `Selective Alarm` and `Escape Alarm`. By default those other two will also be specialized. But you can add the exclusion flag with the value `Selective; Escape` and those will now be excluded.
+
+</details>
+
+---
+
+## Weapon Focus
+Automatically add +1 to attack rolls to weapons with `Weapon Focus`. Includes `Greater Weapon Focus` and `Gnomish Weapon Focus`.
+
+<details>
+  <summary>How to configure Weapon Focus (click to expand)</summary>
+
+  ### Weapon Focus
+  Adds +1 to hit to the chosen weapon types.
+  - Will automatically include the select input in the feat advanced tab if the feat is named `Weapon Focus`
+    - This is configurable in the settings to account for different translations
+  - The dropdown will be added automatically if you add a dictionary flag `weapon-focus` to the feat (or any other Item)
+  - The choices are auto populated based on what Attacks and Weapons belong to the actor
+    - The Attacks/Weapons must have their `Equipment Base Types` filled out (this is new in PF1 v9)
+    - If you know exactly what base type you're looking for, you can fill it into the dictionary flag value directly
+
+  ### Greater Weapon Focus
+  Adds a second +1 on top of `Weapon Focus`
+  - Will automatically include the select input in the feat advanced tab if the feat name includes both `Weapon Focus` and `Greater`
+    - This is configurable in the settings to account for different translations
+  - The dropdown will be added automatically if you add a dictionary flag `greater-weapon-focus` to the feat (or any other Item)
+    - The choices will be based off of any other `Weapon Focus` feats you already have configured.
+
+  ### Racial Weapon Focus
+  Adds +1 to hit to racial weapons - those weapons must have appropriate racial tags.
+  - Will Automatically include the select input in the feat advanced tab if the feat is named `Gnome Weapon Focus` (only official racial weapon feat)
+    - This is configurable in the settings if you want to homebrew a different race
+    - detection for this is kind of messy and it usually also detects it as `Weapon Focus` too. Just delete the weapon focus dictionary flag and it will behave itself once it's already configured for racial weapon focus.
+  - The dropdown will be added automatically if you add the dicationary flag `racial-weapon-focus`
+  - You must type in one of the `tags` that exists on racial weapons. The chosen race must exist on weapons and attacks for this feat to automatically add +1 to attack rolls.
+
+</details>
+
+---
+
+## Weapon Specialization
+Automatically add +2 damage to chosen weapons types for `Weapon Specialization` and `Greater Weapon Specialization`.
+
+<details>
+  <summary>How to configure Weapon Specialization (click to expand)</summary>
+
+  ### Weapon Specialization
+  Adds +2 damage to the chosen weapon types.
+  - Will automatically include the select input in the feat advanced tab if the feat is named `Weapon Specialization`
+    - This is configurable in the settings to account for different translations
+  - The dropdown will be added automatically if you add a dictionary flag `weapon-specialization` to the feat (or any other Item)
+  - The choices are auto populated based on all of your configured [Weapon Focus](#weapon-focus) feats
+
+  ### Weapon Specialization
+  Adds an extra +2 damage to the chosen weapon types.
+  - Will automatically include the select input in the feat advanced tab if the feat name includes both `Weapon Specialization` and `Greater`
+    - This is configurable in the settings to account for different translations
+  - The dropdown will be added automatically if you add a dictionary flag `greater-weapon-specialization` to the feat (or any other Item)
+  - The choices are auto populated based on all of your configured `Weapon Specialization` and [Greater Weapon Focus](#weapon-focus) feats
+
+</details>
+
+---
+
+# Critical Helpers
 Attack's critical variables can now be dynamically adjusted. Crit can be modified with keen. It can also be modified by a static amount to account for certain 3.5 classes or other homebrew. The critical multipler can also be adjusted--this is useful for a Swashbuckler's capstone ability (and any homebrew that needs it).
 
 <details>
@@ -85,36 +215,14 @@ Attack's critical variables can now be dynamically adjusted. Crit can be modifie
 
 </details>
 
-## Elemental Focus
-Increase the DC by +1 of any spell you're casting for a specific element.
+---
 
-<details>
-  <summary>How to customize Elemental Focus (click to expand)</summary>
-
-  - Follows the same basic setup as [Spell Focus](#spell-focus).
-  - You can manually configure it by setting a flag on the feat with a key of `elementalFocus`, `greaterElementalFocus`, or `mythicElementalFocus` and the mod will automatically add the inputs for you below the dictionary flags section.
-  - The accepted values are `acid`, `cold`, `electric`, or `fire`.
-  - The damage for the spell you're casting must be configured using one of the system's predefined types.
-
-</details>
-
-## Elemental Spell CL Bonus
-Increase (or decrease) CL for spells that have a specific elemental damage type. Useful for specific abilities such as [Gnome's Pyromaniac alternate racial trait](https://www.aonprd.com/RacesDisplay.aspx?ItemName=Gnome#:~:text=and%20illusion%20resistance.-,Pyromaniac,-Source%20Advanced%20Race).
-
-<details>
-  <summary>How to customize Elemental CL Bonus (click to expand)</summary>
-
-  - Follows the same basic setup as [Elemental Focus](#elemental-focus) but also includes a formula field.
-  - The inputs will appear automatically after adding the `elemental-cl` dictionary key
-    - The accepted values are `acid`, `cold`, `electric`, or `fire`.
-  - The damage for the spell you're casting must be configured using one of the system's predefined types.
-
-</details>
-
-## Fate's Favored
+# Fate's Favored
 You can now configure the popular trait `Fate's Favored` to increase luck bonuses. To configure, just add a boolean flag `fates-favored` to your trait (or any other Item) and it will automatically increase any luck bonuses received from any other Change by 1. Sorry, this one has no automatic configuration because it's literally just adding `fates-favored` into a boolean flag.
 
-## Fortune and Misfortune
+---
+
+# Fortune and Misfortune
 
 Fortune and Misfortune can now be added as flags onto your buffs, feats, abilities, etc. Simply add a boolean flag `fortune` or `misfortune`. If you have a specific Weapon, Attack, Ability, Feat that only rolls twice for itself, you can add `fortune-self-item` (or `misfortune-self-item`).  There are lots of ways to configure this for individual features. You can have misfortune only for saves or even a specific save. For all skills, an indvidual skill, etc. The following has all of the details on how you can configure it. There is one special case `fortune-warsight-init` that makes it so you roll three times on initiative for the oracle ability (must have "fortune stacks" setting enabled (it is enabled by default) for this ability to work).
 
@@ -195,22 +303,9 @@ Fortune and Misfortune can now be added as flags onto your buffs, feats, abiliti
 
 </details>
 
-## Martial Focus
-Automatically increase damage by +1 for any weapon in the chosen weapon group.
+---
 
-<details>
-  <summary>How to configure Martial Focus (click to expand)</summary>
-
-  - Will automatically include the select input in the feat advanced tab if the feat is named `Martial Focus`
-    - This is configurable in the settings to account for different translations
-  - The dropdown will be added automatically if you add a dictionary flag `martial-focus` to the feat (or any other Item)
-  - The choices are auto populated based on what Attacks and Weapons belong to the actor
-    - The Attacks/Weapons must have their `Weapon Groups` filled out (this is new in PF1 v9)
-  - It will also include any custom weapon groups found on any attack or weapon within the actor's inventory.
-
-</details>
-
-## Skill Bonuses
+# Skill Bonuses
 Various bonuses to skills. You can add Inspiration, change the base die, or add variable bonuses.
 
 <details>
@@ -230,94 +325,60 @@ Various bonuses to skills. You can add Inspiration, change the base die, or add 
 
 </details>
 
-## Spell Caster Level Offset (for specific elements)
-For buffs, abilities, or banes (or anything else) that modify a specific school's caster level.
+---
+
+# Spells
+
+## Modify Spell Caster Level (all spells, specific school, or specific element)
+  For buffs, abilities, or banes (or anything else) that modify spell Caster Levels.
 
 <details>
-  <summary>How to configure Elemental Spell CL (click to expand)</summary>
+  <summary>How to configure spell Caster Level modifications (click to expand)</summary>
 
-  - You must add a dictionary flag `elemental-cl` to your buff/feature/etc. Once you add that, the inputs will show up below.
+  ### For All Spells
+  - Add dictionary flag `all-spell-cl` to your buff/feature/etc.
+    - Text input will appear for your formula
+
+  ### For Specific Element
+  Useful for specific abilities such as [Gnome's Pyromaniac alternate racial trait](https://www.aonprd.com/RacesDisplay.aspx?ItemName=Gnome#:~:text=and%20illusion%20resistance.-,Pyromaniac,-Source%20Advanced%20Race).
+  - Add dictionary flag `elemental-cl` to your buff/feature/etc.
+    - Text input will appear for your formula
+    - Dropdown selector will show up with options for `acid`, `cold`, `electric`, or `fire`
+
+  ### For Specific School
+  - Add dictionary flag `schoolClOffset` to your buff/feature/etc.
+    - Text input will appear for your formula
+    - Dropdown selector will show up with options for your chosen school
 
 </details>
 
-## Spell Caster Level Offset (for specific schools)
-For buffs, abilities, or banes (or anything else) that modify a specific school's caster level.
+---
+
+## Modify Spell DC (all spells, specific school, or specific element)
+  For buffs, abilities, or banes (or anything else) that modify spell DCs.
 
 <details>
-  <summary>How to configure Spell CL (click to expand)</summary>
+  <summary>How to configure spell DC modifications (click to expand)</summary>
 
-  - You must add a dictionary flag `schoolClOffset` to your buff/feature/etc. Once you add that, the inputs will show up below.
+  ### For All Spells
+  - Add dictionary flag `genericSpellDC` to your buff/feature/etc.
+    - Text input will appear for your formula
 
+  ### For Specific Element
+  - Add dictionary flag `elemental-dc` to your buff/feature/etc.
+    - Text input will appear for your formula
+    - Dropdown selector will show up with options for `acid`, `cold`, `electric`, or `fire`
+
+  ### For Specific School
+  - Add dictionary flag `school-dc` to your buff/feature/etc.
+    - Text input will appear for your formula
+    - Dropdown selector will show up with options for your chosen school
+  
 </details>
 
-## Spell DC Bonuses (for all spells)
-Generic Increase (or decrease) to the DC for all spells. These bonuses (from different abilities) will stack with each other.
+---
 
-<details>
-  <summary>How to configure Spell DC (click to expand)</summary>
-
-  - Add the `genericSpellDC` dictionary flag for the inputs to show up automatically
-  - Input a bonus formula
-
-</details>
-
-## Spell DC Bonuses (for specific elements)
-Generic Increase (or decrease) to the DC for a given spells of elemental types (acid, cold, electricity, fire). These bonuses (from different abilities) will stack with each other.
-
-<details>
-  <summary>How to configure Elemental Spell DC (click to expand)</summary>
-
-  - Add the `elemental--dc` dictionary flag for the inputs to show up automatically
-  - Input a bonus formula and select an element
-
-</details>
-
-## Spell DC Bonuses (for specific schools)
-Generic Increase (or decrease) to the DC for a given spell school. These bonuses (from different abilities) will stack with each other.
-
-<details>
-  <summary>How to configure Spell School DC (click to expand)</summary>
-
-  - Add the `school-dc` dictionary flag for the inputs to show up automatically
-  - Input a bonus formula and select a spell school
-
-</details>
-
-## Spell Focus
-
-Spell Focus, Greater Spell Focus, and Mythic Spell Focus now all have a drop down on the advanced tab that lets you select a school. When you cast a spell of that school, the DC will automatically be increased.
-
-<details>
-  <summary>How to configure Spell Focus (click to expand)</summary>
-
-  - The feat name has to match the mod configuration (already set up to match the expected English feat names) _*or*_ if it's one of those two feats added to your character sheet from the compendium (it doesn't matter if it's been renamed if it was added from a compendium).
-    - If the drop down doesn't show up because the name does not exactly match, or some other reason, you can still add a dictionary flag with the name `spellFocus`/`greaterSpellFocus` and the mod will automatically add the inputs for you below the dictionary flags section.
-    - Also handles Mythic Spell Focus, if the auto-dropdown doesn't show up, you can add the flag `mythicSpellFocus` following the same rules outline above
-  - Greater and Mythic options in the dropdown are limited by choices you've made for spell focus. If you want to get around that dropdown limitation, the flag can be manually added per above.
-  - Because of a bug in pf1 0.82.5, the save button on the chat card will show the correct DC, but the info note at the bottom of the chat card will your base DC -- this is the same bug that happens if you use a conditional modifier to increase an individual spell's DC.
-
-  ![image](https://user-images.githubusercontent.com/3664822/216522228-0968c234-3b89-47c0-b0e9-addf9accad34.png)
-
-</details>
-
-## Spell Specialization
-Increase chosen spell CL by +2.
-
-<details>
-  <summary>How to configure Spell Specialization (clicke to expand)</summary>
-
-  - The input will automatically be added for any ability named `Spell Specialization` (configurable in the mod settings)
-  - You can manually add the `spell-specialization` dictionary flag for the input to show up
-  - Only spells in your actor's spellbooks will be available as choices
-    - if you want a different spell that your actor doesn't have, you can manually type the spell's `name` in as the value of the dictionary flag
-  - The spell's `name` is the key. If you have multiple versions of the same spell in your spellbook and want this to work with all of them, then pick the `name` that is in both items.
-    - e.g. If you have two differnt spells in your spellbook that are the same spell, but one is different because it has metamagic details pre-defined in it, `Fireball` and `Maximized Fireball`, then choose `Fireball` and it will apply to both spells
-  - If `Spell Specialization` is accidentally applying to an extra spell because it includes the chosen spell's name, then you can add exclusionary rules, too. Add the dictionary flag `spell-specialization-exclusions` and add in any extra parts of other spell names that should be excluded - each separate term split by a `;`.
-    - e.g. You have chosen the spell `Alarm`, but also have other spells `Selective Alarm` and `Escape Alarm`. By default those other two will also be specialized. But you can add the exclusion flag with the value `Selective; Escape` and those will now be excluded.
-
-</details>
-
-## Versatile Performance
+# Versatile Performance
 Choose your perform. Choose the two skills it replaces. Whenever you roll those skills they'll automatically use your perform skill.
 
 <details>
@@ -338,56 +399,5 @@ Choose your perform. Choose the two skills it replaces. Whenever you roll those 
 
 </details>
 
-## Weapon Focus
-Automatically add +1 to attack rolls to weapons with `Weapon Focus`. Includes `Greater Weapon Focus` and `Gnomish Weapon Focus`.
+---
 
-<details>
-  <summary>How to configure Weapon Focus (click to expand)</summary>
-
-  #### Weapon Focus
-  Adds +1 to hit to the chosen weapon types.
-  - Will automatically include the select input in the feat advanced tab if the feat is named `Weapon Focus`
-    - This is configurable in the settings to account for different translations
-  - The dropdown will be added automatically if you add a dictionary flag `weapon-focus` to the feat (or any other Item)
-  - The choices are auto populated based on what Attacks and Weapons belong to the actor
-    - The Attacks/Weapons must have their `Equipment Base Types` filled out (this is new in PF1 v9)
-    - If you know exactly what base type you're looking for, you can fill it into the dictionary flag value directly
-
-  #### Greater Weapon Focus
-  Adds a second +1 on top of `Weapon Focus`
-  - Will automatically include the select input in the feat advanced tab if the feat name includes both `Weapon Focus` and `Greater`
-    - This is configurable in the settings to account for different translations
-  - The dropdown will be added automatically if you add a dictionary flag `greater-weapon-focus` to the feat (or any other Item)
-    - The choices will be based off of any other `Weapon Focus` feats you already have configured.
-
-  #### Racial Weapon Focus
-  Adds +1 to hit to racial weapons - those weapons must have appropriate racial tags.
-  - Will Automatically include the select input in the feat advanced tab if the feat is named `Gnome Weapon Focus` (only official racial weapon feat)
-    - This is configurable in the settings if you want to homebrew a different race
-    - detection for this is kind of messy and it usually also detects it as `Weapon Focus` too. Just delete the weapon focus dictionary flag and it will behave itself once it's already configured for racial weapon focus.
-  - The dropdown will be added automatically if you add the dicationary flag `racial-weapon-focus`
-  - You must type in one of the `tags` that exists on racial weapons. The chosen race must exist on weapons and attacks for this feat to automatically add +1 to attack rolls.
-
-</details>
-
-## Weapon Specialization
-Automatically add +2 damage to chosen weapons types for `Weapon Specialization` and `Greater Weapon Specialization`.
-
-<details>
-  <summary>How to configure Weapon Specialization (click to expand)</summary>
-
-  #### Weapon Specialization
-  Adds +2 damage to the chosen weapon types.
-  - Will automatically include the select input in the feat advanced tab if the feat is named `Weapon Specialization`
-    - This is configurable in the settings to account for different translations
-  - The dropdown will be added automatically if you add a dictionary flag `weapon-specialization` to the feat (or any other Item)
-  - The choices are auto populated based on all of your configured [Weapon Focus](#weapon-focus) feats
-
-  #### Weapon Specialization
-  Adds an extra +2 damage to the chosen weapon types.
-  - Will automatically include the select input in the feat advanced tab if the feat name includes both `Weapon Specialization` and `Greater`
-    - This is configurable in the settings to account for different translations
-  - The dropdown will be added automatically if you add a dictionary flag `greater-weapon-specialization` to the feat (or any other Item)
-  - The choices are auto populated based on all of your configured `Weapon Specialization` and [Greater Weapon Focus](#weapon-focus) feats
-
-</details>
