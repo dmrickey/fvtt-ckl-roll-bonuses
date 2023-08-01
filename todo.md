@@ -37,15 +37,15 @@
 ## Spells
 - All Spells
   - [x] DC Bonus
-  - [ ] CL Bonus
+  - [x] CL Bonus
 - By School
   - [x] DC Bonus
   - [x] CL Bonus
   - [x] Spell Focus
 - By Element
-  - [ ] DC Bonus
+  - [x] DC Bonus
   - [x] CL Bonus
-    - [ ] Move to spells folder
+    - [x] Move to spells folder
   - [x] Elemental Focus
 - misc
   - reorder table of contents to mirror the above checklist

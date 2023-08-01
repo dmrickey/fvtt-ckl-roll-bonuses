@@ -1,4 +1,4 @@
-export {};
+export { };
 
 declare global {
     abstract class BaseDocument {
@@ -7,7 +7,7 @@ declare global {
         updateSource(changes: Partial<this>, options?: object);
     }
 
-    abstract class ItemDocument extends BaseDocument {}
+    abstract class ItemDocument extends BaseDocument { }
 
     interface Abilities {
         str: 'Strength';
@@ -124,13 +124,17 @@ declare global {
         system: SystemItemEquipmentPF;
     }
     interface ItemSpellPF extends ItemPF {
+        learnedAt: {
+            class: { [key: string]: number };
+            domain: { [key: string]: number };
+        };
         system: SystemItemSpellPF;
         types: string;
 
         /** @deprecated Spells don't have tags */
         tag: string;
     }
-    interface ItemFeatPF extends ItemPF {}
+    interface ItemFeatPF extends ItemPF { }
     interface ItemWeaponPF extends ItemPF {
         system: SystemWeaponPF;
     }
@@ -188,7 +192,7 @@ declare global {
     }
 
     interface ItemPF extends ItemDocument {
-        actions: EmbeddedCollection<Action>;
+        actions: EmbeddedCollection<ItemAction>;
 
         actor: ActorPF;
         firstAction: ItemAction;
@@ -272,7 +276,7 @@ declare global {
      */
     interface RollData {
         action: {
-            id: string;
+            _id: string;
             damage: {
                 parts: { formula: string; type: TraitSelectorValuePlural }[];
             };
@@ -463,9 +467,9 @@ declare global {
 
     interface pf1 {
         components: {
-            ItemAction: { new (): ItemAction };
+            ItemAction: { new(): ItemAction };
             ItemChange: {
-                new (
+                new(
                     args: {
                         flavor: string;
                         formula: string | number;
@@ -490,15 +494,15 @@ declare global {
         };
         documents: {
             actor: {
-                ActorPF: { new (): ActorPF };
+                ActorPF: { new(): ActorPF };
             };
             item: {
-                ItemAttackPF: { new (): ItemAttackPF };
-                ItemEquipmentPF: { new (): ItemEquipmentPF };
-                ItemFeatPF: { new (): ItemFeatPF };
-                ItemPF: { new (): ItemPF };
-                ItemSpellPF: { new (): ItemSpellPF };
-                ItemWeaponPF: { new (): ItemWeaponPF };
+                ItemAttackPF: { new(): ItemAttackPF };
+                ItemEquipmentPF: { new(): ItemEquipmentPF };
+                ItemFeatPF: { new(): ItemFeatPF };
+                ItemPF: { new(): ItemPF };
+                ItemSpellPF: { new(): ItemSpellPF };
+                ItemWeaponPF: { new(): ItemWeaponPF };
             };
         };
         registry: {

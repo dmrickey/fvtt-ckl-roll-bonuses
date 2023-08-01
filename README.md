@@ -7,15 +7,17 @@ Supports PF1 v9+
 ### Table of contents
 
 - [Armor Focus](#armor-focus)
-- [Caster Level Offset for specified Magic School](#caster-level-offset-for-specified-magic-school)
 - [Critical Helpers](#critical-helpers)
-- [Element CL Bonus](#element-cl-bonus)
 - [Elemental Focus](#elemental-focus)
+- [Elemental Spell CL Bonus](#elemental-spell-cl-bonus)
 - [Fate's Favored](#fates-favored)
 - [Fortune and Misfortune](#fortune-and-misfortune)
 - [Martial Focus](#martial-focus)
 - [Skill Bonuses](#skill-bonuses)
+- [Spell Caster Level Offset (for specific elements)](#spell-caster-level-offset-for-specific-elements)
+- [Spell Caster Level Offset (for specific schools)](#spell-caster-level-offset-for-specific-schools)
 - [Spell DC Bonuses (for all spells)](#spell-dc-bonuses-for-all-spells)
+- [Spell DC Bonuses (for specific elements)](#spell-dc-bonuses-for-specific-elements)
 - [Spell DC Bonuses (for specific schools)](#spell-dc-bonuses-for-specific-schools)
 - [Spell Focus](#spell-focus)
 - [Spell Specialization](#spell-specialization)
@@ -46,10 +48,6 @@ Increase the AC of your chosen armor type by +1 (`Armor Focus`) and additionally
     - The choices will be based off of any other `Armor Focus` feats you already have configured.
   
 </details>
-
-## Caster Level Offset for specified Magic School
-Has a formula input which accepts roll data variables plus a dropdown for selecting the school of magic.
-- You must add a dictionary flag `schoolClOffset` to your buff/feature/etc. Once you add that, the inputs will show up below.
 
 ## Critical Helpers
 Attack's critical variables can now be dynamically adjusted. Crit can be modified with keen. It can also be modified by a static amount to account for certain 3.5 classes or other homebrew. The critical multipler can also be adjusted--this is useful for a Swashbuckler's capstone ability (and any homebrew that needs it).
@@ -87,19 +85,6 @@ Attack's critical variables can now be dynamically adjusted. Crit can be modifie
 
 </details>
 
-## Element CL Bonus
-Increase (or decrease) CL for spells that have a specific elemental damage type. Useful for specific abilities such as [Gnome's Pyromaniac alternate racial trait](https://www.aonprd.com/RacesDisplay.aspx?ItemName=Gnome#:~:text=and%20illusion%20resistance.-,Pyromaniac,-Source%20Advanced%20Race).
-
-<details>
-  <summary>How to customize Elemental CL Bonus (click to expand)</summary>
-
-  - Follows the same basic setup as [Elemental Focus](#elemental-focus) but also includes a formula field.
-  - The inputs will appear automatically after adding the `elemental-cl` dictionary key
-    - The accepted values are `acid`, `cold`, `electric`, or `fire`.
-  - The damage for the spell you're casting must be configured using one of the system's predefined types.
-
-</details>
-
 ## Elemental Focus
 Increase the DC by +1 of any spell you're casting for a specific element.
 
@@ -109,6 +94,19 @@ Increase the DC by +1 of any spell you're casting for a specific element.
   - Follows the same basic setup as [Spell Focus](#spell-focus).
   - You can manually configure it by setting a flag on the feat with a key of `elementalFocus`, `greaterElementalFocus`, or `mythicElementalFocus` and the mod will automatically add the inputs for you below the dictionary flags section.
   - The accepted values are `acid`, `cold`, `electric`, or `fire`.
+  - The damage for the spell you're casting must be configured using one of the system's predefined types.
+
+</details>
+
+## Elemental Spell CL Bonus
+Increase (or decrease) CL for spells that have a specific elemental damage type. Useful for specific abilities such as [Gnome's Pyromaniac alternate racial trait](https://www.aonprd.com/RacesDisplay.aspx?ItemName=Gnome#:~:text=and%20illusion%20resistance.-,Pyromaniac,-Source%20Advanced%20Race).
+
+<details>
+  <summary>How to customize Elemental CL Bonus (click to expand)</summary>
+
+  - Follows the same basic setup as [Elemental Focus](#elemental-focus) but also includes a formula field.
+  - The inputs will appear automatically after adding the `elemental-cl` dictionary key
+    - The accepted values are `acid`, `cold`, `electric`, or `fire`.
   - The damage for the spell you're casting must be configured using one of the system's predefined types.
 
 </details>
@@ -232,6 +230,26 @@ Various bonuses to skills. You can add Inspiration, change the base die, or add 
 
 </details>
 
+## Spell Caster Level Offset (for specific elements)
+For buffs, abilities, or banes (or anything else) that modify a specific school's caster level.
+
+<details>
+  <summary>How to configure Elemental Spell CL (click to expand)</summary>
+
+  - You must add a dictionary flag `elemental-cl` to your buff/feature/etc. Once you add that, the inputs will show up below.
+
+</details>
+
+## Spell Caster Level Offset (for specific schools)
+For buffs, abilities, or banes (or anything else) that modify a specific school's caster level.
+
+<details>
+  <summary>How to configure Spell CL (click to expand)</summary>
+
+  - You must add a dictionary flag `schoolClOffset` to your buff/feature/etc. Once you add that, the inputs will show up below.
+
+</details>
+
 ## Spell DC Bonuses (for all spells)
 Generic Increase (or decrease) to the DC for all spells. These bonuses (from different abilities) will stack with each other.
 
@@ -240,7 +258,17 @@ Generic Increase (or decrease) to the DC for all spells. These bonuses (from dif
 
   - Add the `genericSpellDC` dictionary flag for the inputs to show up automatically
   - Input a bonus formula
-  - Because of a bug in pf1 0.82.5, the save button on the chat card will show the correct DC, but the info note at the bottom of the chat card will your base DC -- this is the same bug that happens if you use a conditional modifier to increase an individual spell's DC.
+
+</details>
+
+## Spell DC Bonuses (for specific elements)
+Generic Increase (or decrease) to the DC for a given spells of elemental types (acid, cold, electricity, fire). These bonuses (from different abilities) will stack with each other.
+
+<details>
+  <summary>How to configure Elemental Spell DC (click to expand)</summary>
+
+  - Add the `elemental--dc` dictionary flag for the inputs to show up automatically
+  - Input a bonus formula and select an element
 
 </details>
 
@@ -252,7 +280,6 @@ Generic Increase (or decrease) to the DC for a given spell school. These bonuses
 
   - Add the `school-dc` dictionary flag for the inputs to show up automatically
   - Input a bonus formula and select a spell school
-  - Because of a bug in pf1 0.82.5, the save button on the chat card will show the correct DC, but the info note at the bottom of the chat card will your base DC -- this is the same bug that happens if you use a conditional modifier to increase an individual spell's DC.
 
 </details>
 

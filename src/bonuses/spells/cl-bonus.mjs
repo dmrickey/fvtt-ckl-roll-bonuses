@@ -5,8 +5,7 @@ import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize } from "../../util/localize.mjs";
 import { signed } from "../../util/to-signed-string.mjs";
 
-// todo refactor 'all-spell-dc'
-const key = 'genericSpellDC'
+const key = 'all-spell-cl'
 
 // add info to spell card
 Hooks.on(localHooks.itemGetTypeChatData, (
@@ -23,7 +22,7 @@ Hooks.on(localHooks.itemGetTypeChatData, (
         .map((x) => RollPF.safeTotal(x, rollData))
         .reduce((acc, cur) => acc + cur, 0);
     if (bonus) {
-        props.push(localize('dc-label-mod', { mod: signed(bonus), label: localize('all-spells') }));
+        props.push(localize('cl-label-mod', { mod: signed(bonus), label: localize('all-spells') }));
     }
 });
 
@@ -36,7 +35,7 @@ registerItemHint((hintcls, actor, item, _data) => {
 
     const value = RollPF.safeTotal(flag, actor?.getRollData() ?? {})
     const mod = signed(value);
-    const hint = hintcls.create(`${localize('dc-mod', { mod })} (${localize('all-spells')})`, [], {});
+    const hint = hintcls.create(`${localize('cl-mod', { mod })} (${localize('all-spells')})`, [], {});
     return hint;
 });
 
@@ -58,10 +57,10 @@ Hooks.on('pf1GetRollData', (
         return;
     }
 
-    rollData.dcBonus ||= 0;
+    rollData.cl ||= 0;
     const bonuses = getDocDFlags(actor, key);
     bonuses.forEach(bonus => {
-        rollData.dcBonus += RollPF.safeTotal(bonus, rollData);
+        rollData.cl += RollPF.safeTotal(bonus, rollData);
     });
 });
 
@@ -81,7 +80,7 @@ Hooks.on('renderItemSheet', (
         current,
         item,
         key,
-        label: localize('all-spell-dc'),
+        label: localize('all-spell-cl'),
         parent: html,
     });
 });
