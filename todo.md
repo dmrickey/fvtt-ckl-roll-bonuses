@@ -43,10 +43,12 @@
 
 ## Misc
 ### Attacks
-- Make "bonuses targeting weapons"
 - Add damage to specific Item/Attack
+  - target specific weapon/attack
   - basically configured like fortune
   - saves a list of formula paired with damage types
+    - see pf1's action.hbs usages of `damage-type-visual` to see how it's currently doing damage input
+  - normal/non-crit/only crit options
 - Do something similar for ammo, but make them automatically add damage
 - Add Bane button on chat card to modify the current chat card to add +2 attack and +2d6 damage
 
