@@ -1,15 +1,17 @@
 {
     "ckl-roll-bonuses": {
         "all-spells": "All Spells",
-        "all-spell-dc": "All Spells DC Offset",
+        "all-spell-cl": "All Spells CL",
+        "all-spell-dc": "All Spells DC",
         "armor-focus": "Armor Focus",
         "cl-mod": "{mod} CL",
         "cl-label-mod": "{mod} CL ({label})",
-        "crit-offset": "Crit Offset ({mod})",
+        "crit-offset": "Crit Modifier ({mod})",
         "dc-mod": "{mod} DC",
         "dc-label-mod": "{mod} DC ({label})",
         "elementalFocus": "Elemental Focus",
-        "elemental-cl": "Elemental CL Offset",
+        "elemental-cl": "Elemental CL",
+        "elemental-dc": "Elemental DC",
         "fates-favored": "Fate's Favored",
         "fortune": "Fortune",
         "greaterElementalFocus": "Greater Elemental Focus",
@@ -24,19 +26,14 @@
         "mythicSpellFocus": "Mythic Spell Focus",
         "ok": "OK",
         "roll-bonuses": "Roll Bonuses",
-        "school-dc": "School DC Offset",
-        "schoolClOffset": "School CL Offset",
+        "school-dc": "Spell School DC",
+        "schoolClOffset": "Spell School CL",
         "spellFocus": "Spell Focus",
         "skills": {
             "config": "Skill Config",
             "inspiration": "Inspiration"
         },
         "spell-specialization": "Spell Specialization",
-        "spells": {
-            "elementalFocusEnergy": "Elemental Focus Energy",
-            "schoolClOffset": "School CL Offset",
-            "spellFocusSchool": "Spell Focus School"
-        },
         "versatilePerformance": {
             "error": "Versatile Performance - invalid skill IDs",
             "header": "Versatile Performance",
