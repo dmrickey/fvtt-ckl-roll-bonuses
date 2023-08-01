@@ -6,6 +6,8 @@ Supports PF1 v9+
 
 ### Table of contents
 
+- [Class Features](#class-features)
+  - [Versatile Performance](#versatile-performance)
 - [Feats](#feats)
   - [Armor Focus](#armor-focus)
   - [Elemental Focus](#elemental-focus)
@@ -14,14 +16,41 @@ Supports PF1 v9+
   - [Spell Specialization](#spell-specialization)
   - [Weapon Focus](#weapon-focus)
   - [Weapon Specialization](#weapon-specialization)
-- [Critical Helpers](#critical-helpers)
-- [Fate's Favored](#fates-favored)
-- [Fortune and Misfortune](#fortune-and-misfortune)
-- [Skill Bonuses](#skill-bonuses)
+- [Misc](#misc)
+  - [Critical Helpers](#critical-helpers)
+  - [Fate's Favored](#fates-favored)
+  - [Fortune and Misfortune](#fortune-and-misfortune)
+  - [Skill Bonuses (Almost entirely uneccesary because of v9 updates. Will be removed soon)](#skill-bonuses-almost-entirely-uneccesary-because-of-v9-updates-will-be-removed-soon)
 - [Spells](#spells)
   - [Modify Spell Caster Level (all spells, specific school, or specific element)](#modify-spell-caster-level-all-spells-specific-school-or-specific-element)
   - [Modify Spell DC (all spells, specific school, or specific element)](#modify-spell-dc-all-spells-specific-school-or-specific-element)
-- [Versatile Performance](#versatile-performance)
+
+---
+
+# Class Features
+
+## Versatile Performance
+Choose your perform. Choose the two skills it replaces. Whenever you roll those skills they'll automatically use your perform skill.
+
+<details>
+  <summary>How to configure Versatile PerformanceFocus (click to expand)</summary>
+
+  - The input will automatically be added for any ability named `Versatile Performance`
+    - This is configurable in the settings for different translations
+    - If it doesn't show up (or you want to use this on a different ability), you can add the dictionary flag `versatile-performance` and the inputs will automatically be added
+      - due to its complexity, the inputs will not show up if you're viewing the item from the 
+  - To configure
+    - choose the perform skill you want to use in the first input
+    - choose the two skills in the next two inputs
+  - This adds a music note icon in the skills list next to the skills that are replaced
+    - You can click on the music note to disable the "perform override" and roll the skill normally. Clicking again resumes the versatile performance functionality.
+
+![image](https://github.com/dmrickey/fvtt-ckl-roll-bonuses/assets/3664822/d6ad8b53-6d02-45b3-88b5-504678a0d563)
+![image](https://github.com/dmrickey/fvtt-ckl-roll-bonuses/assets/3664822/3e1b7e9f-8a59-4c35-8219-12478445d598)
+
+</details>
+
+---
  
 # Feats
 
@@ -29,7 +58,7 @@ Supports PF1 v9+
 Increase the AC of your chosen armor type by +1 (`Armor Focus`) and additionally decrease the ACP by 1 (`Improved Armor Focus`).
  
 <details>
-  <summary>How to Armor Focus (click to expand)</summary>
+  <summary>How to configure Armor Focus (click to expand)</summary>
 
   ### Armor Focus
   Adds +1 AC to hit to the chosen armor type.
@@ -179,7 +208,9 @@ Automatically add +2 damage to chosen weapons types for `Weapon Specialization` 
 
 ---
 
-# Critical Helpers
+# Misc
+
+## Critical Helpers
 Attack's critical variables can now be dynamically adjusted. Crit can be modified with keen. It can also be modified by a static amount to account for certain 3.5 classes or other homebrew. The critical multipler can also be adjusted--this is useful for a Swashbuckler's capstone ability (and any homebrew that needs it).
 
 <details>
@@ -193,7 +224,8 @@ Attack's critical variables can now be dynamically adjusted. Crit can be modifie
   * `keen_<id>`
     * e.g. `keen_7hAXCo6sYfpIqeli`
     * Place this flag on anything, then when you use either the Item or Action associated with the id, it will be keen
-    * This is useful for when you have a temporary buff that grants a specific weapon Keen
+      * You can find the id for a specific thing by opening its sheet, then clicking the dictionary icon in the header next to its name
+    * This is useful for when you have a temporary buff (e.g. Magus, Warpriest, Occultist,...) that grants a specific weapon Keen
 
   ### Crit target modifications (dictionary flag)
   Positive numbers are good, so having a `3` will mean your "crits only on a 20" weapon will now crit on "17 or higher"
@@ -201,6 +233,8 @@ Attack's critical variables can now be dynamically adjusted. Crit can be modifie
   * `crit-offset-all`
   * `crit-offset_<id>`
     * e.g. `crit-offset_7hAXCo6sYfpIqeli`
+    * Place this flag on anything, then when you use either the Item or Action associated with the id, it will be modified by the value
+      * You can find the id for a specific thing by opening its sheet, then clicking the dictionary icon in the header next to its name
     * individual descriptions same as keen described above
     * The value of the dictionary flags can be either a number or a formula
     * if something is effect by both crit-offset and keen, then keen is applied first before an extra crit-offset is applied
@@ -210,26 +244,36 @@ Attack's critical variables can now be dynamically adjusted. Crit can be modifie
   * `crit-mult-offset-all`
   * `crit-mult-offset_<id>`
     * e.g. `crit-mult-offset_7hAXCo6sYfpIqeli`
-    * individual descriptions same as keen described above
-    * The value of the dictionary flags can be either a number or a formula
+    * Excact same as above but has a formula for variable crit mult modifications
 
 </details>
 
 ---
 
-# Fate's Favored
-You can now configure the popular trait `Fate's Favored` to increase luck bonuses. To configure, just add a boolean flag `fates-favored` to your trait (or any other Item) and it will automatically increase any luck bonuses received from any other Change by 1. Sorry, this one has no automatic configuration because it's literally just adding `fates-favored` into a boolean flag.
+## Fate's Favored
+One of the best traits in the game. It will automatically increase any configured `change` luck bonus to increase that bonus by 1.
+
+<details>
+  <summary>How to customize Fate's Favored (click to expand)</summary>
+
+- Add a boolean flag `fates-favored` to your trait (or any other Item) and it will automatically increase any luck bonuses received from any other Change by 1.
+  - Sorry, this one has no automatic configuration because it's literally just adding `fates-favored` into a boolean flag.
+
+</details>
 
 ---
 
-# Fortune and Misfortune
-
+## Fortune and Misfortune
 Fortune and Misfortune can now be added as flags onto your buffs, feats, abilities, etc. Simply add a boolean flag `fortune` or `misfortune`. If you have a specific Weapon, Attack, Ability, Feat that only rolls twice for itself, you can add `fortune-self-item` (or `misfortune-self-item`).  There are lots of ways to configure this for individual features. You can have misfortune only for saves or even a specific save. For all skills, an indvidual skill, etc. The following has all of the details on how you can configure it. There is one special case `fortune-warsight-init` that makes it so you roll three times on initiative for the oracle ability (must have "fortune stacks" setting enabled (it is enabled by default) for this ability to work).
 
 <details>
   <summary>How to customize fortune/misfortune (click to expand)</summary>
 
+  <details>
+  <summary>Show configuration picture</summary>
+
   ![image](https://github.com/dmrickey/ckl-foundry-modules/assets/3664822/66d2135b-27e4-44de-8098-f6a5ed4572df)
+  </details>
 
   For brevity, I'll only list `fortune-`, but everything also applies to `misfortune-`.
 
@@ -305,21 +349,29 @@ Fortune and Misfortune can now be added as flags onto your buffs, feats, abiliti
 
 ---
 
-# Skill Bonuses
+## Skill Bonuses (Almost entirely uneccesary because of v9 updates. Will be removed soon)
 Various bonuses to skills. You can add Inspiration, change the base die, or add variable bonuses.
 
 <details>
   <summary>How to customize Elemental Focus (click to expand)</summary>
 
+  <details>
+    <summary>Show configuration picture</summary>
+
   ![image](https://user-images.githubusercontent.com/3664822/183241183-9f899996-6f2a-455a-a711-054039365d31.png)
+  </details>
 
   On the skills tab in the top right is a button for modifying your base inspiration die. It defaults to `1d6[Inspiration]`, it's modifiable here because investigators get the option of changing it to a d8 later, or even rolling twice and taking the higher.
 
   To the right of each skill there's now a cog you can click that will open a menu:
 
-  - Override the base die (only thing I know of that does this is the `Empathy` investigator talent that let's them roll twice and keep the higher, but there could be something else out there, or any homebrew rules)
-  - Bonus is for any other permanent bonuses you have that need a die roll
-  - the checkbox reads the global skill config inspiration value
+  - ~~Override the base die (only thing I know of that does this is the `Empathy` investigator talent that let's them roll twice and keep the higher, but there could be something else out there, or any homebrew rules)~~
+    - `Empathy` can be accomplished via `fortune` by adding `fortune-skill_sen` boolean flag directly on the `Empathy` talent
+  - ~~Bonus is for any other permanent bonuses you have that need a die roll~~
+    - PF1 now handles variable skill bonuses. It used to be that if you had `1d6` for a skill change, then it was rolled once and then that was the permanent value for the bonus. As of v9, skill bonuses evaluated on every roll so the system can handle this much better on its own.
+    - This is still useful for the investiagator talent that increases your die from 1d6 to 1d8 as the system doesn't really have a way to link to a single place for "what's my investigator die"
+  - ~~the checkbox reads the global skill config inspiration value~~
+    - Individual talents (or the Inspiration class ability itself) can simply use PF1's change target to grant a permanent 1d6 bonus to a specific skill
 
   If you have static bonuses, use the built in change system -- this is only necessary to cover a limitation in that you can't have changes based on die rolls -- they're cachced when the buff is turned on. So if you have a 1d6 in a change, and turn the buff on, then it rolls immediately when you turn the buff on and keeps that specific value until the buff is toggled later.
 
@@ -377,27 +429,3 @@ Various bonuses to skills. You can add Inspiration, change the base die, or add 
 </details>
 
 ---
-
-# Versatile Performance
-Choose your perform. Choose the two skills it replaces. Whenever you roll those skills they'll automatically use your perform skill.
-
-<details>
-  <summary>How to configure Versatile PerformanceFocus (click to expand)</summary>
-
-  - The input will automatically be added for any ability named `Versatile Performance`
-    - This is configurable in the settings for different translations
-    - If it doesn't show up (or you want to use this on a different ability), you can add the dictionary flag `versatile-performance` and the inputs will automatically be added
-      - due to its complexity, the inputs will not show up if you're viewing the item from the 
-  - To configure
-    - choose the perform skill you want to use in the first input
-    - choose the two skills in the next two inputs
-  - This adds a music note icon in the skills list next to the skills that are replaced
-    - You can click on the music note to disable the "perform override" and roll the skill normally. Clicking again resumes the versatile performance functionality.
-
-![image](https://github.com/dmrickey/fvtt-ckl-roll-bonuses/assets/3664822/d6ad8b53-6d02-45b3-88b5-504678a0d563)
-![image](https://github.com/dmrickey/fvtt-ckl-roll-bonuses/assets/3664822/3e1b7e9f-8a59-4c35-8219-12478445d598)
-
-</details>
-
----
-

@@ -1,11 +1,11 @@
-- [Class Features](#class-features)
-- [Feats](#feats)
-- [Racial Features](#racial-features)
-- [Skills](#skills)
-- [Spells](#spells)
-- [Misc](#misc)
-- [Housekeeping](#housekeeping)
-- [Checklist for new (and existing features)](#checklist-for-new-and-existing-features)
+- [ADD IN GAME DOCUMENATION](#add-in-game-documenation)
+  - [Class Features](#class-features)
+  - [Feats](#feats)
+  - [Racial Features](#racial-features)
+  - [Skills](#skills)
+  - [Misc](#misc)
+  - [Housekeeping](#housekeeping)
+  - [Checklist for new (and existing features)](#checklist-for-new-and-existing-features)
 
 # ADD IN GAME DOCUMENATION
 
@@ -34,27 +34,16 @@
 - configure an item to give you specific ranks (0.82.5 only gives bonus ranks, not ranks to specific skills)
   - See versatile performance for ideas.
 
-## Spells
-- All Spells
-  - [x] DC Bonus
-  - [x] CL Bonus
-- By School
-  - [x] DC Bonus
-  - [x] CL Bonus
-  - [x] Spell Focus
-- By Element
-  - [x] DC Bonus
-  - [x] CL Bonus
-    - [x] Move to spells folder
-  - [x] Elemental Focus
-- misc
-  - reorder table of contents to mirror the above checklist
-
 ## Misc
+### Attacks
+- Add damage to specific Item/Attack
+  - basically configured like fortune
+  - saves a list of formula paired with damage types
+
 ### Deprecation
 - as of v9, PF1 now defers Roll Bonuses. So that means that the `Bonus` on the Skill settings can go away
 - It should create a new Feature with a change that includes the current formula as part of migration for deleting this
-- 
+
 ### Misc
 - add the formula class to skill inputs
 - consumable buffs - requires later release (waiting on issue #1946) (did not make it into v9)
@@ -69,3 +58,4 @@
 - Has hint on keyed ability
 - Has hint on affected Item (Weapon/Attack/Spell/etc)
 - Has info/attack note
+- Actually affects what it's supposed to (duh)
