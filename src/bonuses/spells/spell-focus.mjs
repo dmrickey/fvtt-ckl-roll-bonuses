@@ -1,5 +1,5 @@
 import { MODULE_NAME } from "../../consts.mjs";
-import { keyValueSelect } from "../../handlebars-handlers/roll-inputs/key-value-select.mjs";
+import { keyValueSelect } from "../../handlebars-handlers/bonus-inputs/key-value-select.mjs";
 import { KeyedDFlagHelper, getDocDFlags } from "../../util/flag-helpers.mjs";
 import { localHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";

@@ -1,4 +1,4 @@
-import { textInput } from "../../handlebars-handlers/roll-inputs/text-input.mjs";
+import { textInput } from "../../handlebars-handlers/bonus-inputs/text-input.mjs";
 import { getDocDFlags } from "../../util/flag-helpers.mjs";
 import { localHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";

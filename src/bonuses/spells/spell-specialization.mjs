@@ -2,7 +2,7 @@
 // https://www.d20pfsrd.com/feats/general-feats/spell-specialization/
 
 import { MODULE_NAME } from "../../consts.mjs";
-import { stringSelect } from "../../handlebars-handlers/roll-inputs/string-select.mjs";
+import { stringSelect } from "../../handlebars-handlers/bonus-inputs/string-select.mjs";
 import { getDocDFlags, KeyedDFlagHelper } from "../../util/flag-helpers.mjs";
 import { localHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";

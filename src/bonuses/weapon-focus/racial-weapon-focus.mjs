@@ -1,5 +1,5 @@
 import { MODULE_NAME } from "../../consts.mjs";
-import { textInput } from "../../handlebars-handlers/roll-inputs/text-input.mjs";
+import { textInput } from "../../handlebars-handlers/bonus-inputs/text-input.mjs";
 import { intersects } from "../../util/array-intersects.mjs";
 import { KeyedDFlagHelper } from "../../util/flag-helpers.mjs";
 import { localHooks } from "../../util/hooks.mjs";

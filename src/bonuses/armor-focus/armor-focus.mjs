@@ -9,7 +9,7 @@ import { MODULE_NAME } from "../../consts.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { registerSetting } from "../../util/settings.mjs";
 import { uniqueArray } from "../../util/unique-array.mjs";
-import { stringSelect } from "../../handlebars-handlers/roll-inputs/string-select.mjs";
+import { stringSelect } from "../../handlebars-handlers/bonus-inputs/string-select.mjs";
 
 const compendiumId = 'zBrrZynIB0EXagds';
 

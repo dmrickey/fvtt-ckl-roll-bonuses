@@ -2,7 +2,7 @@
 // +1 damage to chosen weapon group with proficient weapon
 
 import { MODULE_NAME } from "../consts.mjs";
-import { keyValueSelect } from "../handlebars-handlers/roll-inputs/key-value-select.mjs";
+import { keyValueSelect } from "../handlebars-handlers/bonus-inputs/key-value-select.mjs";
 import { intersects } from "../util/array-intersects.mjs";
 import { KeyedDFlagHelper, getDocDFlags } from "../util/flag-helpers.mjs";
 import { localHooks } from "../util/hooks.mjs";

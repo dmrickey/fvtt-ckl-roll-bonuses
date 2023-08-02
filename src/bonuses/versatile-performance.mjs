@@ -1,6 +1,7 @@
 // https://www.d20pfsrd.com/classes/core-classes/bard/#Versatile_Performance_Ex
 
 import { MODULE_NAME } from "../consts.mjs";
+import { templates } from "../handlebars-handlers/init.mjs";
 import { addNodeToRollBonus } from "../handlebars-handlers/roll-bonus-on-actor-sheet.mjs";
 import { getDocDFlags } from "../util/flag-helpers.mjs";
 import { registerItemHint } from "../util/item-hints.mjs";
@@ -22,15 +23,6 @@ const disabledKey = (
     /** @type {string} */ baseId,
     /** @type {string} */ skillId,
 ) => `vp_disable_${baseId}_${skillId}`;
-
-/**
- * @type {Handlebars.TemplateDelegate}
- */
-let vpSelectorTemplate;
-Hooks.once(
-    'setup',
-    async () => vpSelectorTemplate = await getTemplate(`modules/${MODULE_NAME}/hbs/versatile-performance-selector.hbs`)
-);
 
 registerItemHint((hintcls, actor, item, _data) => {
     if (!(item instanceof pf1.documents.item.ItemFeatPF)) return;
@@ -220,7 +212,7 @@ Hooks.on('renderItemSheet', (
     const templateData = { base, skill1, skill2, performs, allSkills };
 
     const div = document.createElement('div');
-    div.innerHTML = vpSelectorTemplate(templateData, { allowProtoMethodsByDefault: true, allowProtoPropertiesByDefault: true });
+    div.innerHTML = Handlebars.partials[templates.versatilePerformance](templateData, { allowProtoMethodsByDefault: true, allowProtoPropertiesByDefault: true });
 
     const updateVP = async () => {
         // @ts-ignore

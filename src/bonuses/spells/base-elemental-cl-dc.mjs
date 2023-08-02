@@ -1,4 +1,4 @@
-import { textInputAndKeyValueSelect } from "../../handlebars-handlers/roll-inputs/text-input-and-key-value-select.mjs";
+import { textInputAndKeyValueSelect } from "../../handlebars-handlers/bonus-inputs/text-input-and-key-value-select.mjs";
 import { intersection } from "../../util/array-intersects.mjs";
 import { KeyedDFlagHelper, getDocDFlags } from "../../util/flag-helpers.mjs";
 import { localHooks } from "../../util/hooks.mjs";

@@ -2,7 +2,7 @@
 // - ACP for chosen armor is decreased by one.
 
 import { MODULE_NAME } from "../../consts.mjs";
-import { stringSelect } from "../../handlebars-handlers/roll-inputs/string-select.mjs";
+import { stringSelect } from "../../handlebars-handlers/bonus-inputs/string-select.mjs";
 import { intersects } from "../../util/array-intersects.mjs";
 import { KeyedDFlagHelper, getDocDFlags } from "../../util/flag-helpers.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
