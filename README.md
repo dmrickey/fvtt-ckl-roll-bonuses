@@ -6,20 +6,24 @@ Supports PF1 v9+
 
 ### Table of contents
 
-- [Versatile Performance](#versatile-performance)
-- [Armor Focus](#armor-focus)
-- [Elemental Focus](#elemental-focus)
-- [Martial Focus](#martial-focus)
-- [Spell Focus](#spell-focus)
-- [Spell Specialization](#spell-specialization)
-- [Weapon Focus](#weapon-focus)
-- [Weapon Specialization](#weapon-specialization)
-- [Critical Helpers](#critical-helpers)
-- [Fate's Favored](#fates-favored)
-- [Fortune and Misfortune](#fortune-and-misfortune)
-- [Skill Bonuses (Almost entirely uneccesary because of v9 updates. Will be removed soon)](#skill-bonuses-almost-entirely-uneccesary-because-of-v9-updates-will-be-removed-soon)
-- [Modify Spell Caster Level (all spells, specific school, or specific element)](#modify-spell-caster-level-all-spells-specific-school-or-specific-element)
-- [Modify Spell DC (all spells, specific school, or specific element)](#modify-spell-dc-all-spells-specific-school-or-specific-element)
+- [Class Features](#class-features)
+  - [Versatile Performance](#versatile-performance)
+- [Feats](#feats)
+  - [Armor Focus](#armor-focus)
+  - [Elemental Focus](#elemental-focus)
+  - [Martial Focus](#martial-focus)
+  - [Spell Focus](#spell-focus)
+  - [Spell Specialization](#spell-specialization)
+  - [Weapon Focus](#weapon-focus)
+  - [Weapon Specialization](#weapon-specialization)
+- [Misc](#misc)
+  - [Critical Helpers](#critical-helpers)
+  - [Fate's Favored](#fates-favored)
+  - [Fortune and Misfortune](#fortune-and-misfortune)
+  - [Skill Bonuses (Almost entirely uneccesary because of v9 updates. Will be removed soon)](#skill-bonuses-almost-entirely-uneccesary-because-of-v9-updates-will-be-removed-soon)
+- [Spells](#spells)
+  - [Modify Spell Caster Level (all spells, specific school, or specific element)](#modify-spell-caster-level-all-spells-specific-school-or-specific-element)
+  - [Modify Spell DC (all spells, specific school, or specific element)](#modify-spell-dc-all-spells-specific-school-or-specific-element)
 
 ---
 
