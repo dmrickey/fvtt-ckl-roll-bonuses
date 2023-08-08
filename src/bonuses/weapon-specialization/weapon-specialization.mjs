@@ -130,7 +130,7 @@ Hooks.on(localHooks.actionDamageSources, actionDamageSources);
 //     const actor = action.actor;
 //     if (!actor || !item.system.baseTypes?.length) return;
 
-//     const weaponGroups = [...item.system.weaponGroups.value, ...item.system.weaponGroups.custom.split(';')].filter(truthiness);
+//     const weaponGroups = [...item.system.weaponGroups.value, ...item.system.weaponGroups.custom.split(';')].map(x => x.trim()).filter(truthiness);
 //     const focuses = new KeyedDFlagHelper(actor, key).valuesForFlag(key);
 
 //     const isFocused = intersects(weaponGroups, focuses);

@@ -6,24 +6,20 @@ Supports PF1 v9+
 
 ### Table of contents
 
-- [Class Features](#class-features)
-  - [Versatile Performance](#versatile-performance)
-- [Feats](#feats)
-  - [Armor Focus](#armor-focus)
-  - [Elemental Focus](#elemental-focus)
-  - [Martial Focus](#martial-focus)
-  - [Spell Focus](#spell-focus)
-  - [Spell Specialization](#spell-specialization)
-  - [Weapon Focus](#weapon-focus)
-  - [Weapon Specialization](#weapon-specialization)
-- [Misc](#misc)
-  - [Critical Helpers](#critical-helpers)
-  - [Fate's Favored](#fates-favored)
-  - [Fortune and Misfortune](#fortune-and-misfortune)
-  - [Skill Bonuses (Almost entirely uneccesary because of v9 updates. Will be removed soon)](#skill-bonuses-almost-entirely-uneccesary-because-of-v9-updates-will-be-removed-soon)
-- [Spells](#spells)
-  - [Modify Spell Caster Level (all spells, specific school, or specific element)](#modify-spell-caster-level-all-spells-specific-school-or-specific-element)
-  - [Modify Spell DC (all spells, specific school, or specific element)](#modify-spell-dc-all-spells-specific-school-or-specific-element)
+- [Versatile Performance](#versatile-performance)
+- [Armor Focus](#armor-focus)
+- [Elemental Focus](#elemental-focus)
+- [Martial Focus](#martial-focus)
+- [Spell Focus](#spell-focus)
+- [Spell Specialization](#spell-specialization)
+- [Weapon Focus](#weapon-focus)
+- [Weapon Specialization](#weapon-specialization)
+- [Critical Helpers](#critical-helpers)
+- [Fate's Favored](#fates-favored)
+- [Fortune and Misfortune](#fortune-and-misfortune)
+- [Skill Bonuses (Almost entirely uneccesary because of v9 updates. Will be removed soon)](#skill-bonuses-almost-entirely-uneccesary-because-of-v9-updates-will-be-removed-soon)
+- [Modify Spell Caster Level (all spells, specific school, or specific element)](#modify-spell-caster-level-all-spells-specific-school-or-specific-element)
+- [Modify Spell DC (all spells, specific school, or specific element)](#modify-spell-dc-all-spells-specific-school-or-specific-element)
 
 ---
 
@@ -387,9 +383,10 @@ Various bonuses to skills. You can add Inspiration, change the base die, or add 
 <details>
   <summary>How to configure spell Caster Level modifications (click to expand)</summary>
 
-  ### For All Spells
-  - Add dictionary flag `all-spell-cl` to your buff/feature/etc.
-    - Text input will appear for your formula
+  ### ~~For All Spells~~ Deprecated
+  - ~~Add dictionary flag `all-spell-cl` to your buff/feature/etc.~~
+    - ~~Text input will appear for your formula~~
+  - The system now has its own CL change target
 
   ### For Specific Element
   Useful for specific abilities such as [Gnome's Pyromaniac alternate racial trait](https://www.aonprd.com/RacesDisplay.aspx?ItemName=Gnome#:~:text=and%20illusion%20resistance.-,Pyromaniac,-Source%20Advanced%20Race).

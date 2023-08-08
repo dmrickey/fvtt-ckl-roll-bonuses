@@ -154,6 +154,7 @@ declare global {
     }
     interface SystemItemAttackPF extends SystemItem {
         baseTypes: string[];
+        links: { children: { name: string, id: string }[] };
         weaponGroups: TraitSelector?;
     }
     interface SystemItemEquipmentPF extends SystemItem {
@@ -164,6 +165,7 @@ declare global {
             value: number;
         };
         baseTypes: string[];
+        links: { children: { name: string, id: string }[] };
         proficient: boolean;
         slot: 'armor' | 'shield';
     }
@@ -173,6 +175,7 @@ declare global {
     }
     interface SystemWeaponPF extends SystemItem {
         baseTypes: string[];
+        links: { children: { name: string, id: string }[] };
         proficient: boolean;
         weaponGroups: TraitSelector;
     }
