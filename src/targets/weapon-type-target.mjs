@@ -1,16 +1,15 @@
 import { intersects } from "../util/array-intersects.mjs";
-import { BaseAttackTarget } from "./base-target.mjs";
+import { BaseTarget } from "./base-target.mjs";
 
-export class WeaponTypeTarget extends BaseAttackTarget {
+export class WeaponTypeTarget extends BaseTarget {
     /** @type {string[]} */
     baseTypes = [];
 
     /**
      * @inheritdoc
      * @override
-     * @returns {'equipment-type'}
      */
-    get type() { return 'equipment-type'; }
+    static get type() { return 'weapon-type'; }
 
     /**
      * @inheritdoc

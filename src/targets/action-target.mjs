@@ -1,15 +1,14 @@
-import { BaseAttackTarget } from "./base-target.mjs";
+import { BaseTarget } from "./base-target.mjs";
 
-export class ActionTarget extends BaseAttackTarget {
+export class ActionTarget extends BaseTarget {
     /** @type {string[]} */
     ids = [];
 
     /**
      * @inheritdoc
      * @override
-     * @returns {'action'}
      */
-    get type() { return 'action'; }
+    static get type() { return 'action'; }
 
     /**
      * @inheritdoc

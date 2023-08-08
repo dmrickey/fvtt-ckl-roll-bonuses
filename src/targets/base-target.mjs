@@ -1,4 +1,4 @@
-export class BaseAttackTarget {
+export class BaseTarget {
     /**
      * @param {ItemPF | ActionUse} arg
      * @returns {boolean}
@@ -6,7 +6,7 @@ export class BaseAttackTarget {
     isTarget(arg) { throw new Error('must be overridden'); };
 
     /**
-     * @returns {'action' | 'item' | 'weapon-group' | 'equipment-type' }
+     * @returns { string }
      */
-    get type() { throw new Error('must be overridden'); }
+    static get type() { throw new Error('must be overridden'); }
 }

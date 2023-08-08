@@ -1,8 +1,8 @@
 import { intersects } from "../util/array-intersects.mjs";
 import { truthiness } from "../util/truthiness.mjs";
-import { BaseAttackTarget } from "./base-target.mjs";
+import { BaseTarget } from "./base-target.mjs";
 
-export class WeaponGroupTarget extends BaseAttackTarget {
+export class WeaponGroupTarget extends BaseTarget {
     /** @type {TraitSelector} */
     weaponGroups = { custom: '', value: [] };
     get #weaponGroupsArray() { return [...this.weaponGroups.value, ...this.weaponGroups.custom.split(';')].map(x => x.trim()).filter(truthiness); }
@@ -10,9 +10,8 @@ export class WeaponGroupTarget extends BaseAttackTarget {
     /**
      * @inheritdoc
      * @override
-     * @returns {'weapon-group'}
      */
-    get type() { return 'weapon-group'; }
+    static get type() { return 'weapon-group'; }
 
     /**
      * @inheritdoc
