@@ -1,7 +1,7 @@
 export { };
 
 declare global {
-    abstract class BaseDocument {
+    abstract class BaseDocument extends Document {
         getFlag(moduleName: string, key: string): any;
         async setFlag<T>(moduleName: string, key: string, value: T);
         updateSource(changes: Partial<this>, options?: object);
@@ -204,6 +204,7 @@ declare global {
             core: {
                 sourceId: string;
             };
+            [key: string]: any;
         };
         id: string;
         isActive: boolean;
@@ -471,6 +472,7 @@ declare global {
 
     interface pf1 {
         applications: {
+            ActorTraitSelector: { new(doc: Document, options: object): ActorTraitSelector };
             DamageTypeSelector: {
                 new(
                     object: { id: string, async update({ [dataPath]: object }) },

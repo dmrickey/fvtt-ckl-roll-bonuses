@@ -1,7 +1,6 @@
-import { MODULE_NAME } from "../../consts.mjs";
-import { localize } from "../../util/localize.mjs";
-import { templates } from "../init.mjs";
-import { addNodeToRollBonus } from "../roll-bonus-on-actor-sheet.mjs";
+import { MODULE_NAME } from "../../../consts.mjs";
+import { templates } from "../../init.mjs";
+import { addNodeToRollBonus } from "../../roll-bonus-on-actor-sheet.mjs";
 
 /**
  * @param {object} args

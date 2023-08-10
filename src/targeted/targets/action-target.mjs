@@ -16,7 +16,7 @@ export class ActionTarget extends BaseTarget {
      * @param {ItemPF | ActionUse} arg
      * @returns {boolean}
      */
-    isTarget(arg) {
+    static isTarget(arg) {
         if (arg instanceof pf1.components.ItemAction) {
             return this.ids.includes(arg.id);
         }

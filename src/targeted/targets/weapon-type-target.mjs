@@ -1,4 +1,4 @@
-import { intersects } from "../util/array-intersects.mjs";
+import { intersects } from "../../util/array-intersects.mjs";
 import { BaseTarget } from "./base-target.mjs";
 
 export class WeaponTypeTarget extends BaseTarget {
@@ -17,7 +17,7 @@ export class WeaponTypeTarget extends BaseTarget {
      * @param {ItemPF | ActionUse} item
      * @returns {boolean}
      */
-    isTarget(item) {
+    static isTarget(item) {
         if (!(item instanceof pf1.documents.item.ItemAttackPF
             || item instanceof pf1.documents.item.ItemWeaponPF)
         ) {

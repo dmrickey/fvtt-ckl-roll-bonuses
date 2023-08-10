@@ -4,10 +4,10 @@ const containerId = 'ckl-roll-bonus-container';
 
 const addNodeToRollBonus = (
     /** @type {HTMLElement} */ itemSheetHtml,
-    /** @type {HTMLDivElement} */ element,
+    /** @type {HTMLDivElement} */ child,
 ) => {
     const flagsContainer = itemSheetHtml.querySelector('.tab[data-tab="advanced"] .tags');
-    if (!flagsContainer || !element) {
+    if (!flagsContainer || !child) {
         return;
     }
 
@@ -30,7 +30,7 @@ const addNodeToRollBonus = (
         flagsContainer.after(container);
     }
 
-    container.appendChild(element);
+    container.appendChild(child);
 }
 
 export { addNodeToRollBonus };

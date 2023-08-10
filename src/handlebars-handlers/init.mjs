@@ -8,10 +8,14 @@ export const templates = {
     textInput: `modules/${MODULE_NAME}/hbs/text-input.hbs`,
     textInputAndKeyValueSelect: `modules/${MODULE_NAME}/hbs/text-input-and-key-value-select.hbs`,
 
-    damageInput: `modules/${MODULE_NAME}/hbs/damage-input.hbs`,
-
     // preloaded specifics
     versatilePerformance: `modules/${MODULE_NAME}/hbs/versatile-performance-selector.hbs`,
+
+    // targeted bonuses
+    damageInput: `modules/${MODULE_NAME}/hbs/targeted/bonuses/damage-input.hbs`,
+
+    // targeted inputs
+    targetWeaponGroup: `modules/${MODULE_NAME}/hbs/targeted/targets/weapon-group-input.hbs`,
 };
 
 Hooks.on('ready', () => loadTemplates(Object.values(templates)));

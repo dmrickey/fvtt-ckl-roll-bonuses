@@ -1,6 +1,6 @@
-import { intersects } from "../util/array-intersects.mjs";
-import { truthiness } from "../util/truthiness.mjs";
-import { uniqueArray } from "../util/unique-array.mjs";
+import { intersects } from "../../util/array-intersects.mjs";
+import { truthiness } from "../../util/truthiness.mjs";
+import { uniqueArray } from "../../util/unique-array.mjs";
 import { BaseTarget } from "./base-target.mjs";
 
 export class DamageTypeTarget extends BaseTarget {
@@ -15,14 +15,14 @@ export class DamageTypeTarget extends BaseTarget {
      * @inheritdoc
      * @override
      */
-    static get type() { return 'damage-type'; }
+    static get key() { return 'damage-type'; }
 
     /**
      * @inheritdoc
      * @override
      * @param {ItemPF | ActionUse} arg
      */
-    isTarget(arg) {
+    static isTarget(arg) {
         if (arg instanceof pf1.components.ItemAction) {
             const actionDamageTypes = uniqueArray(
                 arg.data.damage.parts.flatMap((part) => [...part.type.custom.split(';'), ...part.type.values])

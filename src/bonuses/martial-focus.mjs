@@ -75,7 +75,7 @@ function addMartialFocus({ actor, item, shared }) {
 Hooks.on(localHooks.actionUseAlterRollData, addMartialFocus);
 
 /**
- * Add Martial Focusto damage tooltip
+ * Add Martial Focus to damage tooltip
  *
  * @param {ItemAction} action
  * @param {ItemChange[]} sources

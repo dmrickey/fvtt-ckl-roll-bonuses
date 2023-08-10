@@ -8,4 +8,6 @@
     "[handlebars]": {
         "editor.formatOnSave": false
     },
+    "js/ts.implicitProjectConfig.checkJs": true,
+    "js/ts.implicitProjectConfig.strictNullChecks": false,
 }
