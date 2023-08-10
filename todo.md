@@ -27,6 +27,10 @@
   - Figure out if I want one input for mulitple choices - or multiple inputs with one choice each - Maybe use a trait selector for input given the choices
 
 ## Feats
+### Improved Critical
+- Selects individual weapon types (like Weapon Focus) and grants keen to all of those
+### Weapon Focus 
+- Add warning if no base equipment types detected
 ### Weapon Focus (Elephant in the Room)
 - Works off of a weapon group toggle and gives bonuses to all of the weapons in the group
 

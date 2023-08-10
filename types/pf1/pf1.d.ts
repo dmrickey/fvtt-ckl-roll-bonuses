@@ -115,6 +115,7 @@ declare global {
             };
         };
         item: ItemPF;
+        static defaultDamageType: TraitSelectorValuePlural;
     }
 
     interface ItemAttackPF extends ItemPF {
@@ -469,8 +470,19 @@ declare global {
     }
 
     interface pf1 {
+        applications: {
+            DamageTypeSelector: {
+                new(
+                    object: { id: string, async update({ [dataPath]: object }) },
+                    dataPath: string,
+                    data: {},
+                    options = {},
+                ): DamageTypeSelector
+            }
+        };
         components: {
             ItemAction: { new(): ItemAction };
+            // ItemAction: ItemAction ;
             ItemChange: {
                 new(
                     args: {

@@ -1,20 +1,26 @@
-import { templates } from "../handlebars-handlers/init.mjs";
-import { addNodeToRollBonus } from "../handlebars-handlers/roll-bonus-on-actor-sheet.mjs";
+import { MODULE_NAME } from "../consts.mjs";
+import { damageInput } from "../handlebars-handlers/bonus-inputs/damage-input.mjs";
+
+const key = 'damage-input';
 
 Hooks.on('renderItemSheet', (
     /** @type {ItemSheetPF} */ { actor, item },
     /** @type {[HTMLElement]} */[html],
     /** @type {unknown} */ _data
 ) => {
-    const name = item?.name?.toLowerCase() ?? '';
-    if (!actor) return;
+    const hasFlag = item.system.flags.boolean?.hasOwnProperty(key);
+    if (!hasFlag) {
+        return;
+    }
 
-    const templateData = { label: 'title here', current: 'in input' };
+    const parts = item.getFlag(MODULE_NAME, key) ?? [];
 
-    const div = document.createElement('div');
-    div.innerHTML = Handlebars.partials[templates.itemTarget](templateData, { allowProtoMethodsByDefault: true, allowProtoPropertiesByDefault: true });
-
-    addNodeToRollBonus(html, div);
+    damageInput({
+        item,
+        key,
+        parent: html,
+        parts,
+    });
 });
 
 

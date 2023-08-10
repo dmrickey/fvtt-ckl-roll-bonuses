@@ -8,7 +8,7 @@ import { templates } from "../init.mjs";
  * @param {ItemPF} args.item
  * @param {string} args.key
  * @param {string} args.label
- * @param {HTMLElement} args.parent,
+ * @param {HTMLElement} args.parent
  */
 export function stringSelect({
     current,

@@ -5,4 +5,7 @@
             "# Roll Bonuses",
         ],
     },
+    "[handlebars]": {
+        "editor.formatOnSave": false
+    },
 }
