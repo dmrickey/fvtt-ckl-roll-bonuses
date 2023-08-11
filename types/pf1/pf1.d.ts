@@ -56,11 +56,18 @@ declare global {
         };
     }
 
+    class ActionUseShared {
+        damageBonus: string[];
+        action: any;
+        conditionals: any;
+        rollData: RollData;
+        conditionalPartsCommon: any;
+    }
     class ActionUse {
         action: Action;
         actor: ActorPF;
         item: ItemPF;
-        shared: Shared;
+        shared: ActionUseShared;
     }
 
     class ChatAttack {
@@ -299,7 +306,9 @@ declare global {
             total: number;
             type: number;
         };
+        chargeCostBonus: number;
         cl: number;
+        conditionals: any;
         dcBonus: number;
         dFlags: ItemDictionaryFlags;
         item: ItemPF;
@@ -309,6 +318,7 @@ declare global {
             total: number;
             type: number;
         };
+        size: number;
         skills: { [key: string]: SkillRollData };
         spells: any;
         // [key: string]: any,

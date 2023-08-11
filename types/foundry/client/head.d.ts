@@ -17,6 +17,7 @@ declare global {
 
     let foundry: {
         utils: {
+            randomID(): string;
             /**
              *
              * @param {string} v0

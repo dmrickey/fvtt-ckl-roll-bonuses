@@ -19,10 +19,13 @@ export class WeaponGroupTarget extends BaseTarget {
     /**
      * @inheritdoc
      * @override
-     * @param {ItemPF | ActionUse} item
+     * @param {ItemPF | ActionUse | ItemAction} doc
      * @returns {boolean}
      */
-    static isTarget(item) {
+    static isTarget(doc) {
+        const item = doc instanceof pf1.documents.item.ItemPF
+            ? doc
+            : doc.item;
         if (!(item instanceof pf1.documents.item.ItemAttackPF
             || item instanceof pf1.documents.item.ItemWeaponPF)
         ) {
