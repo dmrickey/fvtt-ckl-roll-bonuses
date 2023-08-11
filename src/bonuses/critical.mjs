@@ -115,16 +115,6 @@ Hooks.on('pf1GetRollData', (
     // end update critRange
 });
 
-/**
- *  ***shouldn't be necessary in 0.83.0***
- * Override to read critRange from rollData - this should be identical to the function in 0.83.0
- * @this {ChatAttack}
- */
-function critRange() {
-    if (this.action.item.system.broken) return 20;
-    return this.rollData.action.ability?.critRange || 20;
-}
-
 Hooks.on(localHooks.chatAttackAttackNotes, (
     /** @type {ChatAttack} */ { action, attackNotes }
 ) => {
@@ -133,9 +123,4 @@ Hooks.on(localHooks.chatAttackAttackNotes, (
     if (hasKeen) {
         attackNotes.push(localize('keen'));
     }
-});
-
-Hooks.once('setup', () => {
-    // todo hopefully not necessary in 0.83.0
-    libWrapper.register(MODULE_NAME, 'pf1.actionUse.ChatAttack.prototype.critRange', critRange, libWrapper.OVERRIDE);
 });
