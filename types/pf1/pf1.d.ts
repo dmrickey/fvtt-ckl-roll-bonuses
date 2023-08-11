@@ -470,6 +470,11 @@ declare global {
         title: string;
     }
 
+    interface ActorTraitSelector {
+        setPosition(position?: Position);
+        get position(): Position;
+        render(show: boolean);
+    }
     interface pf1 {
         applications: {
             ActorTraitSelector: { new(doc: Document, options: object): ActorTraitSelector };

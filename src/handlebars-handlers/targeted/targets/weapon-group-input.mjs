@@ -18,8 +18,9 @@ export function weaponTypeInput({
     custom = [],
 }) {
     custom = uniqueArray(custom);
-    const current = item.getFlag(MODULE_NAME, key)
-        ?.value.reduce((acc, curr) => ({ ...acc, [curr]: pf1.config.weaponGroups[curr] || curr }), {});
+    /** @type {TraitSelector} */
+    const currentValue = item.getFlag(MODULE_NAME, key);
+    const current = currentValue?.value.reduce((acc, curr) => ({ ...acc, [curr]: pf1.config.weaponGroups[curr] || curr }), {});
     const templateData = {
         current,
     };
@@ -41,6 +42,15 @@ export function weaponTypeInput({
                 },
                 hideCustom: true,
             };
+
+            Hooks.once('renderActorTraitSelector', (
+                /** @type {ActorTraitSelector} */ app,
+                /** @type {JQuery} */ jq,
+                /** @type {Object} */ options,
+            ) => {
+                jq.find('.form-group.stacked').hide();
+                app.setPosition();
+            });
             new pf1.applications.ActorTraitSelector(item, options).render(true);
         });
     });
