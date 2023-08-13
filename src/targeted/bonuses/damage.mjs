@@ -1,9 +1,6 @@
 import { MODULE_NAME } from "../../consts.mjs";
-import { damageInput } from "../../handlebars-handlers/targeted/bonuses/damage-input.mjs";
-import { intersects } from "../../util/array-intersects.mjs";
-import { getDocDFlags } from "../../util/flag-helpers.mjs";
+import { damageInput } from "../../handlebars-handlers/targeted/bonuses/damage.mjs";
 import { localize } from "../../util/localize.mjs";
-import { truthiness } from "../../util/truthiness.mjs";
 import { BaseBonus } from "./base-bonus.mjs";
 
 /**

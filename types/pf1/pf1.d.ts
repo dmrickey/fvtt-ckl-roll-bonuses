@@ -453,6 +453,10 @@ declare global {
         static create();
     }
 
+    interface ItemConditional {
+        constructor();
+    }
+
     interface ItemSheetPF {
         appId: number;
         editors: { [key: string]: object };
@@ -498,6 +502,17 @@ declare global {
             }
         };
         components: {
+            ItemConditional: {
+                new(obj: { [modifiers]: object[] }): ItemConditional,
+                create(modifiers: object[], options: {
+                    parent: {
+                        data: {
+                            conditionals: any[],
+                        },
+                        update: any
+                    }
+                }): ItemConditional,
+            };
             ItemAction: { new(): ItemAction };
             // ItemAction: ItemAction ;
             ItemChange: {

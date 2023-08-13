@@ -16,6 +16,9 @@ export const templates = {
 
     // targeted inputs
     targetWeaponGroup: `modules/${MODULE_NAME}/hbs/targeted/targets/weapon-group-input.hbs`,
+
+    // belongs to pf1
+    conditionals: 'systems/pf1/templates/apps/item-action/conditionals.hbs',
 };
 
 Hooks.on('ready', () => loadTemplates(Object.values(templates)));

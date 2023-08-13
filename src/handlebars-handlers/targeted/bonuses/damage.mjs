@@ -15,12 +15,12 @@ export function damageInput({
     parent,
     parts,
 }) {
-    const damageData = {
+    const templateData = {
         damageTypes: pf1.registry.damageTypes.toObject(),
         isHealing: false,
         parts,
     };
-    const damageInput = Handlebars.partials[templates.damageInput](damageData, { allowProtoMethodsByDefault: true, allowProtoPropertiesByDefault: true });
+    const damageInput = Handlebars.partials[templates.damageInput](templateData, { allowProtoMethodsByDefault: true, allowProtoPropertiesByDefault: true });
     const div = document.createElement('div');
     div.innerHTML = damageInput;
 
