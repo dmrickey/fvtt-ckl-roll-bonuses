@@ -4,10 +4,12 @@ import { conditionalCalculator } from "./util/conditional-calculator.mjs";
 import { localHooks } from "./util/hooks.mjs";
 
 Hooks.on('renderItemSheet', (
-    /** @type {ItemSheetPF} */ { actor, item },
+    /** @type {ItemSheetPF} */ itemSheet,
     /** @type {[HTMLElement]} */[html],
     /** @type {unknown} */ _data
 ) => {
+    const { actor, item } = itemSheet;
+
     allBonuses.forEach((bonus) => {
         const hasFlag = item.system.flags.boolean?.hasOwnProperty(bonus.key);
         if (!hasFlag) {

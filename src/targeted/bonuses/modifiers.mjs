@@ -1,4 +1,4 @@
-import { conditionalsInput } from "../../handlebars-handlers/targeted/bonuses/conditionals.mjs";
+import { modifiersInput } from "../../handlebars-handlers/targeted/bonuses/modifiers.mjs";
 import { BaseBonus } from "./base-bonus.mjs";
 
 /**
@@ -9,7 +9,7 @@ export class ConditionalsBonus extends BaseBonus {
      * @inheritdoc
      * @override
      */
-    static get type() { return 'conditionals'; }
+    static get type() { return 'modifiers'; }
 
     /**
      * @override
@@ -19,6 +19,6 @@ export class ConditionalsBonus extends BaseBonus {
      * @param {HTMLElement} options.html
      */
     static showInputOnItemSheet({ actor, item, html }) {
-        conditionalsInput({ item, key: this.key, parentElement: html });
+        modifiersInput({ item, key: this.key, parentElement: html });
     }
 }

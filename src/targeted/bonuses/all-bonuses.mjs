@@ -1,5 +1,5 @@
 import { BaseBonus } from "./base-bonus.mjs";
-import { ConditionalsBonus } from "./conditionals.mjs";
+import { ConditionalsBonus } from "./modifiers.mjs";
 import { DamageBonus } from "./damage.mjs";
 
 /**

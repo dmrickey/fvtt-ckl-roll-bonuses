@@ -1,4 +1,5 @@
 import { MODULE_NAME } from "../../../consts.mjs";
+import { localize } from "../../../util/localize.mjs";
 import { templates } from "../../init.mjs";
 import { addNodeToRollBonus } from "../../roll-bonus-on-actor-sheet.mjs";
 
@@ -110,6 +111,7 @@ function getModifier(data) {
 
 function getConditional({ data, modifiers } = {}) {
     data ||= pf1.components.ItemConditional.defaultData;
+    data.default = true;
     const c = new pf1.components.ItemConditional(data);
     c._id = c.id;
 
@@ -119,30 +121,37 @@ function getConditional({ data, modifiers } = {}) {
         c.data.modifiers = c.modifiers;
     }
     else {
-        c.modifiers = [];
+        c.modifiers = [getModifier()];
     }
 
     return c;
 }
 
 /**
+ *
+ * @param {ItemPF} item
+ * @param {string} key
+ * @returns
+ */
+function createId(item, key) {
+    return `${item.id}-${key}`;
+}
+
+/**
+ * Uses PF1's conditionals.hbs and only shows the modifiers instead of individual conditionals
+ *
  * @param {object} args
  * @param {ItemPF} args.item
  * @param {string} args.key
  * @param {HTMLElement} args.parentElement
  */
-export function conditionalsInput({
+export function modifiersInput({
     item,
     key,
     parentElement,
 }) {
-    {
-        // reset conditionals
-        // item.setFlag(MODULE_NAME, key, []);
-    }
-
     /** @type {ItemConditional[]} */
-    let conditionals = (item.getFlag(MODULE_NAME, key) || []).map(getConditional);
+    let conditionals = (item.getFlag(MODULE_NAME, key) || [getConditional()]).map(getConditional);
     const templateData = {
         damageTypes: pf1.registry.damageTypes.toObject(),
         data: {
@@ -151,7 +160,24 @@ export function conditionalsInput({
     };
     const conditionalsInput = Handlebars.partials[templates.conditionals](templateData, { allowProtoMethodsByDefault: true, allowProtoPropertiesByDefault: true });
     const div = document.createElement('div');
+    div.classList.add('pf1', 'item-action');
+    div.setAttribute('id', createId(item, key));
     div.innerHTML = conditionalsInput;
+
+    // todo hide conditional modifier elemnts
+    //  - "add conditional button" -- done
+    //  - numbering -- done
+    //  - conditional checkbox (hardcode to true)
+    //  - "delete" button -- done
+    //  - Name and hardcode to Item's name -- done
+    // fix spacing
+
+    setTimeout(() => {
+        const conditionalInput = document.querySelector(`#${createId(item, key)}`);
+        const jq = $(conditionalInput);
+        jq.find('.conditional.flexrow')?.hide();
+        jq.find('.conditional-header')?.text(localize('modifiers'));
+    });
 
     async function updateItem() {
         const sanitized = conditionals.map((c) => ({
@@ -159,6 +185,8 @@ export function conditionalsInput({
             modifiers: c.modifiers.map(({ data }) => ({ data })),
         }));
         await item.setFlag(MODULE_NAME, key, sanitized);
+        // can't do this without rehooking up bindings and adding
+        // await item.update({ flags: { [MODULE_NAME]: { [key]: sanitized } } }, { render: false });
     }
 
     div.querySelectorAll('.conditional-control').forEach((element) => {
