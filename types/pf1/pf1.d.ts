@@ -455,6 +455,10 @@ declare global {
 
     interface ItemConditional {
         constructor();
+        data: any,
+        modifiers: ItemConditionalModifier[];
+        id: string;
+        _id: string;
     }
 
     interface ItemSheetPF {

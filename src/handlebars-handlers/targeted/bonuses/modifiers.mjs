@@ -109,9 +109,16 @@ function getModifier(data) {
     return modifier;
 }
 
-function getConditional({ data, modifiers } = {}) {
+/**
+ *
+ * @param {ItemPF} item
+ * @param {ItemConditional} param1
+ * @returns
+ */
+function getConditional(item, { data, modifiers } = {}) {
     data ||= pf1.components.ItemConditional.defaultData;
     data.default = true;
+    data.name = item.name;
     const c = new pf1.components.ItemConditional(data);
     c._id = c.id;
 
@@ -151,7 +158,7 @@ export function modifiersInput({
     parentElement,
 }) {
     /** @type {ItemConditional[]} */
-    let conditionals = (item.getFlag(MODULE_NAME, key) || [getConditional()]).map(getConditional);
+    let conditionals = (item.getFlag(MODULE_NAME, key) || [getConditional(item)]).map((c) => getConditional(item, c));
     const templateData = {
         damageTypes: pf1.registry.damageTypes.toObject(),
         data: {
@@ -196,7 +203,7 @@ export function modifiersInput({
 
             // Add new conditional
             if (a.classList.contains("add-conditional")) {
-                conditionals.push(getConditional());
+                conditionals.push(getConditional(item));
                 await updateItem();
             }
 
