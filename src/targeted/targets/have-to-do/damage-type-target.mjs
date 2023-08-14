@@ -1,7 +1,7 @@
-import { intersects } from "../../util/array-intersects.mjs";
-import { truthiness } from "../../util/truthiness.mjs";
-import { uniqueArray } from "../../util/unique-array.mjs";
-import { BaseTarget } from "./base-target.mjs";
+import { intersects } from "../../../util/array-intersects.mjs";
+import { truthiness } from "../../../util/truthiness.mjs";
+import { uniqueArray } from "../../../util/unique-array.mjs";
+import { BaseTarget } from "../base-target.mjs";
 
 export class DamageTypeTarget extends BaseTarget {
     /** @type {TraitSelectorValuePlural} */

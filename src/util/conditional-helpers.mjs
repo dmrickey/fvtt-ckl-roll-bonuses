@@ -61,6 +61,7 @@ export function conditionalCalculator(shared, conditional) {
 }
 
 /**
+ * "ItemChange" is used in damage tooltip source
  *
  * @param {ItemConditional} conditional
  * @param {ItemConditionalModifier} modifier
@@ -74,7 +75,7 @@ export function conditionalModToItemChange(conditional, modifier) {
         return;
     }
 
-    if (modifier.critical === 'crit' || modifier.critical === 'nonCrit') {
+    if (modifier.critical !== 'normal') {
         return;
     }
 

@@ -42,6 +42,10 @@ export class WeaponGroupTarget extends BaseTarget {
         const flaggedItems = item.actor.itemFlags.boolean[this.key]?.sources ?? [];
         const bonusTargets = flaggedItems.filter((flagged) => {
             const values = getDocFlags(flagged, this.key)[0];
+            if (!values) {
+                return false;
+            }
+
             const targetedGroups = [...values.value, ...values.custom.split(';')].filter(truthiness);
             return intersects(groupsOnItem, targetedGroups);
         });
@@ -68,6 +72,7 @@ export class WeaponGroupTarget extends BaseTarget {
                 .filter(truthiness)
             ?? []
         );
+        custom.sort();
 
         weaponTypeInput({
             item,
@@ -75,21 +80,5 @@ export class WeaponGroupTarget extends BaseTarget {
             parent: html,
             custom
         });
-    }
-
-    /**
-     * @param {ActorPF | null} actor
-     * @returns
-     */
-    static #getCurrentTargets(actor) {
-        const helper = new KeyedDFlagHelper(actor, this.key);
-        helper.flaggedItems;
-
-        /** @type {TraitSelector[]} */
-        const values = getDocFlags(actor, this.key);
-        const selected = values.flatMap(({ value, custom }) => [...value, ...custom.split(';')])
-            .map(x => x.trim())
-            .filter(truthiness);
-        return selected
     }
 }

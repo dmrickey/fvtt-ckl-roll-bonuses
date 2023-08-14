@@ -31,8 +31,6 @@ Hooks.on('renderItemSheet', (
 });
 
 /**
- * This way is permanent
- *
  * Adds bonus to action's conditionals
  * @param {ActionUse} actionUse
  */

@@ -30,10 +30,12 @@ const getDocDFlags = (doc, key, { ignoreActive = false } = {}) => {
 }
 
 /**
-* @param {BaseDocument | undefined | null} doc - Item or Actor
-* @param {string} key
-* @returns {any[]}
-*/
+ * Get Document flags
+ *
+ * @param {BaseDocument | undefined | null} doc - Item or Actor
+ * @param {string} key
+ * @returns {any[]}
+ */
 const getDocFlags = (doc, key, { includeInactive = false } = {}) => {
     // if doc is an actor
     if (doc instanceof pf1.documents.actor.ActorPF) {

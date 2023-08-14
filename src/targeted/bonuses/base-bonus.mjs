@@ -48,12 +48,12 @@ export class BaseBonus {
      */
     static getConditional(target) { return null; }
 
-    /**
-     * @abstract
-     * @param {ActionUse} actionUse
-     * @returns {string[]}
-     */
-    static getDamageBonusesForRoll({ actor, item, shared }) { return []; }
+    // /**
+    //  * @abstract
+    //  * @param {ActionUse} actionUse
+    //  * @returns {Nullable<ItemConditional>}
+    //  */
+    // static getDamageBonusesForRoll({ actor, item, shared }) { return; }
 
     /**
      * @abstract

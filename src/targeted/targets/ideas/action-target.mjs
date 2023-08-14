@@ -1,4 +1,4 @@
-import { BaseTarget } from "./base-target.mjs";
+import { BaseTarget } from "../base-target.mjs";
 
 export class ActionTarget extends BaseTarget {
     /** @type {string[]} */

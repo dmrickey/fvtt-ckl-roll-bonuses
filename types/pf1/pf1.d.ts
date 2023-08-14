@@ -435,6 +435,7 @@ declare global {
         isModifier: boolean;
         name: string;
         namepsace: 'pf1' | string;
+        get id(): string;
     }
 
     interface ItemChange {
@@ -454,16 +455,27 @@ declare global {
         static create();
     }
 
-    interface ItemConditional {
+    class ItemConditional {
         _id: string;
         data?: any;
         default: boolean;
         id?: string;
         modifiers: ItemConditionalModifier[];
         name: string;
+        static get defaultData(): any;
+
+        constructor(obj: { [modifiers]: object[] }): ItemConditional;
+        static create(modifiers: object[], options: {
+            parent: {
+                data: {
+                    conditionals: any[],
+                },
+                update: any
+            }
+        }): ItemConditional;
     }
 
-    interface ItemConditionalModifier {
+    class ItemConditionalModifier {
         _id: string;
         critical: 'crit' | 'nonCrit' | 'normal'; // all for 'damage', 'crit' and 'normal' also for attack
         damageType: TraitSelectorValuePlural;
@@ -471,14 +483,27 @@ declare global {
         formula: string;
         id?: string;
         subTarget:
-        | 'hasteAttack' | 'rapidShotAttack' | 'attack_0' | 'allAttack' // when target is 'attack'
-        | 'hasteDamage' | 'rapidShotDamage' | 'attack_0' | 'allDamage' // when target is 'damage'
-        | 'dc' // when target is 'effect'
-        | 'charges' // when target is 'misc'
-        // no subtarget for 'size'
-        ;
+            | 'hasteAttack' | 'rapidShotAttack' | 'attack_0' | 'allAttack' // when target is 'attack'
+            | 'hasteDamage' | 'rapidShotDamage' | 'attack_0' | 'allDamage' // when target is 'damage'
+            | 'dc' // when target is 'effect'
+            | 'charges' // when target is 'misc'
+            // no subtarget for 'size'
+            ;
         target: 'attack' | 'damage' | 'effect' | 'misc' | 'size';
         type: BonusModifers;
+
+
+        targets?: { attack: string; damage: string; size: string; effect: string; misc?: string; };
+        subTargets: { [x: string]: string; };
+        conditionalModifierTypes: { [x: string]: string; };
+        conditionalCritical: {
+            normal?: "PF1.Normal",
+            crit?: "PF1.CritDamageBonusFormula",
+            nonCrit?: "PF1.NonCritDamageBonusFormula",
+        };
+
+        constructor(any);
+        static get defaultData(): any;
     }
 
     interface ItemSheetPF {
@@ -526,17 +551,8 @@ declare global {
             }
         };
         components: {
-            ItemConditional: {
-                new(obj: { [modifiers]: object[] }): ItemConditional,
-                create(modifiers: object[], options: {
-                    parent: {
-                        data: {
-                            conditionals: any[],
-                        },
-                        update: any
-                    }
-                }): ItemConditional,
-            };
+            ItemConditional: typeof ItemConditional;
+            ItemConditionalModifier: typeof ItemConditionalModifier,
             ItemAction: { new(): ItemAction };
             // ItemAction: ItemAction ;
             ItemChange: {
@@ -556,6 +572,29 @@ declare global {
             };
         };
         config: {
+            conditionalTargets: {
+                attack: {
+                    _label: 'Attack Rolls';
+                    allAttack: 'All';
+                    hasteAttack: 'Haste';
+                    rapidShotAttack: 'Rapid Shot';
+                };
+                damage: {
+                    _label: 'Damage';
+                    allDamage: 'All';
+                    hasteDamage: 'Haste';
+                    rapidShotDamage: 'Rapid Shot';
+                };
+                size: {
+                    _label: 'Size';
+                };
+                effect: {
+                    _label: 'Effects';
+                };
+                misc: {
+                    _label: 'Misc';
+                };
+            };
             weaponGroups: { [key: string]: string };
             bonusModifiers: BonusModifers;
             abilities;
