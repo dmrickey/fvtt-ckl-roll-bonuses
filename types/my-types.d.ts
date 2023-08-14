@@ -13,9 +13,11 @@ declare global {
         name: string,
 
         /** The damage type of this modifier */
-        modifier: string,
+        modifier: BonusModifers,
 
         /** The sort priority for this modifier */
         sort: number,
     }
+
+    type Nullable<T> = T | null | undefined;
 }

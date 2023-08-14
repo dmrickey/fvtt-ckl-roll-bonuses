@@ -341,6 +341,7 @@ declare global {
         | 'deflection'
         | 'dodge'
         | 'enh'
+        | 'haste'
         | 'inherent'
         | 'insight'
         | 'luck'
@@ -454,11 +455,30 @@ declare global {
     }
 
     interface ItemConditional {
-        constructor();
-        data: any,
-        modifiers: ItemConditionalModifier[];
-        id: string;
         _id: string;
+        data?: any;
+        default: boolean;
+        id?: string;
+        modifiers: ItemConditionalModifier[];
+        name: string;
+    }
+
+    interface ItemConditionalModifier {
+        _id: string;
+        critical: 'crit' | 'nonCrit' | 'normal'; // all for 'damage', 'crit' and 'normal' also for attack
+        damageType: TraitSelectorValuePlural;
+        data?: any;
+        formula: string;
+        id?: string;
+        subTarget:
+        | 'hasteAttack' | 'rapidShotAttack' | 'attack_0' | 'allAttack' // when target is 'attack'
+        | 'hasteDamage' | 'rapidShotDamage' | 'attack_0' | 'allDamage' // when target is 'damage'
+        | 'dc' // when target is 'effect'
+        | 'charges' // when target is 'misc'
+        // no subtarget for 'size'
+        ;
+        target: 'attack' | 'damage' | 'effect' | 'misc' | 'size';
+        type: BonusModifers;
     }
 
     interface ItemSheetPF {

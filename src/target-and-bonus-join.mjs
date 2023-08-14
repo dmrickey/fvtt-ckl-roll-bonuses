@@ -1,6 +1,6 @@
 import { allBonuses } from "./targeted/bonuses/all-bonuses.mjs";
 import { allTargets } from "./targeted/targets/all-targets.mjs";
-import { conditionalCalculator } from "./util/conditional-calculator.mjs";
+import { conditionalCalculator } from "./util/conditional-helpers.mjs";
 import { localHooks } from "./util/hooks.mjs";
 import { truthiness } from "./util/truthiness.mjs";
 
@@ -30,48 +30,6 @@ Hooks.on('renderItemSheet', (
     });
 });
 
-
-// /**
-//  * Can't add damage types with this way
-//  *
-//  * Adds bonus to roll data
-//  * @param {ActionUse} actionUse
-//  */
-// function actionUseAlterRollData(actionUse) {
-//     /** @type {string[]} */
-//     const damageBonuses = [];
-//     allTargets.forEach((target) => {
-//         if (target.isTarget(actionUse)) {
-//             allBonuses.forEach((bonus) => {
-//                 damageBonuses.push(...bonus.getDamageBonusesForRoll(actionUse));
-//             });
-//         }
-//     });
-//     actionUse.shared.damageBonus.push(...damageBonuses);
-// }
-// Hooks.on(localHooks.actionUseAlterRollData, actionUseAlterRollData);
-
-// /**
-//  * This way is permanent
-//  *
-//  * Adds bonus to action's conditionals
-//  * @param {ActionUse} actionUse
-//  */
-// function actionUseAlterRollData(actionUse) {
-//     /** @type {string[]} */
-//     const conditionals = [];
-//     allTargets.forEach((target) => {
-//         if (target.isTarget(actionUse)) {
-//             allBonuses.forEach((bonus) => {
-//                 conditionals.push(...bonus.getConditional(actionUse));
-//             });
-//         }
-//     });
-//     actionUse.shared.conditionals.push(...conditionals.map((_, i) => i + actionUse.shared.action.data.conditionals.length))
-//     actionUse.shared.action.data.conditionals.push(...conditionals);
-// }
-// Hooks.on(localHooks.actionUseAlterRollData, actionUseAlterRollData);
-
 /**
  * This way is permanent
  *
@@ -79,17 +37,18 @@ Hooks.on('renderItemSheet', (
  * @param {ActionUse} actionUse
  */
 function actionUseHandleConditionals(actionUse) {
-    /** @type {ItemConditional[]} */
+    /** @type {Nullable<ItemConditional>[]} */
     const conditionals = [];
     allTargets.forEach((target) => {
         const bonusTargets = target.isTarget(actionUse);
         bonusTargets.forEach((target) => {
             allBonuses.forEach((bonus) => {
-                conditionals.push(...bonus.getConditional(target));
+                conditionals.push(bonus.getConditional(target));
             });
         });
     });
 
+    // todo increase luck bonus if actor has fate's favored flag
     conditionals
         .filter((c) => truthiness(c) && c.modifiers?.length)
         .forEach((conditional) => {
@@ -99,14 +58,15 @@ function actionUseHandleConditionals(actionUse) {
 Hooks.on(localHooks.actionUseHandleConditionals, actionUseHandleConditionals);
 
 /**
- * Adds change bonus to tooltip
+ * Adds damage bonus to tooltip
  *
  * @param {ItemAction} action
  * @param {ItemChange[]} sources
  */
 function actionDamageSources(action, sources) {
+    // todo increase luck bonus if actor has fate's favored flag
     /** @type {ItemChange[]} */
-    const changes = []; dddd
+    const changes = [];
     allTargets.forEach((target) => {
         const bonusTargets = target.isTarget(action);
         bonusTargets.forEach((target) => {
@@ -118,3 +78,32 @@ function actionDamageSources(action, sources) {
     sources.push(...changes.filter(truthiness));
 }
 Hooks.on(localHooks.actionDamageSources, actionDamageSources);
+
+/**
+ * Add attack bonus to tooltip
+ * @param {ItemPF} item
+ * @param {ModifierSource[]} sources
+ * @returns {ModifierSource[]}
+ */
+function getAttackSources(item, sources) {
+    // todo increase luck bonus if actor has fate's favored flag
+    const actor = item.actor;
+    if (!actor) return sources;
+
+    /** @type {ModifierSource[]} */
+    const newSources = [];
+
+    allTargets.forEach((target) => {
+        const bonusTargets = target.isTarget(item);
+        bonusTargets.forEach((target) => {
+            allBonuses.forEach((bonus) => {
+                newSources.push(...bonus.getAttackSourcesForTooltip(target));
+            });
+        });
+    });
+
+    sources.push(...newSources.filter(truthiness));
+
+    return sources;
+}
+Hooks.on(localHooks.itemGetAttackSources, getAttackSources);

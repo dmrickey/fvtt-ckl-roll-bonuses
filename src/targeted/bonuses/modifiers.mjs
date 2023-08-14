@@ -1,6 +1,7 @@
 import { MODULE_NAME } from "../../consts.mjs";
 import { modifiersInput } from "../../handlebars-handlers/targeted/bonuses/modifiers.mjs";
-import { localize } from "../../util/localize.mjs";
+import { conditionalAttackTooltipModSource, conditionalModToItemChange } from "../../util/conditional-helpers.mjs";
+import { truthiness } from "../../util/truthiness.mjs";
 import { BaseBonus } from "./base-bonus.mjs";
 
 /**
@@ -27,13 +28,9 @@ export class ModifiersBonus extends BaseBonus {
     /**
      * @override
      * @param {ItemPF} target
-     * @returns {any}
+     * @returns {Nullable<ItemConditional>}
      */
     static getConditional(target) {
-        /** @type {any[]} */
-        const conditionals = [];
-
-        const name = localize(this.key);
 
         /** @type {ItemConditional} */
         const data = (target.getFlag(MODULE_NAME, this.key) || [])[0];
@@ -45,10 +42,56 @@ export class ModifiersBonus extends BaseBonus {
                 modifiers: data.modifiers?.map((m) => ({ ...m.data }) ?? []),
             };
             if (conditional.modifiers.length) {
-                conditionals.push(conditional);
+                return conditional;
             }
         }
+    }
 
-        return conditionals;
+    /**
+     * @override
+     * @param {ItemPF} target
+     * @returns {ItemChange[]}
+     */
+    static getDamageSourcesForTooltip(target) {
+        /** @type {ItemChange[]} */
+        let sources = [];
+
+        const conditional = this.getConditional(target);
+        if (!conditional) {
+            return sources;
+        }
+
+        sources = (conditional.modifiers ?? [])
+            .filter((mod) => mod.target === 'damage')
+            .map((mod) => conditionalModToItemChange(conditional, mod))
+            .filter(truthiness);
+
+        return sources;
+    }
+
+    /**
+     * @override
+     * @param {ItemPF} target
+     * @returns {ModifierSource[]}
+     */
+    static getAttackSourcesForTooltip(target) {
+        /** @type {ModifierSource[]} */
+        let sources = [];
+
+        if (!target.actor) {
+            return sources;
+        }
+
+        const conditional = this.getConditional(target);
+        if (!conditional) {
+            return sources;
+        }
+
+        sources = (conditional.modifiers ?? [])
+            .filter((mod) => mod.target === 'attack')
+            .map((mod) => conditionalAttackTooltipModSource(conditional, mod, target.actor))
+            .filter(truthiness);
+
+        return sources;
     }
 }

@@ -44,9 +44,9 @@ export class BaseBonus {
     /**
      * @abstract
      * @param {ItemPF} target
-     * @returns {any}
+     * @returns {Nullable<ItemConditional>}
      */
-    static getConditional(target) { return []; }
+    static getConditional(target) { return null; }
 
     /**
      * @abstract
@@ -57,8 +57,15 @@ export class BaseBonus {
 
     /**
      * @abstract
-     * @param {ItemAction} item
+     * @param {ItemPF} target
      * @returns {ItemChange[]}
      */
-    static getDamageSourcesForTooltip({ item }) { return []; }
+    static getDamageSourcesForTooltip(target) { return []; }
+
+    /**
+     * @abstract
+     * @param {ItemPF} target
+     * @returns {ModifierSource[]}
+     */
+    static getAttackSourcesForTooltip(target) { return []; }
 }

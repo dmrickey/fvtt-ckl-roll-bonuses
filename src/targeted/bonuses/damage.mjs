@@ -1,6 +1,7 @@
 import { MODULE_NAME } from "../../consts.mjs";
 import { damageInput } from "../../handlebars-handlers/targeted/bonuses/damage.mjs";
-import { localize } from "../../util/localize.mjs";
+import { conditionalModToItemChange } from "../../util/conditional-helpers.mjs";
+import { truthiness } from "../../util/truthiness.mjs";
 import { BaseBonus } from "./base-bonus.mjs";
 
 /**
@@ -61,193 +62,64 @@ export class DamageBonus extends BaseBonus {
 
     /**
      * @override
-     * @param {ActionUse} actionUse
-     * @returns {string[]}
-     */
-    static getDamageBonusesForRoll({ actor, item }) {
-        /** @type {string[]} */
-        const bonuses = [];
-        if (!actor) return bonuses;
-
-        if (!(item instanceof pf1.documents.item.ItemWeaponPF || item instanceof pf1.documents.item.ItemAttackPF)) {
-            return bonuses;
-        }
-
-        const name = localize(this.key);
-
-        // const damages = actor.itemFlags.boolean[this.key]?.sources;
-        // if (damages) {
-        //     debugger;
-        // }
-
-        // if (isFocused) {
-        //     const change = new pf1.components.ItemChange(
-        //         {
-        //             flavor: name,
-        //             formula: 1,
-        //             modifier: 'untypedPerm',
-        //             operator: 'add',
-        //             priority: 0,
-        //             subTarget: 'damage',
-        //             value: 1,
-        //         }
-        //     );
-        //     bonuses.push(change);
-        // }
-
-        return bonuses;
-    }
-
-    /**
-     * @override
      * @param {ItemPF} target
-     * @returns {any}
+     * @returns {Nullable<ItemConditional>}
      */
     static getConditional(target) {
-        /** @type {any[]} */
-        const conditionals = [];
 
         /** @type {RollData['action']['damage']['parts']} */
         const damages = target.getFlag(MODULE_NAME, this.key);
 
-        const conditional = this.createConditional(damages);
+        const conditional = this.createConditional(damages, target.name);
         if (conditional.modifiers?.length) {
-            conditionals.push(this.createConditional(damages));
+            return this.createConditional(damages, target.name);
         }
 
-        return conditionals;
+        return null;
     }
 
     /**
      *
      * @param {{ formula: string; type: TraitSelectorValuePlural }[]} damageBonuses
+     * @param {string} name
+     * @returns {ItemConditional}
      */
-    static createConditional(damageBonuses) {
-        const name = localize(this.key);
+    static createConditional(damageBonuses, name) {
         return {
             _id: foundry.utils.randomID(),
             default: true,
             name,
-            modifiers: damageBonuses?.map((bonus) => ({
+            modifiers: damageBonuses?.map( /** @return {ItemConditionalModifier} */(bonus) => ({
                 _id: foundry.utils.randomID(),
-                formula: bonus.formula,
-                target: 'damage',
-                subTarget: 'allDamage',
-                type: '',
-                damageType: bonus.type,
                 critical: 'normal',
+                damageType: bonus.type,
+                formula: bonus.formula,
+                subTarget: 'allDamage',
+                target: 'damage',
+                type: 'untyped',
             }) ?? []),
         }
     }
 
     /**
      * @override
-     * @param {ItemAction} item
+     * @param {ItemPF} target
      * @returns {ItemChange[]}
      */
-    static getDamageSourcesForTooltip({ item }) {
+    static getDamageSourcesForTooltip(target) {
         /** @type {ItemChange[]} */
-        const bonuses = [];
-        if (!item.actor) return bonuses;
+        let sources = [];
 
-        if (!(item instanceof pf1.documents.item.ItemWeaponPF || item instanceof pf1.documents.item.ItemAttackPF)) {
-            return bonuses;
+        const conditional = this.getConditional(target);
+        if (!conditional) {
+            return sources;
         }
 
-        const name = localize(this.key);
+        sources = (conditional.modifiers ?? [])
+            .filter((mod) => mod.target === 'damage')
+            .map((mod) => conditionalModToItemChange(conditional, mod))
+            .filter(truthiness);
 
-        const sources = item.actor.itemFlags.boolean[this.key]?.sources ?? [];
-        sources.forEach((source) => {
-            /** @type {RollData['action']['damage']['parts']} */
-            const damages = source.getFlag(MODULE_NAME, this.key);
-            // debugger;
-        });
-
-        // if (isFocused) {
-        //     const change = new pf1.components.ItemChange(
-        //         {
-        //             flavor: name,
-        //             formula: 1,
-        //             modifier: 'untypedPerm',
-        //             operator: 'add',
-        //             priority: 0,
-        //             subTarget: 'damage',
-        //             value: 1,
-        //         }
-        //     );
-        //     bonuses.push(change);
-        // }
-
-        return bonuses;
+        return sources;
     }
 }
-// todo wrap this method from ActionUse
-// if I override it I can fix https://gitlab.com/foundryvtt_pathfinder1e/foundryvtt-pathfinder1/-/merge_requests/1485/diffs too
-// hook will call base, then call into my bonus and add my bonus onto this -- which will basically have to do this whole bit of logic
-// handleConditionals() {
-//     if (this.shared.conditionals) {
-//       const conditionalData = {};
-//       for (const i of this.shared.conditionals) {
-//         const conditional = this.shared.action.data.conditionals[i];
-//         const tag = createTag(conditional.name);
-//         for (const [i, modifier] of conditional.modifiers.entries()) {
-//           // Adds a formula's result to rollData to allow referencing it.
-//           // Due to being its own roll, this will only correctly work for static formulae.
-//           const conditionalRoll = RollPF.safeRoll(modifier.formula, this.shared.rollData);
-//           if (conditionalRoll.err) {
-//             ui.notifications.warn(
-//               game.i18n.format("PF1.WarningConditionalRoll", { number: i + 1, name: conditional.name })
-//             );
-//             // Skip modifier to avoid multiple errors from one non-evaluating entry
-//             continue;
-//           } else conditionalData[[tag, i].join(".")] = RollPF.safeRoll(modifier.formula, this.shared.rollData).total;
-
-//           // Create a key string for the formula array
-//           const partString = `${modifier.target}.${modifier.subTarget}${
-//             modifier.critical ? "." + modifier.critical : ""
-//           }`;
-//           // Add formula in simple format
-//           if (["attack", "effect", "misc"].includes(modifier.target)) {
-//             const hasFlavor = /\[.*\]/.test(modifier.formula);
-//             const flavoredFormula = hasFlavor ? modifier.formula : `(${modifier.formula})[${conditional.name}]`;
-//             this.shared.conditionalPartsCommon[partString] = [
-//               ...(this.shared.conditionalPartsCommon[partString] ?? []),
-//               flavoredFormula,
-//             ];
-//           }
-//           // Add formula as array for damage
-//           else if (modifier.target === "damage") {
-//             this.shared.conditionalPartsCommon[partString] = [
-//               ...(this.shared.conditionalPartsCommon[partString] ?? []),
-//               [modifier.formula, modifier.damageType, false],
-//             ];
-//           }
-//           // Add formula to the size property
-//           else if (modifier.target === "size") {
-//             this.shared.rollData.size += conditionalRoll.total;
-//           }
-//         }
-//       }
-//       // Expand data into rollData to enable referencing in formulae
-//       this.shared.rollData.conditionals = expandObject(conditionalData, 5);
-
-//       // Add specific pre-rolled rollData entries
-//       for (const target of ["effect.cl", "effect.dc", "misc.charges"]) {
-//         if (this.shared.conditionalPartsCommon[target] != null) {
-//           const formula = this.shared.conditionalPartsCommon[target].join("+");
-//           const roll = RollPF.safeRoll(formula, this.shared.rollData, [target, formula]).total;
-//           switch (target) {
-//             case "effect.cl":
-//               this.shared.rollData.cl += roll;
-//               break;
-//             case "effect.dc":
-//               this.shared.rollData.dcBonus = roll;
-//               break;
-//             case "misc.charges":
-//               this.shared.rollData.chargeCostBonus = roll;
-//               break;
-//           }
-//         }
-//       }
-//     }
-//   }

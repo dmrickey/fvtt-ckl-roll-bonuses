@@ -59,3 +59,71 @@ export function conditionalCalculator(shared, conditional) {
         }
     }
 }
+
+/**
+ *
+ * @param {ItemConditional} conditional
+ * @param {ItemConditionalModifier} modifier
+ * @returns {Nullable<ItemChange>}
+ */
+export function conditionalModToItemChange(conditional, modifier) {
+    if (!modifier) return;
+
+    const subTarget = modifier.target;
+    if (subTarget !== 'attack' && subTarget !== 'damage') {
+        return;
+    }
+
+    if (modifier.critical === 'crit' || modifier.critical === 'nonCrit') {
+        return;
+    }
+
+    if (modifier.subTarget !== 'allAttack' && modifier.subTarget !== 'allDamage') {
+        return;
+    }
+
+    const change = new pf1.components.ItemChange({
+        flavor: conditional.name,
+        formula: modifier.formula,
+        modifier: modifier.type,
+        operator: 'add',
+        priority: 0,
+        subTarget,
+        value: modifier.formula,
+    });
+
+    return change;
+}
+
+/**
+ *
+ * @param {ItemConditional} conditional
+ * @param {ItemConditionalModifier} modifier
+ * @param {ActorPF} actor
+ * @returns {Nullable<ModifierSource>}
+ */
+export function conditionalAttackTooltipModSource(conditional, modifier, actor) {
+    if (!modifier) return;
+
+    const subTarget = modifier.target;
+    if (subTarget !== 'attack' && subTarget !== 'damage') {
+        return;
+    }
+
+    if (modifier.critical !== 'normal') {
+        return;
+    }
+
+    if (modifier.subTarget !== 'allAttack' && modifier.subTarget !== 'allDamage') {
+        return;
+    }
+
+    const source = {
+        name: conditional.name,
+        value: RollPF.safeTotal(modifier.formula, actor.getRollData()),
+        modifier: modifier.type,
+        sort: 0,
+    };
+
+    return source;
+}
