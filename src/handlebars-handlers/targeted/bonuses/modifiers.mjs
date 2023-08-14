@@ -171,13 +171,7 @@ export function modifiersInput({
     div.setAttribute('id', createId(item, key));
     div.innerHTML = conditionalsInput;
 
-    // todo hide conditional modifier elemnts
-    //  - "add conditional button" -- done
-    //  - numbering -- done
-    //  - conditional checkbox (hardcode to true)
-    //  - "delete" button -- done
-    //  - Name and hardcode to Item's name -- done
-    // fix spacing
+    // todo make sure "defaults" are saved when swapping to a new 'type'
 
     setTimeout(() => {
         const conditionalInput = document.querySelector(`#${createId(item, key)}`);

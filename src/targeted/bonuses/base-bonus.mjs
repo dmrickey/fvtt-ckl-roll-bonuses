@@ -43,10 +43,10 @@ export class BaseBonus {
 
     /**
      * @abstract
-     * @param {ActionUse} actionUse
+     * @param {ItemPF} target
      * @returns {any}
      */
-    static getConditional({ actor, item, shared }) { return []; }
+    static getConditional(target) { return []; }
 
     /**
      * @abstract

@@ -17,7 +17,7 @@ export class BaseTarget {
     /**
      * @abstract
      * @param {ItemPF | ActionUse | ItemAction} arg
-     * @returns {boolean}
+     * @returns {ItemPF[]}
      */
     static isTarget(arg) { throw new Error('must be overridden'); };
 

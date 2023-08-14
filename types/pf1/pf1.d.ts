@@ -34,7 +34,7 @@ declare global {
             /**
              * The tags for Items that are active with a boolean flag
              */
-            boolean: { [key: string]: { sources: ItemDocument[] } };
+            boolean: { [key: string]: { sources: ItemPF[] } };
             dictionary: ItemDictionaryFlags;
         };
 

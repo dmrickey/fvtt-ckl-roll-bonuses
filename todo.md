@@ -53,8 +53,10 @@
   - saves a list of formula paired with damage types
     - see pf1's action.hbs usages of `damage-type-visual` to see how it's currently doing damage input
   - normal/non-crit/only crit options
-- Do something similar for ammo, but make them automatically add damage
+- *** Do something similar for ammo, but make them automatically add damage ***
 - Add Bane button on chat card to modify the current chat card to add +2 attack and +2d6 damage
+### Magic
+- specialization schools (and opposed)
 
 ### Deprecation
 - as of v9, PF1 now defers Roll Bonuses. So that means that the `Bonus` on the Skill settings can go away

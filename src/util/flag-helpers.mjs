@@ -34,17 +34,18 @@ const getDocDFlags = (doc, key, { ignoreActive = false } = {}) => {
 * @param {string} key
 * @returns {any[]}
 */
-const getDocFlags = (doc, key) => {
+const getDocFlags = (doc, key, { includeInactive = false } = {}) => {
     // if doc is an actor
     if (doc instanceof pf1.documents.actor.ActorPF) {
         const flags = doc.items
+            .filter((item) => item.isActive || includeInactive)
             .map(i => i.getFlag(MODULE_NAME, key))
             .filter(truthiness);
         return flags;
     }
 
     // else read the flag off the item
-    if (doc instanceof pf1.documents.item.ItemPF) {
+    if (doc instanceof pf1.documents.item.ItemPF && (doc.isActive || includeInactive)) {
         return [doc.getFlag(MODULE_NAME, key)].filter(truthiness);
     }
 
@@ -140,6 +141,9 @@ export class KeyedDFlagHelper {
     /** @type {{[key: FlagValue]: string[]}} Keyed by flag value, list of flags containing  */
     #byValue = {};
 
+    /** @type {ItemPF[]} */
+    #items = [];
+
     // todo - maybe 0.83.0 after user is warned when there's a tag collision I can read the dFlags off of the passed in actor
     /**
      * @param {ItemDictionaryFlags | ActorPF | undefined | null} dFlags
@@ -152,6 +156,7 @@ export class KeyedDFlagHelper {
             const actor = dFlags;
             actor.items.forEach(item => {
                 if (item.isActive) {
+                    let hasFlag = false;
                     flags.forEach((flag) => {
                         this.#byFlag[flag] ||= [];
                         if (item.system.flags.dictionary[flag]) {
@@ -163,8 +168,13 @@ export class KeyedDFlagHelper {
 
                             this.#byValue[value] ||= [];
                             this.#byValue[value].push(flag);
+                            hasFlag = true;
                         }
                     });
+
+                    if (hasFlag) {
+                        this.#items.push(item);
+                    }
                 }
             });
         }
@@ -189,6 +199,13 @@ export class KeyedDFlagHelper {
      */
     get dictionaryFlagsFromItems() {
         return Object.values(this.#byItem);
+    }
+
+    /**
+     * @returns {ItemPF[]}
+     */
+    get flaggedItems() {
+        return [...this.#items];
     }
 
     /**

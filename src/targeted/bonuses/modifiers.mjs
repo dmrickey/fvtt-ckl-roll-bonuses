@@ -6,7 +6,7 @@ import { BaseBonus } from "./base-bonus.mjs";
 /**
  * @extends BaseBonus
  */
-export class ConditionalsBonus extends BaseBonus {
+export class ModifiersBonus extends BaseBonus {
     /**
      * @inheritdoc
      * @override
@@ -26,20 +26,19 @@ export class ConditionalsBonus extends BaseBonus {
 
     /**
      * @override
-     * @param {ActionUse} actionUse
+     * @param {ItemPF} target
      * @returns {any}
      */
-    static getConditional({ actor, item, shared }) {
+    static getConditional(target) {
         /** @type {any[]} */
         const conditionals = [];
-        if (!item.actor) return conditionals;
 
         const name = localize(this.key);
 
-        const sources = item.actor.itemFlags.boolean[this.key]?.sources ?? [];
-        sources.forEach((source) => {
-            /** @type {RollData['action']['damage']['parts']} */
-            const data = (source.getFlag(MODULE_NAME, this.key) || [])[0];
+        /** @type {ItemConditional} */
+        const data = (target.getFlag(MODULE_NAME, this.key) || [])[0];
+
+        if (data) {
             const conditional = {
                 ...data,
                 ...data.data,
@@ -48,7 +47,7 @@ export class ConditionalsBonus extends BaseBonus {
             if (conditional.modifiers.length) {
                 conditionals.push(conditional);
             }
-        });
+        }
 
         return conditionals;
     }

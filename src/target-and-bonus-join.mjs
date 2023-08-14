@@ -2,6 +2,7 @@ import { allBonuses } from "./targeted/bonuses/all-bonuses.mjs";
 import { allTargets } from "./targeted/targets/all-targets.mjs";
 import { conditionalCalculator } from "./util/conditional-calculator.mjs";
 import { localHooks } from "./util/hooks.mjs";
+import { truthiness } from "./util/truthiness.mjs";
 
 Hooks.on('renderItemSheet', (
     /** @type {ItemSheetPF} */ itemSheet,
@@ -78,19 +79,22 @@ Hooks.on('renderItemSheet', (
  * @param {ActionUse} actionUse
  */
 function actionUseHandleConditionals(actionUse) {
-    /** @type {string[]} */
+    /** @type {ItemConditional[]} */
     const conditionals = [];
     allTargets.forEach((target) => {
-        if (target.isTarget(actionUse)) {
+        const bonusTargets = target.isTarget(actionUse);
+        bonusTargets.forEach((target) => {
             allBonuses.forEach((bonus) => {
-                conditionals.push(...bonus.getConditional(actionUse));
+                conditionals.push(...bonus.getConditional(target));
             });
-        }
+        });
     });
 
-    conditionals.forEach((conditional) => {
-        conditionalCalculator(actionUse.shared, conditional)
-    });
+    conditionals
+        .filter((c) => truthiness(c) && c.modifiers?.length)
+        .forEach((conditional) => {
+            conditionalCalculator(actionUse.shared, conditional)
+        });
 }
 Hooks.on(localHooks.actionUseHandleConditionals, actionUseHandleConditionals);
 
@@ -102,14 +106,15 @@ Hooks.on(localHooks.actionUseHandleConditionals, actionUseHandleConditionals);
  */
 function actionDamageSources(action, sources) {
     /** @type {ItemChange[]} */
-    const changes = [];
+    const changes = []; dddd
     allTargets.forEach((target) => {
-        if (target.isTarget(action)) {
+        const bonusTargets = target.isTarget(action);
+        bonusTargets.forEach((target) => {
             allBonuses.forEach((bonus) => {
-                changes.push(...bonus.getDamageSourcesForTooltip(action));
+                changes.push(...bonus.getDamageSourcesForTooltip(target));
             });
-        }
+        });
     });
-    sources.push(...changes);
+    sources.push(...changes.filter(truthiness));
 }
 Hooks.on(localHooks.actionDamageSources, actionDamageSources);

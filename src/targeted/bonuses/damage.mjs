@@ -100,42 +100,20 @@ export class DamageBonus extends BaseBonus {
 
     /**
      * @override
-     * @param {ActionUse} actionUse
+     * @param {ItemPF} target
      * @returns {any}
      */
-    static getConditional({ actor, item, shared }) {
+    static getConditional(target) {
         /** @type {any[]} */
         const conditionals = [];
-        if (!item.actor) return conditionals;
 
-        if (!(item instanceof pf1.documents.item.ItemWeaponPF || item instanceof pf1.documents.item.ItemAttackPF)) {
-            return conditionals;
-        }
+        /** @type {RollData['action']['damage']['parts']} */
+        const damages = target.getFlag(MODULE_NAME, this.key);
 
-        const name = localize(this.key);
-
-        const sources = item.actor.itemFlags.boolean[this.key]?.sources ?? [];
-        sources.forEach((source) => {
-            /** @type {RollData['action']['damage']['parts']} */
-            const damages = source.getFlag(MODULE_NAME, this.key);
+        const conditional = this.createConditional(damages);
+        if (conditional.modifiers?.length) {
             conditionals.push(this.createConditional(damages));
-            // debugger;
-        });
-
-        // if (isFocused) {
-        //     const change = new pf1.components.ItemChange(
-        //         {
-        //             flavor: name,
-        //             formula: 1,
-        //             modifier: 'untypedPerm',
-        //             operator: 'add',
-        //             priority: 0,
-        //             subTarget: 'damage',
-        //             value: 1,
-        //         }
-        //     );
-        //     bonuses.push(change);
-        // }
+        }
 
         return conditionals;
     }
@@ -145,11 +123,12 @@ export class DamageBonus extends BaseBonus {
      * @param {{ formula: string; type: TraitSelectorValuePlural }[]} damageBonuses
      */
     static createConditional(damageBonuses) {
+        const name = localize(this.key);
         return {
             _id: foundry.utils.randomID(),
             default: true,
             name,
-            modifiers: damageBonuses.map((bonus) => ({
+            modifiers: damageBonuses?.map((bonus) => ({
                 _id: foundry.utils.randomID(),
                 formula: bonus.formula,
                 target: 'damage',
@@ -157,7 +136,7 @@ export class DamageBonus extends BaseBonus {
                 type: '',
                 damageType: bonus.type,
                 critical: 'normal',
-            })),
+            }) ?? []),
         }
     }
 

@@ -1,7 +1,7 @@
 import { MODULE_NAME } from "../../consts.mjs";
 import { weaponTypeInput } from "../../handlebars-handlers/targeted/targets/weapon-group-input.mjs";
 import { intersects } from "../../util/array-intersects.mjs";
-import { getDocFlags } from "../../util/flag-helpers.mjs";
+import { KeyedDFlagHelper, getDocFlags } from "../../util/flag-helpers.mjs";
 import { truthiness } from "../../util/truthiness.mjs";
 import { uniqueArray } from "../../util/unique-array.mjs";
 import { BaseTarget } from "./base-target.mjs";
@@ -20,7 +20,7 @@ export class WeaponGroupTarget extends BaseTarget {
      * @inheritdoc
      * @override
      * @param {ItemPF | ActionUse | ItemAction} doc
-     * @returns {boolean}
+     * @returns {ItemPF[]}
      */
     static isTarget(doc) {
         const item = doc instanceof pf1.documents.item.ItemPF
@@ -29,18 +29,24 @@ export class WeaponGroupTarget extends BaseTarget {
         if (!(item instanceof pf1.documents.item.ItemAttackPF
             || item instanceof pf1.documents.item.ItemWeaponPF)
         ) {
-            return false;
+            return [];
         }
         if (!item.system.weaponGroups) {
-            return false;
+            return [];
         }
-
-        const targetedGroups = this.#getCurrentTargets(item.actor);
 
         const groupsOnItem = [...item.system.weaponGroups.value, ...item.system.weaponGroups.custom.split(';')]
             .map(x => x.trim())
             .filter(truthiness);
-        return intersects(groupsOnItem, targetedGroups);
+
+        const flaggedItems = item.actor.itemFlags.boolean[this.key]?.sources ?? [];
+        const bonusTargets = flaggedItems.filter((flagged) => {
+            const values = getDocFlags(flagged, this.key)[0];
+            const targetedGroups = [...values.value, ...values.custom.split(';')].filter(truthiness);
+            return intersects(groupsOnItem, targetedGroups);
+        });
+
+        return bonusTargets;
     }
 
     /**
@@ -76,6 +82,9 @@ export class WeaponGroupTarget extends BaseTarget {
      * @returns
      */
     static #getCurrentTargets(actor) {
+        const helper = new KeyedDFlagHelper(actor, this.key);
+        helper.flaggedItems;
+
         /** @type {TraitSelector[]} */
         const values = getDocFlags(actor, this.key);
         const selected = values.flatMap(({ value, custom }) => [...value, ...custom.split(';')])
