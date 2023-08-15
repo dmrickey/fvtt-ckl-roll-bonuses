@@ -211,8 +211,7 @@ Hooks.on('renderItemSheet', (
 
     const templateData = { base, skill1, skill2, performs, allSkills };
 
-    const div = document.createElement('div');
-    div.innerHTML = createTemplate(templates.versatilePerformance, templateData);
+    const div = createTemplate(templates.versatilePerformance, templateData);
 
     const updateVP = async () => {
         // @ts-ignore

@@ -180,11 +180,9 @@ export function modifiersInput({
         }
     };
 
-    const conditionalsInput = createTemplate(templates.conditionals, templateData);
-    const div = document.createElement('div');
+    const div = createTemplate(templates.conditionals, templateData);
     div.classList.add('pf1', 'item-action');
     div.setAttribute('id', createId(item, key));
-    div.innerHTML = conditionalsInput;
 
     // todo make sure "defaults" are saved when swapping to a new 'type'
 

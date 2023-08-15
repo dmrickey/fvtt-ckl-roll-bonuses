@@ -23,12 +23,10 @@ export function stringSelect({
         item.setItemDictionaryFlag(key, choices[0]);
     }
 
-    const template = createTemplate(
+    const div = createTemplate(
         templates.stringSelect,
         { key, label, current, choices },
     );
-    const div = document.createElement('div');
-    div.innerHTML = template;
     const select = div.querySelector(`#string-selector-${key}`);
     select?.addEventListener(
         'change',

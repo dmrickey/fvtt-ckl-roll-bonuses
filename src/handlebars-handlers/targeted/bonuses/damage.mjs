@@ -21,12 +21,10 @@ export function damageInput({
         parts,
     };
 
-    const damageInput = createTemplate(
+    const div = createTemplate(
         templates.damageInput,
         templateData,
     );
-    const div = document.createElement('div');
-    div.innerHTML = damageInput;
 
     div.querySelectorAll('.damage-control').forEach((element) => {
         element.addEventListener('click', (event) => {

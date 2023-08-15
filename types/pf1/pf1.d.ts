@@ -553,7 +553,7 @@ declare global {
         components: {
             ItemConditional: typeof ItemConditional;
             ItemConditionalModifier: typeof ItemConditionalModifier,
-            ItemAction: { new(): ItemAction };
+            ItemAction: ItemAction;
             // ItemAction: ItemAction ;
             ItemChange: {
                 new(

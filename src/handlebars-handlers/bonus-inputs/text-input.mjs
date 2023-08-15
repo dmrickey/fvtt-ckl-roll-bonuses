@@ -23,12 +23,10 @@ export function textInput({
     notFormula = false,
 } = {}
 ) {
-    const template = createTemplate(
+    const div = createTemplate(
         templates.textInput,
         { key, label, current, notFormula, placeholder },
     );
-    const div = document.createElement('div');
-    div.innerHTML = template;
     const select = div.querySelector(`#text-input-${key}`);
     select?.addEventListener(
         'change',

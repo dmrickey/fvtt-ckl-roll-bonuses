@@ -22,7 +22,7 @@ export function textInputAndKeyValueSelect({
         item.setItemDictionaryFlag(select.key, select.choices[0].key);
     }
 
-    const template = createTemplate(
+    const div = createTemplate(
         templates.textInputAndKeyValueSelect,
         {
             choices: select.choices,
@@ -34,8 +34,6 @@ export function textInputAndKeyValueSelect({
             placeholder: text.placeholder || localize('PF1.Formula'),
         },
     );
-    const div = document.createElement('div');
-    div.innerHTML = template;
 
     const input = div.querySelector(`#text-input-${text.key}`);
     input?.addEventListener(

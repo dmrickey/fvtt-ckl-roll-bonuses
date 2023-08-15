@@ -25,10 +25,13 @@ export const templates = {
  *
  * @param {string} template
  * @param {{[key: string]: any}} templateData
+ * @returns {HTMLDivElement}
  */
 export function createTemplate(template, templateData) {
-    return Handlebars.partials[template](
+    const div = document.createElement('div');
+    div.innerHTML = Handlebars.partials[template](
         templateData,
         { allowProtoMethodsByDefault: true, allowProtoPropertiesByDefault: true },
     );
+    return div;
 }

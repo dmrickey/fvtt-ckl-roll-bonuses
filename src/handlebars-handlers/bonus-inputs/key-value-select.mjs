@@ -22,12 +22,10 @@ export function keyValueSelect({
         item.setItemDictionaryFlag(key, choices[0].key);
     }
 
-    const template = createTemplate(
+    const div = createTemplate(
         templates.keyValueSelect,
         { key, label, current, choices },
     );
-    const div = document.createElement('div');
-    div.innerHTML = template;
     const select = div.querySelector(`#key-value-selector-${key}`);
     select?.addEventListener(
         'change',

@@ -25,9 +25,7 @@ export function weaponTypeInput({
         label: localize('PF1.WeaponGroups'),
         current,
     };
-    const template = createTemplate(templates.targetWeaponGroup, templateData);
-    const div = document.createElement('div');
-    div.innerHTML = template;
+    const div = createTemplate(templates.targetWeaponGroup, templateData);
 
     div.querySelectorAll('.trait-selector').forEach((element) => {
         element.addEventListener('click', (event) => {
