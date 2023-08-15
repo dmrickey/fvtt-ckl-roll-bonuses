@@ -1,5 +1,5 @@
 import { addNodeToRollBonus } from "../roll-bonus-on-actor-sheet.mjs";
-import { templates } from "../init.mjs";
+import { createTemplate, templates } from "../templates.mjs";
 import { localize } from "../../util/localize.mjs";
 
 /**
@@ -22,7 +22,8 @@ export function textInputAndKeyValueSelect({
         item.setItemDictionaryFlag(select.key, select.choices[0].key);
     }
 
-    const template = Handlebars.partials[templates.textInputAndKeyValueSelect](
+    const template = createTemplate(
+        templates.textInputAndKeyValueSelect,
         {
             choices: select.choices,
             current: select.current,
@@ -31,7 +32,7 @@ export function textInputAndKeyValueSelect({
             textKey: text.key,
             label,
             placeholder: text.placeholder || localize('PF1.Formula'),
-        }, { allowProtoMethodsByDefault: true, allowProtoPropertiesByDefault: true }
+        },
     );
     const div = document.createElement('div');
     div.innerHTML = template;

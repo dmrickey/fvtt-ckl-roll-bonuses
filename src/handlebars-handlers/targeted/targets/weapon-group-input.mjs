@@ -1,7 +1,7 @@
 import { MODULE_NAME } from "../../../consts.mjs";
 import { localize } from "../../../util/localize.mjs";
 import { uniqueArray } from "../../../util/unique-array.mjs";
-import { templates } from "../../init.mjs";
+import { createTemplate, templates } from "../../templates.mjs";
 import { addNodeToRollBonus } from "../../roll-bonus-on-actor-sheet.mjs";
 
 /**
@@ -22,11 +22,12 @@ export function weaponTypeInput({
     const currentValue = item.getFlag(MODULE_NAME, key);
     const current = currentValue?.value.reduce((acc, curr) => ({ ...acc, [curr]: pf1.config.weaponGroups[curr] || curr }), {});
     const templateData = {
+        label: localize('PF1.WeaponGroups'),
         current,
     };
-    const damageInput = Handlebars.partials[templates.targetWeaponGroup](templateData, { allowProtoMethodsByDefault: true, allowProtoPropertiesByDefault: true });
+    const template = createTemplate(templates.targetWeaponGroup, templateData);
     const div = document.createElement('div');
-    div.innerHTML = damageInput;
+    div.innerHTML = template;
 
     div.querySelectorAll('.trait-selector').forEach((element) => {
         element.addEventListener('click', (event) => {

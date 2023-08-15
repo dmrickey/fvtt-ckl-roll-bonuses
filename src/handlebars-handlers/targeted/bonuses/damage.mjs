@@ -1,5 +1,5 @@
 import { MODULE_NAME } from "../../../consts.mjs";
-import { templates } from "../../init.mjs";
+import { createTemplate, templates } from "../../templates.mjs";
 import { addNodeToRollBonus } from "../../roll-bonus-on-actor-sheet.mjs";
 
 /**
@@ -20,7 +20,11 @@ export function damageInput({
         isHealing: false,
         parts,
     };
-    const damageInput = Handlebars.partials[templates.damageInput](templateData, { allowProtoMethodsByDefault: true, allowProtoPropertiesByDefault: true });
+
+    const damageInput = createTemplate(
+        templates.damageInput,
+        templateData,
+    );
     const div = document.createElement('div');
     div.innerHTML = damageInput;
 

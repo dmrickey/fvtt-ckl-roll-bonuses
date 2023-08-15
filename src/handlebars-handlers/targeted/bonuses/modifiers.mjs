@@ -1,6 +1,6 @@
 import { MODULE_NAME } from "../../../consts.mjs";
 import { localize } from "../../../util/localize.mjs";
-import { templates } from "../../init.mjs";
+import { createTemplate, templates } from "../../templates.mjs";
 import { addNodeToRollBonus } from "../../roll-bonus-on-actor-sheet.mjs";
 
 /**
@@ -179,7 +179,8 @@ export function modifiersInput({
             conditionals,
         }
     };
-    const conditionalsInput = Handlebars.partials[templates.conditionals](templateData, { allowProtoMethodsByDefault: true, allowProtoPropertiesByDefault: true });
+
+    const conditionalsInput = createTemplate(templates.conditionals, templateData);
     const div = document.createElement('div');
     div.classList.add('pf1', 'item-action');
     div.setAttribute('id', createId(item, key));
