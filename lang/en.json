@@ -49,6 +49,7 @@
         },
         "weapon-focus": "Weapon Focus",
         "weapon-specialization": "Weapon Specialization",
+        "weapon-type": "Weapon Type",
         "settings": {
             "armor-focus": {
                 "name": "Armor Focus",

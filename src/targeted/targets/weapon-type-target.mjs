@@ -1,4 +1,8 @@
+import { showTraitsInput } from "../../handlebars-handlers/targeted/targets/checked-items-input.mjs";
 import { intersects } from "../../util/array-intersects.mjs";
+import { getDocFlags } from "../../util/flag-helpers.mjs";
+import { truthiness } from "../../util/truthiness.mjs";
+import { uniqueArray } from "../../util/unique-array.mjs";
 import { BaseTarget } from "./base-target.mjs";
 
 export class WeaponTypeTarget extends BaseTarget {
@@ -14,19 +18,60 @@ export class WeaponTypeTarget extends BaseTarget {
     /**
      * @inheritdoc
      * @override
-     * @param {ItemPF | ActionUse} item
-     * @returns {boolean}
+     * @param {ItemPF | ActionUse | ItemAction} doc
+     * @returns {ItemPF[]}
      */
-    static isTarget(item) {
+    static isTarget(doc) {
+        const item = doc instanceof pf1.documents.item.ItemPF
+            ? doc
+            : doc.item;
         if (!(item instanceof pf1.documents.item.ItemAttackPF
             || item instanceof pf1.documents.item.ItemWeaponPF)
         ) {
-            return false;
+            return [];
         }
-        if (!item.system.baseTypes) {
-            return false;
+        const groupsOnItem = item.system.baseTypes;
+        if (!groupsOnItem?.length) {
+            return [];
         }
 
-        return intersects(item.system.baseTypes, this.baseTypes);
+        const flaggedItems = item.actor.itemFlags.boolean[this.key]?.sources ?? [];
+        const bonusTargets = flaggedItems.filter((flagged) => {
+            /** @type {string[]} */
+            const types = getDocFlags(flagged, this.key)[0];
+            if (!types) {
+                return false;
+            }
+
+            const targetedGroups = types.filter(truthiness);
+            return intersects(groupsOnItem, targetedGroups);
+        });
+
+        return bonusTargets;
+    }
+
+    /**
+     * @inheritdoc
+     * @override
+     * @param {object} options
+     * @param {ActorPF | null | undefined} options.actor
+     * @param {ItemPF} options.item
+     * @param {HTMLElement} options.html
+     */
+    static showInputOnItemSheet({ actor, item, html }) {
+        const options = uniqueArray(item.actor?.items
+            ?.filter(
+                /** @returns {item is ItemWeaponPF | ItemAttackPF} */
+                (item) => item.type === 'weapon' || item.type === 'attack')
+            .flatMap((item) => item.system.baseTypes ?? []));
+        options.sort();
+
+        showTraitsInput({
+            item,
+            flag: this.key,
+            label: this.label,
+            parent: html,
+            options,
+        });
     }
 }

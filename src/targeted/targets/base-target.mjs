@@ -1,3 +1,5 @@
+import { localize } from "../../util/localize.mjs";
+
 /**
  * @abstract
  */
@@ -7,6 +9,11 @@ export class BaseTarget {
      * @returns { string }
      */
     static get key() { return `target_${this.type}`; }
+
+    /**
+     * @returns { string }
+     */
+    static get label() { return localize(this.type); }
 
     /**
      * @abstract

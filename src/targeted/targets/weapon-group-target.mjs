@@ -1,7 +1,7 @@
-import { MODULE_NAME } from "../../consts.mjs";
 import { weaponTypeInput } from "../../handlebars-handlers/targeted/targets/weapon-group-input.mjs";
 import { intersects } from "../../util/array-intersects.mjs";
-import { KeyedDFlagHelper, getDocFlags } from "../../util/flag-helpers.mjs";
+import { getDocFlags } from "../../util/flag-helpers.mjs";
+import { localize } from "../../util/localize.mjs";
 import { truthiness } from "../../util/truthiness.mjs";
 import { uniqueArray } from "../../util/unique-array.mjs";
 import { BaseTarget } from "./base-target.mjs";
@@ -15,6 +15,13 @@ export class WeaponGroupTarget extends BaseTarget {
      * @override
      */
     static get type() { return 'weapon-group'; }
+
+    /**
+     * @inheritdoc
+     * @override
+     * @returns { string }
+     */
+    static get label() { return localize('PF1.WeaponGroups'); }
 
     /**
      * @inheritdoc

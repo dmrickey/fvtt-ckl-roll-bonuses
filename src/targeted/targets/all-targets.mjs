@@ -23,5 +23,5 @@ export const allTargets = [
     // DamageTypeTarget,
     // ItemTarget,
     WeaponGroupTarget,
-    // WeaponTypeTarget,
+    WeaponTypeTarget,
 ];

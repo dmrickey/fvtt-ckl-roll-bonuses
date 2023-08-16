@@ -13,12 +13,13 @@ export const templates = {
 
     // targeted bonuses
     damageInput: `modules/${MODULE_NAME}/hbs/targeted/bonuses/damage-input.hbs`,
+    // (targeted but belongs to pf1) belongs to pf1
+    conditionals: 'systems/pf1/templates/apps/item-action/conditionals.hbs',
 
     // targeted inputs
     targetWeaponGroup: `modules/${MODULE_NAME}/hbs/targeted/targets/weapon-group-input.hbs`,
+    checkedItems: `modules/${MODULE_NAME}/hbs/targeted/targets/checked-items.hbs`,
 
-    // belongs to pf1
-    conditionals: 'systems/pf1/templates/apps/item-action/conditionals.hbs',
 };
 
 /**

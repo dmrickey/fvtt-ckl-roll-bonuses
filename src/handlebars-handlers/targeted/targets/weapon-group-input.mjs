@@ -33,8 +33,7 @@ export function weaponTypeInput({
 
             const options = {
                 name: `flags.${MODULE_NAME}.${key}`,
-                title: localize(`Weapon Groups - ${item.name}`),
-                // subject: a.dataset.options, // no idea
+                title: (`${localize('PF1.WeaponGroups')} - ${item.name}`),
                 choices: {
                     ...pf1.config.weaponGroups,
                     ...custom.reduce((acc, curr) => ({ ...acc, [curr]: curr, }), {})
