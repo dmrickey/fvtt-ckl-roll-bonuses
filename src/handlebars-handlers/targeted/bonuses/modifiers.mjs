@@ -246,20 +246,52 @@ export function modifiersInput({
         });
     });
 
+    /** @type {{ [key in ItemConditionalModifier['target']]: { subTarget: ItemConditionalModifier['subTarget'], critical: ItemConditionalModifier['critical'], damageType: ItemConditionalModifier['damageType'], type: ItemConditionalModifier['type'],} }} */
+    const modDefaults = {
+        attack: { subTarget: 'allAttack', critical: 'normal', damageType: undefined, type: 'untyped', },
+        damage: { subTarget: 'allDamage', critical: 'normal', damageType: pf1.components.ItemAction.defaultDamageType, type: 'untyped', },
+        effect: { subTarget: 'dc', critical: undefined, damageType: undefined, type: undefined, },
+        misc: { subTarget: 'charges', critical: undefined, damageType: undefined, type: undefined, },
+        size: { subTarget: undefined, critical: undefined, damageType: undefined, type: undefined, },
+    };
+
     /**
      *
      * @param {string} selector
      */
     function handleChangeForSelector(selector) {
-        div.querySelectorAll(selector).forEach((element) => {
-            element?.addEventListener(
+        // @ts-ignore
+        div.querySelectorAll(selector).forEach((/** @type {HTMLSelectElement} */ element) => {
+            if (!element) return;
+
+            element.addEventListener(
                 'change',
                 async (event) => {
                     const props = element.name.split('.');
                     props.shift();
                     props.splice(props.length - 1, 0, 'data');
                     const path = props.join('.');
-                    const value = event.target?.value;
+
+                    // @ts-ignore
+                    const /** @type {HTMLSelectElement}*/ eventTarget = event.target;
+                    // @ts-ignore
+                    let /** @type {ItemConditionalModifier['target']} */ value = eventTarget?.value;
+
+                    if (!value) {
+                        value = 'attack';
+                    }
+
+                    if (element.classList.contains('conditional-target')) {
+                        const base = path.split('.');
+                        // @ts-ignore
+                        base.pop();
+                        const baseProp = base.join('.');
+                        setProperty(conditionals, `${baseProp}.subTarget`, modDefaults[value].subTarget);
+                        setProperty(conditionals, `${baseProp}.critical`, modDefaults[value].critical);
+                        setProperty(conditionals, `${baseProp}.damageType`, modDefaults[value].damageType);
+                        setProperty(conditionals, `${baseProp}.type`, modDefaults[value].type);
+                    }
+
                     setProperty(conditionals, path, value);
                     await updateItem();
                 },
@@ -279,7 +311,7 @@ export function modifiersInput({
                 event.preventDefault();
                 /** @type {string[]} */
                 let props = element.getAttribute('data-name')?.split('.') || [];
-                if (!props) {
+                if (!props.length) {
                     const parent = element.parentElement.parentElement.querySelector('.conditional-target');
                     props = parent.name.split('.');
                     props.pop();
@@ -299,7 +331,7 @@ export function modifiersInput({
                         update,
                     },
                     path,
-                    getProperty(conditionals, path)
+                    getProperty(conditionals, path) || { values: [] },
                 );
                 return app.render(true);
             },

@@ -46,6 +46,8 @@ function actionUseHandleConditionals(actionUse) {
         });
     });
 
+    // todo reduce attack bonus highest of each type
+
     // todo increase luck bonus if actor has fate's favored flag
     conditionals
         .filter((c) => truthiness(c) && c.modifiers?.length)
@@ -56,13 +58,12 @@ function actionUseHandleConditionals(actionUse) {
 Hooks.on(localHooks.actionUseHandleConditionals, actionUseHandleConditionals);
 
 /**
- * Adds damage bonus to tooltip
+ * Add damage bonus to actor's Combat damage column tooltip
  *
  * @param {ItemAction} action
  * @param {ItemChange[]} sources
  */
 function actionDamageSources(action, sources) {
-    // todo increase luck bonus if actor has fate's favored flag
     /** @type {ItemChange[]} */
     const changes = [];
     allTargets.forEach((target) => {
@@ -73,23 +74,24 @@ function actionDamageSources(action, sources) {
             });
         });
     });
+    // todo increase luck bonus if actor has fate's favored flag (double check that there isn't a named bonus for that already)
     sources.push(...changes.filter(truthiness));
 }
 Hooks.on(localHooks.actionDamageSources, actionDamageSources);
 
 /**
- * Add attack bonus to tooltip
+ * Add attack bonus to actor's Combat attacks column tooltip
+ *
  * @param {ItemPF} item
  * @param {ModifierSource[]} sources
  * @returns {ModifierSource[]}
  */
 function getAttackSources(item, sources) {
-    // todo increase luck bonus if actor has fate's favored flag
     const actor = item.actor;
     if (!actor) return sources;
 
     /** @type {ModifierSource[]} */
-    const newSources = [];
+    let newSources = [];
 
     allTargets.forEach((target) => {
         const bonusTargets = target.isTarget(item);
@@ -100,7 +102,11 @@ function getAttackSources(item, sources) {
         });
     });
 
-    sources.push(...newSources.filter(truthiness));
+    newSources = newSources.filter(truthiness);
+    // todo reduce attack bonus highest of each type
+    // todo increase luck bonus if actor has fate's favored flag
+
+    sources.push(...newSources);
 
     return sources;
 }

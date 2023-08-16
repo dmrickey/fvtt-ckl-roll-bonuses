@@ -477,8 +477,8 @@ declare global {
 
     class ItemConditionalModifier {
         _id: string;
-        critical: 'crit' | 'nonCrit' | 'normal'; // all for 'damage', 'crit' and 'normal' also for attack
-        damageType: TraitSelectorValuePlural;
+        critical: Mullable<'crit' | 'nonCrit' | 'normal'>; // all for 'damage', 'crit' and 'normal' also for attack
+        damageType: Nullable<TraitSelectorValuePlural>;
         data?: any;
         formula: string;
         id?: string;
@@ -487,10 +487,10 @@ declare global {
             | 'hasteDamage' | 'rapidShotDamage' | 'attack_0' | 'allDamage' // when target is 'damage'
             | 'dc' // when target is 'effect'
             | 'charges' // when target is 'misc'
-            // no subtarget for 'size'
+            | undefined // no subtarget for 'size'
             ;
         target: 'attack' | 'damage' | 'effect' | 'misc' | 'size';
-        type: BonusModifers;
+        type: Nullable<BonusModifers>;
 
 
         targets?: { attack: string; damage: string; size: string; effect: string; misc?: string; };
