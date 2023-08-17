@@ -20,7 +20,7 @@ Supports PF1 v9+
   - [Critical Helpers](#critical-helpers)
   - [Fate's Favored](#fates-favored)
   - [Fortune and Misfortune](#fortune-and-misfortune)
-  - [Skill Bonuses (Almost entirely uneccesary because of v9 updates. Will be removed soon)](#skill-bonuses-almost-entirely-uneccesary-because-of-v9-updates-will-be-removed-soon)
+  - [Skill Bonuses (Almost entirely uneccesary because of v9 updates. May be removed at some point)](#skill-bonuses-almost-entirely-uneccesary-because-of-v9-updates-may-be-removed-at-some-point)
 - [Spells](#spells)
   - [Modify Spell Caster Level (all spells, specific school, or specific element)](#modify-spell-caster-level-all-spells-specific-school-or-specific-element)
   - [Modify Spell DC (all spells, specific school, or specific element)](#modify-spell-dc-all-spells-specific-school-or-specific-element)
@@ -349,7 +349,7 @@ Fortune and Misfortune can now be added as flags onto your buffs, feats, abiliti
 
 ---
 
-## Skill Bonuses (Almost entirely uneccesary because of v9 updates. Will be removed soon)
+## Skill Bonuses (Almost entirely uneccesary because of v9 updates. May be removed at some point)
 Various bonuses to skills. You can add Inspiration, change the base die, or add variable bonuses.
 
 <details>
