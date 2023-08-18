@@ -16,11 +16,9 @@ registerItemHint((hintcls, actor, item, _data) => {
     /** @type {Hint[]} */
     const hints = [];
 
-    // this one is working
     allBonusTypes.forEach((bonus) => {
         if (bonus.isBonusSource(item)) {
             const args = bonus.registerHintOnBonus(item);
-            // const args = bonus.registerHintOnBonus(item);
             if (!args) return;
 
             const { label, cssClasses, options } = args;
@@ -28,7 +26,6 @@ registerItemHint((hintcls, actor, item, _data) => {
         }
     });
 
-    // this one is not working
     allTargetTypes.forEach((target) => {
         const bonuses = target.isTarget(item);
         bonuses.forEach((bonusTarget) => {

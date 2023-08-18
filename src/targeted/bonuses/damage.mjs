@@ -54,6 +54,7 @@ export class DamageBonus extends BaseBonus {
         /**
          * @param {TraitSelectorValuePlural} t
          */
+        // @ts-ignore
         const typeToString = (t) => `${t.custom?.trim() ? `${t.custom.trim()}, ` : ''}${t.values.map(valueLookup)}`;
 
         const hint = damages
@@ -87,6 +88,7 @@ export class DamageBonus extends BaseBonus {
         /**
          * @param {TraitSelectorValuePlural} t
          */
+        // @ts-ignore
         const typeToString = (t) => `${t.custom?.trim() ? `${t.custom.trim()}, ` : ''}${t.values.map(valueLookup)}`;
 
         const hint = damages

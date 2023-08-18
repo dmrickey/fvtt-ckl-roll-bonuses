@@ -18,9 +18,8 @@ export class AttackBonus extends BaseBonus {
      * @returns {boolean}
      */
     static isBonusSource(target) {
-        const formula = target.getFlag(MODULE_NAME, this.key);
-        const total = RollPF.safeTotal(formula, target.actor.getRollData());
-        return !!total;
+        const value = this.#getAttackBonus(target);
+        return !!value;
     };
 
     /**
@@ -43,15 +42,14 @@ export class AttackBonus extends BaseBonus {
 
     /**
      * @override
-     * @param {ItemPF} target
+     * @param {ItemPF} targetSource
      * @returns {ModifierSource[]}
      */
-    static getAttackSourcesForTooltip(target) {
-        const formula = target.getFlag(MODULE_NAME, this.key);
-        const value = RollPF.safeTotal(formula, target.actor.getRollData());
+    static getAttackSourcesForTooltip(targetSource) {
+        const value = this.#getAttackBonus(targetSource);
         return [{
             value,
-            name: target.name,
+            name: targetSource.name,
             modifier: 'untyped',
             sort: -100,
         }];
@@ -59,15 +57,13 @@ export class AttackBonus extends BaseBonus {
 
     /**
      * @override
-     * @param {ItemPF} target
+     * @param {ItemPF} targetSource
      * @param {ActionUseShared} shared
      */
-    static actionUseAlterRollData(target, shared) {
-        const formula = target.getFlag(MODULE_NAME, this.key);
-        const value = RollPF.safeTotal(formula, target.actor.getRollData());
-
+    static actionUseAlterRollData(targetSource, shared) {
+        const value = this.#getAttackBonus(targetSource);
         if (value) {
-            shared.attackBonus.push(`${value}[${target.name}]`);
+            shared.attackBonus.push(`${value}[${targetSource.name}]`);
         }
     }
 
@@ -92,5 +88,15 @@ export class AttackBonus extends BaseBonus {
         }, {
             isFlag: true,
         });
+    }
+
+    /**
+     *
+     * @param {ItemPF} targetSource
+     */
+    static #getAttackBonus(targetSource) {
+        const formula = targetSource.getFlag(MODULE_NAME, this.key);
+        const value = RollPF.safeTotal(formula, targetSource.actor.getRollData());
+        return value;
     }
 }
