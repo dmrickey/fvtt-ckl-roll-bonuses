@@ -1,4 +1,4 @@
-import { ActionTarget } from "./ideas/action-target.mjs";
+import { ActionTarget } from "./have-to-do/action-target.mjs";
 import { BaseTarget } from "./base-target.mjs";
 import { DamageTypeTarget } from "./have-to-do/damage-type-target.mjs";
 import { ItemTarget } from "./have-to-do/item-target.mjs";
