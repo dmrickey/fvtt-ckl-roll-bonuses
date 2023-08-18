@@ -65,9 +65,11 @@ export function conditionalCalculator(shared, conditional) {
  *
  * @param {ItemConditional} conditional
  * @param {ItemConditionalModifier} modifier
+ * @param {object} [options]
+ * @param {boolean} [options.isDamage]
  * @returns {Nullable<ItemChange>}
  */
-export function conditionalModToItemChange(conditional, modifier) {
+export function conditionalModToItemChange(conditional, modifier, { isDamage = false } = {}) {
     if (!modifier) return;
 
     const subTarget = modifier.target;
@@ -86,12 +88,15 @@ export function conditionalModToItemChange(conditional, modifier) {
     const change = new pf1.components.ItemChange({
         flavor: conditional.name,
         formula: modifier.formula,
-        modifier: modifier.type,
+        modifier: modifier.type || undefined,
         operator: 'add',
         priority: 0,
         subTarget,
         value: modifier.formula,
     });
+    if (isDamage) {
+        change.type = modifier.type;
+    }
 
     return change;
 }

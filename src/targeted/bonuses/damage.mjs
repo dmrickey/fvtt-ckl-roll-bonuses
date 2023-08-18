@@ -50,16 +50,9 @@ export class DamageBonus extends BaseBonus {
             return;
         }
 
-        const valueLookup = ( /** @type {keyof pf1['config']['damageTypes']} */ t) => pf1.config.damageTypes[t] || t;
-        /**
-         * @param {TraitSelectorValuePlural} t
-         */
-        // @ts-ignore
-        const typeToString = (t) => `${t.custom?.trim() ? `${t.custom.trim()}, ` : ''}${t.values.map(valueLookup)}`;
-
         const hint = damages
             .filter((d) => !!d.formula?.trim())
-            .map((d) => `${d.formula}[${d.type.custom}${typeToString(d.type)}]`)
+            .map((d) => `${d.formula}[${this.#damagesTypeToString(d.type)}]`)
             .join('\n');
 
         if (!hint) {
@@ -102,7 +95,7 @@ export class DamageBonus extends BaseBonus {
 
         sources = (conditional.modifiers ?? [])
             .filter((mod) => mod.target === 'damage')
-            .map((mod) => conditionalModToItemChange(conditional, mod))
+            .map((mod) => conditionalModToItemChange(conditional, mod, { isDamage: true }))
             .filter(truthiness);
 
         return sources;
@@ -133,12 +126,25 @@ export class DamageBonus extends BaseBonus {
     }
 
     /**
-     *
      * @param {ItemPF} item
      * @return {RollData['action']['damage']['parts']}
      */
     static #getDamageBonuses(item) {
         return item.getFlag(MODULE_NAME, this.key) ?? [];
+    }
+
+    /**
+     * @param {TraitSelectorValuePlural} types
+     * @returns {string}
+     */
+    static #damagesTypeToString(types) {
+        const valueLookup = ( /** @type {keyof pf1['config']['damageTypes']} */ t) => pf1.config.damageTypes[t] || t;
+        /**
+         * @param {TraitSelectorValuePlural} t
+         */
+        // @ts-ignore
+        const typeToString = (t) => `${t.custom?.trim() ? `${t.custom.trim()}, ` : ''}${t.values.map(valueLookup).join(', ')}`;
+        return typeToString(types);
     }
 
     /**
@@ -158,8 +164,7 @@ export class DamageBonus extends BaseBonus {
                 formula: bonus.formula,
                 subTarget: 'allDamage',
                 target: 'damage',
-                type: 'untyped',
-                // type: bonus.type,
+                type: this.#damagesTypeToString(bonus.type),
             }) ?? []),
         }
     }

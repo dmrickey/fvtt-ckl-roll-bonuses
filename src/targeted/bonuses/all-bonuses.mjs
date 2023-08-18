@@ -1,5 +1,4 @@
 import { BaseBonus } from "./base-bonus.mjs";
-import { ModifiersBonus } from "./modifiers.mjs";
 import { DamageBonus } from "./damage.mjs";
 import { AttackBonus } from "./attack.mjs";
 

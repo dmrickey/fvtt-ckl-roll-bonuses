@@ -148,6 +148,8 @@ declare global {
     }
 
     interface ItemChange {
+        //hardcoded bonus type to use instead of modifier
+        type: string | null | undefined;
         modifier: BonusModifers;
         parent: undefined | ItemPF;
     }
@@ -491,7 +493,7 @@ declare global {
             | undefined // no subtarget for 'size'
             ;
         target: 'attack' | 'damage' | 'effect' | 'misc' | 'size';
-        type: Nullable<BonusModifers>;
+        type: Nullable<BonusModifers | string>;
 
 
         targets?: { attack: string; damage: string; size: string; effect: string; misc?: string; };
@@ -561,7 +563,7 @@ declare global {
                     args: {
                         flavor: string;
                         formula: string | number;
-                        modifier: BonusModifers;
+                        modifier?: BonusModifers | string;
                         operator?: 'add' | 'function' | 'set';
                         priority?: number;
                         subTarget: BuffTargets;
