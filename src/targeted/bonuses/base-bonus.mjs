@@ -44,18 +44,9 @@ export class BaseBonus {
      *
      * @abstract
      * @param {ItemPF} bonus
-     * @returns {Nullable<{ label: string, cssClasses?: string[], options?: {hint?: string, icon?: string, image?: string,}}>}
+     * @returns {Nullable<string>}
      */
-    static registerHintOnTarget(bonus) { return; }
-
-    /**
-     * Register Item Hint on item giving bonus
-     *
-     * @abstract
-     * @param {ItemPF} bonus
-     * @returns {Nullable<{ label: string, cssClasses?: string[], options?: {hint?: string, icon?: string, image?: string,}}>}
-     */
-    static registerHintOnBonus(bonus) { return; }
+    static registerHint(bonus) { return; }
 
     /**
      * Gets Conditional used for the action

@@ -41,11 +41,11 @@ export class DamageBonus extends BaseBonus {
 
     /**
      * @override
-     * @param {ItemPF} target
-     * @returns {Nullable<{ label: string, cssClasses?: string[], options?: {hint?: string, icon?: string, image?: string,}}>}
+     * @param {ItemPF} source
+     * @returns {Nullable<string>}
      */
-    static registerHintOnBonus(target) {
-        const damages = this.#getDamageBonuses(target);
+    static registerHint(source) {
+        const damages = this.#getDamageBonuses(source);
         if (!damages.length) {
             return;
         }
@@ -66,45 +66,7 @@ export class DamageBonus extends BaseBonus {
             return;
         }
 
-        return {
-            label: this.label,
-            // label: target.name,
-            options: { hint }
-        };
-    }
-
-    /**
-     * @override
-     * @param {ItemPF} target
-     * @returns {Nullable<{ label: string, cssClasses?: string[], options?: {hint?: string, icon?: string, image?: string,}}>}
-     */
-    static registerHintOnTarget(target) {
-        const damages = this.#getDamageBonuses(target);
-        if (!damages.length) {
-            return;
-        }
-
-        const valueLookup = ( /** @type {keyof pf1['config']['damageTypes']} */ t) => pf1.config.damageTypes[t] || t;
-        /**
-         * @param {TraitSelectorValuePlural} t
-         */
-        // @ts-ignore
-        const typeToString = (t) => `${t.custom?.trim() ? `${t.custom.trim()}, ` : ''}${t.values.map(valueLookup)}`;
-
-        const hint = damages
-            .filter((d) => !!d.formula?.trim())
-            .map((d) => `${d.formula}[${d.type.custom}${typeToString(d.type)}]`)
-            .join('\n');
-
-        if (!hint) {
-            return;
-        }
-
-        return {
-            // label: this.label,
-            label: target.name,
-            options: { hint }
-        };
+        return hint;
     }
 
     /**

@@ -18,24 +18,28 @@ registerItemHint((hintcls, actor, item, _data) => {
 
     allBonusTypes.forEach((bonus) => {
         if (bonus.isBonusSource(item)) {
-            const args = bonus.registerHintOnBonus(item);
-            if (!args) return;
+            const hint = bonus.registerHint(item);
+            if (!hint) return;
 
-            const { label, cssClasses, options } = args;
-            hints.push(hintcls.create(label, cssClasses || [], options || {}));
+            hints.push(hintcls.create(bonus.label, [], { hint }));
         }
     });
 
     allTargetTypes.forEach((target) => {
         const bonuses = target.isTarget(item);
         bonuses.forEach((bonusTarget) => {
+            /** @type{string[]} */
+            const allhints = [];
             allBonusTypes.forEach((bonus) => {
-                const args = bonus.registerHintOnTarget(bonusTarget);
-                if (!args) return;
+                let hint = bonus.registerHint(bonusTarget);
+                if (!hint) return;
 
-                const { label, cssClasses, options } = args;
-                hints.push(hintcls.create(label, cssClasses || [], options || {}));
+                hint = `${bonus.label}\n${hint}`;
+                allhints.push(hint);
             });
+            if (allhints.length) {
+                hints.push(hintcls.create(bonusTarget.name, [], { hint: allhints.join('\n\n') }));
+            }
         });
     });
 

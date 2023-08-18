@@ -26,19 +26,13 @@ export class AttackBonus extends BaseBonus {
      * Register Item Hint on bonus
      *
      * @override
-     * @param {ItemPF} bonus
-     * @returns {Nullable<{ label: string, cssClasses?: string[], options?: {hint?: string, icon?: string, image?: string,}}>}
+     * @param {ItemPF} source
+     * @returns {Nullable<string>}
      */
-    static registerHintOnBonus(bonus) { return; }
-
-    /**
-     * Register Item Hint on target
-     *
-     * @override
-     * @param {ItemPF} bonus
-     * @returns {Nullable<{ label: string, cssClasses?: string[], options?: {hint?: string, icon?: string, image?: string,}}>}
-     */
-    static registerHintOnTarget(bonus) { return; }
+    static registerHint(source) {
+        const formula = source.getFlag(MODULE_NAME, this.key);
+        return formula?.trim();
+    }
 
     /**
      * @override
