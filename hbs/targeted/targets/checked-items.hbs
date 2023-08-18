@@ -8,7 +8,7 @@ label: string,
   <label for="system.{{flag}}">{{label}}</label>
   <ul class="traits-list tag-list">
     {{#each current}}
-      <li class="tag {{@key}}">{{this}}</li>
+      <li class="tag {{@key}}">{{lookup ../options this}}</li>
     {{/each}}
   </ul>
   <a class="trait-selector" data-options="{{flag}}"><i class="fas fa-edit"></i></a>

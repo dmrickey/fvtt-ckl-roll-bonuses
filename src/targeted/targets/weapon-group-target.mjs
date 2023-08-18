@@ -1,3 +1,5 @@
+import { MODULE_NAME } from "../../consts.mjs";
+import { showChecklist } from "../../handlebars-handlers/targeted/targets/checked-items-input.mjs";
 import { weaponTypeInput } from "../../handlebars-handlers/targeted/targets/weapon-group-input.mjs";
 import { intersects } from "../../util/array-intersects.mjs";
 import { getDocFlags } from "../../util/flag-helpers.mjs";
@@ -48,12 +50,7 @@ export class WeaponGroupTarget extends BaseTarget {
 
         const flaggedItems = item.actor.itemFlags.boolean[this.key]?.sources ?? [];
         const bonusTargets = flaggedItems.filter((flagged) => {
-            const values = getDocFlags(flagged, this.key)[0];
-            if (!values) {
-                return false;
-            }
-
-            const targetedGroups = [...values.value, ...values.custom.split(';')].filter(truthiness);
+            const targetedGroups = flagged.getFlag(MODULE_NAME, this.key) || [];
             return intersects(groupsOnItem, targetedGroups);
         });
 
@@ -81,11 +78,17 @@ export class WeaponGroupTarget extends BaseTarget {
         );
         custom.sort();
 
-        weaponTypeInput({
+        const options = {
+            ...pf1.config.weaponGroups,
+            ...custom.reduce((acc, curr) => ({ ...acc, [curr]: curr, }), {})
+        };
+
+        showChecklist({
             item,
-            key: this.key,
+            flag: this.key,
+            label: this.label,
             parent: html,
-            custom
+            options,
         });
     }
 }

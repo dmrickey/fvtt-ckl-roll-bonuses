@@ -1,6 +1,7 @@
 import { MODULE_NAME } from "../../consts.mjs";
 import { damageInput } from "../../handlebars-handlers/targeted/bonuses/damage.mjs";
 import { conditionalModToItemChange } from "../../util/conditional-helpers.mjs";
+import { localize } from "../../util/localize.mjs";
 import { truthiness } from "../../util/truthiness.mjs";
 import { BaseBonus } from "./base-bonus.mjs";
 
@@ -13,6 +14,12 @@ export class DamageBonus extends BaseBonus {
      * @override
      */
     static get type() { return 'damage'; }
+
+    /**
+     * @inheritdoc
+     * @override
+     */
+    static get label() { return localize('PF1.DamageBonus'); }
 
     /**
      * @inheritdoc
@@ -97,6 +104,7 @@ export class DamageBonus extends BaseBonus {
                 subTarget: 'allDamage',
                 target: 'damage',
                 type: 'untyped',
+                // type: bonus.type,
             }) ?? []),
         }
     }

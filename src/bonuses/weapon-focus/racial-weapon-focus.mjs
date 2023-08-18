@@ -116,6 +116,6 @@ Hooks.on('renderItemSheet', (
         label: localize(key),
         parent: html,
     }, {
-        notFormula: true,
+        isFormula: false,
     });
 });

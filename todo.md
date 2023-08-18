@@ -5,8 +5,10 @@
 - [Class Features](#class-features)
   - [Gunslinger](#gunslinger)
   - [Fighter](#fighter)
+  - [Ranger](#ranger)
 - [Feats](#feats)
   - [Improved Critical](#improved-critical)
+  - [Spirited Charge](#spirited-charge)
   - [Weapon Focus](#weapon-focus)
   - [Weapon Focus (Elephant in the Room)](#weapon-focus-elephant-in-the-room)
 - [Racial Features](#racial-features)
@@ -38,10 +40,18 @@
 - Weapon Training
   - Choose a weapons group for each stage
   - Figure out if I want one input for mulitple choices - or multiple inputs with one choice each - Maybe use a trait selector for input given the choices
+## Ranger
+- Favored Enemy
+  - Add a button to chat cards to modify ranger damage for favored enemy 
+    - Perhaps do it automatically depending on target
+- Favored Terrain
+  - Add a button to chat cards to increase the skill/initiative/whatever roll when applicable
 
 # Feats
 ## Improved Critical
 - Selects individual weapon types (like Weapon Focus) and grants keen to all of those
+## Spirited Charge
+- Double Damage without critting
 ## Weapon Focus 
 - Add warning if no base equipment types detected
 ## Weapon Focus (Elephant in the Room)

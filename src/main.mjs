@@ -56,6 +56,8 @@ function actionUseAlterRollData(wrapped, e) {
 }
 
 /**
+ * Adds conditional to action being used
+ *
  * @param {() => {}} wrapped
  * @this ActionUse
  */
@@ -65,6 +67,8 @@ function actionUseHandleConditionals(wrapped) {
 }
 
 /**
+ * Add attack bonus to actor's Combat attacks column tooltip
+ *
  * @param {(actionId: string) => any} wrapped
  * @param {string} actionId
  * @this {ItemPF}
@@ -76,7 +80,7 @@ function itemGetAttackSources(wrapped, actionId) {
 }
 
 /**
- *
+ * Add info to chat card
  * @param {*} wrapped
  * @param {object} data
  * @param {Object<string, string>} labels
@@ -90,6 +94,7 @@ function itemGetTypeChatData(wrapped, data, labels, props, rollData) {
 }
 
 /**
+ * Get damage sources for actor's combat tooltips
  * @param {() => any} wrapped
  * @this {ItemAction}
  */
@@ -97,6 +102,9 @@ function actionDamageSources(wrapped) {
     const sources = wrapped();
     Hooks.call(localHooks.actionDamageSources, this, sources);
     return sources;
+
+    // const filtered = getHighestChanges(sources, { ignoreTarget: true });
+    // return filtered;
 }
 
 

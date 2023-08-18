@@ -11,15 +11,16 @@ export const templates = {
     // preloaded specifics
     versatilePerformance: `modules/${MODULE_NAME}/hbs/versatile-performance-selector.hbs`,
 
-    // targeted bonuses
+    // targeted - bonuses
     damageInput: `modules/${MODULE_NAME}/hbs/targeted/bonuses/damage-input.hbs`,
-    // (targeted but belongs to pf1) belongs to pf1
-    conditionals: 'systems/pf1/templates/apps/item-action/conditionals.hbs',
+    conditionals: 'systems/pf1/templates/apps/item-action/conditionals.hbs', // (targeted but belongs to pf1) belongs to pf1
 
-    // targeted inputs
-    targetWeaponGroup: `modules/${MODULE_NAME}/hbs/targeted/targets/weapon-group-input.hbs`,
+    // targeted - inputs
     checkedItems: `modules/${MODULE_NAME}/hbs/targeted/targets/checked-items.hbs`,
+    targetWeaponGroup: `modules/${MODULE_NAME}/hbs/targeted/targets/weapon-group-input.hbs`,
 
+    // targeted - bonus or target
+    textInputList: `modules/${MODULE_NAME}/hbs/targeted/text-input-list.hbs`,
 };
 
 /**

@@ -12,12 +12,12 @@ import { createTemplate, templates } from "../../templates.mjs";
  * @param {string[] | {[key: string]: string}} args.options
  * @param {HTMLElement} args.parent
  */
-export function showTraitsInput({ flag, item, label, options, parent }) {
+export function showChecklist({ flag, item, label, options, parent }) {
     if (Array.isArray(options)) {
         options = options.reduce((acc, curr) => ({ ...acc, [curr]: curr }), {});
     }
-    const current = item.getFlag(MODULE_NAME, flag) || [];
-    const templateData = { current, flag, label };
+    const current = (item.getFlag(MODULE_NAME, flag) || []);
+    const templateData = { current, flag, label, options };
     const div = createTemplate(templates.checkedItems, templateData);
 
     div.querySelectorAll('.trait-selector').forEach((element) => {

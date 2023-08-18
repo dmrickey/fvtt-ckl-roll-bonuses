@@ -31,7 +31,8 @@ Hooks.on('renderItemSheet', (
 });
 
 /**
- * Adds bonus to action's conditionals
+ * Adds conditional to action being used
+ *
  * @param {ActionUse} actionUse
  */
 function actionUseHandleConditionals(actionUse) {
@@ -45,39 +46,38 @@ function actionUseHandleConditionals(actionUse) {
             });
         });
     });
-
-    // todo reduce attack bonus highest of each type
-
-    // todo increase luck bonus if actor has fate's favored flag
     conditionals
         .filter((c) => truthiness(c) && c.modifiers?.length)
         .forEach((conditional) => {
             conditionalCalculator(actionUse.shared, conditional)
         });
+
+    // todo reduce attack bonus highest of each type
+
+    // todo increase luck bonus if actor has fate's favored flag
 }
 Hooks.on(localHooks.actionUseHandleConditionals, actionUseHandleConditionals);
 
 /**
- * Add damage bonus to actor's Combat damage column tooltip
+ * Alters roll data for attack rolls - for simple changes that don't need an ItemConditional/Modifier or ItemChange
  *
- * @param {ItemAction} action
- * @param {ItemChange[]} sources
+ * @param {ActionUse} actionUse
  */
-function actionDamageSources(action, sources) {
-    /** @type {ItemChange[]} */
-    const changes = [];
+function actionUseAlterRollData({ actor, item, shared }) {
+    if (!actor || item.actor !== actor) {
+        return;
+    }
+
     allTargets.forEach((target) => {
-        const bonusTargets = target.isTarget(action);
+        const bonusTargets = target.isTarget(item);
         bonusTargets.forEach((target) => {
             allBonuses.forEach((bonus) => {
-                changes.push(...bonus.getDamageSourcesForTooltip(target));
+                bonus.actionUseAlterRollData(target, shared);
             });
         });
     });
-    // todo increase luck bonus if actor has fate's favored flag (double check that there isn't a named bonus for that already)
-    sources.push(...changes.filter(truthiness));
 }
-Hooks.on(localHooks.actionDamageSources, actionDamageSources);
+Hooks.on(localHooks.actionUseAlterRollData, actionUseAlterRollData);
 
 /**
  * Add attack bonus to actor's Combat attacks column tooltip
@@ -103,11 +103,33 @@ function getAttackSources(item, sources) {
     });
 
     newSources = newSources.filter(truthiness);
-    // todo reduce attack bonus highest of each type
-    // todo increase luck bonus if actor has fate's favored flag
 
     sources.push(...newSources);
+    // todo reduce attack bonus highest of each type
+    // todo increase luck bonus if actor has fate's favored flag
 
     return sources;
 }
 Hooks.on(localHooks.itemGetAttackSources, getAttackSources);
+
+/**
+ * Add damage bonus to actor's Combat damage column tooltip
+ *
+ * @param {ItemAction} action
+ * @param {ItemChange[]} sources
+ */
+function actionDamageSources(action, sources) {
+    /** @type {ItemChange[]} */
+    const changes = [];
+    allTargets.forEach((target) => {
+        const bonusTargets = target.isTarget(action);
+        bonusTargets.forEach((target) => {
+            allBonuses.forEach((bonus) => {
+                changes.push(...bonus.getDamageSourcesForTooltip(target));
+            });
+        });
+    });
+    // todo increase luck bonus if actor has fate's favored flag (double check that there isn't a named bonus for that already)
+    sources.push(...changes.filter(truthiness));
+}
+Hooks.on(localHooks.actionDamageSources, actionDamageSources);

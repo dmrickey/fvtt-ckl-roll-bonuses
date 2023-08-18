@@ -4,6 +4,11 @@
         "all-spell-cl": "All Spells CL",
         "all-spell-dc": "All Spells DC",
         "armor-focus": "Armor Focus",
+        "bonus": {
+            "attack": {
+                "label": "Attack Bonus"
+            }
+        },
         "cl-mod": "{mod} CL",
         "cl-label-mod": "{mod} CL ({label})",
         "crit-offset": "Crit Modifier ({mod})",

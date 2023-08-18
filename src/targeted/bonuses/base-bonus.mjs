@@ -1,3 +1,5 @@
+import { localize } from "../../util/localize.mjs";
+
 /**
  * @abstract
  */
@@ -7,6 +9,11 @@ export class BaseBonus {
      * @returns { string }
      */
     static get key() { return `bonus_${this.type}`; }
+
+    /**
+     * @returns { string }
+     */
+    static get label() { return localize(`bonus.${this.type}.label`); }
 
     /**
      * @abstract
@@ -24,6 +31,8 @@ export class BaseBonus {
     static showInputOnItemSheet({ actor, item, html }) { throw new Error("must be overridden."); }
 
     /**
+     * Register Item Hint on item giving bonus
+     *
      * @abstract
      * @param {object} o
      * @param {ActorPF} o.actor,
@@ -33,6 +42,8 @@ export class BaseBonus {
     static registerHintOnBonus({ actor, hintcls, item }) { }
 
     /**
+     * Register Item Hint on item receiving bonus
+     *
      * @abstract
      * @param {object} o
      * @param {ActorPF} o.actor,
@@ -42,6 +53,9 @@ export class BaseBonus {
     static registerHintOnTarget({ actor, hintcls, item }) { }
 
     /**
+     * Gets Conditional used for the action
+     * use either this or @see {@link actionUseAlterRollData}
+     *
      * @abstract
      * @param {ItemPF} target
      * @returns {Nullable<ItemConditional>}
@@ -56,6 +70,8 @@ export class BaseBonus {
     // static getDamageBonusesForRoll({ actor, item, shared }) { return; }
 
     /**
+     * Add damage bonus to actor's Combat damage column tooltip
+     *
      * @abstract
      * @param {ItemPF} target
      * @returns {ItemChange[]}
@@ -63,9 +79,21 @@ export class BaseBonus {
     static getDamageSourcesForTooltip(target) { return []; }
 
     /**
+     * Add attack bonus to actor's Combat attacks column tooltip
+     *
      * @abstract
      * @param {ItemPF} target
      * @returns {ModifierSource[]}
      */
     static getAttackSourcesForTooltip(target) { return []; }
+
+    /**
+     * Alters roll data for attack rolls - for simple changes that don't need an ItemConditional/Modifier or ItemChange
+     * use either this or @see {@link getConditional}
+     *
+     * @abstract
+     * @param {ItemPF} target
+     * @param {ActionUseShared} shared
+     */
+    static actionUseAlterRollData(target, shared) { }
 }

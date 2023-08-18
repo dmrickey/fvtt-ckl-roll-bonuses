@@ -57,9 +57,10 @@ declare global {
     }
 
     class ActionUseShared {
-        damageBonus: string[];
         action: any;
         conditionals: any;
+        attackBonus: string[];
+        damageBonus: string[];
         rollData: RollData;
         conditionalPartsCommon: any;
     }
@@ -494,9 +495,9 @@ declare global {
 
 
         targets?: { attack: string; damage: string; size: string; effect: string; misc?: string; };
-        subTargets: { [x: string]: string; };
-        conditionalModifierTypes: { [x: string]: string; };
-        conditionalCritical: {
+        subTargets?: { [x: string]: string; };
+        conditionalModifierTypes?: { [x: string]: string; };
+        conditionalCritical?: {
             normal?: "PF1.Normal",
             crit?: "PF1.CritDamageBonusFormula",
             nonCrit?: "PF1.NonCritDamageBonusFormula",

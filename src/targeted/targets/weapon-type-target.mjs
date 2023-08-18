@@ -1,4 +1,4 @@
-import { showTraitsInput } from "../../handlebars-handlers/targeted/targets/checked-items-input.mjs";
+import { showChecklist } from "../../handlebars-handlers/targeted/targets/checked-items-input.mjs";
 import { intersects } from "../../util/array-intersects.mjs";
 import { getDocFlags } from "../../util/flag-helpers.mjs";
 import { truthiness } from "../../util/truthiness.mjs";
@@ -66,7 +66,7 @@ export class WeaponTypeTarget extends BaseTarget {
             .flatMap((item) => item.system.baseTypes ?? []));
         options.sort();
 
-        showTraitsInput({
+        showChecklist({
             item,
             flag: this.key,
             label: this.label,
