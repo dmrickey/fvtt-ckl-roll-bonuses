@@ -108,13 +108,13 @@ Hooks.on('renderActorSheetPF', (
 });
 
 /**
- * @param {(skillId: string) => any} wrapped
+ * @param {(skillId: string, options: object) => any} wrapped
  * @param {string} skillId
- * @param {Object} _options
+ * @param {Object} options
  * @this {ActorPF}
  * @returns {ChatMessagePF|object|void} The chat message if one was created, or its data if not. `void` if the roll was cancelled.
  */
-function versatileRollSkill(wrapped, skillId, _options) {
+function versatileRollSkill(wrapped, skillId, options) {
     const vps = getDocDFlags(this, key);
 
     for (let i = 0; i < vps.length; i++) {
@@ -136,11 +136,11 @@ function versatileRollSkill(wrapped, skillId, _options) {
                 const vpTitle = localize('versatilePerformance.title', { skill: baseName });
                 doc.updateSource({ content: doc.content.replace(currentTitle, `  ${updatedTitle}<br />  ${vpTitle}`) });
             });
-            return wrapped(baseId);
+            return wrapped(baseId, options);
         }
     }
 
-    return wrapped(skillId);
+    return wrapped(skillId, options);
 }
 
 Hooks.on('renderItemSheet', (
