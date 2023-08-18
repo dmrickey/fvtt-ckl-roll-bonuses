@@ -103,7 +103,7 @@ declare global {
 
     type FlagValue = string | number;
 
-    interface ItemAction {
+    class ItemAction {
         id: string;
         actor: ActorPF;
         data: {
@@ -553,8 +553,8 @@ declare global {
         };
         components: {
             ItemConditional: typeof ItemConditional;
-            ItemConditionalModifier: typeof ItemConditionalModifier,
-            ItemAction: ItemAction;
+            ItemConditionalModifier: typeof ItemConditionalModifier;
+            ItemAction: typeof ItemAction;
             // ItemAction: ItemAction ;
             ItemChange: {
                 new(
@@ -596,12 +596,28 @@ declare global {
                     _label: 'Misc';
                 };
             };
-            weaponGroups: { [key: string]: string };
-            bonusModifiers: BonusModifers;
             abilities;
+            bonusModifiers: BonusModifers;
+            damageTypes: {
+                "untyped": "Untyped",
+                "slashing": "Slashing",
+                "piercing": "Piercing",
+                "bludgeoning": "Bludgeoning",
+                "fire": "Fire",
+                "cold": "Cold",
+                "electric": "Electricity",
+                "acid": "Acid",
+                "sonic": "Sonic",
+                "force": "Force",
+                "negative": "Negative",
+                "positive": "Positive",
+                "precision": "Precision",
+                "nonlethal": "Nonlethal"
+            },
             savingThrows: SavingThrows;
             skills;
             spellSchools: { [key: string]: string };
+            weaponGroups: { [key: string]: string };
         };
         documents: {
             actor: {

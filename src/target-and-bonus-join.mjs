@@ -1,33 +1,48 @@
-import { allBonuses } from "./targeted/bonuses/all-bonuses.mjs";
-import { allTargets } from "./targeted/targets/all-targets.mjs";
+import { allBonusTypes } from "./targeted/bonuses/all-bonuses.mjs";
+import { allTargetTypes } from "./targeted/targets/all-targets.mjs";
 import { conditionalCalculator } from "./util/conditional-helpers.mjs";
 import { localHooks } from "./util/hooks.mjs";
+import { registerItemHint } from "./util/item-hints.mjs";
 import { truthiness } from "./util/truthiness.mjs";
 
-Hooks.on('renderItemSheet', (
-    /** @type {ItemSheetPF} */ itemSheet,
-    /** @type {[HTMLElement]} */[html],
-    /** @type {unknown} */ _data
-) => {
-    const { actor, item } = itemSheet;
+/**
+ * Register hint on target
+ */
+registerItemHint((hintcls, actor, item, _data) => {
+    if (!actor || item?.actor !== actor) {
+        return;
+    }
 
-    allBonuses.forEach((bonus) => {
-        const hasFlag = item.system.flags.boolean?.hasOwnProperty(bonus.key);
-        if (!hasFlag) {
-            return;
+    /** @type {Hint[]} */
+    const hints = [];
+
+    // this one is working
+    allBonusTypes.forEach((bonus) => {
+        if (bonus.isBonusSource(item)) {
+            const args = bonus.registerHintOnBonus(item);
+            // const args = bonus.registerHintOnBonus(item);
+            if (!args) return;
+
+            const { label, cssClasses, options } = args;
+            hints.push(hintcls.create(label, cssClasses || [], options || {}));
         }
-
-        bonus.showInputOnItemSheet({ actor, item, html });
     });
 
-    allTargets.forEach((target) => {
-        const hasFlag = item.system.flags.boolean?.hasOwnProperty(target.key);
-        if (!hasFlag) {
-            return;
-        }
+    // this one is not working
+    allTargetTypes.forEach((target) => {
+        const bonuses = target.isTarget(item);
+        bonuses.forEach((bonusTarget) => {
+            allBonusTypes.forEach((bonus) => {
+                const args = bonus.registerHintOnTarget(bonusTarget);
+                if (!args) return;
 
-        target.showInputOnItemSheet({ actor, item, html });
+                const { label, cssClasses, options } = args;
+                hints.push(hintcls.create(label, cssClasses || [], options || {}));
+            });
+        });
     });
+
+    return hints;
 });
 
 /**
@@ -38,11 +53,11 @@ Hooks.on('renderItemSheet', (
 function actionUseHandleConditionals(actionUse) {
     /** @type {Nullable<ItemConditional>[]} */
     const conditionals = [];
-    allTargets.forEach((target) => {
-        const bonusTargets = target.isTarget(actionUse);
-        bonusTargets.forEach((target) => {
-            allBonuses.forEach((bonus) => {
-                conditionals.push(bonus.getConditional(target));
+    allTargetTypes.forEach((target) => {
+        const bonuses = target.isTarget(actionUse);
+        bonuses.forEach((bonusTarget) => {
+            allBonusTypes.forEach((bonus) => {
+                conditionals.push(bonus.getConditional(bonusTarget));
             });
         });
     });
@@ -68,10 +83,10 @@ function actionUseAlterRollData({ actor, item, shared }) {
         return;
     }
 
-    allTargets.forEach((target) => {
-        const bonusTargets = target.isTarget(item);
-        bonusTargets.forEach((target) => {
-            allBonuses.forEach((bonus) => {
+    allTargetTypes.forEach((target) => {
+        const bonuses = target.isTarget(item);
+        bonuses.forEach((target) => {
+            allBonusTypes.forEach((bonus) => {
                 bonus.actionUseAlterRollData(target, shared);
             });
         });
@@ -93,11 +108,11 @@ function getAttackSources(item, sources) {
     /** @type {ModifierSource[]} */
     let newSources = [];
 
-    allTargets.forEach((target) => {
-        const bonusTargets = target.isTarget(item);
-        bonusTargets.forEach((target) => {
-            allBonuses.forEach((bonus) => {
-                newSources.push(...bonus.getAttackSourcesForTooltip(target));
+    allTargetTypes.forEach((target) => {
+        const bonuses = target.isTarget(item);
+        bonuses.forEach((bonusTarget) => {
+            allBonusTypes.forEach((bonus) => {
+                newSources.push(...bonus.getAttackSourcesForTooltip(bonusTarget));
             });
         });
     });
@@ -121,11 +136,11 @@ Hooks.on(localHooks.itemGetAttackSources, getAttackSources);
 function actionDamageSources(action, sources) {
     /** @type {ItemChange[]} */
     const changes = [];
-    allTargets.forEach((target) => {
-        const bonusTargets = target.isTarget(action);
-        bonusTargets.forEach((target) => {
-            allBonuses.forEach((bonus) => {
-                changes.push(...bonus.getDamageSourcesForTooltip(target));
+    allTargetTypes.forEach((target) => {
+        const bonuses = target.isTarget(action);
+        bonuses.forEach((bonusTarget) => {
+            allBonusTypes.forEach((bonus) => {
+                changes.push(...bonus.getDamageSourcesForTooltip(bonusTarget));
             });
         });
     });
@@ -133,3 +148,29 @@ function actionDamageSources(action, sources) {
     sources.push(...changes.filter(truthiness));
 }
 Hooks.on(localHooks.actionDamageSources, actionDamageSources);
+
+Hooks.on('renderItemSheet', (
+    /** @type {ItemSheetPF} */ itemSheet,
+    /** @type {[HTMLElement]} */[html],
+    /** @type {unknown} */ _data
+) => {
+    const { actor, item } = itemSheet;
+
+    allBonusTypes.forEach((bonus) => {
+        const hasFlag = item.system.flags.boolean?.hasOwnProperty(bonus.key);
+        if (!hasFlag) {
+            return;
+        }
+
+        bonus.showInputOnItemSheet({ actor, item, html });
+    });
+
+    allTargetTypes.forEach((target) => {
+        const hasFlag = item.system.flags.boolean?.hasOwnProperty(target.key);
+        if (!hasFlag) {
+            return;
+        }
+
+        target.showInputOnItemSheet({ actor, item, html });
+    });
+});

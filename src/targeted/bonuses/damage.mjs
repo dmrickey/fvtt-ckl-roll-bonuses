@@ -22,49 +22,87 @@ export class DamageBonus extends BaseBonus {
     static get label() { return localize('PF1.DamageBonus'); }
 
     /**
-     * @inheritdoc
      * @override
-     * @param {object} options
-     * @param {ActorPF | null} options.actor
-     * @param {ItemPF} options.item
-     * @param {HTMLElement} options.html
+     * @param {ItemPF} target
+     * @returns {boolean}
      */
-    static showInputOnItemSheet({ actor, item, html }) {
-        const hasFlag = item.system.flags.boolean?.hasOwnProperty(this.key);
-        if (!hasFlag) {
+    static isBonusSource(target) {
+        const damages = this.#getDamageBonuses(target);
+        if (!damages.length) {
+            return false;
+        }
+
+        if (!damages.filter(({ formula }) => !!formula?.trim()).length) {
+            return false;
+        }
+
+        return true;
+    };
+
+    /**
+     * @override
+     * @param {ItemPF} target
+     * @returns {Nullable<{ label: string, cssClasses?: string[], options?: {hint?: string, icon?: string, image?: string,}}>}
+     */
+    static registerHintOnBonus(target) {
+        const damages = this.#getDamageBonuses(target);
+        if (!damages.length) {
             return;
         }
 
-        const parts = item.getFlag(MODULE_NAME, this.key) ?? [];
+        const valueLookup = ( /** @type {keyof pf1['config']['damageTypes']} */ t) => pf1.config.damageTypes[t] || t;
+        /**
+         * @param {TraitSelectorValuePlural} t
+         */
+        const typeToString = (t) => `${t.custom?.trim() ? `${t.custom.trim()}, ` : ''}${t.values.map(valueLookup)}`;
 
-        damageInput({
-            item,
-            key: this.key,
-            parent: html,
-            parts,
-        });
+        const hint = damages
+            .filter((d) => !!d.formula?.trim())
+            .map((d) => `${d.formula}[${d.type.custom}${typeToString(d.type)}]`)
+            .join('\n');
+
+        if (!hint) {
+            return;
+        }
+
+        return {
+            label: this.label,
+            // label: target.name,
+            options: { hint }
+        };
     }
 
     /**
      * @override
-     * @param {object} o
-     * @param {ActorPF} o.actor,
-     * @param {typeof Hint} o.hintcls,
-     * @param {ItemPF} o.item,
+     * @param {ItemPF} target
+     * @returns {Nullable<{ label: string, cssClasses?: string[], options?: {hint?: string, icon?: string, image?: string,}}>}
      */
-    static registerHintOnBonus({ actor, hintcls, item }) {
-        // todo
-    }
+    static registerHintOnTarget(target) {
+        const damages = this.#getDamageBonuses(target);
+        if (!damages.length) {
+            return;
+        }
 
-    /**
-     * @override
-     * @param {object} o
-     * @param {ActorPF} o.actor,
-     * @param {typeof Hint} o.hintcls,
-     * @param {ItemPF} o.item,
-     */
-    static registerHintOnTarget({ actor, hintcls, item }) {
-        // todo
+        const valueLookup = ( /** @type {keyof pf1['config']['damageTypes']} */ t) => pf1.config.damageTypes[t] || t;
+        /**
+         * @param {TraitSelectorValuePlural} t
+         */
+        const typeToString = (t) => `${t.custom?.trim() ? `${t.custom.trim()}, ` : ''}${t.values.map(valueLookup)}`;
+
+        const hint = damages
+            .filter((d) => !!d.formula?.trim())
+            .map((d) => `${d.formula}[${d.type.custom}${typeToString(d.type)}]`)
+            .join('\n');
+
+        if (!hint) {
+            return;
+        }
+
+        return {
+            // label: this.label,
+            label: target.name,
+            options: { hint }
+        };
     }
 
     /**
@@ -74,39 +112,14 @@ export class DamageBonus extends BaseBonus {
      */
     static getConditional(target) {
 
-        /** @type {RollData['action']['damage']['parts']} */
-        const damages = target.getFlag(MODULE_NAME, this.key);
+        const damages = this.#getDamageBonuses(target);
 
-        const conditional = this.createConditional(damages, target.name);
+        const conditional = this.#createConditional(damages, target.name);
         if (conditional.modifiers?.length) {
-            return this.createConditional(damages, target.name);
+            return this.#createConditional(damages, target.name);
         }
 
         return null;
-    }
-
-    /**
-     *
-     * @param {{ formula: string; type: TraitSelectorValuePlural }[]} damageBonuses
-     * @param {string} name
-     * @returns {ItemConditional}
-     */
-    static createConditional(damageBonuses, name) {
-        return {
-            _id: foundry.utils.randomID(),
-            default: true,
-            name,
-            modifiers: damageBonuses?.map( /** @return {ItemConditionalModifier} */(bonus) => ({
-                _id: foundry.utils.randomID(),
-                critical: 'normal',
-                damageType: bonus.type,
-                formula: bonus.formula,
-                subTarget: 'allDamage',
-                target: 'damage',
-                type: 'untyped',
-                // type: bonus.type,
-            }) ?? []),
-        }
     }
 
     /**
@@ -129,5 +142,61 @@ export class DamageBonus extends BaseBonus {
             .filter(truthiness);
 
         return sources;
+    }
+
+    /**
+     * @inheritdoc
+     * @override
+     * @param {object} options
+     * @param {ActorPF | null} options.actor
+     * @param {ItemPF} options.item
+     * @param {HTMLElement} options.html
+     */
+    static showInputOnItemSheet({ actor, item, html }) {
+        const hasFlag = item.system.flags.boolean?.hasOwnProperty(this.key);
+        if (!hasFlag) {
+            return;
+        }
+
+        const parts = this.#getDamageBonuses(item);
+
+        damageInput({
+            item,
+            key: this.key,
+            parent: html,
+            parts,
+        });
+    }
+
+    /**
+     *
+     * @param {ItemPF} item
+     * @return {RollData['action']['damage']['parts']}
+     */
+    static #getDamageBonuses(item) {
+        return item.getFlag(MODULE_NAME, this.key) ?? [];
+    }
+
+    /**
+     * @param {RollData['action']['damage']['parts']} damageBonuses
+     * @param {string} name
+     * @returns {ItemConditional}
+     */
+    static #createConditional(damageBonuses, name) {
+        return {
+            _id: foundry.utils.randomID(),
+            default: true,
+            name,
+            modifiers: damageBonuses?.map( /** @return {ItemConditionalModifier} */(bonus) => ({
+                _id: foundry.utils.randomID(),
+                critical: 'normal',
+                damageType: bonus.type,
+                formula: bonus.formula,
+                subTarget: 'allDamage',
+                target: 'damage',
+                type: 'untyped',
+                // type: bonus.type,
+            }) ?? []),
+        }
     }
 }

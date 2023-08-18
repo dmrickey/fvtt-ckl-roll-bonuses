@@ -22,6 +22,8 @@ export class BaseTarget {
     static get type() { throw new Error('must be overridden'); }
 
     /**
+     * If the arg has is targeted by this
+     *
      * @abstract
      * @param {ItemPF | ActionUse | ItemAction} arg
      * @returns {ItemPF[]}

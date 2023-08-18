@@ -6,7 +6,7 @@ import { AttackBonus } from "./attack.mjs";
 /**
  * @type {typeof BaseBonus[]}
  */
-export const allBonuses = [
+export const allBonusTypes = [
     AttackBonus,
     DamageBonus,
     // ModifiersBonus, // only if I can get the function to remove duplicates working (which needs to work with conditionals)

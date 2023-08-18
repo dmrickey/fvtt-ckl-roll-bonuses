@@ -22,6 +22,15 @@ export class BaseBonus {
     static get type() { throw new Error('must be overridden'); }
 
     /**
+     * If the item has is providing bonuses
+     *
+     * @abstract
+     * @param {ItemPF} target
+     * @returns {boolean}
+     */
+    static isBonusSource(target) { throw new Error("must be overridden."); };
+
+    /**
      * @abstract
      * @param {object} options
      * @param {ActorPF | null} options.actor
@@ -31,26 +40,22 @@ export class BaseBonus {
     static showInputOnItemSheet({ actor, item, html }) { throw new Error("must be overridden."); }
 
     /**
-     * Register Item Hint on item giving bonus
-     *
-     * @abstract
-     * @param {object} o
-     * @param {ActorPF} o.actor,
-     * @param {typeof Hint} o.hintcls,
-     * @param {ItemPF} o.item,
-     */
-    static registerHintOnBonus({ actor, hintcls, item }) { }
-
-    /**
      * Register Item Hint on item receiving bonus
      *
      * @abstract
-     * @param {object} o
-     * @param {ActorPF} o.actor,
-     * @param {typeof Hint} o.hintcls,
-     * @param {ItemPF} o.item,
+     * @param {ItemPF} bonus
+     * @returns {Nullable<{ label: string, cssClasses?: string[], options?: {hint?: string, icon?: string, image?: string,}}>}
      */
-    static registerHintOnTarget({ actor, hintcls, item }) { }
+    static registerHintOnTarget(bonus) { return; }
+
+    /**
+     * Register Item Hint on item giving bonus
+     *
+     * @abstract
+     * @param {ItemPF} bonus
+     * @returns {Nullable<{ label: string, cssClasses?: string[], options?: {hint?: string, icon?: string, image?: string,}}>}
+     */
+    static registerHintOnBonus(bonus) { return; }
 
     /**
      * Gets Conditional used for the action

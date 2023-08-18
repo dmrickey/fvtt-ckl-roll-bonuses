@@ -1,3 +1,4 @@
+import { MODULE_NAME } from "../../consts.mjs";
 import { showChecklist } from "../../handlebars-handlers/targeted/targets/checked-items-input.mjs";
 import { intersects } from "../../util/array-intersects.mjs";
 import { getDocFlags } from "../../util/flag-helpers.mjs";
@@ -38,7 +39,7 @@ export class WeaponTypeTarget extends BaseTarget {
         const flaggedItems = item.actor.itemFlags.boolean[this.key]?.sources ?? [];
         const bonusTargets = flaggedItems.filter((flagged) => {
             /** @type {string[]} */
-            const types = getDocFlags(flagged, this.key)[0];
+            const types = flagged.getFlag(MODULE_NAME, this.key);
             if (!types) {
                 return false;
             }

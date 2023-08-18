@@ -14,25 +14,32 @@ export class AttackBonus extends BaseBonus {
 
     /**
      * @override
-     * @param {object} o
-     * @param {ActorPF} o.actor,
-     * @param {typeof Hint} o.hintcls,
-     * @param {ItemPF} o.item,
+     * @param {ItemPF} target
+     * @returns {boolean}
      */
-    static registerHintOnBonus({ actor, hintcls, item }) {
-        // todo
-    }
+    static isBonusSource(target) {
+        const formula = target.getFlag(MODULE_NAME, this.key);
+        const total = RollPF.safeTotal(formula, target.actor.getRollData());
+        return !!total;
+    };
 
     /**
+     * Register Item Hint on bonus
+     *
      * @override
-     * @param {object} o
-     * @param {ActorPF} o.actor,
-     * @param {typeof Hint} o.hintcls,
-     * @param {ItemPF} o.item,
+     * @param {ItemPF} bonus
+     * @returns {Nullable<{ label: string, cssClasses?: string[], options?: {hint?: string, icon?: string, image?: string,}}>}
      */
-    static registerHintOnTarget({ actor, hintcls, item }) {
-        // todo
-    }
+    static registerHintOnBonus(bonus) { return; }
+
+    /**
+     * Register Item Hint on target
+     *
+     * @override
+     * @param {ItemPF} bonus
+     * @returns {Nullable<{ label: string, cssClasses?: string[], options?: {hint?: string, icon?: string, image?: string,}}>}
+     */
+    static registerHintOnTarget(bonus) { return; }
 
     /**
      * @override

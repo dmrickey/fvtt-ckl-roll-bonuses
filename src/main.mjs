@@ -107,7 +107,6 @@ function actionDamageSources(wrapped) {
     // return filtered;
 }
 
-
 Hooks.once('setup', () => {
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype.alterRollData', actionUseAlterRollData, libWrapper.WRAPPER)
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype.handleConditionals', actionUseHandleConditionals, libWrapper.WRAPPER);

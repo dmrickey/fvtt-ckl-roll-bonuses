@@ -18,7 +18,7 @@ Hooks.on('ready', () => {
 export let targetTypes = {};
 
 /** @type {typeof BaseTarget[]} */
-export const allTargets = [
+export const allTargetTypes = [
     // ActionTarget,
     // DamageTypeTarget,
     // ItemTarget,
