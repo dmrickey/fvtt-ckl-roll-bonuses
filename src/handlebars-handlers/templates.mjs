@@ -16,6 +16,8 @@ export const templates = {
 
     // targeted - targets
     checkedItems: `modules/${MODULE_NAME}/hbs/targeted/targets/checked-items.hbs`,
+    items: `modules/${MODULE_NAME}/hbs/targeted/targets/items-input.hbs`,
+    itemsApp: `modules/${MODULE_NAME}/hbs/targeted/targets/items-input-application.hbs`,
     targetWeaponGroup: `modules/${MODULE_NAME}/hbs/targeted/targets/weapon-group-input.hbs`,
 
     // targeted - bonus or target

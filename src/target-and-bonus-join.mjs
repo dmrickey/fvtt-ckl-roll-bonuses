@@ -26,7 +26,7 @@ registerItemHint((hintcls, actor, item, _data) => {
     });
 
     allTargetTypes.forEach((target) => {
-        const bonuses = target.isTarget(item);
+        const bonuses = target.getBonusSourcesForTarget(item);
         bonuses.forEach((bonusTarget) => {
             /** @type{string[]} */
             const allhints = [];
@@ -55,7 +55,7 @@ function actionUseHandleConditionals(actionUse) {
     /** @type {Nullable<ItemConditional>[]} */
     const conditionals = [];
     allTargetTypes.forEach((target) => {
-        const bonuses = target.isTarget(actionUse);
+        const bonuses = target.getBonusSourcesForTarget(actionUse);
         bonuses.forEach((bonusTarget) => {
             allBonusTypes.forEach((bonus) => {
                 conditionals.push(bonus.getConditional(bonusTarget));
@@ -85,7 +85,7 @@ function actionUseAlterRollData({ actor, item, shared }) {
     }
 
     allTargetTypes.forEach((target) => {
-        const bonuses = target.isTarget(item);
+        const bonuses = target.getBonusSourcesForTarget(item);
         bonuses.forEach((target) => {
             allBonusTypes.forEach((bonus) => {
                 bonus.actionUseAlterRollData(target, shared);
@@ -110,7 +110,7 @@ function getAttackSources(item, sources) {
     let newSources = [];
 
     allTargetTypes.forEach((target) => {
-        const bonuses = target.isTarget(item);
+        const bonuses = target.getBonusSourcesForTarget(item);
         bonuses.forEach((bonusTarget) => {
             allBonusTypes.forEach((bonus) => {
                 newSources.push(...bonus.getAttackSourcesForTooltip(bonusTarget));
@@ -138,10 +138,10 @@ function actionDamageSources(action, sources) {
     /** @type {ItemChange[]} */
     const changes = [];
     allTargetTypes.forEach((target) => {
-        const bonuses = target.isTarget(action);
-        bonuses.forEach((bonusTarget) => {
+        const bonusSources = target.getBonusSourcesForTarget(action);
+        bonusSources.forEach((bonusSource) => {
             allBonusTypes.forEach((bonus) => {
-                changes.push(...bonus.getDamageSourcesForTooltip(bonusTarget));
+                changes.push(...bonus.getDamageSourcesForTooltip(bonusSource));
             });
         });
     });

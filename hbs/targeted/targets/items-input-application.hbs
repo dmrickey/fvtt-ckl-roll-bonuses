@@ -1,0 +1,16 @@
+<form>
+    <ul>
+        {{#each items}}
+        <li>{{name}} ({{type}})</li>
+        {{/each}}
+    </ul>
+    <div class="form-group">
+        <button id="reset-actions">
+            <i class="fas fa-rotate-left"></i> TODO CANCEL
+        </button>
+        <button type="submit">
+            <i class="fas fa-save"></i> TODO OK
+        </button>
+    </div>
+
+</form>
