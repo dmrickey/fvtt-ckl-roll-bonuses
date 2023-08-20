@@ -7,22 +7,17 @@ import { uniqueArray } from "../../util/unique-array.mjs";
 import { BaseTarget } from "./base-target.mjs";
 
 export class WeaponTypeTarget extends BaseTarget {
-    /** @type {string[]} */
-    baseTypes = [];
-
     /**
-     * @inheritdoc
      * @override
      */
     static get type() { return 'weapon-type'; }
 
     /**
-     * @inheritdoc
      * @override
      * @param {ItemPF | ActionUse | ItemAction} doc
      * @returns {ItemPF[]}
      */
-    static isTarget(doc) {
+    static getBonusSourcesForTarget(doc) {
         const item = doc instanceof pf1.documents.item.ItemPF
             ? doc
             : doc.item;
@@ -37,7 +32,7 @@ export class WeaponTypeTarget extends BaseTarget {
         }
 
         const flaggedItems = item.actor.itemFlags.boolean[this.key]?.sources ?? [];
-        const bonusTargets = flaggedItems.filter((flagged) => {
+        const bonusSources = flaggedItems.filter((flagged) => {
             /** @type {string[]} */
             const types = flagged.getFlag(MODULE_NAME, this.key);
             if (!types) {
@@ -48,11 +43,10 @@ export class WeaponTypeTarget extends BaseTarget {
             return intersects(groupsOnItem, targetedGroups);
         });
 
-        return bonusTargets;
+        return bonusSources;
     }
 
     /**
-     * @inheritdoc
      * @override
      * @param {object} options
      * @param {ActorPF | null | undefined} options.actor

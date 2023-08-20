@@ -31,7 +31,7 @@ export class WeaponGroupTarget extends BaseTarget {
      * @param {ItemPF | ActionUse | ItemAction} doc
      * @returns {ItemPF[]}
      */
-    static isTarget(doc) {
+    static getBonusSourcesForTarget(doc) {
         const item = doc instanceof pf1.documents.item.ItemPF
             ? doc
             : doc.item;
@@ -49,12 +49,12 @@ export class WeaponGroupTarget extends BaseTarget {
             .filter(truthiness);
 
         const flaggedItems = item.actor.itemFlags.boolean[this.key]?.sources ?? [];
-        const bonusTargets = flaggedItems.filter((flagged) => {
+        const bonusSources = flaggedItems.filter((flagged) => {
             const targetedGroups = flagged.getFlag(MODULE_NAME, this.key) || [];
             return intersects(groupsOnItem, targetedGroups);
         });
 
-        return bonusTargets;
+        return bonusSources;
     }
 
     /**

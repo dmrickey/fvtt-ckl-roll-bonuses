@@ -6,11 +6,13 @@ import { localize } from "../../util/localize.mjs";
 export class BaseTarget {
 
     /**
+     * Key for flag on bonustarget
      * @returns { string }
      */
     static get key() { return `target_${this.type}`; }
 
     /**
+     * Label for this bonustarget
      * @returns { string }
      */
     static get label() { return localize(this.type); }
@@ -28,7 +30,7 @@ export class BaseTarget {
      * @param {ItemPF | ActionUse | ItemAction} arg
      * @returns {ItemPF[]}
      */
-    static isTarget(arg) { throw new Error('must be overridden'); };
+    static getBonusSourcesForTarget(arg) { throw new Error('must be overridden'); };
 
     /**
      * @abstract

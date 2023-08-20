@@ -16,7 +16,7 @@ export function showChecklist({ flag, item, label, options, parent }) {
     if (Array.isArray(options)) {
         options = options.reduce((acc, curr) => ({ ...acc, [curr]: curr }), {});
     }
-    const current = (item.getFlag(MODULE_NAME, flag) || []);
+    const current = item.getFlag(MODULE_NAME, flag) || [];
     const templateData = { current, flag, label, options };
     const div = createTemplate(templates.checkedItems, templateData);
 

@@ -5,6 +5,7 @@ declare global {
         getFlag(moduleName: string, key: string): any;
         async setFlag<T>(moduleName: string, key: string, value: T);
         updateSource(changes: Partial<this>, options?: object);
+        uuid: string;
     }
 
     abstract class ItemDocument extends BaseDocument { }
@@ -206,6 +207,7 @@ declare global {
     }
 
     interface ItemPF extends ItemDocument {
+        get hasAction(): boolean;
         actions: EmbeddedCollection<ItemAction>;
 
         actor: ActorPF;
