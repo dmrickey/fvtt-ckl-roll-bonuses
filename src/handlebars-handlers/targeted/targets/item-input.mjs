@@ -18,30 +18,7 @@ export function showItemInput({
     parent,
 }) {
     /** @type {string[]} */
-    const currentUuids = item.getFlag(MODULE_NAME, key) || [
-        "Actor.Bw8oKHwi7mmTG4PD.Item.Dxdouxl0hLPCc57t",
-        "Actor.Bw8oKHwi7mmTG4PD.Item.bTItuyekSVOmBh8S",
-        "Actor.Bw8oKHwi7mmTG4PD.Item.oyq7cJD1QGh8YwaA",
-        "Actor.Bw8oKHwi7mmTG4PD.Item.aKlryTgToNLtNVmb",
-        "Actor.Bw8oKHwi7mmTG4PD.Item.cFBG5m5R4U62kItC",
-        "Actor.Bw8oKHwi7mmTG4PD.Item.oUCPgCjpNACGPoYQ",
-        "Actor.Bw8oKHwi7mmTG4PD.Item.sOqHp8vp0r9hSGnp",
-        "Actor.Bw8oKHwi7mmTG4PD.Item.7hAXCo6sYfpIqeli",
-        "Actor.Bw8oKHwi7mmTG4PD.Item.jYjQKhj6M0oVs94k",
-        "Actor.Bw8oKHwi7mmTG4PD.Item.cWa9gqvSf3YQd1Wm",
-        "Actor.Bw8oKHwi7mmTG4PD.Item.IjawwzL0DGCEMVZB",
-        "Actor.Bw8oKHwi7mmTG4PD.Item.uGJgXIdG0wBT1ypq",
-        "Actor.Bw8oKHwi7mmTG4PD.Item.MkFh6WG8EpmA6DrV",
-        "Actor.Bw8oKHwi7mmTG4PD.Item.51ABKUiTUrq0peH8",
-        "Actor.Bw8oKHwi7mmTG4PD.Item.Nu1EZCwXHxshp7pz",
-        "Actor.Bw8oKHwi7mmTG4PD.Item.TilRpzOyXvySFbVg",
-        "Actor.Bw8oKHwi7mmTG4PD.Item.bDyIl5M77UtHv5TI",
-        "Actor.Bw8oKHwi7mmTG4PD.Item.tBxDVRH0Rf6pPbWa",
-        "Actor.Bw8oKHwi7mmTG4PD.Item.fSYkPCinFcTdC787",
-        "Actor.Bw8oKHwi7mmTG4PD.Item.QnoaCaYina4ki2RX",
-        "Actor.Bw8oKHwi7mmTG4PD.Item.K46OgK18g95PjcVm",
-        "Actor.Bw8oKHwi7mmTG4PD.Item.Mkxb8NGhYoHQzUnN"
-    ];
+    const currentUuids = item.getFlag(MODULE_NAME, key) || [];
     const items = item.actor.items
         .filter(filter)
         .map(({ uuid, id, name, img, type }) => {
@@ -69,7 +46,6 @@ export function showItemInput({
                 item,
                 items,
                 key,
-                parent,
             };
             new ItemSelector(options).render(true);
         });
@@ -84,7 +60,6 @@ class ItemSelector extends FormApplication {
         const options = super.defaultOptions;
 
         options.height = 'auto';
-        options.id = 'item-selector';
         options.template = templates.itemsApp;
         options.title = 'Item Selector'; // todo
 
@@ -118,7 +93,7 @@ class ItemSelector extends FormApplication {
     async _updateObject(event, formData) {
         const checked = [...event.currentTarget.querySelectorAll('input')]
             .filter((node) => node.checked)
-            .map((node) => node.dataset.itemId);
+            .map((node) => node.dataset.uuid);
         const { item, key } = this.getData();
         await item.setFlag(MODULE_NAME, key, checked);
     }
