@@ -1,13 +1,12 @@
-
-<div class="form-group roll-bonuses">
-    <h4 class="header">
-        {{label}}
-    </h4>
-    <div class="form-fields">
-        {{#each currentUuids}}
-        <li data-index="{{@index}}">
-            {{this}}
+<div class="form-group roll-bonuses item-target-input">
+    <label class="header">{{label}}</label>
+    <div class="form-fields item-target">
+        {{#each current}}
+        <li class="item" data-index="{{@index}}" data-item-id="{{this.id}}" data-tooltip="{{this.name}}">
+            <img src="{{this.img}}">
+            <span class="icon-label">{{this.name}}</span>
         </li>
         {{/each}}
     </div>
+    <a><i class="fas fa-edit"></i></a>
 </div>

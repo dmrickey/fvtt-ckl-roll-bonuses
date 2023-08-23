@@ -219,6 +219,7 @@ declare global {
             [key: string]: any;
         };
         id: string;
+        img: string;
         isActive: boolean;
         name: string;
 

@@ -28,6 +28,65 @@
     margin-inline-end: .25rem;
 }
 
+.pf1.sheet .roll-bonuses.item-target-input .header {
+    flex: 1;
+}
+
+.pf1.sheet .roll-bonuses.item-target-input .item-target {
+    flex-wrap: wrap;
+}
+
+.pf1.sheet .roll-bonuses.item-target-input .item-target li {
+    flex: 0 0 52px;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 4px;
+    display: flex;
+    margin: 2px;
+    overflow: hidden;
+}
+
+.pf1.sheet .roll-bonuses.item-target-input .item-target img {
+    border: none;
+    width: 48px;
+    height: 48px;
+}
+
+.pf1.sheet .roll-bonuses.item-target-input .item-target span {
+    visibility: hidden;
+}
+
+.pf1.sheet .roll-bonuses.item-target-input a {
+    flex: 0;
+}
+
+.item-selector div.item-selector-row {
+    align-items: center;
+    display: flex;
+}
+
+.item-selector div.item-selector-row h4 {
+    margin: 0;
+}
+
+.item-selector div.item-selector-row *:not(:last-child) {
+    margin-inline-end: .2rem;
+}
+
+.item-selector div.item-selector-row:hover {
+    display: flex;
+    color: var(--pf1-item-hover-text);
+    text-shadow: var(--pf1-item-hover-shadow);
+    cursor: pointer;
+}
+
+.item-selector div.item-selector-row img {
+    min-height: 24px;
+    min-width: 24px;
+    max-height: 24px;
+    max-width: 24px;
+}
+
 /* override pf1 to be important because otherwise this style is overridden by more specific styles
  * if these classes are used in a place they aren't currently being used. (I moved the lock button
  * to be after the Name which already has more specifc `display: block` style)

@@ -17,28 +17,57 @@ export function showItemInput({
     key,
     parent,
 }) {
-    const currentUuids = item.getFlag(MODULE_NAME, key) || ['Actor.Bw8oKHwi7mmTG4PD.Item.WNthPLMILePesCjj'];
-    const items = item.actor.items.filter(filter);
-    // todo show items that don't exist here.
+    /** @type {string[]} */
+    const currentUuids = item.getFlag(MODULE_NAME, key) || [
+        "Actor.Bw8oKHwi7mmTG4PD.Item.Dxdouxl0hLPCc57t",
+        "Actor.Bw8oKHwi7mmTG4PD.Item.bTItuyekSVOmBh8S",
+        "Actor.Bw8oKHwi7mmTG4PD.Item.oyq7cJD1QGh8YwaA",
+        "Actor.Bw8oKHwi7mmTG4PD.Item.aKlryTgToNLtNVmb",
+        "Actor.Bw8oKHwi7mmTG4PD.Item.cFBG5m5R4U62kItC",
+        "Actor.Bw8oKHwi7mmTG4PD.Item.oUCPgCjpNACGPoYQ",
+        "Actor.Bw8oKHwi7mmTG4PD.Item.sOqHp8vp0r9hSGnp",
+        "Actor.Bw8oKHwi7mmTG4PD.Item.7hAXCo6sYfpIqeli",
+        "Actor.Bw8oKHwi7mmTG4PD.Item.jYjQKhj6M0oVs94k",
+        "Actor.Bw8oKHwi7mmTG4PD.Item.cWa9gqvSf3YQd1Wm",
+        "Actor.Bw8oKHwi7mmTG4PD.Item.IjawwzL0DGCEMVZB",
+        "Actor.Bw8oKHwi7mmTG4PD.Item.uGJgXIdG0wBT1ypq",
+        "Actor.Bw8oKHwi7mmTG4PD.Item.MkFh6WG8EpmA6DrV",
+        "Actor.Bw8oKHwi7mmTG4PD.Item.51ABKUiTUrq0peH8",
+        "Actor.Bw8oKHwi7mmTG4PD.Item.Nu1EZCwXHxshp7pz",
+        "Actor.Bw8oKHwi7mmTG4PD.Item.TilRpzOyXvySFbVg",
+        "Actor.Bw8oKHwi7mmTG4PD.Item.bDyIl5M77UtHv5TI",
+        "Actor.Bw8oKHwi7mmTG4PD.Item.tBxDVRH0Rf6pPbWa",
+        "Actor.Bw8oKHwi7mmTG4PD.Item.fSYkPCinFcTdC787",
+        "Actor.Bw8oKHwi7mmTG4PD.Item.QnoaCaYina4ki2RX",
+        "Actor.Bw8oKHwi7mmTG4PD.Item.K46OgK18g95PjcVm",
+        "Actor.Bw8oKHwi7mmTG4PD.Item.Mkxb8NGhYoHQzUnN"
+    ];
+    const items = item.actor.items
+        .filter(filter)
+        .map(({ uuid, id, name, img }) => ({ uuid, id, name, img }));
+    const current = item.actor.items.filter((i) => currentUuids.includes(i.uuid));
+
+    const allItemUuids = items.map((i) => i.uuid);
+    const badCurrentUuids = currentUuids.filter((c) => !allItemUuids.includes(c));
+    const badCurrent = badCurrentUuids.map(fromUuidSync);
 
     const templateData = {
         label: localize('PF1.Items'),
-        currentUuids,
+        current,
+        badCurrent,
     };
     const div = createTemplate(templates.items, templateData);
 
-    // todo update selector after UI is updated
-    div.querySelectorAll('li').forEach((element) => {
+    div.querySelectorAll('li,a').forEach((element) => {
         element.addEventListener('click', (event) => {
             event.preventDefault();
-
             const options = {
                 currentUuids,
                 item,
                 items,
                 key,
                 parent,
-            }
+            };
             new ItemSelector(options).render(true);
         });
     });
@@ -61,15 +90,9 @@ class ItemSelector extends FormApplication {
 
     /**
      * @override
-     * @param {object} args
-     * @param {Partial<ItemPF>[]} args.items
-     * @param {ItemPF[]} args.item
-     * @param {HTMLElement[]} args.parent
-     * @param {string[]} args.currentUuids
-     * @param {string} args.key
      * @returns
      */
-    getData(args) {
+    getData() {
         const data = super.getData();
 
         const templateData = { ...data.object };
@@ -77,34 +100,19 @@ class ItemSelector extends FormApplication {
         // todo filter item types
         // Attack, Inventory, Buffs, Spells
 
+        templateData.items.forEach((item) => {
+            item.checked = templateData.currentUuids.includes(item.uuid);
+        });
+
         return templateData;
     }
 
     /** @override */
-    activateListeners(html) {
-        super.activateListeners(html);
-        // // Handle swapping out the icon on-change
-        // html.find('li input:nth-of-type(2)').change(configIconUpdate)
-        // // Handle swapping out the hover text on-change
-        // html.find('li input:nth-of-type(1)').change(configTextUpdate)
-        // // Handle deleting the row
-        // html.find('li a .fa-trash').click(ev => ev.target.parentElement.parentElement.remove())
-        // // Handle resetting the window
-        // html.find('#reset-actions').click(() => this.render(true)) // Only kinda partially working
-        // html.find('.add-row').click(ev => {
-        //     let currentcount = html[0].querySelectorAll(".action").length
-        //     let new_row = $(`<li class="action form-group"><i class="fa-solid fa-question"></i><input name="choices.${currentcount}.label" class="label-text" type="text"/><input name="choices.${currentcount}.icon" class="icon-text" type="text"/><a><i class="fa-solid fa-trash" data-tooltip="Delete"></i></a></li>`)
-        //     new_row.insertBefore(ev.currentTarget)
-        //     new_row.find('.icon-text').change(configIconUpdate)
-        //     html.find('.label-text').change(configTextUpdate)
-        //     new_row.find('a .fa-trash').click(ev => ev.target.parentElement.parentElement.remove())
-        // })
-    }
-
-    /** @override */
     async _updateObject(event, formData) {
-        // game.settings.set('ooct','choices',
-        //     Object.values(expandObject(formData)?.choices ?? {0:{'label':'Undecided', 'icon': 'fa-question'}}).filter(c => c.icon&&c.label)
-        // )
+        const checked = [...event.currentTarget.querySelectorAll('input')]
+            .filter((node) => node.checked)
+            .map((node) => node.dataset.itemId);
+        const { item, key } = this.getData();
+        await item.setFlag(MODULE_NAME, key, checked);
     }
 }
