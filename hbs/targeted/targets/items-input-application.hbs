@@ -1,14 +1,9 @@
 <form class="item-selector">
-   <!-- <ul>
-        {{#each items}}
-        <li>{{name}} ({{type}})</li>
-        {{/each}}
-    </ul> -->
         {{#each items}}
         <div style="display: flex;">
         <input type="checkbox" id="{{../item.id}}_{{this.id}}" data-item-id="{{this.uuid}}" {{#if this.checked}}checked{{/if}}>
         <label for="{{../item.id}}_{{this.id}}">
-        <div class="item-selector-row" data-index="{{@index}}" data-item-id="{{this.uuid}}" data-tooltip="{{this.name}}">
+        <div class="item-selector-row" data-index="{{@index}}" data-item-id="{{this.uuid}}" data-tooltip="{{this.name}}<br>{{this.typeLabel}}">
             <img src="{{this.img}}">
             <h4>{{this.name}}</h4>
         </div>

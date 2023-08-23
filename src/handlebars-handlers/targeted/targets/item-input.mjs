@@ -44,7 +44,10 @@ export function showItemInput({
     ];
     const items = item.actor.items
         .filter(filter)
-        .map(({ uuid, id, name, img }) => ({ uuid, id, name, img }));
+        .map(({ uuid, id, name, img, type }) => {
+            const typeLabel = localize(CONFIG.Item.typeLabels[type]);
+            return { uuid, id, name, img, type, typeLabel };
+        });
     const current = item.actor.items.filter((i) => currentUuids.includes(i.uuid));
 
     const allItemUuids = items.map((i) => i.uuid);
@@ -97,12 +100,16 @@ class ItemSelector extends FormApplication {
 
         const templateData = { ...data.object };
 
-        // todo filter item types
-        // Attack, Inventory, Buffs, Spells
-
         templateData.items.forEach((item) => {
             item.checked = templateData.currentUuids.includes(item.uuid);
         });
+
+        templateData.items.sort((a, b) => {
+            const first = a.type.localeCompare(b.type);
+            return first
+                ? first
+                : a.name.localeCompare(b.name);
+        })
 
         return templateData;
     }
