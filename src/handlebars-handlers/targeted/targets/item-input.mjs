@@ -1,5 +1,6 @@
 import { MODULE_NAME } from "../../../consts.mjs";
 import { localize } from "../../../util/localize.mjs";
+import { truthiness } from "../../../util/truthiness.mjs";
 import { addNodeToRollBonus } from "../../roll-bonus-on-actor-sheet.mjs";
 import { createTemplate, templates } from "../../templates.mjs";
 
@@ -43,37 +44,37 @@ export function showItemInput({
             event.preventDefault();
             const options = {
                 currentUuids,
-                item,
                 items,
-                key,
+                path: `flags.${MODULE_NAME}.${key}`,
             };
-            new ItemSelector(options).render(true);
+            new ItemSelector(item, options).render(true);
         });
     });
 
     addNodeToRollBonus(parent, div);
 }
 
-class ItemSelector extends FormApplication {
+/** @extends {DocumentSheet<ItemSelectorOptions, ItemPF>} */
+class ItemSelector extends DocumentSheet {
     /** @override */
     static get defaultOptions() {
         const options = super.defaultOptions;
 
         options.height = 'auto';
         options.template = templates.itemsApp;
-        options.title = 'Item Selector'; // todo
+        options.title = 'Item Selector'; // todo localize
 
         return options;
     }
 
-    /**
-     * @override
-     * @returns
-     */
+    /** @override */
     getData() {
-        const data = super.getData();
-
-        const templateData = { ...data.object };
+        const templateData = {
+            currentUuids: this.options.currentUuids,
+            item: this.object,
+            items: this.options.items,
+            path: this.options.path,
+        };
 
         templateData.items.forEach((item) => {
             item.checked = templateData.currentUuids.includes(item.uuid);
@@ -84,17 +85,22 @@ class ItemSelector extends FormApplication {
             return first
                 ? first
                 : a.name.localeCompare(b.name);
-        })
+        });
 
         return templateData;
     }
 
     /** @override */
-    async _updateObject(event, formData) {
-        const checked = [...event.currentTarget.querySelectorAll('input')]
-            .filter((node) => node.checked)
-            .map((node) => node.dataset.uuid);
-        const { item, key } = this.getData();
-        await item.setFlag(MODULE_NAME, key, checked);
+    _getSubmitData(updateData) {
+        const path = this.options.path;
+
+        const formData = super._getSubmitData(updateData);
+        formData[path] = Array.isArray(formData[path])
+            ? formData[path]
+            : [formData[path]];
+        formData[path] = formData[path].filter(truthiness);
+
+        const submitData = foundry.utils.expandObject(formData);
+        return submitData;
     }
 }
