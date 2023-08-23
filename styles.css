@@ -60,27 +60,36 @@
     flex: 0;
 }
 
+.roll-bonuses.item-selector .items-container {
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
 .roll-bonuses.item-selector div.item-selector-row {
     align-items: center;
     display: flex;
 }
 
-.roll-bonuses.item-selector div.item-selector-row h4 {
-    margin: 0;
-}
-
-.roll-bonuses.item-selector div.item-selector-row *:not(:last-child) {
-    margin-inline-end: .2rem;
-}
-
 .roll-bonuses.item-selector div.item-selector-row:hover {
-    display: flex;
     color: var(--pf1-item-hover-text);
     text-shadow: var(--pf1-item-hover-shadow);
     cursor: pointer;
 }
 
-.roll-bonuses.item-selector div.item-selector-row img {
+.roll-bonuses.item-selector div.item-selector-contents {
+    align-items: center;
+    display: flex;
+}
+
+.roll-bonuses.item-selector div.item-selector-contents h4 {
+    margin: 0;
+}
+
+.roll-bonuses.item-selector div.item-selector-contents *:not(:last-child) {
+    margin-inline-end: .2rem;
+}
+
+.roll-bonuses.item-selector div.item-selector-contents img {
     min-height: 24px;
     min-width: 24px;
     max-height: 24px;

@@ -1,23 +1,26 @@
 <form class="roll-bonuses item-selector">
+    <div class="items-container">
         {{#each items}}
-        <div style="display: flex;">
+        <div
+            class="item-selector-row" style="display: flex;"
+            data-tooltip="{{this.name}}<br>{{this.typeLabel}}"
+        >
             <input
                 type="checkbox"
                 name="{{../path}}"
                 {{#if this.checked}}checked{{/if}}
                 value="{{this.uuid}}"
+                id="{{../item.id}}_{{this.id}}"
             >
             <label for="{{../item.id}}_{{this.id}}">
-                <div
-                    class="item-selector-row"
-                    data-tooltip="{{this.name}}<br>{{this.typeLabel}}"
-                >
+                <div class="item-selector-contents">
                     <img src="{{this.img}}">
                     <h4>{{this.name}}</h4>
                 </div>
             </label>
         </div>
         {{/each}}
+    </div>
     <div class="form-group">
         <button id="reset-actions">
             <i class="fas fa-rotate-left"></i> TODO CANCEL
