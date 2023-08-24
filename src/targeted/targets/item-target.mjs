@@ -5,7 +5,11 @@ import { BaseTarget } from "./base-target.mjs";
 export class ItemTarget extends BaseTarget {
 
     /**
-     * @inheritdoc
+     * @returns {(item: ItemPF) => boolean}
+     */
+    static get itemFilter() { return (/** @type {ItemPF} */ item) => item.hasAction; }
+
+    /**
      * @override
      */
     static get type() { return 'item'; }
@@ -34,8 +38,6 @@ export class ItemTarget extends BaseTarget {
         return bonusSources;
     }
 
-    // todo show warning if any chosen items don't exist or belong to another actor
-
     /**
      * @override
      * @param {object} options
@@ -46,9 +48,10 @@ export class ItemTarget extends BaseTarget {
     static showInputOnItemSheet({ actor, item, html }) {
         showItemInput({
             item,
-            filter: (/** @type {ItemPF} */ item) => item.hasAction,
+            filter: this.itemFilter,
             key: this.key,
             parent: html,
+            label: this.label,
         });
     }
 }

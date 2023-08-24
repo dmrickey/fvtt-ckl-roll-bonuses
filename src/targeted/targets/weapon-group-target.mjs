@@ -19,13 +19,6 @@ export class WeaponGroupTarget extends BaseTarget {
     /**
      * @inheritdoc
      * @override
-     * @returns { string }
-     */
-    static get label() { return localize('PF1.WeaponGroups'); }
-
-    /**
-     * @inheritdoc
-     * @override
      * @param {ItemPF | ActionUse | ItemAction} doc
      * @returns {ItemPF[]}
      */

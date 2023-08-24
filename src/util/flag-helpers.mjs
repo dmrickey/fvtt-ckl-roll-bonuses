@@ -146,7 +146,7 @@ export class KeyedDFlagHelper {
     /** @type {ItemPF[]} */
     #items = [];
 
-    // todo - maybe 0.83.0 after user is warned when there's a tag collision I can read the dFlags off of the passed in actor
+    // todo - maybe after pf1 v10 after user is warned when there's a tag collision I can read the dFlags off of the passed in actor
     /**
      * @param {ItemDictionaryFlags | ActorPF | undefined | null} dFlags
      * @param {...string} flags

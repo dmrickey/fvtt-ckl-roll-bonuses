@@ -15,7 +15,7 @@ export class BaseTarget {
      * Label for this bonustarget
      * @returns { string }
      */
-    static get label() { return localize(this.type); }
+    static get label() { return localize(`bonus.target.label.${this.type}`); }
 
     /**
      * @abstract

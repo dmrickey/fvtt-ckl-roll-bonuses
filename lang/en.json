@@ -7,6 +7,15 @@
         "bonus": {
             "attack": {
                 "label": "Attack Bonus"
+            },
+            "target": {
+                "label": {
+                    "item": "Item Targets",
+                    "spell": "Spell Targets",
+                    "weapon": "Weapon and Attack Targets",
+                    "weapon-group": "Weapon Group Targets",
+                    "weapon-type": "Weapon Type Targets"
+                }
             }
         },
         "cl-mod": "{mod} CL",
@@ -24,6 +33,9 @@
         "greater-weapon-focus": "Greater Weapon Focus",
         "greater-weapon-specialization": "Greater Weapon Specialization",
         "improved-armor-focus": "Improved Armor Focus",
+        "item-app": {
+            "title": "Item Selector"
+        },
         "keen": "Keen",
         "martial-focus": "Martial Focus",
         "modifiers": "Modifiers",
@@ -54,7 +66,6 @@
         },
         "weapon-focus": "Weapon Focus",
         "weapon-specialization": "Weapon Specialization",
-        "weapon-type": "Weapon Type",
         "settings": {
             "armor-focus": {
                 "name": "Armor Focus",

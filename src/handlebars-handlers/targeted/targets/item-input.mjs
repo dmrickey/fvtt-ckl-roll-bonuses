@@ -10,12 +10,14 @@ import { createTemplate, templates } from "../../templates.mjs";
  * @param {ItemPF} args.item,
  * @param {(item: ItemPF) => boolean} args.filter,
  * @param {string} args.key,
+ * @param {string} args.label,
  * @param {HTMLElement} args.parent
  */
 export function showItemInput({
     item,
     filter,
     key,
+    label,
     parent,
 }) {
     /** @type {string[]} */
@@ -33,7 +35,7 @@ export function showItemInput({
     const badCurrent = badCurrentUuids.map(fromUuidSync);
 
     const templateData = {
-        label: localize('PF1.Items'),
+        label,
         current,
         badCurrent,
     };
@@ -62,13 +64,13 @@ class ItemSelector extends DocumentSheet {
 
         options.height = 'auto';
         options.template = templates.itemsApp;
-        options.title = 'Item Selector'; // todo localize
+        options.title = localize('item-app.title');
 
         return options;
     }
 
     /** @override */
-    getData() {
+    async getData() {
         const templateData = {
             currentUuids: this.options.currentUuids,
             item: this.object,
