@@ -8,6 +8,15 @@ Supports PF1 v9+
 
 - [Class Features](#class-features)
   - [Versatile Performance](#versatile-performance)
+- [Generic Targets](#generic-targets)
+  - [Item Target](#item-target)
+  - [Spell Target](#spell-target)
+  - [Weapon Group Target](#weapon-group-target)
+  - [Weapon Target](#weapon-target)
+  - [Weapon Type Target](#weapon-type-target)
+- [Generic Bonuses](#generic-bonuses)
+  - [Attack Bonus](#attack-bonus)
+  - [Damage Bonus](#damage-bonus)
 - [Feats](#feats)
   - [Armor Focus](#armor-focus)
   - [Elemental Focus](#elemental-focus)
@@ -49,6 +58,37 @@ Choose your perform. Choose the two skills it replaces. Whenever you roll those 
 ![image](https://github.com/dmrickey/fvtt-ckl-roll-bonuses/assets/3664822/3e1b7e9f-8a59-4c35-8219-12478445d598)
 
 </details>
+
+---
+
+# Generic Targets
+I've come up with a system for pairing bonuses (see [Generic Bonuses](#generic-bonuses)) with different targets. There are various categories of targets. You can combine multiple targets, then each buff will apply to all of those targets. E.g. you can combine "Weapon Group - Hammers" but also include "Weapon - _My Custom Sword +1_"  and then you'd get the chosen bonus for all hammers and your custom sword. You could even add in "Weapon Type - Dagger" to target all your daggers. And maybe even "Spell - Fireball" 
+
+## Item Target
+An "Item" within Foundry basically means anything that you can drag onto your character sheet. So as far as Foundry is concerned, an Item can your class, spell, feat, trait, buff, attack, weapon, inventory item, etc. This target will let you choose any of those items that are configured to have an action (because only actions are rolled and can have roll bonuses). To configure add a boolean flag `target_item` and the input will show up below.
+
+## Spell Target
+Exactly like [Item Target](#item-target) but filtered to show only Spells. Use with boolean flag `target_spell`.
+
+## Weapon Group Target
+This allows you to target specific Weapon Groups. All weapon groups are available to choose from, plus any custom weapon groups defined on anything in your inventory. Use with boolean flag `target_weapon-group`
+
+## Weapon Target
+Exactly like [Item Target](#item-target) but filtered to show only Attacks and Weapons. Use with boolean flag `target_weapon`.
+
+## Weapon Type Target
+This allows you to target specific Weapon Types. When choosing a type, it looks through all Attacks/Weapons in your inventory and presents those choices to you. The Attacks/Weapons must have their `Equipment Base Types` filled out (this is new in PF1 v9). Use with boolean flag `target_weapon-type`
+
+---
+
+# Generic Bonuses
+Paired with targets above (see [Generic Targets](#generic-targets)), will grant your chosen targets the specified bonuses.
+
+## Attack Bonus
+Give a flat value or a formula to increase the target's attack roll. Use with boolean flag `bonus_attack`.
+
+## Damage Bonus
+Input multiple damage formula (including types) to increase the target's damage. Use with boolean flag `bonus_damage`.
 
 ---
  

@@ -3,14 +3,11 @@
 - [UI](#ui)
   - [Add In-Game Documentation](#add-in-game-documentation)
 - [Class Features](#class-features)
-  - [Gunslinger](#gunslinger)
-  - [Fighter](#fighter)
   - [Ranger](#ranger)
 - [Feats](#feats)
   - [Improved Critical](#improved-critical)
   - [Spirited Charge](#spirited-charge)
   - [Weapon Focus](#weapon-focus)
-  - [Weapon Focus (Elephant in the Room)](#weapon-focus-elephant-in-the-room)
 - [Racial Features](#racial-features)
   - [Air Affinity](#air-affinity)
 - [Skills](#skills)
@@ -23,6 +20,8 @@
   - [Targeting](#targeting)
 - [Housekeeping](#housekeeping)
 - [Checklist for new (and existing features)](#checklist-for-new-and-existing-features)
+- [Deprecated](#deprecated)
+- [Move to Bonus/Target](#move-to-bonustarget)
 
 # UI
 ## Add In-Game Documentation
@@ -32,14 +31,6 @@
 - Always show roll bonuses header in the advanced tab, and add a Cog to itself to configure which bonuses should be on this item (useful for bonuses that can't be auto-detected base on the Feat name/id)
 
 # Class Features 
-## Gunslinger
-- Gun Training
-  - Look for weapons within the "firearms" weapon group, then look for weapon types like Weapon Focus does.
-  - Figure out if I want one input for mulitple choices - or multiple inputs with one choice each - Maybe use a trait selector for input given the choices
-## Fighter
-- Weapon Training
-  - Choose a weapons group for each stage
-  - Figure out if I want one input for mulitple choices - or multiple inputs with one choice each - Maybe use a trait selector for input given the choices
 ## Ranger
 - Favored Enemy
   - Add a button to chat cards to modify ranger damage for favored enemy 
@@ -54,8 +45,6 @@
 - Double Damage without critting
 ## Weapon Focus 
 - Add warning if no base equipment types detected
-## Weapon Focus (Elephant in the Room)
-- Works off of a weapon group toggle and gives bonuses to all of the weapons in the group
 
 # Racial Features
 ## Air Affinity
@@ -71,10 +60,6 @@
 # Misc
 ## Attacks
 - Add damage to specific Item/Attack
-  - target specific weapon/attack
-  - basically configured like fortune
-  - saves a list of formula paired with damage types
-    - see pf1's action.hbs usages of `damage-type-visual` to see how it's currently doing damage input
   - normal/non-crit/only crit options
 - *** Do something similar for ammo, but make them automatically add damage ***
 - Add Bane button on chat card to modify the current chat card to add +2 attack and +2d6 damage
@@ -104,3 +89,18 @@
 - Has hint on affected Item (Weapon/Attack/Spell/etc)
 - Has info/attack note
 - Actually affects what it's supposed to (duh)
+
+# Deprecated
+- Weapon Focus (use bonus targets instead)
+- Martial Focus (use bonus targets instead)
+- Weapon Specialization (use bonus targets instead)
+
+# Move to Bonus/Target
+- Spell School target*
+- Damage Type target*
+- Subschool Target*
+- Spell Type Target*
+- CL Bonus*
+- DC Bonus*
+- *Would deprecate everything under "spells"
+- Move Crit to Bonus (would deprecate crit)
