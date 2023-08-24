@@ -5,7 +5,7 @@ export type DocumentDataType<T extends Document<any, any>> = T extends Document<
 /**
  * The abstract base class shared by both client and server-side which defines the model for a single document type.
  */
-declare abstract class Document<
+export declare abstract class Document<
     ConcreteDocumentData extends AnyDocumentData,
     Parent extends Document<any, any> | null = null,
     ConcreteMetadata extends Metadata<any> = Metadata<any>
