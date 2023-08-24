@@ -1,6 +1,6 @@
 import { BaseBonus } from "./base-bonus.mjs";
-import { DamageBonus } from "./damage.mjs";
-import { AttackBonus } from "./attack.mjs";
+import { DamageBonus } from "./damage-bonus.mjs";
+import { AttackBonus } from "./attack-bonus.mjs";
 
 /**
  * @type {typeof BaseBonus[]}
