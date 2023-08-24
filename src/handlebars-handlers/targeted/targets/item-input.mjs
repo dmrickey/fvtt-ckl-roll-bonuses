@@ -1,6 +1,7 @@
 import { MODULE_NAME } from "../../../consts.mjs";
 import { localize } from "../../../util/localize.mjs";
 import { truthiness } from "../../../util/truthiness.mjs";
+import { uniqueArray } from "../../../util/unique-array.mjs";
 import { addNodeToRollBonus } from "../../roll-bonus-on-actor-sheet.mjs";
 import { createTemplate, templates } from "../../templates.mjs";
 
@@ -71,23 +72,34 @@ class ItemSelector extends DocumentSheet {
 
     /** @override */
     async getData() {
+        /** @type {{currentUuids: string[], item: ItemPF, path: string, groupedItems: {[key: string]: ItemPF[]}}} */
         const templateData = {
             currentUuids: this.options.currentUuids,
             item: this.object,
-            items: this.options.items,
             path: this.options.path,
+            groupedItems: {},
         };
 
-        templateData.items.forEach((item) => {
+        const items = this.options.items;
+        items.forEach((item) => {
             item.checked = templateData.currentUuids.includes(item.uuid);
         });
 
-        templateData.items.sort((a, b) => {
+        items.sort((a, b) => {
             const first = a.type.localeCompare(b.type);
             return first
                 ? first
                 : a.name.localeCompare(b.name);
         });
+
+        const labels = uniqueArray(items.map(({ typeLabel }) => typeLabel));
+        if (labels.length <= 0) {
+            templateData.groupedItems = { '': items };
+        }
+        else {
+            templateData.groupedItems = labels
+                .reduce((acc, curr) => ({ ...acc, [curr]: items.filter(({ typeLabel }) => curr === typeLabel) }), {});
+        }
 
         return templateData;
     }
@@ -96,6 +108,8 @@ class ItemSelector extends DocumentSheet {
     _getSubmitData(updateData) {
         const path = this.options.path;
 
+        // /** @type {{[key: string]: Nullable<string> | Nullable<string>[]}} */
+        // /** @type {Record<string, string | string[]>} */
         const formData = super._getSubmitData(updateData);
         formData[path] = Array.isArray(formData[path])
             ? formData[path]
