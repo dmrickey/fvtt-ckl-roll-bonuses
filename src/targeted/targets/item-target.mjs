@@ -1,5 +1,6 @@
 import { MODULE_NAME } from "../../consts.mjs";
 import { showItemInput } from "../../handlebars-handlers/targeted/targets/item-input.mjs";
+import { truthiness } from "../../util/truthiness.mjs";
 import { BaseTarget } from "./base-target.mjs";
 
 export class ItemTarget extends BaseTarget {
@@ -13,6 +14,17 @@ export class ItemTarget extends BaseTarget {
      * @override
      */
     static get type() { return 'item'; }
+
+    /**
+     * @override
+     * @param {ItemPF} source
+     * @returns {Nullable<string[]>}
+     */
+    static getHints(source) {
+        /** @type {string[]} */
+        const flaggedItems = source.getFlag(MODULE_NAME, this.key) ?? [];
+        return flaggedItems.map((flagged) => fromUuidSync(flagged)?.name).filter(truthiness);
+    }
 
     /**
      * @override

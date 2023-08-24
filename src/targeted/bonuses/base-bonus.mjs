@@ -40,13 +40,13 @@ export class BaseBonus {
     static showInputOnItemSheet({ actor, item, html }) { throw new Error("must be overridden."); }
 
     /**
-     * Register Item Hint on item receiving bonus
+     * Get Item Hints tooltip value
      *
      * @abstract
      * @param {ItemPF} bonus
-     * @returns {Nullable<string>}
+     * @returns {Nullable<string[]>}
      */
-    static registerHint(bonus) { return; }
+    static getHints(bonus) { return; }
 
     /**
      * Gets Conditional used for the action

@@ -17,6 +17,17 @@ export class WeaponGroupTarget extends BaseTarget {
     static get type() { return 'weapon-group'; }
 
     /**
+     * @override
+     * @param {ItemPF} source
+     * @returns {Nullable<string[]>}
+     */
+    static getHints(source) {
+        /** @type {string[]} */
+        const groups = source.getFlag(MODULE_NAME, this.key) ?? [];
+        return groups.map((group) => pf1.config.weaponGroups[group] || group).filter(truthiness);
+    }
+
+    /**
      * @inheritdoc
      * @override
      * @param {ItemPF | ActionUse | ItemAction} doc

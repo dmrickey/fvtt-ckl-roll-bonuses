@@ -42,24 +42,35 @@ export class DamageBonus extends BaseBonus {
     /**
      * @override
      * @param {ItemPF} source
-     * @returns {Nullable<string>}
+     * @returns {Nullable<string[]>}
      */
-    static registerHint(source) {
+    static getHints(source) {
         const damages = this.#getDamageBonuses(source);
         if (!damages.length) {
             return;
         }
 
-        const hint = damages
-            .filter((d) => !!d.formula?.trim())
-            .map((d) => `${d.formula}[${this.#damagesTypeToString(d.type)}]`)
-            .join('\n');
+        /**
+         *
+         * @param {TraitSelectorValuePlural} types
+         * @returns
+         */
+        const typeLabel = (types) => {
+            const label = this.#damagesTypeToString(types);
+            return label
+                ? `[${label}]`
+                : `[${pf1.config.damageTypes.untyped}]`;
+        }
 
-        if (!hint) {
+        const hints = damages
+            .filter((d) => !!d.formula?.trim())
+            .map((d) => `${d.formula}${typeLabel(d.type)}`);
+
+        if (!hints.length) {
             return;
         }
 
-        return hint;
+        return hints;
     }
 
     /**

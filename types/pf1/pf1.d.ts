@@ -1,3 +1,5 @@
+import Document from '../foundry/common/abstract/document.mjs';
+
 export { };
 
 declare global {

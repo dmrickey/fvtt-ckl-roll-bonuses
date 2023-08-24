@@ -27,11 +27,13 @@ export class AttackBonus extends BaseBonus {
      *
      * @override
      * @param {ItemPF} source
-     * @returns {Nullable<string>}
+     * @returns {Nullable<string[]>}
      */
-    static registerHint(source) {
-        const formula = source.getFlag(MODULE_NAME, this.key);
-        return formula?.trim();
+    static getHints(source) {
+        const formula = source.getFlag(MODULE_NAME, this.key)?.trim();
+        if (formula) {
+            return [formula];
+        }
     }
 
     /**

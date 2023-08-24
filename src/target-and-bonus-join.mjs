@@ -3,47 +3,57 @@ import { allTargetTypes } from "./targeted/targets/all-targets.mjs";
 import { conditionalCalculator } from "./util/conditional-helpers.mjs";
 import { localHooks } from "./util/hooks.mjs";
 import { registerItemHint } from "./util/item-hints.mjs";
+import { localize } from "./util/localize.mjs";
 import { truthiness } from "./util/truthiness.mjs";
 
-/**
- * Register hint on target
- */
 registerItemHint((hintcls, actor, item, _data) => {
     if (!actor || item?.actor !== actor) {
         return;
     }
 
     /** @type {Hint[]} */
-    const hints = [];
-
+    const allHints = [];
+    // register hint on bonus source
     allBonusTypes.forEach((bonus) => {
         if (bonus.isBonusSource(item)) {
-            const hint = bonus.registerHint(item);
-            if (!hint) return;
+            const hints = bonus.getHints(item);
+            if (!hints?.length) return;
 
-            hints.push(hintcls.create(bonus.label, [], { hint }));
+            allHints.push(hintcls.create(bonus.label, [], { hint: hints.join('\n') }));
         }
     });
 
+    // register hint on bonus target source
+    /** @type {string[]} */
+    const targetHints = [];
+    allTargetTypes.forEach((target) => {
+        let hints = target.getHints(item);
+        if (hints?.length) {
+            targetHints.push([target.label, ...hints].join('\n'));
+        }
+    });
+    if (targetHints.length) {
+        allHints.push(hintcls.create(localize('bonus.target.label.target'), [], { hint: targetHints.join('\n\n') }));
+    }
+
+    //register hint on targeted item
     allTargetTypes.forEach((target) => {
         const bonuses = target.getBonusSourcesForTarget(item);
         bonuses.forEach((bonusTarget) => {
-            /** @type{string[]} */
-            const allhints = [];
+            /** @type {string[]} */
+            const bonusHints = [];
             allBonusTypes.forEach((bonus) => {
-                let hint = bonus.registerHint(bonusTarget);
-                if (!hint) return;
-
-                hint = `${bonus.label}\n${hint}`;
-                allhints.push(hint);
+                let hints = bonus.getHints(bonusTarget);
+                if (!hints?.length) return;
+                bonusHints.push([bonus.label, ...hints].join('\n'));
             });
-            if (allhints.length) {
-                hints.push(hintcls.create(bonusTarget.name, [], { hint: allhints.join('\n\n') }));
+            if (bonusHints.length) {
+                allHints.push(hintcls.create(bonusTarget.name, [], { hint: bonusHints.join('\n\n') }));
             }
         });
     });
 
-    return hints;
+    return allHints;
 });
 
 /**

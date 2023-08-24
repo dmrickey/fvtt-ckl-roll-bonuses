@@ -12,6 +12,7 @@
                 "label": {
                     "item": "Item Targets",
                     "spell": "Spell Targets",
+                    "target": "Targets",
                     "weapon": "Weapon and Attack Targets",
                     "weapon-group": "Weapon Group Targets",
                     "weapon-type": "Weapon Type Targets"
