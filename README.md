@@ -92,6 +92,46 @@ Input multiple damage formula (including types) to increase the target's damage.
 
 ---
  
+# Targeted Bonus Examples
+
+## Fighter Weapon Training
+
+<details>
+  <summary>How to configure Fighter Weapon Training (click to expand)</summary>
+
+  - To the configure the feature add the boolean flags `target_weapon-group`, `bonus_attack`, and `bonus_damage`. You'll need a new feature for each tier so you can appropriately target each separate weapon group with the appropriate bonus.
+  - Damage/Attack
+    - If you don't use Advanced Weeapon Training (which keeps your attack/damage bonuses from improving) then your formula is `max(0, floor((@classes.fighter.level - 1) / 4))` for your first tier. This formula will keep improving as you level up. For your second tier you can use the same formula but subtract 1, then for your third subtract 2, etc. You can also just use plain numbers - but you'll have to update those as you level up.
+  - For your weapon group simply hit the edit button and select your group
+
+</details>
+
+## Gunslinginer Gun Training
+
+<details>
+  <summary>How to configure Gunslinginer Gun Training (click to expand)</summary>
+
+  - To the configure the feature add the boolean flags `target_weapon-type`, and `bonus_damage`. Unlike fighter weapon training, because the bonus is the same, you can use a single feature for this.
+  - Damage formula is `@abilities.dex.mod`
+  - For your Weapon Type simply hit the edit button and select your type -- you will have to have an Attack/Weapon on your actor with the appropriate `Equipment Base Types` filled out (this is new in PF1 v9).
+
+</details>
+
+## Magus Arcane Weapon Enhcancement
+
+<details>
+  <summary>How to configure Magus Arcane Weapon Enhcancement (click to expand)</summary>
+
+  - Create a buff with the boolean flags `target_weapon`, plus `bonus_attack`/`bonus_damage` (one or both as appropriate).
+    - Be sure to set the buff to appropriately time out after 1 minute.
+  - Input any number of damage formulas (for Flaming, Frost, Shock, etc). Or a static number if you're increasing your enhancement bonus (the bonus will not specifically be typed as enhancement though)
+  - For your weapon, hit the edit button and select your specific weapon from the list.
+  - If you often use different weapon abilities, then I suggest configuring multiple buffs and just enabling the correct one instead of reconfiguring a single buff every time you use it.
+
+</details>
+
+---
+ 
 # Feats
 
 ## Armor Focus 
