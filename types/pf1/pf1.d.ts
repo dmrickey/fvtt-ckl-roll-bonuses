@@ -105,6 +105,10 @@ declare global {
     }
 
     type FlagValue = string | number;
+    interface DamagePart {
+        formula: string;
+        type: TraitSelectorValuePlural;
+    }
 
     class ItemAction {
         id: string;
@@ -119,10 +123,7 @@ declare global {
             };
             actionType: ActionType;
             damage: {
-                parts: {
-                    formula: string;
-                    type: { custom: string; values: string[] };
-                }[];
+                parts: DamagePart[];
             };
         };
         item: ItemPF;

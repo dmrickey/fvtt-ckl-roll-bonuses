@@ -22,6 +22,11 @@
         "cl-mod": "{mod} CL",
         "cl-label-mod": "{mod} CL ({label})",
         "crit-offset": "Crit Modifier ({mod})",
+        "crit-damage-label": {
+            "crit": " (Crit Only)",
+            "nonCrit": " (Non-crit Only)",
+            "normal": ""
+        },
         "dc-mod": "{mod} DC",
         "dc-label-mod": "{mod} DC ({label})",
         "elementalFocus": "Elemental Focus",

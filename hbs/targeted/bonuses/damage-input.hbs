@@ -22,6 +22,9 @@ parts: { formula: string, type: { custom: string, values: string[]}}[],
                 value="{{formula}}"
             />
             {{> "systems/pf1/templates/internal/damage-type-visual.hbs" data=type name="{{i}}.type" damageTypes=@root.damageTypes}}
+            <select name="crit-selector" class="damage-crit">
+                {{ selectOptions ../critChoices selected=crit }}
+            </select>
             <a class="damage-control delete-damage"><i class="fas fa-trash"></i></a>
         </li>
         {{/each}}

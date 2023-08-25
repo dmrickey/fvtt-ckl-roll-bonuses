@@ -34,4 +34,6 @@ declare global {
         }[];
         path: string;
     }
+
+    declare type DamageInputModel = DamagePart & { crit: Nullable<'crit' | 'nonCrit' | 'normal'> };
 }

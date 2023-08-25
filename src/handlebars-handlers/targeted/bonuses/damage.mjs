@@ -1,23 +1,32 @@
 import { MODULE_NAME } from "../../../consts.mjs";
 import { createTemplate, templates } from "../../templates.mjs";
 import { addNodeToRollBonus } from "../../roll-bonus-on-actor-sheet.mjs";
+import { localize } from "../../../util/localize.mjs";
 
 /**
  * @param {object} args
  * @param {ItemPF} args.item
  * @param {string} args.key
  * @param {HTMLElement} args.parent
- * @param {ItemAction['data']['damage']['parts']} args.parts
  */
 export function damageInput({
     item,
     key,
     parent,
-    parts,
 }) {
+    const critChoices = {
+        crit: localize('PF1.CritDamageBonusFormula'),
+        nonCrit: localize('PF1.NonCritDamageBonusFormula'),
+        normal: localize('PF1.DamageFormula'),
+    };
+
+    /** @type {DamageInputModel[]} */
+    const parts = item.getFlag(MODULE_NAME, key) ?? [];
     const templateData = {
+        critChoices,
         damageTypes: pf1.registry.damageTypes.toObject(),
         isHealing: false,
+        item,
         parts,
     };
 
@@ -35,7 +44,7 @@ export function damageInput({
 
             /**
              *
-             * @param {{ [key: string]: object }} arg
+             * @param {DamageInputModel[]} arg
              */
             async function update(arg) {
                 await item.setFlag(MODULE_NAME, key, arg);
@@ -46,13 +55,16 @@ export function damageInput({
                 // Get initial data
                 /** @type {TraitSelectorValuePlural} */
                 const damageTypeBase = pf1.components.ItemAction.defaultDamageType;
+                /** @type {DamageInputModel} */
                 const initialData = {
                     formula: "",
                     type: damageTypeBase,
+                    crit: 'normal',
                 };
 
                 // Add data
-                return update(parts.concat([initialData]));
+                parts.push(initialData);
+                return update(parts);
             }
 
             // Remove a damage component
@@ -76,7 +88,6 @@ export function damageInput({
                 const path = `${damageIndex}.type`;
 
                 /**
-                 *
                  * @param {{ [key: string]: object }} arg
                  */
                 async function update(arg) {
@@ -107,6 +118,24 @@ export function damageInput({
                 const path = `${damageIndex}.formula`;
 
                 setProperty(parts, path, updatedFormula);
+                await item.setFlag(MODULE_NAME, key, parts);
+            }
+        });
+    });
+
+    div.querySelectorAll('.damage-crit').forEach((element) => {
+        element.addEventListener('change', async (event) => {
+            event.preventDefault();
+            // @ts-ignore - event.target is HTMLTextAreaElement
+            const /** @type {HTMLTextAreaElement} */ target = event.target;
+            const critValue = target?.value;
+
+            // Check for normal damage part
+            const damageIndex = target?.closest(".damage-part")?.dataset.damagePart;
+            if (damageIndex !== null) {
+                const path = `${damageIndex}.crit`;
+
+                setProperty(parts, path, critValue);
                 await item.setFlag(MODULE_NAME, key, parts);
             }
         });

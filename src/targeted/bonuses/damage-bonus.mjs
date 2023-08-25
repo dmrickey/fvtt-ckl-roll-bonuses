@@ -62,9 +62,16 @@ export class DamageBonus extends BaseBonus {
                 : `[${pf1.config.damageTypes.untyped}]`;
         }
 
+        /**
+         *
+         * @param {Nullable<'crit' | 'nonCrit' | 'normal'>} crit
+         * @returns string
+         */
+        const critLabel = (crit) => crit ? localize(`crit-damage-label.${crit}`) : '';
+
         const hints = damages
             .filter((d) => !!d.formula?.trim())
-            .map((d) => `${d.formula}${typeLabel(d.type)}`);
+            .map((d) => `${d.formula}${typeLabel(d.type)}${critLabel(d.crit)}`);
 
         if (!hints.length) {
             return;
@@ -126,19 +133,16 @@ export class DamageBonus extends BaseBonus {
             return;
         }
 
-        const parts = this.#getDamageBonuses(item);
-
         damageInput({
             item,
             key: this.key,
             parent: html,
-            parts,
         });
     }
 
     /**
      * @param {ItemPF} item
-     * @return {RollData['action']['damage']['parts']}
+     * @return {DamageInputModel[]}
      */
     static #getDamageBonuses(item) {
         return item.getFlag(MODULE_NAME, this.key) ?? [];
@@ -159,7 +163,7 @@ export class DamageBonus extends BaseBonus {
     }
 
     /**
-     * @param {RollData['action']['damage']['parts']} damageBonuses
+     * @param {DamageInputModel[]} damageBonuses
      * @param {string} name
      * @returns {ItemConditional}
      */
@@ -170,7 +174,7 @@ export class DamageBonus extends BaseBonus {
             name,
             modifiers: damageBonuses?.map( /** @return {ItemConditionalModifier} */(bonus) => ({
                 _id: foundry.utils.randomID(),
-                critical: 'normal',
+                critical: bonus.crit || 'normal', // normal | crit | nonCrit
                 damageType: bonus.type,
                 formula: bonus.formula,
                 subTarget: 'allDamage',
