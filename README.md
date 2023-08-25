@@ -112,6 +112,8 @@ Input multiple damage formula (including types) to increase the target's damage.
 
 </details>
 
+---
+
 ## Gunslinginer Gun Training
 
 <details>
@@ -122,6 +124,8 @@ Input multiple damage formula (including types) to increase the target's damage.
   - For your Weapon Type simply hit the edit button and select your type -- you will have to have an Attack/Weapon on your actor with the appropriate `Equipment Base Types` filled out (this is new in PF1 v9).
 
 </details>
+
+---
 
 ## Magus Arcane Weapon Enhcancement
 
@@ -134,9 +138,9 @@ Input multiple damage formula (including types) to increase the target's damage.
   - For your weapon, hit the edit button and select your specific weapon from the list.
   - If you often use different weapon abilities, then I suggest configuring multiple buffs and just enabling the correct one instead of reconfiguring a single buff every time you use it.
 
-</details>
-
 ![image](https://github.com/dmrickey/fvtt-ckl-roll-bonuses/assets/3664822/433025ee-cfbd-4b61-a1d1-76c07fb48e47)
+
+</details>
 
 ---
  
