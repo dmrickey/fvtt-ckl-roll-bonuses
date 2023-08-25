@@ -19,6 +19,7 @@
                 }
             }
         },
+        "cancel": "Cancel",
         "cl-mod": "{mod} CL",
         "cl-label-mod": "{mod} CL ({label})",
         "crit-offset": "Crit Modifier ({mod})",
