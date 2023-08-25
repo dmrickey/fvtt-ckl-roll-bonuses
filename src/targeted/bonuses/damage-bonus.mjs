@@ -57,9 +57,7 @@ export class DamageBonus extends BaseBonus {
          */
         const typeLabel = (types) => {
             const label = this.#damagesTypeToString(types);
-            return label
-                ? `[${label}]`
-                : `[${pf1.config.damageTypes.untyped}]`;
+            return `[${label}]`;
         }
 
         /**
@@ -153,6 +151,10 @@ export class DamageBonus extends BaseBonus {
      * @returns {string}
      */
     static #damagesTypeToString(types) {
+        if (!types.custom?.trim() && !types.values?.length) {
+            return pf1.config.damageTypes.untyped;
+        }
+
         const valueLookup = ( /** @type {keyof pf1['config']['damageTypes']} */ t) => pf1.config.damageTypes[t] || t;
         /**
          * @param {TraitSelectorValuePlural} t
