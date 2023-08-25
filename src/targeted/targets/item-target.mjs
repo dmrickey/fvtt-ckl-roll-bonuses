@@ -44,7 +44,15 @@ export class ItemTarget extends BaseTarget {
         const bonusSources = flaggedItems.filter((flagged) => {
             /** @type {string[]} */
             const targetedItemUuids = flagged.getFlag(MODULE_NAME, this.key) || [];
-            return targetedItemUuids.includes(item.uuid);
+            // todo in v10 stop here when I can lookup the parent link instead of having to look up the parent and see if this is a child
+            // return targetedItemUuids.includes(item.uuid);
+            if (targetedItemUuids.includes(item.uuid)) {
+                return true;
+            }
+
+            /** @type {ItemPF[]} */
+            const targetedItems = targetedItemUuids.map((uuid) => fromUuidSync(uuid));
+            return !!targetedItems.find((ti) => ti.system.links.children.find(({ id }) => id === item.id));
         });
 
         return bonusSources;

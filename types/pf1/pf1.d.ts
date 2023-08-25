@@ -159,6 +159,7 @@ declare global {
     }
 
     interface SystemItem {
+        links: { children: { name: string, id: string }[], charges: unknown[] };
         broken: boolean;
         flags: {
             boolean: {};
