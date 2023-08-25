@@ -74,7 +74,7 @@ Exactly like [Item Target](#item-target) but filtered to show only Spells. Use w
 This allows you to target specific Weapon Groups. All weapon groups are available to choose from, plus any custom weapon groups defined on anything in your inventory. Use with boolean flag `target_weapon-group`
 
 ## Weapon Target
-Exactly like [Item Target](#item-target) but filtered to show only Attacks and Weapons. Use with boolean flag `target_weapon`.
+Exactly like [Item Target](#item-target) but filtered to show only Attacks and Weapons. Use with boolean flag `target_weapon`. Any weapons targeted will automatically include any attacks created from that weapon.
 
 ## Weapon Type Target
 This allows you to target specific Weapon Types. When choosing a type, it looks through all Attacks/Weapons in your inventory and presents those choices to you. The Attacks/Weapons must have their `Equipment Base Types` filled out (this is new in PF1 v9). Use with boolean flag `target_weapon-type`
