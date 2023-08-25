@@ -121,7 +121,7 @@ Input multiple damage formula (including types) to increase the target's damage.
 
   - To the configure the feature add the boolean flags `target_weapon-type`, and `bonus_damage`. Unlike fighter weapon training, because the bonus is the same, you can use a single feature for this.
   - Damage formula is `@abilities.dex.mod`
-  - For your Weapon Type simply hit the edit button and select your type -- you will have to have an Attack/Weapon on your actor with the appropriate `Equipment Base Types` filled out (this is new in PF1 v9).
+  - For your Weapon Type simply hit the edit button and select your type -- you will have to have an Attack/Weapon on your actor with the appropriate `Equipment Base Types` filled out (this is new in PF1 v9). You can select multiple types for when you level up.
 
 </details>
 
