@@ -104,6 +104,8 @@ Input multiple damage formula (including types) to increase the target's damage.
     - If you don't use Advanced Weeapon Training (which keeps your attack/damage bonuses from improving) then your formula is `max(0, floor((@classes.fighter.level - 1) / 4))` for your first tier. This formula will keep improving as you level up. For your second tier you can use the same formula but subtract 1, then for your third subtract 2, etc. You can also just use plain numbers - but you'll have to update those as you level up.
   - For your weapon group simply hit the edit button and select your group
 
+![image](https://github.com/dmrickey/fvtt-ckl-roll-bonuses/assets/3664822/369e808e-ce8e-4006-a73c-5358a27784ea)
+
 </details>
 
 ## Gunslinginer Gun Training
@@ -129,6 +131,8 @@ Input multiple damage formula (including types) to increase the target's damage.
   - If you often use different weapon abilities, then I suggest configuring multiple buffs and just enabling the correct one instead of reconfiguring a single buff every time you use it.
 
 </details>
+
+![image](https://github.com/dmrickey/fvtt-ckl-roll-bonuses/assets/3664822/433025ee-cfbd-4b61-a1d1-76c07fb48e47)
 
 ---
  
