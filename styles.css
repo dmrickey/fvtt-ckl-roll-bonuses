@@ -3,11 +3,104 @@
     border: 1px solid #7a7971;
 }
 
+#ckl-roll-bonus-container .conditional.flexcolumn::marker {
+    content: '';
+}
+
+#ckl-roll-bonus-container .conditionals.form-group {
+    padding: unset;
+}
+
+#ckl-roll-bonus-container .pf1.item-action {
+    height: unset;
+}
+
+/* copied from apps.less in pf1 repo */
+.pf1.sheet .roll-bonuses .delete-damage {
+    width: 18px;
+    flex: 0 0 18px;
+    line-height: 24px;
+    text-align: right;
+    color: #7a7971;
+}
+
+.pf1.sheet .roll-bonuses .damage-type i.icon {
+    margin-inline-end: .25rem;
+}
+
+.pf1.sheet .roll-bonuses.item-target-input .header {
+    flex: 1;
+}
+
+.pf1.sheet .roll-bonuses.item-target-input .item-target {
+    flex-wrap: wrap;
+}
+
+.pf1.sheet .roll-bonuses.item-target-input .item-target li {
+    flex: 0 0 52px;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 4px;
+    display: flex;
+    margin: 2px;
+    overflow: hidden;
+}
+
+.pf1.sheet .roll-bonuses.item-target-input .item-target img {
+    border: none;
+    width: 48px;
+    height: 48px;
+}
+
+.pf1.sheet .roll-bonuses.item-target-input .item-target span {
+    visibility: hidden;
+}
+
+.pf1.sheet .roll-bonuses.item-target-input a {
+    flex: 0;
+}
+
+.roll-bonuses.item-selector .items-container {
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.roll-bonuses.item-selector div.item-selector-row {
+    align-items: center;
+    display: flex;
+}
+
+.roll-bonuses.item-selector div.item-selector-row:hover {
+    color: var(--pf1-item-hover-text);
+    text-shadow: var(--pf1-item-hover-shadow);
+    cursor: pointer;
+}
+
+.roll-bonuses.item-selector div.item-selector-contents {
+    align-items: center;
+    display: flex;
+}
+
+.roll-bonuses.item-selector div.item-selector-contents h4 {
+    margin: 0;
+}
+
+.roll-bonuses.item-selector div.item-selector-contents *:not(:last-child) {
+    margin-inline-end: .2rem;
+}
+
+.roll-bonuses.item-selector div.item-selector-contents img {
+    min-height: 24px;
+    min-width: 24px;
+    max-height: 24px;
+    max-width: 24px;
+}
+
 /* override pf1 to be important because otherwise this style is overridden by more specific styles
  * if these classes are used in a place they aren't currently being used. (I moved the lock button
  * to be after the Name which already has more specifc `display: block` style)
 
- * Honestly I'm not sure what's happening here because this shouldn't be working because this is plain css, but it breaks the bad behavior correctly
+ * Honestly I'm not sure what's happening here because this shouldn't be working because this file is plain css, but it breaks the bad behavior correctly
  */
 .pf1.sheet {
     .lockable {

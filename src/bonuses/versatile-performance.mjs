@@ -1,7 +1,7 @@
 // https://www.d20pfsrd.com/classes/core-classes/bard/#Versatile_Performance_Ex
 
 import { MODULE_NAME } from "../consts.mjs";
-import { templates } from "../handlebars-handlers/init.mjs";
+import { createTemplate, templates } from "../handlebars-handlers/templates.mjs";
 import { addNodeToRollBonus } from "../handlebars-handlers/roll-bonus-on-actor-sheet.mjs";
 import { getDocDFlags } from "../util/flag-helpers.mjs";
 import { registerItemHint } from "../util/item-hints.mjs";
@@ -108,13 +108,13 @@ Hooks.on('renderActorSheetPF', (
 });
 
 /**
- * @param {(skillId: string) => any} wrapped
+ * @param {(skillId: string, options: object) => any} wrapped
  * @param {string} skillId
- * @param {Object} _options
+ * @param {Object} options
  * @this {ActorPF}
  * @returns {ChatMessagePF|object|void} The chat message if one was created, or its data if not. `void` if the roll was cancelled.
  */
-function versatileRollSkill(wrapped, skillId, _options) {
+function versatileRollSkill(wrapped, skillId, options) {
     const vps = getDocDFlags(this, key);
 
     for (let i = 0; i < vps.length; i++) {
@@ -136,11 +136,11 @@ function versatileRollSkill(wrapped, skillId, _options) {
                 const vpTitle = localize('versatilePerformance.title', { skill: baseName });
                 doc.updateSource({ content: doc.content.replace(currentTitle, `  ${updatedTitle}<br />  ${vpTitle}`) });
             });
-            return wrapped(baseId);
+            return wrapped(baseId, options);
         }
     }
 
-    return wrapped(skillId);
+    return wrapped(skillId, options);
 }
 
 Hooks.on('renderItemSheet', (
@@ -211,8 +211,7 @@ Hooks.on('renderItemSheet', (
 
     const templateData = { base, skill1, skill2, performs, allSkills };
 
-    const div = document.createElement('div');
-    div.innerHTML = Handlebars.partials[templates.versatilePerformance](templateData, { allowProtoMethodsByDefault: true, allowProtoPropertiesByDefault: true });
+    const div = createTemplate(templates.versatilePerformance, templateData);
 
     const updateVP = async () => {
         // @ts-ignore

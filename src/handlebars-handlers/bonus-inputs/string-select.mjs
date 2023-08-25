@@ -1,5 +1,5 @@
 import { addNodeToRollBonus } from "../roll-bonus-on-actor-sheet.mjs";
-import { templates } from "../init.mjs";
+import { createTemplate, templates } from "../templates.mjs";
 
 /**
  * @param {object} args
@@ -8,7 +8,7 @@ import { templates } from "../init.mjs";
  * @param {ItemPF} args.item
  * @param {string} args.key
  * @param {string} args.label
- * @param {HTMLElement} args.parent,
+ * @param {HTMLElement} args.parent
  */
 export function stringSelect({
     current,
@@ -23,12 +23,10 @@ export function stringSelect({
         item.setItemDictionaryFlag(key, choices[0]);
     }
 
-    const template = Handlebars.partials[templates.stringSelect](
+    const div = createTemplate(
+        templates.stringSelect,
         { key, label, current, choices },
-        { allowProtoMethodsByDefault: true, allowProtoPropertiesByDefault: true }
     );
-    const div = document.createElement('div');
-    div.innerHTML = template;
     const select = div.querySelector(`#string-selector-${key}`);
     select?.addEventListener(
         'change',

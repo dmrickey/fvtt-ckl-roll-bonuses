@@ -25,5 +25,7 @@ declare global {
         length: unknown;
 
         get(id: string): T;
+
+        toObject(): { [key: string]: any };
     }
 }

@@ -142,7 +142,7 @@ Hooks.on('pf1PreActorRollSkill', (
     }
 });
 
-// todo pf1 0.83.0
+// todo pf1 v10
 // todo no way to know which actor prompted the dialog so it's impossible to do in any sane way right now
 // Hooks.on('renderApplication', (app, html, data) => {
     // if (app.options.subject?.skill === undefined) {

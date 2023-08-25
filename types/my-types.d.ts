@@ -13,9 +13,27 @@ declare global {
         name: string,
 
         /** The damage type of this modifier */
-        modifier: string,
+        modifier: BonusModifers,
 
         /** The sort priority for this modifier */
         sort: number,
     }
+
+    type Nullable<T> = T | null | undefined;
+
+    class ItemSelectorOptions extends DocumentSheetOptions<ItemPF> {
+        currentUuids: string[];
+        items: {
+            checked?: boolean,
+            uuid: string,
+            type: string,
+            name: string,
+            typeLabel: string,
+            img: string,
+            id: string,
+        }[];
+        path: string;
+    }
+
+    declare type DamageInputModel = DamagePart & { crit: Nullable<'crit' | 'nonCrit' | 'normal'> };
 }

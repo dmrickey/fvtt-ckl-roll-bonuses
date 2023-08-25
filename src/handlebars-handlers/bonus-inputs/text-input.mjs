@@ -1,34 +1,42 @@
+import { MODULE_NAME } from "../../consts.mjs";
 import { addNodeToRollBonus } from "../roll-bonus-on-actor-sheet.mjs";
-import { templates } from "../init.mjs";
+import { createTemplate, templates } from "../templates.mjs";
 
 /**
  * @param {object} args
- * @param {FlagValue} args.current
+ * @param {FlagValue} [args.current]
  * @param {ItemPF} args.item
  * @param {string} args.key
  * @param {string} args.label
  * @param {HTMLElement} args.parent,
  * @param {object} [o]
  * @param {string} [o.placeholder]
- * @param {boolean} [o.notFormula]
+ * @param {boolean} [o.isFormula]
+ * @param {boolean} [o.isFlag] - false (default) if this is a dictionary flag, true if this is a data flag
  */
 export function textInput({
-    current,
+    current = '',
     item,
     key,
     label,
     parent,
 }, {
     placeholder = '',
-    notFormula = false,
+    isFormula = true,
+    isFlag = false,
 } = {}
 ) {
-    const template = Handlebars.partials[templates.textInput](
-        { key, label, current, notFormula, placeholder },
-        { allowProtoMethodsByDefault: true, allowProtoPropertiesByDefault: true }
+    if (!current) {
+        current = isFlag
+            ? item.getFlag(MODULE_NAME, key)
+            : item.getItemDictionaryFlag(key);
+    }
+
+
+    const div = createTemplate(
+        templates.textInput,
+        { key, label, current, isFormula, placeholder },
     );
-    const div = document.createElement('div');
-    div.innerHTML = template;
     const select = div.querySelector(`#text-input-${key}`);
     select?.addEventListener(
         'change',
@@ -37,7 +45,10 @@ export function textInput({
 
             // @ts-ignore - event.target is HTMLTextAreaElement
             const /** @type {HTMLTextAreaElement} */ target = event.target;
-            await item.setItemDictionaryFlag(key, target?.value);
+
+            isFlag
+                ? await item.setFlag(MODULE_NAME, key, target?.value)
+                : await item.setItemDictionaryFlag(key, target?.value);
         },
     );
 

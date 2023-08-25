@@ -11,3 +11,5 @@ import './bonuses/weapon-focus/racial-weapon-focus.mjs';
 import './bonuses/weapon-focus/weapon-focus.mjs';
 import './bonuses/weapon-specialization/weapon-specialization.mjs';
 import './bonuses/weapon-specialization/greater-weapon-specialization.mjs'
+
+import './target-and-bonus-join.mjs';

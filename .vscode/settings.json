@@ -1,0 +1,13 @@
+{
+    "markdown.extension.toc.levels": "1..2",
+    "markdown.extension.toc.omittedFromToc": {
+        "README.md": [
+            "# Roll Bonuses",
+        ],
+    },
+    "[handlebars]": {
+        "editor.formatOnSave": false
+    },
+    "js/ts.implicitProjectConfig.checkJs": true,
+    "js/ts.implicitProjectConfig.strictNullChecks": false,
+}

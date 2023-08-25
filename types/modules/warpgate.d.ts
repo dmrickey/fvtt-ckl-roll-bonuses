@@ -4,12 +4,14 @@ declare global {
 
     interface WarpgateButton {
         label: string,
-        value: boolean,
+        value?: boolean | string,
+        default?: true,
     }
     interface WarpgateInput {
         label: string,
         type: string,
-        options: string | boolean,
+        options?: string | boolean | Array,
+        value: any,
     }
 
     class Warpgate {
@@ -21,7 +23,7 @@ declare global {
             config: {
                 title: string,
             }
-        ): Promise<{ inputs: string[], buttons: boolean }>;
+        ): Promise<{ inputs: (string | boolean)[], buttons: boolean }>;
     }
 
     let warpgate: Warpgate;

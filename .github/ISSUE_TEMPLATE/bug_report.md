@@ -7,6 +7,8 @@ assignees: dmrickey
 
 ---
 
+Please ping me on discord if you write up an issue. I will see the discord notification long before I see github notification. My discord username is `claudekennilol`.
+
 **Describe the bug**
 A clear and concise description of what the bug is.
 E.g. "When I have a fortune buff and attack with "Super Awesome Axe" it does not roll twice"

@@ -8,6 +8,19 @@ Supports PF1 v9+
 
 - [Class Features](#class-features)
   - [Versatile Performance](#versatile-performance)
+- [Generic Targets](#generic-targets)
+  - [Item Target](#item-target)
+  - [Spell Target](#spell-target)
+  - [Weapon Group Target](#weapon-group-target)
+  - [Weapon Target](#weapon-target)
+  - [Weapon Type Target](#weapon-type-target)
+- [Generic Bonuses](#generic-bonuses)
+  - [Attack Bonus](#attack-bonus)
+  - [Damage Bonus](#damage-bonus)
+- [Targeted Bonus Examples](#targeted-bonus-examples)
+  - [Fighter Weapon Training](#fighter-weapon-training)
+  - [Gunslinginer Gun Training](#gunslinginer-gun-training)
+  - [Magus Arcane Weapon Enhcancement](#magus-arcane-weapon-enhcancement)
 - [Feats](#feats)
   - [Armor Focus](#armor-focus)
   - [Elemental Focus](#elemental-focus)
@@ -47,6 +60,85 @@ Choose your perform. Choose the two skills it replaces. Whenever you roll those 
 
 ![image](https://github.com/dmrickey/fvtt-ckl-roll-bonuses/assets/3664822/d6ad8b53-6d02-45b3-88b5-504678a0d563)
 ![image](https://github.com/dmrickey/fvtt-ckl-roll-bonuses/assets/3664822/3e1b7e9f-8a59-4c35-8219-12478445d598)
+
+</details>
+
+---
+
+# Generic Targets
+I've come up with a system for pairing bonuses (see [Generic Bonuses](#generic-bonuses)) with different targets. There are various categories of targets. You can combine multiple targets, then each buff will apply to all of those targets. E.g. you can combine "Weapon Group - Hammers" but also include "Weapon - _My Custom Sword +1_"  and then you'd get the chosen bonus for all hammers and your custom sword. You could even add in "Weapon Type - Dagger" to target all your daggers. And maybe even "Spell - Fireball" 
+
+## Item Target
+An "Item" within Foundry basically means anything that you can drag onto your character sheet. So as far as Foundry is concerned, an Item can your class, spell, feat, trait, buff, attack, weapon, inventory item, etc. This target will let you choose any of those items that are configured to have an action (because only actions are rolled and can have roll bonuses). To configure add a boolean flag `target_item` and the input will show up below.
+
+## Spell Target
+Exactly like [Item Target](#item-target) but filtered to show only Spells. Use with boolean flag `target_spell`.
+
+## Weapon Group Target
+This allows you to target specific Weapon Groups. All weapon groups are available to choose from, plus any custom weapon groups defined on anything in your inventory. Use with boolean flag `target_weapon-group`
+
+## Weapon Target
+Exactly like [Item Target](#item-target) but filtered to show only Attacks and Weapons. Use with boolean flag `target_weapon`. Any weapons targeted will automatically include any attacks created from that weapon.
+
+## Weapon Type Target
+This allows you to target specific Weapon Types. When choosing a type, it looks through all Attacks/Weapons in your inventory and presents those choices to you. The Attacks/Weapons must have their `Equipment Base Types` filled out (this is new in PF1 v9). Use with boolean flag `target_weapon-type`
+
+---
+
+# Generic Bonuses
+Paired with targets above (see [Generic Targets](#generic-targets)), will grant your chosen targets the specified bonuses.
+
+## Attack Bonus
+Give a flat value or a formula to increase the target's attack roll. Use with boolean flag `bonus_attack`.
+
+## Damage Bonus
+Input multiple damage formula (including types) to increase the target's damage. Use with boolean flag `bonus_damage`.
+
+---
+ 
+# Targeted Bonus Examples
+
+## Fighter Weapon Training
+
+<details>
+  <summary>How to configure Fighter Weapon Training (click to expand)</summary>
+
+  - To the configure the feature add the boolean flags `target_weapon-group`, `bonus_attack`, and `bonus_damage`. You'll need a new feature for each tier so you can appropriately target each separate weapon group with the appropriate bonus.
+  - Damage/Attack
+    - If you don't use Advanced Weeapon Training (which keeps your attack/damage bonuses from improving) then your formula is `max(0, floor((@classes.fighter.level - 1) / 4))` for your first tier. This formula will keep improving as you level up. For your second tier you can use the same formula but subtract 1, then for your third subtract 2, etc. You can also just use plain numbers - but you'll have to update those as you level up.
+  - For your weapon group simply hit the edit button and select your group
+
+![image](https://github.com/dmrickey/fvtt-ckl-roll-bonuses/assets/3664822/369e808e-ce8e-4006-a73c-5358a27784ea)
+
+</details>
+
+---
+
+## Gunslinginer Gun Training
+
+<details>
+  <summary>How to configure Gunslinginer Gun Training (click to expand)</summary>
+
+  - To the configure the feature add the boolean flags `target_weapon-type`, and `bonus_damage`. Unlike fighter weapon training, because the bonus is the same, you can use a single feature for this.
+  - Damage formula is `@abilities.dex.mod`
+  - For your Weapon Type simply hit the edit button and select your type -- you will have to have an Attack/Weapon on your actor with the appropriate `Equipment Base Types` filled out (this is new in PF1 v9). You can select multiple types for when you level up.
+
+</details>
+
+---
+
+## Magus Arcane Weapon Enhcancement
+
+<details>
+  <summary>How to configure Magus Arcane Weapon Enhcancement (click to expand)</summary>
+
+  - Create a buff with the boolean flags `target_weapon`, plus `bonus_attack`/`bonus_damage` (one or both as appropriate).
+    - Be sure to set the buff to appropriately time out after 1 minute.
+  - Input any number of damage formulas (for Flaming, Frost, Shock, etc). Or a static number if you're increasing your enhancement bonus (the bonus will not specifically be typed as enhancement though)
+  - For your weapon, hit the edit button and select your specific weapon from the list.
+  - If you often use different weapon abilities, then I suggest configuring multiple buffs and just enabling the correct one instead of reconfiguring a single buff every time you use it.
+
+![image](https://github.com/dmrickey/fvtt-ckl-roll-bonuses/assets/3664822/433025ee-cfbd-4b61-a1d1-76c07fb48e47)
 
 </details>
 
@@ -387,9 +479,10 @@ Various bonuses to skills. You can add Inspiration, change the base die, or add 
 <details>
   <summary>How to configure spell Caster Level modifications (click to expand)</summary>
 
-  ### For All Spells
-  - Add dictionary flag `all-spell-cl` to your buff/feature/etc.
-    - Text input will appear for your formula
+  ### ~~For All Spells~~ Deprecated
+  - ~~Add dictionary flag `all-spell-cl` to your buff/feature/etc.~~
+    - ~~Text input will appear for your formula~~
+  - The system now has its own CL change target
 
   ### For Specific Element
   Useful for specific abilities such as [Gnome's Pyromaniac alternate racial trait](https://www.aonprd.com/RacesDisplay.aspx?ItemName=Gnome#:~:text=and%20illusion%20resistance.-,Pyromaniac,-Source%20Advanced%20Race).

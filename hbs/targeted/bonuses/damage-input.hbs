@@ -1,0 +1,37 @@
+{{!--
+args:
+{
+damageTypes: pf1.registry.damageTypes.toObject(),
+isHealing: boolean
+parts: { formula: string, type: { custom: string, values: string[]}}[],
+}
+--}}
+
+<div class="damage roll-bonuses">
+    <h4 class="damage-header">
+        {{#unless isHealing }}{{localize "PF1.DamageFormula"}}{{ else }}{{localize "PF1.HealingFormula"}}{{/unless}}
+    </h4>
+    <ol class="damage-parts form-group tooltip">
+        {{#each parts as |part i| }}
+        <li class="damage-part flexrow" data-damage-part="{{i}}">
+            <input
+                class="damage-formula formula"
+                type="text"
+                name="{{i}}.formula"
+                placeholder="{{#unless isHealing }}{{localize "PF1.DamageFormula"}} {{ else }}{{localize "PF1.HealingFormula" }}{{/unless}}"
+                value="{{formula}}"
+            />
+            {{> "systems/pf1/templates/internal/damage-type-visual.hbs" data=type name="{{i}}.type" damageTypes=@root.damageTypes}}
+            <select name="crit-selector" class="damage-crit">
+                {{ selectOptions ../critChoices selected=crit }}
+            </select>
+            <a class="damage-control delete-damage"><i class="fas fa-trash"></i></a>
+        </li>
+        {{/each}}
+        <li class="damage-part flexrow">
+            <a class="damage-control add-damage"><i class="fas fa-plus"></i>
+                {{#unless isHealing}}{{localize "PF1.AddDamage"}}{{else}}{{localize "PF1.AddHealing"}}{{/unless}}
+            </a>
+        </li>
+    </ol>
+</div>

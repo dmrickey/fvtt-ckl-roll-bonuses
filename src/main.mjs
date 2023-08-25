@@ -56,6 +56,19 @@ function actionUseAlterRollData(wrapped, e) {
 }
 
 /**
+ * Adds conditional to action being used
+ *
+ * @param {() => {}} wrapped
+ * @this ActionUse
+ */
+function actionUseHandleConditionals(wrapped) {
+    wrapped();
+    Hooks.call(localHooks.actionUseHandleConditionals, this);
+}
+
+/**
+ * Add attack bonus to actor's Combat attacks column tooltip
+ *
  * @param {(actionId: string) => any} wrapped
  * @param {string} actionId
  * @this {ItemPF}
@@ -67,7 +80,7 @@ function itemGetAttackSources(wrapped, actionId) {
 }
 
 /**
- *
+ * Add info to chat card
  * @param {*} wrapped
  * @param {object} data
  * @param {Object<string, string>} labels
@@ -81,6 +94,7 @@ function itemGetTypeChatData(wrapped, data, labels, props, rollData) {
 }
 
 /**
+ * Get damage sources for actor's combat tooltips
  * @param {() => any} wrapped
  * @this {ItemAction}
  */
@@ -88,11 +102,14 @@ function actionDamageSources(wrapped) {
     const sources = wrapped();
     Hooks.call(localHooks.actionDamageSources, this, sources);
     return sources;
-}
 
+    // const filtered = getHighestChanges(sources, { ignoreTarget: true });
+    // return filtered;
+}
 
 Hooks.once('setup', () => {
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype.alterRollData', actionUseAlterRollData, libWrapper.WRAPPER)
+    libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype.handleConditionals', actionUseHandleConditionals, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ChatAttack.prototype.setAttackNotesHTML', setAttackNotesHTMLWrapper, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ChatAttack.prototype.setEffectNotesHTML', setEffectNotesHTMLWrapper, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.damageSources', actionDamageSources, libWrapper.WRAPPER);

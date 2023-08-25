@@ -82,8 +82,11 @@ export function createElementalClOrDc(t) {
             return;
         }
 
+        // ts inspector is being really weird about using `rollData` inside the below map, so this fixes a non-issue
+        const data = rollData;
+
         const offset = matches
-            .map((x) => RollPF.safeTotal(x[formulaKey], rollData) || 0)
+            .map((x) => RollPF.safeTotal(x[formulaKey], data) || 0)
             .reduce((acc, cur) => acc + cur, 0);
 
         if (offset) {

@@ -8,7 +8,7 @@ import { signed } from "../../util/to-signed-string.mjs";
 const key = 'schoolClOffset';
 const formulaKey = 'schoolClOffsetFormula';
 
-// todo add Info to chat card
+// add Info to chat card
 Hooks.on(localHooks.itemGetTypeChatData, (
     /** @type {ItemPF} */ item,
     /** @type {string[]} */ props,
