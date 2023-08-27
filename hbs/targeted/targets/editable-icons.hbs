@@ -1,8 +1,8 @@
-<div class="form-group roll-bonuses item-target-input">
+<div class="form-group roll-bonuses editable-icon-input">
     <label class="header">{{label}}</label>
-    <div class="form-fields item-target">
+    <div class="form-fields">
         {{#each current}}
-        <li class="item" data-index="{{@index}}" data-item-id="{{this.id}}" data-tooltip="{{this.name}}">
+        <li data-index="{{@index}}" data-tooltip="{{this.name}}">
             <img src="{{this.img}}">
             <span class="icon-label">{{this.name}}</span>
         </li>

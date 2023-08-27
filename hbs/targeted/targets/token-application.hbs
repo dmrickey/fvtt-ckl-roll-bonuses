@@ -1,0 +1,46 @@
+{{!--
+const templateData = {
+    item: {ItemPF},
+    path: {string},
+    groupedTokens: {}[],
+};
+--}}
+
+<form class="roll-bonuses roll-bonuses-form token-selector">
+    <div class="form-body">
+        {{#each groupedTokens}}
+        <h4>{{@key}}</h4>
+        <div class="grouped-tokens">
+            {{#each this}}
+            <div
+                class="individual-token"
+                data-tooltip="{{this.name}}"
+            >
+                <input
+                    type="checkbox"
+                    name="{{../../path}}"
+                    {{#if this.checked}}checked{{/if}}
+                    value="{{this.uuid}}"
+                    id="token_{{../../item.id}}_{{this.id}}"
+                >
+                <label for="token_{{../../item.id}}_{{this.id}}">
+                    <div class="token-selector-contents">
+                        <img src="{{this.img}}">
+                        <div>{{this.name}}</div>
+                    </div>
+                </label>
+            </div>
+            {{/each}}
+        </div>
+        <br>
+        {{/each}}
+    </div>
+    <div class="control-group">
+        <button id="reset-actions">
+            <i class="fas fa-rotate-left"></i> {{localize "ckl-roll-bonuses.cancel"}}
+        </button>
+        <button type="submit">
+            <i class="fas fa-save"></i> {{localize "ckl-roll-bonuses.ok"}}
+        </button>
+    </div>
+</form>

@@ -6,6 +6,11 @@ import { registerItemHint } from "./util/item-hints.mjs";
 import { localize } from "./util/localize.mjs";
 import { truthiness } from "./util/truthiness.mjs";
 
+function initSettings() {
+    allTargetTypes.forEach((target) => target.initSettings());
+};
+initSettings();
+
 registerItemHint((hintcls, actor, item, _data) => {
     if (!actor || item?.actor !== actor) {
         return;
@@ -38,6 +43,10 @@ registerItemHint((hintcls, actor, item, _data) => {
 
     //register hint on targeted item
     allTargetTypes.forEach((target) => {
+        if (target.isGenericTarget) {
+            return;
+        }
+
         const bonuses = target.getBonusSourcesForTarget(item);
         bonuses.forEach((bonusTarget) => {
             /** @type {string[]} */
@@ -183,5 +192,31 @@ Hooks.on('renderItemSheet', (
         }
 
         target.showInputOnItemSheet({ actor, item, html });
+    });
+});
+
+Hooks.on('updateItem', (
+    /** @type {ItemPF} */ item,
+    /** @type {{ data?: { active?: boolean, disabled?: boolean} }} */ change,
+    /** @type {object} */ _options,
+    /** @type {string} */ userId,
+) => {
+    if (game.userId !== userId) {
+        return;
+    }
+
+    if (!change?.data?.active || change?.data?.disabled === true) {
+        return;
+    }
+
+    allTargetTypes.forEach((target) => {
+        if (target.showOnActive) {
+            const hasFlag = item.system.flags.boolean?.hasOwnProperty(target.key);
+            if (!hasFlag) {
+                return;
+            }
+
+            target.showTargetEditor(item);
+        }
     });
 });

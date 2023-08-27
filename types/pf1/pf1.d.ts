@@ -30,8 +30,10 @@ declare global {
          * Gets the actor's roll data.
          * @param refresh - pass true to force the roll data to recalculate
          * @returns The actor's roll data
-         */
+        */
         getRollData(args?: { refresh?: boolean }): RollData;
+
+        id: string;
 
         itemFlags: {
             /**
@@ -208,6 +210,33 @@ declare global {
         /** custom entries split by ; */
         custom: string;
         values: string[];
+    }
+
+    /** @see {CONST.TOKEN_DISPOSITIONS} */
+    type DispositionLevel =
+        | /** secret */ -2
+        | /** hostile */ -1
+        | /** neutral */ 0
+        | /** friendly */ 1;
+
+    /** @see {CONST.DOCUMENT_PERMISSION_LEVELS} */
+    type PermissionLevel =
+        | /** inherit */ -1
+        | /** none */ 0
+        | /** limited */ 1
+        | /** observer */ 2
+        | /** owner */ 3;
+
+    interface TokenPF extends ItemDocument {
+        id: string;
+        actor: ActorPF;
+        displayName: 0 | 10 | 20 | 30 | 40 | 50;
+        disposition: DispositionLevel;
+        name: string;
+        permission: PermissionLevel;
+        texture: { src: string; };
+        visible: boolean;
+
     }
 
     interface ItemPF extends ItemDocument {

@@ -11,6 +11,7 @@ Supports PF1 v9+
 - [Generic Targets](#generic-targets)
   - [Item Target](#item-target)
   - [Spell Target](#spell-target)
+  - [Token Target](#token-target)
   - [Weapon Group Target](#weapon-group-target)
   - [Weapon Target](#weapon-target)
   - [Weapon Type Target](#weapon-type-target)
@@ -21,6 +22,8 @@ Supports PF1 v9+
   - [Fighter Weapon Training](#fighter-weapon-training)
   - [Gunslinginer Gun Training](#gunslinginer-gun-training)
   - [Magus Arcane Weapon Enhcancement](#magus-arcane-weapon-enhcancement)
+  - [Paladin Smite](#paladin-smite)
+  - [Slayer's Studied Target](#slayers-studied-target)
 - [Feats](#feats)
   - [Armor Focus](#armor-focus)
   - [Elemental Focus](#elemental-focus)
@@ -73,6 +76,11 @@ An "Item" within Foundry basically means anything that you can drag onto your ch
 
 ## Spell Target
 Exactly like [Item Target](#item-target) but filtered to show only Spells. Use with boolean flag `target_spell`.
+
+## Token Target
+This makes it so any bonuses are only enabled when the specified tokens are targeted (targeted via "T" (foundry default button) with crosshairs -- not "selected" which means the token simply has a selected border). It is configured by adding the `target_token` boolean flag. This is primarily useful for buffs that have a short duration and conditional targeting -- abilities like a Paladin's Smite, Cavalier's Challenge, or a Slayer's Studied Target. After setting the target, whenever an ability is used while the token is targeted, then it will be rolled with the specified bonus.
+
+Whenever a buff (or other ability with this configured) is activated, a dialog will pop up letting you select your target from all the tokens on the map. By default, any tokens you currently have targeted will be preselected and you can verify and hit ok. There is a client setting that will skip this dialog if you already have tokens selected and it will just assume your current targets are your desired targets--while this setting is enabled, if you have no targets the dialog will still open.
 
 ## Weapon Group Target
 This allows you to target specific Weapon Groups. All weapon groups are available to choose from, plus any custom weapon groups defined on anything in your inventory. Use with boolean flag `target_weapon-group`
@@ -139,6 +147,28 @@ Input multiple damage formula (including types) to increase the target's damage.
   - If you often use different weapon abilities, then I suggest configuring multiple buffs and just enabling the correct one instead of reconfiguring a single buff every time you use it.
 
 ![image](https://github.com/dmrickey/fvtt-ckl-roll-bonuses/assets/3664822/433025ee-cfbd-4b61-a1d1-76c07fb48e47)
+
+</details>
+
+## Paladin Smite
+
+<details>
+  <summary>How to configure Paladin Smite (click to expand)</summary>
+
+  - Create a buff with the boolean flags `target_token`, `bonus_attack`, and `bonus_damage`.
+    - attack bonus: `@abilities.cha.mod`
+    - damage bonus: `@classes.paladin.level`
+    - caveat - there is currently no way to automate the "double damage on first attack" against certain foes. If that ever changes, this will be updated to reflect that.
+
+</details>
+
+## Slayer's Studied Target
+
+<details>
+  <summary>How to configure Slayer's Studied Target (click to expand)</summary>
+
+  - Create a buff with the boolean flags `target_token`, `bonus_attack`, and `bonus_damage`.
+    - attack/damage bonus: `1 + floor(@classes.slayer.level / 5)`
 
 </details>
 

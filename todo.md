@@ -13,10 +13,12 @@
 - [Skills](#skills)
   - [Int Headband](#int-headband)
 - [Misc](#misc)
+  - [Ammo](#ammo)
   - [Attacks](#attacks)
   - [Magic](#magic)
   - [Deprecation](#deprecation)
   - [Misc](#misc-1)
+  - [Bonuses](#bonuses)
   - [Targeting](#targeting)
 - [Housekeeping](#housekeeping)
 - [Checklist for new (and existing features)](#checklist-for-new-and-existing-features)
@@ -57,12 +59,16 @@
 - configure an item to give you specific ranks (0.82.5 only gives bonus ranks, not ranks to specific skills)
   - See versatile performance for ideas.
 
+Bonus Targeting
+- Have target-based targeting - would support [Ranger](#ranger)'s Favored Enemy
+- Add an option for "configure when enabled" so things like Smite or Bane can be configured on the fly
+
 # Misc
+## Ammo
+- Add configuration for attack/damage to ammo and add that to any attacks using that ammo
 ## Attacks
-- Add damage to specific Item/Attack
-  - normal/non-crit/only crit options
-- *** Do something similar for ammo, but make them automatically add damage ***
 - Add Bane button on chat card to modify the current chat card to add +2 attack and +2d6 damage
+
 ## Magic
 - specialization schools (and opposed)
 
@@ -75,9 +81,14 @@
 - consumable buffs - requires later release (waiting on issue #1946) (did not make it into v9)
   - idea is to create a a flag on a buff that will add the bonus in "prehook" (and/or use built in changes) but use the new pf1 v.next posthook to disable the buff when it is consumed
 
+## Bonuses
+- Size increase (a.k.a. Gravity Bow or Lead Blades)
+- "x per dice"
+
 ## Targeting
 - show warning if target has an inappropriate bonus
 - add ui to select targets/bonuses
+- add checkbox to toggle between union (current implementation) and intersection (item has to supply all targeting requirements)
 
 # Housekeeping
 - reduce duplication of `Greater` in so many different settings

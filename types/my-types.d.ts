@@ -24,15 +24,19 @@ declare global {
     class ItemSelectorOptions extends DocumentSheetOptions<ItemPF> {
         currentUuids: string[];
         items: {
-            checked?: boolean,
-            uuid: string,
-            type: string,
-            name: string,
-            typeLabel: string,
-            img: string,
-            id: string,
+            checked?: boolean;
+            uuid: string;
+            type: string;
+            name: string;
+            typeLabel: string;
+            img: string;
+            id: string;
         }[];
         path: string;
+    }
+
+    class TokenActorSelectorOptions extends DocumentSheetOptions<ItemPF> {
+        key: string;
     }
 
     declare type DamageInputModel = DamagePart & { crit: Nullable<'crit' | 'nonCrit' | 'normal'> };
