@@ -54,7 +54,11 @@ export class TokenTarget extends BaseTarget {
         return bonusSources;
     }
 
-    // todo show input on buff activation
+    /**
+     * @override
+     * @returns {boolean}
+     */
+    static get isGenericTarget() { return true; }
 
     /**
      * @override

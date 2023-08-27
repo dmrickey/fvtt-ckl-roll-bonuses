@@ -6,22 +6,13 @@ import { localize } from "../../util/localize.mjs";
 export class BaseTarget {
 
     /**
-     * Key for flag on bonustarget
-     * @returns { string }
-     */
-    static get key() { return `target_${this.type}`; }
-
-    /**
-     * Label for this bonustarget
-     * @returns { string }
-     */
-    static get label() { return localize(`bonus.target.label.${this.type}`); }
-
-    /**
+     * If the arg is targeted by this
+     *
      * @abstract
-     * @returns { string }
+     * @param {ItemPF | ActionUse | ItemAction} arg
+     * @returns {ItemPF[]}
      */
-    static get type() { throw new Error('must be overridden'); }
+    static getBonusSourcesForTarget(arg) { throw new Error('must be overridden'); };
 
     /**
      * Get Item Hints tooltip value
@@ -33,13 +24,24 @@ export class BaseTarget {
     static getHints(bonus) { return; }
 
     /**
-     * If the arg is targeted by this
+     * Returns true the targeting is too generic to show a hint on a specific item.
      *
      * @abstract
-     * @param {ItemPF | ActionUse | ItemAction} arg
-     * @returns {ItemPF[]}
+     * @returns {boolean}
      */
-    static getBonusSourcesForTarget(arg) { throw new Error('must be overridden'); };
+    static get isGenericTarget() { return false; }
+
+    /**
+     * Key for flag on bonustarget
+     * @returns { string }
+     */
+    static get key() { return `target_${this.type}`; }
+
+    /**
+     * Label for this bonustarget
+     * @returns { string }
+     */
+    static get label() { return localize(`bonus.target.label.${this.type}`); }
 
     /**
      * @abstract
@@ -64,4 +66,10 @@ export class BaseTarget {
      * @param {ItemPF} item
      */
     static showTargetEditor(item) { }
+
+    /**
+     * @abstract
+     * @returns { string }
+     */
+    static get type() { throw new Error('must be overridden'); }
 }

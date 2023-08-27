@@ -38,6 +38,10 @@ registerItemHint((hintcls, actor, item, _data) => {
 
     //register hint on targeted item
     allTargetTypes.forEach((target) => {
+        if (target.isGenericTarget) {
+            return;
+        }
+
         const bonuses = target.getBonusSourcesForTarget(item);
         bonuses.forEach((bonusTarget) => {
             /** @type {string[]} */
