@@ -140,6 +140,11 @@
                 "hint": "The default race to look for. This is to support translations without having to translate the mod.",
                 "default": "Gnomish"
             },
+            "should-auto-target-tokens": {
+                "name": "Automatically Target Tokens",
+                "hint": "When set to true and using the generic \"Token Target\", when the ability is enabled, the dialog will be skipped if you have tokens currently targeted and will automatically target those tokens. By default (false), the token target dialog opens with your currently targeted tokens pre-selected and you must verify those are the targets you actually want.",
+                "default": false
+            },
             "spellFocus": {
                 "name": "Spell Focus",
                 "hint": "The name of the 'Spell Focus' feat. This is to support translations without having to translate the mod.",

@@ -24,6 +24,11 @@ export class BaseTarget {
     static getHints(bonus) { return; }
 
     /**
+     * Initialize any target-specific settings.
+     */
+    static initSettings() { }
+
+    /**
      * Returns true the targeting is too generic to show a hint on a specific item.
      *
      * @abstract

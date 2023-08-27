@@ -6,6 +6,11 @@ import { registerItemHint } from "./util/item-hints.mjs";
 import { localize } from "./util/localize.mjs";
 import { truthiness } from "./util/truthiness.mjs";
 
+function initSettings() {
+    allTargetTypes.forEach((target) => target.initSettings());
+};
+initSettings();
+
 registerItemHint((hintcls, actor, item, _data) => {
     if (!actor || item?.actor !== actor) {
         return;

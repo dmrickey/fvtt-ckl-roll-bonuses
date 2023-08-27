@@ -2,10 +2,33 @@ import { MODULE_NAME } from "../../consts.mjs";
 import { showTokenInput } from "../../handlebars-handlers/targeted/targets/token-input.mjs";
 import { TokenSelectorApp } from "../../handlebars-handlers/targeted/targets/token-selector-app.mjs";
 import { intersection, intersects } from "../../util/array-intersects.mjs";
+import { registerSetting } from "../../util/settings.mjs";
 import { truthiness } from "../../util/truthiness.mjs";
 import { BaseTarget } from "./base-target.mjs";
 
+class Settings {
+    static tokenSettingKey = 'should-auto-target-tokens';
+    static get shouldAutoTarget() { return Settings.#getSetting(this.tokenSettingKey); }
+    // @ts-ignore
+    static #getSetting(/** @type {string} */key) { return game.settings.get(MODULE_NAME, key); }
+
+    static init() {
+        registerSetting({
+            key: this.tokenSettingKey,
+            scope: 'client',
+            settingType: Boolean,
+        });
+    }
+}
+
 export class TokenTarget extends BaseTarget {
+
+    /**
+     * @override
+     */
+    static initSettings() {
+        Settings.init();
+    }
 
     static get #currentTargetUuids() { return [...game.user.targets].map(x => x.document?.uuid).filter(truthiness); }
 
@@ -91,6 +114,13 @@ export class TokenTarget extends BaseTarget {
      * @param {ItemPF} item
      */
     static showTargetEditor(item) {
+        if (Settings.shouldAutoTarget) {
+            const currentTargetUuids = [...game.user.targets].map(x => x.document.uuid);
+            if (currentTargetUuids.length) {
+                item.setFlag(MODULE_NAME, this.key, currentTargetUuids);
+                return;
+            }
+        }
         new TokenSelectorApp(item, { key: this.key }).render(true);
     }
 }
