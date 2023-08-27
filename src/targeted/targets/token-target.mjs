@@ -1,5 +1,6 @@
 import { MODULE_NAME } from "../../consts.mjs";
 import { showTokenInput } from "../../handlebars-handlers/targeted/targets/token-input.mjs";
+import { TokenSelectorApp } from "../../handlebars-handlers/targeted/targets/token-selector-app.mjs";
 import { intersection, intersects } from "../../util/array-intersects.mjs";
 import { truthiness } from "../../util/truthiness.mjs";
 import { BaseTarget } from "./base-target.mjs";
@@ -53,6 +54,8 @@ export class TokenTarget extends BaseTarget {
         return bonusSources;
     }
 
+    // todo show input on buff activation
+
     /**
      * @override
      * @param {object} options
@@ -71,5 +74,19 @@ export class TokenTarget extends BaseTarget {
             parent: html,
             label: this.label,
         });
+    }
+
+    /**
+     * @override
+     * @returns {boolean}
+     */
+    static get showOnActive() { return true; }
+
+    /**
+     * @override
+     * @param {ItemPF} item
+     */
+    static showTargetEditor(item) {
+        new TokenSelectorApp(item, { key: this.key }).render(true);
     }
 }

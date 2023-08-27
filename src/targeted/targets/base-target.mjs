@@ -49,4 +49,19 @@ export class BaseTarget {
      * @param {HTMLElement} options.html
      */
     static showInputOnItemSheet({ actor, item, html }) { throw new Error("must be overridden."); }
+
+    /**
+     * Returns true if this target should show its editor when the Item is made is active
+     *
+     * @abstract
+     * @returns {boolean}
+     */
+    static get showOnActive() { return false; }
+
+    /**
+     * Shows editor for target
+     *
+     * @param {ItemPF} item
+     */
+    static showTargetEditor(item) { }
 }

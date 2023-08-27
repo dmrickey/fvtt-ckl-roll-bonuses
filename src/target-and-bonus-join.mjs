@@ -185,3 +185,29 @@ Hooks.on('renderItemSheet', (
         target.showInputOnItemSheet({ actor, item, html });
     });
 });
+
+Hooks.on('updateItem', (
+    /** @type {ItemPF} */ item,
+    /** @type {{ data?: { active?: boolean, disabled?: boolean} }} */ change,
+    /** @type {object} */ _options,
+    /** @type {string} */ userId,
+) => {
+    if (game.userId !== userId) {
+        return;
+    }
+
+    if (!change?.data?.active || change?.data?.disabled === true) {
+        return;
+    }
+
+    allTargetTypes.forEach((target) => {
+        if (target.showOnActive) {
+            const hasFlag = item.system.flags.boolean?.hasOwnProperty(target.key);
+            if (!hasFlag) {
+                return;
+            }
+
+            target.showTargetEditor(item);
+        }
+    });
+});

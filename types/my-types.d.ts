@@ -36,17 +36,7 @@ declare global {
     }
 
     class TokenActorSelectorOptions extends DocumentSheetOptions<ItemPF> {
-        currentTargetUuids: string[];
-        availableTargets: {
-            checked?: boolean;
-            disposition: number;
-            dispositionLabel?: string;
-            id: string;
-            img: string;
-            name: string;
-            uuid: string;
-        }[];
-        path: string;
+        key: string;
     }
 
     declare type DamageInputModel = DamagePart & { crit: Nullable<'crit' | 'nonCrit' | 'normal'> };

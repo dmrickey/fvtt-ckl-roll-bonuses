@@ -25,4 +25,5 @@ interface Game {
     settings: ClientSettings;
 
     user: User;
+    userId: string;
 }
