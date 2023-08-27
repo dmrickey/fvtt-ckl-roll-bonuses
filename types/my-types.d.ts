@@ -24,13 +24,27 @@ declare global {
     class ItemSelectorOptions extends DocumentSheetOptions<ItemPF> {
         currentUuids: string[];
         items: {
-            checked?: boolean,
-            uuid: string,
-            type: string,
-            name: string,
-            typeLabel: string,
-            img: string,
-            id: string,
+            checked?: boolean;
+            uuid: string;
+            type: string;
+            name: string;
+            typeLabel: string;
+            img: string;
+            id: string;
+        }[];
+        path: string;
+    }
+
+    class TokenActorSelectorOptions extends DocumentSheetOptions<ItemPF> {
+        currentTargetUuids: string[];
+        availableTargets: {
+            checked?: boolean;
+            disposition: number;
+            dispositionLabel?: string;
+            id: string;
+            img: string;
+            name: string;
+            uuid: string;
         }[];
         path: string;
     }

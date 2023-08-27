@@ -1,4 +1,9 @@
 interface Game {
+    /**
+     * Localization support
+    */
+    i18n: Localization;
+
     modules: {
         get(moduleId: string): {
             active: boolean,
@@ -8,13 +13,16 @@ interface Game {
 
     system: { version: string };
 
-    /**
-     * Client settings which are used to configure application behavior
-     */
-    settings: ClientSettings;
+    scenes: {
+        active: {
+            tokens: EmbeddedCollection<TokenPF>;
+        }
+    };
 
     /**
-     * Localization support
-     */
-    i18n: Localization;
+     * Client settings which are used to configure application behavior
+    */
+    settings: ClientSettings;
+
+    user: User;
 }

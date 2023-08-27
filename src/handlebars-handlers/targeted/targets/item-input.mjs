@@ -6,7 +6,6 @@ import { addNodeToRollBonus } from "../../roll-bonus-on-actor-sheet.mjs";
 import { createTemplate, templates } from "../../templates.mjs";
 
 /**
- *
  * @param {object} args
  * @param {ItemPF} args.item,
  * @param {(item: ItemPF) => boolean} args.filter,
@@ -40,7 +39,7 @@ export function showItemInput({
         current,
         badCurrent,
     };
-    const div = createTemplate(templates.items, templateData);
+    const div = createTemplate(templates.editableIcons, templateData);
 
     div.querySelectorAll('li,a').forEach((element) => {
         element.addEventListener('click', (event) => {
@@ -72,9 +71,8 @@ class ItemSelector extends DocumentSheet {
 
     /** @override */
     async getData() {
-        /** @type {{currentUuids: string[], item: ItemPF, path: string, groupedItems: {[key: string]: ItemPF[]}}} */
+        /** @type {{ item: ItemPF, path: string, groupedItems: {[key: string]: ItemSelectorOptions['items'][]} }} */
         const templateData = {
-            currentUuids: this.options.currentUuids,
             item: this.object,
             path: this.options.path,
             groupedItems: {},
@@ -82,7 +80,7 @@ class ItemSelector extends DocumentSheet {
 
         const items = this.options.items;
         items.forEach((item) => {
-            item.checked = templateData.currentUuids.includes(item.uuid);
+            item.checked = this.options.currentUuids.includes(item.uuid);
         });
 
         items.sort((a, b) => {
@@ -93,13 +91,8 @@ class ItemSelector extends DocumentSheet {
         });
 
         const labels = uniqueArray(items.map(({ typeLabel }) => typeLabel));
-        if (labels.length <= 0) {
-            templateData.groupedItems = { '': items };
-        }
-        else {
-            templateData.groupedItems = labels
-                .reduce((acc, curr) => ({ ...acc, [curr]: items.filter(({ typeLabel }) => curr === typeLabel) }), {});
-        }
+        templateData.groupedItems = labels
+            .reduce((acc, curr) => ({ ...acc, [curr]: items.filter(({ typeLabel }) => curr === typeLabel) }), {});
 
         return templateData;
     }

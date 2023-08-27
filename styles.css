@@ -3,16 +3,18 @@
     border: 1px solid #7a7971;
 }
 
-#ckl-roll-bonus-container .conditional.flexcolumn::marker {
-    content: '';
-}
+#ckl-roll-bonus-container {
+    .conditional.flexcolumn::marker {
+        content: '';
+    }
 
-#ckl-roll-bonus-container .conditionals.form-group {
-    padding: unset;
-}
+    .conditionals.form-group {
+        padding: unset;
+    }
 
-#ckl-roll-bonus-container .pf1.item-action {
-    height: unset;
+    .pf1.item-action {
+        height: unset;
+    }
 }
 
 /* copied from apps.less in pf1 repo */
@@ -28,79 +30,144 @@
     margin-inline-end: .25rem;
 }
 
-.pf1.sheet .roll-bonuses.item-target-input .header {
-    flex: 1;
+.pf1.sheet .roll-bonuses.editable-icon-input {
+    .header {
+        flex: 1;
+    }
+
+    .form-fields {
+        flex-wrap: wrap;
+
+        & li {
+            flex: 0 0 52px;
+            border-width: 2px;
+            border-style: solid;
+            border-radius: 4px;
+            display: flex;
+            margin: 2px;
+            overflow: hidden;
+        }
+
+        & img {
+            border: none;
+            width: 48px;
+            height: 48px;
+        }
+
+        & span {
+            visibility: hidden;
+        }
+    }
+
+    & a {
+        flex: 0;
+    }
 }
 
-.pf1.sheet .roll-bonuses.item-target-input .item-target {
-    flex-wrap: wrap;
+.roll-bonuses-form {
+    .form-body {
+        max-height: 80vh;
+        overflow-y: auto;
+
+        & h4 {
+            font-weight: bold;
+        }
+    }
+
+    .control-group {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 3px 0;
+
+        >* {
+            flex: 3;
+        }
+    }
 }
 
-.pf1.sheet .roll-bonuses.item-target-input .item-target li {
-    flex: 0 0 52px;
-    border-width: 2px;
-    border-style: solid;
-    border-radius: 4px;
-    display: flex;
-    margin: 2px;
-    overflow: hidden;
+.roll-bonuses-form.item-selector {
+    & div.item-selector-row {
+        align-items: center;
+        display: flex;
+
+        &:hover {
+            color: var(--pf1-item-hover-text);
+            text-shadow: var(--pf1-item-hover-shadow);
+            cursor: pointer;
+        }
+    }
+
+    & div.item-selector-contents {
+        align-items: center;
+        display: flex;
+
+        & div {
+            margin: 0;
+        }
+
+        & img {
+            min-height: 24px;
+            min-width: 24px;
+            max-height: 24px;
+            max-width: 24px;
+        }
+
+        & *:not(:last-child) {
+            margin-inline-end: .2rem;
+        }
+    }
 }
 
-.pf1.sheet .roll-bonuses.item-target-input .item-target img {
-    border: none;
-    width: 48px;
-    height: 48px;
-}
+.roll-bonuses-form.token-selector {
+    .grouped-tokens {
+        display: flex;
+        flex-wrap: wrap;
+        max-width: 424px;
 
-.pf1.sheet .roll-bonuses.item-target-input .item-target span {
-    visibility: hidden;
-}
+        & *:not(:last-child) {
+            margin-inline-end: .5rem;
+        }
 
-.pf1.sheet .roll-bonuses.item-target-input a {
-    flex: 0;
-}
+        .individual-token {
+            /* align-items: center; */
+            position: relative;
 
-.roll-bonuses.item-selector .items-container {
-    max-height: 80vh;
-    overflow-y: auto;
-}
+            &:hover {
+                color: var(--pf1-item-hover-text);
+                text-shadow: var(--pf1-item-hover-shadow);
+                cursor: pointer;
+            }
 
-.roll-bonuses.item-selector div.item-selector-row {
-    align-items: center;
-    display: flex;
-}
+            & input {
+                position: absolute;
+            }
 
-.roll-bonuses.item-selector div.item-selector-row:hover {
-    color: var(--pf1-item-hover-text);
-    text-shadow: var(--pf1-item-hover-shadow);
-    cursor: pointer;
-}
+            .token-selector-contents {
+                display: flex;
+                flex-direction: column;
+                min-height: 125px;
+                min-width: 96px;
+                max-height: 125px;
+                max-width: 96px;
 
-.roll-bonuses.item-selector div.item-selector-contents {
-    align-items: center;
-    display: flex;
-}
+                & div {
+                    /* margin: 0; */
+                }
 
-.roll-bonuses.item-selector div.item-selector-contents h4 {
-    margin: 0;
-}
-
-.roll-bonuses.item-selector div.item-selector-contents *:not(:last-child) {
-    margin-inline-end: .2rem;
-}
-
-.roll-bonuses.item-selector div.item-selector-contents img {
-    min-height: 24px;
-    min-width: 24px;
-    max-height: 24px;
-    max-width: 24px;
+                & img {
+                    min-height: 96px;
+                    min-width: 96px;
+                    max-height: 96px;
+                    max-width: 96px;
+                }
+            }
+        }
+    }
 }
 
 /* override pf1 to be important because otherwise this style is overridden by more specific styles
  * if these classes are used in a place they aren't currently being used. (I moved the lock button
  * to be after the Name which already has more specifc `display: block` style)
-
- * Honestly I'm not sure what's happening here because this shouldn't be working because this file is plain css, but it breaks the bad behavior correctly
  */
 .pf1.sheet {
     .lockable {
@@ -114,24 +181,26 @@
 
 .versatile-performance-selector td {
     padding-inline: 2px;
+
+    & select {
+        width: 100%;
+    }
 }
 
-.versatile-performance-selector td select {
-    width: 100%;
-}
+.sheet itemHints.koboldworks .hint {
+    &.ckl-acid-green {
+        color: #53c544;
+    }
 
-.sheet itemHints.koboldworks .hint.ckl-acid-green {
-    color: #53c544;
-}
+    &.ckl-cold-blue {
+        color: #6897e8;
+    }
 
-.sheet itemHints.koboldworks .hint.ckl-cold-blue {
-    color: #6897e8;
-}
+    &.ckl-electric-yellow {
+        color: #999900;
+    }
 
-.sheet itemHints.koboldworks .hint.ckl-electric-yellow {
-    color: #999900;
-}
-
-.sheet itemHints.koboldworks .hint.ckl-fire-red {
-    color: #ff0000;
+    &.ckl-fire-red {
+        color: #ff0000;
+    }
 }

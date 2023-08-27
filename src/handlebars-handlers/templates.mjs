@@ -16,9 +16,10 @@ export const templates = {
 
     // targeted - targets
     checkedItems: `modules/${MODULE_NAME}/hbs/targeted/targets/checked-items.hbs`,
-    items: `modules/${MODULE_NAME}/hbs/targeted/targets/items-input.hbs`,
+    editableIcons: `modules/${MODULE_NAME}/hbs/targeted/targets/editable-icons.hbs`,
     itemsApp: `modules/${MODULE_NAME}/hbs/targeted/targets/items-input-application.hbs`,
     targetWeaponGroup: `modules/${MODULE_NAME}/hbs/targeted/targets/weapon-group-input.hbs`,
+    tokenApp: `modules/${MODULE_NAME}/hbs/targeted/targets/token-application.hbs`,
 
     // targeted - bonus or target
     textInputList: `modules/${MODULE_NAME}/hbs/targeted/text-input-list.hbs`,
