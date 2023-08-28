@@ -7,6 +7,7 @@ export const localHooks = {
     chatAttackAttackNotes: `${MODULE_NAME}_chatAttackAttackNotes`,
     d20Roll: `${MODULE_NAME}_d20Roll`,
     getActorInitiativeFormula: `${MODULE_NAME}_getActorInitiativeFormula`,
+    getConditionalParts: `${MODULE_NAME}_getConditionalParts`,
     itemGetAttackSources: `${MODULE_NAME}_itemGetAttackSources`,
     itemGetTypeChatData: `${MODULE_NAME}_itemGetTypeChatData`,
     itemUse: `${MODULE_NAME}_itemUse`,

@@ -61,6 +61,16 @@ declare global {
         };
     }
 
+
+    type ConditionalPart = [number | string, TraitSelectorValuePlural, false];
+    class ConditionalPartsResults {
+        'attack.crit': string[];
+        'attack.normal': string[];
+        'damage.crit': ConditionalPart[];
+        'damage.nonCrit': ConditionalPart[];
+        'damage.normal': ConditionalPart[];
+    }
+
     class ActionUseShared {
         action: any;
         conditionals: any;
@@ -68,6 +78,7 @@ declare global {
         damageBonus: string[];
         rollData: RollData;
         conditionalPartsCommon: any;
+        attacks: any;
     }
     class ActionUse {
         action: Action;
@@ -149,6 +160,7 @@ declare global {
         tag: string;
     }
     interface ItemFeatPF extends ItemPF { }
+    interface ItemLootPF extends ItemPF { }
     interface ItemWeaponPF extends ItemPF {
         system: SystemWeaponPF;
     }
@@ -665,6 +677,7 @@ declare global {
                 ItemAttackPF: { new(): ItemAttackPF };
                 ItemEquipmentPF: { new(): ItemEquipmentPF };
                 ItemFeatPF: { new(): ItemFeatPF };
+                ItemLootPF: { new(): ItemLootPF };
                 ItemPF: { new(): ItemPF };
                 ItemSpellPF: { new(): ItemSpellPF };
                 ItemWeaponPF: { new(): ItemWeaponPF };

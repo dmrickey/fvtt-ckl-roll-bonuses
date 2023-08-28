@@ -56,7 +56,23 @@ function actionUseAlterRollData(wrapped, e) {
 }
 
 /**
- * Adds conditional to action being used
+ * Used for adding conditionals to individual parts of full attacks
+ *
+ * @param {(arg: object, options: { index: number}) => any} wrapped
+ * @param {object} atk - The attack used.
+ * @param {object} options
+ * @param {number} [options.index=0] - The index of the attack, in order of enabled attacks.
+ * @returns {object} The conditional parts used.
+ * @this ActionUse
+ */
+function getConditionalParts(wrapped, atk, { index = 0 }) {
+    var result = wrapped(atk, { index });
+    Hooks.call(localHooks.getConditionalParts, this, result, atk, index);
+    return result;
+}
+
+/**
+ * Determines conditional parts used in an attack.
  *
  * @param {() => {}} wrapped
  * @this ActionUse
@@ -110,6 +126,7 @@ function actionDamageSources(wrapped) {
 Hooks.once('setup', () => {
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype.alterRollData', actionUseAlterRollData, libWrapper.WRAPPER)
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype.handleConditionals', actionUseHandleConditionals, libWrapper.WRAPPER);
+    libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype._getConditionalParts', getConditionalParts, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ChatAttack.prototype.setAttackNotesHTML', setAttackNotesHTMLWrapper, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ChatAttack.prototype.setEffectNotesHTML', setEffectNotesHTMLWrapper, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.damageSources', actionDamageSources, libWrapper.WRAPPER);
