@@ -160,7 +160,9 @@ declare global {
         tag: string;
     }
     interface ItemFeatPF extends ItemPF { }
-    interface ItemLootPF extends ItemPF { }
+    interface ItemLootPF extends ItemPF {
+        subType: 'gear' | 'ammo' | 'tradeGoods' | 'misc';
+    }
     interface ItemWeaponPF extends ItemPF {
         system: SystemWeaponPF;
     }

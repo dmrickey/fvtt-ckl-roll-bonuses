@@ -69,7 +69,7 @@ Hooks.on('renderItemSheet', (
     /** @type {[HTMLElement]} */[html],
     /** @type {unknown} */ _data
 ) => {
-    if (!(item instanceof pf1.documents.item.ItemLootPF)) {
+    if (!(item instanceof pf1.documents.item.ItemLootPF) || item.subType !== 'ammo') {
         return;
     }
 
