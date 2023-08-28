@@ -33,6 +33,7 @@ Supports PF1 v9+
   - [Weapon Focus](#weapon-focus)
   - [Weapon Specialization](#weapon-specialization)
 - [Misc](#misc)
+  - [Ammunition](#ammunition)
   - [Critical Helpers](#critical-helpers)
   - [Fate's Favored](#fates-favored)
   - [Fortune and Misfortune](#fortune-and-misfortune)
@@ -331,6 +332,9 @@ Automatically add +2 damage to chosen weapons types for `Weapon Specialization` 
 ---
 
 # Misc
+
+## Ammunition
+Ammunition now has inputs for attack and damage bonuses. You can find these on the item's advanced tab.
 
 ## Critical Helpers
 Attack's critical variables can now be dynamically adjusted. Crit can be modified with keen. It can also be modified by a static amount to account for certain 3.5 classes or other homebrew. The critical multipler can also be adjusted--this is useful for a Swashbuckler's capstone ability (and any homebrew that needs it).
