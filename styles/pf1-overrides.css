@@ -1,0 +1,7 @@
+/* override pf1 to be important because otherwise this style is overridden by more specific styles
+ * if these classes are used in a place they aren't currently being used. (I moved the lock button
+ * to be after the Name which already has more specifc `display: block` style)
+ */
+.pf1.sheet .lockable.hide-contents>* {
+    display: none !important;
+}

@@ -1,7 +1,7 @@
 import { MODULE_NAME } from "../../../consts.mjs";
 import { localize } from "../../../util/localize.mjs";
 import { truthiness } from "../../../util/truthiness.mjs";
-import { addNodeToRollBonus } from "../../roll-bonus-on-actor-sheet.mjs";
+import { addNodeToRollBonus } from "../../roll-bonus-on-item-sheet.mjs";
 import { createTemplate, templates } from "../../templates.mjs";
 
 /**

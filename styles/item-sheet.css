@@ -1,0 +1,69 @@
+.pf1.sheet .roll-bonuses input[type=text] {
+    background-color: rgba(0, 0, 0, .05);
+    border: 1px solid #7a7971;
+}
+
+#ckl-roll-bonus-container .conditional.flexcolumn::marker {
+    content: '';
+}
+
+#ckl-roll-bonus-container .conditionals.form-group {
+    padding: unset;
+}
+
+#ckl-roll-bonus-container .pf1.item-action {
+    height: unset;
+}
+
+/* copied from apps.less in pf1 repo */
+.pf1.sheet .roll-bonuses .delete-damage {
+    width: 18px;
+    flex: 0 0 18px;
+    line-height: 24px;
+    text-align: right;
+    color: #7a7971;
+}
+
+.pf1.sheet .roll-bonuses .damage-type i.icon {
+    margin-inline-end: .25rem;
+}
+
+.pf1.sheet .roll-bonuses.editable-icon-input .header {
+    flex: 1;
+}
+
+.pf1.sheet .roll-bonuses.editable-icon-input .form-fields {
+    flex-wrap: wrap;
+}
+
+.pf1.sheet .roll-bonuses.editable-icon-input .form-fields li {
+    flex: 0 0 52px;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 4px;
+    display: flex;
+    margin: 2px;
+    overflow: hidden;
+}
+
+.pf1.sheet .roll-bonuses.editable-icon-input .form-fields img {
+    border: none;
+    width: 48px;
+    height: 48px;
+}
+
+.pf1.sheet .roll-bonuses.editable-icon-input .form-fields span {
+    visibility: hidden;
+}
+
+.pf1.sheet .roll-bonuses.editable-icon-input a {
+    flex: 0;
+}
+
+.versatile-performance-selector td {
+    padding-inline: 2px;
+}
+
+.versatile-performance-selector td select {
+    width: 100%;
+}

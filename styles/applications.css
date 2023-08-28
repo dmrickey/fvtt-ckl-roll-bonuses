@@ -1,0 +1,94 @@
+.roll-bonuses-form .form-body {
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.roll-bonuses-form .form-body h4 {
+    font-weight: bold;
+}
+
+.roll-bonuses-form .control-group {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 3px 0;
+}
+
+.roll-bonuses-form .control-group>* {
+    flex: 3;
+}
+
+.roll-bonuses-form.item-selector div.item-selector-row {
+    align-items: center;
+    display: flex;
+}
+
+.roll-bonuses-form.item-selector div.item-selector-row:hover {
+    color: var(--pf1-item-hover-text);
+    text-shadow: var(--pf1-item-hover-shadow);
+    cursor: pointer;
+}
+
+.roll-bonuses-form.item-selector div.item-selector-contents {
+    align-items: center;
+    display: flex;
+}
+
+.roll-bonuses-form.item-selector div.item-selector-contents div {
+    margin: 0;
+}
+
+.roll-bonuses-form.item-selector div.item-selector-contents img {
+    min-height: 24px;
+    min-width: 24px;
+    max-height: 24px;
+    max-width: 24px;
+}
+
+.roll-bonuses-form.item-selector div.item-selector-contents *:not(:last-child) {
+    margin-inline-end: .2rem;
+}
+
+.roll-bonuses-form.token-selector .grouped-tokens {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 424px;
+}
+
+.roll-bonuses-form.token-selector .grouped-tokens *:not(:last-child) {
+    margin-inline-end: .5rem;
+}
+
+.roll-bonuses-form.token-selector .grouped-tokens .individual-token {
+    /* align-items: center; */
+    position: relative;
+}
+
+.roll-bonuses-form.token-selector .grouped-tokens .individual-token:hover {
+    color: var(--pf1-item-hover-text);
+    text-shadow: var(--pf1-item-hover-shadow);
+    cursor: pointer;
+}
+
+.roll-bonuses-form.token-selector .grouped-tokens .individual-token input {
+    position: absolute;
+}
+
+.roll-bonuses-form.token-selector .grouped-tokens .individual-token .token-selector-contents {
+    display: flex;
+    flex-direction: column;
+    min-height: 125px;
+    min-width: 96px;
+    max-height: 125px;
+    max-width: 96px;
+}
+
+.roll-bonuses-form.token-selector .grouped-tokens .individual-token .token-selector-contents div {
+    /* margin: 0; */
+}
+
+.roll-bonuses-form.token-selector .grouped-tokens .individual-token .token-selector-contents img {
+    min-height: 96px;
+    min-width: 96px;
+    max-height: 96px;
+    max-width: 96px;
+}

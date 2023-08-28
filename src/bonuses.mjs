@@ -1,3 +1,4 @@
+import './bonuses/ammunition.mjs';
 import './bonuses/armor-focus/armor-focus.mjs';
 import './bonuses/armor-focus/improved-armor-focus.mjs';
 import './bonuses/critical.mjs';
