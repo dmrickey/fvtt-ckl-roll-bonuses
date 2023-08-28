@@ -19,7 +19,11 @@
         "src/main.mjs"
     ],
     "styles": [
-        "styles.css"
+        "styles/actor-sheet.css",
+        "styles/applications.css",
+        "styles/item-hints.css",
+        "styles/item-sheet.css",
+        "styles/pf1-overrides.css"
     ],
     "relationships": {
         "systems": [

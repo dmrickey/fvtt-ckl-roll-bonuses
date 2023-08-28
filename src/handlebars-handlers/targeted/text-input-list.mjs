@@ -1,5 +1,5 @@
 import { MODULE_NAME } from "../../consts.mjs";
-import { addNodeToRollBonus } from "../roll-bonus-on-actor-sheet.mjs";
+import { addNodeToRollBonus } from "../roll-bonus-on-item-sheet.mjs";
 import { createTemplate, templates } from "../templates.mjs";
 
 /**
