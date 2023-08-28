@@ -13,10 +13,8 @@
 - [Skills](#skills)
   - [Int Headband](#int-headband)
 - [Misc](#misc)
-  - [Ammo](#ammo)
   - [Attacks](#attacks)
   - [Magic](#magic)
-  - [Deprecation](#deprecation)
   - [Misc](#misc-1)
   - [Bonuses](#bonuses)
   - [Targeting](#targeting)
@@ -61,20 +59,13 @@
 
 Bonus Targeting
 - Have target-based targeting - would support [Ranger](#ranger)'s Favored Enemy
-- Add an option for "configure when enabled" so things like Smite or Bane can be configured on the fly
 
 # Misc
-## Ammo
-- Add configuration for attack/damage to ammo and add that to any attacks using that ammo
 ## Attacks
 - Add Bane button on chat card to modify the current chat card to add +2 attack and +2d6 damage
 
 ## Magic
 - specialization schools (and opposed)
-
-## Deprecation
-- as of v9, PF1 now defers Roll Bonuses. So that means that the `Bonus` on the Skill settings can go away
-- It should create a new Feature with a change that includes the current formula as part of migration for deleting this
 
 ## Misc
 - add the formula class to skill inputs
@@ -105,6 +96,8 @@ Bonus Targeting
 - Weapon Focus (use bonus targets instead)
 - Martial Focus (use bonus targets instead)
 - Weapon Specialization (use bonus targets instead)
+- as of v9, PF1 now defers Roll Bonuses. So that means that the `Bonus` on the Skill settings can go away
+- It should create a new Feature with a change that includes the current formula as part of migration for deleting this
 
 # Move to Bonus/Target
 - Spell School target*

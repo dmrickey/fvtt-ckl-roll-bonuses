@@ -25,7 +25,7 @@ jobs:
     - name: zip-files
       uses: vimtor/action-zip@v1
       with:
-        files: hbs/ lang/ src/ module.json README.md styles.css
+        files: hbs/ lang/ src/ styles/ module.json README.md
         recursive: false
         dest: module.zip
 
