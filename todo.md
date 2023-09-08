@@ -6,6 +6,7 @@
   - [Ranger](#ranger)
 - [Feats](#feats)
   - [Improved Critical](#improved-critical)
+  - [Spell Perfection](#spell-perfection)
   - [Spirited Charge](#spirited-charge)
   - [Weapon Focus](#weapon-focus)
 - [Racial Features](#racial-features)
@@ -41,6 +42,8 @@
 # Feats
 ## Improved Critical
 - Selects individual weapon types (like Weapon Focus) and grants keen to all of those
+## Spell Perfection
+- https://www.d20pfsrd.com/feats/general-feats/spell-perfection/
 ## Spirited Charge
 - Double Damage without critting
 ## Weapon Focus 
