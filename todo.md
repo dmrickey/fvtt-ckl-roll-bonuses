@@ -14,6 +14,7 @@
 - [Skills](#skills)
   - [Int Headband](#int-headband)
 - [Misc](#misc)
+  - [I am targeted](#i-am-targeted)
   - [Attacks](#attacks)
   - [Magic](#magic)
   - [Misc](#misc-1)
@@ -64,6 +65,10 @@ Bonus Targeting
 - Have target-based targeting - would support [Ranger](#ranger)'s Favored Enemy
 
 # Misc
+## I am targeted
+- add bonuses / penalties to attacks that are specifically against me
+  - include percentile miss chance
+
 ## Attacks
 - Add Bane button on chat card to modify the current chat card to add +2 attack and +2d6 damage
 
