@@ -62,6 +62,7 @@
   - See versatile performance for ideas.
 
 Bonus Targeting
+- Have target for "me" item, so I can create buffs bonuses that are available only with this weapon
 - Have target-based targeting - would support [Ranger](#ranger)'s Favored Enemy
 
 # Misc
