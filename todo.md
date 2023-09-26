@@ -1,14 +1,17 @@
 
 
+- [TODO](#todo)
 - [UI](#ui)
   - [Add In-Game Documentation](#add-in-game-documentation)
+- [Bonus Targets](#bonus-targets)
+  - [Bonuses](#bonuses)
+  - [Targets](#targets)
 - [Class Features](#class-features)
   - [Ranger](#ranger)
 - [Feats](#feats)
   - [Improved Critical](#improved-critical)
   - [Spell Perfection](#spell-perfection)
   - [Spirited Charge](#spirited-charge)
-  - [Weapon Focus](#weapon-focus)
 - [Racial Features](#racial-features)
   - [Air Affinity](#air-affinity)
 - [Skills](#skills)
@@ -18,12 +21,14 @@
   - [Attacks](#attacks)
   - [Magic](#magic)
   - [Misc](#misc-1)
-  - [Bonuses](#bonuses)
+  - [Bonuses](#bonuses-1)
   - [Targeting](#targeting)
 - [Housekeeping](#housekeeping)
 - [Checklist for new (and existing features)](#checklist-for-new-and-existing-features)
 - [Deprecated](#deprecated)
-- [Move to Bonus/Target](#move-to-bonustarget)
+
+# TODO
+- Figure out a way to support multiple target groups on a single item (so I can add "Holy" and "Flaming" on a single weapon)
 
 # UI
 ## Add In-Game Documentation
@@ -31,6 +36,29 @@
   - link to specific compendium page for this bonus when it's detected on the sheet
 - create "id getter" ui for things like keen or fortune (fortune will need a lot more as well)
 - Always show roll bonuses header in the advanced tab, and add a Cog to itself to configure which bonuses should be on this item (useful for bonuses that can't be auto-detected base on the Feat name/id)
+- Add some kind of preview to targeting UI to show all currently effect Items
+
+# Bonus Targets
+## Bonuses
+- formula input
+  - Spell level
+    - target spells 0-9, all
+  - CL Bonus*
+  - DC Bonus*
+    - *Would deprecate everything under "spells"
+- Move Crit to Bonus (would deprecate crit)
+
+## Targets
+- Have target for "me" item, so I can create buffs bonuses that are available only with this weapon
+- Have creature type/subtype based targeting - would support [Ranger](#ranger)'s Favored Enemy
+- Have alignment-based targeting
+- Spellbook target
+- Spell preparation Qty
+- Spell School target*
+- Damage Type target*
+- Subschool Target*
+- Spell Type Target*
+  - *Would deprecate everything under "spells"
 
 # Class Features 
 ## Ranger
@@ -47,8 +75,6 @@
 - https://www.d20pfsrd.com/feats/general-feats/spell-perfection/
 ## Spirited Charge
 - Double Damage without critting
-## Weapon Focus 
-- Add warning if no base equipment types detected
 
 # Racial Features
 ## Air Affinity
@@ -60,11 +86,6 @@
 ## Int Headband
 - configure an item to give you specific ranks (0.82.5 only gives bonus ranks, not ranks to specific skills)
   - See versatile performance for ideas.
-
-Bonus Targeting
-- Have target for "me" item, so I can create buffs bonuses that are available only with this weapon
-- Have creature type/subtype based targeting - would support [Ranger](#ranger)'s Favored Enemy
-- Have alignment-based targeting
 
 # Misc
 ## I am targeted
@@ -108,13 +129,3 @@ Bonus Targeting
 - Weapon Specialization (use bonus targets instead)
 - as of v9, PF1 now defers Roll Bonuses. So that means that the `Bonus` on the Skill settings can go away
 - It should create a new Feature with a change that includes the current formula as part of migration for deleting this
-
-# Move to Bonus/Target
-- Spell School target*
-- Damage Type target*
-- Subschool Target*
-- Spell Type Target*
-- CL Bonus*
-- DC Bonus*
-- *Would deprecate everything under "spells"
-- Move Crit to Bonus (would deprecate crit)
