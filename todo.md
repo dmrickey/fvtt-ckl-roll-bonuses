@@ -52,6 +52,7 @@
 - Have target for "me" item, so I can create buffs bonuses that are available only with this weapon
 - Have creature type/subtype based targeting - would support [Ranger](#ranger)'s Favored Enemy
 - Have alignment-based targeting
+- All healing
 - Spellbook target
 - Spell preparation Qty
 - Spell School target*
