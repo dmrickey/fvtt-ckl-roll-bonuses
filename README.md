@@ -320,7 +320,7 @@ Automatically add +2 damage to chosen weapons types for `Weapon Specialization` 
   - The dropdown will be added automatically if you add a dictionary flag `weapon-specialization` to the feat (or any other Item)
   - The choices are auto populated based on all of your configured [Weapon Focus](#weapon-focus) feats
 
-  ### Weapon Specialization
+  ### Greater Weapon Specialization
   Adds an extra +2 damage to the chosen weapon types.
   - Will automatically include the select input in the feat advanced tab if the feat name includes both `Weapon Specialization` and `Greater`
     - This is configurable in the settings to account for different translations
