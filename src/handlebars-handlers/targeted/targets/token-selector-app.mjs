@@ -38,7 +38,7 @@ export class TokenSelectorApp extends DocumentSheet {
 
         const currentTargetUuids = [...game.user.targets].map(x => x.document.uuid);
         const availableTargets = game.scenes.active.tokens
-            .filter((token) => token.visible && token.actor.id !== item.actor.id)
+            .filter((token) => token.object.isVisible && token.actor.id !== item.actor.id)
             .map((token) => ({
                 id: token.id,
                 disposition: token.disposition,
