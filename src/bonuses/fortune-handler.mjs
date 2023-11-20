@@ -111,6 +111,10 @@ const handleFortune = (
     {
         const test = new Roll(options.dice).roll({ async: false });
         const dice = test.dice[0];
+        if (!dice) {
+            // no actual roll, a static number was probably given
+            return;
+        }
         const { modifiers, results } = dice;
         const totalThrown = results.length;
         if (test.dice.length !== 1 // if there was more than a single dice term
