@@ -115,6 +115,46 @@ Hooks.on('pf1GetRollData', (
     // end update critRange
 });
 
+Hooks.once('setup', () => {
+    /**
+     * @param {() => number} wrapped
+     * @this {ItemAction}
+     * @returns {number}
+     */
+    function handleItemActionCritRangeWrapper(wrapped) {
+        const { actor, item } = this;
+        const action = this;
+        const rollData = actor.getRollData();
+
+        const hasKeen = item.hasItemBooleanFlag(selfKeen)
+            || hasAnyBFlag(actor, keenAll, keenId(item), keenId(action));
+
+        const offsetFlags = [critOffsetAll, critOffsetId(item), critOffsetId(action), selfKeen];
+        const offsetHelper = new KeyedDFlagHelper(actor || rollData.dFlags, ...offsetFlags)
+        if (!offsetHelper.hasAnyFlags() && !hasKeen) {
+            return wrapped();
+        }
+
+        if (!!item.system.broken) {
+            return 20;
+        }
+
+        const current = action.data.ability.critRange;
+        let range = hasKeen
+            ? current * 2 - 21
+            : current;
+
+        // todo some day change this back to use rollData.dFlags
+        const mod = offsetHelper.sumAll(rollData)
+            + RollPF.safeTotal(item.system.flags.dictionary[critOffsetSelf] ?? 0, rollData);
+
+        range -= mod;
+        range = Math.clamped(range, 2, 20);
+        return range;
+    }
+    libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.critRange', handleItemActionCritRangeWrapper, libWrapper.MIXED);
+});
+
 Hooks.on(localHooks.chatAttackAttackNotes, (
     /** @type {ChatAttack} */ { action, attackNotes }
 ) => {
