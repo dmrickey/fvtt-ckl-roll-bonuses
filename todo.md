@@ -9,6 +9,7 @@
 - [Class Features](#class-features)
   - [Ranger](#ranger)
 - [Feats](#feats)
+  - [Extreme Mood Swings](#extreme-mood-swings)
   - [Improved Critical](#improved-critical)
   - [Spell Perfection](#spell-perfection)
   - [Spirited Charge](#spirited-charge)
@@ -70,6 +71,9 @@
   - Add a button to chat cards to increase the skill/initiative/whatever roll when applicable
 
 # Feats
+## Extreme Mood Swings
+- Increase each morale bonus you receive by 1.
+- https://www.d20pfsrd.com/feats/general-feats/extreme-mood-swings/
 ## Improved Critical
 - Selects individual weapon types (like Weapon Focus) and grants keen to all of those
 ## Spell Perfection

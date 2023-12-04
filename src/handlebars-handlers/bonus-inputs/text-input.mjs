@@ -32,7 +32,6 @@ export function textInput({
             : item.getItemDictionaryFlag(key);
     }
 
-
     const div = createTemplate(
         templates.textInput,
         { key, label, current, isFormula, placeholder },

@@ -42,13 +42,19 @@ export class AttackBonus extends BaseBonus {
      * @returns {ModifierSource[]}
      */
     static getAttackSourcesForTooltip(targetSource) {
+        const /** @type {ModifierSource[]} */ sources = [];
+
         const value = this.#getAttackBonus(targetSource);
-        return [{
-            value,
-            name: targetSource.name,
-            modifier: 'untyped',
-            sort: -100,
-        }];
+        if (value) {
+            sources.push({
+                value,
+                name: targetSource.name,
+                modifier: 'untyped',
+                sort: -100,
+            });
+        }
+
+        return sources;
     }
 
     /**
