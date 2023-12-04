@@ -409,7 +409,7 @@ declare global {
         | 'untyped'
         | 'untypedPerm';
 
-    type BuffTargets =
+    type BuffTarget =
         | '~attackCore'
         | 'aac'
         | 'ac'
@@ -471,6 +471,7 @@ declare global {
         | 'strSkills'
         | 'swimSpeed'
         | 'tac'
+        | 'unskills'
         | 'vigor'
         | 'wdamage'
         | 'will'
@@ -499,7 +500,7 @@ declare global {
                 modifier: BonusModifers;
                 operator?: 'add' | 'function' | 'set';
                 priority?: number;
-                subTarget: BuffTargets;
+                subTarget: BuffTarget;
                 value?: string | number;
             },
             parent = null
@@ -616,7 +617,7 @@ declare global {
                         modifier?: BonusModifers | string;
                         operator?: 'add' | 'function' | 'set';
                         priority?: number;
-                        subTarget: BuffTargets;
+                        subTarget: BuffTarget;
                         /** The evaluation of the formula */
                         value?: string | number;
                     },
