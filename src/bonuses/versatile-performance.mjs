@@ -130,11 +130,13 @@ function versatileRollSkill(wrapped, skillId, options) {
                 /** @type {string}*/ _userId,
             ) => {
                 const { content } = doc;
-                const currentTitle = content.split('\r\n')[1];
-                const name = this.getSkillInfo(skillId).name;
-                const updatedTitle = localize('PF1.SkillCheck', { skill: name });
+                const currentTitle = this.getSkillInfo(skillId).name;
+                if (!currentTitle || !baseName || !content.includes(baseName)) {
+                    return;
+                }
+                const updatedTitle = localize('PF1.SkillCheck', { skill: currentTitle });
                 const vpTitle = localize('versatilePerformance.title', { skill: baseName });
-                doc.updateSource({ content: doc.content.replace(currentTitle, `  ${updatedTitle}<br />  ${vpTitle}`) });
+                doc.updateSource({ content: doc.content.replace(baseName, `  ${updatedTitle}<br />  ${vpTitle}`) });
             });
             return wrapped(baseId, options);
         }
@@ -142,6 +144,9 @@ function versatileRollSkill(wrapped, skillId, options) {
 
     return wrapped(skillId, options);
 }
+Hooks.once('setup', () => {
+    libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorPF.prototype.rollSkill', versatileRollSkill, libWrapper.WRAPPER);
+});
 
 Hooks.on('renderItemSheet', (
     /** @type {ItemSheetPF} */ { actor, item },
@@ -230,8 +235,4 @@ Hooks.on('renderItemSheet', (
     skill2Select?.addEventListener('change', updateVP);
 
     addNodeToRollBonus(html, div);
-});
-
-Hooks.once('setup', () => {
-    libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorPF.prototype.rollSkill', versatileRollSkill, libWrapper.WRAPPER);
 });
