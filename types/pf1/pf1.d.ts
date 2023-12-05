@@ -329,6 +329,8 @@ declare global {
         acp: boolean;
         changeBonus: number;
         cs: boolean;
+        /** compendium link returned for custom skills */
+        journal: string | undefined;
         rank: number;
         rt: boolean;
 
@@ -668,6 +670,7 @@ declare global {
                 "nonlethal": "Nonlethal"
             },
             savingThrows: SavingThrows;
+            skillCompendiumEntries: { [key: string]: string };
             skills;
             spellSchools: { [key: string]: string };
             weaponGroups: { [key: string]: string };

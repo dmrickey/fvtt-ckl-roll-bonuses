@@ -117,6 +117,18 @@ Hooks.on('renderActorSheetPF', (
 function versatileRollSkill(wrapped, skillId, options) {
     const vps = getDocDFlags(this, key);
 
+    const journalLookup = (/** @type {string} */ skl) => {
+        const link = this.getSkillInfo(skl.split('.subSkills')[0])?.journal || pf1.config.skillCompendiumEntries[skl.split('.subSkills')[0]] || '';
+        if (link) {
+            return `
+<a data-tooltip="PF1.OpenAssociatedCompendiumEntry" data-action="open-compendium-entry" data-compendium-entry="${link}" data-document-type="JournalEntry">
+    <i class="fas fa-book"></i>
+</a>
+`;
+        }
+        return '';
+    };
+
     for (let i = 0; i < vps.length; i++) {
         const [baseId, ...substitutes] = `${vps[i]}`.split(';').map(x => x.trim());
 
@@ -136,7 +148,7 @@ function versatileRollSkill(wrapped, skillId, options) {
                 }
                 const updatedTitle = localize('PF1.SkillCheck', { skill: currentTitle });
                 const vpTitle = localize('versatilePerformance.title', { skill: baseName });
-                doc.updateSource({ content: doc.content.replace(baseName, `  ${updatedTitle}<br />  ${vpTitle}`) });
+                doc.updateSource({ content: doc.content.replace(baseName, `${journalLookup(skillId)} ${updatedTitle}<br />${journalLookup(baseId)} ${vpTitle}`) });
             });
             return wrapped(baseId, options);
         }
