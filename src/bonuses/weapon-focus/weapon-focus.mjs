@@ -82,7 +82,8 @@ registerItemHint((hintcls, actor, item, _data) => {
         }
         tips.push(localize('dc-mod', { mod: signed(bonus) }));
         return hintcls.create('', [], { icon: 'fas fa-sword', hint: tips.join('\n') });
-    });
+    }
+});
 
 /**
  * Add Weapon Focus to tooltip
@@ -140,15 +141,15 @@ function addWeaponFocusBonus({ actor, item, shared }) {
     const helper = new KeyedDFlagHelper(actor, weaponFocusKey, greaterWeaponFocusKey, mythicWeaponFocusKey);
     let key = '';
 
-    if (baseTypes.find(value => helper.valuesForFlag(weaponFocusKey).includes(value))) {
+    if (intersects(baseTypes, helper.valuesForFlag(weaponFocusKey))) {
         value += 1;
         key = weaponFocusKey;
     }
-    if (baseTypes.find(value => helper.valuesForFlag(greaterWeaponFocusKey).includes(value))) {
+    if (intersects(baseTypes, helper.valuesForFlag(greaterWeaponFocusKey))) {
         value += 1;
         key = greaterWeaponFocusKey;
     }
-    if (baseTypes.find(value => helper.valuesForFlag(mythicWeaponFocusKey).includes(value))) {
+    if (intersects(baseTypes, helper.valuesForFlag(mythicWeaponFocusKey))) {
         value *= 2;
         key = mythicWeaponFocusKey;
     }
