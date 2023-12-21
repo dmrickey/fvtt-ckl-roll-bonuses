@@ -67,9 +67,10 @@ export function conditionalCalculator(shared, conditional) {
  * @param {ItemConditionalModifier} modifier
  * @param {object} [options]
  * @param {boolean} [options.isDamage]
+ * @param {RollData?} [options.rollData]
  * @returns {Nullable<ItemChange>}
  */
-export function conditionalModToItemChange(conditional, modifier, { isDamage = false } = {}) {
+export function conditionalModToItemChange(conditional, modifier, { isDamage = false, rollData = null } = {}) {
     if (!modifier) return;
 
     const subTarget = modifier.target;
@@ -92,7 +93,7 @@ export function conditionalModToItemChange(conditional, modifier, { isDamage = f
         operator: 'add',
         priority: 0,
         subTarget,
-        value: modifier.formula,
+        value: rollData ? RollPF.safeTotal(modifier.formula, rollData) : modifier.formula,
     });
     if (isDamage) {
         change.type = modifier.type;
