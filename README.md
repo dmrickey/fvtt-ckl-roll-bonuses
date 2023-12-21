@@ -295,6 +295,13 @@ Automatically add +1 to attack rolls to weapons with `Weapon Focus`. Includes `G
   - The dropdown will be added automatically if you add a dictionary flag `greater-weapon-focus` to the feat (or any other Item)
     - The choices will be based off of any other `Weapon Focus` feats you already have configured.
 
+  ### Mythic Weapon Focus
+  Doubles the bonus from `Weapon Focus` and `Greater Weapon Focus`
+  - Will automatically include the select input in the feat advanced tab if the feat name includes both `Weapon Focus` and `Mythic`
+    - This is configurable in the settings to account for different translations
+  - The dropdown will be added automatically if you add a dictionary flag `mythic-weapon-focus` to the feat (or any other Item)
+    - The choices will be based off of any other `Weapon Focus` feats you already have configured.
+
   ### Racial Weapon Focus
   Adds +1 to hit to racial weapons - those weapons must have appropriate racial tags.
   - Will Automatically include the select input in the feat advanced tab if the feat is named `Gnome Weapon Focus` (only official racial weapon feat)
