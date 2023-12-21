@@ -6,31 +6,57 @@ import { localHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize } from "../../util/localize.mjs";
 import { registerSetting } from "../../util/settings.mjs";
+import { signed } from '../../util/to-signed-string.mjs';
 import { uniqueArray } from "../../util/unique-array.mjs";
-import { gnomeWeaponFocusId, greaterWeaponFocusId, greaterWeaponFocusKey, racialWeaponFocusKey, weaponFocusId, weaponFocusKey } from "./ids.mjs";
+import {
+    gnomeWeaponFocusId,
+    greaterWeaponFocusId,
+    greaterWeaponFocusKey,
+    mythicWeaponFocusKey,
+    mythicWeaponFocusId,
+    racialWeaponFocusKey,
+    weaponFocusId,
+    weaponFocusKey,
+} from "./ids.mjs";
 
-const allKeys = [weaponFocusKey, greaterWeaponFocusKey];
+const allKeys = [weaponFocusKey, greaterWeaponFocusKey, mythicWeaponFocusKey];
 
 registerSetting({ key: weaponFocusKey });
 registerSetting({ key: greaterWeaponFocusKey });
+registerSetting({ key: mythicWeaponFocusKey });
 
 class Settings {
     static get weaponFocus() { return Settings.#getSetting(weaponFocusKey); }
     static get greater() { return Settings.#getSetting(greaterWeaponFocusKey); }
+    static get mythic() { return Settings.#getSetting(mythicWeaponFocusKey); }
     // @ts-ignore
     static #getSetting(/** @type {string} */key) { return game.settings.get(MODULE_NAME, key).toLowerCase(); }
 }
 
 // register hint on item with focus
 registerItemHint((hintcls, _actor, item, _data) => {
-    const  /** @type {Hint[]} */ hints = [];
-    allKeys.forEach((key) => {
-        const current = item.getItemDictionaryFlag(key);
-        if (current) {
-            hints.push(hintcls.create(`${current}`, [], {}));
+    const isFocused = item.getItemDictionaryFlag(weaponFocusKey);
+    const isGreater = item.getItemDictionaryFlag(greaterWeaponFocusKey);
+    const isMythic = item.getItemDictionaryFlag(mythicWeaponFocusKey);
+
+    if (isFocused || isGreater || isMythic) {
+        const tips = []
+        let bonus = 0;
+        if (isFocused) {
+            tips.push(localize(weaponFocusKey));
+            bonus += 1;
         }
-    });
-    return hints;
+        if (isGreater) {
+            tips.push(localize(greaterWeaponFocusKey));
+            bonus += 1;
+        }
+        if (isMythic) {
+            tips.push(localize(mythicWeaponFocusKey));
+            bonus *= 2;
+        }
+        tips.push(localize('dc-mod', { mod: signed(bonus) }));
+        return hintcls.create('', [], { icon: 'fas fa-sword', hint: tips.join('\n') });
+    }
 });
 
 // register hint on focused weapon/attack
@@ -41,11 +67,14 @@ registerItemHint((hintcls, actor, item, _data) => {
 
     const baseTypes = item.system.baseTypes;
 
-    const helper = new KeyedDFlagHelper(actor, weaponFocusKey, greaterWeaponFocusKey);
+    const helper = new KeyedDFlagHelper(actor, weaponFocusKey, greaterWeaponFocusKey, mythicWeaponFocusKey);
 
     let label;
     if (intersects(baseTypes, helper.valuesForFlag(greaterWeaponFocusKey))) {
         label = localize(greaterWeaponFocusKey);
+    }
+    else if (intersects(baseTypes, helper.valuesForFlag(mythicWeaponFocusKey))) {
+        label = localize(mythicWeaponFocusKey);
     }
     else if (intersects(baseTypes, helper.valuesForFlag(weaponFocusKey))) {
         label = localize(weaponFocusKey);
@@ -74,15 +103,18 @@ function getAttackSources(item, sources) {
     let value = 0;
     let name = localize(weaponFocusKey);
 
-    const weaponFocuses = getDocDFlags(actor, weaponFocusKey);
-    const greaterWeaponFocuses = getDocDFlags(actor, greaterWeaponFocusKey);
+    const helper = new KeyedDFlagHelper(actor, weaponFocusKey, greaterWeaponFocusKey, mythicWeaponFocusKey);
 
-    if (baseTypes.find(bt => weaponFocuses.includes(bt))) {
+    if (baseTypes.find(bt => helper.valuesForFlag(weaponFocusKey).includes(bt))) {
         value += 1;
     }
-    if (baseTypes.find(bt => greaterWeaponFocuses.includes(bt))) {
+    if (baseTypes.find(bt => helper.valuesForFlag(greaterWeaponFocusKey).includes(bt))) {
         value += 1;
         name = localize(greaterWeaponFocusKey);
+    }
+    if (baseTypes.find(bt => helper.valuesForFlag(mythicWeaponFocusKey).includes(bt))) {
+        value *= 2;
+        name = localize(mythicWeaponFocusKey);
     }
 
     if (value) {
@@ -106,17 +138,24 @@ function addWeaponFocusBonus({ actor, item, shared }) {
     const baseTypes = item.system.baseTypes;
     let value = 0;
 
-    const helper = new KeyedDFlagHelper(actor, weaponFocusKey, greaterWeaponFocusKey);
+    const helper = new KeyedDFlagHelper(actor, weaponFocusKey, greaterWeaponFocusKey, mythicWeaponFocusKey);
+    let key = '';
 
     if (baseTypes.find(value => helper.valuesForFlag(weaponFocusKey).includes(value))) {
         value += 1;
+        key = weaponFocusKey;
     }
     if (baseTypes.find(value => helper.valuesForFlag(greaterWeaponFocusKey).includes(value))) {
         value += 1;
+        key = greaterWeaponFocusKey;
+    }
+    if (baseTypes.find(value => helper.valuesForFlag(mythicWeaponFocusKey).includes(value))) {
+        value *= 2;
+        key = mythicWeaponFocusKey;
     }
 
     if (value) {
-        shared.attackBonus.push(`${value}[${localize(weaponFocusKey)}]`);
+        shared.attackBonus.push(`${value}[${localize(key)}]`);
     }
 }
 Hooks.on(localHooks.actionUseAlterRollData, addWeaponFocusBonus);
@@ -141,11 +180,15 @@ Hooks.on('renderItemSheet', (
     const isGreater = (name.includes(Settings.weaponFocus) && name.includes(Settings.greater))
         || sourceId.includes(greaterWeaponFocusId)
         || item.system.flags.dictionary[greaterWeaponFocusKey] !== undefined;
+    const isMythic = (name.includes(Settings.weaponFocus) && name.includes(Settings.mythic))
+        || sourceId.includes(mythicWeaponFocusId)
+        || item.system.flags.dictionary[mythicWeaponFocusKey] !== undefined;
     const isRacial = sourceId.includes(gnomeWeaponFocusId)
         || item.system.flags.dictionary[racialWeaponFocusKey] !== undefined;
 
-    if (isGreater) {
+    if (isGreater || isMythic) {
         key = greaterWeaponFocusKey;
+        key = isGreater ? greaterWeaponFocusKey : mythicWeaponFocusKey;
 
         if (actor) {
             choices = getDocDFlags(actor, weaponFocusKey).map((x) => `${x}`);
