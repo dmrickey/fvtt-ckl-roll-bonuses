@@ -50,6 +50,7 @@
         "misfortune": "Misfortune",
         "mythicElementalFocus": "Mythic Elemental Focus",
         "mythicSpellFocus": "Mythic Spell Focus",
+        "mythic-weapon-focus": "Mythic Weapon Focus",
         "ok": "OK",
         "roll-bonuses": "Roll Bonuses",
         "school-dc": "Spell School DC",
@@ -128,6 +129,11 @@
             "mythicSpellFocus": {
                 "name": "Mythic Spell Focus",
                 "hint": "The 'Mythic' adjective, feat names are checked for this plus 'Spell Focus'. This is to support translations without having to translate the mod.",
+                "default": "Mythic"
+            },
+            "mythic-weapon-focus": {
+                "name": "Mythic Weapon Focus",
+                "hint": "The 'Mythic' adjective, feat names are checked for this plus 'Weapon Focus'. This is to support translations without having to translate the mod.",
                 "default": "Mythic"
             },
             "racial-weapon-focus": {
