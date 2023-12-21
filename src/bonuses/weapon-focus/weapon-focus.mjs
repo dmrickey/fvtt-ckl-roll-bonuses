@@ -35,9 +35,35 @@ class Settings {
 
 // register hint on item with focus
 registerItemHint((hintcls, _actor, item, _data) => {
-    const isFocused = item.getItemDictionaryFlag(weaponFocusKey);
-    const isGreater = item.getItemDictionaryFlag(greaterWeaponFocusKey);
-    const isMythic = item.getItemDictionaryFlag(mythicWeaponFocusKey);
+    const key = allKeys.find((k) => item.system.flags.dictionary[k] !== undefined);
+    if (!key) {
+        return;
+    }
+
+    const currentTarget = getDocDFlags(item, key)[0];
+    if (!currentTarget) {
+        return;
+    }
+
+    const label = `${currentTarget}`;
+
+    const hint = hintcls.create(label, [], {});
+    return hint;
+});
+
+// register hint on focused weapon/attack
+registerItemHint((hintcls, actor, item, _data) => {
+    if (!(item instanceof pf1.documents.item.ItemWeaponPF || item instanceof pf1.documents.item.ItemAttackPF)) {
+        return;
+    }
+
+    const baseTypes = item.system.baseTypes;
+
+    const helper = new KeyedDFlagHelper(actor, weaponFocusKey, greaterWeaponFocusKey, mythicWeaponFocusKey);
+
+    const isFocused = intersects(baseTypes, helper.valuesForFlag(weaponFocusKey));
+    const isGreater = intersects(baseTypes, helper.valuesForFlag(greaterWeaponFocusKey));
+    const isMythic = intersects(baseTypes, helper.valuesForFlag(mythicWeaponFocusKey));
 
     if (isFocused || isGreater || isMythic) {
         const tips = []
@@ -56,34 +82,7 @@ registerItemHint((hintcls, _actor, item, _data) => {
         }
         tips.push(localize('dc-mod', { mod: signed(bonus) }));
         return hintcls.create('', [], { icon: 'fas fa-sword', hint: tips.join('\n') });
-    }
-});
-
-// register hint on focused weapon/attack
-registerItemHint((hintcls, actor, item, _data) => {
-    if (!(item instanceof pf1.documents.item.ItemWeaponPF || item instanceof pf1.documents.item.ItemAttackPF)) {
-        return;
-    }
-
-    const baseTypes = item.system.baseTypes;
-
-    const helper = new KeyedDFlagHelper(actor, weaponFocusKey, greaterWeaponFocusKey, mythicWeaponFocusKey);
-
-    let label;
-    if (intersects(baseTypes, helper.valuesForFlag(greaterWeaponFocusKey))) {
-        label = localize(greaterWeaponFocusKey);
-    }
-    else if (intersects(baseTypes, helper.valuesForFlag(mythicWeaponFocusKey))) {
-        label = localize(mythicWeaponFocusKey);
-    }
-    else if (intersects(baseTypes, helper.valuesForFlag(weaponFocusKey))) {
-        label = localize(weaponFocusKey);
-    }
-
-    if (label) {
-        return hintcls.create(label, [], {});
-    }
-});
+    });
 
 /**
  * Add Weapon Focus to tooltip
