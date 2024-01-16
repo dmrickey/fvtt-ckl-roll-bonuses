@@ -26,7 +26,7 @@
   - [Targeting](#targeting)
 - [Housekeeping](#housekeeping)
 - [Checklist for new (and existing features)](#checklist-for-new-and-existing-features)
-- [Deprecated](#deprecated)
+- [Deprecate](#deprecate)
 
 # TODO
 - Figure out a way to support multiple target groups on a single item (so I can add "Holy" and "Flaming" on a single weapon)
@@ -128,7 +128,7 @@
 - Has info/attack note
 - Actually affects what it's supposed to (duh)
 
-# Deprecated
+# Deprecate
 - Weapon Focus (use bonus targets instead)
 - Martial Focus (use bonus targets instead)
 - Weapon Specialization (use bonus targets instead)
