@@ -197,7 +197,7 @@ Hooks.on('renderItemSheet', (
 
 Hooks.on('updateItem', (
     /** @type {ItemPF} */ item,
-    /** @type {{ data?: { active?: boolean, disabled?: boolean} }} */ change,
+    /** @type {{ system?: { active?: boolean, disabled?: boolean} }} */ change,
     /** @type {object} */ _options,
     /** @type {string} */ userId,
 ) => {
@@ -205,7 +205,7 @@ Hooks.on('updateItem', (
         return;
     }
 
-    if (!change?.data?.active || change?.data?.disabled === true) {
+    if (!change?.system?.active || change?.system?.disabled === true) {
         return;
     }
 
