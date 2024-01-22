@@ -1,0 +1,45 @@
+New way to set up will be all target-bonuses -- these are going to be called "sets"
+One individual Item can have many sets
+└─ Targeting within a set - multiple targets can be joined by either "and" or "or"
+
+Structure looks like this
+
+Item
+└─ flags
+   └─ MODULE
+      |  // TargetBonusSets
+      └─ SETS
+         └─ [
+              // this is a SetTargetBonus
+              0: {
+                    targets: [
+                        // these are each TargetBonus
+                        0: {key: '', value: ...},
+                        1: {key: '', value: ...},
+                        2: {key: '', value: ...},
+                        ...
+                    ],
+                    bonuses: [
+                        0: {key: '', value: ...},
+                        1: {key: '', value: ...},
+                        2: {key: '', value: ...},
+                        ...
+                    ],
+              },
+              1: { ... },
+              ...
+            ]
+
+Needs to cache itself when item is updated.
+Also each target/bonus needs to be added to a static lookup based on the cached key
+
+Needs an API to set values - it should use the API itself
+All keys should be added to the api
+└─ Should use a common method to add keys to the API so it can detect collisions in case I'm dumb and re-use a key
+
+Add `?` of `i` to everything with hover hints
+
+Two separate `+` buttons
+- first adds a new set (accompanied by a delete button)
+- second that adds a new target/bonus within a set (each target/bonus needs its own individual delete button)
+  - Should open its own UI that shows all available optiosn to add - also shows the `?` or `i` from above
