@@ -1,33 +1,25 @@
 export {};
 
 declare global {
-    interface Indexed<T> {
-        /** the index of this within its container @see {T} */
-        index: number;
-    }
-
     declare type TargetBonusValue = Array<
         string | number | object | string[] | number[] | object[]
     >;
 
-    declare type Target = {
+    declare class Target {
         key: string;
         value: TargetBonusValue;
         join: 'and' | 'or';
-    };
-    declare type IndexedTarget = Target & Indexed<Target>;
+    }
 
-    declare type Bonus = {
+    declare class Bonus {
         key: string;
         value: TargetBonusValue;
-    };
-    declare type IndexedBonus = Bonus & Indexed<Bonus>;
+    }
 
-    class SetTargetBonus {
+    declare class SetTargetBonus {
         bonuses: Bonus[];
         targets: Target[];
     }
-    declare type IndexedSetTargetBonus = SetTargetBonus & Indexed;
 
     interface BaseDocument {
         getFlag(

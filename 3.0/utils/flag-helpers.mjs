@@ -1,26 +1,24 @@
 import { SETS_FLAG_KEY, MODULE_NAME } from '../consts.mjs';
 
 /**
- *
+ * @template {'bonuses'|'targets'} BonusOrTarget
  * @param {ItemPF} item
  * @param {number} setIndex
- * @param {'bonuses'|'targets'} type
+ * @param {BonusOrTarget} type
  * @param {number} index
- * @returns {IndexedBonus|IndexedTarget}
+ * @returns {SetTargetBonus[BonusOrTarget][number]}
  */
 const _getSetTargetBonusByIndex = (item, setIndex, type, index) => {
     const sets = item.getFlag(MODULE_NAME, SETS_FLAG_KEY) || [];
     const current = (sets[setIndex]?.[type] || [])[index];
-    return current
-        ? { ...current, index }
-        : current;
+    return current;
 }
 
 /**
  * @param {ItemPF} item
  * @param {number} setIndex
  * @param {number} index
- * @returns {IndexedBonus}
+ * @returns {Bonus}
  */
 const getSetBonusByIndex = (item, setIndex, index) => _getSetTargetBonusByIndex(item, setIndex, 'bonuses', index);
 
@@ -28,24 +26,23 @@ const getSetBonusByIndex = (item, setIndex, index) => _getSetTargetBonusByIndex(
  * @param {ItemPF} item
  * @param {number} setIndex
  * @param {number} index
- * @returns {IndexedTarget}
+ * @returns {Target}
  */
-// @ts-ignore
 const getSetTargetByIndex = (item, setIndex, index) => _getSetTargetBonusByIndex(item, setIndex, 'targets', index);
 
 /**
  *
+ * @template {'bonuses'|'targets'} BonusOrTarget
  * @param {ItemPF} item
  * @param {number} setIndex
- * @param {'bonuses'|'targets'} type
+ * @param {BonusOrTarget} type
  * @param {string} key
- * @returns {Array<IndexedBonus|IndexedTarget>}
+ * @returns {SetTargetBonus[BonusOrTarget]}
  */
 const _getSetTargetBonusByKey = (item, setIndex, type, key) => {
     const sets = item.getFlag(MODULE_NAME, SETS_FLAG_KEY) || [];
     const current = sets[setIndex]?.[type] || [];
     const value = current
-        .map((x, i) => ({ ...x, index: i }))
         .filter((x) => x.key === key);
     return value;
 }
@@ -54,7 +51,7 @@ const _getSetTargetBonusByKey = (item, setIndex, type, key) => {
  * @param {ItemPF} item
  * @param {number} setIndex
  * @param {string} key
- * @returns {IndexedBonus[]}
+ * @returns {Bonus[]}
  */
 const getSetBonusByKey = (item, setIndex, key) => _getSetTargetBonusByKey(item, setIndex, 'bonuses', key);
 
@@ -62,25 +59,23 @@ const getSetBonusByKey = (item, setIndex, key) => _getSetTargetBonusByKey(item, 
  * @param {ItemPF} item
  * @param {number} setIndex
  * @param {string} key
- * @returns {IndexedTarget[]}
+ * @returns {Target[]}
  */
-// @ts-ignore
 const getSetTargetByKey = (item, setIndex, key) => _getSetTargetBonusByKey(item, setIndex, 'targets', key);
 
 /**
  * @param {ItemPF} item
  * @param {number} setIndex
+ * @returns {SetTargetBonus}
  */
-const getSetByIndex = (item, setIndex) => {
-    return (getSets(item))[setIndex];
-}
+const getSetByIndex = (item, setIndex) => getSets(item)[setIndex];
 
 /**
+ *
  * @param {ItemPF} item
+ * @returns {SetTargetBonus[]}
  */
-const getSets = (item) => {
-    return item.getFlag(MODULE_NAME, SETS_FLAG_KEY);
-}
+const getSets = (item) => item.getFlag(MODULE_NAME, SETS_FLAG_KEY);
 
 /**
  * @param {ItemPF} item
