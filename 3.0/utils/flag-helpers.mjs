@@ -1,5 +1,15 @@
 import { SETS_FLAG_KEY, MODULE_NAME } from '../consts.mjs';
 
+// might need to do a bit more complex than here -- see https://discord.com/channels/170995199584108546/722559135371231352/1199838674616057926
+/**
+ * @param {ItemPF} item
+ * @returns {SetTargetBonus[]}
+ */
+const _getSets = (item) => {
+    const flags = item.getFlag(MODULE_NAME, SETS_FLAG_KEY) || [];
+    return [...flags];
+}
+
 /**
  * @template {'bonuses'|'targets'} BonusOrTarget
  * @param {ItemPF} item
@@ -9,7 +19,7 @@ import { SETS_FLAG_KEY, MODULE_NAME } from '../consts.mjs';
  * @returns {SetTargetBonus[BonusOrTarget][number]}
  */
 const _getSetTargetBonusByIndex = (item, setIndex, type, index) => {
-    const sets = item.getFlag(MODULE_NAME, SETS_FLAG_KEY) || [];
+    const sets = _getSets(item);
     const current = (sets[setIndex]?.[type] || [])[index];
     return current;
 }
@@ -40,7 +50,7 @@ const getSetTargetByIndex = (item, setIndex, index) => _getSetTargetBonusByIndex
  * @returns {SetTargetBonus[BonusOrTarget]}
  */
 const _getSetTargetBonusByKey = (item, setIndex, type, key) => {
-    const sets = item.getFlag(MODULE_NAME, SETS_FLAG_KEY) || [];
+    const sets = _getSets(item);
     const current = sets[setIndex]?.[type] || [];
     const value = current
         .filter((x) => x.key === key);
@@ -68,14 +78,14 @@ const getSetTargetByKey = (item, setIndex, key) => _getSetTargetBonusByKey(item,
  * @param {number} setIndex
  * @returns {SetTargetBonus}
  */
-const getSetByIndex = (item, setIndex) => getSets(item)[setIndex];
+const getSetByIndex = (item, setIndex) => _getSets(item)[setIndex];
 
 /**
  *
  * @param {ItemPF} item
  * @returns {SetTargetBonus[]}
  */
-const getSets = (item) => item.getFlag(MODULE_NAME, SETS_FLAG_KEY);
+const getSets = (item) => _getSets(item);
 
 /**
  * @param {ItemPF} item
@@ -83,7 +93,7 @@ const getSets = (item) => item.getFlag(MODULE_NAME, SETS_FLAG_KEY);
  * @param {Bonus} bonus
  */
 const addSetBonus = async (item, setIndex, bonus) => {
-    const sets = item.getFlag(MODULE_NAME, SETS_FLAG_KEY) || [];
+    const sets = _getSets(item);
     const set = sets[setIndex] || { bonuses: [], targets: [] };
     set.bonuses.push(bonus)
     sets[setIndex] = set;
@@ -96,7 +106,7 @@ const addSetBonus = async (item, setIndex, bonus) => {
  * @param {Target} target
  */
 const addSetTarget = async (item, setIndex, target) => {
-    const sets = item.getFlag(MODULE_NAME, SETS_FLAG_KEY) || [];
+    const sets = _getSets(item);
     const set = sets[setIndex] || { bonuses: [], targets: [] };
     set.targets.push(target)
     sets[setIndex] = set;
@@ -110,7 +120,7 @@ const addSetTarget = async (item, setIndex, target) => {
  * @param {number} index
  */
 const updateSetBonus = async (item, setIndex, bonus, index) => {
-    const sets = item.getFlag(MODULE_NAME, SETS_FLAG_KEY) || [];
+    const sets = _getSets(item);
     const set = sets[setIndex] || { bonuses: [], targets: [] };
     if (set.bonuses[index] && set.bonuses[index].key !== bonus.key) {
         throw new Error('this should never happen');
@@ -128,7 +138,7 @@ const updateSetBonus = async (item, setIndex, bonus, index) => {
  * @param {number} index
  */
 const updateSetTarget = async (item, setIndex, target, index) => {
-    const sets = item.getFlag(MODULE_NAME, SETS_FLAG_KEY) || [];
+    const sets = _getSets(item);
     const set = sets[setIndex] || { bonuses: [], targets: [] };
     if (set.targets[index] && set.targets[index].key !== target.key) {
         throw new Error('this should never happen');
