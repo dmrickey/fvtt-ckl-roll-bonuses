@@ -11,6 +11,7 @@ export const localHooks = {
     itemGetAttackSources: `${MODULE_NAME}_itemGetAttackSources`,
     itemGetTypeChatData: `${MODULE_NAME}_itemGetTypeChatData`,
     itemUse: `${MODULE_NAME}_itemUse`,
+    patchChangeValue: `${MODULE_NAME}_patchChangeValue`,
 
     /** @deprecated Do not use - makes multi attacks way too chatty */
     chatAttackEffectNotes: `${MODULE_NAME}_chatAttackEffectNotes`,

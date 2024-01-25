@@ -666,7 +666,7 @@ declare global {
                 };
             };
             abilities;
-            bonusModifiers: BonusModifers;
+            bonusModifiers: { [key: string]: string };
             damageTypes: {
                 untyped: 'Untyped';
                 slashing: 'Slashing';
