@@ -88,27 +88,50 @@ const getSetByIndex = (item, setIndex) => _getSets(item)[setIndex];
 const getSets = (item) => _getSets(item);
 
 /**
+ * @template {'bonuses'|'targets'} BonusOrTarget
+ * @param {ItemPF} item
+ * @param {number} setIndex
+ * @param {BonusOrTarget} type
+ * @param {SetTargetBonus[BonusOrTarget][number]} value
+ */
+const _addSetTargetBonus = async (item, setIndex, type, value) => {
+    const sets = _getSets(item);
+    const set = sets[setIndex] || { bonuses: [], targets: [] };
+    set[type].push(value)
+    sets[setIndex] = set;
+    await item.setFlag(MODULE_NAME, SETS_FLAG_KEY, sets);
+}
+
+/**
  * @param {ItemPF} item
  * @param {number} setIndex
  * @param {Bonus} bonus
  */
-const addSetBonus = async (item, setIndex, bonus) => {
-    const sets = _getSets(item);
-    const set = sets[setIndex] || { bonuses: [], targets: [] };
-    set.bonuses.push(bonus)
-    sets[setIndex] = set;
-    await item.setFlag(MODULE_NAME, SETS_FLAG_KEY, sets);
-};
+const addSetBonus = async (item, setIndex, bonus) => await _addSetTargetBonus(item, setIndex, 'bonuses', bonus);
 
 /**
  * @param {ItemPF} item
  * @param {number} setIndex
  * @param {Target} target
  */
-const addSetTarget = async (item, setIndex, target) => {
+const addSetTarget = async (item, setIndex, target) => await _addSetTargetBonus(item, setIndex, 'targets', target);
+
+/**
+ * @template {'bonuses'|'targets'} BonusOrTarget
+ * @param {ItemPF} item
+ * @param {number} setIndex
+ * @param {BonusOrTarget} type
+ * @param {SetTargetBonus[BonusOrTarget][number]} value
+ * @param {number} index
+ */
+const _updateSetTargetBonus = async (item, setIndex, type, value, index) => {
     const sets = _getSets(item);
     const set = sets[setIndex] || { bonuses: [], targets: [] };
-    set.targets.push(target)
+    if (set[type][index] && set[type][index].key !== value.key) {
+        throw new Error('this should never happen');
+        // todo see if I need to handle this (or if I do get this, it's probably broken code elsewhere)
+    }
+    set[type][index] = value;
     sets[setIndex] = set;
     await item.setFlag(MODULE_NAME, SETS_FLAG_KEY, sets);
 }
@@ -119,17 +142,7 @@ const addSetTarget = async (item, setIndex, target) => {
  * @param {Bonus} bonus
  * @param {number} index
  */
-const updateSetBonus = async (item, setIndex, bonus, index) => {
-    const sets = _getSets(item);
-    const set = sets[setIndex] || { bonuses: [], targets: [] };
-    if (set.bonuses[index] && set.bonuses[index].key !== bonus.key) {
-        throw new Error('this should never happen');
-        // todo see if I need to handle this (or if I do get this, it's probably broken code elsewhere)
-    }
-    set.bonuses[index] = bonus;
-    sets[setIndex] = set;
-    await item.setFlag(MODULE_NAME, SETS_FLAG_KEY, sets);
-}
+const updateSetBonus = async (item, setIndex, bonus, index) => await _updateSetTargetBonus(item, setIndex, 'bonuses', bonus, index);
 
 /**
  * @param {ItemPF} item
@@ -137,17 +150,7 @@ const updateSetBonus = async (item, setIndex, bonus, index) => {
  * @param {Target} target
  * @param {number} index
  */
-const updateSetTarget = async (item, setIndex, target, index) => {
-    const sets = _getSets(item);
-    const set = sets[setIndex] || { bonuses: [], targets: [] };
-    if (set.targets[index] && set.targets[index].key !== target.key) {
-        throw new Error('this should never happen');
-        // todo see if I need to handle this (or if I do get this, it's probably broken code elsewhere)
-    }
-    set.targets[index] = target;
-    sets[setIndex] = set;
-    await item.setFlag(MODULE_NAME, SETS_FLAG_KEY, sets);
-}
+const updateSetTarget = async (item, setIndex, target, index) => await _updateSetTargetBonus(item, setIndex, 'targets', target, index);
 
 /**
  *
