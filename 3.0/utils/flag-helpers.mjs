@@ -47,7 +47,7 @@ const getSetTargetByIndex = (item, setIndex, index) => _getSetTargetBonusByIndex
  * @param {number} setIndex
  * @param {BonusOrTarget} type
  * @param {string} key
- * @returns {SetTargetBonus[BonusOrTarget]}
+ * @returns {SetTargetBonus[BonusOrTarget][number][]}
  */
 const _getSetTargetBonusByKey = (item, setIndex, type, key) => {
     const sets = _getSets(item);
@@ -97,7 +97,8 @@ const getSets = (item) => _getSets(item);
 const _addSetTargetBonus = async (item, setIndex, type, value) => {
     const sets = _getSets(item);
     const set = sets[setIndex] || { bonuses: [], targets: [] };
-    set[type].push(value)
+    // @ts-ignore
+    set[type].push(value);
     sets[setIndex] = set;
     await item.setFlag(MODULE_NAME, SETS_FLAG_KEY, sets);
 }
