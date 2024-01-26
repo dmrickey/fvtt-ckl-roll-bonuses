@@ -51,8 +51,9 @@ Hooks.on('renderItemSheet', (
 
     const current = getDocDFlags(item, bonusKey)[0];
     const formula = getDocDFlags(item, formulaKey)[0];
-    const choices = Object.keys(bonusModifiers)
-        .map((key) => ({ key, label: bonusModifiers[key] }));
+
+    const choices = Object.entries(bonusModifiers)
+        .map(([key, label]) => ({ key, label }));
 
     textInputAndKeyValueSelect({
         text: { current: formula, key: formulaKey },
