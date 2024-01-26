@@ -1,4 +1,4 @@
-import { localHooks } from './util/hooks.mjs';
+import { HookWrapperHandler, localHooks } from './util/hooks.mjs';
 import { MODULE_NAME } from './consts.mjs';
 
 import './handlebars-handlers/init.mjs';
@@ -25,12 +25,12 @@ function setEffectNotesHTMLWrapper(wrapped) {
 }
 
 /**
- * @param {() => number} wrapped
+ * @param {() => number | string} wrapped
  * @this ItemChange
  */
 function patchChangeValue(wrapped) {
-    let value = wrapped();
-    Hooks.call(localHooks.patchChangeValue, this, { value });
+    const seed = wrapped();
+    const value = HookWrapperHandler.handleHookSync(localHooks.patchChangeValue, seed, this);
     return value;
 }
 

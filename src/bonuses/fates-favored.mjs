@@ -1,20 +1,21 @@
-import { localHooks } from '../util/hooks.mjs';
+import { HookWrapperHandler, localHooks } from '../util/hooks.mjs';
 import { localize } from '../util/localize.mjs';
 
 const fatesFavored = 'fates-favored';
 
 /**
+ * @param {number | string} value
  * @param {ItemChange} itemChange
- * @param {object} obj
- * @param {number | string} obj.value
+ * @returns {number | string}
  */
-function patchChangeValue(itemChange, { value }) {
+function patchChangeValue(value, itemChange) {
     const actor = itemChange.parent?.actor;
     value = itemChange.modifier === 'luck' && actor?.itemFlags?.boolean?.[fatesFavored]
         ? isNaN(+value) ? `${value} + 1` : (+value + 1)
         : value;
+    return value;
 }
-Hooks.on(localHooks.patchChangeValue, patchChangeValue);
+HookWrapperHandler.registerHandler(localHooks.patchChangeValue, patchChangeValue);
 
 /**
  * Increase luck source modifier by 1 for tooltip
