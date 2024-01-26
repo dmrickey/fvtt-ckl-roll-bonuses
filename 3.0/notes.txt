@@ -37,9 +37,10 @@ Needs an API to set values - it should use the API itself
 All keys should be added to the api
 └─ Should use a common method to add keys to the API so it can detect collisions in case I'm dumb and re-use a key
 
-Add `?` of `i` to everything with hover hints
+Add `?` of `i` icons to everything with hover hints
 
 Two separate `+` buttons
 - first adds a new set (accompanied by a delete button)
 - second that adds a new target/bonus within a set (each target/bonus needs its own individual delete button)
-  - Should open its own UI that shows all available optiosn to add - also shows the `?` or `i` from above
+  - Should open its own UI that shows all available options to add - also shows the `?` or `i` from above
+  - Should automatically disable incompatible target groups / or bonus groups (i.e. a skill bonus can't be used for weapon targets, or damage can't be used with a skill target)
