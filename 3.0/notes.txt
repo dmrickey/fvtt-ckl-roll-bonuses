@@ -7,19 +7,17 @@ Structure looks like this
 Item
 └─ flags
    └─ MODULE
-      |  // TargetBonusSets
-      └─ SETS
+      └─ SETS // SetTargetBonus[]
          └─ [
               // this is a SetTargetBonus
               0: {
-                    targets: [
-                        // these are each TargetBonus
-                        0: {key: '', value: ...},
-                        1: {key: '', value: ...},
-                        2: {key: '', value: ...},
+                    targets: [ // Target[]
+                        0: {key: '', value: ..., join: ''},
+                        1: {key: '', value: ..., join: ''},
+                        2: {key: '', value: ..., join: ''},
                         ...
                     ],
-                    bonuses: [
+                    bonuses: [ // Bonus[]
                         0: {key: '', value: ...},
                         1: {key: '', value: ...},
                         2: {key: '', value: ...},
@@ -34,6 +32,7 @@ Needs to cache itself when item is updated.
 Also each target/bonus needs to be added to a static lookup based on the cached key
 
 Needs an API to set values - it should use the API itself
+hbs handlers will emit changed values instead of saving the values themselves (then the targetbonus can do the saving it self with the function it registered to the api)
 All keys should be added to the api
 └─ Should use a common method to add keys to the API so it can detect collisions in case I'm dumb and re-use a key
 
@@ -44,3 +43,5 @@ Two separate `+` buttons
 - second that adds a new target/bonus within a set (each target/bonus needs its own individual delete button)
   - Should open its own UI that shows all available options to add - also shows the `?` or `i` from above
   - Should automatically disable incompatible target groups / or bonus groups (i.e. a skill bonus can't be used for weapon targets, or damage can't be used with a skill target)
+
+Reduce settings for translations for Improved/Greater to a single word for each since they're always the same

@@ -1,6 +1,6 @@
 import { MODULE_NAME } from "../consts.mjs";
 
-export const templates = {
+export const templates = /** @type {const} */ ({
     // generic shortcuts
     keyValueSelect: `modules/${MODULE_NAME}/hbs/labeled-key-value-dropdown-select.hbs`,
     stringSelect: `modules/${MODULE_NAME}/hbs/labeled-string-dropdown-select.hbs`,
@@ -23,18 +23,17 @@ export const templates = {
 
     // targeted - bonus or target
     textInputList: `modules/${MODULE_NAME}/hbs/targeted/text-input-list.hbs`,
-};
+});
 
 /**
- *
- * @param {string} template
- * @param {{[key: string]: any}} templateData
+ * @param {(typeof templates)[keyof typeof templates]} template
+ * @param {{[key: string]: any}?} templateData
  * @returns {HTMLDivElement}
  */
 export function createTemplate(template, templateData) {
     const div = document.createElement('div');
     div.innerHTML = Handlebars.partials[template](
-        templateData,
+        templateData || {},
         { allowProtoMethodsByDefault: true, allowProtoPropertiesByDefault: true },
     );
     return div;

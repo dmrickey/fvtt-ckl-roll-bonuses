@@ -1,0 +1,32 @@
+<div>
+    {{#each sets}}
+    <div>trash for this set</div>
+
+    <div class="row">
+        <h3>{{localize TARGET-HEADER}}</h3>
+        <div>plus new target</div>
+    </div>
+
+    {{#each targets}}
+    <div class="row">
+        {{> (lookup . 'template') data=this}}
+        <div>trash delete this target</div>
+    </div>
+    {{/each}}
+
+    <div class="row">
+        <h3>{{localize BONUS-HEADER}}</h3>
+        <div>plus new bonus</div>
+    </div>
+
+    {{#each bonuses}}
+    <div class="row">
+        {{> (lookup . 'template') data=this}}
+        <div>trash delete this bonus</div>
+    </div>
+    {{/each}}
+
+    <hr>
+    {{/each}}
+    <div>plus icon for new set</div>
+</div>

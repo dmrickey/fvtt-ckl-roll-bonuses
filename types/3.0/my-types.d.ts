@@ -5,15 +5,30 @@ declare global {
         string | number | object | string[] | number[] | object[]
     >;
 
+    declare class Prepared {
+        label: string;
+        template: string;
+        [key: string]: any;
+    }
+
     declare class Target {
         key: string;
         value: TargetBonusValue;
         join: 'and' | 'or';
     }
 
+    declare type PreparedTarget = Prepared & Target;
+
     declare class Bonus {
         key: string;
         value: TargetBonusValue;
+    }
+
+    declare type PreparedBonus = Prepared & Bonus;
+
+    declare class PreparedSetTargetBonus {
+        bonuses: PreparedBonus[];
+        targets: PreparedTarget[];
     }
 
     declare class SetTargetBonus {
@@ -34,5 +49,12 @@ declare global {
             value: SetTargetBonus[]
         );
         setFlag<T>(moduleName: string, key: string, value: T);
+    }
+
+    interface PrepareBonusData {
+        prepareBonusData(actor: ActorPF | null, item: ItemPF): PreparedBonus;
+    }
+    interface PrepareTargetData {
+        prepareTargetData(actor: ActorPF | null, item: ItemPF): PreparedTarget;
     }
 }
