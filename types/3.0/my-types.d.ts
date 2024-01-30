@@ -52,9 +52,11 @@ declare global {
     }
 
     interface PrepareBonusData {
+        key: string;
         prepareBonusData(actor: ActorPF | null, item: ItemPF): PreparedBonus;
     }
     interface PrepareTargetData {
+        key: string;
         prepareTargetData(actor: ActorPF | null, item: ItemPF): PreparedTarget;
     }
 }

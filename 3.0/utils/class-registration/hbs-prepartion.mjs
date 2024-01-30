@@ -6,16 +6,14 @@ const targets = {};
 const bonuses = {};
 
 /**
- * @param {string} key
  * @param {PrepareTargetData} target
  */
-const registerTarget = (key, target) => targets[key] = target;
+const registerTargetHbs = (target) => targets[target.key] = target;
 
 /**
- * @param {string} key
  * @param {PrepareBonusData} bonus
  */
-const registerBonus = (key, bonus) => bonuses[key] = bonus;
+const registerBonusHbs = (bonus) => bonuses[bonus.key] = bonus;
 
 /**
  *
@@ -24,13 +22,13 @@ const registerBonus = (key, bonus) => bonuses[key] = bonus;
  * @param {SetTargetBonus[]} sets
  * @returns {PreparedSetTargetBonus[]}
  */
-const prepareData = (actor, item, sets) => sets.map((setTargetBonus) => ({
+const prepareHbsData = (actor, item, sets) => sets.map((setTargetBonus) => ({
     bonuses: setTargetBonus.bonuses.map((bonus) => bonuses[bonus.key]?.prepareBonusData(actor, item)),
     targets: setTargetBonus.targets.map((target) => targets[target.key]?.prepareTargetData(actor, item)),
 }));
 
 export {
-    prepareData,
-    registerBonus,
-    registerTarget,
+    prepareHbsData,
+    registerBonusHbs,
+    registerTargetHbs,
 };

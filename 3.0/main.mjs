@@ -1,7 +1,7 @@
 import { addNodeToRollBonus } from '../src/handlebars-handlers/roll-bonus-on-item-sheet.mjs';
 import { createTemplate, templates } from './handlebars-handlers/templates.mjs';
 import { getSets } from './utils/flag-helpers.mjs';
-import { prepareData } from './utils/hbs-prepartion.mjs';
+import { prepareHbsData } from './utils/class-registration/hbs-prepartion.mjs';
 
 Hooks.on('renderItemSheet', (
     /** @type {ItemSheetPF} */ { actor, item },
@@ -9,7 +9,7 @@ Hooks.on('renderItemSheet', (
     /** @type {unknown} */ _data
 ) => {
     const currentSets = getSets(item);
-    const prepareSets = prepareData(actor, item, currentSets);
+    const prepareSets = prepareHbsData(actor, item, currentSets);
     const div = createTemplate(
         templates.targetBonusArea,
         { item, sets: prepareSets },
