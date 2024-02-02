@@ -47,8 +47,13 @@ declare global {
             moduleName: string,
             key: 'ckl-target-bonus-sets',
             value: SetTargetBonus[]
-        );
-        setFlag<T>(moduleName: string, key: string, value: T);
+        ): Promise;
+        setFlag<T>(moduleName: string, key: string, value: T): Promise;
+
+        update<T>(
+            update: { [key: string]: any },
+            { render: boolean }?
+        ): Promise;
     }
 
     interface PrepareBonusData {

@@ -100,7 +100,7 @@ const _addSetTargetBonus = async (item, setIndex, type, value) => {
     // @ts-ignore
     set[type].push(value);
     sets[setIndex] = set;
-    await item.setFlag(MODULE_NAME, SETS_FLAG_KEY, sets);
+    await item.update({ [`flags.${MODULE_NAME}.${SETS_FLAG_KEY}`]: sets }, { render: false });
 }
 
 /**
@@ -134,7 +134,7 @@ const _updateSetTargetBonus = async (item, setIndex, type, value, index) => {
     }
     set[type][index] = value;
     sets[setIndex] = set;
-    await item.setFlag(MODULE_NAME, SETS_FLAG_KEY, sets);
+    await item.update({ [`flags.${MODULE_NAME}.${SETS_FLAG_KEY}`]: sets }, { render: false });
 }
 
 /**
@@ -160,7 +160,7 @@ const updateSetTarget = async (item, setIndex, target, index) => await _updateSe
 const addSet = async (item) => {
     const current = getSets(item);
     current.push({ bonuses: [], targets: [] });
-    await item.setFlag(MODULE_NAME, SETS_FLAG_KEY, current);
+    await item.update({ [`flags.${MODULE_NAME}.${SETS_FLAG_KEY}`]: current }, { render: false });
 }
 
 export {
