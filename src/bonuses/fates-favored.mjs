@@ -1,21 +1,21 @@
-import { MODULE_NAME } from '../consts.mjs';
-import { localHooks } from '../util/hooks.mjs';
+import { HookWrapperHandler, localHooks } from '../util/hooks.mjs';
 import { localize } from '../util/localize.mjs';
 
 const fatesFavored = 'fates-favored';
 
 /**
- * @param {() => number} wrapped
- * @this ItemChange
+ * @param {number | string} value
+ * @param {ItemChange} itemChange
+ * @returns {number | string}
  */
-function patchChangeValue(wrapped) {
-    const actor = this.parent?.actor;
-    const value = wrapped();
-    return this.modifier === 'luck' && actor?.itemFlags?.boolean?.[fatesFavored]
+function patchChangeValue(value, itemChange) {
+    const actor = itemChange.parent?.actor;
+    value = itemChange.modifier === 'luck' && actor?.itemFlags?.boolean?.[fatesFavored]
         ? isNaN(+value) ? `${value} + 1` : (+value + 1)
         : value;
+    return value;
 }
-Hooks.once('setup', () => libWrapper.register(MODULE_NAME, 'pf1.components.ItemChange.prototype.value', patchChangeValue, libWrapper.WRAPPER));
+HookWrapperHandler.registerHandler(localHooks.patchChangeValue, patchChangeValue);
 
 /**
  * Increase luck source modifier by 1 for tooltip
