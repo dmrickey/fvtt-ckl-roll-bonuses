@@ -1,4 +1,4 @@
-import { localHooks } from './util/hooks.mjs';
+import { HookWrapperHandler, localHooks } from './util/hooks.mjs';
 import { MODULE_NAME } from './consts.mjs';
 
 import './handlebars-handlers/init.mjs';
@@ -22,6 +22,16 @@ function setAttackNotesHTMLWrapper(wrapped) {
 function setEffectNotesHTMLWrapper(wrapped) {
     Hooks.call(localHooks.chatAttackEffectNotes, this);
     return wrapped();
+}
+
+/**
+ * @param {() => number | string} wrapped
+ * @this ItemChange
+ */
+function patchChangeValue(wrapped) {
+    const seed = wrapped();
+    const value = HookWrapperHandler.handleHookSync(localHooks.patchChangeValue, seed, this);
+    return value;
 }
 
 /**
@@ -125,11 +135,12 @@ function actionDamageSources(wrapped) {
 }
 
 Hooks.once('setup', () => {
-    libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype.alterRollData', actionUseAlterRollData, libWrapper.WRAPPER)
+    libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype.alterRollData', actionUseAlterRollData, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype.handleConditionals', actionUseHandleConditionals, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype._getConditionalParts', getConditionalParts, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ChatAttack.prototype.setAttackNotesHTML', setAttackNotesHTMLWrapper, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ChatAttack.prototype.setEffectNotesHTML', setEffectNotesHTMLWrapper, libWrapper.WRAPPER);
+    libWrapper.register(MODULE_NAME, 'pf1.components.ItemChange.prototype.value', patchChangeValue, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.damageSources', actionDamageSources, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.dice.d20Roll', d20RollWrapper, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype.getAttackSources', itemGetAttackSources, libWrapper.WRAPPER);
