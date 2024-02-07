@@ -20,6 +20,7 @@
                 }
             }
         },
+        "change-type-offset": "Change Offset",
         "cancel": "Cancel",
         "cl-mod": "{mod} CL",
         "cl-label-mod": "{mod} CL ({label})",

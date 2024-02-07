@@ -3,8 +3,8 @@ import { KeyedDFlagHelper, getDocDFlags } from "../util/flag-helpers.mjs";
 import { HookWrapperHandler, localHooks } from "../util/hooks.mjs";
 import { localize } from "../util/localize.mjs";
 
-const bonusKey = 'bonus-type-offset';
-const formulaKey = 'bonus-type-offset-formula';
+const bonusKey = 'change-type-offset';
+const formulaKey = 'change-type-offset-formula';
 
 /**
  * @param {number | string} value
