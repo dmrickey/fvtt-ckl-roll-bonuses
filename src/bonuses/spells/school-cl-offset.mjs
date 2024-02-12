@@ -31,7 +31,6 @@ Hooks.on(localHooks.itemGetTypeChatData, (
     }
 });
 
-
 // register hint on spell
 registerItemHint((hintcls, actor, item, _data) => {
     if (!item || !(item instanceof pf1.documents.item.ItemSpellPF)) return;

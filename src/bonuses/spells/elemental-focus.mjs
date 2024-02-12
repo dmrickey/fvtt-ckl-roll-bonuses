@@ -136,12 +136,12 @@ function getDcBonus(action) {
         .flatMap(({ custom, values }) => ([...custom.split(';').map(x => x.trim()), ...values]))
         .filter(truthiness);
 
-    const mythicFocuses = getDocDFlags(actor, mythicElementalFocusKey);
+    const mythicFocuses = getDocDFlags(actor, mythicElementalFocusKey, { includeInactive: false });
     const hasMythicFocus = intersects(damageTypes, mythicFocuses);
 
     let bonus = 0;
     const handleFocus = (/** @type {string} */key) => {
-        const focuses = getDocDFlags(actor, key);
+        const focuses = getDocDFlags(actor, key, { includeInactive: false });
         const hasFocus = intersects(damageTypes, focuses);
         if (hasFocus) {
             bonus += 1;
@@ -194,7 +194,7 @@ Hooks.on('renderItemSheet', (
         if (actor) {
             elements = {};
             // @ts-ignore
-            const /** @type {string[]}*/ existingElementalFocuses = getDocDFlags(actor, elementalFocusKey);
+            const /** @type {string[]}*/ existingElementalFocuses = getDocDFlags(actor, elementalFocusKey, { includeInactive: false });
             existingElementalFocuses.forEach((focus) => {
                 elements[focus] = pf1.registry.damageTypes.get(focus);
             });

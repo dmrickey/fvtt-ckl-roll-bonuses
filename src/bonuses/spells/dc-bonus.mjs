@@ -18,7 +18,7 @@ Hooks.on(localHooks.itemGetTypeChatData, (
     const { actor } = item;
     if (!actor) return;
 
-    const bonuses = getDocDFlags(actor, key);
+    const bonuses = getDocDFlags(actor, key, { includeInactive: false });
     const bonus = bonuses
         .map((x) => RollPF.safeTotal(x, rollData))
         .reduce((acc, cur) => acc + cur, 0);
@@ -59,7 +59,7 @@ Hooks.on('pf1GetRollData', (
     }
 
     rollData.dcBonus ||= 0;
-    const bonuses = getDocDFlags(actor, key);
+    const bonuses = getDocDFlags(actor, key, { includeInactive: false });
     bonuses.forEach(bonus => {
         rollData.dcBonus += RollPF.safeTotal(bonus, rollData);
     });

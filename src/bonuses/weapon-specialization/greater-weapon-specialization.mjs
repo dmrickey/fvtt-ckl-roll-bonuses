@@ -82,7 +82,7 @@ function actionDamageSources({ item }, sources) {
 
     const name = localize(key);
 
-    const weaponSpecializationes = getDocDFlags(actor, key);
+    const weaponSpecializationes = getDocDFlags(actor, key, { includeInactive: false });
     const baseTypes = item.system.baseTypes;
     const isFocused = intersects(baseTypes, weaponSpecializationes);
 

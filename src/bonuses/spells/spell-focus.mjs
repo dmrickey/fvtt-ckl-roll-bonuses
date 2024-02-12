@@ -128,12 +128,12 @@ function getDcBonus(action) {
         return 0;
     }
 
-    const mythicFocuses = getDocDFlags(actor, mythicSpellFocusKey);
+    const mythicFocuses = getDocDFlags(actor, mythicSpellFocusKey, { includeInactive: false });
     const hasMythicFocus = !!mythicFocuses.find(f => f === item.system.school);
 
     let bonus = 0;
     const handleFocus = ( /** @type {string} */key) => {
-        const focuses = getDocDFlags(actor, key);
+        const focuses = getDocDFlags(actor, key, { includeInactive: false });
         const hasFocus = !!focuses.find(focus => focus === item.system.school);
         if (hasFocus) {
             bonus += 1;
@@ -184,7 +184,7 @@ Hooks.on('renderItemSheet', (
 
         if (actor) {
             spellSchools = {};
-            const existingSpellFocuses = getDocDFlags(actor, spellFocusKey);
+            const existingSpellFocuses = getDocDFlags(actor, spellFocusKey, { includeInactive: false });
             existingSpellFocuses.forEach((focus) => {
                 spellSchools[focus] = pf1.config.spellSchools[focus];
             });

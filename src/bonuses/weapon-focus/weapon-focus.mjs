@@ -191,7 +191,7 @@ Hooks.on('renderItemSheet', (
         key = isGreater ? greaterWeaponFocusKey : mythicWeaponFocusKey;
 
         if (actor) {
-            choices = getDocDFlags(actor, weaponFocusKey).map((x) => `${x}`);
+            choices = getDocDFlags(actor, weaponFocusKey, { includeInactive: false }).map((x) => `${x}`);
         }
     }
     else if ((name.includes(Settings.weaponFocus) && !isRacial)

@@ -9,21 +9,23 @@ import { uniqueArray } from "./unique-array.mjs";
  * @param {BaseDocument | undefined | null} doc - Item or Actor
  * @param {string} key
  * @param {object} [options]
- * @param {boolean} [options.ignoreActive]
+ * @param {boolean} [options.includeInactive]
  * @returns {FlagValue[]}
  */
-const getDocDFlags = (doc, key, { ignoreActive = false } = {}) => {
+const getDocDFlags = (doc, key, { includeInactive = true } = {}) => {
     // if doc is an actor
     if (doc instanceof pf1.documents.actor.ActorPF) {
         const flags = doc.items
-            .map(i => (i.isActive || ignoreActive) && i.getItemDictionaryFlag(key))
+            .filter((i) => i.isActive || includeInactive)
+            .map(i => i.getItemDictionaryFlag(key))
             .filter(truthiness);
         return flags;
     }
 
     // else read the flag off the item
     if (doc instanceof pf1.documents.item.ItemPF) {
-        return [doc.isActive && doc.getItemDictionaryFlag(key)].filter(truthiness);
+        return [(doc.isActive || includeInactive) && doc.getItemDictionaryFlag(key)]
+            .filter(truthiness);
     }
 
     return [];

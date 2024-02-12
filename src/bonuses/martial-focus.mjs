@@ -90,7 +90,7 @@ function actionDamageSources({ item }, sources) {
 
     const name = localize(key);
 
-    const martialFocuses = getDocDFlags(actor, key);
+    const martialFocuses = getDocDFlags(actor, key, { includeInactive: false });
     const groupsOnItem = [...(item.system.weaponGroups?.value || []), ...(item.system.weaponGroups?.custom || '').split(';')].filter(truthiness);
     const isFocused = intersects(groupsOnItem, martialFocuses);
 

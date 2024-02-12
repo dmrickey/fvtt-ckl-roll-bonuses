@@ -80,7 +80,7 @@ Hooks.on('renderActorSheetPF', (
     /** @type {{ find: (arg0: string) => { (): any; new (): any; each: { (arg0: { (_: any, element: HTMLElement): void; }): void; new (): any; }; }; }} */ html,
     /** @type {{ actor: ActorPF; }} */ { actor }
 ) => {
-    const vps = getDocDFlags(actor, key);
+    const vps = getDocDFlags(actor, key, { includeInactive: false });
 
     if (!vps?.length) return;
 
@@ -115,7 +115,7 @@ Hooks.on('renderActorSheetPF', (
  * @returns {ChatMessagePF|object|void} The chat message if one was created, or its data if not. `void` if the roll was cancelled.
  */
 function versatileRollSkill(wrapped, skillId, options) {
-    const vps = getDocDFlags(this, key);
+    const vps = getDocDFlags(this, key, { includeInactive: false });
 
     const journalLookup = (/** @type {string} */ skl) => {
         const link = this.getSkillInfo(skl.split('.subSkills')[0])?.journal || pf1.config.skillCompendiumEntries[skl.split('.subSkills')[0]] || '';
