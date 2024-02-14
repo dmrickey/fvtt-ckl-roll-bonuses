@@ -68,15 +68,19 @@ Hooks.on('pf1GetRollData', (
     const { item } = action;
     const isBroken = !!item.system.broken;
 
+    const { actor } = action;
+    if (!actor) {
+        return;
+    }
+
     // update critMult
     const calculateMult = () => {
         if (isBroken) {
             return 2;
         }
 
-        // todo some day change this back to use rollData.dFlags
-        const sum = new KeyedDFlagHelper(action?.actor || rollData.dFlags, critMultOffsetSelf, critMultOffsetAll, critMultOffsetId(action), critMultOffsetId(item))
-            .sumAll(rollData);
+        const sum = new KeyedDFlagHelper(actor, critMultOffsetSelf, critMultOffsetAll, critMultOffsetId(action), critMultOffsetId(item))
+            .sumAll();
 
         return +(rollData.action.ability.critMult || 2) + sum;
     };
@@ -101,8 +105,7 @@ Hooks.on('pf1GetRollData', (
             : current;
 
         const flags = [critOffsetAll, critOffsetId(item), critOffsetId(action)];
-        // todo some day change this back to use rollData.dFlags
-        const mod = new KeyedDFlagHelper(action?.actor || rollData.dFlags, ...flags).sumAll(rollData)
+        const mod = new KeyedDFlagHelper(action?.actor || rollData.dFlags, ...flags).sumAll()
             + RollPF.safeTotal(item.system.flags.dictionary[critOffsetSelf] ?? 0, rollData);
 
         range -= mod;
@@ -124,13 +127,12 @@ Hooks.once('setup', () => {
     function handleItemActionCritRangeWrapper(wrapped) {
         const { actor, item } = this;
         const action = this;
-        const rollData = actor.getRollData();
 
         const hasKeen = item.hasItemBooleanFlag(selfKeen)
             || hasAnyBFlag(actor, keenAll, keenId(item), keenId(action));
 
         const offsetFlags = [critOffsetAll, critOffsetId(item), critOffsetId(action), selfKeen];
-        const offsetHelper = new KeyedDFlagHelper(actor || rollData.dFlags, ...offsetFlags)
+        const offsetHelper = new KeyedDFlagHelper(actor, ...offsetFlags)
         if (!offsetHelper.hasAnyFlags() && !hasKeen) {
             return wrapped();
         }
@@ -145,8 +147,8 @@ Hooks.once('setup', () => {
             : current;
 
         // todo some day change this back to use rollData.dFlags
-        const mod = offsetHelper.sumAll(rollData)
-            + RollPF.safeTotal(item.system.flags.dictionary[critOffsetSelf] ?? 0, rollData);
+        const mod = offsetHelper.sumAll()
+            + RollPF.safeTotal(item.system.flags.dictionary[critOffsetSelf] ?? 0, item.getRollData());
 
         range -= mod;
         range = Math.clamped(range, 2, 20);

@@ -26,6 +26,7 @@ function patchChangeValue(value, itemChange) {
     }
 
     const formulas = Object.values(matches).map((o) => o[formulaKey]);
+    // todo use helper.sum here
     const offset = formulas
         .map(x => RollPF.safeTotal(x, actor.getRollData()))
         .reduce((acc, cur) => acc + cur, 0);

@@ -136,7 +136,7 @@ export class KeyedDFlagHelper {
     /** @type {{[key: string]: number}?} - Sums for each individual flag */
     #sumByFlag = null;
 
-    /** @type {ItemDictionaryFlags} - Keyed by item tag, and contains each flag/value */
+    /** @type {ItemDictionaryFlags} - Keyed by item tag, and contains at least one flag/value */
     #byItem = {};
 
     /** @type {string[]} - The flags*/
@@ -145,8 +145,8 @@ export class KeyedDFlagHelper {
     /** @type {{[key: FlagValue]: string[]}} Keyed by flag value, list of flags containing  */
     #byValue = {};
 
-    /** @type {ItemPF[]} */
-    #items = [];
+    /** @type {{[key: string]: ItemPF}} */
+    #items = {};
 
     // todo - maybe after pf1 v10 after user is warned when there's a tag collision I can read the dFlags off of the passed in actor
     /**
@@ -177,7 +177,7 @@ export class KeyedDFlagHelper {
                     });
 
                     if (hasFlag) {
-                        this.#items.push(item);
+                        this.#items[item.system.tag] = item;
                     }
                 }
             });
@@ -209,7 +209,7 @@ export class KeyedDFlagHelper {
      * @returns {ItemPF[]}
      */
     get flaggedItems() {
-        return [...this.#items];
+        return Object.values(this.#items);
     }
 
     /**
@@ -280,61 +280,69 @@ export class KeyedDFlagHelper {
         return this.#byValue[value] ?? [];
     }
 
-    /**
-     * Returns an array of {@link FlagValue}s as {@link String}s.
-     *
-     * @returns {string[]}
-     */
-    stringValuesForAllFlags() {
-        return uniqueArray(
-            Object.values(this.#byFlag)
-                .flatMap((x) => x)
-                .filter(truthiness)
-                .map((x) => `${x}`)
-        );
-    }
+    // /**
+    //  * Returns an array of {@link FlagValue}s as {@link String}s.
+    //  *
+    //  * @returns {string[]}
+    //  */
+    // stringValuesForAllFlags() {
+    //     return uniqueArray(
+    //         Object.values(this.#byFlag)
+    //             .flatMap((x) => x)
+    //             .filter(truthiness)
+    //             .map((x) => `${x}`)
+    //     );
+    // }
 
     /**
-     * @param {RollData} rollData
      * @returns {{[key: string]: number}}
      */
-    // @ts-ignore
-    #calculateSums(rollData) {
+    #calculateSums() {
         /** @type {{[key: string]: number}} */
         const sums = {};
-        Object.entries(this.#byFlag).forEach(([key, value]) => {
-            sums[key] = value
-                .map((x) => RollPF.safeTotal(x, rollData))
-                .reduce((acc, current) => acc + current, 0);
-        });
+
+        Object.entries(this.#byItem).forEach(([tag, dFlags]) => {
+            const item = this.#items[tag];
+            Object.entries(dFlags).forEach(([flag, flagValue]) => {
+                sums[flag] ||= 0;
+                sums[flag] += RollPF.safeTotal(flagValue, item.getRollData());
+            });
+        })
+
+        // todo verify this
+        // Object.entries(this.#byFlag).forEach(([key, value]) => {
+        //     sums[key] = value
+        //         .map((x) => {
+        //             const item = this.#items.find(i => i.id)
+        //             return RollPF.safeTotal(x, rollData);
+        //         })
+        //         .reduce((acc, current) => acc + current, 0);
+        // });
         return sums;
     }
     /**
      * Gets the keyed sums for each flag
-     * @param {RollData} rollData
      * @returns {{[key: string]: number}} Totals, keyed by flag
      */
-    sumEntries(rollData) {
-        this.#sumByFlag ??= this.#calculateSums(rollData ?? {});
+    sumEntries() {
+        this.#sumByFlag ??= this.#calculateSums();
         return { ...this.#sumByFlag };
     }
 
     /**
      * Gets the sum of all values for the given flag.
      * @param {string} flag - The flag to fetch the total for
-     * @param {RollData} rollData
      * @returns {number} - The total for the given flag
      */
-    sumOfFlag(flag, rollData) {
-        return this.sumEntries(rollData)[flag];
+    sumOfFlag(flag) {
+        return this.sumEntries()[flag];
     }
 
     /**
      * Gets the sum of all values.
-     * @param {RollData} rollData
      * @returns {number} - The combined total for all flags
      */
-    sumAll(rollData) {
-        return Object.values(this.sumEntries(rollData)).reduce((sum, current) => sum + current, 0);
+    sumAll() {
+        return Object.values(this.sumEntries()).reduce((sum, current) => sum + current, 0);
     }
 }

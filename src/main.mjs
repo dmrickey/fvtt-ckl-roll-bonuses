@@ -1,5 +1,11 @@
-import { HookWrapperHandler, localHooks } from './util/hooks.mjs';
 import { MODULE_NAME } from './consts.mjs';
+
+// specifically set this up before importing anything else so it's ready to start being populated
+game.modules.get(MODULE_NAME).api = {
+    config: {},
+};
+
+import { HookWrapperHandler, localHooks } from './util/hooks.mjs';
 
 import './handlebars-handlers/init.mjs';
 import './util/item-hints.mjs';

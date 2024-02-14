@@ -384,7 +384,10 @@ declare global {
          * @param formula - The string that should resolve to a number
          * @param rollData - The roll data used for resolving any variables in the formula
          */
-        static safeTotal(formula: string | number, rollData: RollData): number;
+        static safeTotal(
+            formula: string | number,
+            rollData: Nullable<RollData>
+        ): number;
     }
 
     type BonusModifers =

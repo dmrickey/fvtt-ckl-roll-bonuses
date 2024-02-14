@@ -8,13 +8,17 @@
   - [Targets](#targets)
 - [Class Features](#class-features)
   - [Ranger](#ranger)
+  - [Psychic](#psychic)
 - [Feats](#feats)
+  - [Bomber's eye](#bombers-eye)
   - [Extreme Mood Swings](#extreme-mood-swings)
   - [Improved Critical](#improved-critical)
+  - [Longshot](#longshot)
   - [Spell Perfection](#spell-perfection)
   - [Spirited Charge](#spirited-charge)
 - [Racial Features](#racial-features)
-  - [Air Affinity](#air-affinity)
+  - [Sylph](#sylph)
+  - [Kobold](#kobold)
 - [Skills](#skills)
   - [Int Headband](#int-headband)
 - [Misc](#misc)
@@ -69,23 +73,34 @@
     - Perhaps do it automatically depending on target
 - Favored Terrain
   - Add a button to chat cards to increase the skill/initiative/whatever roll when applicable
+## Psychic
+- Phrenic Amplification
+  - increases DC of `mind-affecting` spells by 1/2/3
 
 # Feats
+## Bomber's eye
+- Increase throwing range
 ## Extreme Mood Swings
 - Increase each morale bonus you receive by 1.
 - https://www.d20pfsrd.com/feats/general-feats/extreme-mood-swings/
 ## Improved Critical
 - Selects individual weapon types (like Weapon Focus) and grants keen to all of those
+## Longshot
+- Increase bow range
 ## Spell Perfection
 - https://www.d20pfsrd.com/feats/general-feats/spell-perfection/
 ## Spirited Charge
 - Double Damage without critting
 
+
 # Racial Features
-## Air Affinity
-- Sylph sorcerers with the elemental (air) bloodline treat their Charisma scores as 2 points higher for the purposes of all sorcerer spells and class abilities
+## Sylph
+- Air Affinity sorcerers with the elemental (air) bloodline treat their Charisma scores as 2 points higher for the purposes of all sorcerer spells and class abilities
   - Specifically just "treat <ability score> higher/lower for <spell book>"
   - maybe also "treat <ability score> higher/lower for <class ability>" -- would need to be based off of class key and ability that has a parent as that class
+## Kobold
+- Frightener
+  - +1 DC for `fear` spells
 
 # Skills
 ## Int Headband
