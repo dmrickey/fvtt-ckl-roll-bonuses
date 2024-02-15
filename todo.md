@@ -7,8 +7,9 @@
   - [Bonuses](#bonuses)
   - [Targets](#targets)
 - [Class Features](#class-features)
-  - [Ranger](#ranger)
+  - [Cleric](#cleric)
   - [Psychic](#psychic)
+  - [Ranger](#ranger)
 - [Feats](#feats)
   - [Bomber's eye](#bombers-eye)
   - [Extreme Mood Swings](#extreme-mood-swings)
@@ -66,16 +67,19 @@
 - Spell Type Target*
   - *Would deprecate everything under "spells"
 
-# Class Features 
+# Class Features
+## Cleric
+### Healing Domain - Healer's Blessing
+- Cure Spells are treated as if they're empowered (+50% healing)
+## Psychic
+### Phrenic Amplification
+  - increases DC of `mind-affecting` spells by 1/2/3
 ## Ranger
-- Favored Enemy
+### Favored Enemy
   - Add a button to chat cards to modify ranger damage for favored enemy 
     - Perhaps do it automatically depending on target
-- Favored Terrain
+### Favored Terrain
   - Add a button to chat cards to increase the skill/initiative/whatever roll when applicable
-## Psychic
-- Phrenic Amplification
-  - increases DC of `mind-affecting` spells by 1/2/3
 
 # Feats
 ## Bomber's eye
@@ -95,11 +99,12 @@
 
 # Racial Features
 ## Sylph
-- Air Affinity sorcerers with the elemental (air) bloodline treat their Charisma scores as 2 points higher for the purposes of all sorcerer spells and class abilities
+### Air Affinity
+- sorcerers with the elemental (air) bloodline treat their Charisma scores as 2 points higher for the purposes of all sorcerer spells and class abilities
   - Specifically just "treat <ability score> higher/lower for <spell book>"
   - maybe also "treat <ability score> higher/lower for <class ability>" -- would need to be based off of class key and ability that has a parent as that class
 ## Kobold
-- Frightener
+### Frightener
   - +1 DC for `fear` spells
 
 # Skills
@@ -133,7 +138,7 @@
 - add checkbox to toggle between union (current implementation) and intersection (item has to supply all targeting requirements)
 
 # Housekeeping
-- reduce duplication of `Greater` in so many different settings
+- reduce duplication of `Improved` and `Greater` in so many different settings - they always use the same word in both German and Spanish (and English) so they don't need unique settings per usage
 - Consolidate weapon hints (Weapon Focus, Specialization, Martial) - find a way to make them more concise
 - Remove Inspiration from being added into the dialog and instead create a change as part of rolling the skill
 
@@ -142,6 +147,7 @@
 - Has hint on affected Item (Weapon/Attack/Spell/etc)
 - Has info/attack note
 - Actually affects what it's supposed to (duh)
+- Make sure `rollData` is using the item that has the bonus, not the item's that's being targeted nor the actor's
 
 # Deprecate
 - Weapon Focus (use bonus targets instead)
