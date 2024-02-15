@@ -227,6 +227,11 @@ export class KeyedDFlagHelper {
         return result;
     }
 
+    getHelperForItemsWithAllFlags() {
+        // todo figure out how to include items
+        return new KeyedDFlagHelper(this.#byItem, ...this.#flags);
+    }
+
     /**
      * @param {string} key
      * @param {string | number} value
