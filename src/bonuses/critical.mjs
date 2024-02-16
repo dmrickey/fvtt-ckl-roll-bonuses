@@ -32,11 +32,11 @@ registerItemHint((hintcls, _actor, item, _data) => {
 });
 
 // register crit mod - making assumptions that there aren't really positives and negatives on the same "buff"
-registerItemHint((hintcls, actor, item, _data,) => {
+registerItemHint((hintcls, _actor, item, _data,) => {
     const dFlags = getDocDFlagsStartsWith(item, 'crit-offset');
     const values = Object.values(dFlags)
         .flatMap((x) => x)
-        .map((x) => RollPF.safeTotal(x, actor.getRollData()));
+        .map((x) => RollPF.safeTotal(x, item.getRollData()));
 
     if (!values.length) {
         return;
@@ -79,7 +79,7 @@ Hooks.on('pf1GetRollData', (
             return 2;
         }
 
-        const sum = new KeyedDFlagHelper(actor, critMultOffsetSelf, critMultOffsetAll, critMultOffsetId(action), critMultOffsetId(item))
+        const sum = new KeyedDFlagHelper(actor, {}, critMultOffsetSelf, critMultOffsetAll, critMultOffsetId(action), critMultOffsetId(item))
             .sumAll();
 
         return +(rollData.action.ability.critMult || 2) + sum;
@@ -105,7 +105,7 @@ Hooks.on('pf1GetRollData', (
             : current;
 
         const flags = [critOffsetAll, critOffsetId(item), critOffsetId(action)];
-        const mod = new KeyedDFlagHelper(actor || rollData.dFlags, ...flags).sumAll()
+        const mod = new KeyedDFlagHelper(actor, {}, ...flags).sumAll()
             + RollPF.safeTotal(item.system.flags.dictionary[critOffsetSelf] ?? 0, rollData);
 
         range -= mod;
@@ -128,17 +128,17 @@ Hooks.once('setup', () => {
         const { actor, item } = this;
         const action = this;
 
+        if (!!item.system.broken) {
+            return 20;
+        }
+
         const hasKeen = item.hasItemBooleanFlag(selfKeen)
             || hasAnyBFlag(actor, keenAll, keenId(item), keenId(action));
 
         const offsetFlags = [critOffsetAll, critOffsetId(item), critOffsetId(action), selfKeen];
-        const offsetHelper = new KeyedDFlagHelper(actor, ...offsetFlags)
+        const offsetHelper = new KeyedDFlagHelper(actor, {}, ...offsetFlags)
         if (!offsetHelper.hasAnyFlags() && !hasKeen) {
             return wrapped();
-        }
-
-        if (!!item.system.broken) {
-            return 20;
         }
 
         const current = action.data.ability.critRange;

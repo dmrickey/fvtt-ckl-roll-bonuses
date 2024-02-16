@@ -26,7 +26,7 @@ Hooks.on(localHooks.itemGetTypeChatData, (
     }
 });
 
-// register hint on ability
+// register hint on source
 registerItemHint((hintcls, actor, item, _data) => {
     const flag = item.getItemDictionaryFlag(key);
     if (!flag) {

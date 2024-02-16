@@ -23,11 +23,11 @@ export class DamageBonus extends BaseBonus {
 
     /**
      * @override
-     * @param {ItemPF} target
+     * @param {ItemPF} item
      * @returns {boolean}
      */
-    static isBonusSource(target) {
-        const damages = this.#getDamageBonuses(target);
+    static isBonusSource(item) {
+        const damages = this.#getDamageBonuses(item);
         if (!damages.length) {
             return false;
         }
@@ -125,8 +125,8 @@ export class DamageBonus extends BaseBonus {
      * @param {ItemPF} options.item
      * @param {HTMLElement} options.html
      */
-    static showInputOnItemSheet({ actor, item, html }) {
-        const hasFlag = item.system.flags.boolean?.hasOwnProperty(this.key);
+    static showInputOnItemSheet({ item, html }) {
+        const hasFlag = item.hasItemBooleanFlag(this.key);
         if (!hasFlag) {
             return;
         }

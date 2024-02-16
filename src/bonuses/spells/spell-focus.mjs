@@ -44,7 +44,7 @@ Hooks.on(localHooks.itemGetTypeChatData, (
         return;
     }
 
-    const helper = new KeyedDFlagHelper(actor, ...allKeys);
+    const helper = new KeyedDFlagHelper(actor, {}, ...allKeys);
 
     const isFocused = helper.valuesForFlag(spellFocusKey).includes(item.system.school);
     const isGreater = helper.valuesForFlag(greaterSpellFocusKey).includes(item.system.school);
@@ -65,7 +65,7 @@ registerItemHint((hintcls, actor, item, _data) => {
         return;
     }
 
-    const helper = new KeyedDFlagHelper(actor, spellFocusKey, greaterSpellFocusKey, mythicSpellFocusKey);
+    const helper = new KeyedDFlagHelper(actor, {}, spellFocusKey, greaterSpellFocusKey, mythicSpellFocusKey);
 
     const isFocused = helper.valuesForFlag(spellFocusKey).includes(item.system.school);
     const isGreater = helper.valuesForFlag(greaterSpellFocusKey).includes(item.system.school);
@@ -91,7 +91,7 @@ registerItemHint((hintcls, actor, item, _data) => {
     }
 });
 
-// register hint on ability
+// register hint on source
 registerItemHint((hintcls, _actor, item, _data) => {
     const key = allKeys.find((k) => item.system.flags.dictionary[k] !== undefined);
     if (!key) {

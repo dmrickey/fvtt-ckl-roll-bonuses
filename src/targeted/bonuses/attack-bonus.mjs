@@ -14,11 +14,11 @@ export class AttackBonus extends BaseBonus {
 
     /**
      * @override
-     * @param {ItemPF} target
+     * @param {ItemPF} item
      * @returns {boolean}
      */
-    static isBonusSource(target) {
-        const value = this.#getAttackBonus(target);
+    static isBonusSource(item) {
+        const value = this.#getAttackBonus(item);
         return !!value;
     };
 
@@ -77,7 +77,7 @@ export class AttackBonus extends BaseBonus {
      * @param {HTMLElement} options.html
      */
     static showInputOnItemSheet({ item, html }) {
-        const hasFlag = item.system.flags.boolean?.hasOwnProperty(this.key);
+        const hasFlag = item.hasItemBooleanFlag(this.key);
         if (!hasFlag) {
             return;
         }
@@ -93,12 +93,11 @@ export class AttackBonus extends BaseBonus {
     }
 
     /**
-     *
-     * @param {ItemPF} targetSource
+     * @param {ItemPF} item
      */
-    static #getAttackBonus(targetSource) {
-        const formula = targetSource.getFlag(MODULE_NAME, this.key);
-        const value = RollPF.safeTotal(formula, targetSource.actor.getRollData());
+    static #getAttackBonus(item) {
+        const formula = item.getFlag(MODULE_NAME, this.key);
+        const value = RollPF.safeTotal(formula, item.getRollData());
         return value;
     }
 }

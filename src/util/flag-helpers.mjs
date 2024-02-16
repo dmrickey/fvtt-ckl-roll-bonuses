@@ -1,4 +1,5 @@
 import { MODULE_NAME } from "../consts.mjs";
+import { intersection } from './array-intersects.mjs';
 import { truthiness } from "./truthiness.mjs";
 import { uniqueArray } from "./unique-array.mjs";
 
@@ -112,14 +113,14 @@ const countBFlags = (items, ...flags) => {
 
 /**
  *
- * @param {ActorPF} actor
+ * @param {Nullable<ActorPF>} actor
  * @param  {...string} flags
  * @returns True if the actor has the boolean flag or not.
  */
 const hasAnyBFlag = (
     actor,
     ...flags
-) => flags.some((flag) => !!actor?.itemFlags?.boolean?.[flag]);
+) => !!actor && flags.some((flag) => !!actor?.itemFlags?.boolean?.[flag]);
 
 export {
     countBFlags,
@@ -148,30 +149,46 @@ export class KeyedDFlagHelper {
     /** @type {{[key: string]: ItemPF}} */
     #items = {};
 
+    /** @type {ActorPF} */
+    #actor;
+
     /**
      * @param {ActorPF} actor
+     * @param {object} options
+     * @param {boolean} [options.includeInactive]
+     * @param {boolean} [options.onlyIncludeAllFlags]
+     * @param {{[key: string]: FlagValue | ((arg: FlagValue) => boolean)}} [options.mustHave]
      * @param {...string} flags
      */
-    constructor(actor, ...flags) {
+    constructor(actor, { includeInactive = false, onlyIncludeAllFlags = false, mustHave = {} }, ...flags) {
         this.#flags = flags;
+        this.#actor = actor;
 
         actor.items.forEach(item => {
-            if (item.isActive) {
+            if (includeInactive || item.isActive) {
                 let hasFlag = false;
-                flags.forEach((flag) => {
-                    this.#byFlag[flag] ||= [];
-                    if (item.system.flags.dictionary[flag]) {
-                        const value = item.system.flags.dictionary[flag];
-                        this.#byFlag[flag].push(value);
+                if ((!onlyIncludeAllFlags || intersection(this.#flags, Object.keys(item.system.flags.dictionary)).length === this.#flags.length)
+                    && Object.entries(mustHave).every(([key, value]) => {
+                        return (typeof value === 'function')
+                            ? value(item.system.flags.dictionary[key])
+                            : item.system.flags.dictionary[key] === value;
+                    })
+                ) {
+                    flags.forEach((flag) => {
+                        this.#byFlag[flag] ||= [];
+                        if (item.system.flags.dictionary[flag]) {
+                            const value = item.system.flags.dictionary[flag];
+                            this.#byFlag[flag].push(value);
 
-                        this.#byItem[item.system.tag] ||= {};
-                        this.#byItem[item.system.tag][flag] = value;
+                            this.#byItem[item.system.tag] ||= {};
+                            this.#byItem[item.system.tag][flag] = value;
 
-                        this.#byValue[value] ||= [];
-                        this.#byValue[value].push(flag);
-                        hasFlag = true;
-                    }
-                });
+                            this.#byValue[value] ||= [];
+                            this.#byValue[value].push(flag);
+                            hasFlag = true;
+                        }
+                    });
+                }
 
                 if (hasFlag) {
                     this.#items[item.system.tag] = item;
@@ -196,6 +213,7 @@ export class KeyedDFlagHelper {
 
     /**
      * If the helper was created with 3 flags, then return {@see ItemDictionaryFlags} for only those items that have all three flags
+     * @deprecated Use `onlyIncludeAllFlags` in constructor instead
      * @returns {ItemDictionaryFlags}
      */
     getItemDictionaryFlagsWithAllFlags() {
@@ -209,9 +227,11 @@ export class KeyedDFlagHelper {
         return result;
     }
 
-    getHelperForItemsWithAllFlags() {
-        // todo figure out how to include items
-        return new KeyedDFlagHelper(this.#byItem, ...this.#flags);
+    /**
+     * @returns {ItemDictionaryFlags}
+     */
+    getItemDictionaryFlags() {
+        return { ... this.#byItem };
     }
 
     /**
@@ -296,17 +316,9 @@ export class KeyedDFlagHelper {
             });
         })
 
-        // todo verify this
-        // Object.entries(this.#byFlag).forEach(([key, value]) => {
-        //     sums[key] = value
-        //         .map((x) => {
-        //             const item = this.#items.find(i => i.id)
-        //             return RollPF.safeTotal(x, rollData);
-        //         })
-        //         .reduce((acc, current) => acc + current, 0);
-        // });
         return sums;
     }
+
     /**
      * Gets the keyed sums for each flag
      * @returns {{[key: string]: number}} Totals, keyed by flag
@@ -322,7 +334,7 @@ export class KeyedDFlagHelper {
      * @returns {number} - The total for the given flag
      */
     sumOfFlag(flag) {
-        return this.sumEntries()[flag];
+        return this.sumEntries()[flag] || 0;
     }
 
     /**

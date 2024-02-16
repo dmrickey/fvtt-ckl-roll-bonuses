@@ -27,14 +27,14 @@ Hooks.on(localHooks.itemGetTypeChatData, (
     }
 });
 
-// register hint on ability
-registerItemHint((hintcls, actor, item, _data) => {
+// register hint on source
+registerItemHint((hintcls, _actor, item, _data) => {
     const flag = item.getItemDictionaryFlag(key);
     if (!flag) {
         return;
     }
 
-    const value = RollPF.safeTotal(flag, actor?.getRollData() ?? {})
+    const value = RollPF.safeTotal(flag, item.getRollData())
     const mod = signed(value);
     const hint = hintcls.create(`${localize('dc-mod', { mod })} (${localize('all-spells')})`, [], {});
     return hint;

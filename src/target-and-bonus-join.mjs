@@ -28,7 +28,7 @@ registerItemHint((hintcls, actor, item, _data) => {
         }
     });
 
-    // register hint on bonus target source
+    // register hint on target source
     /** @type {string[]} */
     const targetHints = [];
     allTargetTypes.forEach((target) => {

@@ -37,9 +37,9 @@ function handleShieldFocusRollData(doc, rollData) {
     if (!actor) return;
 
     const isShield = doc.isActive && doc.system.slot === 'shield';
-    const hasShieldFocus = actor.itemFlags?.boolean?.[shieldFocus];
-    const hasImprovedShieldFocus = actor.itemFlags?.boolean?.[improvedShieldFocus];
-    const hasGreaterShieldFocus = actor.itemFlags?.boolean?.[greaterShieldFocus];
+    const hasShieldFocus = hasAnyBFlag(actor, shieldFocus)
+    const hasImprovedShieldFocus = hasAnyBFlag(actor, improvedShieldFocus);
+    const hasGreaterShieldFocus = hasAnyBFlag(actor, greaterShieldFocus);
 
     if (isShield) {
         if (hasShieldFocus) {
@@ -62,9 +62,9 @@ function handleShieldFocusRollData(doc, rollData) {
  * @param {ItemChange[]} tempChanges
  */
 function handleShieldFocusChange(actor, tempChanges) {
-    const hasShieldFocus = actor.itemFlags?.boolean?.[shieldFocus];
-    const hasImprovedShieldFocus = actor.itemFlags?.boolean?.[improvedShieldFocus];
-    const hasGreaterShieldFocus = actor.itemFlags?.boolean?.[greaterShieldFocus];
+    const hasShieldFocus = hasAnyBFlag(actor, shieldFocus);
+    const hasImprovedShieldFocus = hasAnyBFlag(actor, improvedShieldFocus);
+    const hasGreaterShieldFocus = hasAnyBFlag(actor, greaterShieldFocus);
     if (!hasShieldFocus && !hasImprovedShieldFocus && !hasGreaterShieldFocus) return;
 
     //@ts-ignore

@@ -27,7 +27,6 @@ const damageElements = [
  * @param {'cl' | 'dc'} t
  */
 export function createElementalClOrDc(t) {
-
     const key = `elemental-${t}`;
     const formulaKey = `elemental-${t}-formula`;
 
@@ -35,13 +34,11 @@ export function createElementalClOrDc(t) {
      *
      * @param {ItemPF} item
      * @param {ItemAction?} action
-     * @param {RollData?} rollData
      * @returns {undefined | { offset: number, elements: string[]}}
      */
     function getBonusesForItem(
         item,
         action = null,
-        rollData = null,
     ) {
         if (!(item instanceof pf1.documents.item.ItemSpellPF)) {
             return;
@@ -49,11 +46,6 @@ export function createElementalClOrDc(t) {
 
         const { actor } = item;
         if (!actor) {
-            return;
-        }
-
-        rollData ||= actor.getRollData();
-        if (!rollData) {
             return;
         }
 
@@ -65,30 +57,28 @@ export function createElementalClOrDc(t) {
             .map(({ type }) => type)
             .flatMap(({ custom, values }) => ([...custom.split(';').map(x => x.trim()), ...values]))
             .filter(truthiness)
-            .map((x) => x.toLowerCase())
-            ?? [];
+            .map((x) => x.toLowerCase());
         const types = getSpellTypes(item);
         const domains = Object.keys(item.learnedAt?.domain || []).map((x) => x.toLowerCase());
 
         const comparators = damageElements.flatMap((element) => [element, pf1.registry.damageTypes.get(element)?.name?.toLowerCase() || element]);
         const toFind = intersection([...damageTypes, ...types, ...domains], comparators);
 
-        const flags = new KeyedDFlagHelper(actor, key, formulaKey)
-            .getItemDictionaryFlagsWithAllFlags();
-        const matches = Object.values(flags)
-            .filter((offset) => toFind.includes(`${offset[key]}`));
+        const helper = new KeyedDFlagHelper(
+            actor,
+            {
+                onlyIncludeAllFlags: true,
+                mustHave: { [key]: (value) => toFind.includes(`${value}`) }
+            },
+            key,
+            formulaKey
+        );
 
-        if (!matches.length) {
-            return;
-        }
-
-        const offset = matches
-            .map((x) => RollPF.safeTotal(x[formulaKey], rollData) || 0)
-            .reduce((acc, cur) => acc + cur, 0);
+        const offset = helper.sumOfFlag(formulaKey);
 
         if (offset) {
-            const elements = matches
-                .map((x) => pf1.registry.damageTypes.get(`${x[key]}`)?.name ?? x[key]);
+            const elements = helper.valuesForFlag(key)
+                .map((value) => pf1.registry.damageTypes.get(`${value}`)?.name ?? value);
             return { offset, elements };
         }
     }
@@ -113,7 +103,7 @@ export function createElementalClOrDc(t) {
             return;
         }
 
-        const found = getBonusesForItem(item, action, rollData);
+        const found = getBonusesForItem(item, action);
 
         if (found?.offset) {
             props.push(localize(`${t}-label-mod`, { mod: signed(found.offset), label: found.elements.join(', ') }));
@@ -135,8 +125,8 @@ export function createElementalClOrDc(t) {
         }
     });
 
-    // register hint on ability
-    registerItemHint((hintcls, actor, item, _data) => {
+    // register hint on source
+    registerItemHint((hintcls, _actor, item, _data) => {
         const currentElement = getDocDFlags(item, key)[0];
         if (!currentElement) {
             return;
@@ -147,7 +137,7 @@ export function createElementalClOrDc(t) {
             return;
         }
 
-        const total = RollPF.safeTotal(formula, actor?.getRollData() ?? {});
+        const total = RollPF.safeTotal(formula, item.getRollData());
         if (!total) {
             return;
         }
@@ -172,7 +162,7 @@ export function createElementalClOrDc(t) {
         if (!(item instanceof pf1.documents.item.ItemSpellPF) || item?.type !== 'spell' || !rollData) {
             return;
         }
-        const found = getBonusesForItem(item, action, rollData);
+        const found = getBonusesForItem(item, action);
         if (found?.offset) {
             rollData[prop[t]] ||= 0;
             rollData[prop[t]] += found.offset;

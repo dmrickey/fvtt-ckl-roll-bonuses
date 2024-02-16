@@ -30,27 +30,26 @@ class Settings {
  * @returns {boolean}
  */
 function isSpecializedSpell(actor, item) {
-    const helper = new KeyedDFlagHelper(actor, key, exclusionKey);
     const name = item.name?.toLowerCase() ?? '';
+    const helper = new KeyedDFlagHelper(
+        actor,
+        {
+            mustHave: {
+                [key]: (spec) => name.includes(`${spec || ''}`.toLowerCase()),
+                [exclusionKey]: (exclusions) => {
+                    const exceptions = `${exclusions || ''}`.toLowerCase()
+                        .split(';')
+                        .filter(truthiness)
+                        .map((x) => x.trim());
+                    return !exceptions.find((except) => name.includes(except));
+                }
+            }
+        },
+        key,
+        exclusionKey
+    );
 
-    // todo figure out how to move this logic into KeydDFlagHelper
-    const byItems = helper.dictionaryFlagsFromItems;
-    for (let i = 0; i < byItems.length; i++) {
-        const flags = byItems[i];
-
-        const specialization = `${flags[key] || ''}`.toLowerCase();
-        if (!specialization) continue;
-
-        const exceptions = `${flags[exclusionKey] || ''}`.toLowerCase()
-            .split(';')
-            .filter(truthiness)
-            .map((x) => x.trim());
-
-        const matched = !!(name.includes(specialization) && !exceptions.find((except) => name.includes(except)));
-        if (matched) return true;
-    }
-
-    return false;
+    return !!helper.hasAnyFlags();
 }
 
 // add info to spell card
@@ -68,7 +67,7 @@ Hooks.on(localHooks.itemGetTypeChatData, (
     }
 });
 
-// register hint on spell
+// register hint on specialized spell
 registerItemHint((hintcls, actor, item, _data) => {
     if (!(item instanceof pf1.documents.item.ItemSpellPF)) {
         return;
@@ -132,7 +131,7 @@ Hooks.on('renderItemSheet', (
         return;
     }
 
-    const helper = new KeyedDFlagHelper(actor, spellFocusKey);
+    const helper = new KeyedDFlagHelper(actor, {}, spellFocusKey);
     const focuses = helper.stringValuesForFlag(spellFocusKey);
     const current = item.getItemDictionaryFlag(key);
 

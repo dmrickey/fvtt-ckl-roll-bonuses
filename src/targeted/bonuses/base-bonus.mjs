@@ -25,10 +25,10 @@ export class BaseBonus {
      * If the item has is providing bonuses
      *
      * @abstract
-     * @param {ItemPF} target
+     * @param {ItemPF} item
      * @returns {boolean}
      */
-    static isBonusSource(target) { throw new Error("must be overridden."); };
+    static isBonusSource(item) { throw new Error("must be overridden."); };
 
     /**
      * @abstract
