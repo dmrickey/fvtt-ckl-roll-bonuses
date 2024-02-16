@@ -88,14 +88,14 @@ Hooks.on('pf1GetRollData', (
     if (!(action instanceof pf1.components.ItemAction)) {
         return;
     }
+    const { actor, item } = action;
 
-    const item = action?.item;
-    if (!(item instanceof pf1.documents.item.ItemSpellPF) || item?.type !== 'spell' || !item.system?.school || !rollData) {
+    if (!(item instanceof pf1.documents.item.ItemSpellPF) || item?.type !== 'spell' || !item.system?.school || !rollData || !actor) {
         return;
     }
 
     // todo some day change this back to use rollData.dFlags
-    const flags = new KeyedDFlagHelper(action?.actor || rollData.dFlags, key, formulaKey)
+    const flags = new KeyedDFlagHelper(actor || rollData.dFlags, key, formulaKey)
         .getItemDictionaryFlagsWithAllFlags();
     const matches = Object.values(flags)
         .filter((offset) => offset[key] === item.system.school);

@@ -98,14 +98,14 @@ Hooks.on('pf1GetRollData', (
         }
 
         const hasKeen = item.hasItemBooleanFlag(selfKeen)
-            || hasAnyBFlag(action.actor, keenAll, keenId(item), keenId(action));
+            || hasAnyBFlag(actor, keenAll, keenId(item), keenId(action));
 
         let range = hasKeen
             ? current * 2 - 21
             : current;
 
         const flags = [critOffsetAll, critOffsetId(item), critOffsetId(action)];
-        const mod = new KeyedDFlagHelper(action?.actor || rollData.dFlags, ...flags).sumAll()
+        const mod = new KeyedDFlagHelper(actor || rollData.dFlags, ...flags).sumAll()
             + RollPF.safeTotal(item.system.flags.dictionary[critOffsetSelf] ?? 0, rollData);
 
         range -= mod;

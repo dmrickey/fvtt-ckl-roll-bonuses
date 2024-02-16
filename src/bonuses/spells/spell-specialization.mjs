@@ -64,7 +64,6 @@ Hooks.on(localHooks.itemGetTypeChatData, (
     if (!actor) return;
 
     if (isSpecializedSpell(actor, item)) {
-        // props.push(localize(key));
         props.push(localize('cl-label-mod', { mod: '+2', label: localize(key) }));
     }
 });
@@ -129,7 +128,7 @@ Hooks.on('renderItemSheet', (
     const hasKey = item.system.flags.dictionary[key] !== undefined;
     const hasName = item.name?.toLowerCase() === Settings.spellSpecialization;
     const hasId = !!item?.flags?.core?.sourceId?.includes(compendiumId);
-    if (!(hasKey || hasName || hasId)) {
+    if (!(hasKey || hasName || hasId) || !actor) {
         return;
     }
 

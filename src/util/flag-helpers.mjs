@@ -148,54 +148,36 @@ export class KeyedDFlagHelper {
     /** @type {{[key: string]: ItemPF}} */
     #items = {};
 
-    // todo - maybe after pf1 v10 after user is warned when there's a tag collision I can read the dFlags off of the passed in actor
     /**
-     * @param {ItemDictionaryFlags | ActorPF | undefined | null} dFlags
+     * @param {ActorPF} actor
      * @param {...string} flags
      */
-    constructor(dFlags = {}, ...flags) {
+    constructor(actor, ...flags) {
         this.#flags = flags;
 
-        if (dFlags instanceof pf1.documents.actor.ActorPF) {
-            const actor = dFlags;
-            actor.items.forEach(item => {
-                if (item.isActive) {
-                    let hasFlag = false;
-                    flags.forEach((flag) => {
-                        this.#byFlag[flag] ||= [];
-                        if (item.system.flags.dictionary[flag]) {
-                            const value = item.system.flags.dictionary[flag];
-                            this.#byFlag[flag].push(value);
-
-                            this.#byItem[item.system.tag] ||= {};
-                            this.#byItem[item.system.tag][flag] = value;
-
-                            this.#byValue[value] ||= [];
-                            this.#byValue[value].push(flag);
-                            hasFlag = true;
-                        }
-                    });
-
-                    if (hasFlag) {
-                        this.#items[item.system.tag] = item;
-                    }
-                }
-            });
-        }
-        else {
-            for (const itemTag in (dFlags)) {
+        actor.items.forEach(item => {
+            if (item.isActive) {
+                let hasFlag = false;
                 flags.forEach((flag) => {
                     this.#byFlag[flag] ||= [];
-                    if (dFlags[itemTag].hasOwnProperty(flag)) {
-                        const value = dFlags[itemTag][flag];
+                    if (item.system.flags.dictionary[flag]) {
+                        const value = item.system.flags.dictionary[flag];
                         this.#byFlag[flag].push(value);
 
-                        this.#byItem[itemTag] ||= {};
-                        this.#byItem[itemTag][flag] = value;
+                        this.#byItem[item.system.tag] ||= {};
+                        this.#byItem[item.system.tag][flag] = value;
+
+                        this.#byValue[value] ||= [];
+                        this.#byValue[value].push(flag);
+                        hasFlag = true;
                     }
                 });
+
+                if (hasFlag) {
+                    this.#items[item.system.tag] = item;
+                }
             }
-        }
+        });
     }
 
     /**
