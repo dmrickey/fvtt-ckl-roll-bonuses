@@ -34,6 +34,7 @@ Supports PF1 v9+
   - [Weapon Specialization](#weapon-specialization)
 - [Misc](#misc)
   - [Ammunition](#ammunition)
+  - [Change Offset](#change-offset)
   - [Critical Helpers](#critical-helpers)
   - [Fate's Favored](#fates-favored)
   - [Fortune and Misfortune](#fortune-and-misfortune)
@@ -343,6 +344,18 @@ Automatically add +2 damage to chosen weapons types for `Weapon Specialization` 
 ## Ammunition
 Ammunition now has inputs for attack and damage bonuses. You can find these on the item's advanced tab.
 
+## Change Offset
+Modify the results of any `change` type. This is essentially a very generic form of [Fate's Favored](#fates-favored) -- but this will allow you to increase or decrease any `change` type instead of only modifying luck bonuses by +1.
+
+<details>
+  <summary>How to change offset (click to expand)</summary>
+
+  - Add dictionary flag `change-type-offset` to your buff/feature/etc.
+    - Text input will appear for your formula
+    - Dropdown selector will show up with options for your chosen change type
+
+</details>
+
 ## Critical Helpers
 Attack's critical variables can now be dynamically adjusted. Crit can be modified with keen. It can also be modified by a static amount to account for certain 3.5 classes or other homebrew. The critical multipler can also be adjusted--this is useful for a Swashbuckler's capstone ability (and any homebrew that needs it).
 
@@ -389,8 +402,8 @@ One of the best traits in the game. It will automatically increase any configure
 <details>
   <summary>How to customize Fate's Favored (click to expand)</summary>
 
-- Add a boolean flag `fates-favored` to your trait (or any other Item) and it will automatically increase any luck bonuses received from any other Change by 1.
-  - Sorry, this one has no automatic configuration because it's literally just adding `fates-favored` into a boolean flag.
+  - Add a boolean flag `fates-favored` to your trait (or any other Item) and it will automatically increase any luck bonuses received from any other Change by 1.
+    - Sorry, this one has no automatic configuration because it's literally just adding `fates-favored` into a boolean flag.
 
 </details>
 
