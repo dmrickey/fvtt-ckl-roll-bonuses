@@ -17,6 +17,7 @@
   - [Longshot](#longshot)
   - [Spell Perfection](#spell-perfection)
   - [Spirited Charge](#spirited-charge)
+  - [Weapon Finesse](#weapon-finesse)
 - [Racial Features](#racial-features)
   - [Sylph](#sylph)
   - [Kobold](#kobold)
@@ -95,6 +96,8 @@
 - https://www.d20pfsrd.com/feats/general-feats/spell-perfection/
 ## Spirited Charge
 - Double Damage without critting
+## Weapon Finesse
+- Automatically switch to using dex for attack
 
 
 # Racial Features
