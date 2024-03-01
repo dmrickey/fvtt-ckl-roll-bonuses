@@ -25,11 +25,13 @@ class Settings {
 }
 
 /**
- * @param {ActorPF} actor
+ * @param {Nullable<ActorPF>} actor
  * @param {ItemSpellPF} item
  * @returns {boolean}
  */
 function isSpecializedSpell(actor, item) {
+    if (!actor) return false;
+
     const name = item.name?.toLowerCase() ?? '';
     const helper = new KeyedDFlagHelper(
         actor,

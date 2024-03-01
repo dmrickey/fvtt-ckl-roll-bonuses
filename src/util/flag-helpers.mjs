@@ -59,33 +59,36 @@ const getDocFlags = (doc, key, { includeInactive = false } = {}) => {
 
 /**
  * @param {BaseDocument} doc
- * @param {string} keyStart
+ * @param {...string} keyStarts
  * @returns {{[key: string]: (number | string)[]}}
  */
-const getDocDFlagsStartsWith = (doc, keyStart) => {
-    const /** @type {{[key: string]: (number | string)[]}} */ found = {};
+const getDocDFlagsStartsWith = (doc, ...keyStarts) => {
+    /** @type {{[key: string]: (number | string)[]}} */
+    const found = {};
+
     if (doc instanceof pf1.documents.actor.ActorPF) {
         Object.entries(doc.itemFlags.dictionary).forEach(([_itemTag, flags]) => {
             Object.entries(flags).forEach(([flag, value]) => {
+                keyStarts.forEach((keyStart) => {
+                    if (flag.startsWith(keyStart)) {
+                        found[flag] ||= [];
+                        found[flag].push(value);
+                    }
+                });
+            });
+        });
+    }
+    else if (doc instanceof pf1.documents.item.ItemPF) {
+        Object.entries(doc.getItemDictionaryFlags()).forEach(([flag, value]) => {
+            keyStarts.forEach((keyStart) => {
                 if (flag.startsWith(keyStart)) {
-                    found[flag] ||= [];
-                    found[flag].push(value);
+                    found[flag] = [value];
                 }
             });
         });
-
-        return found;
-    }
-    if (doc instanceof pf1.documents.item.ItemPF) {
-        Object.entries(doc.getItemDictionaryFlags()).forEach(([flag, value]) => {
-            if (flag.startsWith(keyStart)) {
-                found[flag] = [value];
-            }
-        });
-        return found;
     }
 
-    return {};
+    return found;
 }
 
 // todo swap like individual method
@@ -124,9 +127,9 @@ const hasAnyBFlag = (
 
 export {
     countBFlags,
-    getDocFlags,
     getDocDFlags,
     getDocDFlagsStartsWith,
+    getDocFlags,
     hasAnyBFlag,
 }
 
@@ -235,23 +238,6 @@ export class KeyedDFlagHelper {
     }
 
     /**
-     * @param {string} key
-     * @param {string | number} value
-     * @returns {ItemDictionaryFlags}
-     */
-    getItemDictionaryFlagsWithAllFlagsAndMatchingFlag(key, value) {
-        const all = this.getItemDictionaryFlagsWithAllFlags();
-
-        /** @type {ItemDictionaryFlags} */
-        const result = {};
-        Object.entries(all).forEach(([itemTag, dFlags]) => {
-            if (dFlags[key] === value)
-                result[itemTag] = dFlags;
-        });
-        return result;
-    }
-
-    /**
      *
      * @returns {boolean} - whether or not any flags were found
      */
@@ -287,36 +273,29 @@ export class KeyedDFlagHelper {
         return this.#byValue[value] ?? [];
     }
 
-    // /**
-    //  * Returns an array of {@link FlagValue}s as {@link String}s.
-    //  *
-    //  * @returns {string[]}
-    //  */
-    // stringValuesForAllFlags() {
-    //     return uniqueArray(
-    //         Object.values(this.#byFlag)
-    //             .flatMap((x) => x)
-    //             .filter(truthiness)
-    //             .map((x) => `${x}`)
-    //     );
-    // }
-
+    /** @type {Nullable<{[key: string]: number}>} */
+    #sums;
     /**
      * @returns {{[key: string]: number}}
      */
     #calculateSums() {
-        /** @type {{[key: string]: number}} */
-        const sums = {};
+        if (this.#sums) return this.#sums;
+
+        this.#sums = {};
 
         Object.entries(this.#byItem).forEach(([tag, dFlags]) => {
             const item = this.#items[tag];
-            Object.entries(dFlags).forEach(([flag, flagValue]) => {
-                sums[flag] ||= 0;
-                sums[flag] += RollPF.safeTotal(flagValue, item.getRollData());
+            Object.entries(dFlags).forEach(([flag, _flagValue]) => {
+                // @ts-ignore
+                this.#sums[flag] ||= 0;
+
+                var total = FormulaCacheHelper.getFormulaFlagValue(item, flag);
+                // @ts-ignore
+                this.#sums[flag] += total;
             });
         })
 
-        return sums;
+        return this.#sums;
     }
 
     /**
@@ -330,11 +309,11 @@ export class KeyedDFlagHelper {
 
     /**
      * Gets the sum of all values for the given flag.
-     * @param {string} flag - The flag to fetch the total for
-     * @returns {number} - The total for the given flag
+     * @param {...string} flags - The flags to fetch the totals for
+     * @returns {number} - The total for the given flags
      */
-    sumOfFlag(flag) {
-        return this.sumEntries()[flag] || 0;
+    sumOfFlag(...flags) {
+        return flags.reduce((sum, flag) => sum + (this.sumEntries()[flag] || 0), 0);
     }
 
     /**
@@ -343,5 +322,79 @@ export class KeyedDFlagHelper {
      */
     sumAll() {
         return Object.values(this.sumEntries()).reduce((sum, current) => sum + current, 0);
+    }
+}
+
+export class FormulaCacheHelper {
+    /** @type {string[]} */
+    static #flags = [];
+    /** @type {string[]} */
+    static #partialFlags = [];
+
+    /** @param  {...string} flags */
+    static registerFormulaFlag(...flags) {
+        this.#flags.push(...flags);
+    }
+
+    /** @param  {...string} partialFlags */
+    static registerFormulaPartialFlag(...partialFlags) {
+        this.#partialFlags.push(...partialFlags);
+    }
+
+    /**
+     * @param {ItemPF} item
+     * @param {RollData} rollData
+     */
+    static cacheFormulas(item, rollData) {
+        this.#flags.forEach((flag) => {
+            const formula = item.getItemDictionaryFlag(flag);
+            if (formula) {
+                const value = RollPF.safeTotal(formula, rollData);
+
+                item[MODULE_NAME] ||= {};
+                item[MODULE_NAME][flag] = value;
+            }
+        });
+
+        const flagValues = getDocDFlagsStartsWith(item, ...this.#partialFlags);
+        const flags = Object.keys(flagValues);
+        flags.forEach((flag) => {
+            // because this is an item and not an actor there can only be one value in the array
+            const exactFormula = flagValues[flag][0];
+            const formula = RollPF.safeRoll(exactFormula, rollData).formula;
+
+            item[MODULE_NAME] ||= {};
+            item[MODULE_NAME][flag] = formula;
+        });
+    }
+
+    /**
+     * @param {ItemPF} item
+     * @param {...string} keys
+     * @returns {number}
+     */
+    static getFormulaFlagValue(item, ...keys) {
+        const total = keys.reduce((sum, key) => {
+            const formula = item?.[MODULE_NAME]?.[key] || 0;
+            const total = RollPF.safeTotal(formula);
+            return sum + total;
+        }, 0);
+        return total;
+    }
+
+    /**
+     * @param {ItemPF} item
+     * @param {...string} keys
+     * @returns {number}
+     */
+    static getFormulaPartialFlagValue(item, ...keys) {
+        const flagValues = getDocDFlagsStartsWith(item, ...keys);
+        const flags = Object.keys(flagValues);
+        const total = flags.reduce((sum, key) => {
+            const formula = item?.[MODULE_NAME]?.[key] || 0;
+            const total = RollPF.safeTotal(formula);
+            return sum + total;
+        }, 0);
+        return total;
     }
 }

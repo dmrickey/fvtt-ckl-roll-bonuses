@@ -179,7 +179,7 @@ Hooks.on('pf1PreActorRollSkill', (
     // lastRow.parentElement.appendChild(node);
 // });
 
-// Hooks.once('pf1.postReady', () => {
+// Hooks.once('pf1.init', () => {
 //     // libWrapper.register(MODULE_NAME, 'pf1.DicePF.d20Roll', function (wrapped, skillId, options) {
 //     libWrapper.register(MODULE_NAME, 'pf1.documents.ActorPF.prototype.rollSkill', function (wrapped, skillId, options) {
 

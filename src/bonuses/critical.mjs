@@ -1,6 +1,6 @@
 import { MODULE_NAME } from "../consts.mjs";
-import { hasAnyBFlag, getDocDFlagsStartsWith, KeyedDFlagHelper } from "../util/flag-helpers.mjs";
-import { localHooks } from "../util/hooks.mjs";
+import { hasAnyBFlag, getDocDFlagsStartsWith, KeyedDFlagHelper, FormulaCacheHelper } from "../util/flag-helpers.mjs";
+import { HookWrapperHandler, localHooks } from "../util/hooks.mjs";
 import { registerItemHint } from "../util/item-hints.mjs";
 import { localize } from "../util/localize.mjs";
 import { signed } from "../util/to-signed-string.mjs";
@@ -17,7 +17,10 @@ const critMultOffsetSelf = 'crit-mult-offset-self';
 const critMultOffsetAll = 'crit-mult-offset-all';
 const critMultOffsetId = (/** @type {IdObject} */ { id }) => `crit-mult-offset_${id}`;
 
-// register keen
+FormulaCacheHelper.registerFormulaFlag(critOffsetSelf, critOffsetAll, critMultOffsetSelf, critMultOffsetAll);
+FormulaCacheHelper.registerFormulaPartialFlag('crit-offset_', 'crit-mult-offset_');
+
+// register keen on bonus
 registerItemHint((hintcls, _actor, item, _data) => {
     const bFlags = Object.entries(item.system?.flags?.boolean ?? {})
         .filter(([_, value]) => !!value)
@@ -31,23 +34,13 @@ registerItemHint((hintcls, _actor, item, _data) => {
     return hint;
 });
 
-// register crit mod - making assumptions that there aren't really positives and negatives on the same "buff"
+// register crit offset hint on bonus
 registerItemHint((hintcls, _actor, item, _data,) => {
-    const dFlags = getDocDFlagsStartsWith(item, 'crit-offset');
-    const values = Object.values(dFlags)
-        .flatMap((x) => x)
-        .map((x) => RollPF.safeTotal(x, item.getRollData()));
+    // return early if it has a self mod because that's encompassed in the "show on target" hint
+    if (item.getItemDictionaryFlag(critOffsetSelf)) return;
 
-    if (!values.length) {
-        return;
-    }
-
-    const min = Math.min(...values);
-    const max = Math.max(...values);
-
-    const mod = Math.abs(min) > Math.abs(max)
-        ? min
-        : max;
+    const mod = FormulaCacheHelper.getFormulaFlagValue(item, critOffsetAll)
+        + FormulaCacheHelper.getFormulaPartialFlagValue(item, 'crit-offset_');
 
     if (mod === 0) {
         return;
@@ -58,11 +51,82 @@ registerItemHint((hintcls, _actor, item, _data,) => {
     return hint;
 });
 
+// register crit mult hint on bonus
+registerItemHint((hintcls, _actor, item, _data,) => {
+    // return early if it has a self mod because that's encompassed in the "show on target" hint
+    if (item.getItemDictionaryFlag(critMultOffsetSelf)) return;
+
+    const mod = FormulaCacheHelper.getFormulaFlagValue(item, critMultOffsetAll)
+        + FormulaCacheHelper.getFormulaPartialFlagValue(item, 'crit-mult-offset_');
+
+    if (mod === 0) {
+        return;
+    }
+
+    const label = localize('crit-mult', { mod: signed(mod) });
+    const hint = hintcls.create(label, [], {});
+    return hint;
+});
+
+// register crit bonus on specific target
+registerItemHint((hintcls, actor, item, _data) => {
+    if (!actor || !item?.firstAction) return;
+
+    const isBroken = !!item.system.broken;
+
+    const action = item.firstAction;
+
+    const multFlags = [critMultOffsetAll, critMultOffsetId(action), critMultOffsetId(item)]
+    const offsetFlags = [critOffsetAll, critOffsetId(item), critOffsetId(action)];
+    const helper = new KeyedDFlagHelper(actor, {}, ...multFlags, ...offsetFlags);
+
+    const getMult = () => {
+        if (isBroken) return 2;
+
+        const sum = helper.sumOfFlag(...multFlags)
+            + FormulaCacheHelper.getFormulaFlagValue(item, critMultOffsetSelf);
+        const mult = +(action.data.ability.critMult || 2) + sum;
+        return mult;
+    }
+
+    const getRange = () => {
+        if (isBroken) return 20;
+
+        const current = action.data.ability.critRange;
+
+        const hasKeen = item.hasItemBooleanFlag(selfKeen)
+            || hasAnyBFlag(actor, keenAll, keenId(item), keenId(action));
+
+        let range = hasKeen
+            ? current * 2 - 21
+            : current;
+
+        const sum = helper.sumOfFlag(...offsetFlags)
+            + FormulaCacheHelper.getFormulaFlagValue(item, critOffsetSelf);
+
+        range -= sum;
+        range = Math.clamped(range, 2, 20);
+        return range;
+    }
+
+    const mult = getMult();
+    const range = getRange();
+
+    if (mult === action.data.ability.critMult
+        && range === action.data.ability.critRange
+    ) return;
+
+    const rangeFormat = range === 20 ? '20' : `${range}-20`;
+    const label = `${rangeFormat}/x${mult}`;
+    const hint = hintcls.create(label, [], {});
+    return hint;
+});
+
 Hooks.on('pf1GetRollData', (
     /** @type {ItemAction} */ action,
     /** @type {RollData} */ rollData
 ) => {
-    if (!(action instanceof pf1.components.ItemAction)) {
+    if (!(action instanceof pf1.components.ItemAction) || !rollData?.action?.ability) {
         return;
     }
     const { item } = action;
@@ -79,8 +143,9 @@ Hooks.on('pf1GetRollData', (
             return 2;
         }
 
-        const sum = new KeyedDFlagHelper(actor, {}, critMultOffsetSelf, critMultOffsetAll, critMultOffsetId(action), critMultOffsetId(item))
-            .sumAll();
+        const sum = new KeyedDFlagHelper(actor, {}, critMultOffsetAll, critMultOffsetId(action), critMultOffsetId(item))
+            .sumAll()
+            + FormulaCacheHelper.getFormulaFlagValue(item, critMultOffsetSelf);
 
         return +(rollData.action.ability.critMult || 2) + sum;
     };
@@ -106,7 +171,7 @@ Hooks.on('pf1GetRollData', (
 
         const flags = [critOffsetAll, critOffsetId(item), critOffsetId(action)];
         const mod = new KeyedDFlagHelper(actor, {}, ...flags).sumAll()
-            + RollPF.safeTotal(item.system.flags.dictionary[critOffsetSelf] ?? 0, rollData);
+            + FormulaCacheHelper.getFormulaFlagValue(item, critOffsetSelf);
 
         range -= mod;
         range = Math.clamped(range, 2, 20);
@@ -118,42 +183,39 @@ Hooks.on('pf1GetRollData', (
     // end update critRange
 });
 
-Hooks.once('setup', () => {
-    /**
-     * @param {() => number} wrapped
-     * @this {ItemAction}
-     * @returns {number}
-     */
-    function handleItemActionCritRangeWrapper(wrapped) {
-        const { actor, item } = this;
-        const action = this;
+/**
+ * @param {() => number} wrapped
+ * @this {ItemAction}
+ * @returns {number}
+ */
+function handleItemActionCritRangeWrapper(wrapped) {
+    const { actor, item } = this;
+    const action = this;
 
-        if (!!item.system.broken) {
-            return 20;
-        }
-
-        const hasKeen = item.hasItemBooleanFlag(selfKeen)
-            || hasAnyBFlag(actor, keenAll, keenId(item), keenId(action));
-
-        const offsetFlags = [critOffsetAll, critOffsetId(item), critOffsetId(action), selfKeen];
-        const offsetHelper = new KeyedDFlagHelper(actor, {}, ...offsetFlags)
-        if (!offsetHelper.hasAnyFlags() && !hasKeen) {
-            return wrapped();
-        }
-
-        const current = action.data.ability.critRange;
-        let range = hasKeen
-            ? current * 2 - 21
-            : current;
-
-        // todo some day change this back to use rollData.dFlags
-        const mod = offsetHelper.sumAll()
-            + RollPF.safeTotal(item.system.flags.dictionary[critOffsetSelf] ?? 0, item.getRollData());
-
-        range -= mod;
-        range = Math.clamped(range, 2, 20);
-        return range;
+    if (!!item.system.broken) {
+        return 20;
     }
+
+    const hasKeen = item.hasItemBooleanFlag(selfKeen)
+        || hasAnyBFlag(actor, keenAll, keenId(item), keenId(action));
+
+    const offsetFlags = [critOffsetAll, critOffsetId(item), critOffsetId(action), selfKeen];
+    const offset = new KeyedDFlagHelper(actor, {}, ...offsetFlags).sumAll()
+        + FormulaCacheHelper.getFormulaFlagValue(item, critOffsetSelf);
+    if (!offset && !hasKeen) {
+        return wrapped();
+    }
+
+    const current = action.data.ability.critRange;
+    let range = hasKeen
+        ? current * 2 - 21
+        : current;
+
+    range -= offset;
+    range = Math.clamped(range, 2, 20);
+    return range;
+}
+Hooks.once('init', () => {
     libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.critRange', handleItemActionCritRangeWrapper, libWrapper.MIXED);
 });
 

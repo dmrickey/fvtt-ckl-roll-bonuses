@@ -608,4 +608,4 @@ function applyChange(actor, targets = null, { applySourceInfo = true } = {}) {
     }
 }
 
-Hooks.once('setup', () => libWrapper.register(MODULE_NAME, 'pf1.components.ItemChange.prototype.applyChange', applyChange, libWrapper.OVERRIDE));
+Hooks.once('init', () => libWrapper.register(MODULE_NAME, 'pf1.components.ItemChange.prototype.applyChange', applyChange, libWrapper.OVERRIDE));

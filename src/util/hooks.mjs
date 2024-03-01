@@ -12,6 +12,7 @@ export const localHooks = /** @type {const} */ ({
     itemGetTypeChatData: `${MODULE_NAME}_itemGetTypeChatData`,
     itemUse: `${MODULE_NAME}_itemUse`,
     patchChangeValue: `${MODULE_NAME}_patchChangeValue`,
+    prepareData: `${MODULE_NAME}_prepareData`,
 
     /** @deprecated Do not use - makes multi attacks way too chatty */
     chatAttackEffectNotes: `${MODULE_NAME}_chatAttackEffectNotes`,
@@ -30,7 +31,14 @@ export class HookWrapperHandler {
      * @overload
      * @param {typeof localHooks.patchChangeValue} hook
      * @param {(value: number | string, itemChange: ItemChange) => number | string} func
-     * @returns {void}v
+     * @returns {void}
+     */
+
+    /**
+     * @overload
+     * @param {typeof localHooks.prepareData} hook
+     * @param {(item: ItemPF, rollData: RollData) => void} func
+     * @returns {void}
      */
 
     /**
@@ -87,5 +95,27 @@ export class HookWrapperHandler {
         }
 
         return value;
+    }
+
+    /**
+     * @overload
+     * @param {typeof localHooks.prepareData} hook
+     * @param {ItemPF} item
+     * @param {RollData} rollData
+     * @returns {void}
+     */
+
+    /**
+     * @param {Hook} hook
+     * @param {...any} args
+     * @returns {void}
+     */
+    static handleHookNoReturnSync(hook, ...args) {
+        const funcs = handlers[hook] || [];
+
+        for (let i = 0; i < funcs.length; i++) {
+            const func = funcs[i];
+            func(...args);
+        }
     }
 }

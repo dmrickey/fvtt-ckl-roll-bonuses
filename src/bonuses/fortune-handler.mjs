@@ -196,7 +196,7 @@ function handleInitiative(formula) {
     return parts.filter((p) => p !== null).join(" + ");
 };
 
-Hooks.once('setup', () => {
+Hooks.once('init', () => {
     libWrapper.register(MODULE_NAME, 'pf1.documents.CombatantPF.prototype._getInitiativeFormula', handleInitiative, libWrapper.OVERRIDE);
 });
 
