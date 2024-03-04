@@ -94,6 +94,4 @@ export class ModifiersBonus extends BaseBonus {
 
         return sources;
     }
-
-    // todo use cache
 }

@@ -25,6 +25,8 @@ export class BaseTarget {
 
     /**
      * Initialize any target-specific settings.
+     *
+     * @abstract
      */
     static init() { }
 

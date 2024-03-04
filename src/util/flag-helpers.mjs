@@ -234,7 +234,7 @@ export class KeyedDFlagHelper {
      * @returns {ItemDictionaryFlags}
      */
     getItemDictionaryFlags() {
-        return { ... this.#byItem };
+        return { ...this.#byItem };
     }
 
     /**
@@ -273,29 +273,27 @@ export class KeyedDFlagHelper {
         return this.#byValue[value] ?? [];
     }
 
-    /** @type {Nullable<{[key: string]: number}>} */
-    #sums;
     /**
      * @returns {{[key: string]: number}}
      */
     #calculateSums() {
-        if (this.#sums) return this.#sums;
+        if (this.#sumByFlag) return this.#sumByFlag;
 
-        this.#sums = {};
+        this.#sumByFlag = {};
 
         Object.entries(this.#byItem).forEach(([tag, dFlags]) => {
             const item = this.#items[tag];
             Object.entries(dFlags).forEach(([flag, _flagValue]) => {
                 // @ts-ignore
-                this.#sums[flag] ||= 0;
+                this.#sumByFlag[flag] ||= 0;
 
                 var total = FormulaCacheHelper.getDictionaryFlagValue(item, flag);
                 // @ts-ignore
-                this.#sums[flag] += total;
+                this.#sumByFlag[flag] += total;
             });
         })
 
-        return this.#sums;
+        return this.#sumByFlag;
     }
 
     /**
@@ -333,17 +331,29 @@ export class FormulaCacheHelper {
     /** @type {string[]} */
     static #moduleFlags = [];
 
-    /** @param  {...string} flags */
+    /**
+     * Registers dicationary flag to cache helper
+     *
+     * @param  {...string} flags
+     */
     static registerDictionaryFlag(...flags) {
         this.#dictionaryFlags.push(...flags);
     }
 
-    /** @param  {...string} partialFlags */
+    /**
+     * Registers partial dicationary flag to cache helper, i.e. flagsa that start with the given value - used for flags that include an id in the string
+     *
+     * @param  {...string} partialFlags
+     */
     static registerPartialDictionaryFlag(...partialFlags) {
         this.#partialDictionaryFlags.push(...partialFlags);
     }
 
-    /** @param  {...string} moduleFlags */
+    /**
+     * Registers foundry module flag to cache helper
+     *
+     * @param  {...string} moduleFlags
+     */
     static registerModuleFlag(...moduleFlags) {
         this.#moduleFlags.push(...moduleFlags);
     }

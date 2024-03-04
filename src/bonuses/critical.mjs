@@ -201,7 +201,7 @@ function handleItemActionCritRangeWrapper(wrapped) {
     const hasKeen = item.hasItemBooleanFlag(selfKeen)
         || hasAnyBFlag(actor, keenAll, keenId(item), keenId(action));
 
-    const offsetFlags = [critOffsetAll, critOffsetId(item), critOffsetId(action), selfKeen];
+    const offsetFlags = [critOffsetAll, critOffsetId(item), critOffsetId(action)];
     const offset = new KeyedDFlagHelper(actor, {}, ...offsetFlags).sumAll()
         + FormulaCacheHelper.getDictionaryFlagValue(item, critOffsetSelf);
     if (!offset && !hasKeen) {
@@ -264,6 +264,7 @@ Hooks.on('renderItemSheet', (
 ) => {
     const has = getDocDFlagsStartsWith(item, 'crit-');
 
+    // the current array only can have a single element since this is from an item and not an actor
     Object.entries(has).forEach(([key, [current]]) => {
         textInput({
             current,
