@@ -89,9 +89,11 @@ export class ModifiersBonus extends BaseBonus {
 
         sources = (conditional.modifiers ?? [])
             .filter((mod) => mod.target === 'attack')
-            .map((mod) => conditionalAttackTooltipModSource(conditional, mod, target.actor))
+            .map((mod) => conditionalAttackTooltipModSource(conditional, mod))
             .filter(truthiness);
 
         return sources;
     }
+
+    // todo use cache
 }

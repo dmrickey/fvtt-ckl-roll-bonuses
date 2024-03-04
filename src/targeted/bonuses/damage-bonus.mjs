@@ -126,7 +126,7 @@ export class DamageBonus extends BaseBonus {
 
         sources = (conditional.modifiers ?? [])
             .filter((mod) => mod.target === 'damage')
-            .map((mod) => conditionalModToItemChange(conditional, mod, { isDamage: true, rollData: target.getRollData() }))
+            .map((mod) => conditionalModToItemChange(conditional, mod, { isDamage: true }))
             .filter(truthiness);
 
         return sources;
