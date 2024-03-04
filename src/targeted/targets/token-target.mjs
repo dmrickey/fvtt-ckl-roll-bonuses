@@ -26,7 +26,7 @@ export class TokenTarget extends BaseTarget {
     /**
      * @override
      */
-    static initSettings() {
+    static init() {
         Settings.init();
     }
 

@@ -142,6 +142,7 @@ declare global {
         };
         item: ItemPF;
         static defaultDamageType: TraitSelectorValuePlural;
+        hasAttack: boolean;
     }
 
     interface ItemAttackPF extends ItemPF {
@@ -254,7 +255,7 @@ declare global {
     }
 
     interface ItemPF extends ItemDocument {
-        [MODULE_NAME]?: { [key: string]: number | string };
+        [MODULE_NAME]: { [key: string]: number | string | object | array };
 
         get hasAction(): boolean;
         actions: EmbeddedCollection<ItemAction>;

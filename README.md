@@ -375,7 +375,7 @@ Attack's critical variables can now be dynamically adjusted. Crit can be modifie
     * This is useful for when you have a temporary buff (e.g. Magus, Warpriest, Occultist,...) that grants a specific weapon Keen
 
   ### Crit target modifications (dictionary flag)
-  Positive numbers are good, so having a `3` will mean your "crits only on a 20" weapon will now crit on "17 or higher"
+  Positive numbers are good, so having a `3` will mean your "crits only on a 20" weapon will now crit on "17 or higher". Adding any of these will give you a formula input.
   * `crit-offset-self`
   * `crit-offset-all`
   * `crit-offset_<id>`

@@ -1,6 +1,7 @@
 import { MODULE_NAME } from "../../consts.mjs";
 import { damageInput } from "../../handlebars-handlers/targeted/bonuses/damage.mjs";
 import { conditionalModToItemChange } from "../../util/conditional-helpers.mjs";
+import { HookWrapperHandler, localHooks } from "../../util/hooks.mjs";
 import { localize } from "../../util/localize.mjs";
 import { truthiness } from "../../util/truthiness.mjs";
 import { BaseBonus } from "./base-bonus.mjs";
@@ -23,11 +24,25 @@ export class DamageBonus extends BaseBonus {
 
     /**
      * @override
+     */
+    static init() {
+        HookWrapperHandler.registerHandler(localHooks.prepareData, (item, rollData) => {
+            const damages = item.getFlag(MODULE_NAME, this.key) || [];
+            damages.forEach((/** @type {DamageInputModel}*/ damage) => {
+                item[MODULE_NAME][this.key] ||= [];
+                const formula = RollPF.safeRoll(damage.formula, rollData).formula;
+                item[MODULE_NAME][this.key].push(formula);
+            });
+        });
+    }
+
+    /**
+     * @override
      * @param {ItemPF} item
      * @returns {boolean}
      */
     static isBonusSource(item) {
-        const damages = this.#getDamageBonuses(item);
+        const damages = this.#getCachedDamageBonuses(item);
         if (!damages.length) {
             return false;
         }
@@ -45,7 +60,7 @@ export class DamageBonus extends BaseBonus {
      * @returns {Nullable<string[]>}
      */
     static getHints(source) {
-        const damages = this.#getDamageBonuses(source);
+        const damages = this.#getCachedDamageBonuses(source);
         if (!damages.length) {
             return;
         }
@@ -85,7 +100,7 @@ export class DamageBonus extends BaseBonus {
      */
     static getConditional(target) {
 
-        const damages = this.#getDamageBonuses(target);
+        const damages = this.#getCachedDamageBonuses(target);
 
         const conditional = this.#createConditional(damages, target.name);
         if (conditional.modifiers?.length) {
@@ -142,8 +157,14 @@ export class DamageBonus extends BaseBonus {
      * @param {ItemPF} item
      * @return {DamageInputModel[]}
      */
-    static #getDamageBonuses(item) {
-        return item.getFlag(MODULE_NAME, this.key) ?? [];
+    static #getCachedDamageBonuses(item) {
+        /** @type {DamageInputModel[]} */
+        const damages = item.getFlag(MODULE_NAME, this.key) ?? [];
+
+        return damages.map((damage, i) => ({
+            ...damage,
+            formula: item[MODULE_NAME][this.key][i],
+        }));
     }
 
     /**

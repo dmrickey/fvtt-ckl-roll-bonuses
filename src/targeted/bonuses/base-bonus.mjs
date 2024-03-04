@@ -22,7 +22,7 @@ export class BaseBonus {
     static get type() { throw new Error('must be overridden'); }
 
     /**
-     * If the item has is providing bonuses
+     * If the item is providing bonuses
      *
      * @abstract
      * @param {ItemPF} item
@@ -92,4 +92,11 @@ export class BaseBonus {
      * @param {ActionUseShared} shared
      */
     static actionUseAlterRollData(target, shared) { }
+
+    /**
+     * Initializes anything specific to the bonus
+     *
+     * @abstract
+     */
+    static init() { }
 }

@@ -289,7 +289,7 @@ export class KeyedDFlagHelper {
                 // @ts-ignore
                 this.#sums[flag] ||= 0;
 
-                var total = FormulaCacheHelper.getFormulaFlagValue(item, flag);
+                var total = FormulaCacheHelper.getDictionaryFlagValue(item, flag);
                 // @ts-ignore
                 this.#sums[flag] += total;
             });
@@ -312,7 +312,7 @@ export class KeyedDFlagHelper {
      * @param {...string} flags - The flags to fetch the totals for
      * @returns {number} - The total for the given flags
      */
-    sumOfFlag(...flags) {
+    sumOfFlags(...flags) {
         return flags.reduce((sum, flag) => sum + (this.sumEntries()[flag] || 0), 0);
     }
 
@@ -327,18 +327,25 @@ export class KeyedDFlagHelper {
 
 export class FormulaCacheHelper {
     /** @type {string[]} */
-    static #flags = [];
+    static #dictionaryFlags = [];
     /** @type {string[]} */
-    static #partialFlags = [];
+    static #partialDictionaryFlags = [];
+    /** @type {string[]} */
+    static #moduleFlags = [];
 
     /** @param  {...string} flags */
-    static registerFormulaFlag(...flags) {
-        this.#flags.push(...flags);
+    static registerDictionaryFlag(...flags) {
+        this.#dictionaryFlags.push(...flags);
     }
 
     /** @param  {...string} partialFlags */
-    static registerFormulaPartialFlag(...partialFlags) {
-        this.#partialFlags.push(...partialFlags);
+    static registerPartialDictionaryFlag(...partialFlags) {
+        this.#partialDictionaryFlags.push(...partialFlags);
+    }
+
+    /** @param  {...string} moduleFlags */
+    static registerModuleFlag(...moduleFlags) {
+        this.#moduleFlags.push(...moduleFlags);
     }
 
     /**
@@ -346,25 +353,34 @@ export class FormulaCacheHelper {
      * @param {RollData} rollData
      */
     static cacheFormulas(item, rollData) {
-        this.#flags.forEach((flag) => {
+        if (!item) return;
+
+        this.#dictionaryFlags.forEach((flag) => {
             const formula = item.getItemDictionaryFlag(flag);
             if (formula) {
                 const value = RollPF.safeTotal(formula, rollData);
 
-                item[MODULE_NAME] ||= {};
                 item[MODULE_NAME][flag] = value;
             }
         });
 
-        const flagValues = getDocDFlagsStartsWith(item, ...this.#partialFlags);
+        const flagValues = getDocDFlagsStartsWith(item, ...this.#partialDictionaryFlags);
         const flags = Object.keys(flagValues);
         flags.forEach((flag) => {
             // because this is an item and not an actor there can only be one value in the array
             const exactFormula = flagValues[flag][0];
             const formula = RollPF.safeRoll(exactFormula, rollData).formula;
 
-            item[MODULE_NAME] ||= {};
             item[MODULE_NAME][flag] = formula;
+        });
+
+        this.#moduleFlags.forEach((flag) => {
+            const formula = item.flags?.[MODULE_NAME]?.[flag];
+            if (formula) {
+                const value = RollPF.safeTotal(formula, rollData);
+
+                item[MODULE_NAME][flag] = value;
+            }
         });
     }
 
@@ -373,7 +389,7 @@ export class FormulaCacheHelper {
      * @param {...string} keys
      * @returns {number}
      */
-    static getFormulaFlagValue(item, ...keys) {
+    static getDictionaryFlagValue(item, ...keys) {
         const total = keys.reduce((sum, key) => {
             const formula = item?.[MODULE_NAME]?.[key] || 0;
             const total = RollPF.safeTotal(formula);
@@ -387,10 +403,24 @@ export class FormulaCacheHelper {
      * @param {...string} keys
      * @returns {number}
      */
-    static getFormulaPartialFlagValue(item, ...keys) {
+    static getPartialDictionaryFlagValue(item, ...keys) {
         const flagValues = getDocDFlagsStartsWith(item, ...keys);
         const flags = Object.keys(flagValues);
         const total = flags.reduce((sum, key) => {
+            const formula = item?.[MODULE_NAME]?.[key] || 0;
+            const total = RollPF.safeTotal(formula);
+            return sum + total;
+        }, 0);
+        return total;
+    }
+
+    /**
+     * @param {ItemPF} item
+     * @param {...string} keys
+     * @returns {number}
+     */
+    static getModuleFlagValue(item, ...keys) {
+        const total = keys.reduce((sum, key) => {
             const formula = item?.[MODULE_NAME]?.[key] || 0;
             const total = RollPF.safeTotal(formula);
             return sum + total;

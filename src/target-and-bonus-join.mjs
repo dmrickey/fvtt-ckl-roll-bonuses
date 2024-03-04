@@ -6,10 +6,11 @@ import { registerItemHint } from "./util/item-hints.mjs";
 import { localize } from "./util/localize.mjs";
 import { truthiness } from "./util/truthiness.mjs";
 
-function initSettings() {
-    allTargetTypes.forEach((target) => target.initSettings());
+function init() {
+    allTargetTypes.forEach((target) => target.init());
+    allBonusTypes.forEach((bonus) => bonus.init());
 };
-initSettings();
+init();
 
 registerItemHint((hintcls, actor, item, _data) => {
     if (!actor || item?.actor !== actor) {
@@ -105,9 +106,9 @@ function actionUseAlterRollData({ actor, item, shared }) {
 
     allTargetTypes.forEach((target) => {
         const bonuses = target.getBonusSourcesForTarget(item);
-        bonuses.forEach((target) => {
+        bonuses.forEach((bonusTarget) => {
             allBonusTypes.forEach((bonus) => {
-                bonus.actionUseAlterRollData(target, shared);
+                bonus.actionUseAlterRollData(bonusTarget, shared);
             });
         });
     });
@@ -157,10 +158,10 @@ function actionDamageSources(action, sources) {
     /** @type {ItemChange[]} */
     const changes = [];
     allTargetTypes.forEach((target) => {
-        const bonusSources = target.getBonusSourcesForTarget(action);
-        bonusSources.forEach((bonusSource) => {
+        const bonuses = target.getBonusSourcesForTarget(action);
+        bonuses.forEach((bonusTarget) => {
             allBonusTypes.forEach((bonus) => {
-                changes.push(...bonus.getDamageSourcesForTooltip(bonusSource));
+                changes.push(...bonus.getDamageSourcesForTooltip(bonusTarget));
             });
         });
     });

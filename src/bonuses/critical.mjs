@@ -1,6 +1,7 @@
 import { MODULE_NAME } from "../consts.mjs";
+import { textInput } from "../handlebars-handlers/bonus-inputs/text-input.mjs";
 import { hasAnyBFlag, getDocDFlagsStartsWith, KeyedDFlagHelper, FormulaCacheHelper } from "../util/flag-helpers.mjs";
-import { HookWrapperHandler, localHooks } from "../util/hooks.mjs";
+import { localHooks } from "../util/hooks.mjs";
 import { registerItemHint } from "../util/item-hints.mjs";
 import { localize } from "../util/localize.mjs";
 import { signed } from "../util/to-signed-string.mjs";
@@ -17,8 +18,8 @@ const critMultOffsetSelf = 'crit-mult-offset-self';
 const critMultOffsetAll = 'crit-mult-offset-all';
 const critMultOffsetId = (/** @type {IdObject} */ { id }) => `crit-mult-offset_${id}`;
 
-FormulaCacheHelper.registerFormulaFlag(critOffsetSelf, critOffsetAll, critMultOffsetSelf, critMultOffsetAll);
-FormulaCacheHelper.registerFormulaPartialFlag('crit-offset_', 'crit-mult-offset_');
+FormulaCacheHelper.registerDictionaryFlag(critOffsetSelf, critOffsetAll, critMultOffsetSelf, critMultOffsetAll);
+FormulaCacheHelper.registerPartialDictionaryFlag('crit-offset_', 'crit-mult-offset_');
 
 // register keen on bonus
 registerItemHint((hintcls, _actor, item, _data) => {
@@ -39,8 +40,8 @@ registerItemHint((hintcls, _actor, item, _data,) => {
     // return early if it has a self mod because that's encompassed in the "show on target" hint
     if (item.getItemDictionaryFlag(critOffsetSelf)) return;
 
-    const mod = FormulaCacheHelper.getFormulaFlagValue(item, critOffsetAll)
-        + FormulaCacheHelper.getFormulaPartialFlagValue(item, 'crit-offset_');
+    const mod = FormulaCacheHelper.getDictionaryFlagValue(item, critOffsetAll)
+        + FormulaCacheHelper.getPartialDictionaryFlagValue(item, 'crit-offset_');
 
     if (mod === 0) {
         return;
@@ -56,8 +57,8 @@ registerItemHint((hintcls, _actor, item, _data,) => {
     // return early if it has a self mod because that's encompassed in the "show on target" hint
     if (item.getItemDictionaryFlag(critMultOffsetSelf)) return;
 
-    const mod = FormulaCacheHelper.getFormulaFlagValue(item, critMultOffsetAll)
-        + FormulaCacheHelper.getFormulaPartialFlagValue(item, 'crit-mult-offset_');
+    const mod = FormulaCacheHelper.getDictionaryFlagValue(item, critMultOffsetAll)
+        + FormulaCacheHelper.getPartialDictionaryFlagValue(item, 'crit-mult-offset_');
 
     if (mod === 0) {
         return;
@@ -75,6 +76,7 @@ registerItemHint((hintcls, actor, item, _data) => {
     const isBroken = !!item.system.broken;
 
     const action = item.firstAction;
+    if (!(action?.hasAttack && action.data.ability?.critMult > 1)) return;
 
     const multFlags = [critMultOffsetAll, critMultOffsetId(action), critMultOffsetId(item)]
     const offsetFlags = [critOffsetAll, critOffsetId(item), critOffsetId(action)];
@@ -83,8 +85,8 @@ registerItemHint((hintcls, actor, item, _data) => {
     const getMult = () => {
         if (isBroken) return 2;
 
-        const sum = helper.sumOfFlag(...multFlags)
-            + FormulaCacheHelper.getFormulaFlagValue(item, critMultOffsetSelf);
+        const sum = helper.sumOfFlags(...multFlags)
+            + FormulaCacheHelper.getDictionaryFlagValue(item, critMultOffsetSelf);
         const mult = +(action.data.ability.critMult || 2) + sum;
         return mult;
     }
@@ -101,8 +103,8 @@ registerItemHint((hintcls, actor, item, _data) => {
             ? current * 2 - 21
             : current;
 
-        const sum = helper.sumOfFlag(...offsetFlags)
-            + FormulaCacheHelper.getFormulaFlagValue(item, critOffsetSelf);
+        const sum = helper.sumOfFlags(...offsetFlags)
+            + FormulaCacheHelper.getDictionaryFlagValue(item, critOffsetSelf);
 
         range -= sum;
         range = Math.clamped(range, 2, 20);
@@ -145,7 +147,7 @@ Hooks.on('pf1GetRollData', (
 
         const sum = new KeyedDFlagHelper(actor, {}, critMultOffsetAll, critMultOffsetId(action), critMultOffsetId(item))
             .sumAll()
-            + FormulaCacheHelper.getFormulaFlagValue(item, critMultOffsetSelf);
+            + FormulaCacheHelper.getDictionaryFlagValue(item, critMultOffsetSelf);
 
         return +(rollData.action.ability.critMult || 2) + sum;
     };
@@ -171,7 +173,7 @@ Hooks.on('pf1GetRollData', (
 
         const flags = [critOffsetAll, critOffsetId(item), critOffsetId(action)];
         const mod = new KeyedDFlagHelper(actor, {}, ...flags).sumAll()
-            + FormulaCacheHelper.getFormulaFlagValue(item, critOffsetSelf);
+            + FormulaCacheHelper.getDictionaryFlagValue(item, critOffsetSelf);
 
         range -= mod;
         range = Math.clamped(range, 2, 20);
@@ -201,7 +203,7 @@ function handleItemActionCritRangeWrapper(wrapped) {
 
     const offsetFlags = [critOffsetAll, critOffsetId(item), critOffsetId(action), selfKeen];
     const offset = new KeyedDFlagHelper(actor, {}, ...offsetFlags).sumAll()
-        + FormulaCacheHelper.getFormulaFlagValue(item, critOffsetSelf);
+        + FormulaCacheHelper.getDictionaryFlagValue(item, critOffsetSelf);
     if (!offset && !hasKeen) {
         return wrapped();
     }
@@ -227,4 +229,48 @@ Hooks.on(localHooks.chatAttackAttackNotes, (
     if (hasKeen) {
         attackNotes.push(localize('keen'));
     }
+});
+
+/**
+ *
+ * @param {string} key
+ * @returns {string}
+ */
+const labelLookup = (key) => {
+    switch (key) {
+        case critOffsetSelf: return localize(critOffsetSelf);
+        case critOffsetAll: return localize(critOffsetAll);
+        case critMultOffsetSelf: return localize(critMultOffsetSelf);
+        case critMultOffsetAll: return localize(critMultOffsetAll);
+    }
+
+    if (key.includes('crit-offset_')) {
+        const id = key.split('_')[1];
+        return localize('crit-offset-targeted', { id });
+    }
+
+    if (key.includes('crit-mult-offset_')) {
+        const id = key.split('_')[1];
+        return localize('crit-mult-offset-targeted', { id });
+    }
+
+    return "Crit";
+}
+
+Hooks.on('renderItemSheet', (
+    /** @type {ItemSheetPF} */ { item },
+    /** @type {[HTMLElement]} */[html],
+    /** @type {unknown} */ _data
+) => {
+    const has = getDocDFlagsStartsWith(item, 'crit-');
+
+    Object.entries(has).forEach(([key, [current]]) => {
+        textInput({
+            current,
+            item,
+            key,
+            label: labelLookup(key),
+            parent: html,
+        });
+    });
 });

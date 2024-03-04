@@ -19,7 +19,7 @@ function patchChangeValue(value, itemChange) {
 
     const helper = new KeyedDFlagHelper(actor, { onlyIncludeAllFlags: true }, bonusKey, formulaKey);
 
-    const offset = helper.sumOfFlag(formulaKey);
+    const offset = helper.sumOfFlags(formulaKey);
     if (offset) {
         value = isNaN(+value) ? `${value} + ${offset}` : (+value + offset);
     }

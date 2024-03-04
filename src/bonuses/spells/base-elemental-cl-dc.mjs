@@ -1,6 +1,6 @@
 import { textInputAndKeyValueSelect } from "../../handlebars-handlers/bonus-inputs/text-input-and-key-value-select.mjs";
 import { intersection } from "../../util/array-intersects.mjs";
-import { KeyedDFlagHelper, getDocDFlags } from "../../util/flag-helpers.mjs";
+import { FormulaCacheHelper, KeyedDFlagHelper, getDocDFlags } from "../../util/flag-helpers.mjs";
 import { localHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize } from "../../util/localize.mjs";
@@ -29,6 +29,8 @@ const damageElements = [
 export function createElementalClOrDc(t) {
     const key = `elemental-${t}`;
     const formulaKey = `elemental-${t}-formula`;
+
+    FormulaCacheHelper.registerDictionaryFlag(formulaKey);
 
     /**
      *
@@ -74,7 +76,7 @@ export function createElementalClOrDc(t) {
             formulaKey
         );
 
-        const offset = helper.sumOfFlag(formulaKey);
+        const offset = helper.sumOfFlags(formulaKey);
 
         if (offset) {
             const elements = helper.valuesForFlag(key)
@@ -132,12 +134,7 @@ export function createElementalClOrDc(t) {
             return;
         }
 
-        const formula = getDocDFlags(item, formulaKey)[0];
-        if (!formula) {
-            return;
-        }
-
-        const total = RollPF.safeTotal(formula, item.getRollData());
+        const total = FormulaCacheHelper.getDictionaryFlagValue(item, formulaKey);
         if (!total) {
             return;
         }

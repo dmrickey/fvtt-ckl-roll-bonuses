@@ -1,5 +1,6 @@
 import { MODULE_NAME } from "../../consts.mjs";
 import { textInput } from "../../handlebars-handlers/bonus-inputs/text-input.mjs";
+import { FormulaCacheHelper } from "../../util/flag-helpers.mjs";
 import { BaseBonus } from "./base-bonus.mjs";
 
 /**
@@ -96,8 +97,14 @@ export class AttackBonus extends BaseBonus {
      * @param {ItemPF} item
      */
     static #getAttackBonus(item) {
-        const formula = item.getFlag(MODULE_NAME, this.key);
-        const value = RollPF.safeTotal(formula, item.getRollData());
+        const value = FormulaCacheHelper.getModuleFlagValue(item, this.key);
         return value;
+    }
+
+    /**
+     * @override
+     */
+    static init() {
+        FormulaCacheHelper.registerModuleFlag(this.key);
     }
 }

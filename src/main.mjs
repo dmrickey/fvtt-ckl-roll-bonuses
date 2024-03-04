@@ -60,6 +60,7 @@ function prepareItemData(wrapped) {
     wrapped();
 
     const item = this;
+    item[MODULE_NAME] = {};
     const rollData = item.getRollData();
     FormulaCacheHelper.cacheFormulas(item, rollData)
     HookWrapperHandler.handleHookNoReturnSync(localHooks.prepareData, item, rollData);
@@ -178,7 +179,7 @@ Hooks.once('init', () => {
     libWrapper.register(MODULE_NAME, 'pf1.dice.d20Roll', d20RollWrapper, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype.getAttackSources', itemGetAttackSources, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype.getTypeChatData', itemGetTypeChatData, libWrapper.WRAPPER);
-    libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype.prepareDerivedData', prepareItemData, libWrapper.WRAPPER);
+    libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype.prepareDerivedItemData', prepareItemData, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype.use', itemUseWrapper, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemSpellPF.prototype.getTypeChatData', itemGetTypeChatData, libWrapper.WRAPPER);
 
