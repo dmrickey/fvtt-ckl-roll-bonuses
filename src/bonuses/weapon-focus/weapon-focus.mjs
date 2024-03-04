@@ -33,7 +33,7 @@ class Settings {
     static #getSetting(/** @type {string} */key) { return game.settings.get(MODULE_NAME, key).toLowerCase(); }
 }
 
-// register hint on item with focus
+// register hint on source
 registerItemHint((hintcls, _actor, item, _data) => {
     const key = allKeys.find((k) => item.system.flags.dictionary[k] !== undefined);
     if (!key) {
@@ -59,7 +59,7 @@ registerItemHint((hintcls, actor, item, _data) => {
 
     const baseTypes = item.system.baseTypes;
 
-    const helper = new KeyedDFlagHelper(actor, weaponFocusKey, greaterWeaponFocusKey, mythicWeaponFocusKey);
+    const helper = new KeyedDFlagHelper(actor, {}, weaponFocusKey, greaterWeaponFocusKey, mythicWeaponFocusKey);
 
     const isFocused = intersects(baseTypes, helper.valuesForFlag(weaponFocusKey));
     const isGreater = intersects(baseTypes, helper.valuesForFlag(greaterWeaponFocusKey));
@@ -103,7 +103,7 @@ function getAttackSources(item, sources) {
     let value = 0;
     let name = localize(weaponFocusKey);
 
-    const helper = new KeyedDFlagHelper(actor, weaponFocusKey, greaterWeaponFocusKey, mythicWeaponFocusKey);
+    const helper = new KeyedDFlagHelper(actor, {}, weaponFocusKey, greaterWeaponFocusKey, mythicWeaponFocusKey);
 
     if (baseTypes.find(bt => helper.valuesForFlag(weaponFocusKey).includes(bt))) {
         value += 1;
@@ -138,7 +138,7 @@ function addWeaponFocusBonus({ actor, item, shared }) {
     const baseTypes = item.system.baseTypes;
     let value = 0;
 
-    const helper = new KeyedDFlagHelper(actor, weaponFocusKey, greaterWeaponFocusKey, mythicWeaponFocusKey);
+    const helper = new KeyedDFlagHelper(actor, {}, weaponFocusKey, greaterWeaponFocusKey, mythicWeaponFocusKey);
     let key = '';
 
     if (intersects(baseTypes, helper.valuesForFlag(weaponFocusKey))) {

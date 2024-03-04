@@ -23,7 +23,7 @@ class Settings {
     static #getSetting(/** @type {string} */key) { return game.settings.get(MODULE_NAME, key).toLowerCase(); }
 }
 
-// register hint on feat
+// register hint on source feat
 registerItemHint((hintcls, _actor, item, _data) => {
     const current = item.getItemDictionaryFlag(key);
     if (current) {
@@ -42,7 +42,7 @@ registerItemHint((hintcls, actor, item, _data) => {
     }
 
     const baseTypes = item.system.baseTypes;
-    const helper = new KeyedDFlagHelper(actor, key);
+    const helper = new KeyedDFlagHelper(actor, {}, key);
 
     if (intersects(baseTypes, helper.valuesForFlag(key))) {
         return hintcls.create(`+2 ${localize('PF1.Damage')}`, [], { hint: localize(key) });
@@ -61,7 +61,7 @@ function addWeaponSpecialization({ actor, item, shared }) {
 
     const baseTypes = item.system.baseTypes;
 
-    const helper = new KeyedDFlagHelper(actor, key);
+    const helper = new KeyedDFlagHelper(actor, {}, key);
     if (intersects(baseTypes, helper.valuesForFlag(key))) {
         shared.damageBonus.push(`${2}[${localize(key)}]`);
     }
@@ -129,7 +129,7 @@ Hooks.on(localHooks.actionDamageSources, actionDamageSources);
 //     if (!actor || !item.system.baseTypes?.length) return;
 
 //     const weaponGroups = [...item.system.weaponGroups.value, ...item.system.weaponGroups.custom.split(';')].map(x => x.trim()).filter(truthiness);
-//     const focuses = new KeyedDFlagHelper(actor, key).valuesForFlag(key);
+//     const focuses = new KeyedDFlagHelper(actor, {}, key).valuesForFlag(key);
 
 //     const isFocused = intersects(weaponGroups, focuses);
 
@@ -158,7 +158,7 @@ Hooks.on('renderItemSheet', (
 
     const current = item.getItemDictionaryFlag(key);
 
-    const helper = new KeyedDFlagHelper(actor, greaterWeaponFocusKey, weaponSpecializationKey);
+    const helper = new KeyedDFlagHelper(actor, {}, greaterWeaponFocusKey, weaponSpecializationKey);
     const focuses = helper.valuesForFlag(greaterWeaponFocusKey).map(x => `${x}`);
     const specs = helper.valuesForFlag(weaponSpecializationKey).map(x => `${x}`);
     const choices = intersection(focuses, specs).sort();

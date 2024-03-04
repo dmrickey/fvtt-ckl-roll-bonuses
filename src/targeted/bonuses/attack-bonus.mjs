@@ -1,5 +1,6 @@
 import { MODULE_NAME } from "../../consts.mjs";
 import { textInput } from "../../handlebars-handlers/bonus-inputs/text-input.mjs";
+import { FormulaCacheHelper } from "../../util/flag-helpers.mjs";
 import { BaseBonus } from "./base-bonus.mjs";
 
 /**
@@ -14,11 +15,11 @@ export class AttackBonus extends BaseBonus {
 
     /**
      * @override
-     * @param {ItemPF} target
+     * @param {ItemPF} item
      * @returns {boolean}
      */
-    static isBonusSource(target) {
-        const value = this.#getAttackBonus(target);
+    static isBonusSource(item) {
+        const value = this.#getAttackBonus(item);
         return !!value;
     };
 
@@ -77,7 +78,7 @@ export class AttackBonus extends BaseBonus {
      * @param {HTMLElement} options.html
      */
     static showInputOnItemSheet({ item, html }) {
-        const hasFlag = item.system.flags.boolean?.hasOwnProperty(this.key);
+        const hasFlag = item.hasItemBooleanFlag(this.key);
         if (!hasFlag) {
             return;
         }
@@ -93,12 +94,17 @@ export class AttackBonus extends BaseBonus {
     }
 
     /**
-     *
-     * @param {ItemPF} targetSource
+     * @param {ItemPF} item
      */
-    static #getAttackBonus(targetSource) {
-        const formula = targetSource.getFlag(MODULE_NAME, this.key);
-        const value = RollPF.safeTotal(formula, targetSource.actor.getRollData());
+    static #getAttackBonus(item) {
+        const value = FormulaCacheHelper.getModuleFlagValue(item, this.key);
         return value;
+    }
+
+    /**
+     * @override
+     */
+    static init() {
+        FormulaCacheHelper.registerModuleFlag(this.key);
     }
 }

@@ -1,17 +1,18 @@
+import { MODULE_NAME } from '../../src/consts.mjs';
 import Document from '../foundry/common/abstract/document.mjs';
 
-export {};
+export { };
 
 declare global {
     abstract class BaseDocument extends Document {
-        getRollData(): Nullable<RollData>;
+        getRollData(): RollData;
         getFlag(moduleName: string, key: string): any;
         async setFlag<T>(moduleName: string, key: string, value: T);
         updateSource(changes: Partial<this>, options?: object);
         uuid: string;
     }
 
-    abstract class ItemDocument extends BaseDocument {}
+    abstract class ItemDocument extends BaseDocument { }
 
     interface Abilities {
         str: 'Strength';
@@ -141,6 +142,7 @@ declare global {
         };
         item: ItemPF;
         static defaultDamageType: TraitSelectorValuePlural;
+        hasAttack: boolean;
     }
 
     interface ItemAttackPF extends ItemPF {
@@ -159,7 +161,7 @@ declare global {
         /** @deprecated Spells don't have tags */
         tag: string;
     }
-    interface ItemFeatPF extends ItemPF {}
+    interface ItemFeatPF extends ItemPF { }
     interface ItemLootPF extends ItemPF {
         subType: 'gear' | 'ammo' | 'tradeGoods' | 'misc';
     }
@@ -253,6 +255,8 @@ declare global {
     }
 
     interface ItemPF extends ItemDocument {
+        [MODULE_NAME]: { [key: string]: number | string | object | array };
+
         get hasAction(): boolean;
         actions: EmbeddedCollection<ItemAction>;
 
@@ -384,7 +388,20 @@ declare global {
          * @param formula - The string that should resolve to a number
          * @param rollData - The roll data used for resolving any variables in the formula
          */
-        static safeTotal(formula: string | number, rollData: RollData): number;
+        static safeTotal(
+            formula: string | number,
+            rollData?: Nullable<RollData>
+        ): number;
+
+        /**
+         * Safely get the result of a roll, returns 0 if unsafe.
+         * @param formula - The string that should resolve to a number
+         * @param rollData - The roll data used for resolving any variables in the formula
+         */
+        static safeRoll(
+            formula: string | number,
+            rollData?: Nullable<RollData>
+        ): { total: number, formula: string };
     }
 
     type BonusModifers =
@@ -609,10 +626,10 @@ declare global {
     interface pf1 {
         applications: {
             ActorTraitSelector: {
-                new (doc: Document, options: object): ActorTraitSelector;
+                new(doc: Document, options: object): ActorTraitSelector;
             };
             DamageTypeSelector: {
-                new (
+                new(
                     object: { id: string; update({ [dataPath]: object }) },
                     dataPath: string,
                     data: {},
@@ -626,7 +643,7 @@ declare global {
             ItemAction: typeof ItemAction;
             // ItemAction: ItemAction ;
             ItemChange: {
-                new (
+                new(
                     args: {
                         flavor: string;
                         formula: string | number;
@@ -691,16 +708,16 @@ declare global {
         };
         documents: {
             actor: {
-                ActorPF: { new (): ActorPF };
+                ActorPF: { new(): ActorPF };
             };
             item: {
-                ItemAttackPF: { new (): ItemAttackPF };
-                ItemEquipmentPF: { new (): ItemEquipmentPF };
-                ItemFeatPF: { new (): ItemFeatPF };
-                ItemLootPF: { new (): ItemLootPF };
-                ItemPF: { new (): ItemPF };
-                ItemSpellPF: { new (): ItemSpellPF };
-                ItemWeaponPF: { new (): ItemWeaponPF };
+                ItemAttackPF: { new(): ItemAttackPF };
+                ItemEquipmentPF: { new(): ItemEquipmentPF };
+                ItemFeatPF: { new(): ItemFeatPF };
+                ItemLootPF: { new(): ItemLootPF };
+                ItemPF: { new(): ItemPF };
+                ItemSpellPF: { new(): ItemSpellPF };
+                ItemWeaponPF: { new(): ItemWeaponPF };
             };
         };
         registry: {

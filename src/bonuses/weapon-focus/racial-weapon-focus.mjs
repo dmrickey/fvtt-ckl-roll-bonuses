@@ -20,7 +20,7 @@ class Settings {
     static #getSetting(/** @type {string} */key) { return game.settings.get(MODULE_NAME, key).toLowerCase(); }
 }
 
-// register hint on item with focus
+// register hint on source
 registerItemHint((hintcls, _actor, item, _data) => {
     const current = item.getItemDictionaryFlag(racialWeaponFocusKey);
     if (!current) {
@@ -39,9 +39,13 @@ registerItemHint((hintcls, actor, item, _data) => {
 
     const tags = (item.system.tags || []).map((tag) => tag.toLocaleLowerCase());
 
-    const helper = new KeyedDFlagHelper(actor, racialWeaponFocusKey);
+    const helper = new KeyedDFlagHelper(actor, {
+        mustHave: {
+            [racialWeaponFocusKey]: (value) => tags.includes(`${value}`),
+        }
+    }, racialWeaponFocusKey);
 
-    if (intersects(tags, helper.valuesForFlag(racialWeaponFocusKey))) {
+    if (helper.hasAnyFlags()) {
         const label = localize(weaponFocusKey);
         return hintcls.create(label, [], {});
     }
@@ -59,14 +63,14 @@ function getAttackSources(item, sources) {
 
     const tags = (item.system.tags || []).map((tag) => tag.toLocaleLowerCase());
 
-    const helper = new KeyedDFlagHelper(actor, racialWeaponFocusKey);
+    const helper = new KeyedDFlagHelper(actor, {
+        mustHave: {
+            [racialWeaponFocusKey]: (value) => tags.includes(`${value}`),
+        }
+    }, racialWeaponFocusKey);
 
-    const value = tags.find(tag => helper.valuesForFlag(racialWeaponFocusKey).includes(tag))
-        ? 1
-        : 0;
-
-    if (value) {
-        sources.push({ value, name: localize(weaponFocusKey), modifier: 'untyped', sort: -100 });
+    if (helper.hasAnyFlags()) {
+        sources.push({ value: 1, name: localize(weaponFocusKey), modifier: 'untyped', sort: -100 });
         return sources.sort((a, b) => b.sort - a.sort);
     }
 
@@ -83,14 +87,14 @@ function addWeaponFocusBonus({ actor, item, shared }) {
 
     const tags = (item.system.tags || []).map((tag) => tag.toLocaleLowerCase());
 
-    const helper = new KeyedDFlagHelper(actor, racialWeaponFocusKey);
+    const helper = new KeyedDFlagHelper(actor, {
+        mustHave: {
+            [racialWeaponFocusKey]: (value) => tags.includes(`${value}`),
+        }
+    }, racialWeaponFocusKey);
 
-    const value = tags.find(value => helper.valuesForFlag(racialWeaponFocusKey).includes(value))
-        ? 1
-        : 0;
-
-    if (value) {
-        shared.attackBonus.push(`${value}[${localize(weaponFocusKey)}]`);
+    if (helper.hasAnyFlags()) {
+        shared.attackBonus.push(`${1}[${localize(weaponFocusKey)}]`);
     }
 }
 Hooks.on(localHooks.actionUseAlterRollData, addWeaponFocusBonus);

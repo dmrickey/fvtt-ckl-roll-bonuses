@@ -156,7 +156,7 @@ function versatileRollSkill(wrapped, skillId, options) {
 
     return wrapped(skillId, options);
 }
-Hooks.once('setup', () => {
+Hooks.once('init', () => {
     libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorPF.prototype.rollSkill', versatileRollSkill, libWrapper.WRAPPER);
 });
 

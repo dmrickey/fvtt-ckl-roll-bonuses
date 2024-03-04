@@ -1,5 +1,5 @@
 import { textInput } from "../../handlebars-handlers/bonus-inputs/text-input.mjs";
-import { getDocDFlags } from "../../util/flag-helpers.mjs";
+import { FormulaCacheHelper, KeyedDFlagHelper, getDocDFlags } from "../../util/flag-helpers.mjs";
 import { localHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize } from "../../util/localize.mjs";
@@ -7,33 +7,29 @@ import { signed } from "../../util/to-signed-string.mjs";
 
 const key = 'all-spell-cl'
 
+FormulaCacheHelper.registerDictionaryFlag(key);
+
 // add info to spell card
 Hooks.on(localHooks.itemGetTypeChatData, (
     /** @type {ItemPF} */ item,
     /** @type {string[]} */ props,
-    /** @type {RollData} */ rollData,
+    /** @type {RollData} */ _rollData,
 ) => {
     if (!item || !(item instanceof pf1.documents.item.ItemSpellPF)) return;
     const { actor } = item;
     if (!actor) return;
 
-    const bonuses = getDocDFlags(actor, key, { includeInactive: false });
-    const bonus = bonuses
-        .map((x) => RollPF.safeTotal(x, rollData))
-        .reduce((acc, cur) => acc + cur, 0);
+    const bonus = new KeyedDFlagHelper(actor, {}, key).sumAll();
     if (bonus) {
         props.push(localize('cl-label-mod', { mod: signed(bonus), label: localize('all-spells') }));
     }
 });
 
-// register hint on ability
-registerItemHint((hintcls, actor, item, _data) => {
-    const flag = item.getItemDictionaryFlag(key);
-    if (!flag) {
-        return;
-    }
+// register hint on source
+registerItemHint((hintcls, _actor, item, _data) => {
+    const value = FormulaCacheHelper.getDictionaryFlagValue(item, key);
+    if (!value) return;
 
-    const value = RollPF.safeTotal(flag, actor?.getRollData() ?? {})
     const mod = signed(value);
     const hint = hintcls.create(`${localize('cl-mod', { mod })} (${localize('all-spells')})`, [], {});
     return hint;
@@ -47,21 +43,17 @@ Hooks.on('pf1GetRollData', (
         return;
     }
 
-    const { actor } = action;
-    if (!actor) {
+    const { actor, item } = action;
+    if (!actor
+        || !(item instanceof pf1.documents.item.ItemSpellPF)
+        || !rollData
+    ) {
         return;
     }
 
-    const { item } = action;
-    if (!(item instanceof pf1.documents.item.ItemSpellPF) || !rollData) {
-        return;
-    }
-
+    const total = new KeyedDFlagHelper(actor, {}, key).sumAll();
     rollData.cl ||= 0;
-    const bonuses = getDocDFlags(actor, key, { includeInactive: false });
-    bonuses.forEach(bonus => {
-        rollData.cl += RollPF.safeTotal(bonus, rollData);
-    });
+    rollData.cl += total;
 });
 
 Hooks.on('renderItemSheet', (

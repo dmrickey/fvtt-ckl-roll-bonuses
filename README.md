@@ -268,6 +268,7 @@ Increase chosen spell CL by +2.
   - The spell's `name` is the key. If you have multiple versions of the same spell in your spellbook and want this to work with all of them, then pick the `name` that is in both items.
     - e.g. If you have two differnt spells in your spellbook that are the same spell, but one is different because it has metamagic details pre-defined in it, `Fireball` and `Maximized Fireball`, then choose `Fireball` and it will apply to both spells
   - If `Spell Specialization` is accidentally applying to an extra spell because it includes the chosen spell's name, then you can add exclusionary rules, too. Add the dictionary flag `spell-specialization-exclusions` and add in any extra parts of other spell names that should be excluded - each separate term split by a `;`.
+    - This is a manual process - you have to edit the dictionary flag directly, there's no special input that will show up for this.
     - e.g. You have chosen the spell `Alarm`, but also have other spells `Selective Alarm` and `Escape Alarm`. By default those other two will also be specialized. But you can add the exclusion flag with the value `Selective; Escape` and those will now be excluded.
 
 </details>
@@ -374,7 +375,7 @@ Attack's critical variables can now be dynamically adjusted. Crit can be modifie
     * This is useful for when you have a temporary buff (e.g. Magus, Warpriest, Occultist,...) that grants a specific weapon Keen
 
   ### Crit target modifications (dictionary flag)
-  Positive numbers are good, so having a `3` will mean your "crits only on a 20" weapon will now crit on "17 or higher"
+  Positive numbers are good, so having a `3` will mean your "crits only on a 20" weapon will now crit on "17 or higher". Adding any of these will give you a formula input.
   * `crit-offset-self`
   * `crit-offset-all`
   * `crit-offset_<id>`

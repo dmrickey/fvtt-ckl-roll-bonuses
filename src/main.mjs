@@ -1,10 +1,17 @@
-import { HookWrapperHandler, localHooks } from './util/hooks.mjs';
 import { MODULE_NAME } from './consts.mjs';
+
+// specifically set this up before importing anything else so it's ready to start being populated
+// game.modules.get(MODULE_NAME).api = {
+//     config: {},
+// };
+
+import { HookWrapperHandler, localHooks } from './util/hooks.mjs';
 
 import './handlebars-handlers/init.mjs';
 import './util/item-hints.mjs';
 import './bonuses.mjs';
 import './patch/init.mjs';
+import { FormulaCacheHelper } from './util/flag-helpers.mjs';
 
 /**
  * @param {() => any} wrapped
@@ -43,6 +50,20 @@ function patchChangeValue(wrapped) {
 function d20RollWrapper(wrapped, options = {}) {
     Hooks.call(localHooks.d20Roll, options);
     return wrapped.call(this, options);
+}
+
+/**
+ * @param {*} wrapped
+ * @this {ItemPF}
+ */
+function prepareItemData(wrapped) {
+    wrapped();
+
+    const item = this;
+    item[MODULE_NAME] = {};
+    const rollData = item.getRollData();
+    FormulaCacheHelper.cacheFormulas(item, rollData)
+    HookWrapperHandler.handleHookNoReturnSync(localHooks.prepareData, item, rollData);
 }
 
 /**
@@ -134,19 +155,35 @@ function actionDamageSources(wrapped) {
     // return filtered;
 }
 
-Hooks.once('setup', () => {
+/**
+ * Safely get the result of a roll, returns 0 if unsafe.
+ * @param {string | number} formula - The string that should resolve to a number
+ * @param {Nullable<RollData>} data - The roll data used for resolving any variables in the formula
+ * @returns {number}
+ */
+function safeTotal(
+    formula,
+    data,
+) {
+    return isNaN(+formula) ? RollPF.safeRoll(formula, data).total : +formula;
+}
+
+Hooks.once('init', () => {
+    libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype._getConditionalParts', getConditionalParts, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype.alterRollData', actionUseAlterRollData, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype.handleConditionals', actionUseHandleConditionals, libWrapper.WRAPPER);
-    libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype._getConditionalParts', getConditionalParts, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ChatAttack.prototype.setAttackNotesHTML', setAttackNotesHTMLWrapper, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ChatAttack.prototype.setEffectNotesHTML', setEffectNotesHTMLWrapper, libWrapper.WRAPPER);
-    libWrapper.register(MODULE_NAME, 'pf1.components.ItemChange.prototype.value', patchChangeValue, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.damageSources', actionDamageSources, libWrapper.WRAPPER);
+    libWrapper.register(MODULE_NAME, 'pf1.components.ItemChange.prototype.value', patchChangeValue, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.dice.d20Roll', d20RollWrapper, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype.getAttackSources', itemGetAttackSources, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype.getTypeChatData', itemGetTypeChatData, libWrapper.WRAPPER);
-    libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemSpellPF.prototype.getTypeChatData', itemGetTypeChatData, libWrapper.WRAPPER);
+    libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype.prepareDerivedItemData', prepareItemData, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype.use', itemUseWrapper, libWrapper.WRAPPER);
+    libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemSpellPF.prototype.getTypeChatData', itemGetTypeChatData, libWrapper.WRAPPER);
+
+    RollPF.safeTotal = safeTotal;
 });
 
-Hooks.once('init', () => console.log('ckl roll bonuses loaded'));
+Hooks.once('init', () => console.log(`${MODULE_NAME} loaded`));

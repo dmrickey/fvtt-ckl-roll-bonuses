@@ -1,5 +1,5 @@
 import { textInputAndKeyValueSelect } from "../../handlebars-handlers/bonus-inputs/text-input-and-key-value-select.mjs";
-import { KeyedDFlagHelper, getDocDFlags } from "../../util/flag-helpers.mjs";
+import { FormulaCacheHelper, KeyedDFlagHelper, getDocDFlags } from "../../util/flag-helpers.mjs";
 import { localHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize } from "../../util/localize.mjs";
@@ -7,6 +7,8 @@ import { signed } from "../../util/to-signed-string.mjs";
 
 const key = 'school-dc';
 const formulaKey = 'school-dc-formula';
+
+FormulaCacheHelper.registerDictionaryFlag(formulaKey);
 
 // add Info to chat card
 Hooks.on(localHooks.itemGetTypeChatData, (
@@ -18,12 +20,8 @@ Hooks.on(localHooks.itemGetTypeChatData, (
     const { actor } = item;
     if (!actor) return;
 
-    const helper = new KeyedDFlagHelper(actor, key, formulaKey);
-    const matches = helper.getItemDictionaryFlagsWithAllFlagsAndMatchingFlag(key, item.system.school);
-    const formulas = Object.values(matches).map((o) => o[formulaKey])
-    const offset = formulas
-        .map(x => RollPF.safeTotal(x, actor.getRollData()))
-        .reduce((acc, cur) => acc + cur, 0);
+    const helper = new KeyedDFlagHelper(actor, { onlyIncludeAllFlags: true, mustHave: { [key]: item.system.school } }, key, formulaKey);
+    const offset = helper.sumOfFlags(formulaKey);
 
     if (offset) {
         const school = pf1.config.spellSchools[item.system.school] ?? item.system.school;
@@ -36,12 +34,8 @@ registerItemHint((hintcls, actor, item, _data) => {
     if (!item || !(item instanceof pf1.documents.item.ItemSpellPF)) return;
     if (!actor) return;
 
-    const helper = new KeyedDFlagHelper(actor, key, formulaKey);
-    const matches = helper.getItemDictionaryFlagsWithAllFlagsAndMatchingFlag(key, item.system.school);
-    const formulas = Object.values(matches).map((o) => o[formulaKey])
-    const offset = formulas
-        .map(x => RollPF.safeTotal(x, actor.getRollData()))
-        .reduce((acc, cur) => acc + cur, 0);
+    const helper = new KeyedDFlagHelper(actor, { onlyIncludeAllFlags: true, mustHave: { [key]: item.system.school } }, key, formulaKey);
+    const offset = helper.sumOfFlags(formulaKey);
 
     if (offset) {
         const school = pf1.config.spellSchools[item.system.school] ?? item.system.school;
@@ -51,15 +45,14 @@ registerItemHint((hintcls, actor, item, _data) => {
     }
 });
 
-// register hint on ability
-registerItemHint((hintcls, actor, item, _data) => {
+// register hint on source
+registerItemHint((hintcls, _actor, item, _data) => {
     const currentSchool = getDocDFlags(item, key)[0];
     if (!currentSchool) {
         return;
     }
 
-    const formula = getDocDFlags(item, formulaKey)[0];
-    const total = RollPF.safeTotal(formula, actor?.getRollData() ?? {});
+    const total = FormulaCacheHelper.getDictionaryFlagValue(item, formulaKey);
     if (!total) {
         return;
     }
@@ -89,12 +82,8 @@ Hooks.on('pf1GetRollData', (
         return;
     }
 
-    const helper = new KeyedDFlagHelper(actor, key, formulaKey);
-    const matches = helper.getItemDictionaryFlagsWithAllFlagsAndMatchingFlag(key, item.system.school);
-    const formulas = Object.values(matches).map((o) => o[formulaKey])
-    const offset = formulas
-        .map((x) => RollPF.safeTotal(x, rollData))
-        .reduce((acc, cur) => acc + cur, 0);
+    const helper = new KeyedDFlagHelper(actor, { onlyIncludeAllFlags: true, mustHave: { [key]: item.system.school } }, key, formulaKey);
+    const offset = helper.sumOfFlags(formulaKey);
 
     rollData.dcBonus ||= 0;
     rollData.dcBonus += offset;

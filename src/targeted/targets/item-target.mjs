@@ -65,7 +65,7 @@ export class ItemTarget extends BaseTarget {
      * @param {ItemPF} options.item
      * @param {HTMLElement} options.html
      */
-    static showInputOnItemSheet({ actor, item, html }) {
+    static showInputOnItemSheet({ item, html }) {
         showItemInput({
             item,
             filter: this.itemFilter,

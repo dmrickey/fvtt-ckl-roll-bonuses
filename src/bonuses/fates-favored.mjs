@@ -1,3 +1,4 @@
+import { hasAnyBFlag } from '../util/flag-helpers.mjs';
 import { HookWrapperHandler, localHooks } from '../util/hooks.mjs';
 import { localize } from '../util/localize.mjs';
 
@@ -10,7 +11,7 @@ const fatesFavored = 'fates-favored';
  */
 function patchChangeValue(value, itemChange) {
     const actor = itemChange.parent?.actor;
-    value = itemChange.modifier === 'luck' && actor?.itemFlags?.boolean?.[fatesFavored]
+    value = itemChange.modifier === 'luck' && hasAnyBFlag(actor, fatesFavored)
         ? isNaN(+value) ? `${value} + 1` : (+value + 1)
         : value;
     return value;
@@ -24,7 +25,7 @@ HookWrapperHandler.registerHandler(localHooks.patchChangeValue, patchChangeValue
  * @returns {ModifierSource[]}
  */
 function getAttackSources(item, sources) {
-    if (!item?.actor?.itemFlags?.boolean?.[fatesFavored]) return sources;
+    if (!item.hasItemBooleanFlag(fatesFavored)) return sources;
 
     let /** @type {ModifierSource?} */ fatesFavoredSource = null;
     sources.forEach((source) => {

@@ -52,13 +52,12 @@ Hooks.on(localHooks.itemGetTypeChatData, (
     /** @type {RollData} */ rollData,
 ) => {
     if (!item || !(item instanceof pf1.documents.item.ItemSpellPF)) return;
+
     const { actor } = item;
     if (!actor) return;
 
     const action = item.firstAction;
-    if (!action) {
-        return;
-    }
+    if (!action) return;
 
     const bonus = getDcBonus(action);
     if (bonus) {
@@ -77,7 +76,7 @@ registerItemHint((hintcls, actor, item, _data) => {
         return;
     }
 
-    const helper = new KeyedDFlagHelper(actor, elementalFocusKey, greaterElementalFocusKey, mythicElementalFocusKey);
+    const helper = new KeyedDFlagHelper(actor, {}, elementalFocusKey, greaterElementalFocusKey, mythicElementalFocusKey);
 
     const damageTypes = action.data.damage.parts
         .map(({ type }) => type)

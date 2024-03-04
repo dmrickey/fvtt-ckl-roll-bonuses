@@ -25,8 +25,10 @@ export class BaseTarget {
 
     /**
      * Initialize any target-specific settings.
+     *
+     * @abstract
      */
-    static initSettings() { }
+    static init() { }
 
     /**
      * Returns true the targeting is too generic to show a hint on a specific item.

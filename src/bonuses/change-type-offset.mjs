@@ -17,19 +17,13 @@ function patchChangeValue(value, itemChange) {
         return value;
     }
 
-    const flags = new KeyedDFlagHelper(actor, bonusKey, formulaKey).getItemDictionaryFlagsWithAllFlags();
-    const matches = Object.values(flags)
-        .filter((offset) => offset[bonusKey] === itemChange.modifier);
+    const helper = new KeyedDFlagHelper(actor, { onlyIncludeAllFlags: true }, bonusKey, formulaKey);
 
-    if (!matches.length) {
-        return value;
+    const offset = helper.sumOfFlags(formulaKey);
+    if (offset) {
+        value = isNaN(+value) ? `${value} + ${offset}` : (+value + offset);
     }
 
-    const formulas = Object.values(matches).map((o) => o[formulaKey]);
-    const offset = formulas
-        .map(x => RollPF.safeTotal(x, actor.getRollData()))
-        .reduce((acc, cur) => acc + cur, 0);
-    value = isNaN(+value) ? `${value} + ${offset}` : (+value + offset);
     return value;
 }
 HookWrapperHandler.registerHandler(localHooks.patchChangeValue, patchChangeValue);
@@ -38,7 +32,7 @@ HookWrapperHandler.registerHandler(localHooks.patchChangeValue, patchChangeValue
  * @param {string} html
  */
 Hooks.on('renderItemSheet', (
-    /** @type {ItemSheetPF} */ { actor, item },
+    /** @type {ItemSheetPF} */ { item },
     /** @type {[HTMLElement]} */[html],
     /** @type {unknown} */ _data
 ) => {

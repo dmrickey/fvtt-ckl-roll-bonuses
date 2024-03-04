@@ -67,10 +67,9 @@ export function conditionalCalculator(shared, conditional) {
  * @param {ItemConditionalModifier} modifier
  * @param {object} [options]
  * @param {boolean} [options.isDamage]
- * @param {RollData?} [options.rollData]
  * @returns {Nullable<ItemChange>}
  */
-export function conditionalModToItemChange(conditional, modifier, { isDamage = false, rollData = null } = {}) {
+export function conditionalModToItemChange(conditional, modifier, { isDamage = false } = {}) {
     if (!modifier) return;
 
     const subTarget = modifier.target;
@@ -93,7 +92,7 @@ export function conditionalModToItemChange(conditional, modifier, { isDamage = f
         operator: 'add',
         priority: 0,
         subTarget,
-        value: rollData ? RollPF.safeTotal(modifier.formula, rollData) : modifier.formula,
+        value: modifier.formula,
     });
     if (isDamage) {
         change.type = modifier.type;
@@ -106,10 +105,9 @@ export function conditionalModToItemChange(conditional, modifier, { isDamage = f
  *
  * @param {ItemConditional} conditional
  * @param {ItemConditionalModifier} modifier
- * @param {ActorPF} actor
  * @returns {Nullable<ModifierSource>}
  */
-export function conditionalAttackTooltipModSource(conditional, modifier, actor) {
+export function conditionalAttackTooltipModSource(conditional, modifier) {
     if (!modifier) return;
 
     const subTarget = modifier.target;
@@ -127,7 +125,7 @@ export function conditionalAttackTooltipModSource(conditional, modifier, actor) 
 
     const source = {
         name: conditional.name,
-        value: RollPF.safeTotal(modifier.formula, actor.getRollData()),
+        value: RollPF.safeTotal(modifier.formula),
         modifier: modifier.type,
         sort: 0,
     };

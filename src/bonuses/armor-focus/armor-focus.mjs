@@ -21,7 +21,7 @@ class Settings {
     static #getSetting(/** @type {string} */key) { return game.settings.get(MODULE_NAME, key).toLowerCase(); }
 }
 
-// register hint on feat
+// register hint on source feat
 registerItemHint((hintcls, _actor, item, _data) => {
     const current = item.getItemDictionaryFlag(key);
     if (current) {
@@ -37,7 +37,7 @@ registerItemHint((hintcls, actor, item, _data) => {
     const baseTypes = item.system.baseTypes;
     if (!baseTypes?.length) return;
 
-    const armorFocuses = new KeyedDFlagHelper(actor, key).valuesForFlag(key);
+    const armorFocuses = new KeyedDFlagHelper(actor, {}, key).valuesForFlag(key);
     const isFocused = intersects(armorFocuses, baseTypes);
 
     if (isArmor && isFocused) {
@@ -63,7 +63,7 @@ function handleArmorFocusRollData(doc, rollData) {
     const baseTypes = armor.system.baseTypes;
     if (!baseTypes?.length) return;
 
-    const armorFocuses = new KeyedDFlagHelper(actor, key).valuesForFlag(key);
+    const armorFocuses = new KeyedDFlagHelper(actor, {}, key).valuesForFlag(key);
     const isFocused = intersects(armorFocuses, baseTypes);
 
     if (isFocused) {
@@ -77,7 +77,7 @@ Hooks.on('pf1AddDefaultChanges', handleArmorFocusChange);
  * @param {ItemChange[]} tempChanges
  */
 function handleArmorFocusChange(actor, tempChanges) {
-    const armorFocuses = new KeyedDFlagHelper(actor, key).valuesForFlag(key);
+    const armorFocuses = new KeyedDFlagHelper(actor, {}, key).valuesForFlag(key);
     if (!armorFocuses.length) return;
 
     const armor = actor.items.find(
