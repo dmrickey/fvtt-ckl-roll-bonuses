@@ -18,6 +18,9 @@
                     "weapon-group": "Weapon Group Targets",
                     "weapon-type": "Weapon Type Targets"
                 }
+            },
+            "virtual-size": {
+                "label": "Virtual Size"
             }
         },
         "change-type-offset": "Change Offset",
@@ -80,6 +83,9 @@
                 "skill1": "Skill 1",
                 "skill2": "Skill 2"
             }
+        },
+        "virtual-size": {
+            "hint": "Size: {mod}"
         },
         "weapon-focus": "Weapon Focus",
         "weapon-specialization": "Weapon Specialization",

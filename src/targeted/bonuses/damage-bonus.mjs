@@ -103,11 +103,9 @@ export class DamageBonus extends BaseBonus {
         const damages = this.#getCachedDamageBonuses(target);
 
         const conditional = this.#createConditional(damages, target.name);
-        if (conditional.modifiers?.length) {
-            return this.#createConditional(damages, target.name);
-        }
-
-        return null;
+        return conditional.modifiers?.length
+            ? conditional
+            : null;;
     }
 
     /**

@@ -33,9 +33,11 @@
 - [Housekeeping](#housekeeping)
 - [Checklist for new (and existing features)](#checklist-for-new-and-existing-features)
 - [Deprecate](#deprecate)
+- [Add Quench Testings](#add-quench-testings)
+- [Add create hooks for initializing some items (like anything based off of name/id)](#add-create-hooks-for-initializing-some-items-like-anything-based-off-of-nameid)
 
 # TODO
-- Figure out a way to support multiple target groups on a single item (so I can add "Holy" and "Flaming" on a single weapon)
+- Figure out a way to support multiple target groups on a single Item (so I can add `Favored Enemy (Human) +4` and `Favored Enemy (goblin) +2` on a single Item)
 
 # UI
 ## Add In-Game Documentation
@@ -44,6 +46,7 @@
 - create "id getter" ui for things like keen or fortune (fortune will need a lot more as well)
 - Always show roll bonuses header in the advanced tab, and add a Cog to itself to configure which bonuses should be on this item (useful for bonuses that can't be auto-detected base on the Feat name/id)
 - Add some kind of preview to targeting UI to show all currently effect Items
+- ### Add text filter to item input target
 
 # Bonus Targets
 ## Bonuses
@@ -53,12 +56,15 @@
   - CL Bonus*
   - DC Bonus*
     - *Would deprecate everything under "spells"
+  - Size bonus (Lead Blades, Gravity Bow, Strong Jaw)
 - Move Crit to Bonus (would deprecate crit)
 
 ## Targets
 - Have target for "me" item, so I can create buffs bonuses that are available only with this weapon
 - Have creature type/subtype based targeting - would support [Ranger](#ranger)'s Favored Enemy
 - Have alignment-based targeting
+- Melee Attacks
+- Ranged Attacks
 - All healing
 - Spellbook target
 - Spell preparation Qty
@@ -158,3 +164,6 @@
 - Weapon Specialization (use bonus targets instead)
 - as of v9, PF1 now defers Roll Bonuses. So that means that the `Bonus` on the Skill settings can go away
 - It should create a new Feature with a change that includes the current formula as part of migration for deleting this
+
+# Add Quench Testings
+# Add create hooks for initializing some items (like anything based off of name/id)

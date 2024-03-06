@@ -1,7 +1,7 @@
 import { MODULE_NAME } from '../../src/consts.mjs';
 import Document from '../foundry/common/abstract/document.mjs';
 
-export { };
+export {};
 
 declare global {
     abstract class BaseDocument extends Document {
@@ -12,7 +12,7 @@ declare global {
         uuid: string;
     }
 
-    abstract class ItemDocument extends BaseDocument { }
+    abstract class ItemDocument extends BaseDocument {}
 
     interface Abilities {
         str: 'Strength';
@@ -161,7 +161,7 @@ declare global {
         /** @deprecated Spells don't have tags */
         tag: string;
     }
-    interface ItemFeatPF extends ItemPF { }
+    interface ItemFeatPF extends ItemPF {}
     interface ItemLootPF extends ItemPF {
         subType: 'gear' | 'ammo' | 'tradeGoods' | 'misc';
     }
@@ -401,7 +401,7 @@ declare global {
         static safeRoll(
             formula: string | number,
             rollData?: Nullable<RollData>
-        ): { total: number, formula: string };
+        ): { total: number; formula: string };
     }
 
     type BonusModifers =
@@ -568,6 +568,7 @@ declare global {
             | 'allDamage' // when target is 'damage'
             | 'dc' // when target is 'effect'
             | 'charges' // when target is 'misc'
+            | '' // size
             | undefined; // no subtarget for 'size'
         target: 'attack' | 'damage' | 'effect' | 'misc' | 'size';
         type: Nullable<BonusModifers | string>;
@@ -626,10 +627,10 @@ declare global {
     interface pf1 {
         applications: {
             ActorTraitSelector: {
-                new(doc: Document, options: object): ActorTraitSelector;
+                new (doc: Document, options: object): ActorTraitSelector;
             };
             DamageTypeSelector: {
-                new(
+                new (
                     object: { id: string; update({ [dataPath]: object }) },
                     dataPath: string,
                     data: {},
@@ -643,7 +644,7 @@ declare global {
             ItemAction: typeof ItemAction;
             // ItemAction: ItemAction ;
             ItemChange: {
-                new(
+                new (
                     args: {
                         flavor: string;
                         formula: string | number;
@@ -708,16 +709,16 @@ declare global {
         };
         documents: {
             actor: {
-                ActorPF: { new(): ActorPF };
+                ActorPF: { new (): ActorPF };
             };
             item: {
-                ItemAttackPF: { new(): ItemAttackPF };
-                ItemEquipmentPF: { new(): ItemEquipmentPF };
-                ItemFeatPF: { new(): ItemFeatPF };
-                ItemLootPF: { new(): ItemLootPF };
-                ItemPF: { new(): ItemPF };
-                ItemSpellPF: { new(): ItemSpellPF };
-                ItemWeaponPF: { new(): ItemWeaponPF };
+                ItemAttackPF: { new (): ItemAttackPF };
+                ItemEquipmentPF: { new (): ItemEquipmentPF };
+                ItemFeatPF: { new (): ItemFeatPF };
+                ItemLootPF: { new (): ItemLootPF };
+                ItemPF: { new (): ItemPF };
+                ItemSpellPF: { new (): ItemSpellPF };
+                ItemWeaponPF: { new (): ItemWeaponPF };
             };
         };
         registry: {

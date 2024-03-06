@@ -95,6 +95,7 @@ export class AttackBonus extends BaseBonus {
 
     /**
      * @param {ItemPF} item
+     * @return {number}
      */
     static #getAttackBonus(item) {
         const value = FormulaCacheHelper.getModuleFlagValue(item, this.key);
