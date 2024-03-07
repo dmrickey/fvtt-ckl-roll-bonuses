@@ -10,5 +10,5 @@ export class WeaponTarget extends ItemTarget {
     /**
      * @override
      */
-    static get type() { return 'weapon'; }
+    static get targetKey() { return 'weapon'; }
 }

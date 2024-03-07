@@ -14,7 +14,7 @@ export class WeaponGroupTarget extends BaseTarget {
      * @inheritdoc
      * @override
      */
-    static get type() { return 'weapon-group'; }
+    static get targetKey() { return 'weapon-group'; }
 
     /**
      * @override

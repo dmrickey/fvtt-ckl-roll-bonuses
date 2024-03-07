@@ -35,7 +35,7 @@ export class TokenTarget extends BaseTarget {
     /**
      * @override
      */
-    static get type() { return 'token'; }
+    static get targetKey() { return 'token'; }
 
     /**
      * @override

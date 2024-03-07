@@ -13,7 +13,7 @@ export class ItemTarget extends BaseTarget {
     /**
      * @override
      */
-    static get type() { return 'item'; }
+    static get targetKey() { return 'item'; }
 
     /**
      * @override

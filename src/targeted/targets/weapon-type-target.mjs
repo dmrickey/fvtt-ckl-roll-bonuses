@@ -10,7 +10,7 @@ export class WeaponTypeTarget extends BaseTarget {
     /**
      * @override
      */
-    static get type() { return 'weapon-type'; }
+    static get targetKey() { return 'weapon-type'; }
 
     /**
      * @override

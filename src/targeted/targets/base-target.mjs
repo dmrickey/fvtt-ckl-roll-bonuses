@@ -42,13 +42,13 @@ export class BaseTarget {
      * Key for flag on bonustarget
      * @returns { string }
      */
-    static get key() { return `target_${this.type}`; }
+    static get key() { return `target_${this.targetKey}`; }
 
     /**
      * Label for this bonustarget
      * @returns { string }
      */
-    static get label() { return localize(`bonus.target.label.${this.type}`); }
+    static get label() { return localize(`bonus.target.label.${this.targetKey}`); }
 
     /**
      * @abstract
@@ -78,5 +78,5 @@ export class BaseTarget {
      * @abstract
      * @returns { string }
      */
-    static get type() { throw new Error('must be overridden'); }
+    static get targetKey() { throw new Error('must be overridden'); }
 }
