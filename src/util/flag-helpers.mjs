@@ -366,11 +366,10 @@ export class FormulaCacheHelper {
         if (!item) return;
 
         this.#dictionaryFlags.forEach((flag) => {
-            const formula = item.getItemDictionaryFlag(flag);
-            if (formula) {
-                const value = RollPF.safeTotal(formula, rollData);
-
-                item[MODULE_NAME][flag] = value;
+            const exactFormula = item.getItemDictionaryFlag(flag);
+            if (exactFormula) {
+                const formula = RollPF.safeRoll(exactFormula, rollData).formula;
+                item[MODULE_NAME][flag] = formula;
             }
         });
 
@@ -385,11 +384,10 @@ export class FormulaCacheHelper {
         });
 
         this.#moduleFlags.forEach((flag) => {
-            const formula = item.flags?.[MODULE_NAME]?.[flag];
-            if (formula) {
-                const value = RollPF.safeTotal(formula, rollData);
-
-                item[MODULE_NAME][flag] = value;
+            const exactFormula = item.flags?.[MODULE_NAME]?.[flag];
+            if (exactFormula) {
+                const formula = RollPF.safeRoll(exactFormula, rollData).formula;
+                item[MODULE_NAME][flag] = formula;
             }
         });
     }
@@ -400,11 +398,8 @@ export class FormulaCacheHelper {
      * @returns {number}
      */
     static getDictionaryFlagValue(item, ...keys) {
-        const total = keys.reduce((sum, key) => {
-            const formula = item?.[MODULE_NAME]?.[key] || 0;
-            const total = RollPF.safeTotal(formula);
-            return sum + total;
-        }, 0);
+        const formulas = Object.values(this.getDictionaryFlagFormula(item, ...keys));
+        const total = formulas.reduce((/** @type {number} */ sum, formula) => sum + RollPF.safeTotal(formula), 0);
         return total;
     }
 
@@ -414,13 +409,8 @@ export class FormulaCacheHelper {
      * @returns {number}
      */
     static getPartialDictionaryFlagValue(item, ...keys) {
-        const flagValues = getDocDFlagsStartsWith(item, ...keys);
-        const flags = Object.keys(flagValues);
-        const total = flags.reduce((sum, key) => {
-            const formula = item?.[MODULE_NAME]?.[key] || 0;
-            const total = RollPF.safeTotal(formula);
-            return sum + total;
-        }, 0);
+        const formulas = Object.values(this.getPartialDictionaryFlagFormula(item, ...keys));
+        const total = formulas.reduce((/** @type {number} */ sum, formula) => sum + RollPF.safeTotal(formula), 0);
         return total;
     }
 
@@ -430,11 +420,40 @@ export class FormulaCacheHelper {
      * @returns {number}
      */
     static getModuleFlagValue(item, ...keys) {
-        const total = keys.reduce((sum, key) => {
-            const formula = item?.[MODULE_NAME]?.[key] || 0;
-            const total = RollPF.safeTotal(formula);
-            return sum + total;
-        }, 0);
+        const formulas = Object.values(this.getModuleFlagFormula(item, ...keys));
+        const total = formulas.reduce((/** @type {number} */ sum, formula) => sum + RollPF.safeTotal(formula), 0);
         return total;
+    }
+
+    /**
+     * @param {ItemPF} item
+     * @param {...string} keys
+     * @returns {{[key: string]:(number | string)}}
+     */
+    static getDictionaryFlagFormula(item, ...keys) {
+        const formulas = keys.reduce((obj, key) => ({ ...obj, [key]: item?.[MODULE_NAME]?.[key] || '' }), {});
+        return formulas;
+    }
+
+    /**
+     * @param {ItemPF} item
+     * @param {...string} keys
+     * @returns {{[key: string]:(number | string)}}
+     */
+    static getPartialDictionaryFlagFormula(item, ...keys) {
+        const flagValues = getDocDFlagsStartsWith(item, ...keys);
+        const flags = Object.keys(flagValues);
+        const formulas = flags.reduce((obj, flag) => ({ ...obj, [flag]: item?.[MODULE_NAME]?.[flag] || '' }), {});
+        return formulas;
+    }
+
+    /**
+     * @param {ItemPF} item
+     * @param {...string} keys
+     * @returns {{[key: string]:(number | string)}}
+     */
+    static getModuleFlagFormula(item, ...keys) {
+        const formulas = keys.reduce((obj, key) => ({ ...obj, [key]: item?.[MODULE_NAME]?.[key] || '' }), {});
+        return formulas;
     }
 }
