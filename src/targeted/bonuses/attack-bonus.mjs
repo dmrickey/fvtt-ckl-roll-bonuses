@@ -31,9 +31,9 @@ export class AttackBonus extends BaseBonus {
      * @returns {Nullable<string[]>}
      */
     static getHints(source) {
-        const formula = source.getFlag(MODULE_NAME, this.key)?.trim();
+        const formula = FormulaCacheHelper.getModuleFlagFormula(source, this.key)[this.key];
         if (formula) {
-            return [formula];
+            return [`${formula}`];
         }
     }
 
