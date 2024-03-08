@@ -2,6 +2,7 @@ import { MODULE_NAME } from "../consts.mjs";
 
 export const templates = {
     // generic shortcuts
+    enabledLabel: `modules/${MODULE_NAME}/hbs/enabled-label.hbs`,
     keyValueSelect: `modules/${MODULE_NAME}/hbs/labeled-key-value-dropdown-select.hbs`,
     stringSelect: `modules/${MODULE_NAME}/hbs/labeled-string-dropdown-select.hbs`,
     textInput: `modules/${MODULE_NAME}/hbs/text-input.hbs`,
