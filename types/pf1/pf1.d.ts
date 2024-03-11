@@ -50,6 +50,9 @@ declare global {
         name: string;
 
         system: {
+            details: {
+                alignment: string;
+            };
             skills: {
                 [key: string]: {
                     name: string;
@@ -685,6 +688,14 @@ declare global {
             };
             abilities;
             bonusModifiers: { [key in BonusModifers]: string };
+            damageResistances: {
+                magic: 'Magic';
+                epic: 'Epic';
+                lawful: 'Lawful';
+                chaotic: 'Chaotic';
+                good: 'Good';
+                evil: 'Evil';
+            };
             damageTypes: {
                 untyped: 'Untyped';
                 slashing: 'Slashing';
