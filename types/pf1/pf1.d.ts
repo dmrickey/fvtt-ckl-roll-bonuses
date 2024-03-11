@@ -148,73 +148,11 @@ declare global {
         hasAttack: boolean;
     }
 
-    interface ItemAttackPF extends ItemPF {
-        system: SystemItemAttackPF;
-    }
-    interface ItemEquipmentPF extends ItemPF {
-        system: SystemItemEquipmentPF;
-    }
-    interface ItemSpellPF extends ItemPF {
-        learnedAt: {
-            class: { [key: string]: number };
-            domain: { [key: string]: number };
-        };
-        system: SystemItemSpellPF;
-
-        /** @deprecated Spells don't have tags */
-        tag: string;
-    }
-    interface ItemFeatPF extends ItemPF {}
-    interface ItemLootPF extends ItemPF {
-        subType: 'gear' | 'ammo' | 'tradeGoods' | 'misc';
-    }
-    interface ItemWeaponPF extends ItemPF {
-        system: SystemWeaponPF;
-    }
-
     interface ItemChange {
-        //hardcoded bonus type to use instead of modifier
+        /** hardcoded bonus type to use instead of modifier */
         type: string | null | undefined;
         modifier: BonusModifers;
         parent: undefined | ItemPF;
-    }
-
-    interface SystemItem {
-        links: { children: { name: string; id: string }[]; charges: unknown[] };
-        broken: boolean;
-        flags: {
-            boolean: {};
-            dictionary: DictionaryFlags;
-        };
-        tag: string;
-        tags: string[];
-    }
-    interface SystemItemAttackPF extends SystemItem {
-        baseTypes: string[];
-        links: { children: { name: string; id: string }[] };
-        weaponGroups: TraitSelector?;
-    }
-    interface SystemItemEquipmentPF extends SystemItem {
-        armor: {
-            acp: number;
-            dex: number | null;
-            enh: number;
-            value: number;
-        };
-        baseTypes: string[];
-        links: { children: { name: string; id: string }[] };
-        proficient: boolean;
-        slot: 'armor' | 'shield';
-    }
-    interface SystemItemSpellPF extends SystemItem {
-        school: string;
-        types: string;
-    }
-    interface SystemWeaponPF extends SystemItem {
-        baseTypes: string[];
-        links: { children: { name: string; id: string }[] };
-        proficient: boolean;
-        weaponGroups: TraitSelector;
     }
 
     /** used for weapons and attacks */
@@ -257,7 +195,7 @@ declare global {
         visible: boolean;
     }
 
-    interface ItemPF extends ItemDocument {
+    class ItemPF extends ItemDocument {
         [MODULE_NAME]: { [key: string]: number | string | object | array };
 
         get hasAction(): boolean;
@@ -266,9 +204,7 @@ declare global {
         actor: ActorPF;
         firstAction: ItemAction;
         flags: {
-            core: {
-                sourceId: string;
-            };
+            core: { sourceId: string };
             [key: string]: any;
         };
         id: string;
@@ -317,6 +253,75 @@ declare global {
          * @returns True if the item has the boolean flag
          */
         hasItemBooleanFlag(key: string): boolean;
+    }
+
+    class ItemAttackPF extends ItemPF {
+        system: SystemItemAttackPF;
+    }
+    class ItemEquipmentPF extends ItemPF {
+        system: SystemItemEquipmentPF;
+    }
+    class ItemSpellPF extends ItemPF {
+        learnedAt: {
+            class: { [key: string]: number };
+            domain: { [key: string]: number };
+        };
+        system: SystemItemSpellPF;
+
+        /** @deprecated Spells don't have tags */
+        tag: string;
+    }
+    class ItemFeatPF extends ItemPF {}
+    class ItemLootPF extends ItemPF {
+        subType: 'gear' | 'ammo' | 'tradeGoods' | 'misc';
+    }
+    class ItemWeaponPF extends ItemPF {
+        system: SystemWeaponPF;
+    }
+
+    class SystemItem {
+        links: { children: { name: string; id: string }[]; charges: unknown[] };
+        broken: boolean;
+        flags: {
+            boolean: {};
+            dictionary: DictionaryFlags;
+        };
+        tag: string;
+        tags: string[];
+    }
+    class SystemItemAttackPF extends SystemItem {
+        baseTypes: string[];
+        links: { children: { name: string; id: string }[] };
+        weaponGroups: TraitSelector?;
+    }
+    class SystemItemEquipmentPF extends SystemItem {
+        armor: {
+            acp: number;
+            dex: number | null;
+            enh: number;
+            value: number;
+        };
+        baseTypes: string[];
+        links: { children: { name: string; id: string }[] };
+        proficient: boolean;
+        slot: 'armor' | 'shield';
+    }
+    class SystemItemSpellPF extends SystemItem {
+        /** @deprecated not until v10 */
+        descriptors: {
+            value: string[];
+            custom: string[];
+        };
+        school: string;
+
+        /** @deprecated use until v10 */
+        types: string;
+    }
+    class SystemWeaponPF extends SystemItem {
+        baseTypes: string[];
+        links: { children: { name: string; id: string }[] };
+        proficient: boolean;
+        weaponGroups: TraitSelector;
     }
 
     type ItemType =
