@@ -1,10 +1,12 @@
 import { textInputAndKeyValueSelect } from "../handlebars-handlers/bonus-inputs/text-input-and-key-value-select.mjs";
-import { KeyedDFlagHelper, getDocDFlags } from "../util/flag-helpers.mjs";
+import { KeyedDFlagHelper, getDocDFlags, FormulaCacheHelper } from "../util/flag-helpers.mjs";
 import { HookWrapperHandler, localHooks } from "../util/hooks.mjs";
 import { localize } from "../util/localize.mjs";
 
 const bonusKey = 'change-type-offset';
 const formulaKey = 'change-type-offset-formula';
+
+FormulaCacheHelper.registerDictionaryFlag(formulaKey);
 
 /**
  * @param {number | string} value
@@ -17,7 +19,16 @@ function patchChangeValue(value, itemChange) {
         return value;
     }
 
-    const helper = new KeyedDFlagHelper(actor, { onlyIncludeAllFlags: true }, bonusKey, formulaKey);
+    const helper = new KeyedDFlagHelper(
+        actor,
+        {
+            onlyIncludeAllFlags: true,
+            mustHave: {
+                [bonusKey]: (value) => value === itemChange.modifier,
+            }
+        },
+        bonusKey,
+        formulaKey);
 
     const offset = helper.sumOfFlags(formulaKey);
     if (offset) {
