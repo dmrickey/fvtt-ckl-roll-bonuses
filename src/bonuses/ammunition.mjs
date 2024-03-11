@@ -84,6 +84,6 @@ Hooks.on('renderItemSheet', (
         parent: html,
         label: localize('bonus.attack.label'),
     }, {
-        isFlag: true,
+        isModuleFlag: true,
     });
 });

@@ -89,7 +89,7 @@ export class AttackBonus extends BaseBonus {
             parent: html,
             label: this.label,
         }, {
-            isFlag: true,
+            isModuleFlag: true,
         });
     }
 

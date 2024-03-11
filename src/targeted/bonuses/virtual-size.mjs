@@ -68,7 +68,7 @@ export class VirtualSizeBonus extends BaseBonus {
             parent: html,
             label: this.label,
         }, {
-            isFlag: true,
+            isModuleFlag: true,
         });
     }
 
