@@ -5,6 +5,7 @@ import { localHooks } from "../util/hooks.mjs";
 import { registerItemHint } from "../util/item-hints.mjs";
 import { localize } from "../util/localize.mjs";
 import { signed } from "../util/to-signed-string.mjs";
+import { truthiness } from '../util/truthiness.mjs';
 
 const selfKeen = 'keen-self';
 const keenAll = 'keen-all';
@@ -40,8 +41,13 @@ registerItemHint((hintcls, _actor, item, _data,) => {
     // return early if it has a self mod because that's encompassed in the "show on target" hint
     if (item.getItemDictionaryFlag(critOffsetSelf)) return;
 
-    const mod = FormulaCacheHelper.getDictionaryFlagValue(item, critOffsetAll)
-        + FormulaCacheHelper.getPartialDictionaryFlagValue(item, 'crit-offset_');
+    const mod = [
+        FormulaCacheHelper.getDictionaryFlagFormula(item, critOffsetAll),
+        FormulaCacheHelper.getPartialDictionaryFlagFormula(item, 'crit-offset_'),
+    ]
+        .filter(truthiness);
+
+    // TOOD check if formula are determinate, and if so add them and do the following - if not, return a differnt hint with the formula as the hint
 
     if (mod === 0) {
         return;
@@ -57,8 +63,8 @@ registerItemHint((hintcls, _actor, item, _data,) => {
     // return early if it has a self mod because that's encompassed in the "show on target" hint
     if (item.getItemDictionaryFlag(critMultOffsetSelf)) return;
 
-    const mod = FormulaCacheHelper.getDictionaryFlagValue(item, critMultOffsetAll)
-        + FormulaCacheHelper.getPartialDictionaryFlagValue(item, 'crit-mult-offset_');
+    const mod = FormulaCacheHelper.getDictionaryFlagFormula(item, critMultOffsetAll)
+        + FormulaCacheHelper.getPartialDictionaryFlagFormula(item, 'crit-mult-offset_');
 
     if (mod === 0) {
         return;
