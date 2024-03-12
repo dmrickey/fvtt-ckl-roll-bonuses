@@ -195,7 +195,9 @@ declare global {
         visible: boolean;
     }
 
-    class ItemPF extends ItemDocument {
+    class ItemPF<
+        SystemData extends SystemItemData = SystemItemData
+    > extends ItemDocument {
         [MODULE_NAME]: { [key: string]: number | string | object | array };
 
         get hasAction(): boolean;
@@ -218,7 +220,7 @@ declare global {
          * @deprecated use @see actor
          */
         parentActor: ActorPF;
-        system: SystemItem;
+        system: SystemData;
         type: ItemType;
 
         /**
@@ -242,7 +244,7 @@ declare global {
         getItemDictionaryFlags(): DictionaryFlags;
 
         /**
-         * Sets teh given dictionary flag on the item
+         * Sets the given dictionary flag on the item
          * @param key
          * @param value
          */
@@ -255,32 +257,28 @@ declare global {
         hasItemBooleanFlag(key: string): boolean;
     }
 
-    class ItemAttackPF extends ItemPF {
-        system: SystemItemAttackPF;
-    }
-    class ItemEquipmentPF extends ItemPF {
-        system: SystemItemEquipmentPF;
-    }
-    class ItemSpellPF extends ItemPF {
-        learnedAt: {
-            class: { [key: string]: number };
-            domain: { [key: string]: number };
-        };
-        system: SystemItemSpellPF;
-
-        /** @deprecated Spells don't have tags */
-        tag: string;
-    }
+    class ItemAttackPF extends ItemPF<SystemItemDataAttackPF> {}
+    class ItemEquipmentPF extends ItemPF<SystemItemDataEquipmentPF> {}
     class ItemFeatPF extends ItemPF {}
     class ItemLootPF extends ItemPF {
         subType: 'gear' | 'ammo' | 'tradeGoods' | 'misc';
     }
-    class ItemWeaponPF extends ItemPF {
-        system: SystemWeaponPF;
-    }
+    class ItemSpellPF extends ItemPF<SystemItemDataSpellPF> {
+        learnedAt: {
+            class: { [key: string]: number };
+            domain: { [key: string]: number };
+        };
 
-    class SystemItem {
-        links: { children: { name: string; id: string }[]; charges: unknown[] };
+        /** @deprecated Spells don't have tags */
+        tag: string;
+    }
+    class ItemWeaponPF extends ItemPF<SystemWeaponPF> {}
+
+    class SystemItemData {
+        links: {
+            children: { name: string; id: string }[];
+            charges?: unknown[];
+        };
         broken: boolean;
         flags: {
             boolean: {};
@@ -289,12 +287,12 @@ declare global {
         tag: string;
         tags: string[];
     }
-    class SystemItemAttackPF extends SystemItem {
+    class SystemItemDataAttackPF extends SystemItemData {
         baseTypes: string[];
-        links: { children: { name: string; id: string }[] };
+        // links: { children: { name: string; id: string }[] };
         weaponGroups: TraitSelector?;
     }
-    class SystemItemEquipmentPF extends SystemItem {
+    class SystemItemDataEquipmentPF extends SystemItemData {
         armor: {
             acp: number;
             dex: number | null;
@@ -302,11 +300,11 @@ declare global {
             value: number;
         };
         baseTypes: string[];
-        links: { children: { name: string; id: string }[] };
+        // links: { children: { name: string; id: string }[] };
         proficient: boolean;
         slot: 'armor' | 'shield';
     }
-    class SystemItemSpellPF extends SystemItem {
+    class SystemItemDataSpellPF extends SystemItemData {
         /** @deprecated not until v10 */
         descriptors: {
             value: string[];
@@ -317,9 +315,9 @@ declare global {
         /** @deprecated use until v10 */
         types: string;
     }
-    class SystemWeaponPF extends SystemItem {
+    class SystemWeaponPF extends SystemItemData {
         baseTypes: string[];
-        links: { children: { name: string; id: string }[] };
+        // links: { children: { name: string; id: string }[] };
         proficient: boolean;
         weaponGroups: TraitSelector;
     }
