@@ -28,7 +28,8 @@ function patchChangeValue(value, itemChange) {
             }
         },
         bonusKey,
-        formulaKey);
+        formulaKey,
+    );
 
     const offset = helper.sumOfFlags(formulaKey);
     if (offset) {

@@ -9,6 +9,7 @@ import { TokenTarget } from "./token-target.mjs";
 import { WeaponGroupTarget } from "./weapon-group-target.mjs";
 import { WeaponTarget } from "./weapon-target.mjs";
 import { WeaponTypeTarget } from "./weapon-type-target.mjs";
+import { IsSpellTarget } from "./is-spell-target.mjs";
 
 /** @type {typeof BaseTarget[]} */
 export const allTargetTypes = [
@@ -17,6 +18,8 @@ export const allTargetTypes = [
     ItemTarget,
     IsMeleeWeaponTarget,
     IsRangedWeaponTarget,
+    IsSpellTarget,
+    IsMeleeWeaponTarget,
     SpellTarget,
     TokenTarget,
     WeaponGroupTarget,

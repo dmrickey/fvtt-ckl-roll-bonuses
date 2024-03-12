@@ -1,3 +1,4 @@
+import { showEnabledLabel } from '../handlebars-handlers/enabled-label.mjs';
 import { hasAnyBFlag } from '../util/flag-helpers.mjs';
 import { HookWrapperHandler, localHooks } from '../util/hooks.mjs';
 import { localize } from '../util/localize.mjs';
@@ -50,3 +51,18 @@ function getAttackSources(item, sources) {
     return sources;
 }
 Hooks.on(localHooks.itemGetAttackSources, getAttackSources);
+
+Hooks.on('renderItemSheet', (
+    /** @type {ItemSheetPF} */ { item },
+    /** @type {[HTMLElement]} */[html],
+    /** @type {unknown} */ _data
+) => {
+    const hasFlag = item.system.flags.boolean?.hasOwnProperty(fatesFavored);
+    if (!hasFlag) {
+        return;
+    }
+    showEnabledLabel({
+        label: localize(fatesFavored),
+        parent: html,
+    });
+});

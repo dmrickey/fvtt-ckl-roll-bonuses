@@ -119,7 +119,7 @@ Increase the value used by any sizeRoll formula in the target. (typically in the
 
   - To configure the feature add the boolean flags `target_weapon-group`, `bonus_attack`, and `bonus_damage`. You'll need a new feature for each tier so you can appropriately target each separate weapon group with the appropriate bonus.
   - Damage/Attack
-    - If you don't use Advanced Weeapon Training (which keeps your attack/damage bonuses from improving) then your formula is `max(0, floor((@classes.fighter.level - 1) / 4))` for your first tier. This formula will keep improving as you level up. For your second tier you can use the same formula but subtract 1, then for your third subtract 2, etc. You can also just use plain numbers - but you'll have to update those as you level up.
+    - If you don't use Advanced Weapon Training (which keeps your attack/damage bonuses from improving) then your formula is `max(0, floor((@classes.fighter.level - 1) / 4))` for your first tier. This formula will keep improving as you level up. For your second tier you can use the same formula but subtract 1, then for your third subtract 2, etc. You can also just use plain numbers - but you'll have to update those as you level up.
   - For your weapon group simply hit the edit button and select your group
 
 ![image](https://github.com/dmrickey/fvtt-ckl-roll-bonuses/assets/3664822/369e808e-ce8e-4006-a73c-5358a27784ea)

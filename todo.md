@@ -35,6 +35,7 @@
 - [Deprecate](#deprecate)
 - [Add Quench Testings](#add-quench-testings)
 - [Add create hooks for initializing some items (like anything based off of name/id)](#add-create-hooks-for-initializing-some-items-like-anything-based-off-of-nameid)
+- [This release must include](#this-release-must-include)
 
 # TODO
 - Figure out a way to support multiple target groups on a single Item (so I can add `Favored Enemy (Human) +4` and `Favored Enemy (goblin) +2` on a single Item)
@@ -167,3 +168,15 @@
 
 # Add Quench Testings
 # Add create hooks for initializing some items (like anything based off of name/id)
+
+
+# This release must include
+- target hint for "is item targets (melee/ranged)
+- update damage column for size modifiers in actor attacks
+- masterwork and enhancement bonuses for ammo
+  - damage change would be amazing. (basically the same)
+  - look into adding a `change` bonus specifically for enhancement bonus
+- Add `showEnabledLabel` for inputs that don't have them (like fate's favored)
+- Add customized labels for fortune effects that have variable targets
+- Show icon next to skills that roll inspiration for free
+- Add Weapon Finesse
