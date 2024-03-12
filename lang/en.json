@@ -95,6 +95,11 @@
                 "hint": "The name of the 'Armor Focus' feat. This is to support translations without having to translate the mod.",
                 "default": "Armor Focus"
             },
+            "debug": {
+                "name": "Debug Mode",
+                "hint": "Enable this to turn on extra logging which may help in tracking down certain issues. Defaults to `false`.",
+                "default": false
+            },
             "elementalFocus": {
                 "name": "Elemental Focus",
                 "hint": "The name of the 'Elemental Focus' feat. This is to support translations without having to translate the mod.",

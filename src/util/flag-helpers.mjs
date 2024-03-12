@@ -1,7 +1,7 @@
 import { MODULE_NAME } from "../consts.mjs";
-import { intersection } from './array-intersects.mjs';
+import { difference, intersection } from './array-intersects.mjs';
+import { ifDebug } from './if-debug.mjs';
 import { truthiness } from "./truthiness.mjs";
-import { uniqueArray } from "./unique-array.mjs";
 
 // todo update to use actor.itemFlags.dictionary or item.system.flags.dictionary
 //   can't really do this an support the same feat with different bonuses
@@ -431,6 +431,11 @@ export class FormulaCacheHelper {
      * @returns {{[key: string]:(number | string)}}
      */
     static getDictionaryFlagFormula(item, ...keys) {
+        ifDebug(() => {
+            const diff = difference(keys, this.#dictionaryFlags);
+            if (diff.length) console.error(`Dictionary flag(s) has not been cached:`, diff);
+        });
+
         const formulas = keys.reduce((obj, key) => ({ ...obj, [key]: item?.[MODULE_NAME]?.[key] || '' }), {});
         return formulas;
     }
@@ -441,6 +446,11 @@ export class FormulaCacheHelper {
      * @returns {{[key: string]:(number | string)}}
      */
     static getPartialDictionaryFlagFormula(item, ...keys) {
+        ifDebug(() => {
+            const diff = difference(keys, this.#partialDictionaryFlags);
+            if (diff.length) console.error(`Dictionary flag(s) has not been cached:`, diff);
+        });
+
         const flagValues = getDocDFlagsStartsWith(item, ...keys);
         const flags = Object.keys(flagValues);
         const formulas = flags.reduce((obj, flag) => ({ ...obj, [flag]: item?.[MODULE_NAME]?.[flag] || '' }), {});
@@ -453,6 +463,11 @@ export class FormulaCacheHelper {
      * @returns {{[key: string]:(number | string)}}
      */
     static getModuleFlagFormula(item, ...keys) {
+        ifDebug(() => {
+            const diff = difference(keys, this.#moduleFlags);
+            if (diff.length) console.error(`Dictionary flag(s) has not been cached:`, diff);
+        });
+
         const formulas = keys.reduce((obj, key) => ({ ...obj, [key]: item?.[MODULE_NAME]?.[key] || '' }), {});
         return formulas;
     }
