@@ -92,6 +92,8 @@ export class AlignmentTarget extends BaseTarget {
         const flaggedSources = item.actor.itemFlags.boolean[this.key]?.sources ?? [];
         const bonusSources = flaggedSources.filter((source) => {
             const bonusAlignment = this.#getFlagLetter(source);
+            if (!bonusAlignment) return false;
+
             return !this.#currentTargetedActors.some((actor) => actor.system.details.alignment?.includes(bonusAlignment));
         });
 

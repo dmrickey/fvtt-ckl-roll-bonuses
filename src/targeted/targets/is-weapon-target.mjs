@@ -1,11 +1,11 @@
 import { BaseIsItemTarget } from './base-is-item-target.mjs';
 
-export class IsMeleeWeaponTarget extends BaseIsItemTarget {
+export class IsWeaponTarget extends BaseIsItemTarget {
 
     /**
      * @override
      */
-    static get targetKey() { return 'is-melee-weapon'; }
+    static get targetKey() { return 'is-weapon'; }
 
     /**
      * @override

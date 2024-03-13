@@ -16,7 +16,13 @@
             },
             "target": {
                 "label": {
+                    "alignment": "Alignment Targets",
+                    "is-melee-weapon": "Targets All Melee Weapon",
+                    "is-ranged-weapon": "Targets All Ranged Weapon",
+                    "is-spell": "Targets All Spells",
+                    "is-weapon": "Targets All Weapon",
                     "item": "Item Targets",
+                    "self": "Targets Self",
                     "spell": "Spell Targets",
                     "target": "Targets",
                     "token": "Token Targets",
