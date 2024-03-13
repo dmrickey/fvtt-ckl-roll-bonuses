@@ -15,18 +15,20 @@ import { SelfTarget } from './self-target.mjs';
 
 /** @type {typeof BaseTarget[]} */
 export const allTargetTypes = [
-    // ActionTarget,
-    // DamageTypeTarget,
     AlignmentTarget,
-    ItemTarget,
+    IsMeleeWeaponTarget,
     IsMeleeWeaponTarget,
     IsRangedWeaponTarget,
     IsSpellTarget,
-    IsMeleeWeaponTarget,
+    ItemTarget,
     SelfTarget,
     SpellTarget,
     TokenTarget,
     WeaponGroupTarget,
     WeaponTarget,
     WeaponTypeTarget,
+
+    // todo later
+    // ActionTarget,
+    // DamageTypeTarget,
 ];
