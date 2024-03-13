@@ -3,12 +3,21 @@ import { keyValueSelect } from '../../handlebars-handlers/bonus-inputs/key-value
 import { truthiness } from '../../util/truthiness.mjs';
 import { BaseTarget } from "./base-target.mjs";
 
+// todo doesn't exist until v10
 // /** @type {Record<string, string>} */
+// const choices =  /** @type {const} */ ({
+//     lawful: pf1.config.damageResistances.lawful,
+//     chaotic: pf1.config.damageResistances.chaotic,
+//     good: pf1.config.damageResistances.good,
+//     evil: pf1.config.damageResistances.evil,
+// });
+
+/** @type {Record<string, string>} */
 const choices =  /** @type {const} */ ({
-    lawful: pf1.config.damageResistances.lawful,
-    chaotic: pf1.config.damageResistances.chaotic,
-    good: pf1.config.damageResistances.good,
-    evil: pf1.config.damageResistances.evil,
+    lawful: 'alignment.lawful',
+    chaotic: 'alignment.chaotic',
+    good: 'alignment.good',
+    evil: 'alignment.evil',
 });
 
 /**
@@ -98,7 +107,6 @@ export class AlignmentTarget extends BaseTarget {
      * @param {HTMLElement} options.html
      */
     static showInputOnItemSheet({ actor, item, html }) {
-
         keyValueSelect({
             choices,
             item,
