@@ -180,3 +180,4 @@
 - Add customized labels for fortune effects that have variable targets
 - Show icon next to skills that roll inspiration for free
 - Add Weapon Finesse
+- finish critical formula showing

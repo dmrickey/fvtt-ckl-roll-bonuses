@@ -8,6 +8,7 @@ import { signed } from "../../util/to-signed-string.mjs";
 const key = 'school-dc';
 const formulaKey = 'school-dc-formula';
 
+FormulaCacheHelper.registerUncacheableDictionaryFlag(key);
 FormulaCacheHelper.registerDictionaryFlag(formulaKey);
 
 // add Info to chat card

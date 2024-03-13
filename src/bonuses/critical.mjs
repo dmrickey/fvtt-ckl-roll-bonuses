@@ -41,21 +41,27 @@ registerItemHint((hintcls, _actor, item, _data,) => {
     // return early if it has a self mod because that's encompassed in the "show on target" hint
     if (item.getItemDictionaryFlag(critOffsetSelf)) return;
 
-    const mod = [
+    const formula = [
         FormulaCacheHelper.getDictionaryFlagFormula(item, critOffsetAll),
         FormulaCacheHelper.getPartialDictionaryFlagFormula(item, 'crit-offset_'),
     ]
-        .filter(truthiness);
+        .filter(truthiness)
+        .join(' + ');
+
+    const roll = RollPF.safeRoll(formula);
+    if (roll.isDeterministic) {
+        const mod = roll.total;
+        if (mod === 0) {
+            return;
+        }
+
+        const label = localize('crit-offset', { mod: signed(mod) });
+        const hint = hintcls.create(label, [], {});
+        return hint;
+    }
 
     // TOOD check if formula are determinate, and if so add them and do the following - if not, return a differnt hint with the formula as the hint
 
-    if (mod === 0) {
-        return;
-    }
-
-    const label = localize('crit-offset', { mod: signed(mod) });
-    const hint = hintcls.create(label, [], {});
-    return hint;
 });
 
 // register crit mult hint on bonus
@@ -63,16 +69,24 @@ registerItemHint((hintcls, _actor, item, _data,) => {
     // return early if it has a self mod because that's encompassed in the "show on target" hint
     if (item.getItemDictionaryFlag(critMultOffsetSelf)) return;
 
-    const mod = FormulaCacheHelper.getDictionaryFlagFormula(item, critMultOffsetAll)
-        + FormulaCacheHelper.getPartialDictionaryFlagFormula(item, 'crit-mult-offset_');
+    const formula = [
+        FormulaCacheHelper.getDictionaryFlagFormula(item, critMultOffsetAll),
+        FormulaCacheHelper.getPartialDictionaryFlagFormula(item, 'crit-mult-offset_'),
+    ]
+        .filter(truthiness)
+        .join(' + ');
 
-    if (mod === 0) {
-        return;
+    const roll = RollPF.safeRoll(formula);
+    if (roll.isDeterministic) {
+        const mod = roll.total;
+        if (mod === 0) {
+            return;
+        }
+
+        const label = localize('crit-mult', { mod: signed(mod) });
+        const hint = hintcls.create(label, [], {});
+        return hint;
     }
-
-    const label = localize('crit-mult', { mod: signed(mod) });
-    const hint = hintcls.create(label, [], {});
-    return hint;
 });
 
 // register crit bonus on specific target

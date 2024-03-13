@@ -25,13 +25,13 @@ export const intersection = (a, b) => {
 
 /**
  * @template T
- * @param {T[]} a
- * @param {T[]} b
+ * @param {T[]|Set<T>} a
+ * @param {T[]|Set<T>} b
  * @returns {T[]} items in collection a that aren't in collection b
  */
 export const difference = (a, b) => {
-    const setA = new Set(a);
-    const setB = new Set(b);
+    const setA = Array.isArray(a) ? new Set(a) : a;
+    const setB = Array.isArray(b) ? new Set(b) : b;
     const diff = [...setA].filter(x => !setB.has(x));
     return diff;
 }

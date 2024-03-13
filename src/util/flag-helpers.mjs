@@ -243,6 +243,10 @@ export class KeyedDFlagHelper {
         Object.entries(this.#byItem).forEach(([tag, dFlags]) => {
             const item = this.#items[tag];
             Object.keys(dFlags).forEach((flag) => {
+                if (FormulaCacheHelper.isUncacheableDictionaryFlag(flag)) {
+                    return;
+                }
+
                 // @ts-ignore
                 this.#sumByFlag[flag] ||= 0;
 
@@ -291,6 +295,21 @@ export class FormulaCacheHelper {
     static #partialDictionaryFlags = [];
     /** @type {string[]} */
     static #moduleFlags = [];
+    /** @type {Set<string>} */
+    static #uncacheableDictionaryFlags = new Set();
+
+    /**
+     * Registers flags that can't be cached. This is used to suppress error messages when doing lookups for key pairs associated with a type and a formula.
+     * This is for when using KeydDFlagHelper sums that it will skip trying to tally flags that are types.
+     *
+     * @param  {...string} flags
+     */
+    static registerUncacheableDictionaryFlag(...flags) {
+        flags.forEach((f) => this.#uncacheableDictionaryFlags.add(f));
+    }
+    static isUncacheableDictionaryFlag(/** @type {string} */flag) {
+        return this.#uncacheableDictionaryFlags.has(flag);
+    }
 
     /**
      * Registers dicationary flag to cache helper
@@ -298,10 +317,8 @@ export class FormulaCacheHelper {
      * @param  {...string} flags
      */
     static registerDictionaryFlag(...flags) {
-        ifDebug(() => {
-            const invalid = flags.filter((f) => f.includes('_'));
-            if (invalid.length) console.error(`Dictionary flag(s) cannot have an underscore:`, invalid);
-        });
+        const invalid = flags.filter((f) => f.includes('_'));
+        if (invalid.length) console.error(`Dictionary flag(s) cannot have an underscore:`, invalid);
 
         this.#dictionaryFlags.push(...flags);
     }
@@ -312,10 +329,8 @@ export class FormulaCacheHelper {
      * @param  {...string} partialFlags
      */
     static registerPartialDictionaryFlag(...partialFlags) {
-        ifDebug(() => {
-            const invalid = partialFlags.filter((f) => f.slice(-1) !== '_');
-            if (invalid.length) console.error(`Partial dictionary flag(s) must have an underscore:`, invalid);
-        });
+        const invalid = partialFlags.filter((f) => f.slice(-1) !== '_');
+        if (invalid.length) console.error(`Partial dictionary flag(s) must have an underscore:`, invalid);
 
         this.#partialDictionaryFlags.push(...partialFlags);
     }
@@ -344,7 +359,8 @@ export class FormulaCacheHelper {
         const cacheFormula = (exactFormula, flag) => {
             if (exactFormula) {
                 const formula = RollPF.safeRoll(exactFormula, rollData).formula;
-                item[MODULE_NAME][flag] = formula;
+                const simplified = RollPF.simplifyFormula(formula);
+                item[MODULE_NAME][flag] = simplified;
             }
         }
 
@@ -419,6 +435,7 @@ export class FormulaCacheHelper {
      * @returns {{[key: string]:(number | string)}}
      */
     static getDictionaryFlagFormula(item, ...keys) {
+        keys = difference(keys, this.#uncacheableDictionaryFlags);
         ifDebug(() => {
             const diff = difference(keys, this.#dictionaryFlags);
             if (diff.length) console.error(`Dictionary flag(s) has not been cached:`, diff);

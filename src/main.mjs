@@ -12,6 +12,8 @@ import './util/item-hints.mjs';
 import './bonuses.mjs';
 import './patch/init.mjs';
 import { FormulaCacheHelper } from './util/flag-helpers.mjs';
+import { simplifyRollFormula } from './util/simplify-roll-formula.mjs';
+import { registerSetting } from './util/settings.mjs';
 
 /**
  * @param {() => any} wrapped
@@ -169,6 +171,8 @@ function safeTotal(
 }
 
 Hooks.once('init', () => {
+    registerSetting({ key: 'debug', settingType: Boolean }, { registerNow: true });
+
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype._getConditionalParts', getConditionalParts, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype.alterRollData', actionUseAlterRollData, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype.handleConditionals', actionUseHandleConditionals, libWrapper.WRAPPER);
@@ -184,6 +188,7 @@ Hooks.once('init', () => {
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemSpellPF.prototype.getTypeChatData', itemGetTypeChatData, libWrapper.WRAPPER);
 
     RollPF.safeTotal = safeTotal;
+    RollPF.simplifyFormula = simplifyRollFormula;
 });
 
 Hooks.once('init', () => console.log(`${MODULE_NAME} loaded`));

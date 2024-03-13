@@ -7,11 +7,9 @@ import { registerSetting } from './settings.mjs';
  * @returns
  */
 const ifDebug = (func) => {
-    if (game.settings.get(MODULE_NAME, 'debug')) {
+    if (game.settings?.get(MODULE_NAME, 'debug')) {
         func();
     }
 };
-
-registerSetting({ key: 'debug', settingType: Boolean })
 
 export { ifDebug };

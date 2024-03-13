@@ -11,6 +11,11 @@ interface Game {
         };
     };
 
+    /**
+     * @returns {boolean} True if the game has already fired the 'ready' hook
+     */
+    ready: boolean;
+
     system: { version: string };
 
     scenes: {

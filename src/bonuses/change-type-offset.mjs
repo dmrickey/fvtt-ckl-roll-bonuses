@@ -6,6 +6,7 @@ import { localize } from "../util/localize.mjs";
 const bonusKey = 'change-type-offset';
 const formulaKey = 'change-type-offset-formula';
 
+FormulaCacheHelper.registerUncacheableDictionaryFlag(bonusKey);
 FormulaCacheHelper.registerDictionaryFlag(formulaKey);
 
 /**

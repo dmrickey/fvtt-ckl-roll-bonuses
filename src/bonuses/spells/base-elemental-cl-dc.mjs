@@ -30,6 +30,7 @@ export function createElementalClOrDc(t) {
     const key = `elemental-${t}`;
     const formulaKey = `elemental-${t}-formula`;
 
+    FormulaCacheHelper.registerUncacheableDictionaryFlag(key);
     FormulaCacheHelper.registerDictionaryFlag(formulaKey);
 
     /**
