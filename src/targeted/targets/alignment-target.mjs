@@ -101,6 +101,12 @@ export class AlignmentTarget extends BaseTarget {
     }
 
     /**
+     * @override
+     * @returns {boolean}
+     */
+    static get isGenericTarget() { return true; }
+
+    /**
      * @inheritdoc
      * @override
      * @param {object} options
