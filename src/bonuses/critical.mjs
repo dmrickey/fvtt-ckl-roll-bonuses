@@ -55,12 +55,14 @@ registerItemHint((hintcls, _actor, item, _data,) => {
             return;
         }
 
-        const label = localize('crit-offset', { mod: signed(mod) });
+        const label = localize('crit-offset-mod', { mod: signed(mod) });
         const hint = hintcls.create(label, [], {});
         return hint;
     }
-
-    // TOOD check if formula are determinate, and if so add them and do the following - if not, return a differnt hint with the formula as the hint
+    else {
+        const simplified = RollPF.simplifyFormula(formula);
+        hintcls.create(localize('crit-offset'), [], { hint: simplified })
+    }
 
 });
 
@@ -83,9 +85,13 @@ registerItemHint((hintcls, _actor, item, _data,) => {
             return;
         }
 
-        const label = localize('crit-mult', { mod: signed(mod) });
+        const label = localize('crit-mult-mod', { mod: signed(mod) });
         const hint = hintcls.create(label, [], {});
         return hint;
+    }
+    else {
+        const simplified = RollPF.simplifyFormula(formula);
+        hintcls.create(localize('crit-mult'), [], { hint: simplified })
     }
 });
 
