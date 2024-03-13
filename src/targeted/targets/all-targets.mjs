@@ -10,16 +10,20 @@ import { WeaponGroupTarget } from "./weapon-group-target.mjs";
 import { WeaponTarget } from "./weapon-target.mjs";
 import { WeaponTypeTarget } from "./weapon-type-target.mjs";
 import { IsSpellTarget } from "./is-spell-target.mjs";
+import { AlignmentTarget } from './alignment-target.mjs';
+import { SelfTarget } from './self-target.mjs';
 
 /** @type {typeof BaseTarget[]} */
 export const allTargetTypes = [
     // ActionTarget,
     // DamageTypeTarget,
+    AlignmentTarget,
     ItemTarget,
     IsMeleeWeaponTarget,
     IsRangedWeaponTarget,
     IsSpellTarget,
     IsMeleeWeaponTarget,
+    SelfTarget,
     SpellTarget,
     TokenTarget,
     WeaponGroupTarget,

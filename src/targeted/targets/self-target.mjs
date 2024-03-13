@@ -2,29 +2,12 @@ import { MODULE_NAME } from '../../consts.mjs';
 import { showEnabledLabel } from '../../handlebars-handlers/enabled-label.mjs';
 import { BaseTarget } from './base-target.mjs';
 
-/**
- * @abstract
- */
-export class BaseIsItemTarget extends BaseTarget {
+export class SelfTarget extends BaseTarget {
 
     /**
-     * @param {object} args
-     * @param {ItemPF} args.item,
-     * @param {Nullable<ItemAction>} [args.action]
-     * @returns {boolean}
+     * @override
      */
-    static #itemFilter({ item, action = null }) {
-        return !!item?.hasAction && this.extendedItemFilter({ item, action })
-    }
-
-    /**
-     * @abstract
-     * @param {object} args
-     * @param {ItemPF} args.item,
-     * @param {Nullable<ItemAction>} [args.action]
-     * @returns {boolean}
-     */
-    static extendedItemFilter({ item, action = null }) { throw new Error('must be overridden'); }
+    static get targetKey() { return 'self'; }
 
     /**
      * @inheritdoc
@@ -64,16 +47,8 @@ export class BaseIsItemTarget extends BaseTarget {
         const item = doc instanceof pf1.documents.item.ItemPF
             ? doc
             : doc.item;
-        if (!item.actor) {
-            return [];
-        }
-
-        const action = doc instanceof pf1.components.ItemAction ? doc : item.firstAction;
-        if (!this.#itemFilter({ item, action })) {
-            return [];
-        }
-
-        const flaggedItems = item.actor.itemFlags.boolean[this.key]?.sources ?? [];
-        return flaggedItems;
+        return (item.hasItemBooleanFlag(this.key))
+            ? [item]
+            : [];
     };
 }
