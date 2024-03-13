@@ -1,5 +1,11 @@
 {
     "ckl-roll-bonuses": {
+        "alignment": {
+            "lawful": "Lawful",
+            "chaotic": "Chaotic",
+            "good": "Good",
+            "evil": "Evil"
+        },
         "all-spells": "All Spells",
         "all-spell-cl": "All Spells CL",
         "all-spell-dc": "All Spells DC",
