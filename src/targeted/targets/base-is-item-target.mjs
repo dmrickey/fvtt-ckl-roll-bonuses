@@ -13,7 +13,7 @@ export class BaseIsItemTarget extends BaseTarget {
      * @param {Nullable<ItemAction>} [args.action]
      * @returns {boolean}
      */
-    static itemFilter({ item, action = null }) {
+    static #itemFilter({ item, action = null }) {
         return !!item?.hasAction && this.extendedItemFilter({ item, action })
     }
 
@@ -69,7 +69,7 @@ export class BaseIsItemTarget extends BaseTarget {
         }
 
         const action = doc instanceof pf1.components.ItemAction ? doc : item.firstAction;
-        if (!this.extendedItemFilter({ item, action })) {
+        if (!this.#itemFilter({ item, action })) {
             return [];
         }
 
