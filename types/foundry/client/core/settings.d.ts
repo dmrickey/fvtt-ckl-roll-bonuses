@@ -1,7 +1,6 @@
-export { }
+export {};
 
 declare global {
-
     /**
      * A class responsible for managing defined game settings or settings menus.
      * Each setting is a string key/value pair belonging to a certain package and a certain store scope.
@@ -14,6 +13,8 @@ declare global {
      * @see {@link SettingsConfig}
      */
     interface ClientSettings {
+        /** not really a set, but it has `has` and that's all I need */
+        settings: Set<string>;
 
         /**
          * Return a singleton instance of the Game Settings Configuration app
@@ -72,8 +73,16 @@ declare global {
         register<N extends string, K extends string, T>(
             namespace: N,
             key: K,
-            data: ClientSettings.Values[`${N}.${K}`] extends string | number | boolean | Array<any> | object | null
-                ? ClientSettings.PartialSettingConfig<ClientSettings.Values[`${N}.${K}`]>
+            data: ClientSettings.Values[`${N}.${K}`] extends
+                | string
+                | number
+                | boolean
+                | Array<any>
+                | object
+                | null
+                ? ClientSettings.PartialSettingConfig<
+                      ClientSettings.Values[`${N}.${K}`]
+                  >
                 : ClientSettings.PartialSettingConfig<T>
         ): void;
 
@@ -90,53 +99,63 @@ declare global {
          * game.settings.get("myModule", "myClientSetting");
          * ```
          */
-        get<N extends string, K extends string>(namespace: N, key: K): ClientSettings.Values[`${N}.${K}`];
+        get<N extends string, K extends string>(
+            namespace: N,
+            key: K
+        ): ClientSettings.Values[`${N}.${K}`];
     }
 
     namespace ClientSettings {
-        type PartialSettingConfig<T = unknown> = InexactPartial<Omit<SettingConfig<T>, "key" | "namespace">>;
+        type PartialSettingConfig<T = unknown> = InexactPartial<
+            Omit<SettingConfig<T>, 'key' | 'namespace'>
+        >;
 
         interface Values {
-            "core.animateRollTable": boolean;
-            "core.chatBubbles": boolean;
-            "core.chatBubblesPan": boolean;
-            "core.combatTrackerConfig": { resource: string; skipDefeated: boolean } | {};
-            "core.compendiumConfiguration": Partial<Record<string, CompendiumCollection.Configuration>>;
-            "core.coneTemplateType": "round" | "flat";
-            "core.defaultDrawingConfig": foundry.data.DrawingData["_source"] | {};
-            "core.defaultToken": DeepPartial<TokenDataSource>;
-            "core.disableResolutionScaling": boolean;
-            "core.fontSize": number;
-            "core.fpsMeter": boolean;
-            "core.globalAmbientVolume": number;
-            "core.globalInterfaceVolume": number;
-            "core.globalPlaylistVolume": number;
-            "core.keybindings": Record<string, KeybindingActionBinding[]>;
-            "core.language": string;
-            "core.leftClickRelease": boolean;
-            "core.lightAnimation": boolean;
-            "core.maxFPS": number;
-            "core.mipmap": boolean;
-            "core.moduleConfiguration": Record<string, boolean>;
-            "core.noCanvas": boolean;
-            "core.notesDisplayToggle": boolean;
-            "core.nue.shownTips": boolean;
-            "core.performanceMode": boolean;
-            "core.permissions": Game.Permissions;
-            "core.playlist.playingLocation": "top" | "bottom";
-            "core.rollMode": keyof CONFIG.Dice.RollModes;
-            "core.rtcClientSettings": typeof AVSettings.DEFAULT_CLIENT_SETTINGS;
-            "core.rtcWorldSettings": typeof AVSettings.DEFAULT_WORLD_SETTINGS;
-            "core.scrollingStatusText": boolean;
-            "core.sheetClasses": {
-                [Key in DocumentType as DocumentSubTypes<Key> extends string ? Key : never]?: Record<
-                    DocumentSubTypes<Key> & string,
-                    string
-                >;
+            'core.animateRollTable': boolean;
+            'core.chatBubbles': boolean;
+            'core.chatBubblesPan': boolean;
+            'core.combatTrackerConfig':
+                | { resource: string; skipDefeated: boolean }
+                | {};
+            'core.compendiumConfiguration': Partial<
+                Record<string, CompendiumCollection.Configuration>
+            >;
+            'core.coneTemplateType': 'round' | 'flat';
+            'core.defaultDrawingConfig':
+                | foundry.data.DrawingData['_source']
+                | {};
+            'core.defaultToken': DeepPartial<TokenDataSource>;
+            'core.disableResolutionScaling': boolean;
+            'core.fontSize': number;
+            'core.fpsMeter': boolean;
+            'core.globalAmbientVolume': number;
+            'core.globalInterfaceVolume': number;
+            'core.globalPlaylistVolume': number;
+            'core.keybindings': Record<string, KeybindingActionBinding[]>;
+            'core.language': string;
+            'core.leftClickRelease': boolean;
+            'core.lightAnimation': boolean;
+            'core.maxFPS': number;
+            'core.mipmap': boolean;
+            'core.moduleConfiguration': Record<string, boolean>;
+            'core.noCanvas': boolean;
+            'core.notesDisplayToggle': boolean;
+            'core.nue.shownTips': boolean;
+            'core.performanceMode': boolean;
+            'core.permissions': Game.Permissions;
+            'core.playlist.playingLocation': 'top' | 'bottom';
+            'core.rollMode': keyof CONFIG.Dice.RollModes;
+            'core.rtcClientSettings': typeof AVSettings.DEFAULT_CLIENT_SETTINGS;
+            'core.rtcWorldSettings': typeof AVSettings.DEFAULT_WORLD_SETTINGS;
+            'core.scrollingStatusText': boolean;
+            'core.sheetClasses': {
+                [Key in DocumentType as DocumentSubTypes<Key> extends string
+                    ? Key
+                    : never]?: Record<DocumentSubTypes<Key> & string, string>;
             };
-            "core.time": number;
-            "core.tokenDragPreview": boolean;
-            "core.visionAnimation": boolean;
+            'core.time': number;
+            'core.tokenDragPreview': boolean;
+            'core.visionAnimation': boolean;
             [key: string]: unknown;
         }
     }

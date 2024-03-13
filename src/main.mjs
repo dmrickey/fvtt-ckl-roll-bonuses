@@ -13,7 +13,7 @@ import './bonuses.mjs';
 import './patch/init.mjs';
 import { FormulaCacheHelper } from './util/flag-helpers.mjs';
 import { simplifyRollFormula } from './util/simplify-roll-formula.mjs';
-import { registerSetting } from './util/settings.mjs';
+import { debugSetup } from './util/if-debug.mjs';
 
 /**
  * @param {() => any} wrapped
@@ -170,9 +170,11 @@ function safeTotal(
     return isNaN(+formula) ? RollPF.safeRoll(formula, data).total : +formula;
 }
 
-Hooks.once('init', () => {
-    registerSetting({ key: 'debug', settingType: Boolean }, { registerNow: true });
+Hooks.once('setup', () => {
+    debugSetup();
+});
 
+Hooks.once('init', () => {
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype._getConditionalParts', getConditionalParts, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype.alterRollData', actionUseAlterRollData, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype.handleConditionals', actionUseHandleConditionals, libWrapper.WRAPPER);
