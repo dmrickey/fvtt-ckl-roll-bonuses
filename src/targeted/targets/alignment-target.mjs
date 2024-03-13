@@ -44,7 +44,7 @@ export class AlignmentTarget extends BaseTarget {
     /**
      *
      * @param {ItemPF} item
-     * @returns {string}
+     * @returns {Nullable<string>}
      */
     static #getFlagLetter(item) {
         /** @type {AlignmentOptions} */
@@ -54,7 +54,7 @@ export class AlignmentTarget extends BaseTarget {
             case 'evil': return 'e';
             case 'good': return 'g';
             case 'lawful': return 'l';
-            default: return '';
+            default: return null;
         }
     }
 
