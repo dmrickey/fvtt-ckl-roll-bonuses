@@ -1,7 +1,7 @@
 import { MODULE_NAME } from '../../src/consts.mjs';
 import Document from '../foundry/common/abstract/document.mjs';
 
-export { };
+export {};
 
 declare global {
     abstract class BaseDocument extends Document {
@@ -12,7 +12,7 @@ declare global {
         uuid: string;
     }
 
-    abstract class ItemDocument extends BaseDocument { }
+    abstract class ItemDocument extends BaseDocument {}
 
     interface Abilities {
         str: 'Strength';
@@ -257,9 +257,9 @@ declare global {
         hasItemBooleanFlag(key: string): boolean;
     }
 
-    class ItemAttackPF extends ItemPF<SystemItemDataAttackPF> { }
-    class ItemEquipmentPF extends ItemPF<SystemItemDataEquipmentPF> { }
-    class ItemFeatPF extends ItemPF { }
+    class ItemAttackPF extends ItemPF<SystemItemDataAttackPF> {}
+    class ItemEquipmentPF extends ItemPF<SystemItemDataEquipmentPF> {}
+    class ItemFeatPF extends ItemPF {}
     class ItemLootPF extends ItemPF {
         subType: 'gear' | 'ammo' | 'tradeGoods' | 'misc';
     }
@@ -272,7 +272,7 @@ declare global {
         /** @deprecated Spells don't have tags */
         tag: string;
     }
-    class ItemWeaponPF extends ItemPF<SystemWeaponPF> { }
+    class ItemWeaponPF extends ItemPF<SystemWeaponPF> {}
 
     class SystemItemData {
         links: {
@@ -388,7 +388,7 @@ declare global {
         // [key: string]: any,
     }
 
-    interface RollPF {
+    class RollPF {
         /**
          * A standardized helper function for simplifying the constant parts of a multipart roll formula.
          *
@@ -399,7 +399,18 @@ declare global {
          *
          * @returns {string}  The resulting simplified formula.
          */
-        simplifyFormula: (formula: string, { preserveFlavor, deterministic }?: { preserveFlavor?: boolean | undefined; deterministic?: boolean | undefined; } | undefined) => string;
+        simplifyFormula: (
+            formula: string,
+            {
+                preserveFlavor,
+                deterministic,
+            }?:
+                | {
+                      preserveFlavor?: boolean | undefined;
+                      deterministic?: boolean | undefined;
+                  }
+                | undefined
+        ) => string;
 
         /**
          * Safely get the result of a roll, returns 0 if unsafe.
@@ -649,10 +660,10 @@ declare global {
     interface pf1 {
         applications: {
             ActorTraitSelector: {
-                new(doc: Document, options: object): ActorTraitSelector;
+                new (doc: Document, options: object): ActorTraitSelector;
             };
             DamageTypeSelector: {
-                new(
+                new (
                     object: { id: string; update({ [dataPath]: object }) },
                     dataPath: string,
                     data: {},
@@ -666,7 +677,7 @@ declare global {
             ItemAction: typeof ItemAction;
             // ItemAction: ItemAction ;
             ItemChange: {
-                new(
+                new (
                     args: {
                         flavor: string;
                         formula: string | number;
@@ -739,16 +750,16 @@ declare global {
         };
         documents: {
             actor: {
-                ActorPF: { new(): ActorPF };
+                ActorPF: { new (): ActorPF };
             };
             item: {
-                ItemAttackPF: { new(): ItemAttackPF };
-                ItemEquipmentPF: { new(): ItemEquipmentPF };
-                ItemFeatPF: { new(): ItemFeatPF };
-                ItemLootPF: { new(): ItemLootPF };
-                ItemPF: { new(): ItemPF };
-                ItemSpellPF: { new(): ItemSpellPF };
-                ItemWeaponPF: { new(): ItemWeaponPF };
+                ItemAttackPF: { new (): ItemAttackPF };
+                ItemEquipmentPF: { new (): ItemEquipmentPF };
+                ItemFeatPF: { new (): ItemFeatPF };
+                ItemLootPF: { new (): ItemLootPF };
+                ItemPF: { new (): ItemPF };
+                ItemSpellPF: { new (): ItemSpellPF };
+                ItemWeaponPF: { new (): ItemWeaponPF };
             };
         };
         registry: {

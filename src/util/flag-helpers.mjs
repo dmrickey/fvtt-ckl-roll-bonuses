@@ -358,9 +358,8 @@ export class FormulaCacheHelper {
          */
         const cacheFormula = (exactFormula, flag) => {
             if (exactFormula) {
-                const formula = RollPF.safeRoll(exactFormula, rollData).formula;
-                const simplified = RollPF.simplifyFormula(formula);
-                item[MODULE_NAME][flag] = simplified;
+                const roll = RollPF.safeRoll(exactFormula, rollData);
+                item[MODULE_NAME][flag] = roll.simplifiedFormula;
             }
         }
 
@@ -370,7 +369,7 @@ export class FormulaCacheHelper {
         });
 
         const flagValues = getDocDFlagsStartsWith(item, ...this.#partialDictionaryFlags);
-        // because this is an item and not an actor there can only be one value in the array
+        // because this is an item and not an actor there can only be one value in the flag's array
         Object.entries(flagValues).forEach(([flag, [exactFormula]]) =>
             cacheFormula(exactFormula, flag)
         );
@@ -394,6 +393,7 @@ export class FormulaCacheHelper {
 
     /**
      * Get value for registered partial key (e.g. keen_)
+     * Combines multiple flags into a single sum
      *
      * @param {ItemPF} item
      * @param {...string} keys
@@ -407,6 +407,7 @@ export class FormulaCacheHelper {
 
     /**
      * Get formula for registered partial key but have id (e.g. keen_12345678)
+     * Combines multiple flags into a single sum
      *
      * @param {ItemPF} item
      * @param {...string} keys
@@ -419,6 +420,7 @@ export class FormulaCacheHelper {
     }
 
     /**
+     * Combines multiple flags into a single sum
      * @param {ItemPF} item
      * @param {...string} keys
      * @returns {number}
@@ -430,6 +432,7 @@ export class FormulaCacheHelper {
     }
 
     /**
+     * Combines multiple flags into a single sum
      * @param {ItemPF} item
      * @param {...string} keys
      * @returns {{[key: string]:(number | string)}}

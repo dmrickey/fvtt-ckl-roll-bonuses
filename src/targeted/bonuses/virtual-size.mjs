@@ -11,16 +11,6 @@ export class VirtualSizeBonus extends BaseBonus {
      */
     static get type() { return 'virtual-size'; }
 
-    /**
-     * @override
-     * @param {ItemPF} item
-     * @returns {boolean}
-     */
-    static isBonusSource(item) {
-        const value = this.#getCachedSizeBonus(item);
-        return !!value;
-    };
-
     // todo figure out how to override formula used in Item list in character sheet
 
     /**
@@ -32,8 +22,12 @@ export class VirtualSizeBonus extends BaseBonus {
         const size = this.#getCachedSizeBonus(source);
         if (!size) return;
 
-        const mod = signed(size);
-        return [localize('virtual-size.hint', { mod })];
+        const formula = FormulaCacheHelper.getModuleFlagFormula(source, this.key)[this.key];
+        const mod = RollPF.safeRoll(formula).isDeterministic
+            ? signed(size)
+            : formula;
+
+        return [localize(`${this.type}.hint`, { mod })];
     }
 
     /**

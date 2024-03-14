@@ -84,7 +84,7 @@ export class HookWrapperHandler {
      * @param {...any} args
      * @returns {T}
      */
-    static handleHookSync(hook, seed, ...args) {
+    static fireHookWithReturnSync(hook, seed, ...args) {
         const funcs = handlers[hook] || [];
 
         let value = seed;
@@ -110,7 +110,7 @@ export class HookWrapperHandler {
      * @param {...any} args
      * @returns {void}
      */
-    static handleHookNoReturnSync(hook, ...args) {
+    static fireHookNoReturnSync(hook, ...args) {
         const funcs = handlers[hook] || [];
 
         for (let i = 0; i < funcs.length; i++) {

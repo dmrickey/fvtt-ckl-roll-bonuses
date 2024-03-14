@@ -10,9 +10,12 @@
         "all-spell-cl": "All Spells CL",
         "all-spell-dc": "All Spells DC",
         "armor-focus": "Armor Focus",
-        "bonus": {
-            "attack": {
-                "label": "Attack Bonus"
+        "bonus-target": {
+            "bonus": {
+                "label": {
+                    "attack": "Attack Bonus",
+                    "virtual-size": "Virtual Size"
+                }
             },
             "target": {
                 "label": {
@@ -30,9 +33,6 @@
                     "weapon-group": "Weapon Group Targets",
                     "weapon-type": "Weapon Type Targets"
                 }
-            },
-            "virtual-size": {
-                "label": "Virtual Size"
             }
         },
         "change-type-offset": "Change Offset",

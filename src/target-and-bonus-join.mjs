@@ -1,8 +1,9 @@
+import { MODULE_NAME } from './consts.mjs';
 import { allBonusTypes } from "./targeted/bonuses/all-bonuses.mjs";
 import { BaseBonus } from './targeted/bonuses/base-bonus.mjs';
 import { allTargetTypes } from "./targeted/targets/all-targets.mjs";
 import { conditionalCalculator } from "./util/conditional-helpers.mjs";
-import { localHooks } from "./util/hooks.mjs";
+import { HookWrapperHandler, localHooks } from "./util/hooks.mjs";
 import { registerItemHint } from "./util/item-hints.mjs";
 import { localize } from "./util/localize.mjs";
 import { truthiness } from "./util/truthiness.mjs";
@@ -40,7 +41,7 @@ registerItemHint((hintcls, actor, item, _data) => {
         }
     });
     if (targetHints.length) {
-        allHints.push(hintcls.create(localize('bonus.target.label.target'), [], { hint: targetHints.join('\n\n') }));
+        allHints.push(hintcls.create(localize('bonus-target.target.label.target'), [], { hint: targetHints.join('\n\n') }));
     }
 
     //register hint on targeted item
@@ -265,3 +266,23 @@ Hooks.on('updateItem', (
         }
     });
 });
+
+/**
+ * @param {ItemPF} item
+ * @param {RollData} _rollData
+ */
+const prepare = (item, _rollData) => {
+    item[MODULE_NAME].targets = [];
+    item[MODULE_NAME].bonuses = [];
+    allBonusTypes.forEach((bonus) => {
+        if (bonus.isBonusSource(item)) {
+            item[MODULE_NAME].bonuses.push(bonus);
+        }
+    });
+    allTargetTypes.forEach((target) => {
+        if (target.isTargetSource(item)) {
+            item[MODULE_NAME].targets.push(target);
+        }
+    });
+};
+HookWrapperHandler.registerHandler(localHooks.prepareData, prepare);

@@ -31,12 +31,20 @@ export class BaseTarget {
     static init() { }
 
     /**
-     * Returns true the targeting is too generic to show a hint on a specific item.
+     * Returns true the targeting is too generic to show a hint on a specific item (generally means this is a "token" target that does not have a specific targeted item).
      *
      * @abstract
      * @returns {boolean}
      */
     static get isGenericTarget() { return false; }
+
+    /**
+     * If the item is providing this target
+     *
+     * @param {ItemPF} item
+     * @returns {boolean}
+     */
+    static isTargetSource(item) { return item.hasItemBooleanFlag(this.key); };
 
     /**
      * Key for flag on bonustarget
@@ -48,7 +56,7 @@ export class BaseTarget {
      * Label for this bonustarget
      * @returns { string }
      */
-    static get label() { return localize(`bonus.target.label.${this.targetKey}`); }
+    static get label() { return localize(`bonus-target.target.label.${this.targetKey}`); }
 
     /**
      * @abstract

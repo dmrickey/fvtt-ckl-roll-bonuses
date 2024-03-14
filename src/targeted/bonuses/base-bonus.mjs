@@ -13,7 +13,7 @@ export class BaseBonus {
     /**
      * @returns { string }
      */
-    static get label() { return localize(`bonus.${this.type}.label`); }
+    static get label() { return localize(`bonus-target.bonus.label.${this.type}`); }
 
     /**
      * @abstract
@@ -22,13 +22,12 @@ export class BaseBonus {
     static get type() { throw new Error('must be overridden'); }
 
     /**
-     * If the item is providing bonuses
+     * If the item is providing this bonus
      *
-     * @abstract
      * @param {ItemPF} item
      * @returns {boolean}
      */
-    static isBonusSource(item) { throw new Error("must be overridden."); };
+    static isBonusSource(item) { return item.hasItemBooleanFlag(this.key); };
 
     /**
      * @abstract

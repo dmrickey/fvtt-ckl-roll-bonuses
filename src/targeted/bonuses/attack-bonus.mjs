@@ -1,4 +1,3 @@
-import { MODULE_NAME } from "../../consts.mjs";
 import { textInput } from "../../handlebars-handlers/bonus-inputs/text-input.mjs";
 import { FormulaCacheHelper } from "../../util/flag-helpers.mjs";
 import { BaseBonus } from "./base-bonus.mjs";
@@ -12,16 +11,6 @@ export class AttackBonus extends BaseBonus {
      * @override
      */
     static get type() { return 'attack'; }
-
-    /**
-     * @override
-     * @param {ItemPF} item
-     * @returns {boolean}
-     */
-    static isBonusSource(item) {
-        const value = this.#getAttackBonus(item);
-        return !!value;
-    };
 
     /**
      * Register Item Hint on bonus

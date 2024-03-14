@@ -39,7 +39,7 @@ function setEffectNotesHTMLWrapper(wrapped) {
  */
 function patchChangeValue(wrapped) {
     const seed = wrapped();
-    const value = HookWrapperHandler.handleHookSync(localHooks.patchChangeValue, seed, this);
+    const value = HookWrapperHandler.fireHookWithReturnSync(localHooks.patchChangeValue, seed, this);
     return value;
 }
 
@@ -65,7 +65,7 @@ function prepareItemData(wrapped) {
     item[MODULE_NAME] = {};
     const rollData = item.getRollData();
     FormulaCacheHelper.cacheFormulas(item, rollData)
-    HookWrapperHandler.handleHookNoReturnSync(localHooks.prepareData, item, rollData);
+    HookWrapperHandler.fireHookNoReturnSync(localHooks.prepareData, item, rollData);
 }
 
 /**
@@ -190,7 +190,11 @@ Hooks.once('init', () => {
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemSpellPF.prototype.getTypeChatData', itemGetTypeChatData, libWrapper.WRAPPER);
 
     RollPF.safeTotal = safeTotal;
-    RollPF.simplifyFormula = simplifyRollFormula;
+    Object.defineProperty(
+        RollPF.prototype,
+        'simplifiedFormula',
+        {
+            get: function () { return simplifyRollFormula(this.formula, { preserveFlavor: true }); }
+        }
+    );
 });
-
-Hooks.once('init', () => console.log(`${MODULE_NAME} loaded`));

@@ -3,6 +3,7 @@ import { damageInput } from "../../handlebars-handlers/targeted/bonuses/damage.m
 import { conditionalModToItemChange } from "../../util/conditional-helpers.mjs";
 import { HookWrapperHandler, localHooks } from "../../util/hooks.mjs";
 import { localize } from "../../util/localize.mjs";
+import { signed } from '../../util/to-signed-string.mjs';
 import { truthiness } from "../../util/truthiness.mjs";
 import { BaseBonus } from "./base-bonus.mjs";
 
@@ -30,29 +31,11 @@ export class DamageBonus extends BaseBonus {
             const damages = item.getFlag(MODULE_NAME, this.key) || [];
             damages.forEach((/** @type {DamageInputModel}*/ damage) => {
                 item[MODULE_NAME][this.key] ||= [];
-                const formula = RollPF.safeRoll(damage.formula, rollData).formula;
-                item[MODULE_NAME][this.key].push(formula);
+                const roll = RollPF.safeRoll(damage.formula, rollData);
+                item[MODULE_NAME][this.key].push(roll.simplifiedFormula);
             });
         });
     }
-
-    /**
-     * @override
-     * @param {ItemPF} item
-     * @returns {boolean}
-     */
-    static isBonusSource(item) {
-        const damages = this.#getCachedDamageBonuses(item);
-        if (!damages.length) {
-            return false;
-        }
-
-        if (!damages.filter(({ formula }) => !!formula?.trim()).length) {
-            return false;
-        }
-
-        return true;
-    };
 
     /**
      * @override
@@ -84,6 +67,16 @@ export class DamageBonus extends BaseBonus {
 
         const hints = damages
             .filter((d) => !!d.formula?.trim())
+            .map(({ formula, type, crit }) => ({
+                type,
+                crit,
+                formula: (() => {
+                    const roll = RollPF.safeRoll(formula);
+                    return roll.isDeterministic
+                        ? signed(roll.total)
+                        : formula;
+                })(),
+            }))
             .map((d) => `${d.formula}${typeLabel(d.type)}${critLabel(d.crit)}`);
 
         if (!hints.length) {
@@ -99,9 +92,7 @@ export class DamageBonus extends BaseBonus {
      * @returns {Nullable<ItemConditional>}
      */
     static getConditional(target) {
-
         const damages = this.#getCachedDamageBonuses(target);
-
         const conditional = this.#createConditional(damages, target.name);
         return conditional.modifiers?.length
             ? conditional

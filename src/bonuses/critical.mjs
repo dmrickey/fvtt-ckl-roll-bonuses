@@ -60,8 +60,7 @@ registerItemHint((hintcls, _actor, item, _data,) => {
         return hint;
     }
     else {
-        const simplified = RollPF.simplifyFormula(formula);
-        hintcls.create(localize('crit-offset'), [], { hint: simplified })
+        hintcls.create(localize('crit-offset'), [], { hint: roll.simplifiedFormula })
     }
 
 });
@@ -90,8 +89,7 @@ registerItemHint((hintcls, _actor, item, _data,) => {
         return hint;
     }
     else {
-        const simplified = RollPF.simplifyFormula(formula);
-        hintcls.create(localize('crit-mult'), [], { hint: simplified })
+        hintcls.create(localize('crit-mult'), [], { hint: roll.simplifiedFormula })
     }
 });
 
