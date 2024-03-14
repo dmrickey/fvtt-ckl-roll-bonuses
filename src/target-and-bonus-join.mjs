@@ -25,19 +25,21 @@ registerItemHint((hintcls, actor, item, _data) => {
     allBonusTypes.forEach((bonus) => {
         if (bonus.isBonusSource(item)) {
             const hints = bonus.getHints(item);
-            if (!hints?.length) return;
-
-            allHints.push(hintcls.create(bonus.label, [], { hint: hints.join('\n') }));
+            if (hints?.length) {
+                allHints.push(hintcls.create(bonus.label, [], { hint: hints.join('\n') }));
+            }
         }
     });
 
-    // register hint on target source
     /** @type {string[]} */
     const targetHints = [];
+    // register hint on target source
     allTargetTypes.forEach((target) => {
-        let hints = target.getHints(item);
-        if (hints?.length) {
-            targetHints.push([target.label, ...hints].join('\n'));
+        if (target.isTargetSource(item)) {
+            const hints = target.getHints(item);
+            if (hints?.length) {
+                targetHints.push([target.label, ...hints].join('\n'));
+            }
         }
     });
     if (targetHints.length) {
@@ -55,7 +57,7 @@ registerItemHint((hintcls, actor, item, _data) => {
             /** @type {string[]} */
             const bonusHints = [];
             allBonusTypes.forEach((bonus) => {
-                let hints = bonus.getHints(bonusTarget);
+                const hints = bonus.getHints(bonusTarget);
                 if (!hints?.length) return;
                 bonusHints.push([bonus.label, ...hints].join('\n'));
             });
