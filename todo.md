@@ -177,10 +177,12 @@
   - damage change would be amazing. (basically the same)
   - look into adding a `change` bonus specifically for enhancement bonus
 - Add `showEnabledLabel` for inputs that don't have them (like fate's favored)
-- Add customized labels for fortune effects that have variable targets
+  - Fortune
+  - Add customized labels for fortune effects that have variable targets
 - Show icon next to skills that roll inspiration for free
 - Add Weapon Finesse
 - Attempt to create a "resource offset"
   - includes showing anything modifying a given resource in the resource's sheet near the formula so it can see why the total is not what that sheet says it should be
 - investigate moving inspiration into a bonus and off of the skill sheet
-- update target-and-bonus-join so that it ensures that _all_ targets are satisfied instead of _any_
+- update target-and-bonus-join so that it ensures that _all_ targets are satisfied instead of _any_    
+  - Done.. but make sure it works

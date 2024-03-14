@@ -21,7 +21,7 @@ registerItemHint((hintcls, actor, item, _data) => {
 
     /** @type {Hint[]} */
     const allHints = [];
-    // register hint on bonus source
+    // register hints on bonus source
     allBonusTypes.forEach((bonus) => {
         if (bonus.isBonusSource(item)) {
             const hints = bonus.getHints(item);
@@ -33,7 +33,7 @@ registerItemHint((hintcls, actor, item, _data) => {
 
     /** @type {string[]} */
     const targetHints = [];
-    // register hint on target source
+    // register hints on target source
     allTargetTypes.forEach((target) => {
         if (target.isTargetSource(item)) {
             const hints = target.getHints(item);
@@ -46,26 +46,53 @@ registerItemHint((hintcls, actor, item, _data) => {
         allHints.push(hintcls.create(localize('bonus-target.target.label.target'), [], { hint: targetHints.join('\n\n') }));
     }
 
-    //register hint on targeted item
-    allTargetTypes.forEach((target) => {
-        if (target.isGenericTarget) {
-            return;
-        }
+    /** @type {{itemName: string, bonusName: string, hints: string[]}[]} */
+    const bonusHints = [];
+    //register hints on targeted item
+    handleBonusesFor(
+        item,
+        (bonusTarget, bonus) => {
+            const hints = bonus.getHints(bonusTarget);
+            if (!hints?.length) return;
+            bonusHints.push({ itemName: bonusTarget.name, bonusName: bonus.label, hints });
+        },
+        { skipGenericTarget: true }
+    );
+    if (bonusHints.length) {
+        const hints = bonusHints
+            .reduce(
+                (/** @type {{[key: string]: string}} */ acc, curr) => {
+                    acc[curr.itemName] ||= '';
+                    acc[curr.itemName] += [curr.bonusName, ...curr.hints].join('\n');
+                    return acc;
+                },
+                {},
+            );
+        Object.entries(hints)
+            .forEach(([name, hint]) => allHints.push(hintcls.create(name, [], { hint })))
+    }
 
-        const bonuses = target.getBonusSourcesForTarget(item);
-        bonuses.forEach((bonusTarget) => {
-            /** @type {string[]} */
-            const bonusHints = [];
-            allBonusTypes.forEach((bonus) => {
-                const hints = bonus.getHints(bonusTarget);
-                if (!hints?.length) return;
-                bonusHints.push([bonus.label, ...hints].join('\n'));
-            });
-            if (bonusHints.length) {
-                allHints.push(hintcls.create(bonusTarget.name, [], { hint: bonusHints.join('\n\n') }));
-            }
-        });
-    });
+
+    //register hint on targeted item
+    // allTargetTypes.forEach((target) => {
+    //     if (target.isGenericTarget) {
+    //         return;
+    //     }
+
+    //     const bonuses = target.getBonusSourcesForTarget(item);
+    //     bonuses.forEach((bonusTarget) => {
+    //         /** @type {string[]} */
+    //         const bonusHints = [];
+    //         allBonusTypes.forEach((bonus) => {
+    //             const hints = bonus.getHints(bonusTarget);
+    //             if (!hints?.length) return;
+    //             bonusHints.push([bonus.label, ...hints].join('\n'));
+    //         });
+    //         if (bonusHints.length) {
+    //             allHints.push(hintcls.create(bonusTarget.name, [], { hint: bonusHints.join('\n\n') }));
+    //         }
+    //     });
+    // });
 
     return allHints;
 });
@@ -76,21 +103,30 @@ registerItemHint((hintcls, actor, item, _data) => {
  * @param {object} [options]
  * @param {boolean} [options.skipGenericTarget]
  */
-const getBonusesFor = (thing, func, { skipGenericTarget = false } = {}) => {
-    // iterate over each "target" class
-    allTargetTypes.forEach((target) => {
-        if (skipGenericTarget && target.isGenericTarget) return;
+const handleBonusesFor = (thing, func, { skipGenericTarget = false } = {}) => {
+    allTargetTypes
+        .filter((targetType) => !skipGenericTarget || !targetType.isGenericTarget)
+        .flatMap((targetType) => targetType.getBonusSourcesForTarget(thing))
+        .filter((bonusTarget, i, self) => self.findIndex((nestedTarget) => bonusTarget.id === nestedTarget.id) === i)
+        .filter((bonusTarget) => bonusTarget[MODULE_NAME].targets.every((baseTarget) =>
+            (!skipGenericTarget || !baseTarget.isGenericTarget) && baseTarget.doesTargetInclude(bonusTarget, thing))
+        )
+        .forEach((bonusTarget) => bonusTarget[MODULE_NAME].bonuses.forEach((bonus) => func(bonusTarget, bonus)));
 
-        // return all Items that have targets pointing at this "thing"
-        const bonuses = target.getBonusSourcesForTarget(thing);
+    // // iterate over each "target" class
+    // allTargetTypes.forEach((target) => {
+    //     if (skipGenericTarget && target.isGenericTarget) return;
 
-        // iterate over each bonus-target pointing at this "thing"
-        bonuses.forEach((bonusTarget) => {
+    //     // return all Items that have targets pointing at this "thing"
+    //     const bonuses = target.getBonusSourcesForTarget(thing);
 
-            // perform the action for each bonus found
-            allBonusTypes.forEach((bonus) => func(bonusTarget, bonus));
-        });
-    });
+    //     // iterate over each bonus-target pointing at this "thing"
+    //     bonuses.forEach((bonusTarget) => {
+
+    //         // perform the action for each bonus found
+    //         allBonusTypes.forEach((bonus) => func(bonusTarget, bonus));
+    //     });
+    // });
 }
 
 /**
@@ -101,7 +137,7 @@ const getBonusesFor = (thing, func, { skipGenericTarget = false } = {}) => {
 function actionUseHandleConditionals(actionUse) {
     /** @type {Nullable<ItemConditional>[]} */
     const conditionals = [];
-    getBonusesFor(
+    handleBonusesFor(
         actionUse,
         (bonusTarget, bonus) => conditionals.push(bonus.getConditional(bonusTarget)),
     );
@@ -133,7 +169,7 @@ function actionUseAlterRollData({ actor, item, shared }) {
         return;
     }
 
-    getBonusesFor(
+    handleBonusesFor(
         item,
         (bonusTarget, bonus) => bonus.actionUseAlterRollData(bonusTarget, shared),
     );
@@ -163,7 +199,7 @@ function getAttackSources(item, sources) {
     /** @type {ModifierSource[]} */
     let newSources = [];
 
-    getBonusesFor(
+    handleBonusesFor(
         item,
         (bonusTarget, bonus) => newSources.push(...bonus.getAttackSourcesForTooltip(bonusTarget)),
     );
@@ -197,7 +233,7 @@ function actionDamageSources(action, sources) {
     /** @type {ItemChange[]} */
     const changes = [];
 
-    getBonusesFor(
+    handleBonusesFor(
         action,
         (bonusTarget, bonus) => changes.push(...bonus.getDamageSourcesForTooltip(bonusTarget)),
     );
@@ -274,8 +310,8 @@ Hooks.on('updateItem', (
  * @param {RollData} _rollData
  */
 const prepare = (item, _rollData) => {
-    item[MODULE_NAME].targets = [];
     item[MODULE_NAME].bonuses = [];
+    item[MODULE_NAME].targets = [];
     allBonusTypes.forEach((bonus) => {
         if (bonus.isBonusSource(item)) {
             item[MODULE_NAME].bonuses.push(bonus);

@@ -1,4 +1,6 @@
 import { MODULE_NAME } from '../../src/consts.mjs';
+import { BaseBonus } from '../../src/targeted/bonuses/base-bonus.mjs';
+import { BaseTarget } from '../../src/targeted/targets/base-target.mjs';
 import Document from '../foundry/common/abstract/document.mjs';
 
 export {};
@@ -198,7 +200,11 @@ declare global {
     class ItemPF<
         SystemData extends SystemItemData = SystemItemData
     > extends ItemDocument {
-        [MODULE_NAME]: { [key: string]: number | string | object | array };
+        [MODULE_NAME]: {
+            bonuses: (typeof BaseBonus)[];
+            targets: (typeof BaseTarget)[];
+            [key: string]: number | string | object | array;
+        };
 
         get hasAction(): boolean;
         actions: EmbeddedCollection<ItemAction>;

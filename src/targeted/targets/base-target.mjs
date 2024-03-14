@@ -15,6 +15,16 @@ export class BaseTarget {
     static getBonusSourcesForTarget(arg) { throw new Error('must be overridden'); };
 
     /**
+     * For a given target source, does it target the `thing`?
+     * @param {ItemPF} targetSource
+     * @param {ActionUse | ItemPF | ItemAction} thing
+     * @returns {boolean} True if this target source applies to this thing
+     */
+    static doesTargetInclude(targetSource, thing) {
+        return !!this.getBonusSourcesForTarget(thing).find((source) => source.id === targetSource.id);
+    }
+
+    /**
      * Get Item Hints tooltip value
      *
      * @abstract
