@@ -49,9 +49,9 @@ registerItemHint((hintcls, _actor, item, _data,) => {
         .join(' + ');
 
     const roll = RollPF.safeRoll(formula);
-    if (roll.isDeterministic) {
+    if (roll.isNumber) {
         const mod = roll.total;
-        if (mod === 0) {
+        if (!mod) {
             return;
         }
 
@@ -78,9 +78,9 @@ registerItemHint((hintcls, _actor, item, _data,) => {
         .join(' + ');
 
     const roll = RollPF.safeRoll(formula);
-    if (roll.isDeterministic) {
+    if (roll.isNumber) {
         const mod = roll.total;
-        if (mod === 0) {
+        if (!mod) {
             return;
         }
 

@@ -24,7 +24,7 @@ export class AttackBonus extends BaseBonus {
         const formula = FormulaCacheHelper.getModuleFlagFormula(source, this.key)[this.key];
         const roll = RollPF.safeRoll(formula);
 
-        return roll.isDeterministic
+        return roll.isNumber && roll.total
             ? [`${signed(roll.total)}`]
             : [`${formula}`];
     }

@@ -23,7 +23,8 @@ export class VirtualSizeBonus extends BaseBonus {
         if (!size) return;
 
         const formula = FormulaCacheHelper.getModuleFlagFormula(source, this.key)[this.key];
-        const mod = RollPF.safeRoll(formula).isDeterministic
+        const roll = RollPF.safeRoll(formula);
+        const mod = roll.isNumber
             ? signed(size)
             : formula;
 

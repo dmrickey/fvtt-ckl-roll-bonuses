@@ -72,7 +72,7 @@ export class DamageBonus extends BaseBonus {
                 crit,
                 formula: (() => {
                     const roll = RollPF.safeRoll(formula);
-                    return roll.isDeterministic
+                    return roll.isNumber && roll.total
                         ? signed(roll.total)
                         : formula;
                 })(),

@@ -170,7 +170,7 @@ function safeTotal(
     formula,
     data,
 ) {
-    return isNaN(+formula) ? RollPF.safeRoll(formula, data).total : +formula;
+    return (isNaN(+formula) ? RollPF.safeRoll(formula, data).total : +formula) || 0;
 }
 
 Hooks.once('setup', () => {
@@ -197,7 +197,16 @@ Hooks.once('init', () => {
         RollPF.prototype,
         'simplifiedFormula',
         {
+            /** @this {RollPF} */
             get: function () { return simplifyRollFormula(this.formula, { preserveFlavor: true }); }
+        }
+    );
+    Object.defineProperty(
+        RollPF.prototype,
+        'isNumber',
+        {
+            /** @this {RollPF} */
+            get: function () { return this.isDeterministic && !this.terms.every((x) => !!x.flavor); }
         }
     );
 });

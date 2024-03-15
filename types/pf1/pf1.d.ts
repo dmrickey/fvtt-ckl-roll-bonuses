@@ -394,29 +394,12 @@ declare global {
         // [key: string]: any,
     }
 
-    interface RollPF {
-        /**
-         * A standardized helper function for simplifying the constant parts of a multipart roll formula.
-         *
-         * @param {string} formula                          The original roll formula.
-         * @param {object} [options]                        Formatting options.
-         * @param {boolean} [options.preserveFlavor=false]  Preserve flavor text in the simplified formula.
-         * @param {boolean} [options.deterministic]         Strip any non-deterministic terms from the result.
-         *
-         * @returns {string}  The resulting simplified formula.
-         */
-        simplifyFormula: (
-            formula: string,
-            {
-                preserveFlavor,
-                deterministic,
-            }?:
-                | {
-                    preserveFlavor?: boolean | undefined;
-                    deterministic?: boolean | undefined;
-                }
-                | undefined
-        ) => string;
+    interface RollPF extends Roll {
+        /** returns true if formula has no flavor and no dice (i.e. reduces to a single number) */
+        isNumber: boolean;
+        simplifiedFormula: string;
+
+        prototype: typeof RollPF;
 
         /**
          * Safely get the result of a roll, returns 0 if unsafe.
@@ -436,11 +419,7 @@ declare global {
         static safeRoll(
             formula: string | number,
             rollData?: Nullable<RollData>
-        ): {
-            formula: string;
-            isDeterministic: boolean;
-            total: number;
-        };
+        ): RollPF;
     }
 
     type BonusModifers =
