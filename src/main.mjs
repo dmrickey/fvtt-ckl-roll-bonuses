@@ -62,7 +62,10 @@ function prepareItemData(wrapped) {
     wrapped();
 
     const item = this;
-    item[MODULE_NAME] = {};
+    item[MODULE_NAME] = {
+        bonuses: [],
+        targets: [],
+    };
     const rollData = item.getRollData();
     FormulaCacheHelper.cacheFormulas(item, rollData)
     HookWrapperHandler.fireHookNoReturnSync(localHooks.prepareData, item, rollData);

@@ -62,6 +62,9 @@ registerItemHint((hintcls, actor, item, _data) => {
         const hints = bonusHints
             .reduce(
                 (/** @type {{[key: string]: string}} */ acc, curr) => {
+                    if (acc[curr.itemName]) {
+                        acc[curr.itemName] += '\n\n';
+                    }
                     acc[curr.itemName] ||= '';
                     acc[curr.itemName] += [curr.bonusName, ...curr.hints].join('\n');
                     return acc;
@@ -310,8 +313,6 @@ Hooks.on('updateItem', (
  * @param {RollData} _rollData
  */
 const prepare = (item, _rollData) => {
-    item[MODULE_NAME].bonuses = [];
-    item[MODULE_NAME].targets = [];
     allBonusTypes.forEach((bonus) => {
         if (bonus.isBonusSource(item)) {
             item[MODULE_NAME].bonuses.push(bonus);
