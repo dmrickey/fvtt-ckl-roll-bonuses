@@ -169,7 +169,6 @@
 # Add Quench Testings
 # Add create hooks for initializing some items (like anything based off of name/id)
 
-
 # This release must include
 - target hint for "is item targets (melee/ranged)
 - update damage column for size modifiers in actor attacks

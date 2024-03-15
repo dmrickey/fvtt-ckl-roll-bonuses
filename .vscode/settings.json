@@ -10,4 +10,5 @@
     },
     "js/ts.implicitProjectConfig.checkJs": true,
     "js/ts.implicitProjectConfig.strictNullChecks": false,
+    "typescript.tsserver.experimental.enableProjectDiagnostics": true,
 }

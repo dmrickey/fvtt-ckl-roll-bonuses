@@ -1,3 +1,4 @@
+// @ts-nocheck
 /** copied from 5e */
 
 /**

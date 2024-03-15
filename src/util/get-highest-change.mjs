@@ -1,3 +1,4 @@
+// @ts-nocheck
 // copied from foundryvtt-pathfinder1\module\documents\actor\utils\apply-changes.mjs
 
 /**

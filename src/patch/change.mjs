@@ -1,5 +1,6 @@
-import { MODULE_NAME } from "../consts.mjs";
+// @ts-nocheck
 
+import { MODULE_NAME } from "../consts.mjs";
 
 /**
  * @this {ActorPF}

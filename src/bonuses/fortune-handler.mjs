@@ -101,23 +101,29 @@ registerItemHint((hintcls, actor, item, _data) => {
     return hints;
 });
 
-const handleFortune = (
-    /** @type {{ dice?: any; fortuneCount: any; misfortuneCount: any; actionID?: any; }} */ options,
-) => {
+/**
+ *
+ * @param {object} options
+ * @param {Nullable<string>} [options.dice]
+ * @param {Nullable<number>} [options.fortuneCount]
+ * @param {Nullable<number>} [options.misfortuneCount]
+ * @returns
+ */
+const handleFortune = (options) => {
     options.dice ||= '1d20';
     options.fortuneCount ||= 0;
     options.misfortuneCount ||= 0;
 
     {
-        const test = new Roll(options.dice).roll({ async: false });
-        const dice = test.dice[0];
+        const roll = RollPF.safeRoll(options.dice);
+        const dice = roll.dice[0];
         if (!dice) {
             // no actual roll, a static number was probably given
             return;
         }
         const { modifiers, results } = dice;
         const totalThrown = results.length;
-        if (test.dice.length !== 1 // if there was more than a single dice term
+        if (roll.dice.length !== 1 // if there was more than a single dice term
             || dice.faces !== 20 // if the die is not a d20
             || modifiers.length > 1 // if there were somehow multiple dice modifier text on the throw
             || results.filter(x => !x.discarded).length !== 1 // if more than a single die was kept into the result
