@@ -1,5 +1,6 @@
 import { textInput } from "../../handlebars-handlers/bonus-inputs/text-input.mjs";
 import { FormulaCacheHelper } from "../../util/flag-helpers.mjs";
+import { signed } from "../../util/to-signed-string.mjs";
 import { BaseBonus } from "./base-bonus.mjs";
 
 /**
@@ -21,9 +22,11 @@ export class AttackBonus extends BaseBonus {
      */
     static getHints(source) {
         const formula = FormulaCacheHelper.getModuleFlagFormula(source, this.key)[this.key];
-        if (formula) {
-            return [`${formula}`];
-        }
+        const roll = RollPF.safeRoll(formula);
+
+        return roll.isDeterministic
+            ? [`${signed(roll.total)}`]
+            : [`${formula}`];
     }
 
     /**
