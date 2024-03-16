@@ -173,7 +173,7 @@ Hooks.on('pf1GetRollData', (
             .sumAll()
             + FormulaCacheHelper.getDictionaryFlagValue(item, critMultOffsetSelf);
 
-        return +(rollData.action.ability.critMult || 2) + sum;
+        return +(rollData.action?.ability.critMult || 2) + sum;
     };
 
     const mult = calculateMult();
@@ -182,7 +182,7 @@ Hooks.on('pf1GetRollData', (
 
     // update critRange
     const calculateRange = () => {
-        const current = rollData.action.ability.critRange;
+        const current = rollData.action?.ability.critRange ?? 20;
 
         if (isBroken) {
             return 20;

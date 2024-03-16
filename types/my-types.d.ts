@@ -1,22 +1,22 @@
-export { }
+export {};
 
 declare global {
     interface IdObject {
-        id: string,
+        id: string;
     }
 
     interface ModifierSource {
         /** The value of this modifer */
-        value: number | string,
+        value: number | string;
 
         /** The name of the source of this modifier */
-        name: string,
+        name: string;
 
         /** The damage type of this modifier */
-        modifier: BonusModifers,
+        modifier: Nullable<BonusModifers | string>;
 
         /** The sort priority for this modifier */
-        sort: number,
+        sort: number;
     }
 
     type Nullable<T> = T | null | undefined;
@@ -35,9 +35,11 @@ declare global {
         path: string;
     }
 
-    class TokenActorSelectorOptions extends DocumentSheetOptions<ItemPF> {
+    interface TokenActorSelectorOptions extends DocumentSheetOptions<ItemPF> {
         key: string;
     }
 
-    declare type DamageInputModel = DamagePart & { crit: Nullable<'crit' | 'nonCrit' | 'normal'> };
+    declare type DamageInputModel = DamagePart & {
+        crit: Nullable<'crit' | 'nonCrit' | 'normal'>;
+    };
 }

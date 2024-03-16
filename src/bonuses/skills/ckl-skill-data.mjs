@@ -73,8 +73,8 @@ export class CklSkillData {
             || actor.system.skills[skillId.split('.')[0]].subSkills[skillId.split('.').at(-1) ?? '']?.name;
         const { inputs: output, buttons: result } = await warpgate.menu({ buttons, inputs }, { title });
         if (result) {
-            const bonus = output[1]?.trim() || '';
-            const dice = output[0]?.trim() || '';
+            const bonus = `${output[1]}`?.trim() || '';
+            const dice = `${output[0]}`.trim() || '';
             const inspiration = output[2] || false;
 
             // todo verify validity of input bonus / dice

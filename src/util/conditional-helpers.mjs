@@ -45,6 +45,7 @@ export function conditionalCalculator(shared, conditional) {
             const roll = RollPF.safeTotal(formula, shared.rollData);
             switch (target) {
                 case "effect.cl":
+                    // @ts-ignore
                     shared.rollData.cl += roll;
                     break;
                 case "effect.dc":

@@ -28,7 +28,7 @@ registerItemHint((hintcls, actor, item, _data) => {
 
 /**
  * @param {ActorPF | ItemPF | ItemAction} doc
- * @param {RollData} rollData
+ * @param {RollData<SystemItemDataEquipmentPF>} rollData
  */
 function handleShieldFocusRollData(doc, rollData) {
     if (!(doc instanceof pf1.documents.item.ItemEquipmentPF)) return;

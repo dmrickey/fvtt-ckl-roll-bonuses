@@ -298,6 +298,7 @@ declare global {
         // links: { children: { name: string; id: string }[] };
         weaponGroups: TraitSelector?;
     }
+    class SystemIteMDataBuffPF extends SystemItemData {}
     class SystemItemDataEquipmentPF extends SystemItemData {
         armor: {
             acp: number;
@@ -429,51 +430,87 @@ declare global {
     interface TraitsRollData {
         // TODO
         armorProf: {
-            custom: '';
-            customTotal: 'No Metal Armors';
-            total: ['lgt', 'med', 'shl'];
+            custom: string;
+            customTotal: string;
+            total: ('lgt' | 'med' | 'hvy' | 'shl' | 'twr')[];
             value: [];
         };
-        aura: { custom: '' };
-        ci: { value: string[]; custom: '' };
-        cres: '';
-        di: { value: string[]; custom: '' };
-        dr: { value: string[]; custom: '' };
-        dv: { value: string[]; custom: '' };
-        eres: { value: string[]; custom: '10 cold' };
-        fastHealing: '';
+        aura: { custom: string };
+        ci: { value: string[]; custom: string };
+        cres: string;
+        di: { value: string[]; custom: string };
+        dr: { value: string[]; custom: string };
+        dv: { value: string[]; custom: string };
+        eres: { value: string[]; custom: string };
+        fastHealing: string;
         humanoid: true;
         languages: {
             value: string[];
-            custom: '';
+            custom: string;
             total: string[];
-            customTotal: 'Catfolk';
+            customTotal: string;
         };
-        regen: '';
+        regen: string;
         senses: {
             bs: number;
-            bse: 30;
-            custom: '';
-            dv: 60;
-            ll: { enabled: true; multiplier: { dim: 2; bright: 2 } };
-            sc: 0;
-            si: false;
-            sid: false;
-            tr: true;
-            ts: 0;
+            bse: number;
+            custom: string;
+            dv: number;
+            ll: { enabled: true; multiplier: { dim: number; bright: number } };
+            sc: number;
+            si: boolean;
+            sid: boolean;
+            tr: boolean;
+            ts: number;
         };
-        size: 'med';
-        stature: 'tall';
-        type: 'humanoid';
+        size: ActorSize;
+        stature: ActorStature;
+        type: string;
         weaponProf: {
-            custom: '';
-            customTotal: 'Club;Dagger;Dart;Quarterstaff;Scimitar;Scythe;Sickle;Shortspear;Sling;Spear;Natural attacks';
-            total: ['sim'];
-            value: [];
+            custom: string;
+            customTotal: string;
+            total: string[];
+            value: string[];
         };
     }
     interface SpellBookRollData {
-        // TODO
+        ability: keyof Abilities;
+        abilityMod: number;
+        altName: string;
+        arcaneSpellFailure: true;
+        autoSpellLevelCalculation: true;
+        autoSpellLevels: true;
+        baseDCFormula: string;
+        castPerDayAllOffsetFormula: string;
+        casterType: SpellcastingLevelType;
+        cl: {
+            formula: string;
+            autoSpellLevelCalculationFormula: string;
+            total: number;
+            autoSpellLevelTotal: number;
+        };
+        clNotes: string;
+        class: string;
+        concentration: { total: number };
+        concentrationFormula: string;
+        concentrationNotes: string;
+        domainSlotValue: number;
+        hasCantrips: true;
+        inUse: true;
+        label: string;
+        name: string;
+        preparedAllOffsetFormula: string;
+        psychic: false;
+        range: { close: number; medium: number; long: number; cl: number };
+        spellPoints: {
+            useSystem: false;
+            value: number;
+            maxFormula: string;
+            restoreFormula: string;
+            max: number;
+        };
+        spellPreparationMode: SpellcastingType;
+        spellSlotAbilityBonusFormula: string;
     }
     interface SpellRollData {
         // TODO
@@ -482,7 +519,7 @@ declare global {
     /**
      * Roll Data used for resolving formulas
      */
-    interface ActorRollData {
+    interface RollData<T extends SystemItemData = SystemItemData> {
         abiliites: {
             [key: keyof Abilities]: AbilityRollData;
         };
@@ -519,22 +556,25 @@ declare global {
         spells: Record<string, SpellBookRollData>;
         traits: TraitsRollData;
         // [key: string]: any,
-    }
 
-    class ItemRollData extends ActorRollData {
-        chargeCostBonus: number;
-        conditionals: any;
+        // TODO where does this come from?
+        conditionals?: any;
 
-        item: unknown;
-    }
-    class BufFRollData extends ItemRollData {}
-    class SpellRollData extends ItemRollData {
-        cl: number;
-        dcBonus: number;
-    }
+        // item roll data
+        dFlags?: DictionaryFlags;
+        item: T;
 
-    interface UniqueActionRollData {
-        action: {
+        // buff roll data
+        level?: number;
+
+        // spell roll data
+        cl?: number;
+        sl?: number;
+        classLevel?: number;
+        ablMod?: number;
+
+        // action roll data
+        action?: {
             _id: string;
             damage: {
                 parts: { formula: string; type: TraitSelectorValuePlural }[];
@@ -547,10 +587,12 @@ declare global {
                 damageMult: number;
             };
         };
-    }
 
-    declare type ActionRollData<T extends ItemRollData = ItemRollData> =
-        ActorRollData & UniqueActionRollData & T;
+        // action use roll data
+        chargeCostBonus?: number;
+        d20?: string;
+        dcBonus?: number;
+    }
 
     interface RollPF extends Roll {
         /** returns true if formula has no flavor and no dice (i.e. reduces to a single number) */
@@ -795,15 +837,34 @@ declare global {
         title: string;
     }
 
+    declare type ActorSize =
+        | 'fine'
+        | 'dim'
+        | 'tiny'
+        | 'sm'
+        | 'med'
+        | 'lg'
+        | 'huge'
+        | 'grg'
+        | 'col';
+
+    declare type ActorStature = 'tall' | 'long';
+
+    declare type SpellcastingType = 'spontaneous' | 'prepared' | 'hybrid';
+    declare type SpellcastingLevelType = 'low' | 'med' | 'high';
+
     interface ActorTraitSelector {
         setPosition(position?: Position);
         get position(): Position;
         render(show: boolean);
     }
+
     interface pf1 {
+        actorSizes: Record<ActorSize, string>;
+        actorStatures: Record<ActorStature, string>;
         applications: {
             ActorTraitSelector: {
-                new (doc: Document, options: object): ActorTraitSelector;
+                new (doc: BaseDocument, options: object): ActorTraitSelector;
             };
             DamageTypeSelector: {
                 new (
@@ -907,6 +968,12 @@ declare global {
         };
         registry: {
             damageTypes: EmbeddedCollection<DamageType>;
+        };
+        spellcasting: {
+            type: SpellcastingType;
+        };
+        utils: {
+            createTag(name: string): string;
         };
     }
 

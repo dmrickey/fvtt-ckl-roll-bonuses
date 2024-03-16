@@ -152,6 +152,7 @@ Hooks.on('renderItemSheet', (
     if (!((name.includes(WeaponSpecializationSettings.weaponSpecialization) && name.includes(Settings.weaponSpecialization))
         || item.system.flags.dictionary[key] !== undefined
         || sourceId.includes(compendiumId))
+        || !actor
     ) {
         return;
     }

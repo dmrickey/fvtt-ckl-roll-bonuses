@@ -1,4 +1,4 @@
-export { };
+export {};
 
 declare global {
     let RollPF: RollPF;
@@ -25,4 +25,6 @@ declare global {
         U extends object,
         M extends MergeObjectOptions
     >(original: T, other?: U, options?: M, _d?: number): Result<T, U, M>;
+
+    function expandObject(_: object, depth: number): object;
 }

@@ -155,6 +155,10 @@ Hooks.on('renderItemSheet', (
         return;
     }
 
+    if (!actor) {
+        return;
+    }
+
     const current = item.getItemDictionaryFlag(key);
 
     const choices = uniqueArray(new KeyedDFlagHelper(actor, {}, weaponFocusKey).valuesForFlag(weaponFocusKey))
