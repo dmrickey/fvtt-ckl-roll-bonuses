@@ -1,4 +1,3 @@
-import { MODULE_NAME } from '../../consts.mjs';
 import { showEnabledLabel } from '../../handlebars-handlers/enabled-label.mjs';
 import { BaseTarget } from './base-target.mjs';
 
