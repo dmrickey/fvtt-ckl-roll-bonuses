@@ -435,7 +435,7 @@ export class FormulaCacheHelper {
      * Combines multiple flags into a single sum
      * @param {ItemPF} item
      * @param {...string} keys
-     * @returns {{[key: string]:(number | string)}}
+     * @returns {Record<string, number | string>}}
      */
     static getDictionaryFlagFormula(item, ...keys) {
         keys = difference(keys, this.#uncacheableDictionaryFlags);
@@ -453,7 +453,7 @@ export class FormulaCacheHelper {
      *
      * @param {ItemPF} item
      * @param {...string} keys
-     * @returns {{[key: string]:(number | string)}}
+     * @returns {Record<string, number | string>}}
      */
     static getPartialDictionaryFlagFormula(item, ...keys) {
         ifDebug(() => {
@@ -472,7 +472,7 @@ export class FormulaCacheHelper {
      *
      * @param {ItemPF} item
      * @param {...string} keys
-     * @returns {{[key: string]:(number | string)}}
+     * @returns {Record<string, number | string>}}
      */
     static getExactPartialDictionaryFlagFormula(item, ...keys) {
         ifDebug(() => {
@@ -490,7 +490,7 @@ export class FormulaCacheHelper {
     /**
      * @param {ItemPF} item
      * @param {...string} keys
-     * @returns {{[key: string]:(number | string)}}
+     * @returns {Record<string, number | string>}}
      */
     static getModuleFlagFormula(item, ...keys) {
         ifDebug(() => {
