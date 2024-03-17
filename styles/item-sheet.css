@@ -61,9 +61,7 @@
 }
 
 .pf1.sheet .roll-bonuses .form-fields .label {
-    /* TODO verify this is correct */
-    align-self: flex-end;
-    justify-self: flex-end;
+    text-align: end;
 }
 
 .versatile-performance-selector td {
