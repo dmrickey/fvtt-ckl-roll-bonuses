@@ -15,6 +15,8 @@ import { FormulaCacheHelper } from './util/flag-helpers.mjs';
 import { simplifyRollFormula } from './util/simplify-roll-formula.mjs';
 import { debugSetup } from './util/if-debug.mjs';
 
+import './overrides/action-damage.mjs';
+
 /**
  * @param {() => any} wrapped
  * @this {ChatAttack}

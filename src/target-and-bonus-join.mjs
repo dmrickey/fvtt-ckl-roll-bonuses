@@ -88,7 +88,7 @@ registerItemHint((hintcls, actor, item, _data) => {
  * @param {object} [options]
  * @param {boolean} [options.skipGenericTarget]
  */
-const handleBonusesFor = (thing, func, { skipGenericTarget = false } = {}) => {
+export const handleBonusesFor = (thing, func, { skipGenericTarget = false } = {}) => {
     allTargetTypes
         .filter((targetType) => !skipGenericTarget || !targetType.isGenericTarget)
         .flatMap((targetType) => targetType.getBonusSourcesForTarget(thing))
