@@ -42,8 +42,8 @@ registerItemHint((hintcls, _actor, item, _data,) => {
     if (item.getItemDictionaryFlag(critOffsetSelf)) return;
 
     const formula = [
-        FormulaCacheHelper.getDictionaryFlagFormula(item, critOffsetAll),
-        FormulaCacheHelper.getPartialDictionaryFlagFormula(item, 'crit-offset_'),
+        FormulaCacheHelper.getDictionaryFlagFormula(item, critOffsetAll)[critOffsetAll],
+        ...Object.values(FormulaCacheHelper.getPartialDictionaryFlagFormula(item, 'crit-offset_')),
     ]
         .filter(truthiness)
         .join(' + ');
@@ -60,9 +60,9 @@ registerItemHint((hintcls, _actor, item, _data,) => {
         return hint;
     }
     else {
-        hintcls.create(localize('crit-offset'), [], { hint: roll.simplifiedFormula })
+        const hint = hintcls.create(localize('crit-offset'), [], { hint: roll.simplifiedFormula });
+        return hint;
     }
-
 });
 
 // register crit mult hint on bonus
@@ -71,8 +71,8 @@ registerItemHint((hintcls, _actor, item, _data,) => {
     if (item.getItemDictionaryFlag(critMultOffsetSelf)) return;
 
     const formula = [
-        FormulaCacheHelper.getDictionaryFlagFormula(item, critMultOffsetAll),
-        FormulaCacheHelper.getPartialDictionaryFlagFormula(item, 'crit-mult-offset_'),
+        FormulaCacheHelper.getDictionaryFlagFormula(item, critMultOffsetAll)[critMultOffsetAll],
+        ...Object.values(FormulaCacheHelper.getPartialDictionaryFlagFormula(item, 'crit-mult-offset_')),
     ]
         .filter(truthiness)
         .join(' + ');
@@ -89,7 +89,8 @@ registerItemHint((hintcls, _actor, item, _data,) => {
         return hint;
     }
     else {
-        hintcls.create(localize('crit-mult'), [], { hint: roll.simplifiedFormula })
+        const hint = hintcls.create(localize('crit-mult'), [], { hint: roll.simplifiedFormula });
+        return hint;
     }
 });
 
