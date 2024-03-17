@@ -170,7 +170,6 @@
 # Add create hooks for initializing some items (like anything based off of name/id)
 
 # This release must include
-- target hint for "is item targets (melee/ranged)
 - update damage column for size modifiers in actor attacks
 - masterwork and enhancement bonuses for ammo
   - damage change would be amazing. (basically the same)
@@ -184,5 +183,3 @@
 - Attempt to create a "resource offset"
   - includes showing anything modifying a given resource in the resource's sheet near the formula so it can see why the total is not what that sheet says it should be
 - investigate moving inspiration into a bonus and off of the skill sheet
-- update target-and-bonus-join so that it ensures that _all_ targets are satisfied instead of _any_    
-  - Done.. but make sure it works
