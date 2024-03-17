@@ -24,8 +24,12 @@ registerItemHint((hintcls, actor, item, _data) => {
     // register hints on bonus source
     allBonusTypes.forEach((bonus) => {
         if (bonus.isBonusSource(item)) {
-            const hints = bonus.getHints(item);
+            let hints = bonus.getHints(item);
             if (hints?.length) {
+                // remove hint tooltip if it's the same as the label
+                if (hints.length === 1 && hints[0] === bonus.label) {
+                    hints = [];
+                }
                 allHints.push(hintcls.create(bonus.label, [], { hint: hints.join('\n') }));
             }
         }
