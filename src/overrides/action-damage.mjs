@@ -1,3 +1,4 @@
+// @ts-nocheck
 // copied from pf1 - fixed to include bonus for size modifier
 
 import { handleBonusesFor } from '../target-and-bonus-join.mjs';
