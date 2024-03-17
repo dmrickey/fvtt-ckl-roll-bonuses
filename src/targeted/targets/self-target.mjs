@@ -18,9 +18,17 @@ export class SelfTarget extends BaseTarget {
     static getHints(source) {
         /** @type {string[]} */
         if (source.getFlag(MODULE_NAME, this.key)) {
-            return [this.label];
+            // return [this.label];
         }
+        return;
     }
+
+
+    /**
+     * @inheritdoc
+     * @override
+     */
+    static get isGenericTarget() { return true; }
 
     /**
      * @inheritdoc

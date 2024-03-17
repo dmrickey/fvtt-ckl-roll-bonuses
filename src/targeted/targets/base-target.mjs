@@ -41,7 +41,9 @@ export class BaseTarget {
     static init() { }
 
     /**
-     * Returns true the targeting is too generic to show a hint on a specific item (generally means this is a "token" target that does not have a specific targeted item).
+     * Returns true the targeting is too generic to show a hint on a specific item
+     * - generally means this is a "token" target that does not have a specific targeted item
+     * - also used for "self item targets" which already show the bonus, so don't need to show the target as well on the same item
      *
      * @abstract
      * @returns {boolean}
@@ -97,4 +99,10 @@ export class BaseTarget {
      * @returns { string }
      */
     static get targetKey() { throw new Error('must be overridden'); }
+
+    // /**
+    //  * Skip
+    //  * @returns {boolean}
+    //  */
+    // static get skipTargetHint { return false; }
 }

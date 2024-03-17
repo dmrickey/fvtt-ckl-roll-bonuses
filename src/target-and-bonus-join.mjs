@@ -38,7 +38,7 @@ registerItemHint((hintcls, actor, item, _data) => {
         if (target.isTargetSource(item)) {
             const hints = target.getHints(item);
             if (hints?.length) {
-                targetHints.push([target.label, ...hints].join('\n'));
+                targetHints.push([...new Set([target.label, ...hints])].join('\n'));
             }
         }
     });
