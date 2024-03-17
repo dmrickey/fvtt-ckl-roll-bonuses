@@ -75,28 +75,6 @@ registerItemHint((hintcls, actor, item, _data) => {
             .forEach(([name, hint]) => allHints.push(hintcls.create(name, [], { hint })))
     }
 
-
-    //register hint on targeted item
-    // allTargetTypes.forEach((target) => {
-    //     if (target.isGenericTarget) {
-    //         return;
-    //     }
-
-    //     const bonuses = target.getBonusSourcesForTarget(item);
-    //     bonuses.forEach((bonusTarget) => {
-    //         /** @type {string[]} */
-    //         const bonusHints = [];
-    //         allBonusTypes.forEach((bonus) => {
-    //             const hints = bonus.getHints(bonusTarget);
-    //             if (!hints?.length) return;
-    //             bonusHints.push([bonus.label, ...hints].join('\n'));
-    //         });
-    //         if (bonusHints.length) {
-    //             allHints.push(hintcls.create(bonusTarget.name, [], { hint: bonusHints.join('\n\n') }));
-    //         }
-    //     });
-    // });
-
     return allHints;
 });
 
@@ -115,21 +93,6 @@ const handleBonusesFor = (thing, func, { skipGenericTarget = false } = {}) => {
             (!skipGenericTarget || !baseTarget.isGenericTarget) && baseTarget.doesTargetInclude(bonusTarget, thing))
         )
         .forEach((bonusTarget) => bonusTarget[MODULE_NAME].bonuses.forEach((bonus) => func(bonusTarget, bonus)));
-
-    // // iterate over each "target" class
-    // allTargetTypes.forEach((target) => {
-    //     if (skipGenericTarget && target.isGenericTarget) return;
-
-    //     // return all Items that have targets pointing at this "thing"
-    //     const bonuses = target.getBonusSourcesForTarget(thing);
-
-    //     // iterate over each bonus-target pointing at this "thing"
-    //     bonuses.forEach((bonusTarget) => {
-
-    //         // perform the action for each bonus found
-    //         allBonusTypes.forEach((bonus) => func(bonusTarget, bonus));
-    //     });
-    // });
 }
 
 /**
@@ -144,14 +107,7 @@ function actionUseHandleConditionals(actionUse) {
         actionUse,
         (bonusTarget, bonus) => conditionals.push(bonus.getConditional(bonusTarget)),
     );
-    // allTargetTypes.forEach((target) => {
-    //     const bonuses = target.getBonusSourcesForTarget(actionUse);
-    //     bonuses.forEach((bonusTarget) => {
-    //         allBonusTypes.forEach((bonus) => {
-    //             conditionals.push(bonus.getConditional(bonusTarget));
-    //         });
-    //     });
-    // });
+
     conditionals
         .filter((c) => c?.modifiers?.length)
         .forEach((conditional) => conditionalCalculator(actionUse.shared, conditional));
@@ -176,15 +132,6 @@ function actionUseAlterRollData({ actor, item, shared }) {
         item,
         (bonusTarget, bonus) => bonus.actionUseAlterRollData(bonusTarget, shared),
     );
-
-    // allTargetTypes.forEach((target) => {
-    //     const bonuses = target.getBonusSourcesForTarget(item);
-    //     bonuses.forEach((bonusTarget) => {
-    //         allBonusTypes.forEach((bonus) => {
-    //             bonus.actionUseAlterRollData(bonusTarget, shared);
-    //         });
-    //     });
-    // });
 }
 Hooks.on(localHooks.actionUseAlterRollData, actionUseAlterRollData);
 
@@ -206,15 +153,6 @@ function getAttackSources(item, sources) {
         item,
         (bonusTarget, bonus) => newSources.push(...bonus.getAttackSourcesForTooltip(bonusTarget)),
     );
-
-    // allTargetTypes.forEach((target) => {
-    //     const bonuses = target.getBonusSourcesForTarget(item);
-    //     bonuses.forEach((bonusTarget) => {
-    //         allBonusTypes.forEach((bonus) => {
-    //             newSources.push(...bonus.getAttackSourcesForTooltip(bonusTarget));
-    //         });
-    //     });
-    // });
 
     newSources = newSources.filter(truthiness);
 
@@ -241,14 +179,6 @@ function actionDamageSources(action, sources) {
         (bonusTarget, bonus) => changes.push(...bonus.getDamageSourcesForTooltip(bonusTarget)),
     );
 
-    // allTargetTypes.forEach((target) => {
-    //     const bonuses = target.getBonusSourcesForTarget(action);
-    //     bonuses.forEach((bonusTarget) => {
-    //         allBonusTypes.forEach((bonus) => {
-    //             changes.push(...bonus.getDamageSourcesForTooltip(bonusTarget));
-    //         });
-    //     });
-    // });
     const newChanges = changes.filter(truthiness);
 
     // todo increase luck bonus if actor has fate's favored flag (double check that there isn't a named bonus for that already)
