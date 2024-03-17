@@ -38,7 +38,8 @@ export function damageInput({
     div.querySelectorAll('.damage-control').forEach((element) => {
         element.addEventListener('click', (event) => {
             event.preventDefault();
-            /** @type {HTMLElement} */
+            /** @type {HTMLElement } */
+            // @ts-ignore
             const a = event.currentTarget;
             if (!a) return;
 
@@ -69,7 +70,9 @@ export function damageInput({
 
             // Remove a damage component
             if (a.classList.contains("delete-damage")) {
+                /** @type {HTMLDataListElement | null} */
                 const li = a.closest(".damage-part");
+                if (!li) return;
                 const clonedParts = deepClone(parts);
                 clonedParts.splice(Number(li.dataset.damagePart), 1);
                 return update(clonedParts);
@@ -83,6 +86,7 @@ export function damageInput({
             const clickedElement = event.currentTarget;
 
             // Check for normal damage part
+            // @ts-ignore
             const damageIndex = clickedElement?.closest(".damage-part")?.dataset.damagePart;
             if (damageIndex !== null) {
                 const path = `${damageIndex}.type`;
@@ -113,6 +117,7 @@ export function damageInput({
             const updatedFormula = target?.value;
 
             // Check for normal damage part
+            // @ts-ignore
             const damageIndex = target?.closest(".damage-part")?.dataset.damagePart;
             if (damageIndex !== null) {
                 const path = `${damageIndex}.formula`;
@@ -131,6 +136,7 @@ export function damageInput({
             const critValue = target?.value;
 
             // Check for normal damage part
+            // @ts-ignore
             const damageIndex = target?.closest(".damage-part")?.dataset.damagePart;
             if (damageIndex !== null) {
                 const path = `${damageIndex}.crit`;

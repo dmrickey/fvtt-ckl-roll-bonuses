@@ -1,6 +1,6 @@
-export { }
+export {};
 
-import './core/hooks'
+import './core/hooks';
 
 declare global {
     /**
@@ -9,14 +9,19 @@ declare global {
      * @remarks
      * Initialized between the `"DOMContentLoaded"` event and the `"init"` hook event.
      */
-    let game: "game" extends keyof LenientGlobalVariableTypes ? Game : Game | {};
+    let game: 'game' extends keyof LenientGlobalVariableTypes
+        ? Game
+        : Game | {};
 
     let CONFIG: CONFIG;
+
+    let CONST: CONST;
 
     let Hooks: Hooks;
 
     let foundry: {
         utils: {
+            expandObject(_: object, depth?: number): Record<string, unknown>;
             randomID(): string;
             /**
              *
@@ -25,6 +30,6 @@ declare global {
              * @returns True if v0 is newer than v1
              */
             isNewerVersion(v0: string, v1: string): boolean;
-        },
+        };
     };
 }

@@ -188,6 +188,7 @@ export function modifiersInput({
 
     setTimeout(() => {
         const conditionalInput = document.querySelector(`#${createId(item, key)}`);
+        // @ts-ignore
         const jq = $(conditionalInput);
         jq.find('.conditional.flexrow')?.hide();
         jq.find('.conditional-header')?.text(localize('modifiers'));
@@ -217,30 +218,33 @@ export function modifiersInput({
                 await updateItem();
             }
 
+            /** @type {HTMLDataListElement | null} */
+            let li;
+
             // Remove a conditional
             if (a.classList.contains("delete-conditional")) {
-                const li = a.closest(".conditional");
+                li = a.closest(".conditional");
                 if (!(li instanceof Element)) return;
-                conditionals = conditionals.filter((c) => c.id !== li.dataset.conditional);
+                conditionals = conditionals.filter((c) => c.id !== li?.dataset.conditional);
                 await updateItem();
             }
 
             // Add a new conditional modifier
             if (a.classList.contains("add-conditional-modifier")) {
-                const li = a.closest(".conditional");
+                li = a.closest(".conditional");
                 if (!(li instanceof Element)) return;
-                const conditional = conditionals.find((c) => c.id === li.dataset.conditional);
+                const conditional = conditionals.find((c) => c.id === li?.dataset.conditional);
                 conditional?.modifiers.push(createModifier());
                 await updateItem();
             }
 
             // Remove a conditional modifier
             if (a.classList.contains("delete-conditional-modifier")) {
-                const li = a.closest(".conditional-modifier");
+                li = a.closest(".conditional-modifier");
                 if (!(li instanceof Element)) return;
-                const conditional = conditionals.find((c) => c.id === li.dataset.conditional);
+                const conditional = conditionals.find((c) => c.id === li?.dataset.conditional);
                 if (!conditional) return;
-                conditional.modifiers = conditional.modifiers.filter((m) => m.id !== li.dataset.modifier);
+                conditional.modifiers = conditional.modifiers.filter((m) => m.id !== li?.dataset.modifier);
                 await updateItem();
             }
         });
@@ -264,6 +268,12 @@ export function modifiersInput({
         div.querySelectorAll(selector).forEach((/** @type {HTMLSelectElement} */ element) => {
             if (!element) return;
 
+            /**
+             * Listen to mousedown event
+             *
+            * @type {HTMLSelectElement} - the target of the event
+            * @listens document#mousedown - the namespace and name of the event
+             */
             element.addEventListener(
                 'change',
                 async (event) => {
@@ -312,7 +322,8 @@ export function modifiersInput({
                 /** @type {string[]} */
                 let props = element.getAttribute('data-name')?.split('.') || [];
                 if (!props.length) {
-                    const parent = element.parentElement.parentElement.querySelector('.conditional-target');
+                    const parent = element.parentElement?.parentElement?.querySelector('.conditional-target');
+                    // @ts-ignore
                     props = parent.name.split('.');
                     props.pop();
                     props.push('damageType');

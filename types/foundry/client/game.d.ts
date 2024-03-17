@@ -20,7 +20,7 @@ interface Game {
 
     scenes: {
         active: {
-            tokens: EmbeddedCollection<TokenPF>;
+            tokens: EmbeddedCollection<TokenDocumentPF>;
         };
     };
 

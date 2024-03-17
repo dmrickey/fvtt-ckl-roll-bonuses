@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { intersects } from "../../../util/array-intersects.mjs";
 import { truthiness } from "../../../util/truthiness.mjs";
 import { uniqueArray } from "../../../util/unique-array.mjs";

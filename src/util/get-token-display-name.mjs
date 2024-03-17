@@ -1,5 +1,5 @@
 /**
- * @param {TokenPF} token
+ * @param {TokenDocumentPF} token
  * @returns {string}
  */
 export const getTokenDisplayName = (token) => {

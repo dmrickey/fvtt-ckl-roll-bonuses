@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { BaseTarget } from "../base-target.mjs";
 
 export class ActionTarget extends BaseTarget {

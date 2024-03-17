@@ -63,7 +63,10 @@ export class TokenSelectorApp extends DocumentSheet {
         return templateData;
     }
 
-    /** @override */
+    /**
+     * @override
+     * @param {any} updateData
+     */
     _getSubmitData(updateData) {
         const path = this.path;
 
@@ -73,6 +76,7 @@ export class TokenSelectorApp extends DocumentSheet {
         formData[path] = Array.isArray(formData[path])
             ? formData[path]
             : [formData[path]];
+        // @ts-ignore
         formData[path] = formData[path].filter(truthiness);
 
         const submitData = foundry.utils.expandObject(formData);

@@ -186,7 +186,7 @@ declare global {
         | /** observer */ 2
         | /** owner */ 3;
 
-    interface TokenPF extends ItemDocument {
+    interface TokenDocumentPF extends ItemDocument {
         id: string;
         actor: ActorPF;
         displayName: 0 | 10 | 20 | 30 | 40 | 50;
@@ -195,6 +195,11 @@ declare global {
         permission: PermissionLevel;
         texture: { src: string };
         visible: boolean;
+        object: TokenPF;
+    }
+
+    interface TokenPF {
+        isVisible: boolean;
     }
 
     class ItemPF<
@@ -331,12 +336,15 @@ declare global {
 
     type ItemType =
         | 'attack'
+        | 'base'
         | 'buff'
         | 'class'
         | 'consumable'
+        | 'container'
         | 'equipment'
         | 'feat'
         | 'loot'
+        | 'race'
         | 'spell'
         | 'weapon';
 

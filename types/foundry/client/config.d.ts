@@ -64,10 +64,14 @@ interface CONFIG {
             /** @defaultValue `2` */
             decimals: number;
         };
-    }
+    };
+
+    Item: {
+        typeLabels: Record<ItemType, string>;
+    };
 }
 
 type ConfiguredDocumentClassOrDefault<Fallback extends DocumentConstructor> =
-    Fallback["metadata"]["name"] extends keyof DocumentClassConfig
-    ? DocumentClassConfig[Fallback["metadata"]["name"]]
-    : Fallback;
+    Fallback['metadata']['name'] extends keyof DocumentClassConfig
+        ? DocumentClassConfig[Fallback['metadata']['name']]
+        : Fallback;

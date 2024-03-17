@@ -26,5 +26,5 @@ declare global {
         M extends MergeObjectOptions
     >(original: T, other?: U, options?: M, _d?: number): Result<T, U, M>;
 
-    function expandObject(_: object, depth: number): object;
+    function expandObject(_: object, depth?: number): Record<string, unknown>;
 }
