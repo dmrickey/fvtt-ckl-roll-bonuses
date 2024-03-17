@@ -308,6 +308,16 @@ Hooks.on('updateItem', (
     });
 });
 
+Hooks.on(localHooks.itemUse, (
+    /** @type {ItemPF} */ item,
+    /** @type {{ fortuneCount: number; misfortuneCount: number; actionID: any; }} */ options
+) => {
+    handleBonusesFor(
+        item,
+        (bonusTarget, bonus) => bonus.onItemUse(bonusTarget, options),
+    );
+});
+
 /**
  * @param {ItemPF} item
  * @param {RollData} _rollData

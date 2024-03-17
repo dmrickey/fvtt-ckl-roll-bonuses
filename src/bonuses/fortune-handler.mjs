@@ -109,39 +109,38 @@ registerItemHint((hintcls, actor, item, _data) => {
  * @param {Nullable<number>} [options.misfortuneCount]
  * @returns
  */
-const handleFortune = (options) => {
+export const handleFortune = (options) => {
     options.dice ||= '1d20';
     options.fortuneCount ||= 0;
     options.misfortuneCount ||= 0;
 
-    {
-        const roll = RollPF.safeRoll(options.dice);
-        const dice = roll.dice[0];
-        if (!dice) {
-            // no actual roll, a static number was probably given
-            return;
-        }
-        const { modifiers, results } = dice;
-        const totalThrown = results.length;
-        if (roll.dice.length !== 1 // if there was more than a single dice term
-            || dice.faces !== 20 // if the die is not a d20
-            || modifiers.length > 1 // if there were somehow multiple dice modifier text on the throw
-            || results.filter(x => !x.discarded).length !== 1 // if more than a single die was kept into the result
-        ) {
-            // then don't calculate fortune/misfortune because it's a weird roll that either I can't assume the rules for or the system won't allow
-            return;
-        }
+    const roll = RollPF.safeRoll(options.dice);
+    const dice = roll.dice[0];
+    if (!dice) {
+        // no actual roll, a static number was probably given
+        return;
+    }
+    const { modifiers, results } = dice;
+    const totalThrown = results.length;
+    if (roll.dice.length !== 1 // if there was more than a single dice term
+        || dice.faces !== 20 // if the die is not a d20
+        || modifiers.length > 1 // if there were somehow multiple dice modifier text on the throw
+        || results.filter(x => !x.discarded).length !== 1 // if more than a single die was kept into the result
+    ) {
+        // then don't calculate fortune/misfortune because it's a weird roll that either I can't assume the rules for or the system won't allow
+        return;
+    }
 
-        const mod = modifiers[0] || '';
-        if (mod.includes('dh') || mod.includes('kl')) {
-            options.misfortuneCount += (totalThrown - 1);
-        }
-        else if (mod.includes('kh') || mod.includes('dl')) {
-            options.fortuneCount += (totalThrown - 1);
-        }
+    const mod = modifiers[0] || '';
+    if (mod.includes('dh') || mod.includes('kl')) {
+        options.misfortuneCount += (totalThrown - 1);
+    }
+    else if (mod.includes('kh') || mod.includes('dl')) {
+        options.fortuneCount += (totalThrown - 1);
     }
 
     if (options.fortuneCount === options.misfortuneCount) {
+        options.dice = '1d20kh';
         return;
     }
 
@@ -213,8 +212,8 @@ Hooks.on(localHooks.itemUse, (
     /** @type {ItemPF} */ item,
     /** @type {{ fortuneCount: number; misfortuneCount: number; actionID: any; }} */ options
 ) => {
-    options.fortuneCount ||= 0;
-    options.misfortuneCount ||= 0;
+    options.fortuneCount = 0;
+    options.misfortuneCount = 0;
 
     if (item.hasItemBooleanFlag(selfFortune)) {
         options.fortuneCount++;

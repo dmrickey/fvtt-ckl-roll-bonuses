@@ -1,4 +1,5 @@
 import { localize } from "../../util/localize.mjs";
+import { localHooks } from "../../util/hooks.mjs";
 
 /**
  * @abstract
@@ -91,6 +92,15 @@ export class BaseBonus {
      * @param {ActionUseShared} shared
      */
     static actionUseAlterRollData(target, shared) { }
+
+    /**
+     * alters item use input via @see {@link localHooks.itemUse}
+     *
+     * @abstract
+     * @param {ItemPF} bonusTarget
+     * @param {{ fortuneCount: number; misfortuneCount: number; actionID: any; }} options passed into ItemPF.use
+     */
+    static onItemUse(bonusTarget, options) { }
 
     /**
      * Initializes anything specific to the bonus

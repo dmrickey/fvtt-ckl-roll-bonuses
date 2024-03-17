@@ -79,12 +79,17 @@ declare global {
 
     class ActionUseShared {
         action: any;
-        conditionals: any;
         attackBonus: string[];
-        damageBonus: string[];
-        rollData: RollData;
-        conditionalPartsCommon: any;
         attacks: any;
+        conditionalPartsCommon: any;
+        conditionals: any;
+        damageBonus: string[];
+        dice: string;
+        rollData: RollData;
+
+        // custom data
+        fortuneCount;
+        misfortuneCount;
     }
     class ActionUse {
         action: Action;

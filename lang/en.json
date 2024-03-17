@@ -14,7 +14,9 @@
             "bonus": {
                 "label": {
                     "attack": "Attack Bonus",
-                    "effective-size": "Effective Size"
+                    "effective-size": "Effective Size",
+                    "fortune": "Fortune",
+                    "misfortune": "Misfortune"
                 }
             },
             "target": {
