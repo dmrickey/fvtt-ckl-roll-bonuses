@@ -14,7 +14,7 @@
             "bonus": {
                 "label": {
                     "attack": "Attack Bonus",
-                    "virtual-size": "Virtual Size"
+                    "effective-size": "Effective Size"
                 }
             },
             "target": {
@@ -56,6 +56,9 @@
         },
         "dc-mod": "{mod} DC",
         "dc-label-mod": "{mod} DC ({label})",
+        "effective-size": {
+            "hint": "Size: {mod}"
+        },
         "elementalFocus": "Elemental Focus",
         "elemental-cl": "Elemental CL",
         "elemental-dc": "Elemental DC",
@@ -97,9 +100,6 @@
                 "skill1": "Skill 1",
                 "skill2": "Skill 2"
             }
-        },
-        "virtual-size": {
-            "hint": "Size: {mod}"
         },
         "weapon-focus": "Weapon Focus",
         "weapon-specialization": "Weapon Specialization",

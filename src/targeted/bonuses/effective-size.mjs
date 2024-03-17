@@ -4,12 +4,12 @@ import { localize } from '../../util/localize.mjs';
 import { signed } from '../../util/to-signed-string.mjs';
 import { BaseBonus } from './base-bonus.mjs';
 
-export class VirtualSizeBonus extends BaseBonus {
+export class EffectiveSizeBonus extends BaseBonus {
     /**
      * @inheritdoc
      * @override
      */
-    static get type() { return 'virtual-size'; }
+    static get type() { return 'effective-size'; }
 
     // todo figure out how to override formula used in Item list in character sheet
 
