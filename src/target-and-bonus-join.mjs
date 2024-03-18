@@ -52,9 +52,10 @@ registerItemHint((hintcls, actor, item, _data) => {
     handleBonusesFor(
         item,
         (bonusType, bonusTarget) => {
-            const hints = bonusType.getHints(bonusTarget);
-            if (!hints?.length) return;
-            bonusHints.push({ itemName: bonusTarget.name, bonusName: bonusType.label, hints });
+            const hints = bonusType.getHints(bonusTarget, item);
+            if (hints?.length) {
+                bonusHints.push({ itemName: bonusTarget.name, bonusName: bonusType.label, hints });
+            }
         },
         { skipGenericTarget: true }
     );

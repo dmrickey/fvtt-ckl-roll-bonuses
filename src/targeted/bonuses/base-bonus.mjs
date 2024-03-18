@@ -43,10 +43,11 @@ export class BaseBonus {
      * Get Item Hints tooltip value
      *
      * @abstract
-     * @param {ItemPF} bonus
+     * @param {ItemPF} bonus The source of the bonus
+     * @param {ItemPF?} [item] The item receiving the bonus for contextually aware hints.
      * @returns {Nullable<string[]>}
      */
-    static getHints(bonus) { return; }
+    static getHints(bonus, item) { return; }
 
     /**
      * Gets Conditional used for the action
