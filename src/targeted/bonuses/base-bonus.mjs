@@ -109,4 +109,12 @@ export class BaseBonus {
      * @abstract
      */
     static init() { }
+
+    /**
+     * @abstract
+     * @param {ItemPF} bonus The source of the bonus
+     * @param {ItemPF?} [item] The item receiving the bonus for contextually aware hints.
+     * @returns {string[]}
+     */
+    static getFootnotes(bonus, item) { return []; }
 }

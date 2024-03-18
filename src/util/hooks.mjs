@@ -4,7 +4,7 @@ export const customGlobalHooks = /** @type {const} */ ({
     actionDamageSources: `${MODULE_NAME}_actionDamageSources`,
     actionUseAlterRollData: `${MODULE_NAME}_actionUseAlterRollData`,
     actionUseHandleConditionals: `${MODULE_NAME}_actionUseHandleConditionals`,
-    chatAttackAttackNotes: `${MODULE_NAME}_chatAttackAttackNotes`,
+    chatAttackFootnotes: `${MODULE_NAME}_chatAttackFootnotes`,
     d20Roll: `${MODULE_NAME}_d20Roll`,
     getActorInitiativeFormula: `${MODULE_NAME}_getActorInitiativeFormula`,
     getConditionalParts: `${MODULE_NAME}_getConditionalParts`,

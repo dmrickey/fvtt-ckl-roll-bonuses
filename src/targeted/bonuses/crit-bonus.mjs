@@ -1,7 +1,9 @@
+import { hasLegacyCritFlag } from '../../bonuses/critical.mjs';
 import { MODULE_NAME } from '../../consts.mjs';
 import { checkboxInput } from '../../handlebars-handlers/bonus-inputs/chekbox-input.mjs';
 import { textInput } from "../../handlebars-handlers/bonus-inputs/text-input.mjs";
 import { FormulaCacheHelper } from "../../util/flag-helpers.mjs";
+import { LocalHookHandler, localHooks } from '../../util/hooks.mjs';
 import { BaseBonus } from "./base-bonus.mjs";
 
 // TODO actually add overrides
@@ -21,10 +23,47 @@ export class CritBonus extends BaseBonus {
     static get #critOffsetKey() { return `${this.key}-offset`; }
 
     /**
+     * If the item is providing this bonus
+     * @override
+     * @param {ItemPF} item
+     * @returns {boolean}
+     */
+    static isBonusSource(item) { return super.isBonusSource(item) && !hasLegacyCritFlag(item); };
+
+    /**
      * @override
      */
     static init() {
         FormulaCacheHelper.registerModuleFlag(this.#critMultKey, this.#critOffsetKey);
+
+        /**
+         * @param {number} current
+         * @param {ItemAction} action
+         * @returns {number}
+         */
+        const handleItemActionCritRangeWrapper = (current, action) => {
+            const { actor, item } = action;
+
+            if (!!item.system.broken) {
+                return 20;
+            }
+
+            const hasKeen = !!item.hasItemBooleanFlag(this.#critKeenKey);
+
+            const offset = FormulaCacheHelper.getModuleFlagValue(item, this.#critOffsetKey);
+            if (!offset && !hasKeen) {
+                return current;
+            }
+
+            let range = hasKeen
+                ? current * 2 - 21
+                : current;
+
+            range -= offset;
+            range = Math.clamped(range, 2, 20);
+            return range;
+        }
+        LocalHookHandler.registerHandler(localHooks.itemActionCritRangeWrapper, handleItemActionCritRangeWrapper);
     }
 
     /**
@@ -117,5 +156,16 @@ export class CritBonus extends BaseBonus {
         }, {
             isModuleFlag: true,
         });
+    }
+
+    /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} bonus
+     * @param {ItemPF} item
+     * @returns {string[]}
+     */
+    static getFootnotes(bonus, item) {
+        return this.getHints(bonus, item) || [];
     }
 }

@@ -22,7 +22,7 @@ import './overrides/action-damage.mjs';
  * @this {ChatAttack}
 */
 function setAttackNotesHTMLWrapper(wrapped) {
-    Hooks.call(customGlobalHooks.chatAttackAttackNotes, this);
+    Hooks.call(customGlobalHooks.chatAttackFootnotes, this);
     return wrapped();
 }
 

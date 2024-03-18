@@ -251,7 +251,7 @@ Hooks.once('init', () => {
     libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.critRange', handleItemActionCritRangeWrapper, libWrapper.MIXED);
 });
 
-Hooks.on(customGlobalHooks.chatAttackAttackNotes, (
+Hooks.on(customGlobalHooks.chatAttackFootnotes, (
     /** @type {ChatAttack} */ { action, attackNotes }
 ) => {
     const hasKeen = action.item.hasItemBooleanFlag(selfKeen)
