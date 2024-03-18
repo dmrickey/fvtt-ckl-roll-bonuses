@@ -30,12 +30,18 @@ export function checkboxInput({
         templates.checkboxInput,
         { key, label, current },
     );
+    /** @type {HTMLInputElement | null} */
     const checkbox = div.querySelector(`#checkbox-input-${key}`);
-    checkbox.checked = current; // TODO fix typing
-    checkbox?.addEventListener(
+    if (!checkbox) {
+        return;
+    }
+
+    checkbox.checked = current;
+    checkbox.addEventListener(
         'change',
         async (event) => {
             if (!key) return;
+            // @ts-ignore
             const value = event.currentTarget.checked;
 
             isModuleFlag
