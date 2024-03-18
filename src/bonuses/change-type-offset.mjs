@@ -1,6 +1,6 @@
 import { textInputAndKeyValueSelect } from "../handlebars-handlers/bonus-inputs/text-input-and-key-value-select.mjs";
 import { KeyedDFlagHelper, getDocDFlags, FormulaCacheHelper } from "../util/flag-helpers.mjs";
-import { HookWrapperHandler, localHooks } from "../util/hooks.mjs";
+import { LocalHookHandler, localHooks } from "../util/hooks.mjs";
 import { localize } from "../util/localize.mjs";
 
 const bonusKey = 'change-type-offset';
@@ -39,7 +39,7 @@ function patchChangeValue(value, itemChange) {
 
     return value;
 }
-HookWrapperHandler.registerHandler(localHooks.patchChangeValue, patchChangeValue);
+LocalHookHandler.registerHandler(localHooks.patchChangeValue, patchChangeValue);
 
 /**
  * @param {string} html

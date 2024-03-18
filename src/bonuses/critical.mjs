@@ -1,7 +1,7 @@
 import { MODULE_NAME } from "../consts.mjs";
 import { textInput } from "../handlebars-handlers/bonus-inputs/text-input.mjs";
 import { hasAnyBFlag, getDocDFlagsStartsWith, KeyedDFlagHelper, FormulaCacheHelper } from "../util/flag-helpers.mjs";
-import { localHooks } from "../util/hooks.mjs";
+import { LocalHookHandler, customGlobalHooks, localHooks } from "../util/hooks.mjs";
 import { registerItemHint } from "../util/item-hints.mjs";
 import { localize } from "../util/localize.mjs";
 import { signed } from "../util/to-signed-string.mjs";
@@ -21,6 +21,12 @@ const critMultOffsetId = (/** @type {IdObject} */ { id }) => `crit-mult-offset_$
 
 FormulaCacheHelper.registerDictionaryFlag(critOffsetSelf, critOffsetAll, critMultOffsetSelf, critMultOffsetAll);
 FormulaCacheHelper.registerPartialDictionaryFlag('crit-offset_', 'crit-mult-offset_');
+
+/**
+ * @param {ItemPF} item
+ * @returns {boolean} true if this item has a legacy crit flag
+ */
+export const hasLegacyCritFlag = (item) => !!Object.keys(getDocDFlagsStartsWith(item, 'crit-')).length;
 
 // register keen on bonus
 registerItemHint((hintcls, _actor, item, _data) => {
@@ -211,13 +217,12 @@ Hooks.on('pf1GetRollData', (
 });
 
 /**
- * @param {() => number} wrapped
- * @this {ItemAction}
+ * @param {number} current
+ * @param {ItemAction} action
  * @returns {number}
  */
-function handleItemActionCritRangeWrapper(wrapped) {
-    const { actor, item } = this;
-    const action = this;
+function handleItemActionCritRangeWrapper(current, action) {
+    const { actor, item } = action;
 
     if (!!item.system.broken) {
         return 20;
@@ -230,10 +235,9 @@ function handleItemActionCritRangeWrapper(wrapped) {
     const offset = new KeyedDFlagHelper(actor, {}, ...offsetFlags).sumAll()
         + FormulaCacheHelper.getDictionaryFlagValue(item, critOffsetSelf);
     if (!offset && !hasKeen) {
-        return wrapped();
+        return current;
     }
 
-    const current = action.data.ability.critRange;
     let range = hasKeen
         ? current * 2 - 21
         : current;
@@ -242,11 +246,12 @@ function handleItemActionCritRangeWrapper(wrapped) {
     range = Math.clamped(range, 2, 20);
     return range;
 }
+LocalHookHandler.registerHandler(localHooks.itemActionCritRangeWrapper, handleItemActionCritRangeWrapper);
 Hooks.once('init', () => {
     libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.critRange', handleItemActionCritRangeWrapper, libWrapper.MIXED);
 });
 
-Hooks.on(localHooks.chatAttackAttackNotes, (
+Hooks.on(customGlobalHooks.chatAttackAttackNotes, (
     /** @type {ChatAttack} */ { action, attackNotes }
 ) => {
     const hasKeen = action.item.hasItemBooleanFlag(selfKeen)

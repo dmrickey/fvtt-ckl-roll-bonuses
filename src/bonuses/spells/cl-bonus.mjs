@@ -1,6 +1,6 @@
 import { textInput } from "../../handlebars-handlers/bonus-inputs/text-input.mjs";
 import { FormulaCacheHelper, KeyedDFlagHelper, getDocDFlags } from "../../util/flag-helpers.mjs";
-import { localHooks } from "../../util/hooks.mjs";
+import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize } from "../../util/localize.mjs";
 import { signed } from "../../util/to-signed-string.mjs";
@@ -10,7 +10,7 @@ const key = 'all-spell-cl'
 FormulaCacheHelper.registerDictionaryFlag(key);
 
 // add info to spell card
-Hooks.on(localHooks.itemGetTypeChatData, (
+Hooks.on(customGlobalHooks.itemGetTypeChatData, (
     /** @type {ItemPF} */ item,
     /** @type {string[]} */ props,
     /** @type {RollData} */ _rollData,

@@ -5,7 +5,7 @@ import { MODULE_NAME } from "../consts.mjs";
 import { keyValueSelect } from "../handlebars-handlers/bonus-inputs/key-value-select.mjs";
 import { intersects } from "../util/array-intersects.mjs";
 import { KeyedDFlagHelper, getDocDFlags } from "../util/flag-helpers.mjs";
-import { localHooks } from "../util/hooks.mjs";
+import { customGlobalHooks } from "../util/hooks.mjs";
 import { registerItemHint } from "../util/item-hints.mjs";
 import { localize } from "../util/localize.mjs";
 import { registerSetting } from "../util/settings.mjs";
@@ -72,7 +72,7 @@ function addMartialFocus({ actor, item, shared }) {
         shared.damageBonus.push(`${1}[${localize(key)}]`);
     }
 }
-Hooks.on(localHooks.actionUseAlterRollData, addMartialFocus);
+Hooks.on(customGlobalHooks.actionUseAlterRollData, addMartialFocus);
 
 /**
  * Add Martial Focus to damage tooltip
@@ -112,7 +112,7 @@ function actionDamageSources({ item }, sources) {
     return sources;
 
 };
-Hooks.on(localHooks.actionDamageSources, actionDamageSources);
+Hooks.on(customGlobalHooks.actionDamageSources, actionDamageSources);
 
 // this is a lot better, but it doesn't work because action.use doesn't read this data off of the roll data -- it re-looks it up itself.
 // /**

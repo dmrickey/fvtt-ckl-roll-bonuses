@@ -1,7 +1,7 @@
 import { MODULE_NAME } from "../../consts.mjs";
 import { damageInput } from "../../handlebars-handlers/targeted/bonuses/damage.mjs";
 import { conditionalModToItemChange } from "../../util/conditional-helpers.mjs";
-import { HookWrapperHandler, localHooks } from "../../util/hooks.mjs";
+import { LocalHookHandler, localHooks } from "../../util/hooks.mjs";
 import { localize } from "../../util/localize.mjs";
 import { signed } from '../../util/to-signed-string.mjs';
 import { truthiness } from "../../util/truthiness.mjs";
@@ -27,7 +27,7 @@ export class DamageBonus extends BaseBonus {
      * @override
      */
     static init() {
-        HookWrapperHandler.registerHandler(localHooks.prepareData, (item, rollData) => {
+        LocalHookHandler.registerHandler(localHooks.prepareData, (item, rollData) => {
             const damages = item.getFlag(MODULE_NAME, this.key) || [];
             damages.forEach((/** @type {DamageInputModel}*/ damage) => {
                 item[MODULE_NAME][this.key] ||= [];

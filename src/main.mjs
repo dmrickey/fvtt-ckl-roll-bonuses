@@ -5,7 +5,7 @@ import { MODULE_NAME } from './consts.mjs';
 //     config: {},
 // };
 
-import { HookWrapperHandler, localHooks } from './util/hooks.mjs';
+import { LocalHookHandler, customGlobalHooks, localHooks } from './util/hooks.mjs';
 
 import './handlebars-handlers/init.mjs';
 import './util/item-hints.mjs';
@@ -22,7 +22,7 @@ import './overrides/action-damage.mjs';
  * @this {ChatAttack}
 */
 function setAttackNotesHTMLWrapper(wrapped) {
-    Hooks.call(localHooks.chatAttackAttackNotes, this);
+    Hooks.call(customGlobalHooks.chatAttackAttackNotes, this);
     return wrapped();
 }
 
@@ -31,7 +31,7 @@ function setAttackNotesHTMLWrapper(wrapped) {
  * @this {ChatAttack}
  */
 function setEffectNotesHTMLWrapper(wrapped) {
-    Hooks.call(localHooks.chatAttackEffectNotes, this);
+    Hooks.call(customGlobalHooks.chatAttackEffectNotes, this);
     return wrapped();
 }
 
@@ -41,7 +41,7 @@ function setEffectNotesHTMLWrapper(wrapped) {
  */
 function patchChangeValue(wrapped) {
     const seed = wrapped();
-    const value = HookWrapperHandler.fireHookWithReturnSync(localHooks.patchChangeValue, seed, this);
+    const value = LocalHookHandler.fireHookWithReturnSync(localHooks.patchChangeValue, seed, this);
     return value;
 }
 
@@ -52,7 +52,7 @@ function patchChangeValue(wrapped) {
  * @returns The result of the original method.
  */
 function d20RollWrapper(wrapped, options = {}) {
-    Hooks.call(localHooks.d20Roll, options);
+    Hooks.call(customGlobalHooks.d20Roll, options);
     return wrapped.call(this, options);
 }
 
@@ -72,7 +72,7 @@ function prepareItemData(wrapped) {
     item[MODULE_NAME] = empty;
     const rollData = item.getRollData();
     FormulaCacheHelper.cacheFormulas(item, rollData)
-    HookWrapperHandler.fireHookNoReturnSync(localHooks.prepareData, item, rollData);
+    LocalHookHandler.fireHookNoReturnSync(localHooks.prepareData, item, rollData);
 }
 
 /**
@@ -82,7 +82,7 @@ function prepareItemData(wrapped) {
  * @returns The result of the original method.
  */
 function itemUseWrapper(wrapped, options = {}) {
-    Hooks.call(localHooks.itemUse, this, options);
+    Hooks.call(customGlobalHooks.itemUse, this, options);
     return wrapped.call(this, options);
 }
 
@@ -93,7 +93,7 @@ function itemUseWrapper(wrapped, options = {}) {
  */
 function actionUseAlterRollData(wrapped, e) {
     wrapped(e);
-    Hooks.call(localHooks.actionUseAlterRollData, this);
+    Hooks.call(customGlobalHooks.actionUseAlterRollData, this);
 }
 
 /**
@@ -108,7 +108,19 @@ function actionUseAlterRollData(wrapped, e) {
  */
 function getConditionalParts(wrapped, atk, { index = 0 }) {
     var result = wrapped(atk, { index });
-    Hooks.call(localHooks.getConditionalParts, this, result, atk, index);
+    Hooks.call(customGlobalHooks.getConditionalParts, this, result, atk, index);
+    return result;
+}
+
+/**
+ * @param {()=> number} wrapped
+ * @this {ItemAction}
+ * @returns {number}
+ */
+function itemActionCritRangeWrapper(wrapped) {
+    var current = wrapped();
+
+    const result = LocalHookHandler.fireHookWithReturnSync(localHooks.itemActionCritRangeWrapper, current, this);
     return result;
 }
 
@@ -120,7 +132,7 @@ function getConditionalParts(wrapped, atk, { index = 0 }) {
  */
 function actionUseHandleConditionals(wrapped) {
     wrapped();
-    Hooks.call(localHooks.actionUseHandleConditionals, this);
+    Hooks.call(customGlobalHooks.actionUseHandleConditionals, this);
 }
 
 /**
@@ -132,7 +144,7 @@ function actionUseHandleConditionals(wrapped) {
  */
 function itemGetAttackSources(wrapped, actionId) {
     const sources = wrapped(actionId);
-    Hooks.call(localHooks.itemGetAttackSources, this, sources);
+    Hooks.call(customGlobalHooks.itemGetAttackSources, this, sources);
     return sources;
 }
 
@@ -147,7 +159,7 @@ function itemGetAttackSources(wrapped, actionId) {
  */
 function itemGetTypeChatData(wrapped, data, labels, props, rollData) {
     wrapped(data, labels, props, rollData);
-    Hooks.call(localHooks.itemGetTypeChatData, this, props, rollData);
+    Hooks.call(customGlobalHooks.itemGetTypeChatData, this, props, rollData);
 }
 
 /**
@@ -157,7 +169,7 @@ function itemGetTypeChatData(wrapped, data, labels, props, rollData) {
  */
 function actionDamageSources(wrapped) {
     const sources = wrapped();
-    Hooks.call(localHooks.actionDamageSources, this, sources);
+    Hooks.call(customGlobalHooks.actionDamageSources, this, sources);
     return sources;
 
     // const filtered = getHighestChanges(sources, { ignoreTarget: true });
@@ -195,6 +207,7 @@ Hooks.once('init', () => {
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype.prepareDerivedItemData', prepareItemData, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype.use', itemUseWrapper, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemSpellPF.prototype.getTypeChatData', itemGetTypeChatData, libWrapper.WRAPPER);
+    libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.critRange', itemActionCritRangeWrapper, libWrapper.WRAPPER);
 
     // for patching resources - both
     // libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype._updateMaxUses', updateMaxUses, libWrapper.WRAPPER);

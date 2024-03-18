@@ -2,7 +2,7 @@ import { MODULE_NAME } from "../../consts.mjs";
 import { textInput } from "../../handlebars-handlers/bonus-inputs/text-input.mjs";
 import { intersects } from "../../util/array-intersects.mjs";
 import { KeyedDFlagHelper } from "../../util/flag-helpers.mjs";
-import { localHooks } from "../../util/hooks.mjs";
+import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize } from "../../util/localize.mjs";
 import { registerSetting } from "../../util/settings.mjs";
@@ -76,7 +76,7 @@ function getAttackSources(item, sources) {
 
     return sources;
 }
-Hooks.on(localHooks.itemGetAttackSources, getAttackSources);
+Hooks.on(customGlobalHooks.itemGetAttackSources, getAttackSources);
 
 /**
  * Add weapon focus to attack roll
@@ -97,7 +97,7 @@ function addWeaponFocusBonus({ actor, item, shared }) {
         shared.attackBonus.push(`${1}[${localize(weaponFocusKey)}]`);
     }
 }
-Hooks.on(localHooks.actionUseAlterRollData, addWeaponFocusBonus);
+Hooks.on(customGlobalHooks.actionUseAlterRollData, addWeaponFocusBonus);
 
 Hooks.on('renderItemSheet', (
     /** @type {ItemSheetPF} */ { item },

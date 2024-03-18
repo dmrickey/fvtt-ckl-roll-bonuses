@@ -3,7 +3,7 @@ import { allBonusTypes } from "./targeted/bonuses/all-bonuses.mjs";
 import { BaseBonus } from './targeted/bonuses/base-bonus.mjs';
 import { allTargetTypes } from "./targeted/targets/all-targets.mjs";
 import { conditionalCalculator } from "./util/conditional-helpers.mjs";
-import { HookWrapperHandler, localHooks } from "./util/hooks.mjs";
+import { LocalHookHandler, customGlobalHooks, localHooks } from "./util/hooks.mjs";
 import { registerItemHint } from "./util/item-hints.mjs";
 import { localize } from "./util/localize.mjs";
 import { truthiness } from "./util/truthiness.mjs";
@@ -117,7 +117,7 @@ function actionUseHandleConditionals(actionUse) {
     // todo reduce attack bonus highest of each type
     // todo increase luck bonus if actor has fate's favored flag
 }
-Hooks.on(localHooks.actionUseHandleConditionals, actionUseHandleConditionals);
+Hooks.on(customGlobalHooks.actionUseHandleConditionals, actionUseHandleConditionals);
 
 /**
  * Alters roll data for attack rolls - for simple changes that don't need an ItemConditional/Modifier or ItemChange
@@ -134,7 +134,7 @@ function actionUseAlterRollData({ actor, item, shared }) {
         (bonusType, bonusTarget) => bonusType.actionUseAlterRollData(bonusTarget, shared),
     );
 }
-Hooks.on(localHooks.actionUseAlterRollData, actionUseAlterRollData);
+Hooks.on(customGlobalHooks.actionUseAlterRollData, actionUseAlterRollData);
 
 /**
  * Add attack bonus to actor's Combat attacks column tooltip
@@ -163,7 +163,7 @@ function getAttackSources(item, sources) {
 
     return sources;
 }
-Hooks.on(localHooks.itemGetAttackSources, getAttackSources);
+Hooks.on(customGlobalHooks.itemGetAttackSources, getAttackSources);
 
 /**
  * Add damage bonus to actor's Combat damage column tooltip
@@ -185,7 +185,7 @@ function actionDamageSources(action, sources) {
     // todo increase luck bonus if actor has fate's favored flag (double check that there isn't a named bonus for that already)
     sources.push(...newChanges);
 }
-Hooks.on(localHooks.actionDamageSources, actionDamageSources);
+Hooks.on(customGlobalHooks.actionDamageSources, actionDamageSources);
 
 Hooks.on('renderItemSheet', (
     /** @type {ItemSheetPF} */ itemSheet,
@@ -224,7 +224,7 @@ Hooks.on('updateItem', (
     });
 });
 
-Hooks.on(localHooks.itemUse, (
+Hooks.on(customGlobalHooks.itemUse, (
     /** @type {ItemPF} */ item,
     /** @type {{ fortuneCount: number; misfortuneCount: number; actionID: any; }} */ options
 ) => {
@@ -253,4 +253,4 @@ const prepare = (item, _rollData) => {
         }
     });
 };
-HookWrapperHandler.registerHandler(localHooks.prepareData, prepare);
+LocalHookHandler.registerHandler(localHooks.prepareData, prepare);

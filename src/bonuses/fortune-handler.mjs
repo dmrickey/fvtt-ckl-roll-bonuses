@@ -1,6 +1,6 @@
 import { MODULE_NAME } from '../consts.mjs';
 import { countBFlags } from '../util/flag-helpers.mjs';
-import { localHooks } from '../util/hooks.mjs';
+import { customGlobalHooks } from '../util/hooks.mjs';
 import { registerItemHint } from '../util/item-hints.mjs';
 import { localize } from '../util/localize.mjs';
 import { registerSetting } from '../util/settings.mjs';
@@ -206,9 +206,9 @@ Hooks.once('init', () => {
 });
 
 // item use does not fire through this hook, so it needs its own dice handling below
-Hooks.on(localHooks.d20Roll, ( /** @type {{ dice?: any; fortuneCount: any; misfortuneCount: any; actionID?: any; }} */ options) => handleFortune(options));
+Hooks.on(customGlobalHooks.d20Roll, ( /** @type {{ dice?: any; fortuneCount: any; misfortuneCount: any; actionID?: any; }} */ options) => handleFortune(options));
 
-Hooks.on(localHooks.itemUse, (
+Hooks.on(customGlobalHooks.itemUse, (
     /** @type {ItemPF} */ item,
     /** @type {{ fortuneCount: number; misfortuneCount: number; actionID: any; }} */ options
 ) => {

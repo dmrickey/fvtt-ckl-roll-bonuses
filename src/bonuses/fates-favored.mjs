@@ -1,6 +1,6 @@
 import { showEnabledLabel } from '../handlebars-handlers/enabled-label.mjs';
 import { hasAnyBFlag } from '../util/flag-helpers.mjs';
-import { HookWrapperHandler, localHooks } from '../util/hooks.mjs';
+import { LocalHookHandler, customGlobalHooks, localHooks } from '../util/hooks.mjs';
 import { localize } from '../util/localize.mjs';
 
 const fatesFavored = 'fates-favored';
@@ -17,7 +17,7 @@ function patchChangeValue(value, itemChange) {
         : value;
     return value;
 }
-HookWrapperHandler.registerHandler(localHooks.patchChangeValue, patchChangeValue);
+LocalHookHandler.registerHandler(localHooks.patchChangeValue, patchChangeValue);
 
 /**
  * Increase luck source modifier by 1 for tooltip
@@ -50,7 +50,7 @@ function getAttackSources(item, sources) {
 
     return sources;
 }
-Hooks.on(localHooks.itemGetAttackSources, getAttackSources);
+Hooks.on(customGlobalHooks.itemGetAttackSources, getAttackSources);
 
 Hooks.on('renderItemSheet', (
     /** @type {ItemSheetPF} */ { item },

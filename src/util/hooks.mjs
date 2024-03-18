@@ -1,6 +1,6 @@
 import { MODULE_NAME } from "../consts.mjs";
 
-export const localHooks = /** @type {const} */ ({
+export const customGlobalHooks = /** @type {const} */ ({
     actionDamageSources: `${MODULE_NAME}_actionDamageSources`,
     actionUseAlterRollData: `${MODULE_NAME}_actionUseAlterRollData`,
     actionUseHandleConditionals: `${MODULE_NAME}_actionUseHandleConditionals`,
@@ -11,11 +11,15 @@ export const localHooks = /** @type {const} */ ({
     itemGetAttackSources: `${MODULE_NAME}_itemGetAttackSources`,
     itemGetTypeChatData: `${MODULE_NAME}_itemGetTypeChatData`,
     itemUse: `${MODULE_NAME}_itemUse`,
-    patchChangeValue: `${MODULE_NAME}_patchChangeValue`,
-    prepareData: `${MODULE_NAME}_prepareData`,
 
     /** @deprecated Do not use - makes multi attacks way too chatty */
     chatAttackEffectNotes: `${MODULE_NAME}_chatAttackEffectNotes`,
+});
+
+export const localHooks = /** @type {const} */ ({
+    itemActionCritRangeWrapper: `${MODULE_NAME}_itemActionCritRangeWrapper`,
+    patchChangeValue: `${MODULE_NAME}_patchChangeValue`,
+    prepareData: `${MODULE_NAME}_prepareData`,
 });
 
 /**
@@ -25,7 +29,14 @@ export const localHooks = /** @type {const} */ ({
 /** @type {{[key in Hook]?: any[]}} */
 const handlers = {};
 
-export class HookWrapperHandler {
+export class LocalHookHandler {
+
+    /**
+     * @overload
+     * @param {typeof localHooks.itemActionCritRangeWrapper} hook
+     * @param {(value: number, action: ItemAction) => number} func
+     * @returns {void}
+     */
 
     /**
      * @overload
@@ -71,6 +82,14 @@ export class HookWrapperHandler {
 
     /**
      * @overload
+     * @param {typeof localHooks.itemActionCritRangeWrapper} hook
+     * @param {number | string} seed
+     * @param {ItemAction} action
+     * @returns {number}
+     */
+
+    /**
+     * @overload
      * @param {typeof localHooks.patchChangeValue} hook
      * @param {number | string} seed
      * @param {ItemChange} itemChange
@@ -89,8 +108,7 @@ export class HookWrapperHandler {
 
         let value = seed;
 
-        for (let i = 0; i < funcs.length; i++) {
-            const func = funcs[i];
+        for (const func of funcs) {
             value = func(value, ...args);
         }
 
@@ -113,8 +131,7 @@ export class HookWrapperHandler {
     static fireHookNoReturnSync(hook, ...args) {
         const funcs = handlers[hook] || [];
 
-        for (let i = 0; i < funcs.length; i++) {
-            const func = funcs[i];
+        for (const func of funcs) {
             func(...args);
         }
     }

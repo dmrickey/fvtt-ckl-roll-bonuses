@@ -1,5 +1,5 @@
 import { localize } from "../../util/localize.mjs";
-import { localHooks } from "../../util/hooks.mjs";
+import { customGlobalHooks } from "../../util/hooks.mjs";
 
 /**
  * @abstract
@@ -95,7 +95,7 @@ export class BaseBonus {
     static actionUseAlterRollData(target, shared) { }
 
     /**
-     * alters item use input via @see {@link localHooks.itemUse}
+     * alters item use input via @see {@link customGlobalHooks.itemUse}
      *
      * @abstract
      * @param {ItemPF} bonusTarget

@@ -3,7 +3,7 @@ import { checkboxInput } from '../handlebars-handlers/bonus-inputs/chekbox-input
 import { textInput } from "../handlebars-handlers/bonus-inputs/text-input.mjs";
 import { damageInput } from "../handlebars-handlers/targeted/bonuses/damage.mjs";
 import { FormulaCacheHelper } from '../util/flag-helpers.mjs';
-import { HookWrapperHandler, localHooks } from "../util/hooks.mjs";
+import { LocalHookHandler, customGlobalHooks, localHooks } from "../util/hooks.mjs";
 import { localize } from "../util/localize.mjs";
 
 const legacyAmmoDamageKey = 'bonus_damage';
@@ -72,7 +72,7 @@ function getConditionalParts(actionUse, result, atk, index) {
         }
     }
 }
-Hooks.on(localHooks.getConditionalParts, getConditionalParts);
+Hooks.on(customGlobalHooks.getConditionalParts, getConditionalParts);
 
 Hooks.on('renderItemSheet', (
     /** @type {ItemSheetPF} */ { actor, item },
@@ -114,7 +114,7 @@ Hooks.on('renderItemSheet', (
     });
 });
 
-HookWrapperHandler.registerHandler(localHooks.prepareData, (item, rollData) => {
+LocalHookHandler.registerHandler(localHooks.prepareData, (item, rollData) => {
     const damages = item.getFlag(MODULE_NAME, ammoDamageKey) || [];
     damages.forEach((/** @type {DamageInputModel}*/ damage) => {
         item[MODULE_NAME][ammoDamageKey] ||= [];
