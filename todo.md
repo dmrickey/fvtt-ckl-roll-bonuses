@@ -35,6 +35,8 @@
 - [Deprecate](#deprecate)
 - [Add Quench Testings](#add-quench-testings)
 - [Add create hooks for initializing some items (like anything based off of name/id)](#add-create-hooks-for-initializing-some-items-like-anything-based-off-of-nameid)
+- [in pf1 V10](#in-pf1-v10)
+- [Not Possible](#not-possible)
 - [This release must include](#this-release-must-include)
 
 # TODO
@@ -46,34 +48,35 @@
   - link to specific compendium page for this bonus when it's detected on the sheet
 - create "id getter" ui for things like keen or fortune (fortune will need a lot more as well)
 - Always show roll bonuses header in the advanced tab, and add a Cog to itself to configure which bonuses should be on this item (useful for bonuses that can't be auto-detected base on the Feat name/id)
-- Add some kind of preview to targeting UI to show all currently effect Items
+- Add some kind of preview to item targeting UI to show all currently affected Items
 - ### Add text filter to item input target
 
 # Bonus Targets
 ## Bonuses
-- formula input
-  - Spell level
-    - target spells 0-9, all
-  - CL Bonus*
-  - DC Bonus*
-    - *Would deprecate everything under "spells"
-  - Size bonus (Lead Blades, Gravity Bow, Strong Jaw)
+- Spell level
+  - target spells 0-9, all
+- CL Bonus*
+- DC Bonus*
 - Move Crit to Bonus (would deprecate crit)
 
+*Would deprecate everything under "spells"
+
 ## Targets
-- Have target for "me" item, so I can create buffs bonuses that are available only with this weapon
 - Have creature type/subtype based targeting - would support [Ranger](#ranger)'s Favored Enemy
-- Have alignment-based targeting
-- Melee Attacks
-- Ranged Attacks
 - All healing
 - Spellbook target
 - Spell preparation Qty
 - Spell School target*
 - Damage Type target*
 - Subschool Target*
-- Spell Type Target*
-  - *Would deprecate everything under "spells"
+- Skill Target
+  - Include "smart groups" that will give options e.g.
+    - specific ability skills (e.g. all int skills)
+    - The default layout will group subskills under the base skill and checking the base skill will automatically check all subskills
+- While in Combat
+  - [Scarred by War](https://www.aonprd.com/TraitDisplay.aspx?ItemName=Scarred%20by%20War) (used to grant diplomacy bonus while not in combat)
+
+*Would deprecate everything under "spells"
 
 # Class Features
 ## Cleric
@@ -139,7 +142,6 @@
   - idea is to create a a flag on a buff that will add the bonus in "prehook" (and/or use built in changes) but use the new pf1 v.next posthook to disable the buff when it is consumed
 
 ## Bonuses
-- Size increase (a.k.a. Gravity Bow or Lead Blades)
 - "x per dice"
 
 ## Targeting
@@ -169,6 +171,19 @@
 # Add Quench Testings
 # Add create hooks for initializing some items (like anything based off of name/id)
 
+# in pf1 V10
+- Ammo
+  - Attack Notes to add to individual attacks
+    - This should be doable via patching pf1.actionUse.ChatAttack.prototype. addEffectNotes (formerly setEffectNotesHTML)
+      - (assuming my PR is merged)
+
+# Not Possible
+- Attempt to create a "resource offset"
+  - includes showing anything modifying a given resource in the resource's sheet near the formula so it can see why the total is not what that sheet says it should be
+  - Sad day. Not possible for basically the same reason custom changes aren't possible
+- Custom changes that effect only specific targets :(
+  - changes are generated and applied too early and too broadly in the system prep. I can either create a change that applies to everything (pointless) or I can create a specific change that exists for the specified target, but it's created too late to both be reduced to the best bonus type and actually be added to the roll
+
 # This release must include
 - Add `showEnabledLabel` for inputs that don't have them (like fate's favored)
   - fortune-handler
@@ -176,8 +191,5 @@
 - Show icon next to skills that roll inspiration for free
   - permanent-skill-bonuses
 - Add Weapon Finesse
-- Attempt to create a "resource offset"
-  - includes showing anything modifying a given resource in the resource's sheet near the formula so it can see why the total is not what that sheet says it should be
 - investigate moving inspiration into a bonus and off of the skill sheet
-- Ammo
-  - Attack Notes to add to individual attacks
+- Verify that alignment based targets work
