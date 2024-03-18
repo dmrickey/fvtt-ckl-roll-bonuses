@@ -170,7 +170,6 @@
 # Add create hooks for initializing some items (like anything based off of name/id)
 
 # This release must include
-- update damage column for size modifiers in actor attacks
 - masterwork and enhancement bonuses for ammo
   - damage change would be amazing. (basically the same)
   - look into adding a `change` bonus specifically for enhancement bonus
@@ -183,3 +182,4 @@
 - Attempt to create a "resource offset"
   - includes showing anything modifying a given resource in the resource's sheet near the formula so it can see why the total is not what that sheet says it should be
 - investigate moving inspiration into a bonus and off of the skill sheet
+- Attack Notes for arrows to add to individual attacks

@@ -91,10 +91,10 @@ declare global {
         fortuneCount;
         misfortuneCount;
     }
-    class ActionUse {
+    class ActionUse<T extends ItemPF = ItemPF> {
         action: Action;
         actor: ActorPF;
-        item: ItemPF;
+        item: T;
         shared: ActionUseShared;
     }
 
@@ -160,6 +160,17 @@ declare global {
         type: string | null | undefined;
         modifier: BonusModifers;
         parent: undefined | ItemPF;
+
+        data: {
+            flavor: undefined;
+            formula: string;
+            modifier: BonusModifers;
+            operator: '+' | '-';
+            priority: number;
+            subTarget: 'skill.kna';
+            target: BuffTarget = 'skillzz';
+            value: number;
+        };
     }
 
     /** used for weapons and attacks */
@@ -334,7 +345,9 @@ declare global {
     }
     class SystemWeaponPF extends SystemItemData {
         baseTypes: string[];
+        enh: number;
         // links: { children: { name: string; id: string }[] };
+        masterwork: boolean;
         proficient: boolean;
         weaponGroups: TraitSelector;
     }
