@@ -4,6 +4,8 @@ import { textInput } from "../../handlebars-handlers/bonus-inputs/text-input.mjs
 import { FormulaCacheHelper } from "../../util/flag-helpers.mjs";
 import { BaseBonus } from "./base-bonus.mjs";
 
+// TODO actually add overrides
+
 /**
  * @extends BaseBonus
  */
