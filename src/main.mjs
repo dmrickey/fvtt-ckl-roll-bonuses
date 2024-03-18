@@ -64,10 +64,12 @@ function prepareItemData(wrapped) {
     wrapped();
 
     const item = this;
-    item[MODULE_NAME] = {
-        bonuses: [],
-        targets: [],
-    };
+    /**
+     * initialize module data but make the individual portions initialize their own specific data so this part of the app doesn't need to know about all the properties/types
+     *  @type {any}
+     */
+    const empty = {};
+    item[MODULE_NAME] = empty;
     const rollData = item.getRollData();
     FormulaCacheHelper.cacheFormulas(item, rollData)
     HookWrapperHandler.fireHookNoReturnSync(localHooks.prepareData, item, rollData);
