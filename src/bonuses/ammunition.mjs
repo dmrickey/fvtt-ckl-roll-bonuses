@@ -2,7 +2,7 @@ import { MODULE_NAME } from "../consts.mjs";
 import { checkboxInput } from '../handlebars-handlers/bonus-inputs/chekbox-input.mjs';
 import { textInput } from "../handlebars-handlers/bonus-inputs/text-input.mjs";
 import { damageInput } from "../handlebars-handlers/targeted/bonuses/damage.mjs";
-import { FormulaCacheHelper, KeyedDFlagHelper } from '../util/flag-helpers.mjs';
+import { FormulaCacheHelper } from '../util/flag-helpers.mjs';
 import { HookWrapperHandler, localHooks } from "../util/hooks.mjs";
 import { localize } from "../util/localize.mjs";
 
@@ -15,16 +15,6 @@ const ammoMasterworkKey = 'ammo-mw';
 const ammoEnhancementKey = 'ammo-enhancement'
 
 FormulaCacheHelper.registerModuleFlag(ammoAttackKey, ammoEnhancementKey);
-
-// /**
-//  * @param {ItemPF} item
-//  * @return {DamageInputModel[]}
-//  */
-// function getDamageBonuses(item) {
-//     return item.getFlag(MODULE_NAME, legacyAmmoDamageKey) ?? [];
-// }
-
-// TODO action has `get enhancementBonus()` that can be overridden
 
 /**
  * @param {ActionUse<ItemWeaponPF>} actionUse
@@ -44,16 +34,16 @@ function getConditionalParts(actionUse, result, atk, index) {
             result['attack.normal'].push(`${attack}${label}`);
         }
 
-        const mw = !!ammo.getItemDictionaryFlag(ammoMasterworkKey);
+        const mw = !!ammo.getFlag(MODULE_NAME, ammoMasterworkKey);
         const cachedEnhancementBonus = FormulaCacheHelper.getModuleFlagValue(ammo, ammoEnhancementKey);
         if (mw && !actionUse.item.system.masterwork && !cachedEnhancementBonus && !actionUse.item.system.enh) {
-            result['attack.normal'].push(`1[${localize('PF1.Masterwork')}]`)
+            result['attack.normal'].push(`1[${ammo.name} - ${localize('PF1.Masterwork')}]`)
         }
         else if (cachedEnhancementBonus) {
             const diff = cachedEnhancementBonus - actionUse.item.system.enh;
             if (diff > 0) {
-                result['attack.normal'].push(`${diff}[${localize('PF1.EnhancementBonus')}]`);
-                result['damage.normal'].push([`${diff}[${localize('PF1.EnhancementBonus')}]`, { values: [], custom: '' }, false]);
+                result['attack.normal'].push(`${diff}[${ammo.name} - ${localize('PF1.EnhancementBonus')} (${cachedEnhancementBonus})]`);
+                result['damage.normal'].push([`${diff}[${ammo.name} - ${localize('PF1.EnhancementBonus')} (${cachedEnhancementBonus})]`, { values: [], custom: ammo.name }, false]);
             }
         }
 
@@ -84,24 +74,6 @@ function getConditionalParts(actionUse, result, atk, index) {
 }
 Hooks.on(localHooks.getConditionalParts, getConditionalParts);
 
-/**
- * @param {ActionUse} actionUse
- */
-function addMartialFocus({ actor, item, shared }) {
-    // if (!(item instanceof pf1.documents.item.ItemWeaponPF || item instanceof pf1.documents.item.ItemAttackPF)) {
-    //     return;
-    // }
-
-
-
-    // if (!actor) return;
-
-    // if (item.name === 'Longbow') {
-    //     debugger;
-    // }
-}
-Hooks.on(localHooks.actionUseAlterRollData, addMartialFocus);
-
 Hooks.on('renderItemSheet', (
     /** @type {ItemSheetPF} */ { actor, item },
     /** @type {[HTMLElement]} */[html],
@@ -116,6 +88,8 @@ Hooks.on('renderItemSheet', (
         key: ammoMasterworkKey,
         label: localize('PF1.Masterwork'),
         parent: html,
+    }, {
+        isModuleFlag: true,
     });
     textInput({
         item,

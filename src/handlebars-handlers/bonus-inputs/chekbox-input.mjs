@@ -31,16 +31,11 @@ export function checkboxInput({
         { key, label, current },
     );
     const checkbox = div.querySelector(`#checkbox-input-${key}`);
-    checkbox.checked = current;
+    checkbox.checked = current; // TODO fix typing
     checkbox?.addEventListener(
         'change',
         async (event) => {
             if (!key) return;
-            debugger;
-
-            // // @ts-ignore - event.target is HTMLTextAreaElement
-            // const /** @type {HTMLTextAreaElement} */ target = event.target;
-
             const value = event.currentTarget.checked;
 
             isModuleFlag
