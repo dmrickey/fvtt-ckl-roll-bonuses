@@ -35,7 +35,7 @@ export class LocalHookHandler {
     /**
      * @overload
      * @param {typeof localHooks.updateItemActionRollData} hook
-     * @param {(action: ItemAction, rollData: RollData) => void}
+     * @param {(action: ItemAction, rollData: RollData) => void} func
      * @returns {void}
      */
 
