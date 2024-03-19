@@ -159,7 +159,6 @@
 - Has hint on affected Item (Weapon/Attack/Spell/etc)
 - Has info/attack note
 - Actually affects what it's supposed to (duh)
-- Make sure `rollData` is using the item that has the bonus, not the item's that's being targeted nor the actor's
 
 # Deprecate
 - Weapon Focus (use bonus targets instead)
@@ -176,6 +175,8 @@
   - Attack Notes to add to individual attacks
     - This should be doable via patching pf1.actionUse.ChatAttack.prototype. addEffectNotes (formerly setEffectNotesHTML)
       - (assuming my PR is merged)
+- Targeting
+  - descriptor-based targeting
 
 # Not Possible
 - Attempt to create a "resource offset"
@@ -191,6 +192,9 @@
 - Show icon next to skills that roll inspiration for free
   - permanent-skill-bonuses
 - Add Weapon Finesse
-- investigate moving inspiration into a bonus and off of the skill sheet
-- Verify that alignment based targets work
 - Add safety check for `renderItemSheet` hook that ensures the sheet is a pf1 item sheet
+- Add labels for crit
+- Verification
+  - alignment based targets
+  - crit bonus
+  - fortune bonus
