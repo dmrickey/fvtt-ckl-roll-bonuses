@@ -197,4 +197,13 @@
 - Verification
   - alignment based targets
   - crit bonus
-  - fortune bonus
+    - make sure multiple work
+- update readme for new stuff
+  - new bonuses
+    - Effective Size (so it modifies attacks that use sizeRoll)
+    - fortune/misfortune (added to use the specific targeting system)
+    - critical (again added so it uses the new targeting system)
+  - new targets
+    - self (adds any targeted bonuses only to this Item)
+    - is weapon / is melee / is ranged / is spell
+    - alignment target

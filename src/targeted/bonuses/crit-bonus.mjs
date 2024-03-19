@@ -5,9 +5,8 @@ import { textInput } from "../../handlebars-handlers/bonus-inputs/text-input.mjs
 import { handleBonusTypeFor } from '../../target-and-bonus-join.mjs';
 import { FormulaCacheHelper } from "../../util/flag-helpers.mjs";
 import { LocalHookHandler, localHooks } from '../../util/hooks.mjs';
+import { SelfTarget } from '../targets/self-target.mjs';
 import { BaseBonus } from "./base-bonus.mjs";
-
-// TODO actually add overrides
 
 /**
  * @extends BaseBonus
@@ -76,9 +75,9 @@ export class CritBonus extends BaseBonus {
             handleBonusTypeFor(
                 action,
                 CritBonus,
-                (bonusType, bonusTarget) => {
-                    hasKeen ||= bonusType.hasKeen(bonusTarget);
-                    offset += bonusType.getOffsetValue(bonusTarget);
+                (bonusType, sourceItem) => {
+                    hasKeen ||= bonusType.hasKeen(sourceItem);
+                    offset += bonusType.getOffsetValue(sourceItem);
                 }
             );
 
@@ -115,10 +114,10 @@ export class CritBonus extends BaseBonus {
             handleBonusTypeFor(
                 action,
                 CritBonus,
-                (bonusType, bonusTarget) => {
-                    hasKeen ||= bonusType.hasKeen(bonusTarget);
-                    offset += bonusType.getOffsetValue(bonusTarget);
-                    mult += bonusType.getMultValue(bonusTarget);
+                (bonusType, sourceItem) => {
+                    hasKeen ||= bonusType.hasKeen(sourceItem);
+                    offset += bonusType.getOffsetValue(sourceItem);
+                    mult += bonusType.getMultValue(sourceItem);
                 }
             );
 
@@ -141,19 +140,31 @@ export class CritBonus extends BaseBonus {
      *
      * @override
      * @param {ItemPF} source
-     * @param {ItemPF} item
+     * @param {(ActionUse | ItemPF | ItemAction)?} [target]
      * @returns {Nullable<string[]>}
      */
-    static getHints(source, item) {
-        const action = item?.firstAction;
+    static getHints(source, target = undefined) {
+        if (SelfTarget.isTargetSource(source)) {
+            target = source.firstAction;
+        }
+
+        /** @type {Nullable<ItemAction>} */
+        let itemAction;
+        if (target) {
+            itemAction = target instanceof pf1.documents.item.ItemPF
+                ? target.firstAction
+                : target instanceof pf1.components.ItemAction
+                    ? target
+                    : undefined;
+        }
 
         /** @type {number} */ let originalCritMult;
         /** @type {number} */ let originalCritRange;
         /** @type {boolean} */ let isBroken;
-        if (action && action.data.ability?.critMult <= 1) {
-            originalCritMult = +(action.data.ability?.critMult) || 2;
-            originalCritRange = action.data.ability?.critRange || 20;
-            isBroken = item.system.broken;
+        if (itemAction && itemAction.data.ability?.critMult > 1) {
+            originalCritMult = +(itemAction.data.ability?.critMult) || 2;
+            originalCritRange = itemAction.data.ability?.critRange || 20;
+            isBroken = source.system.broken;
         } else {
             originalCritMult = 2;
             originalCritRange = 20;
@@ -237,11 +248,11 @@ export class CritBonus extends BaseBonus {
     /**
      * @inheritdoc
      * @override
-     * @param {ItemPF} bonus
-     * @param {ItemPF} item
+     * @param {ItemPF} source
+     * @param {(ActionUse | ItemPF | ItemAction)?} item
      * @returns {string[]}
      */
-    static getFootnotes(bonus, item) {
-        return this.getHints(bonus, item) || [];
+    static getFootnotes(source, item) {
+        return this.getHints(source, item) || [];
     }
 }

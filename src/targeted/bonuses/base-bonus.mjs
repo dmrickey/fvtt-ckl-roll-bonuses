@@ -23,7 +23,7 @@ export class BaseBonus {
     static get type() { throw new Error('must be overridden'); }
 
     /**
-     * If the item is providing this bonus
+     * If the item is a source for this bonus
      *
      * @param {ItemPF} item
      * @returns {boolean}
@@ -43,21 +43,21 @@ export class BaseBonus {
      * Get Item Hints tooltip value
      *
      * @abstract
-     * @param {ItemPF} bonus The source of the bonus
-     * @param {ItemPF?} [item] The item receiving the bonus for contextually aware hints.
+     * @param {ItemPF} source The source of the bonus
+     * @param {(ActionUse | ItemPF | ItemAction)?} [target] The target for contextually aware hints
      * @returns {Nullable<string[]>}
      */
-    static getHints(bonus, item) { return; }
+    static getHints(source, target = undefined) { return; }
 
     /**
      * Gets Conditional used for the action
      * use either this or @see {@link actionUseAlterRollData}
      *
      * @abstract
-     * @param {ItemPF} target
+     * @param {ItemPF} source
      * @returns {Nullable<ItemConditional>}
      */
-    static getConditional(target) { return null; }
+    static getConditional(source) { return null; }
 
     // /**
     //  * @abstract
@@ -70,38 +70,38 @@ export class BaseBonus {
      * Add damage bonus to actor's Combat damage column tooltip
      *
      * @abstract
-     * @param {ItemPF} target
+     * @param {ItemPF} source
      * @returns {ItemChange[]}
      */
-    static getDamageSourcesForTooltip(target) { return []; }
+    static getDamageSourcesForTooltip(source) { return []; }
 
     /**
      * Add attack bonus to actor's Combat attacks column tooltip
      *
      * @abstract
-     * @param {ItemPF} target
+     * @param {ItemPF} source
      * @returns {ModifierSource[]}
      */
-    static getAttackSourcesForTooltip(target) { return []; }
+    static getAttackSourcesForTooltip(source) { return []; }
 
     /**
      * Alters roll data for attack rolls - for simple changes that don't need an ItemConditional/Modifier or ItemChange
      * use either this or @see {@link getConditional}
      *
      * @abstract
-     * @param {ItemPF} target
+     * @param {ItemPF} source
      * @param {ActionUseShared} shared
      */
-    static actionUseAlterRollData(target, shared) { }
+    static actionUseAlterRollData(source, shared) { }
 
     /**
      * alters item use input via @see {@link customGlobalHooks.itemUse}
      *
      * @abstract
-     * @param {ItemPF} bonusTarget
+     * @param {ItemPF} source
      * @param {{ fortuneCount: number; misfortuneCount: number; actionID: any; }} options passed into ItemPF.use
      */
-    static onItemUse(bonusTarget, options) { }
+    static onItemUse(source, options) { }
 
     /**
      * Initializes anything specific to the bonus
@@ -112,9 +112,9 @@ export class BaseBonus {
 
     /**
      * @abstract
-     * @param {ItemPF} bonus The source of the bonus
-     * @param {ItemPF?} [item] The item receiving the bonus for contextually aware hints.
+     * @param {ItemPF} source The source of the bonus
+     * @param {(ActionUse | ItemPF | ItemAction)?} [item] The item receiving the bonus for contextually aware hints.
      * @returns {string[]}
      */
-    static getFootnotes(bonus, item) { return []; }
+    static getFootnotes(source, item) { return []; }
 }

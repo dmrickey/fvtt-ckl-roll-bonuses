@@ -30,7 +30,7 @@ function actionDamage(action, rollData, options) {
                     if (!isNaN(rd.size)) {
                         handleBonusesFor(
                             action,
-                            (bonusType, bonusTarget) => rd.size += bonusType.getConditional?.(bonusTarget)?.modifiers
+                            (bonusType, sourceItem) => rd.size += bonusType.getConditional?.(sourceItem)?.modifiers
                                 .filter((x) => x.target === 'size')
                                 .map((x) => RollPF.safeTotal(x.formula))
                                 .reduce((acc, x) => acc + x, 0) ?? 0

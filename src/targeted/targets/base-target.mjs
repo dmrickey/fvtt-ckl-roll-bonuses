@@ -18,20 +18,20 @@ export class BaseTarget {
      * For a given target source, does it target the `thing`?
      * @param {ItemPF} targetSource
      * @param {ActionUse | ItemPF | ItemAction} thing
-     * @returns {boolean} True if this target source applies to this thing
+     * @returns {boolean} True if this target source applies to the `thing`
      */
     static doesTargetInclude(targetSource, thing) {
-        return !!this.getBonusSourcesForTarget(thing).find((source) => source.id === targetSource.id);
+        return !!this.getBonusSourcesForTarget(thing).find((bonusSource) => bonusSource.id === targetSource.id);
     }
 
     /**
      * Get Item Hints tooltip value
      *
      * @abstract
-     * @param {ItemPF} bonus
+     * @param {ItemPF} source
      * @returns {Nullable<string[]>}
      */
-    static getHints(bonus) { return; }
+    static getHints(source) { return; }
 
     /**
      * Initialize any target-specific settings.
@@ -51,21 +51,21 @@ export class BaseTarget {
     static get isGenericTarget() { return false; }
 
     /**
-     * If the item is providing this target
+     * If the item is a source for this target
      *
-     * @param {ItemPF} item
+     * @param {ItemPF} source
      * @returns {boolean}
      */
-    static isTargetSource(item) { return item.hasItemBooleanFlag(this.key); };
+    static isTargetSource(source) { return source.hasItemBooleanFlag(this.key); };
 
     /**
-     * Key for flag on bonustarget
+     * Key for flag on target source
      * @returns { string }
      */
     static get key() { return `target_${this.targetKey}`; }
 
     /**
-     * Label for this bonustarget
+     * Label for this target source
      * @returns { string }
      */
     static get label() { return localize(`bonus-target.target.label.${this.targetKey}`); }
@@ -90,9 +90,9 @@ export class BaseTarget {
     /**
      * Shows editor for target
      *
-     * @param {ItemPF} item
+     * @param {ItemPF} source
      */
-    static showTargetEditor(item) { }
+    static showTargetEditor(source) { }
 
     /**
      * @abstract

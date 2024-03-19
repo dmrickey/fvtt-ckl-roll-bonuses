@@ -35,6 +35,7 @@ registerItemHint((hintcls, actor, item, _data) => {
 
     /** @type {string[]} */
     const targetHints = [];
+    // register hints on target source
     item[MODULE_NAME].targets.forEach((targetType) => {
         const hints = targetType.getHints(item);
         if (hints?.length) {
@@ -51,10 +52,10 @@ registerItemHint((hintcls, actor, item, _data) => {
     //register hints on targeted item
     handleBonusesFor(
         item,
-        (bonusType, bonusTarget) => {
-            const hints = bonusType.getHints(bonusTarget, item);
+        (bonusType, sourceItem) => {
+            const hints = bonusType.getHints(sourceItem, item);
             if (hints?.length) {
-                bonusHints.push({ itemName: bonusTarget.name, bonusName: bonusType.label, hints });
+                bonusHints.push({ itemName: sourceItem.name, bonusName: bonusType.label, hints });
             }
         },
         { skipGenericTarget: true }
@@ -81,7 +82,7 @@ registerItemHint((hintcls, actor, item, _data) => {
 
 /**
  * @param {ActionUse | ItemPF | ItemAction} thing
- * @param {(bonusType: typeof BaseBonus, bonusTarget: ItemPF) => void} func The type providing the bonus, and the Item providing the bonus
+ * @param {(bonusType: typeof BaseBonus, sourceItem: ItemPF) => void} func The type providing the bonus, and the Item providing the bonus
  * @param {object} [options]
  * @param {boolean} [options.skipGenericTarget]
  */
@@ -90,18 +91,18 @@ export const handleBonusesFor = (thing, func, { skipGenericTarget = false } = {}
         .filter((targetType) => !skipGenericTarget || !targetType.isGenericTarget)
         .flatMap((targetType) => targetType.getBonusSourcesForTarget(thing))
         // filter down to unique items in case one source item is affecting this target item through multiple "targets"
-        .filter((bonusTarget, i, self) => self.findIndex((nestedTarget) => bonusTarget.id === nestedTarget.id) === i)
-        .filter((bonusTarget) => bonusTarget[MODULE_NAME].targets.every((baseTarget) =>
-            (!skipGenericTarget || !baseTarget.isGenericTarget) && baseTarget.doesTargetInclude(bonusTarget, thing))
+        .filter((sourceItem, i, self) => self.findIndex((nestedTarget) => sourceItem.id === nestedTarget.id) === i)
+        .filter((sourceItem) => sourceItem[MODULE_NAME].targets.every((baseTarget) =>
+            (!skipGenericTarget || !baseTarget.isGenericTarget) && baseTarget.doesTargetInclude(sourceItem, thing))
         )
-        .forEach((bonusTarget) => bonusTarget[MODULE_NAME].bonuses.forEach((bonusType) => func(bonusType, bonusTarget)));
+        .forEach((sourceItem) => sourceItem[MODULE_NAME].bonuses.forEach((bonusType) => func(bonusType, sourceItem)));
 }
 
 /**
  * @template {typeof BaseBonus} T
  * @param {ActionUse | ItemPF | ItemAction} thing
  * @param {T} specificBonusType
- * @param {(bonusType: T, bonusTarget: ItemPF) => void} func
+ * @param {(bonusType: T, sourceItem: ItemPF) => void} func
  * @param {object} [options]
  * @param {boolean} [options.skipGenericTarget]
  */
@@ -110,13 +111,13 @@ export const handleBonusTypeFor = (thing, specificBonusType, func, { skipGeneric
         .filter((targetType) => !skipGenericTarget || !targetType.isGenericTarget)
         .flatMap((targetType) => targetType.getBonusSourcesForTarget(thing))
         // filter down to unique items in case one source item is affecting this target item through multiple "targets"
-        .filter((bonusTarget, i, self) => self.findIndex((nestedTarget) => bonusTarget.id === nestedTarget.id) === i)
-        .filter((bonusTarget) => bonusTarget[MODULE_NAME].targets.every((baseTarget) =>
-            (!skipGenericTarget || !baseTarget.isGenericTarget) && baseTarget.doesTargetInclude(bonusTarget, thing))
+        .filter((sourceItem, i, self) => self.findIndex((nestedTarget) => sourceItem.id === nestedTarget.id) === i)
+        .filter((sourceItem) => sourceItem[MODULE_NAME].targets.every((baseTarget) =>
+            (!skipGenericTarget || !baseTarget.isGenericTarget) && baseTarget.doesTargetInclude(sourceItem, thing))
         )
-        .forEach((bonusTarget) => bonusTarget[MODULE_NAME].bonuses.forEach((bonusType) => {
+        .forEach((sourceItem) => sourceItem[MODULE_NAME].bonuses.forEach((bonusType) => {
             if (bonusType === specificBonusType) {
-                func(specificBonusType, bonusTarget);
+                func(specificBonusType, sourceItem);
             }
         }));
 }
@@ -131,7 +132,7 @@ function actionUseHandleConditionals(actionUse) {
     const conditionals = [];
     handleBonusesFor(
         actionUse,
-        (bonusType, bonusTarget) => conditionals.push(bonusType.getConditional(bonusTarget)),
+        (bonusType, sourceItem) => conditionals.push(bonusType.getConditional(sourceItem)),
     );
 
     conditionals
@@ -155,7 +156,7 @@ function actionUseAlterRollData({ actor, item, shared }) {
 
     handleBonusesFor(
         item,
-        (bonusType, bonusTarget) => bonusType.actionUseAlterRollData(bonusTarget, shared),
+        (bonusType, sourceItem) => bonusType.actionUseAlterRollData(sourceItem, shared),
     );
 }
 Hooks.on(customGlobalHooks.actionUseAlterRollData, actionUseAlterRollData);
@@ -166,7 +167,7 @@ Hooks.on(customGlobalHooks.actionUseAlterRollData, actionUseAlterRollData);
 function addFootnotes({ action, attackNotes }) {
     handleBonusesFor(
         action,
-        (bonusType, bonusTarget) => attackNotes.push(...bonusType.getFootnotes(bonusTarget))
+        (bonusType, sourceItem) => attackNotes.push(...bonusType.getFootnotes(sourceItem, action))
     );
 }
 Hooks.on(customGlobalHooks.chatAttackFootnotes, addFootnotes);
@@ -187,7 +188,7 @@ function getAttackSources(item, sources) {
 
     handleBonusesFor(
         item,
-        (bonusType, bonusTarget) => newSources.push(...bonusType.getAttackSourcesForTooltip(bonusTarget)),
+        (bonusType, sourceItem) => newSources.push(...bonusType.getAttackSourcesForTooltip(sourceItem)),
     );
 
     newSources = newSources.filter(truthiness);
@@ -212,7 +213,7 @@ function actionDamageSources(action, sources) {
 
     handleBonusesFor(
         action,
-        (bonusType, bonusTarget) => changes.push(...bonusType.getDamageSourcesForTooltip(bonusTarget)),
+        (bonusType, sourceItem) => changes.push(...bonusType.getDamageSourcesForTooltip(sourceItem)),
     );
 
     const newChanges = changes.filter(truthiness);
@@ -265,7 +266,7 @@ Hooks.on(customGlobalHooks.itemUse, (
 ) => {
     handleBonusesFor(
         item,
-        (bonusType, bonusTarget) => bonusType.onItemUse(bonusTarget, options),
+        (bonusType, sourceItem) => bonusType.onItemUse(sourceItem, options),
     );
 });
 
@@ -294,9 +295,12 @@ LocalHookHandler.registerHandler(localHooks.prepareData, prepare);
  * @param {ActorPF | ItemPF | ItemAction} action
  * @param {RollData} rollData
  */
-function handleArmorFocusRollData(action, rollData) {
+function updateItemActionRollData(action, rollData) {
     if (!(action instanceof pf1.components.ItemAction)) return;
+
+    // safety for initialization during data prep where the bonuses havent' been set up yet
+    if (!action.item[MODULE_NAME]?.bonuses || !action.item[MODULE_NAME]?.bonuses) return;
 
     LocalHookHandler.fireHookNoReturnSync(localHooks.updateItemActionRollData, action, rollData);
 }
-Hooks.on('pf1GetRollData', handleArmorFocusRollData);
+Hooks.on('pf1GetRollData', updateItemActionRollData);

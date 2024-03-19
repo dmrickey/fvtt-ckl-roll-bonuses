@@ -18,11 +18,10 @@ export class SelfTarget extends BaseTarget {
     static getHints(source) {
         /** @type {string[]} */
         if (source.getFlag(MODULE_NAME, this.key)) {
-            // return [this.label];
+            return [this.label];
         }
         return;
     }
-
 
     /**
      * @inheritdoc
@@ -55,7 +54,7 @@ export class SelfTarget extends BaseTarget {
         const item = doc instanceof pf1.documents.item.ItemPF
             ? doc
             : doc.item;
-        return (item.hasItemBooleanFlag(this.key))
+        return item.hasItemBooleanFlag(this.key)
             ? [item]
             : [];
     };
