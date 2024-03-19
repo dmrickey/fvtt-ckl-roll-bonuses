@@ -2,6 +2,7 @@ import { hasLegacyCritFlag } from '../../bonuses/critical.mjs';
 import { MODULE_NAME } from '../../consts.mjs';
 import { checkboxInput } from '../../handlebars-handlers/bonus-inputs/chekbox-input.mjs';
 import { textInput } from "../../handlebars-handlers/bonus-inputs/text-input.mjs";
+import { handleBonusTypeFor } from '../../target-and-bonus-join.mjs';
 import { FormulaCacheHelper } from "../../util/flag-helpers.mjs";
 import { LocalHookHandler, localHooks } from '../../util/hooks.mjs';
 import { BaseBonus } from "./base-bonus.mjs";
@@ -25,10 +26,31 @@ export class CritBonus extends BaseBonus {
     /**
      * If the item is providing this bonus
      * @override
-     * @param {ItemPF} item
+     * @param {ItemPF} source
      * @returns {boolean}
      */
-    static isBonusSource(item) { return super.isBonusSource(item) && !hasLegacyCritFlag(item); };
+    static isBonusSource(source) { return super.isBonusSource(source) && !hasLegacyCritFlag(source); };
+
+    /**
+     * If the item is providing keen
+     * @param {ItemPF} source
+     * @returns {boolean}
+     */
+    static hasKeen(source) { return !!source.getFlag(MODULE_NAME, this.#critKeenKey); }
+
+    /**
+     * The value of the bonus source's mult
+     * @param {ItemPF} source
+     * @returns {number}
+     */
+    static getMultValue(source) { return FormulaCacheHelper.getModuleFlagValue(source, this.#critMultKey); }
+
+    /**
+     * The value of the bonus source's offset
+     * @param {ItemPF} source
+     * @returns {number}
+     */
+    static getOffsetValue(source) { return FormulaCacheHelper.getModuleFlagValue(source, this.#critOffsetKey); }
 
     /**
      * @override
@@ -42,15 +64,24 @@ export class CritBonus extends BaseBonus {
          * @returns {number}
          */
         const handleItemActionCritRangeWrapper = (current, action) => {
-            const { actor, item } = action;
+            const { item } = action;
 
             if (!!item.system.broken) {
                 return 20;
             }
 
-            const hasKeen = !!item.hasItemBooleanFlag(this.#critKeenKey);
+            let hasKeen = false;
+            let offset = 0;
 
-            const offset = FormulaCacheHelper.getModuleFlagValue(item, this.#critOffsetKey);
+            handleBonusTypeFor(
+                action,
+                CritBonus,
+                (bonusType, bonusTarget) => {
+                    hasKeen ||= bonusType.hasKeen(bonusTarget);
+                    offset += bonusType.getOffsetValue(bonusTarget);
+                }
+            );
+
             if (!offset && !hasKeen) {
                 return current;
             }
@@ -64,6 +95,45 @@ export class CritBonus extends BaseBonus {
             return range;
         }
         LocalHookHandler.registerHandler(localHooks.itemActionCritRangeWrapper, handleItemActionCritRangeWrapper);
+
+        /**
+         * @param {ItemAction} action
+         * @param {RollData} rollData
+         */
+        const updateItemActionRollData = (action, rollData) => {
+            if (!rollData.action?.ability) {
+                return;
+            }
+
+            const { item } = action;
+            const isBroken = !!item.system.broken;
+
+            let hasKeen = false;
+            let offset = 0;
+            let mult = +rollData.action.ability.critMult || 2;
+
+            handleBonusTypeFor(
+                action,
+                CritBonus,
+                (bonusType, bonusTarget) => {
+                    hasKeen ||= bonusType.hasKeen(bonusTarget);
+                    offset += bonusType.getOffsetValue(bonusTarget);
+                    mult += bonusType.getMultValue(bonusTarget);
+                }
+            );
+
+            rollData.action.ability.critMult = isBroken ? 2 : mult;
+
+            const current = rollData.action.ability.critRange || 20;
+            let range = hasKeen
+                ? current * 2 - 21
+                : current;
+            range -= offset;
+            range = Math.clamped(range, 2, 20);
+            rollData.action.ability.critRange = isBroken ? 20 : range;
+
+        };
+        LocalHookHandler.registerHandler(localHooks.updateItemActionRollData, updateItemActionRollData);
     }
 
     /**
@@ -75,30 +145,36 @@ export class CritBonus extends BaseBonus {
      * @returns {Nullable<string[]>}
      */
     static getHints(source, item) {
-        const action = item.firstAction;
-        if (!item.firstAction) return;
+        const action = item?.firstAction;
 
-        const isBroken = !!item.system.broken;
-
-        if (!(action?.hasAttack && action.data.ability?.critMult > 1)) return;
+        /** @type {number} */ let originalCritMult;
+        /** @type {number} */ let originalCritRange;
+        /** @type {boolean} */ let isBroken;
+        if (action && action.data.ability?.critMult <= 1) {
+            originalCritMult = +(action.data.ability?.critMult) || 2;
+            originalCritRange = action.data.ability?.critRange || 20;
+            isBroken = item.system.broken;
+        } else {
+            originalCritMult = 2;
+            originalCritRange = 20;
+            isBroken = false;
+        }
 
         const getMult = () => {
             if (isBroken) return 2;
 
-            const mult = +(action.data.ability.critMult || 2) + FormulaCacheHelper.getModuleFlagValue(source, this.#critMultKey);
+            const mult = originalCritMult + FormulaCacheHelper.getModuleFlagValue(source, this.#critMultKey);
             return mult;
         }
 
         const getRange = () => {
             if (isBroken) return 20;
 
-            const current = action.data.ability.critRange;
-
-            const hasKeen = !!item.getFlag(MODULE_NAME, this.#critKeenKey);
+            const hasKeen = !!source.getFlag(MODULE_NAME, this.#critKeenKey);
 
             let range = hasKeen
-                ? current * 2 - 21
-                : current;
+                ? originalCritRange * 2 - 21
+                : originalCritRange;
 
             const value = FormulaCacheHelper.getModuleFlagValue(source, this.#critMultKey);
 
@@ -110,8 +186,8 @@ export class CritBonus extends BaseBonus {
         const mult = getMult();
         const range = getRange();
 
-        if (mult === action.data.ability.critMult
-            && range === action.data.ability.critRange
+        if (mult === originalCritMult
+            && range === originalCritRange
         ) return;
 
         const rangeFormat = range === 20 ? '20' : `${range}-20`;

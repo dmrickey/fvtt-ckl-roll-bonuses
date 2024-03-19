@@ -106,7 +106,7 @@ Give a flat value or a formula to increase the target's attack roll. Use with bo
 Input multiple damage formula (including types) to increase the target's damage. Use with boolean flag `bonus_damage`.
 
 ## Effective Size Bonus
-Increase the value used by any sizeRoll formula in the target. (typically in the damage formula) Use with boolean flag `bonus_effective-size`. This is useful for spells like Gravity Bow, Lead Blades, Strong Jaw, temporarily granting the Impact quality to a specific weapon, etc.
+Increase the value used by any `sizeRoll` formula in the target (typically in the damage formula). Use with boolean flag `bonus_effective-size`. This is useful for spells like Gravity Bow, Lead Blades, Strong Jaw, temporarily granting the Impact quality to a specific weapon, etc.
 
 ---
  

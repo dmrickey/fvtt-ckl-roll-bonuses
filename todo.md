@@ -193,3 +193,4 @@
 - Add Weapon Finesse
 - investigate moving inspiration into a bonus and off of the skill sheet
 - Verify that alignment based targets work
+- Add safety check for `renderItemSheet` hook that ensures the sheet is a pf1 item sheet

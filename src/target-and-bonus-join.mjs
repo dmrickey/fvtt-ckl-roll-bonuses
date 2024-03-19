@@ -81,7 +81,7 @@ registerItemHint((hintcls, actor, item, _data) => {
 
 /**
  * @param {ActionUse | ItemPF | ItemAction} thing
- * @param {(bonusType: typeof BaseBonus, bonusTarget: ItemPF) => void} func
+ * @param {(bonusType: typeof BaseBonus, bonusTarget: ItemPF) => void} func The type providing the bonus, and the Item providing the bonus
  * @param {object} [options]
  * @param {boolean} [options.skipGenericTarget]
  */
@@ -95,6 +95,30 @@ export const handleBonusesFor = (thing, func, { skipGenericTarget = false } = {}
             (!skipGenericTarget || !baseTarget.isGenericTarget) && baseTarget.doesTargetInclude(bonusTarget, thing))
         )
         .forEach((bonusTarget) => bonusTarget[MODULE_NAME].bonuses.forEach((bonusType) => func(bonusType, bonusTarget)));
+}
+
+/**
+ * @template {typeof BaseBonus} T
+ * @param {ActionUse | ItemPF | ItemAction} thing
+ * @param {T} specificBonusType
+ * @param {(bonusType: T, bonusTarget: ItemPF) => void} func
+ * @param {object} [options]
+ * @param {boolean} [options.skipGenericTarget]
+ */
+export const handleBonusTypeFor = (thing, specificBonusType, func, { skipGenericTarget = false } = {}) => {
+    allTargetTypes
+        .filter((targetType) => !skipGenericTarget || !targetType.isGenericTarget)
+        .flatMap((targetType) => targetType.getBonusSourcesForTarget(thing))
+        // filter down to unique items in case one source item is affecting this target item through multiple "targets"
+        .filter((bonusTarget, i, self) => self.findIndex((nestedTarget) => bonusTarget.id === nestedTarget.id) === i)
+        .filter((bonusTarget) => bonusTarget[MODULE_NAME].targets.every((baseTarget) =>
+            (!skipGenericTarget || !baseTarget.isGenericTarget) && baseTarget.doesTargetInclude(bonusTarget, thing))
+        )
+        .forEach((bonusTarget) => bonusTarget[MODULE_NAME].bonuses.forEach((bonusType) => {
+            if (bonusType === specificBonusType) {
+                func(specificBonusType, bonusTarget);
+            }
+        }));
 }
 
 /**
@@ -145,7 +169,6 @@ function addFootnotes({ action, attackNotes }) {
         (bonusType, bonusTarget) => attackNotes.push(...bonusType.getFootnotes(bonusTarget))
     );
 }
-
 Hooks.on(customGlobalHooks.chatAttackFootnotes, addFootnotes);
 
 /**
@@ -266,3 +289,14 @@ const prepare = (item, _rollData) => {
     });
 };
 LocalHookHandler.registerHandler(localHooks.prepareData, prepare);
+
+/**
+ * @param {ActorPF | ItemPF | ItemAction} action
+ * @param {RollData} rollData
+ */
+function handleArmorFocusRollData(action, rollData) {
+    if (!(action instanceof pf1.components.ItemAction)) return;
+
+    LocalHookHandler.fireHookNoReturnSync(localHooks.updateItemActionRollData, action, rollData);
+}
+Hooks.on('pf1GetRollData', handleArmorFocusRollData);

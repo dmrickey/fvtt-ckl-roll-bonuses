@@ -20,6 +20,7 @@ export const localHooks = /** @type {const} */ ({
     itemActionCritRangeWrapper: `${MODULE_NAME}_itemActionCritRangeWrapper`,
     patchChangeValue: `${MODULE_NAME}_patchChangeValue`,
     prepareData: `${MODULE_NAME}_prepareData`,
+    updateItemActionRollData: `${MODULE_NAME}_updateItemActionRollData`,
 });
 
 /**
@@ -30,6 +31,13 @@ export const localHooks = /** @type {const} */ ({
 const handlers = {};
 
 export class LocalHookHandler {
+
+    /**
+     * @overload
+     * @param {typeof localHooks.updateItemActionRollData} hook
+     * @param {(action: ItemAction, rollData: RollData) => void}
+     * @returns {void}
+     */
 
     /**
      * @overload
@@ -72,8 +80,7 @@ export class LocalHookHandler {
     static async handleHookAsync(hook, value, ...args) {
         const funcs = handlers[hook] || [];
 
-        for (let i = 0; i < funcs.length; i++) {
-            const func = funcs[i];
+        for (const func of funcs) {
             value = await func(value, ...args);
         }
 
@@ -114,6 +121,14 @@ export class LocalHookHandler {
 
         return value;
     }
+
+    /**
+     * @overload
+     * @param {typeof localHooks.updateItemActionRollData} hook
+     * @param {ItemAction} action
+     * @param {RollData} rollData
+     * @returns {void}
+     */
 
     /**
      * @overload

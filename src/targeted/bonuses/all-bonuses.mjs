@@ -4,12 +4,14 @@ import { AttackBonus } from "./attack-bonus.mjs";
 import { EffectiveSizeBonus } from './effective-size.mjs';
 import { FortuneBonus } from './fortune-bonus.mjs';
 import { MisfortuneBonus } from './misfortune-bonus.mjs';
+import { CritBonus } from './crit-bonus.mjs';
 
 /**
  * @type {typeof BaseBonus[]}
  */
 export const allBonusTypes = [
     AttackBonus,
+    CritBonus,
     DamageBonus,
     EffectiveSizeBonus,
     FortuneBonus,

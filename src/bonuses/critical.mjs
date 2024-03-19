@@ -1,4 +1,3 @@
-import { MODULE_NAME } from "../consts.mjs";
 import { textInput } from "../handlebars-handlers/bonus-inputs/text-input.mjs";
 import { hasAnyBFlag, getDocDFlagsStartsWith, KeyedDFlagHelper, FormulaCacheHelper } from "../util/flag-helpers.mjs";
 import { LocalHookHandler, customGlobalHooks, localHooks } from "../util/hooks.mjs";
