@@ -247,9 +247,6 @@ function handleItemActionCritRangeWrapper(current, action) {
     return range;
 }
 LocalHookHandler.registerHandler(localHooks.itemActionCritRangeWrapper, handleItemActionCritRangeWrapper);
-Hooks.once('init', () => {
-    libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.critRange', handleItemActionCritRangeWrapper, libWrapper.MIXED);
-});
 
 Hooks.on(customGlobalHooks.chatAttackFootnotes, (
     /** @type {ChatAttack} */ { action, attackNotes }
