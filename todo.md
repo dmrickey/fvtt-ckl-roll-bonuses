@@ -198,3 +198,4 @@
   - all based targets
   - crit bonus
     - make sure multiple work
+- Furious Focus (super specific conditional modifier)

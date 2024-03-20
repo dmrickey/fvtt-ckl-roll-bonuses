@@ -13,10 +13,12 @@ import { TokenTarget } from "./token-target.mjs";
 import { WeaponGroupTarget } from "./weapon-group-target.mjs";
 import { WeaponTarget } from "./weapon-target.mjs";
 import { WeaponTypeTarget } from "./weapon-type-target.mjs";
+import { AllTarget } from './all-target.mjs';
 
 /** @type {typeof BaseTarget[]} */
 export const allTargetTypes = [
     AlignmentTarget,
+    AllTarget,
     IsMeleeTarget,
     IsRangedTarget,
     IsSpellTarget,
