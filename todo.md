@@ -199,3 +199,12 @@
   - crit bonus
     - make sure multiple work
 - Furious Focus (super specific conditional modifier)
+- localize
+  - Furious Focus
+  - Crit labels
+  - All labels
+  - "is item" labels
+    - weapon
+    - spell
+    - melee
+    - ranged
