@@ -14,6 +14,6 @@ export class IsSpellTarget extends BaseIsItemTarget {
      * @returns {boolean}
      */
     static extendedItemFilter({ action = null }) {
-        return ['msak', 'rsak'].includes(action?.data.actionType ?? '');
+        return ['msak', 'rsak', 'spellsave'].includes(action?.data.actionType ?? '');
     }
 }

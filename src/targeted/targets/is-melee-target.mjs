@@ -1,11 +1,11 @@
 import { BaseIsItemTarget } from './base-is-item-target.mjs';
 
-export class IsMeleeWeaponTarget extends BaseIsItemTarget {
+export class IsMeleeTarget extends BaseIsItemTarget {
 
     /**
      * @override
      */
-    static get targetKey() { return 'is-melee-weapon'; }
+    static get targetKey() { return 'is-melee'; }
 
     /**
      * @override
@@ -14,6 +14,6 @@ export class IsMeleeWeaponTarget extends BaseIsItemTarget {
      * @returns {boolean}
      */
     static extendedItemFilter({ action = null }) {
-        return action?.data.actionType === 'mwak';
+        return ['mwak', 'msak', 'mcman'].includes(action?.data.actionType ?? '');
     }
 }

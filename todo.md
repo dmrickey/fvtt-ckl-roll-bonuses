@@ -193,17 +193,9 @@
   - permanent-skill-bonuses
 - Add Weapon Finesse
 - Add safety check for `renderItemSheet` hook that ensures the sheet is a pf1 item sheet
-- Add labels for crit
+- Add deprecation crit
 - Verification
   - alignment based targets
+  - all based targets
   - crit bonus
     - make sure multiple work
-- update readme for new stuff
-  - new bonuses
-    - Effective Size (so it modifies attacks that use sizeRoll)
-    - fortune/misfortune (added to use the specific targeting system)
-    - critical (again added so it uses the new targeting system)
-  - new targets
-    - self (adds any targeted bonuses only to this Item)
-    - is weapon / is melee / is ranged / is spell
-    - alignment target

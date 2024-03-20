@@ -1,12 +1,12 @@
 import { BaseIsItemTarget } from './base-is-item-target.mjs';
 
-export class IsRangedWeaponTarget extends BaseIsItemTarget {
+export class IsRangedTarget extends BaseIsItemTarget {
 
     /**
      * @inheritdoc
      * @override
      */
-    static get targetKey() { return 'is-ranged-weapon'; }
+    static get targetKey() { return 'is-ranged'; }
 
     /**
      * @inheritdoc
@@ -16,6 +16,6 @@ export class IsRangedWeaponTarget extends BaseIsItemTarget {
      * @returns {boolean}
      */
     static extendedItemFilter({ action = null }) {
-        return action?.data.actionType === 'rwak';
+        return ['rcman', 'rwak', 'rsak', 'twak'].includes(action?.data.actionType ?? '');
     }
 }

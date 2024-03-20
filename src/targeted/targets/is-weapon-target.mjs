@@ -14,6 +14,6 @@ export class IsWeaponTarget extends BaseIsItemTarget {
      * @returns {boolean}
      */
     static extendedItemFilter({ action = null }) {
-        return ['mwak', 'rwak'].includes(action?.data.actionType ?? '');
+        return ['mwak', 'rwak', 'twak'].includes(action?.data.actionType ?? '');
     }
 }

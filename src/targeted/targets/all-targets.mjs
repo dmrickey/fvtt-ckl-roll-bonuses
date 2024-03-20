@@ -2,8 +2,8 @@ import { ActionTarget } from "./have-to-do/action-target.mjs";
 import { AlignmentTarget } from './alignment-target.mjs';
 import { BaseTarget } from "./base-target.mjs";
 import { DamageTypeTarget } from "./have-to-do/damage-type-target.mjs";
-import { IsMeleeWeaponTarget } from './is-melee-weapon-target.mjs';
-import { IsRangedWeaponTarget } from './is-ranged-weapon-target.mjs';
+import { IsMeleeTarget } from './is-melee-target.mjs';
+import { IsRangedTarget } from './is-ranged-target.mjs';
 import { IsSpellTarget } from "./is-spell-target.mjs";
 import { IsWeaponTarget } from './is-weapon-target.mjs';
 import { ItemTarget } from "./item-target.mjs";
@@ -17,8 +17,8 @@ import { WeaponTypeTarget } from "./weapon-type-target.mjs";
 /** @type {typeof BaseTarget[]} */
 export const allTargetTypes = [
     AlignmentTarget,
-    IsMeleeWeaponTarget,
-    IsRangedWeaponTarget,
+    IsMeleeTarget,
+    IsRangedTarget,
     IsSpellTarget,
     IsWeaponTarget,
     ItemTarget,
