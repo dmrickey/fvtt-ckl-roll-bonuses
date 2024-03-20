@@ -5,6 +5,7 @@ import './bonuses/critical.mjs';
 import './bonuses/fates-favored.mjs';
 import './bonuses/change-type-offset.mjs';
 import './bonuses/fortune-handler.mjs';
+import './bonuses/furious-focus.mjs';
 import './bonuses/martial-focus.mjs';
 import './bonuses/skills/init.mjs';
 import './bonuses/spells/init.mjs';
