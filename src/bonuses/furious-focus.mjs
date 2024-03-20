@@ -12,14 +12,15 @@ const furiousFocus = 'furious-focus';
  * @param {number} index - The index of the attack, in order of enabled attacks.
  */
 function getConditionalParts(actionUse, result, atk, index) {
-    const { actor } = actionUse;
-    if (index !== 0 || !actor) {
+    const { actor, shared } = actionUse;
+    if (index !== 0 || !actor || !shared) {
         return;
     }
 
-    const hasFocus = hasAnyBFlag(actor, furiousFocus);
-    if (hasFocus) {
-        result['attack.normal'].push(`-@powerAttackPenalty[${localize(furiousFocus)}]`);
+    const hasFocus = () => hasAnyBFlag(actor, furiousFocus);
+    const penalty = shared.rollData.powerAttackPenalty || 0;
+    if (shared.powerAttack && hasFocus() && penalty) {
+        result['attack.normal'].push(`${penalty * -1}[${localize(furiousFocus)}]`);
     }
 }
 Hooks.on(customGlobalHooks.getConditionalParts, getConditionalParts);

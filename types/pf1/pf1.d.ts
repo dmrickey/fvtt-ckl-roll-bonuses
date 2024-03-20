@@ -85,6 +85,7 @@ declare global {
         conditionals: any;
         damageBonus: string[];
         dice: string;
+        powerAttack: boolean;
         rollData: RollData;
 
         // custom data
@@ -602,9 +603,6 @@ declare global {
         // action roll data
         action?: {
             _id: string;
-            damage: {
-                parts: { formula: string; type: TraitSelectorValuePlural }[];
-            };
             ability: {
                 attack: string;
                 critMult: number | string;
@@ -612,12 +610,17 @@ declare global {
                 damage: string;
                 damageMult: number;
             };
+            damage: {
+                parts: { formula: string; type: TraitSelectorValuePlural }[];
+            };
         };
 
         // action use roll data
         chargeCostBonus?: number;
         d20?: string;
         dcBonus?: number;
+        powerAttackBonus?: number;
+        powerAttackPenalty?: number;
     }
 
     interface RollPF extends Roll {

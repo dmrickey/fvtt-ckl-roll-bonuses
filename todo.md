@@ -12,7 +12,6 @@
   - [Ranger](#ranger)
 - [Feats](#feats)
   - [Bomber's eye](#bombers-eye)
-  - [Extreme Mood Swings](#extreme-mood-swings)
   - [Improved Critical](#improved-critical)
   - [Longshot](#longshot)
   - [Spell Perfection](#spell-perfection)
@@ -41,6 +40,7 @@
 
 # TODO
 - Figure out a way to support multiple target groups on a single Item (so I can add `Favored Enemy (Human) +4` and `Favored Enemy (goblin) +2` on a single Item)
+  - (see 3.0 scaffolding branch for a super rought start on this)
 
 # UI
 ## Add In-Game Documentation
@@ -95,9 +95,6 @@
 # Feats
 ## Bomber's eye
 - Increase throwing range
-## Extreme Mood Swings
-- Increase each morale bonus you receive by 1.
-- https://www.d20pfsrd.com/feats/general-feats/extreme-mood-swings/
 ## Improved Critical
 - Selects individual weapon types (like Weapon Focus) and grants keen to all of those
 ## Longshot
@@ -197,8 +194,12 @@
   - alignment based targets
   - all based targets
   - crit bonus
-    - make sure multiple work
-- Furious Focus (super specific conditional modifier)
+    - make sure different bonuses apply crit bonuses work together
+- Furious Focus
+  - Make automatically "turn on" for Furious Focus
+- Extreme Mood Swings
+  - Increase each morale bonus you receive by 1.
+  - https://www.d20pfsrd.com/feats/general-feats/extreme-mood-swings/
 - localize
   - Furious Focus
   - Crit labels
