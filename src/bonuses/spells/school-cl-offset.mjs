@@ -94,6 +94,8 @@ Hooks.on('renderItemSheet', (
     /** @type {[HTMLElement]} */[html],
     /** @type {unknown} */ _data
 ) => {
+    if (!(item instanceof pf1.documents.item.ItemPF)) return;
+
     const { spellSchools } = pf1.config;
 
     const hasKey = item.system.flags.dictionary[key] !== undefined

@@ -230,6 +230,8 @@ Hooks.on('renderItemSheet', (
 ) => {
     const { actor, item } = itemSheet;
 
+    if (!(item instanceof pf1.documents.item.ItemPF)) return;
+
     item[MODULE_NAME].bonuses.forEach((bonusType) => {
         bonusType.showInputOnItemSheet({ actor, item, html });
     });

@@ -192,8 +192,7 @@
 - Show icon next to skills that roll inspiration for free
   - permanent-skill-bonuses
 - Add Weapon Finesse
-- Add safety check for `renderItemSheet` hook that ensures the sheet is a pf1 item sheet
-- Add deprecation crit
+- Add crit deprecation
 - Verification
   - alignment based targets
   - all based targets

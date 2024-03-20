@@ -172,6 +172,8 @@ export function createElementalClOrDc(t) {
     /** @type {[HTMLElement]} */[html],
     /** @type {unknown} */ _data
     ) => {
+        if (!(item instanceof pf1.documents.item.ItemPF)) return;
+
         if (item.system.flags.dictionary[key] === undefined) {
             return;
         }

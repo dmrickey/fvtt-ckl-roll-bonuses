@@ -149,6 +149,8 @@ Hooks.on('renderItemSheet', (
     /** @type {[HTMLElement]} */[html],
     /** @type {unknown} */ _data
 ) => {
+    if (!(item instanceof pf1.documents.item.ItemPF)) return;
+
     const name = item?.name?.toLowerCase() ?? '';
     const sourceId = item?.flags.core?.sourceId ?? '';
     if (!(name === Settings.weaponSpecialization || item.system.flags.dictionary[key] !== undefined || sourceId.includes(compendiumId))) {

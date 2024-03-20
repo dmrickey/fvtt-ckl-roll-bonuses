@@ -288,6 +288,8 @@ Hooks.on('renderItemSheet', (
     /** @type {[HTMLElement]} */[html],
     /** @type {unknown} */ _data
 ) => {
+    if (!(item instanceof pf1.documents.item.ItemPF)) return;
+
     const has = getDocDFlagsStartsWith(item, 'crit-');
 
     // the current array only can have a single element since this is from an item and not an actor

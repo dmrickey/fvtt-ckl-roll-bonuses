@@ -61,6 +61,8 @@ Hooks.on('renderItemSheet', (
     /** @type {[HTMLElement]} */[html],
     /** @type {unknown} */ _data
 ) => {
+    if (!(item instanceof pf1.documents.item.ItemPF)) return;
+
     const hasFlag = item.system.flags.dictionary?.hasOwnProperty(key);
     if (!hasFlag) {
         return;
