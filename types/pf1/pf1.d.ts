@@ -30,6 +30,10 @@ declare global {
     class ActorPF extends BaseDocument {
         getSkillInfo(skillId: string): SkillRollData;
 
+        [MODULE_NAME]: {
+            [key: string]: number | string | object | array;
+        };
+
         /**
          * Gets the actor's roll data.
          * @param refresh - pass true to force the roll data to recalculate
@@ -104,6 +108,41 @@ declare global {
         attackNotes: string[];
         effectNotes: string[];
         rollData: RollData;
+        attack: D20RollPF;
+
+        d20: Die;
+        dice: Die[];
+
+        flavor: string;
+        formula: string;
+        isCrit: boolean;
+        isDeterministic: boolean;
+        isFumble: boolean;
+        isNat1: boolean;
+        isNat20: boolean;
+        isNormal: boolean;
+        isNumber: boolean;
+        isStatic: boolean;
+        natural: number;
+        result: string;
+        simplifiedFormula: string;
+        total: number;
+        totalHalved: number;
+    }
+
+    class Die {
+        faces: number;
+        isIntermediate: boolean;
+        modifiers: string[];
+        number: number;
+        options: { flavor?: string };
+        results: { result: number; active: boolean }[];
+    }
+
+    class D20RollPF {
+        data: {};
+        options: {};
+        terms: RollTerm[];
     }
 
     class ChatMessagePF extends BaseDocument {
@@ -616,6 +655,7 @@ declare global {
         };
 
         // action use roll data
+        attackCount: number;
         chargeCostBonus?: number;
         d20?: string;
         dcBonus?: number;

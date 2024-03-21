@@ -195,8 +195,6 @@
   - all based targets
   - crit bonus
     - make sure different bonuses apply crit bonuses work together
-- Furious Focus
-  - Make automatically "turn on" for Furious Focus
 - Extreme Mood Swings
   - Increase each morale bonus you receive by 1.
   - https://www.d20pfsrd.com/feats/general-feats/extreme-mood-swings/

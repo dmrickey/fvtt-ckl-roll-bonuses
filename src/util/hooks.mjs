@@ -4,6 +4,8 @@ export const customGlobalHooks = /** @type {const} */ ({
     actionDamageSources: `${MODULE_NAME}_actionDamageSources`,
     actionUseAlterRollData: `${MODULE_NAME}_actionUseAlterRollData`,
     actionUseHandleConditionals: `${MODULE_NAME}_actionUseHandleConditionals`,
+    /** Make sure to put the effect note on the specific attack effected and not all */
+    chatAttackEffectNotes: `${MODULE_NAME}_chatAttackEffectNotes`,
     chatAttackFootnotes: `${MODULE_NAME}_chatAttackFootnotes`,
     d20Roll: `${MODULE_NAME}_d20Roll`,
     getActorInitiativeFormula: `${MODULE_NAME}_getActorInitiativeFormula`,
@@ -11,14 +13,12 @@ export const customGlobalHooks = /** @type {const} */ ({
     itemGetAttackSources: `${MODULE_NAME}_itemGetAttackSources`,
     itemGetTypeChatData: `${MODULE_NAME}_itemGetTypeChatData`,
     itemUse: `${MODULE_NAME}_itemUse`,
-
-    /** @deprecated Do not use - makes multi attacks way too chatty */
-    chatAttackEffectNotes: `${MODULE_NAME}_chatAttackEffectNotes`,
 });
 
 export const localHooks = /** @type {const} */ ({
     itemActionCritRangeWrapper: `${MODULE_NAME}_itemActionCritRangeWrapper`,
     patchChangeValue: `${MODULE_NAME}_patchChangeValue`,
+    postPrepareActorDerivedData: `${MODULE_NAME}_postPrepareActorDerivedData`,
     prepareData: `${MODULE_NAME}_prepareData`,
     updateItemActionRollData: `${MODULE_NAME}_updateItemActionRollData`,
 });
@@ -31,6 +31,13 @@ export const localHooks = /** @type {const} */ ({
 const handlers = {};
 
 export class LocalHookHandler {
+
+    /**
+     * @overload
+     * @param {typeof localHooks.postPrepareActorDerivedData} hook
+     * @param {(actor: ActorPF) => void} func
+     * @returns {void}
+     */
 
     /**
      * @overload
@@ -121,6 +128,13 @@ export class LocalHookHandler {
 
         return value;
     }
+
+    /**
+     * @overload
+     * @param {typeof localHooks.postPrepareActorDerivedData} hook
+     * @param {ActorPF} actor
+     * @returns {void}
+     */
 
     /**
      * @overload

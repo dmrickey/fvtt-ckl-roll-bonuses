@@ -1,4 +1,4 @@
-import { MODULE_NAME } from './consts.mjs';
+import { FRIENDLY_MODULE_NAME, MODULE_NAME } from './consts.mjs';
 
 // specifically set this up before importing anything else so it's ready to start being populated
 // game.modules.get(MODULE_NAME).api = {
@@ -189,6 +189,17 @@ function safeTotal(
     return (isNaN(+formula) ? RollPF.safeRoll(formula, data).total : +formula) || 0;
 }
 
+/**
+ * Get damage sources for actor's combat tooltips
+ * @param {() => any} wrapped
+ * @this {ActorPF}
+ */
+function prepareActorDerivedData(wrapped) {
+    wrapped();
+    this[MODULE_NAME] ||= {};
+    LocalHookHandler.fireHookNoReturnSync(localHooks.postPrepareActorDerivedData, this);
+}
+
 Hooks.once('setup', () => {
     debugSetup();
 });
@@ -208,7 +219,7 @@ Hooks.once('init', () => {
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype.use', itemUseWrapper, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemSpellPF.prototype.getTypeChatData', itemGetTypeChatData, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.critRange', itemActionCritRangeWrapper, libWrapper.WRAPPER);
-
+    libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorPF.prototype.prepareSpecificDerivedData', prepareActorDerivedData, libWrapper.WRAPPER);
     // for patching resources - both
     // libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype._updateMaxUses', updateMaxUses, libWrapper.WRAPPER);
     // pf1.documents.actor.ActorPF.prototype.updateItemResources
@@ -230,4 +241,6 @@ Hooks.once('init', () => {
             get: function () { return this.isDeterministic && !this.terms.every((x) => !!x.flavor); }
         }
     );
+
+    console.log(`${FRIENDLY_MODULE_NAME} loaded`);
 });

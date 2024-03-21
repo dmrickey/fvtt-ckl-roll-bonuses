@@ -29,6 +29,8 @@ interface Game {
      */
     settings: ClientSettings;
 
+    time: { worldTime: number };
+
     user: User;
     userId: string;
 }

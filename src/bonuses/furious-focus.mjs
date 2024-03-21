@@ -1,9 +1,14 @@
+import { MODULE_NAME } from '../consts.mjs';
 import { showEnabledLabel } from '../handlebars-handlers/enabled-label.mjs';
 import { hasAnyBFlag } from '../util/flag-helpers.mjs';
 import { customGlobalHooks } from '../util/hooks.mjs';
-import { localize } from '../util/localize.mjs';
+import { localizeGenericBonusLabel } from '../util/localize.mjs';
 
 const furiousFocus = 'furious-focus';
+const furiousFocusTimestamp = 'furious-focus-timestamp';
+
+/** @returns {string} */
+const label = () => { return localizeGenericBonusLabel(furiousFocus); }
 
 /**
  * @param {ActionUse<ItemWeaponPF>} actionUse
@@ -19,11 +24,25 @@ function getConditionalParts(actionUse, result, atk, index) {
 
     const hasFocus = () => hasAnyBFlag(actor, furiousFocus);
     const penalty = shared.rollData.powerAttackPenalty || 0;
-    if (shared.powerAttack && hasFocus() && penalty) {
-        result['attack.normal'].push(`${penalty * -1}[${localize(furiousFocus)}]`);
+    const hasUsed = hasUsedFF(actor);
+    if (shared.powerAttack && hasFocus() && penalty && !hasUsed) {
+        result['attack.normal'].push(`${penalty * -1}[${label()}]`);
+        setUsedFF(actor);
     }
 }
 Hooks.on(customGlobalHooks.getConditionalParts, getConditionalParts);
+
+/**
+ * @param {ChatAttack} chatAttack
+ */
+function addFuriousFocusEffectNote({ attack, effectNotes }) {
+    const term = attack.terms.at(-1);
+
+    if (attack.terms.some((x) => x.options?.flavor === label())) {
+        effectNotes.push(label());
+    }
+}
+Hooks.on(customGlobalHooks.chatAttackEffectNotes, addFuriousFocusEffectNote);
 
 Hooks.on('renderItemSheet', (
     /** @type {ItemSheetPF} */ { item },
@@ -37,7 +56,12 @@ Hooks.on('renderItemSheet', (
         return;
     }
     showEnabledLabel({
-        label: localize(furiousFocus),
+        label: label(),
         parent: html,
     });
 });
+
+/** @param {ActorPF} actor */
+const hasUsedFF = (actor) => actor.getFlag(MODULE_NAME, furiousFocusTimestamp) === game.time.worldTime;
+/** @param {ActorPF} actor */
+const setUsedFF = (actor) => actor.setFlag(MODULE_NAME, furiousFocusTimestamp, game.time.worldTime);

@@ -88,6 +88,14 @@
         "elemental-dc": "Elemental DC",
         "fates-favored": "Fate's Favored",
         "fortune": "Fortune",
+        "generic-bonus": {
+            "hint": {
+                "furious-focus": "Negates the attack penalty of power attack on the first attack made each round."
+            },
+            "label": {
+                "furious-focus": "Furious Focus"
+            }
+        },
         "greaterElementalFocus": "Greater Elemental Focus",
         "greaterSpellFocus": "Greater Spell Focus",
         "greater-weapon-focus": "Greater Weapon Focus",
