@@ -20,6 +20,7 @@
                 },
                 "label": {
                     "attack": "Attack Bonus",
+                    "crit": "Critical",
                     "effective-size": "Effective Size",
                     "fortune": "Fortune",
                     "misfortune": "Misfortune"

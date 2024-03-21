@@ -9,13 +9,14 @@ import { isEmptyObject } from "./is-empty-object.mjs";
  */
 const localize = (key, opts = {}) => {
     const myKey = `${MODULE_NAME}.${key}`;
-    const str = isEmptyObject(opts)
+    let str = isEmptyObject(opts)
         ? (game.i18n.localize(myKey) === myKey ? game.i18n.localize(key) : game.i18n.localize(myKey))
         : (game.i18n.format(myKey, opts) === myKey ? game.i18n.format(key, opts) : game.i18n.format(myKey, opts));
 
     ifDebug(() => {
         if (str === key) {
             console.error(`${MODULE_NAME} - Missing translation for ${key}`);
+            str = `*** ${str} ***`;
         }
     });
 
