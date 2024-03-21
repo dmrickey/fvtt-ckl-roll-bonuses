@@ -198,8 +198,9 @@
 - Extreme Mood Swings
   - Increase each morale bonus you receive by 1.
   - https://www.d20pfsrd.com/feats/general-feats/extreme-mood-swings/
+- Furious Focus
+  - Automatically add the flag when the sheet is opened.
 - localize
-  - Furious Focus
   - Crit labels
   - All labels
   - "is item" labels

@@ -34,6 +34,7 @@ Supports PF1 v9+
 - [Feats](#feats)
   - [Armor Focus](#armor-focus)
   - [Elemental Focus](#elemental-focus)
+  - [Furious Focus](#furious-focus)
   - [Martial Focus](#martial-focus)
   - [Spell Focus](#spell-focus)
   - [Spell Specialization](#spell-specialization)
@@ -245,9 +246,22 @@ Increase the DC by +1 of any spell you're casting for a specific element.
   <summary>How to customize Elemental Focus (click to expand)</summary>
 
   - Follows the same basic setup as [Spell Focus](#spell-focus).
-  - You can manually configure it by setting a flag on the feat with a key of `elementalFocus`, `greaterElementalFocus`, or `mythicElementalFocus` and the mod will automatically add the inputs for you below the dictionary flags section.
+  - You can manually configure it by setting a dictionary flag on the feat with a key of `elementalFocus`, `greaterElementalFocus`, or `mythicElementalFocus` and the mod will automatically add the inputs for you below the dictionary flags section.
   - The accepted values are `acid`, `cold`, `electric`, or `fire`.
   - The damage for the spell you're casting must be configured using one of the system's predefined types.
+
+</details>
+
+---
+
+## Furious Focus
+Negate the Power Attack penalty for the first attack of each round.
+
+<details>
+  <summary>How to enable Furious Focus (click to expand)</summary>
+
+  - Add the boolean flag `furious-focus`. This should be detected automatically the first time you go into the feat to edit it--if it is not then you can manually add the flag.
+  - This only works once each round. If your GM is not advancing game time (happens automatically when advancing rounds in combat), then the penalty will not be taken away with following power attacks.
 
 </details>
 
