@@ -35,9 +35,8 @@ Hooks.on(customGlobalHooks.getConditionalParts, getConditionalParts);
 /**
  * @param {ChatAttack} chatAttack
  */
-function addFuriousFocusEffectNote({ attack, effectNotes }) {
-    const term = attack.terms.at(-1);
-
+function addFuriousFocusEffectNote(chatAttack) {
+    const { attack, effectNotes } = chatAttack;
     if (attack.terms.some((x) => x.options?.flavor === label())) {
         effectNotes.push(label());
     }
