@@ -1,4 +1,4 @@
-import { localize } from "../../util/localize.mjs";
+import { localizeTargetedTargetLabel } from "../../util/localize.mjs";
 
 /**
  * @abstract
@@ -68,7 +68,7 @@ export class BaseTarget {
      * Label for this target source
      * @returns { string }
      */
-    static get label() { return localize(`bonus-target.target.label.${this.targetKey}`); }
+    static get label() { return localizeTargetedTargetLabel(this.targetKey); }
 
     /**
      * @abstract

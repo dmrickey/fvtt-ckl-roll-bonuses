@@ -1,4 +1,4 @@
-import { localize } from "../../util/localize.mjs";
+import { localizeTargetedBonusLabel } from "../../util/localize.mjs";
 import { customGlobalHooks } from "../../util/hooks.mjs";
 
 /**
@@ -14,7 +14,7 @@ export class BaseBonus {
     /**
      * @returns { string }
      */
-    static get label() { return localize(`bonus-target.bonus.label.${this.type}`); }
+    static get label() { return localizeTargetedBonusLabel(this.type); }
 
     /**
      * @abstract
