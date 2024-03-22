@@ -1,4 +1,4 @@
-export { }
+export {};
 
 declare global {
     /**
@@ -31,7 +31,7 @@ declare global {
          *                  (default: `{}`)
          * @param options - (default: `{}`)
          */
-        constructor(formula: string, data?: D, options?: Roll["options"]);
+        constructor(formula: string, data?: D, options?: Roll['options']);
 
         /**
          * The original provided data object which substitutes into attributes of the roll formula
@@ -125,7 +125,11 @@ declare global {
          *                          (default: `false`)
          * @returns The altered Roll expression
          */
-        alter(multiply: number, add: number, { multiplyNumeric }?: { multiplyNumeric: boolean }): this;
+        alter(
+            multiply: number,
+            add: number,
+            { multiplyNumeric }?: { multiplyNumeric: boolean }
+        ): this;
 
         /**
          * Clone the Roll instance, returning a new Roll instance that has not yet been evaluated.
@@ -146,9 +150,15 @@ declare global {
          * console.log(r.total);  // 11
          * ```
          */
-        evaluate(options?: InexactPartial<Options> & { async: true }): Promise<Evaluated<this>>;
-        evaluate(options: InexactPartial<Options & { async: false }>): Evaluated<this>;
-        evaluate(options?: InexactPartial<Options>): Evaluated<this> | Promise<Evaluated<this>>;
+        evaluate(
+            options?: InexactPartial<Options> & { async: true }
+        ): Promise<Evaluated<this>>;
+        evaluate(
+            options: InexactPartial<Options & { async: false }>
+        ): Evaluated<this>;
+        evaluate(
+            options?: InexactPartial<Options>
+        ): Evaluated<this> | Promise<Evaluated<this>>;
 
         /**
          * Evaluate the roll asynchronously.
@@ -156,14 +166,18 @@ declare global {
          * @param options - Options which inform how evaluation is performed
          * @internal
          */
-        protected _evaluate(options?: InexactPartial<Omit<Options, "async">>): Promise<Evaluated<this>>;
+        protected _evaluate(
+            options?: InexactPartial<Omit<Options, 'async'>>
+        ): Promise<Evaluated<this>>;
 
         /**
          * Evaluate the roll synchronously.
          * A temporary helper method used to migrate behavior from 0.7.x (sync by default) to 0.9.x (async by default).
          * @param options - Options which inform how evaluation is performed
          */
-        protected _evaluateSync(options?: InexactPartial<Omit<Options, "async">>): Evaluated<this>;
+        protected _evaluateSync(
+            options?: InexactPartial<Omit<Options, 'async'>>
+        ): Evaluated<this>;
 
         /**
          * Safely evaluate the final total result for the Roll using its component terms.
@@ -175,9 +189,15 @@ declare global {
          * Alias for evaluate.
          * @see Roll#evaluate
          */
-        roll(options?: InexactPartial<Options> & { async: true }): Promise<Evaluated<this>>;
-        roll(options: InexactPartial<Options & { async: false }>): Evaluated<this>;
-        roll(options?: InexactPartial<Options>): Evaluated<this> | Promise<Evaluated<this>>;
+        roll(
+            options?: InexactPartial<Options> & { async: true }
+        ): Promise<Evaluated<this>>;
+        roll(
+            options: InexactPartial<Options & { async: false }>
+        ): Evaluated<this>;
+        roll(
+            options?: InexactPartial<Options>
+        ): Evaluated<this> | Promise<Evaluated<this>>;
 
         /**
          * Create a new Roll object using the original provided formula and data.
@@ -185,9 +205,15 @@ declare global {
          * @param options - Evaluation options passed to Roll#evaluate
          * @returns A new Roll object, rolled using the same formula and data
          */
-        reroll(options?: InexactPartial<Options> & { async: true }): Promise<Evaluated<this>>;
-        reroll(options: InexactPartial<Options & { async: false }>): Evaluated<this>;
-        reroll(options?: InexactPartial<Options>): Evaluated<this> | Promise<Evaluated<this>>;
+        reroll(
+            options?: InexactPartial<Options> & { async: true }
+        ): Promise<Evaluated<this>>;
+        reroll(
+            options: InexactPartial<Options & { async: false }>
+        ): Evaluated<this>;
+        reroll(
+            options?: InexactPartial<Options>
+        ): Evaluated<this> | Promise<Evaluated<this>>;
 
         /**
          * A factory method which constructs a Roll instance using the default configured Roll class.
@@ -200,7 +226,7 @@ declare global {
         static create<D extends Record<string, unknown> = {}>(
             formula: string,
             data?: D,
-            options?: InexactPartial<Options>,
+            options?: InexactPartial<Options>
         ): typeof CONFIG.Dice.rolls extends [infer T] ? T : Roll<D>;
 
         /**
@@ -274,7 +300,7 @@ declare global {
             }?: {
                 missing?: string;
                 warn?: boolean;
-            },
+            }
         ): string;
 
         /**
@@ -310,7 +336,10 @@ declare global {
          *                   (default: `{}`)
          * @returns An array of terms, split on dice pool terms
          */
-        protected _splitGroup(_formula: string, options?: InexactPartial<SplitGroupOptions>): string[];
+        protected _splitGroup(
+            _formula: string,
+            options?: InexactPartial<SplitGroupOptions>
+        ): string[];
 
         /**
          * Split a formula by identifying arithmetic terms
@@ -324,7 +353,10 @@ declare global {
          * @param formula - The formula to extract
          * @returns The cleaned formula and extracted flavor mapping
          */
-        protected static _extractFlavors(formula: string): { formula: string; flavors: Flavor };
+        protected static _extractFlavors(formula: string): {
+            formula: string;
+            flavors: Flavor;
+        };
 
         /**
          * Restore flavor text to a string term
@@ -347,7 +379,15 @@ declare global {
          */
         protected static _classifyStringTerm(
             term: string,
-            { intermediate, prior, next }?: { intermediate?: boolean; prior?: RollTerm | string; next?: RollTerm | string },
+            {
+                intermediate,
+                prior,
+                next,
+            }?: {
+                intermediate?: boolean;
+                prior?: RollTerm | string;
+                next?: RollTerm | string;
+            }
         ): RollTerm;
 
         /**
@@ -397,18 +437,62 @@ declare global {
          * @returns A promise which resolves to the created ChatMessage entity, if create is true
          *          or the Object of prepared chatData otherwise.
          */
-        toMessage<T extends DeepPartial<ConstructorParameters<ConfiguredDocumentClass<typeof ChatMessage>>[0]> = {}>(
+        toMessage<
+            T extends DeepPartial<
+                ConstructorParameters<
+                    ConfiguredDocumentClass<typeof ChatMessage>
+                >[0]
+            > = {}
+        >(
             messageData?: T,
-            { rollMode, create }?: { rollMode?: keyof CONFIG.Dice.RollModes | "roll"; create?: true },
-        ): Promise<InstanceType<ConfiguredDocumentClass<typeof ChatMessage>> | undefined>;
-        toMessage<T extends DeepPartial<ConstructorParameters<ConfiguredDocumentClass<typeof ChatMessage>>[0]> = {}>(
+            {
+                rollMode,
+                create,
+            }?: {
+                rollMode?: keyof CONFIG.Dice.RollModes | 'roll';
+                create?: true;
+            }
+        ): Promise<
+            | InstanceType<ConfiguredDocumentClass<typeof ChatMessage>>
+            | undefined
+        >;
+        toMessage<
+            T extends DeepPartial<
+                ConstructorParameters<
+                    ConfiguredDocumentClass<typeof ChatMessage>
+                >[0]
+            > = {}
+        >(
             messageData: T,
-            { rollMode, create }: { rollMode?: keyof CONFIG.Dice.RollModes | "roll"; create: false },
+            {
+                rollMode,
+                create,
+            }: {
+                rollMode?: keyof CONFIG.Dice.RollModes | 'roll';
+                create: false;
+            }
         ): MessageData<T>;
-        toMessage<T extends DeepPartial<ConstructorParameters<ConfiguredDocumentClass<typeof ChatMessage>>[0]> = {}>(
+        toMessage<
+            T extends DeepPartial<
+                ConstructorParameters<
+                    ConfiguredDocumentClass<typeof ChatMessage>
+                >[0]
+            > = {}
+        >(
             messageData: T,
-            { rollMode, create }: { rollMode?: keyof CONFIG.Dice.RollModes | "roll"; create: boolean },
-        ): Promise<InstanceType<ConfiguredDocumentClass<typeof ChatMessage>> | undefined> | MessageData<T>;
+            {
+                rollMode,
+                create,
+            }: {
+                rollMode?: keyof CONFIG.Dice.RollModes | 'roll';
+                create: boolean;
+            }
+        ):
+            | Promise<
+                  | InstanceType<ConfiguredDocumentClass<typeof ChatMessage>>
+                  | undefined
+              >
+            | MessageData<T>;
 
         /**
          * Expand an inline roll element to display it's contained dice result as a tooltip
@@ -475,7 +559,7 @@ declare global {
         static fromTerms<T extends ConstructorOf<Roll<any>>>(
             this: T,
             terms: RollTerm[],
-            options?: InexactPartial<Options>,
+            options?: InexactPartial<Options>
         ): InstanceType<T>;
     }
 
@@ -484,7 +568,6 @@ declare global {
          * An Array of dice term modifiers which are applied
          */
         modifiers: string[];
-
 
         /**
          * The number of dice of this term to roll, before modifiers are applied
@@ -505,9 +588,9 @@ declare global {
     }
 
     /**
- * An abstract class which represents a single token that can be used as part of a Roll formula.
- * Every portion of a Roll formula is parsed into a subclass of RollTerm in order for the Roll to be fully evaluated.
- */
+     * An abstract class which represents a single token that can be used as part of a Roll formula.
+     * Every portion of a Roll formula is parsed into a subclass of RollTerm in order for the Roll to be fully evaluated.
+     */
     declare abstract class RollTerm {
         constructor({ options }?: { options?: RollTerm.Options });
 
@@ -555,13 +638,35 @@ declare global {
          * @param options - (default: `{}`)
          * @returns The evaluated dice term
          */
-        evaluate(options?: InexactPartial<RollTerm.EvaluationOptions & { async: false }>): this;
-        evaluate(options: InexactPartial<RollTerm.EvaluationOptions> & { async: true }): Promise<this>;
-        evaluate(options?: InexactPartial<RollTerm.EvaluationOptions>): this | Promise<this>;
+        evaluate(
+            options?: InexactPartial<
+                RollTerm.EvaluationOptions & { async: false }
+            >
+        ): this;
+        evaluate(
+            options: InexactPartial<RollTerm.EvaluationOptions> & {
+                async: true;
+            }
+        ): Promise<this>;
+        evaluate(
+            options?: InexactPartial<RollTerm.EvaluationOptions>
+        ): this | Promise<this>;
 
-        protected _evaluate({ minimize, maximize }?: { minimize?: boolean; maximize?: boolean }): Promise<this>;
+        protected _evaluate({
+            minimize,
+            maximize,
+        }?: {
+            minimize?: boolean;
+            maximize?: boolean;
+        }): Promise<this>;
 
-        protected _evaluateSync({ minimize, maximize }?: { minimize?: boolean; maximize?: boolean }): this;
+        protected _evaluateSync({
+            minimize,
+            maximize,
+        }?: {
+            minimize?: boolean;
+            maximize?: boolean;
+        }): this;
 
         /* -------------------------------------------- */
         /*  Serialization and Loading                   */
@@ -579,7 +684,10 @@ declare global {
          * @param data - The de-serialized term data
          * @returns The re-constructed RollTerm object
          */
-        protected static _fromData<T extends RollTerm>(this: ConstructorOf<T>, data: object): T;
+        protected static _fromData<T extends RollTerm>(
+            this: ConstructorOf<T>,
+            data: object
+        ): T;
 
         /**
          * Reconstruct a RollTerm instance from a provided JSON string
@@ -604,10 +712,10 @@ declare global {
         /**
          * The named function in the Math environment which should be applied to the term
          */
-        fn: MathTermData["fn"];
+        fn: MathTermData['fn'];
 
         /** An array of string argument terms for the function */
-        terms: NonNullable<MathTermData["terms"]>;
+        terms: NonNullable<MathTermData['terms']>;
 
         /**
          * The cached Roll instances for each function argument
@@ -642,9 +750,21 @@ declare global {
 
         override get isDeterministic(): boolean;
 
-        protected _evaluateSync({ minimize, maximize }?: { minimize?: boolean; maximize?: boolean }): this;
+        protected _evaluateSync({
+            minimize,
+            maximize,
+        }?: {
+            minimize?: boolean;
+            maximize?: boolean;
+        }): this;
 
-        protected _evaluate({ minimize, maximize }?: { minimize?: boolean; maximize?: boolean }): Promise<this>;
+        protected _evaluate({
+            minimize,
+            maximize,
+        }?: {
+            minimize?: boolean;
+            maximize?: boolean;
+        }): Promise<this>;
     }
 
     /**
@@ -653,7 +773,7 @@ declare global {
     class NumericTerm extends RollTerm {
         constructor({ number, options }: NumericTermData);
 
-        number: NumericTermData["number"];
+        number: NumericTermData['number'];
 
         /**
          * @defaultValue
@@ -695,10 +815,10 @@ declare global {
         constructor({ term, roll, options }: ParentheticalTerm.TermData);
 
         /** The original provided string term used to construct the parenthetical */
-        term: ParentheticalTerm.TermData["term"];
+        term: ParentheticalTerm.TermData['term'];
 
         /** Alternatively, an already-evaluated Roll instance may be passed directly */
-        roll: ParentheticalTerm.TermData["roll"];
+        roll: ParentheticalTerm.TermData['roll'];
 
         /**
          * The regular expression pattern used to identify the opening of a parenthetical expression.
@@ -739,7 +859,10 @@ declare global {
          * t.formula; // (4d6 + 4)
          * ```
          */
-        static fromTerms(terms: RollTerm[], options?: Partial<RollTerm.Options>): ParentheticalTerm;
+        static fromTerms(
+            terms: RollTerm[],
+            options?: Partial<RollTerm.Options>
+        ): ParentheticalTerm;
     }
 
     declare namespace ParentheticalTerm {
@@ -748,6 +871,36 @@ declare global {
             roll: Roll;
             options: RollTerm.Options;
         }
+    }
+
+    interface D20RollConstructorOptions extends RollTerm.EvaluationOptions {
+        /**
+         * The number on the d20 that is considered a critical success.
+         *
+         * @defaultValue `20`
+         */
+        critical?: number;
+        /**
+         * The number on the d20 that is considered a critical failure.
+         *
+         * @defaultValue `1`
+         */
+        fumble?: number;
+        /**
+         * The flavor of the roll
+         */
+        flavor?: string;
+        /**
+         * An additional bonus to be added to the roll.
+         */
+        bonus?: string | number;
+        /**
+         * A number used as a static roll result of the d20.
+         * If null, the d20 is rolled normally and the result is used.
+         *
+         * @defaultValue `null`
+         */
+        staticRoll?: number | null;
     }
 
     declare namespace RollTerm {
@@ -786,10 +939,10 @@ declare global {
     declare class OperatorTerm extends RollTerm {
         constructor({ operator, options }?: Partial<OperatorTerm.TermData>);
 
-        operator: OperatorTerm.TermData["operator"];
+        operator: OperatorTerm.TermData['operator'];
 
         /** An array of operators which represent arithmetic operations */
-        static OPERATORS: ["+", "-", "*", "/", "%"];
+        static OPERATORS: ['+', '-', '*', '/', '%'];
     }
 
     declare namespace OperatorTerm {

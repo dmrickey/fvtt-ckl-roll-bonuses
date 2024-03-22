@@ -200,6 +200,54 @@ function prepareActorDerivedData(wrapped) {
     LocalHookHandler.fireHookNoReturnSync(localHooks.postPrepareActorDerivedData, this);
 }
 
+/**
+ * @param {ActorPF | ItemPF | ItemAction} action
+ * @param {RollData} rollData
+ */
+function updateItemActionRollData(action, rollData) {
+    if (!(action instanceof pf1.components.ItemAction)) return;
+
+    // safety for initialization during data prep where the bonuses havent' been set up yet
+    if (!action.item[MODULE_NAME]?.bonuses || !action.item[MODULE_NAME]?.bonuses) return;
+
+    rollData[MODULE_NAME] ||= {};
+    LocalHookHandler.fireHookNoReturnSync(localHooks.updateItemActionRollData, action, rollData);
+}
+Hooks.on('pf1GetRollData', updateItemActionRollData);
+
+/**
+ * @typedef {{data: RollData?, extraParts: unknown[], bonus:unknown, primaryAttack: boolean}} RollAttackArgs
+ */
+/**
+ * Place an attack roll using an item (weapon, feat, spell, or equipment)
+ *
+ * @param {(arg: RollAttackArgs) => Promise<D20RollPF>} wrapped
+ * @param {object} [args]
+ * @param {RollData?} [args.data]
+ * @param {unknown[]} [args.extraParts]
+ * @param {unknown} [args.bonus]
+ * @param {boolean} [args.primaryAttack]
+ * @this {ItemAction}
+ */
+async function itemActionRollAttack(
+    wrapped,
+    { data = null, extraParts = [], bonus = null, primaryAttack = true } = {}
+) {
+    const roll = await wrapped({ data, extraParts, bonus, primaryAttack });
+
+    const formula = roll.formula;
+    const options = roll.options;
+    const rollData = roll.data;
+    const seed = { formula, options };
+    LocalHookHandler.fireHookWithReturnSync(localHooks.itemActionRollAttack, seed, this, rollData);
+
+    if (formula !== seed.formula || !foundry.utils.objectsEqual(options, seed.options)) {
+        const replaced = await new CONFIG.Dice.rolls.D20RollPF(seed.formula, data, seed.options).evaluate();
+        return replaced;
+    }
+    return roll;
+}
+
 Hooks.once('setup', () => {
     debugSetup();
 });
@@ -220,6 +268,7 @@ Hooks.once('init', () => {
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemSpellPF.prototype.getTypeChatData', itemGetTypeChatData, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.critRange', itemActionCritRangeWrapper, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorPF.prototype.prepareSpecificDerivedData', prepareActorDerivedData, libWrapper.WRAPPER);
+    libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.rollAttack', itemActionRollAttack, libWrapper.WRAPPER);
     // for patching resources - both
     // libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype._updateMaxUses', updateMaxUses, libWrapper.WRAPPER);
     // pf1.documents.actor.ActorPF.prototype.updateItemResources

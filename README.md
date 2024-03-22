@@ -20,11 +20,13 @@ Supports PF1 v9+
   - [Weapon Target](#weapon-target)
   - [Weapon Type Target](#weapon-type-target)
 - [Generic Bonuses](#generic-bonuses)
+  - [Agile](#agile)
   - [Attack Bonus](#attack-bonus)
   - [Critical Bonuses](#critical-bonuses)
   - [Damage Bonus](#damage-bonus)
   - [Effective Size Bonus](#effective-size-bonus)
   - [Fortune/Misfortune](#fortunemisfortune)
+  - [Weapon Finesse](#weapon-finesse)
 - [Targeted Bonus Examples](#targeted-bonus-examples)
   - [Fighter Weapon Training](#fighter-weapon-training)
   - [Gunslinginer Gun Training](#gunslinginer-gun-training)
@@ -124,6 +126,9 @@ This allows you to target specific Weapon Types. When choosing a type, it looks 
 # Generic Bonuses
 Paired with targets above (see [Generic Targets](#generic-targets)), will grant your chosen targets the specified bonuses.
 
+## Agile
+Automatically makes targeted attacks use Dex instead of Str for damage rolls. Use with boolean flag `bonus_agile`.
+
 ## Attack Bonus
 Give a flat value or a formula to increase the target's attack roll. Use with boolean flag `bonus_attack`.
 
@@ -138,6 +143,9 @@ Increase the value used by any `sizeRoll` formula in the target (typically in th
 
 ## Fortune/Misfortune
 Applies a fortune effect (`2d20kh`) (or misfortune (`2d20kl`)) to the [targeted](#generic-targets) actions. This will only work for actions, but not for generic abilities such as skills, ability checks, etc. If you need a fortune effect for _everything_ or a _specific type of roll that can't be targeted_, then use the non-targeted [Fortune and Misfortune](#fortune-and-misfortune) option.
+
+## Weapon Finesse
+Automatically makes targeted attacks use Dex instead of Str for attack rolls. Use with boolean flag `bonus_weapon-finesse`.
 
 ---
  

@@ -91,8 +91,26 @@ export class BaseBonus {
      * @abstract
      * @param {ItemPF} source
      * @param {ActionUseShared} shared
-     */
+    */
     static actionUseAlterRollData(source, shared) { }
+
+    /**
+     * @abstract
+     * @param {ItemPF} _source
+     * @param {ItemActionRollAttackHookArgs} seed
+     * @param {ItemAction} _action
+     * @param {RollData} _data
+     * @returns {ItemActionRollAttackHookArgs}
+     */
+    static itemActionRollAttack(_source, seed, _action, _data) { return seed; }
+
+    /**
+     * @abstract
+      * @param {ItemPF} source
+      * @param {ItemAction} action
+      * @param {RollData} rollData
+      */
+    static updateItemActionRollData(source, action, rollData) { }
 
     /**
      * alters item use input via @see {@link customGlobalHooks.itemUse}

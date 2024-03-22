@@ -5,6 +5,7 @@ import { EffectiveSizeBonus } from './effective-size.mjs';
 import { FortuneBonus } from './fortune-bonus.mjs';
 import { MisfortuneBonus } from './misfortune-bonus.mjs';
 import { CritBonus } from './crit-bonus.mjs';
+import { WeaponFinesseBonus } from './weapon-finesse-bonus.mjs';
 
 /**
  * @type {typeof BaseBonus[]}
@@ -16,5 +17,6 @@ export const allBonusTypes = [
     EffectiveSizeBonus,
     FortuneBonus,
     MisfortuneBonus,
+    WeaponFinesseBonus,
     // ModifiersBonus, // only if I can get the function to remove duplicates working (which needs to work with conditionals)
 ];

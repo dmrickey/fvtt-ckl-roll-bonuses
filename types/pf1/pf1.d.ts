@@ -140,9 +140,10 @@ declare global {
     }
 
     class D20RollPF {
-        data: {};
-        options: {};
+        data: RollData;
+        options: RollOptions;
         terms: RollTerm[];
+        formula: string;
     }
 
     class ChatMessagePF extends BaseDocument {
@@ -586,9 +587,10 @@ declare global {
      * Roll Data used for resolving formulas
      */
     interface RollData<T extends SystemItemData = SystemItemData> {
-        abiliites: {
-            [key: keyof Abilities]: AbilityRollData;
+        [MODULE_NAME]: {
+            [key: string]: number | string | object | array;
         };
+        abilities: Record<keyof Abilities, AbilityRollData>;
         ac: ACRollData;
         altCurrency: CurrencyRollData;
         armor: {
@@ -643,10 +645,10 @@ declare global {
         action?: {
             _id: string;
             ability: {
-                attack: string;
+                attack: keyof Abilities;
                 critMult: number | string;
                 critRange: number;
-                damage: string;
+                damage: keyof Abilities;
                 damageMult: number;
             };
             damage: {
@@ -661,6 +663,18 @@ declare global {
         dcBonus?: number;
         powerAttackBonus?: number;
         powerAttackPenalty?: number;
+    }
+
+    interface ItemActionRollAttackHookArgs {
+        formula: string;
+        options: RollOptions;
+    }
+    interface RollOptions {
+        bonus: string;
+        critical: number;
+        flavor: string;
+        fumble: number;
+        staticRoll?: string?;
     }
 
     interface RollPF extends Roll {
@@ -989,7 +1003,7 @@ declare global {
                     _label: 'Misc';
                 };
             };
-            abilities;
+            abilities: Abilities;
             bonusModifiers: { [key in BonusModifers]: string };
             damageResistances: {
                 magic: 'Magic';

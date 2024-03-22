@@ -294,15 +294,29 @@ const prepare = (item, _rollData) => {
 LocalHookHandler.registerHandler(localHooks.prepareData, prepare);
 
 /**
- * @param {ActorPF | ItemPF | ItemAction} action
+ * @param {ItemActionRollAttackHookArgs} seed
+ * @param {ItemAction} action
+ * @param {RollData} data
+ * @returns {Promise<ItemActionRollAttackHookArgs>}
+ */
+const itemActionRollAttack = async (seed, action, data) => {
+    handleBonusesFor(
+        action,
+        (bonusType, sourceItem) => bonusType.itemActionRollAttack(sourceItem, seed, action, data),
+    );
+    return seed;
+}
+LocalHookHandler.registerHandler(localHooks.itemActionRollAttack, itemActionRollAttack);
+
+/**
+ *
+ * @param {ItemAction} action
  * @param {RollData} rollData
  */
-function updateItemActionRollData(action, rollData) {
-    if (!(action instanceof pf1.components.ItemAction)) return;
-
-    // safety for initialization during data prep where the bonuses havent' been set up yet
-    if (!action.item[MODULE_NAME]?.bonuses || !action.item[MODULE_NAME]?.bonuses) return;
-
-    LocalHookHandler.fireHookNoReturnSync(localHooks.updateItemActionRollData, action, rollData);
+const updateItemActionRollData = (action, rollData) => {
+    handleBonusesFor(
+        action,
+        (bonusType, sourceItem) => bonusType.updateItemActionRollData(sourceItem, action, rollData),
+    );
 }
-Hooks.on('pf1GetRollData', updateItemActionRollData);
+LocalHookHandler.registerHandler(localHooks.updateItemActionRollData, updateItemActionRollData)

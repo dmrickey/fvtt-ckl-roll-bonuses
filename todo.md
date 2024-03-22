@@ -188,9 +188,9 @@
     - Add customized labels for fortune effects that have variable targets
 - Show icon next to skills that roll inspiration for free
   - permanent-skill-bonuses
-- Add Weapon Finesse
 - Add crit deprecation
 - Verification
+  - Weapon Finesse
   - alignment based targets
   - all based targets
   - crit bonus
@@ -200,7 +200,13 @@
   - https://www.d20pfsrd.com/feats/general-feats/extreme-mood-swings/
 - Furious Focus
   - Automatically add the flag when the sheet is opened.
+- Weapon Finesse
+  - find out if I need a better name than `weapon finesse` (maybe `dex-to-attack`?)
+  - Update tooltip for Actor's sheet in Attack column
+  - Verify that the dex bonus is higher than the str bonus being swapped out
+- Add Agile to automatically swap to dex for damage
 - localize
+  - Weapon Finesse
   - Crit labels
   - All labels
   - "is item" labels
@@ -208,3 +214,8 @@
     - spell
     - melee
     - ranged
+- BaseBonus - rename `type` to `bonusKey`
+- It looks like Fortune is always adding kh, so I'm getting `1d20kh`
+- remove conditional logic for `showInputOnItemSheet` from bonuses because target-and-bonus-join already does that
+  - see if there are other methods doing the same
+  - also check targets

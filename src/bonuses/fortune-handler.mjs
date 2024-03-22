@@ -37,6 +37,7 @@ let fortuneHintLookup = {};
 
 Hooks.once('ready', () => {
     fortuneHintLookup = {
+        // @ts-ignore - because I typed Abilities too strongly and ignoring here is easier
         [abilityFortune]: (key) => key ? pf1.config.abilities[key] : localize('PF1.Ability'),
         [attackFortune]: (key) => !key ? localize('PF1.Attack') : key === 'melee' ? localize('PF1.Melee') : localize('PF1.Ranged'),
         [babFortune]: () => localize('PF1.BABAbbr'),
