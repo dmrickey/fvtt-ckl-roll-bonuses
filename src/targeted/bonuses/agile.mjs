@@ -3,13 +3,13 @@ import { showEnabledLabel } from '../../handlebars-handlers/enabled-label.mjs';
 import { LocalHookHandler, localHooks } from '../../util/hooks.mjs';
 import { BaseBonus } from './base-bonus.mjs';
 
-export class WeaponFinesseBonus extends BaseBonus {
+export class AgileBonus extends BaseBonus {
 
     /**
      * @override
      * @returns { string }
      */
-    static get type() { return 'weapon-finesse'; }
+    static get type() { return 'agile'; }
 
     /**
      * Get Item Hints tooltip value
@@ -26,31 +26,42 @@ export class WeaponFinesseBonus extends BaseBonus {
     }
 
     /**
+     * Add damage bonus to actor's Combat damage column tooltip
+     *
      * @override
      * @param {ItemPF} source
-     * @returns {ModifierSource[]}
+     * @returns {ItemChange[]}
      */
-    static getAttackSourcesForTooltip(source) {
-        const /** @type {ModifierSource[]} */ sources = [];
+    static getDamageSourcesForTooltip(source) {
+        /** @type {ItemChange[]} */
+        const sources = [];
 
         const { dex, str } = source[MODULE_NAME]?.[this.key];
         if (dex || str) {
 
             if (dex) {
-                sources.push({
+                const change = new pf1.components.ItemChange({
+                    flavor: source.name,
+                    formula: dex,
+                    modifier: 'untypedPerm',
+                    operator: 'add',
+                    priority: 0,
+                    subTarget: 'damage',
                     value: dex,
-                    name: source.name,
-                    modifier: 'untyped',
-                    sort: -100,
                 });
+                sources.push(change);
             }
             if (str) {
-                sources.push({
+                const change = new pf1.components.ItemChange({
+                    flavor: source.name,
+                    formula: -str,
+                    modifier: 'untypedPerm',
+                    operator: 'add',
+                    priority: 0,
+                    subTarget: 'damage',
                     value: -str,
-                    name: source.name,
-                    modifier: 'untyped',
-                    sort: -100,
                 });
+                sources.push(change);
             }
         }
 
@@ -99,7 +110,7 @@ export class WeaponFinesseBonus extends BaseBonus {
      * @param {RollData} data
      * @returns {ItemActionRollAttackHookArgs}
      */
-    static itemActionRollAttack(_source, seed, _action, data) {
+    static itemActionRollDamage(_source, seed, _action, data) {
         const strRegex = new RegExp(`[0-9]+\\[${pf1.config.abilities.str}\\]`);
         const dexIsGreater = data.abilities.dex.mod > data.abilities.str.mod;
         if (data && seed.formula.match(strRegex) && dexIsGreater) {

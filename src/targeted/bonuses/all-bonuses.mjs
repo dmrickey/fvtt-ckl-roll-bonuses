@@ -6,11 +6,13 @@ import { FortuneBonus } from './fortune-bonus.mjs';
 import { MisfortuneBonus } from './misfortune-bonus.mjs';
 import { CritBonus } from './crit-bonus.mjs';
 import { WeaponFinesseBonus } from './weapon-finesse-bonus.mjs';
+import { AgileBonus } from './agile.mjs';
 
 /**
  * @type {typeof BaseBonus[]}
  */
 export const allBonusTypes = [
+    AgileBonus,
     AttackBonus,
     CritBonus,
     DamageBonus,

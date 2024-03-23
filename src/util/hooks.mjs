@@ -18,6 +18,7 @@ export const customGlobalHooks = /** @type {const} */ ({
 export const localHooks = /** @type {const} */ ({
     itemActionCritRangeWrapper: `${MODULE_NAME}_itemActionCritRangeWrapper`,
     itemActionRollAttack: `${MODULE_NAME}_itemActionRollAttack`,
+    itemActionRollDamage: `${MODULE_NAME}_itemActionRollDamage`,
     patchChangeValue: `${MODULE_NAME}_patchChangeValue`,
     postPrepareActorDerivedData: `${MODULE_NAME}_postPrepareActorDerivedData`,
     prepareData: `${MODULE_NAME}_prepareData`,
@@ -76,6 +77,13 @@ export class LocalHookHandler {
      */
 
     /**
+     * @overload
+     * @param {typeof localHooks.itemActionRollDamage} hook
+     * @param {(seed: ItemActionRollAttackHookArgs, action: ItemAction, data: RollData) => Promise<ItemActionRollAttackHookArgs>} func
+     * @returns {void}
+     */
+
+    /**
      * @param {Hook} hook
      * @param {*} func
      * @returns {void}
@@ -103,15 +111,6 @@ export class LocalHookHandler {
 
         return value;
     }
-
-    /**
-     * @overload
-     * @param {typeof localHooks.itemActionRollAttack} hook
-     * @param {ItemActionRollAttackHookArgs} seed
-     * @param {ItemAction} action
-     * @param {RollData} data
-     * @returns {Promise<{ItemActionRollAttackHookArgs}>}
-     */
 
     /**
      * @overload
@@ -147,6 +146,24 @@ export class LocalHookHandler {
 
         return value;
     }
+
+    /**
+     * @overload
+     * @param {typeof localHooks.itemActionRollAttack} hook
+     * @param {ItemActionRollAttackHookArgs} seed
+     * @param {ItemAction} action
+     * @param {RollData} data
+     * @returns {void}
+     */
+
+    /**
+     * @overload
+     * @param {typeof localHooks.itemActionRollDamage} hook
+     * @param {ItemActionRollAttackHookArgs} seed
+     * @param {ItemAction} action
+     * @param {RollData} data
+     * @returns {void}
+     */
 
     /**
      * @overload

@@ -283,11 +283,13 @@ const prepare = (item, _rollData) => {
     allBonusTypes.forEach((bonusType) => {
         if (bonusType.isBonusSource(item)) {
             item[MODULE_NAME].bonuses.push(bonusType);
+            bonusType.prepareData(item, _rollData);
         }
     });
     allTargetTypes.forEach((targetType) => {
         if (targetType.isTargetSource(item)) {
             item[MODULE_NAME].targets.push(targetType);
+            targetType.prepareData(item, _rollData);
         }
     });
 };
@@ -307,6 +309,21 @@ const itemActionRollAttack = async (seed, action, data) => {
     return seed;
 }
 LocalHookHandler.registerHandler(localHooks.itemActionRollAttack, itemActionRollAttack);
+
+/**
+ * @param {ItemActionRollAttackHookArgs} seed
+ * @param {ItemAction} action
+ * @param {RollData} data
+ * @returns {Promise<ItemActionRollAttackHookArgs>}
+ */
+const itemActionRollDamage = async (seed, action, data) => {
+    handleBonusesFor(
+        action,
+        (bonusType, sourceItem) => bonusType.itemActionRollDamage(sourceItem, seed, action, data),
+    );
+    return seed;
+}
+LocalHookHandler.registerHandler(localHooks.itemActionRollAttack, itemActionRollDamage);
 
 /**
  *

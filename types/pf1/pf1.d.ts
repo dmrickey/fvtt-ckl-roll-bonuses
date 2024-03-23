@@ -139,12 +139,8 @@ declare global {
         results: { result: number; active: boolean }[];
     }
 
-    class D20RollPF {
-        data: RollData;
-        options: RollOptions;
-        terms: RollTerm[];
-        formula: string;
-    }
+    interface D20RollPF<T extends RollData = RollData<SystemItemData>>
+        extends RollPF<T> {}
 
     class ChatMessagePF extends BaseDocument {
         content: string;
@@ -183,7 +179,7 @@ declare global {
                 attack: string;
                 critMult: number;
                 critRange: number;
-                damage: string;
+                damage: keyof Abilities;
                 damageMult: number;
             };
             actionType: ActionType;
@@ -677,7 +673,8 @@ declare global {
         staticRoll?: string?;
     }
 
-    interface RollPF extends Roll {
+    interface RollPF<T extends RollData = RollData<SystemItemData>>
+        extends Roll<T> {
         /** returns true if formula has no flavor and no dice (i.e. reduces to a single number) */
         isNumber: boolean;
         simplifiedFormula: string;
@@ -704,6 +701,8 @@ declare global {
             rollData?: Nullable<RollData>
         ): RollPF;
     }
+
+    interface DamageRoll extends RollPF {}
 
     type BonusModifers =
         | 'alchemical'

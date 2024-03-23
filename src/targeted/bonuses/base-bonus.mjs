@@ -106,6 +106,16 @@ export class BaseBonus {
 
     /**
      * @abstract
+     * @param {ItemPF} _source
+     * @param {ItemActionRollAttackHookArgs} seed
+     * @param {ItemAction} _action
+     * @param {RollData} _data
+     * @returns {ItemActionRollAttackHookArgs}
+     */
+    static itemActionRollDamage(_source, seed, _action, _data) { return seed; }
+
+    /**
+     * @abstract
       * @param {ItemPF} source
       * @param {ItemAction} action
       * @param {RollData} rollData
@@ -120,6 +130,13 @@ export class BaseBonus {
      * @param {{ fortuneCount: number; misfortuneCount: number; actionID: any; }} options passed into ItemPF.use
      */
     static onItemUse(source, options) { }
+
+    /**
+     * @abstract
+     * @param {ItemPF} item
+     * @param {RollData} rollData
+     */
+    static prepareData(item, rollData) { }
 
     /**
      * Initializes anything specific to the bonus

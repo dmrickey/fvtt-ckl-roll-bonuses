@@ -100,7 +100,7 @@ function actionDamageSources({ item }, sources) {
                 value: 2,
             }
         );
-        return sources.push(change);
+        sources.push(change);
     }
 
     return sources;

@@ -88,6 +88,12 @@ export class BaseTarget {
     static get showOnActive() { return false; }
 
     /**
+     * @param {ItemPF} item
+     * @param {RollData} rollData
+     */
+    static prepareData(item, rollData) { }
+
+    /**
      * Shows editor for target
      *
      * @param {ItemPF} source
