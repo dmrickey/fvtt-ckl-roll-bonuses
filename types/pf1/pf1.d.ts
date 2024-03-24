@@ -12,6 +12,7 @@ declare global {
         async setFlag<T>(moduleName: string, key: string, value: T);
         updateSource(changes: Partial<this>, options?: object);
         uuid: string;
+        update(data: Record<string, any>);
     }
 
     abstract class ItemDocument extends BaseDocument {}

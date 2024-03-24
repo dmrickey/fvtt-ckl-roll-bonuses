@@ -3,9 +3,19 @@ import { showEnabledLabel } from '../handlebars-handlers/enabled-label.mjs';
 import { hasAnyBFlag } from '../util/flag-helpers.mjs';
 import { customGlobalHooks } from '../util/hooks.mjs';
 import { localizeGenericBonusLabel } from '../util/localize.mjs';
+import { registerSetting } from '../util/settings.mjs';
 
 const furiousFocus = 'furious-focus';
 const furiousFocusTimestamp = 'furious-focus-timestamp';
+const compendiumId = 'UcEIgufLJlIfhHmu';
+
+registerSetting({ key: furiousFocus });
+
+class Settings {
+    static get furiousFocus() { return Settings.#getSetting(furiousFocus); }
+    // @ts-ignore
+    static #getSetting(/** @type {string} */key) { return game.settings.get(MODULE_NAME, key).toLowerCase(); }
+}
 
 /** @returns {string} */
 const label = () => { return localizeGenericBonusLabel(furiousFocus); }
@@ -51,6 +61,13 @@ Hooks.on('renderItemSheet', (
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
     const hasFlag = item.system.flags.boolean?.hasOwnProperty(furiousFocus);
+    const name = item?.name?.toLowerCase() ?? '';
+    const sourceId = item?.flags.core?.sourceId ?? '';
+    if (!hasFlag && (name === Settings.furiousFocus || sourceId.includes(compendiumId))) {
+        item.update({ [`system.flags.boolean.${furiousFocus}`]: true });
+        return;
+    }
+
     if (!hasFlag) {
         return;
     }

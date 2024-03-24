@@ -55,7 +55,14 @@ export class FinesseTarget extends BaseTarget {
             return [];
         }
 
-        if (item instanceof pf1.documents.item.ItemWeaponPF
+        const isWeapon = item instanceof pf1.documents.item.ItemWeaponPF;
+        const isAttack = item instanceof pf1.documents.item.ItemAttackPF;
+
+        if (!isWeapon || !isAttack) {
+            return [];
+        }
+
+        if (isWeapon
             && !(item.system.properties.fin
                 || item.system.weaponGroups.value.includes('natural')
             )
@@ -63,7 +70,7 @@ export class FinesseTarget extends BaseTarget {
             return [];
         }
 
-        if (item instanceof pf1.documents.item.ItemAttackPF
+        if (isAttack
             && !(!!item.system.flags.boolean[this.finesseTargetOverride]
                 || item.system.weaponGroups?.value.includes('natural')
             )
