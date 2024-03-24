@@ -12,7 +12,7 @@ function init() {
     allTargetTypes.forEach((targetType) => targetType.init());
     allBonusTypes.forEach((bonusType) => bonusType.init());
 };
-init();
+Hooks.once('ready', init);
 
 registerItemHint((hintcls, actor, item, _data) => {
     if (!actor || item?.actor !== actor) {
