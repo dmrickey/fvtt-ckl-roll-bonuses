@@ -435,7 +435,7 @@ Automatically add +2 damage to chosen weapons types for `Weapon Specialization` 
 # Misc
 
 ## Ammunition
-Ammunition now has inputs for attack and damage bonuses. You can find these on the item's advanced tab.
+Ammunition now has inputs for masterwork, enhancement, attack, and damage bonuses. You can find these on the item's advanced tab.
 
 ## Change Offset
 Modify the results of any `change` type. This is essentially a very generic form of [Fate's Favored](#fates-favored) -- but this will allow you to increase or decrease any `change` type instead of only modifying luck bonuses by +1.
