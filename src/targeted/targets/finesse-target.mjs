@@ -1,29 +1,15 @@
+import { MODULE_NAME } from '../../consts.mjs';
 import { showEnabledLabel } from '../../handlebars-handlers/enabled-label.mjs';
 import { BaseTarget } from './base-target.mjs';
 
-/**
- * @abstract
- */
-export class BaseIsItemTarget extends BaseTarget {
+export class FinesseTarget extends BaseTarget {
+
+    static finesseTargetOverride = 'finesse-override';
 
     /**
-     * @param {object} args
-     * @param {ItemPF} args.item,
-     * @param {Nullable<ItemAction>} [args.action]
-     * @returns {boolean}
+     * @override
      */
-    static _itemFilter({ item, action = null }) {
-        return !!item?.hasAction && this.extendedItemFilter({ item, action })
-    }
-
-    /**
-     * @abstract
-     * @param {object} args
-     * @param {ItemPF} args.item,
-     * @param {Nullable<ItemAction>} [args.action]
-     * @returns {boolean}
-     */
-    static extendedItemFilter({ item, action = null }) { throw new Error('must be overridden'); }
+    static get targetKey() { return 'finesse'; }
 
     /**
      * @inheritdoc
@@ -33,9 +19,10 @@ export class BaseIsItemTarget extends BaseTarget {
      */
     static getHints(source) {
         /** @type {string[]} */
-        if (this.isTargetSource(source)) {
+        if (source.getFlag(MODULE_NAME, this.key)) {
             return [this.label];
         }
+        return;
     }
 
     /**
@@ -63,12 +50,20 @@ export class BaseIsItemTarget extends BaseTarget {
         const item = doc instanceof pf1.documents.item.ItemPF
             ? doc
             : doc.item;
-        if (!item.actor) {
+
+        if (item instanceof pf1.documents.item.ItemWeaponPF
+            && !(item.system.properties.fin
+                || item.system.weaponGroups.value.includes('natural')
+            )
+        ) {
             return [];
         }
 
-        const action = doc instanceof pf1.components.ItemAction ? doc : item.firstAction;
-        if (!this._itemFilter({ item, action })) {
+        if (item instanceof pf1.documents.item.ItemAttackPF
+            && !(!!item.system.flags.boolean[this.finesseTargetOverride]
+                || item.system.weaponGroups?.value.includes('natural')
+            )
+        ) {
             return [];
         }
 

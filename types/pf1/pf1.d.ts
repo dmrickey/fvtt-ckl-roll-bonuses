@@ -211,10 +211,10 @@ declare global {
     }
 
     /** used for weapons and attacks */
-    interface TraitSelector {
+    interface TraitSelector<T extends string = string> {
         /** custom entries split by ; */
         custom: string;
-        value: string[];
+        value: T[];
     }
 
     /** used for damage parts */
@@ -345,7 +345,7 @@ declare global {
         };
         broken: boolean;
         flags: {
-            boolean: {};
+            boolean: Record<string, boolean>;
             dictionary: DictionaryFlags;
         };
         tag: string;
@@ -354,7 +354,7 @@ declare global {
     class SystemItemDataAttackPF extends SystemItemData {
         baseTypes: string[];
         // links: { children: { name: string; id: string }[] };
-        weaponGroups: TraitSelector?;
+        weaponGroups: TraitSelector<keyof WeaponGroups>?;
     }
     class SystemIteMDataBuffPF extends SystemItemData {}
     class SystemItemDataEquipmentPF extends SystemItemData {
@@ -386,7 +386,8 @@ declare global {
         // links: { children: { name: string; id: string }[] };
         masterwork: boolean;
         proficient: boolean;
-        weaponGroups: TraitSelector;
+        properties: Record<keyof WeaponProperties, boolean>;
+        weaponGroups: TraitSelector<keyof WeaponGroups>;
     }
 
     type ItemType =
@@ -1032,7 +1033,7 @@ declare global {
             skillCompendiumEntries: { [key: string]: string };
             skills;
             spellSchools: { [key: string]: string };
-            weaponGroups: { [key: string]: string };
+            weaponGroups: WeaponGroups;
         };
         documents: {
             actor: {
@@ -1063,5 +1064,48 @@ declare global {
         fort: 'Fortitude';
         ref: 'Reflex';
         will: 'Will';
+    }
+
+    interface WeaponGroups {
+        axes: 'Axes';
+        bladesHeavy: 'Blades, Heavy';
+        bladesLight: 'Blades, Light';
+        bows: 'Bows';
+        close: 'Close';
+        crossbows: 'Crossbows';
+        double: 'Double';
+        firearms: 'Firearms';
+        flails: 'Flails';
+        hammers: 'Hammers';
+        monk: 'Monk';
+        natural: 'Natural';
+        polearms: 'Polearms';
+        siegeEngines: 'Siege Engines';
+        spears: 'Spears';
+        thrown: 'Thrown';
+        tribal: 'Tribal';
+    }
+
+    interface WeaponProperties {
+        ato: 'Automatic';
+        blc: 'Blocking';
+        brc: 'Brace';
+        dbl: 'Double';
+        dea: 'Deadly';
+        dis: 'Disarm';
+        dst: 'Distracting';
+        fin: 'Finesse';
+        frg: 'Fragile';
+        grp: 'Grapple';
+        imp: 'Improvised';
+        mnk: 'Monk';
+        nnl: 'Non-lethal';
+        prf: 'Performance';
+        rch: 'Reach';
+        sct: 'Scatter';
+        snd: 'Sunder';
+        spc: 'Special';
+        thr: 'Thrown';
+        trp: 'Trip';
     }
 }

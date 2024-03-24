@@ -17,7 +17,7 @@ export class ActionTarget extends BaseTarget {
      * @param {ItemPF | ActionUse} arg
      * @returns {boolean}
      */
-    static getBonusSourcesForTarget(arg) {
+    static getSourcesFor(arg) {
         if (arg instanceof pf1.components.ItemAction) {
             return this.ids.includes(arg.id);
         }

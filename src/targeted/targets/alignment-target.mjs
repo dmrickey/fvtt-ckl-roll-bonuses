@@ -77,7 +77,7 @@ export class AlignmentTarget extends BaseTarget {
      * @param {ItemPF | ActionUse | ItemAction} doc
      * @returns {ItemPF[]}
      */
-    static getBonusSourcesForTarget(doc) {
+    static getSourcesFor(doc) {
         if (!this.#currentTargetedActors.length) {
             return [];
         }

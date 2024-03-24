@@ -22,7 +22,7 @@ export class WeaponGroupTarget extends BaseTarget {
      * @returns {Nullable<string[]>}
      */
     static getHints(source) {
-        /** @type {string[]} */
+        /** @type {(keyof WeaponGroups)[]} */
         const groups = source.getFlag(MODULE_NAME, this.key) ?? [];
         return groups.map((group) => pf1.config.weaponGroups[group] || group).filter(truthiness);
     }
@@ -33,7 +33,7 @@ export class WeaponGroupTarget extends BaseTarget {
      * @param {ItemPF | ActionUse | ItemAction} doc
      * @returns {ItemPF[]}
      */
-    static getBonusSourcesForTarget(doc) {
+    static getSourcesFor(doc) {
         const item = doc instanceof pf1.documents.item.ItemPF
             ? doc
             : doc.item;

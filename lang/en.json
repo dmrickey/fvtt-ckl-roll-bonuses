@@ -13,15 +13,19 @@
         "bonus-target": {
             "bonus": {
                 "hint": {
+                    "agile": "Grants dex to damage for attacks",
                     "attack": "Formula input for increasing attack.",
                     "effective-size": "Formula input for increasing a sizeRoll formula's Effective Size. This is used for buffs like Lead Blades, Gravity Bow, etc.",
+                    "finesse": "Uses dex for attack rolls instead of strength",
                     "fortune": "Roll twice and take the better. Multiple bonuses stack which means you could roll 3, 4, or more dice.",
                     "misfortune": "Roll twice and take the worse. Multiple bonuses stack which means you could roll 3, 4, or more dice."
                 },
                 "label": {
+                    "agile": "Agile",
                     "attack": "Attack Bonus",
                     "crit": "Critical",
                     "effective-size": "Effective Size",
+                    "finesse": "Finesse",
                     "fortune": "Fortune",
                     "misfortune": "Misfortune"
                 }
@@ -30,6 +34,7 @@
                 "hint": {
                     "alignment": "This enables bonuses for an action based on the active targeted tokens when the action is performed.",
                     "all": "Bonuses will be active for any action that can accept the bonus.",
+                    "finesse": "Bonuses will be active for all finesse-able targets. Thsi requires the weapon/attack to have the Finesse Weapon property, be in the Natural Attack weapon group, or have the `finesse-override` boolean flag.",
                     "is-melee-weapon": "Bonuses will be active whenever an action used that is configured as a melee attack",
                     "is-ranged-weapon": "Bonuses will be active whenever an action used that is configured as a ranged attack",
                     "is-spell": "Bonuses will be active whenever an action used that is configured as a spell attack",
@@ -40,11 +45,12 @@
                     "token": "Bonuses are applied when using an action while specific tokens are targeted. When this buff is activate, a dialog will show up that allows you to choose from tokens in the scene.",
                     "weapon": "Bonuses will be applied to actions uses for these specific Attacks and Weapons",
                     "weapon-group": "Bonuses will be applied when using an action for any weapon in the chosen Weapon Group(s). Attacks and Weapons must be properly configured with weapon groups.",
-                    "weapon-type": "Bonuses will be applied when using an action for any weapon that has this Equipment Base Type. Attacks and Weapons must be properly configured with base types."
+                    "weapon-type": "Bonuses will be applied when using an action for any weapon that has this Equipment Base Type. Attacks and Weapons must be properly configured with Equipment Base Types."
                 },
                 "label": {
                     "alignment": "Alignment Targets",
                     "all": "All Targets",
+                    "finesse": "Finesse.",
                     "is-melee-weapon": "Targets All Melee Weapons",
                     "is-ranged-weapon": "Targets All Ranged Weapons",
                     "is-spell": "Targets All Spells",

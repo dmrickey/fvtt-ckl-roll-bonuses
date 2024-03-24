@@ -25,7 +25,7 @@ class Settings {
 
 // register hint on source feat
 registerItemHint((hintcls, _actor, item, _data) => {
-    const current = item.getItemDictionaryFlag(key);
+    const current = /** @type {keyof WeaponGroups} */ (item.getItemDictionaryFlag(key));
     if (current) {
         return hintcls.create(pf1.config.weaponGroups[current] ?? current, [], {});
     }

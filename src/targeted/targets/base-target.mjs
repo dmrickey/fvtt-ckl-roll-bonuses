@@ -12,7 +12,7 @@ export class BaseTarget {
      * @param {ItemPF | ActionUse | ItemAction} arg
      * @returns {ItemPF[]}
      */
-    static getBonusSourcesForTarget(arg) { throw new Error('must be overridden'); };
+    static getSourcesFor(arg) { throw new Error('must be overridden'); };
 
     /**
      * For a given target source, does it target the `thing`?
@@ -21,7 +21,7 @@ export class BaseTarget {
      * @returns {boolean} True if this target source applies to the `thing`
      */
     static doesTargetInclude(targetSource, thing) {
-        return !!this.getBonusSourcesForTarget(thing).find((bonusSource) => bonusSource.id === targetSource.id);
+        return !!this.getSourcesFor(thing).find((bonusSource) => bonusSource.id === targetSource.id);
     }
 
     /**

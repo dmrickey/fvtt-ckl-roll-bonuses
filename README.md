@@ -11,6 +11,7 @@ Supports PF1 v9+
 - [Generic Targets](#generic-targets)
   - [Alignment Target](#alignment-target)
   - [All](#all)
+  - [Finesse](#finesse)
   - [Item Target](#item-target)
   - [Item Type Target](#item-type-target)
   - [Self Target](#self-target)
@@ -25,8 +26,8 @@ Supports PF1 v9+
   - [Critical Bonuses](#critical-bonuses)
   - [Damage Bonus](#damage-bonus)
   - [Effective Size Bonus](#effective-size-bonus)
+  - [Finesse](#finesse-1)
   - [Fortune/Misfortune](#fortunemisfortune)
-  - [Weapon Finesse](#weapon-finesse)
 - [Targeted Bonus Examples](#targeted-bonus-examples)
   - [Fighter Weapon Training](#fighter-weapon-training)
   - [Gunslinginer Gun Training](#gunslinginer-gun-training)
@@ -91,6 +92,13 @@ This will make any [Generic Bonuses](#generic-bonuses) kick in only when the act
 ## All
 This will make any [Generic Bonuses](#generic-bonuses) configured on this Item apply to any Action that they are able to. Use with `target_all`. 
 
+## Finesse
+This will make any [Generic Bonuses](#generic-bonuses) configured on this Item apply to any finesse-able attacks. Configure with the boolean flag `target_finesse` This is intended for use alongside the Weapon Finesse feat. For any Item to be considered finesse-able, it needs to fulfill at least one of the following three criteria
+- it must be a weapon that has the `Finesse` Weapon property checked on the weapon's details tab
+- it must be an attack or a weapon that has the Natural weapon group selected
+- it must have its own boolean flag `finesse-override`
+  - this last case is to cover "Attacks" that are made from weapons. Once an Attack has been created from a weapon, it no longer has a "Finesse" weapon property available to it as the PF1 system has those reserved purely for Weapons and no other Item types.
+
 ## Item Target
 An "Item" within Foundry basically means anything that you can drag onto your character sheet. So as far as Foundry is concerned, an Item can your class, spell, feat, trait, buff, attack, weapon, inventory item, etc. This target will let you choose any of those items that are configured to have an action (because only actions are rolled and can have roll bonuses). To configure add a boolean flag `target_item` and the input will show up below.
 
@@ -141,11 +149,11 @@ Input multiple damage formula (including types) to increase the target's damage.
 ## Effective Size Bonus
 Increase the value used by any `sizeRoll` formula in the target (typically in the damage formula). Use with boolean flag `bonus_effective-size`. This is useful for spells like Gravity Bow, Lead Blades, Strong Jaw, temporarily granting the Impact quality to a specific weapon, etc.
 
+## Finesse
+Automatically makes targeted attacks use Dex instead of Str for attack rolls. Use with boolean flag `bonus_finesse`.
+
 ## Fortune/Misfortune
 Applies a fortune effect (`2d20kh`) (or misfortune (`2d20kl`)) to the [targeted](#generic-targets) actions. This will only work for actions, but not for generic abilities such as skills, ability checks, etc. If you need a fortune effect for _everything_ or a _specific type of roll that can't be targeted_, then use the non-targeted [Fortune and Misfortune](#fortune-and-misfortune) option.
-
-## Weapon Finesse
-Automatically makes targeted attacks use Dex instead of Str for attack rolls. Use with boolean flag `bonus_weapon-finesse`.
 
 ---
  

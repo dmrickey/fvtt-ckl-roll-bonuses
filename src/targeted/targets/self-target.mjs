@@ -50,7 +50,7 @@ export class SelfTarget extends BaseTarget {
      * @param {ItemPF | ActionUse | ItemAction} doc
      * @returns {ItemPF[]}
      */
-    static getBonusSourcesForTarget(doc) {
+    static getSourcesFor(doc) {
         const item = doc instanceof pf1.documents.item.ItemPF
             ? doc
             : doc.item;

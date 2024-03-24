@@ -89,7 +89,7 @@ registerItemHint((hintcls, actor, item, _data) => {
 export const handleBonusesFor = (thing, func, { skipGenericTarget = false } = {}) => {
     allTargetTypes
         .filter((targetType) => !skipGenericTarget || !targetType.isGenericTarget)
-        .flatMap((targetType) => targetType.getBonusSourcesForTarget(thing))
+        .flatMap((targetType) => targetType.getSourcesFor(thing))
         // filter down to unique items in case one source item is affecting this target item through multiple "targets"
         .filter((sourceItem, i, self) => self.findIndex((nestedTarget) => sourceItem.id === nestedTarget.id) === i)
         .filter((sourceItem) => sourceItem[MODULE_NAME].targets.every((baseTarget) =>
@@ -109,7 +109,7 @@ export const handleBonusesFor = (thing, func, { skipGenericTarget = false } = {}
 export const handleBonusTypeFor = (thing, specificBonusType, func, { skipGenericTarget = false } = {}) => {
     allTargetTypes
         .filter((targetType) => !skipGenericTarget || !targetType.isGenericTarget)
-        .flatMap((targetType) => targetType.getBonusSourcesForTarget(thing))
+        .flatMap((targetType) => targetType.getSourcesFor(thing))
         // filter down to unique items in case one source item is affecting this target item through multiple "targets"
         .filter((sourceItem, i, self) => self.findIndex((nestedTarget) => sourceItem.id === nestedTarget.id) === i)
         .filter((sourceItem) => sourceItem[MODULE_NAME].targets.every((baseTarget) =>
@@ -323,7 +323,7 @@ const itemActionRollDamage = async (seed, action, data) => {
     );
     return seed;
 }
-LocalHookHandler.registerHandler(localHooks.itemActionRollAttack, itemActionRollDamage);
+LocalHookHandler.registerHandler(localHooks.itemActionRollDamage, itemActionRollDamage);
 
 /**
  *

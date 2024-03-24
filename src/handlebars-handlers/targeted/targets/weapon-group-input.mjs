@@ -18,7 +18,7 @@ export function weaponTypeInput({
     custom = [],
 }) {
     custom = uniqueArray(custom);
-    /** @type {TraitSelector} */
+    /** @type {TraitSelector<keyof WeaponGroups>} */
     const currentValue = item.getFlag(MODULE_NAME, key);
     const current = currentValue?.value.reduce((acc, curr) => ({ ...acc, [curr]: pf1.config.weaponGroups[curr] || curr }), {});
     const templateData = {

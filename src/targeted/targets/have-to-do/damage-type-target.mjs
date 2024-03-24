@@ -23,7 +23,7 @@ export class DamageTypeTarget extends BaseTarget {
      * @override
      * @param {ItemPF | ActionUse} arg
      */
-    static getBonusSourcesForTarget(arg) {
+    static getSourcesFor(arg) {
         if (arg instanceof pf1.components.ItemAction) {
             const actionDamageTypes = uniqueArray(
                 arg.data.damage.parts.flatMap((part) => [...part.type.custom.split(';'), ...part.type.values])

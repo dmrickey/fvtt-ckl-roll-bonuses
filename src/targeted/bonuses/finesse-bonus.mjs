@@ -9,7 +9,7 @@ export class WeaponFinesseBonus extends BaseBonus {
      * @override
      * @returns { string }
      */
-    static get type() { return 'weapon-finesse'; }
+    static get type() { return 'finesse'; }
 
     /**
      * Get Item Hints tooltip value
