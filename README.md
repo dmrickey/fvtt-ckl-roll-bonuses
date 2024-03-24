@@ -29,12 +29,6 @@ Supports PF1 v9+
   - [Finesse](#finesse-1)
   - [Fortune/Misfortune](#fortunemisfortune)
 - [Targeted Bonus Examples](#targeted-bonus-examples)
-  - [Fighter Weapon Training](#fighter-weapon-training)
-  - [Gunslinginer Gun Training](#gunslinginer-gun-training)
-  - [Lead Blades, Gravity Bow, Strong Jaw, and Impact Weapon](#lead-blades-gravity-bow-strong-jaw-and-impact-weapon)
-  - [Magus Arcane Weapon Enhcancement](#magus-arcane-weapon-enhcancement)
-  - [Paladin Smite](#paladin-smite)
-  - [Slayer's Studied Target](#slayers-studied-target)
 - [Feats](#feats)
   - [Armor Focus](#armor-focus)
   - [Elemental Focus](#elemental-focus)
@@ -159,8 +153,15 @@ Applies a fortune effect (`2d20kh`) (or misfortune (`2d20kl`)) to the [targeted]
 ---
  
 # Targeted Bonus Examples
+- [Fighter Weapon Training](#fighter-weapon-training)
+- [Gunslinginer Gun Training](#gunslinginer-gun-training)
+- [Lead Blades, Gravity Bow, Strong Jaw, and Impact Weapon](#lead-blades-gravity-bow-strong-jaw-and-impact-weapon)
+- [Magus Arcane Weapon Enhcancement](#magus-arcane-weapon-enhcancement)
+- [Paladin Smite](#paladin-smite)
+- [Slayer's Studied Target](#slayers-studied-target)
+- [Unchained Rogue's Finesse Training](#unchained-rogues-finesse-training)
 
-## Fighter Weapon Training
+### Fighter Weapon Training
 
 <details>
   <summary>How to configure Fighter Weapon Training (click to expand)</summary>
@@ -176,7 +177,7 @@ Applies a fortune effect (`2d20kh`) (or misfortune (`2d20kl`)) to the [targeted]
 
 ---
 
-## Gunslinginer Gun Training
+### Gunslinginer Gun Training
 
 <details>
   <summary>How to configure Gunslinginer Gun Training (click to expand)</summary>
@@ -189,7 +190,7 @@ Applies a fortune effect (`2d20kh`) (or misfortune (`2d20kl`)) to the [targeted]
 
 ---
 
-## Lead Blades, Gravity Bow, Strong Jaw, and Impact Weapon
+### Lead Blades, Gravity Bow, Strong Jaw, and Impact Weapon
 
 <details>
     <summary>How to configure</summary>
@@ -205,7 +206,7 @@ Applies a fortune effect (`2d20kh`) (or misfortune (`2d20kl`)) to the [targeted]
 
 </details>
 
-## Magus Arcane Weapon Enhcancement
+### Magus Arcane Weapon Enhcancement
 
 <details>
   <summary>How to configure Magus Arcane Weapon Enhcancement (click to expand)</summary>
@@ -220,7 +221,7 @@ Applies a fortune effect (`2d20kh`) (or misfortune (`2d20kl`)) to the [targeted]
 
 </details>
 
-## Paladin Smite
+### Paladin Smite
 
 <details>
   <summary>How to configure Paladin Smite (click to expand)</summary>
@@ -232,13 +233,23 @@ Applies a fortune effect (`2d20kh`) (or misfortune (`2d20kl`)) to the [targeted]
 
 </details>
 
-## Slayer's Studied Target
+### Slayer's Studied Target
 
 <details>
   <summary>How to configure Slayer's Studied Target (click to expand)</summary>
 
   - Create a buff with the boolean flags `target_token`, `bonus_attack`, and `bonus_damage`.
     - attack/damage bonus: `1 + floor(@classes.slayer.level / 5)`
+
+</details>
+
+### Unchained Rogue's Finesse Training
+
+<details>
+  <summary>How to configure Slayer's Studied Target (click to expand)</summary>
+
+  - This is a combination of [Agile](#agile) (`bonus_agile`) and [Weapon Type Target](#weapon-type-target) (`target_weapon-type`)
+    - Don't forget that to correctly configure the weapon type target, the weapon you want to use must be configured with a `Base Equipment Type`
 
 </details>
 
