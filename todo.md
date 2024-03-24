@@ -193,6 +193,3 @@
 - localize
   - All labels
 - BaseBonus - rename `type` to `bonusKey`
-- remove conditional logic for `showInputOnItemSheet` from bonuses because target-and-bonus-join already does that
-  - see if there are other methods doing the same
-  - also check targets

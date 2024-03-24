@@ -52,11 +52,6 @@ export class EffectiveSizeBonus extends BaseBonus {
      * @param {HTMLElement} options.html
      */
     static showInputOnItemSheet({ item, html }) {
-        const hasFlag = item.hasItemBooleanFlag(this.key);
-        if (!hasFlag) {
-            return;
-        }
-
         textInput({
             item,
             key: this.key,
