@@ -58,7 +58,7 @@ export class FinesseTarget extends BaseTarget {
         const isWeapon = item instanceof pf1.documents.item.ItemWeaponPF;
         const isAttack = item instanceof pf1.documents.item.ItemAttackPF;
 
-        if (!isWeapon || !isAttack) {
+        if (!isWeapon && !isAttack) {
             return [];
         }
 

@@ -164,6 +164,11 @@
                 "hint": "The name of the 'Elemental Focus' feat. This is to support translations without having to translate the mod.",
                 "default": "Elemental Focus"
             },
+            "extreme-mood-swings": {
+                "name": "Extreme Mood Swings",
+                "hint": "The name of the 'Extreme Mood Swings' feat. This is to support translations without having to translate the mod.",
+                "default": "Extreme Mood Swings"
+            },
             "fortuneStacks": {
                 "name": "Fortune Stacks",
                 "hint": "If true (default), multiple fortunes/misfortunes from different sources will stack. So you could potentially end up with 4d20kh. If false, then multiple fortunes/misfortunes will only go to a max of two dice. Multiple misfortune and fortunes affecting the same roll will cancel out (e.g. 3 differnt fortunes vs 2 different misfortunes means you are \"more fortunate\" and will be rolling with a bonus. If you have an equal number of fortune vs misfortune, then you \"break even\" and roll normally.)",
