@@ -2,7 +2,7 @@ import { MODULE_NAME } from '../../consts.mjs';
 import { showEnabledLabel } from '../../handlebars-handlers/enabled-label.mjs';
 import { BaseBonus } from './base-bonus.mjs';
 
-export class WeaponFinesseBonus extends BaseBonus {
+export class FinesseBonus extends BaseBonus {
 
     /**
      * @override

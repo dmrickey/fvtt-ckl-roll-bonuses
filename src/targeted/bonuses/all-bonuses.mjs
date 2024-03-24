@@ -5,7 +5,7 @@ import { EffectiveSizeBonus } from './effective-size.mjs';
 import { FortuneBonus } from './fortune-bonus.mjs';
 import { MisfortuneBonus } from './misfortune-bonus.mjs';
 import { CritBonus } from './crit-bonus.mjs';
-import { WeaponFinesseBonus as FinesseBonus } from './finesse-bonus.mjs';
+import { FinesseBonus as FinesseBonus } from './finesse-bonus.mjs';
 import { AgileBonus } from './agile.mjs';
 
 /**
