@@ -1,7 +1,6 @@
 import { MODULE_NAME } from "../../consts.mjs";
 import { showChecklist } from "../../handlebars-handlers/targeted/targets/checked-items-input.mjs";
 import { intersects } from "../../util/array-intersects.mjs";
-import { getDocFlags } from "../../util/flag-helpers.mjs";
 import { truthiness } from "../../util/truthiness.mjs";
 import { uniqueArray } from "../../util/unique-array.mjs";
 import { BaseTarget } from "./base-target.mjs";
@@ -10,7 +9,7 @@ export class WeaponTypeTarget extends BaseTarget {
     /**
      * @override
      */
-    static get type() { return 'weapon-type'; }
+    static get targetKey() { return 'weapon-type'; }
 
     /**
      * @override
@@ -28,7 +27,7 @@ export class WeaponTypeTarget extends BaseTarget {
      * @param {ItemPF | ActionUse | ItemAction} doc
      * @returns {ItemPF[]}
      */
-    static getBonusSourcesForTarget(doc) {
+    static getSourcesFor(doc) {
         const item = doc instanceof pf1.documents.item.ItemPF
             ? doc
             : doc.item;

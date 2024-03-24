@@ -1,13 +1,21 @@
 import { MODULE_NAME } from "../consts.mjs";
 import { localize } from "./localize.mjs";
 
-export const registerSetting = ( /** @type {{key: string, defaultValue?: any, scope?: 'world' | 'client', settingType?: BooleanConstructor | StringConstructor}}*/{
+/**
+ *
+ * @param {object} setting
+ * @param {string} setting.key
+ * @param {any} [setting.defaultValue]
+ * @param {'world' | 'client'} [setting.scope]
+ * @param {BooleanConstructor | StringConstructor} [setting.settingType]
+ */
+export const registerSetting = ({
     key,
     defaultValue = null,
     scope = 'world',
-    settingType = String
-}) =>
-    Hooks.once('ready', () => {
+    settingType = String,
+}) => {
+    const doIt = () => {
         defaultValue ||= localize(`settings.${key}.default`);
         game.settings.register(MODULE_NAME, key, {
             name: `${MODULE_NAME}.settings.${key}.name`,
@@ -18,4 +26,9 @@ export const registerSetting = ( /** @type {{key: string, defaultValue?: any, sc
             config: true,
             type: settingType
         })
-    });
+    };
+
+    game.ready
+        ? doIt()
+        : Hooks.once('ready', () => doIt());
+};

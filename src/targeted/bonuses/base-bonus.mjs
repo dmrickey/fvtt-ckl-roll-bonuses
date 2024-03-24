@@ -1,4 +1,5 @@
-import { localize } from "../../util/localize.mjs";
+import { localizeTargetedBonusLabel } from "../../util/localize.mjs";
+import { customGlobalHooks } from "../../util/hooks.mjs";
 
 /**
  * @abstract
@@ -13,7 +14,7 @@ export class BaseBonus {
     /**
      * @returns { string }
      */
-    static get label() { return localize(`bonus.${this.type}.label`); }
+    static get label() { return localizeTargetedBonusLabel(this.type); }
 
     /**
      * @abstract
@@ -22,13 +23,12 @@ export class BaseBonus {
     static get type() { throw new Error('must be overridden'); }
 
     /**
-     * If the item is providing bonuses
+     * If the item is a source for this bonus
      *
-     * @abstract
      * @param {ItemPF} item
      * @returns {boolean}
      */
-    static isBonusSource(item) { throw new Error("must be overridden."); };
+    static isBonusSource(item) { return item.hasItemBooleanFlag(this.key); };
 
     /**
      * @abstract
@@ -43,20 +43,21 @@ export class BaseBonus {
      * Get Item Hints tooltip value
      *
      * @abstract
-     * @param {ItemPF} bonus
+     * @param {ItemPF} source The source of the bonus
+     * @param {(ActionUse | ItemPF | ItemAction)?} [target] The target for contextually aware hints
      * @returns {Nullable<string[]>}
      */
-    static getHints(bonus) { return; }
+    static getHints(source, target = undefined) { return; }
 
     /**
      * Gets Conditional used for the action
      * use either this or @see {@link actionUseAlterRollData}
      *
      * @abstract
-     * @param {ItemPF} target
+     * @param {ItemPF} source
      * @returns {Nullable<ItemConditional>}
      */
-    static getConditional(target) { return null; }
+    static getConditional(source) { return null; }
 
     // /**
     //  * @abstract
@@ -69,29 +70,73 @@ export class BaseBonus {
      * Add damage bonus to actor's Combat damage column tooltip
      *
      * @abstract
-     * @param {ItemPF} target
+     * @param {ItemPF} source
      * @returns {ItemChange[]}
      */
-    static getDamageSourcesForTooltip(target) { return []; }
+    static getDamageSourcesForTooltip(source) { return []; }
 
     /**
      * Add attack bonus to actor's Combat attacks column tooltip
      *
      * @abstract
-     * @param {ItemPF} target
+     * @param {ItemPF} source
      * @returns {ModifierSource[]}
      */
-    static getAttackSourcesForTooltip(target) { return []; }
+    static getAttackSourcesForTooltip(source) { return []; }
 
     /**
      * Alters roll data for attack rolls - for simple changes that don't need an ItemConditional/Modifier or ItemChange
      * use either this or @see {@link getConditional}
      *
      * @abstract
-     * @param {ItemPF} target
+     * @param {ItemPF} source
      * @param {ActionUseShared} shared
+    */
+    static actionUseAlterRollData(source, shared) { }
+
+    /**
+     * @abstract
+     * @param {ItemPF} _source
+     * @param {ItemActionRollAttackHookArgs} seed
+     * @param {ItemAction} _action
+     * @param {RollData} _data
+     * @returns {ItemActionRollAttackHookArgs}
      */
-    static actionUseAlterRollData(target, shared) { }
+    static itemActionRollAttack(_source, seed, _action, _data) { return seed; }
+
+    /**
+     * @abstract
+     * @param {ItemPF} _source
+     * @param {ItemActionRollAttackHookArgs} seed
+     * @param {ItemAction} _action
+     * @param {RollData} _data
+     * @returns {ItemActionRollAttackHookArgs}
+     */
+    static itemActionRollDamage(_source, seed, _action, _data) { return seed; }
+
+    /**
+     * @abstract
+      * @param {ItemPF} source
+      * @param {ItemAction} action
+      * @param {RollData} rollData
+      */
+    static updateItemActionRollData(source, action, rollData) { }
+
+    /**
+     * alters item use input via @see {@link customGlobalHooks.itemUse}
+     *
+     * @abstract
+     * @param {ItemPF} source
+     * @param {{ fortuneCount: number; misfortuneCount: number; actionID: any; }} options passed into ItemPF.use
+     */
+    static onItemUse(source, options) { }
+
+    /**
+     * @abstract
+     * @param {ItemPF} item
+     * @param {RollData} rollData
+     */
+    static prepareData(item, rollData) { }
 
     /**
      * Initializes anything specific to the bonus
@@ -99,4 +144,12 @@ export class BaseBonus {
      * @abstract
      */
     static init() { }
+
+    /**
+     * @abstract
+     * @param {ItemPF} source The source of the bonus
+     * @param {(ActionUse | ItemPF | ItemAction)?} [item] The item receiving the bonus for contextually aware hints.
+     * @returns {string[]}
+     */
+    static getFootnotes(source, item) { return []; }
 }

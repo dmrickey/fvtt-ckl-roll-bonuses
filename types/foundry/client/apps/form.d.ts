@@ -1,6 +1,9 @@
-import type { EditorView } from "prosemirror-view";
-import type { Editor } from "tinymce";
-import type { ProseMirrorKeyMaps, ProseMirrorMenu } from "../../prosemirror/prosemirror.mjs";
+import type { EditorView } from 'prosemirror-view';
+import type { Editor } from 'tinymce';
+import type {
+    ProseMirrorKeyMaps,
+    ProseMirrorMenu,
+} from '../../prosemirror/prosemirror.mjs';
 
 declare global {
     interface FormApplicationOptions extends ApplicationOptions {
@@ -121,7 +124,10 @@ declare global {
          */
         override getData(options?: Partial<Options>): MaybePromise<object>;
 
-        protected override _render(force?: boolean, options?: Application.RenderOptions<Options>): Promise<void>;
+        protected override _render(
+            force?: boolean,
+            options?: Application.RenderOptions<Options>
+        ): Promise<void>;
 
         protected override _renderInner(data: object): Promise<JQuery>;
 
@@ -150,7 +156,11 @@ declare global {
          */
         protected _onSubmit(
             event: Event,
-            { updateData, preventClose, preventRender }?: FormApplication.OnSubmitOptions
+            {
+                updateData,
+                preventClose,
+                preventRender,
+            }?: FormApplication.OnSubmitOptions
         ): Promise<Partial<Record<string, unknown>>>;
 
         /**
@@ -159,8 +169,9 @@ declare global {
          *                     (default: `{}`)
          * @returns The prepared update data
          */
-        // TODO: Maybe we can calculate how the flattened `updateData` looks like, then it would be Partial<Record<string, unknown>> & Flattened<T>
-        protected _getSubmitData(updateData?: object | null): Record<string, unknown>;
+        protected _getSubmitData(
+            updateData?: object | null
+        ): Record<string, unknown>;
 
         /**
          * Handle changes to an input element, submitting the form if options.submitOnChange is true.
@@ -186,7 +197,10 @@ declare global {
          * @param selection  - The target path which was selected
          * @param filePicker - The FilePicker instance which was submitted
          */
-        protected _onSelectFile(selection: string, filePicker: FilePicker): void;
+        protected _onSelectFile(
+            selection: string,
+            filePicker: FilePicker
+        ): void;
 
         /**
          * This method is called upon form submission after form data is validated
@@ -194,7 +208,10 @@ declare global {
          * @param formData - The object of validated form data with which to update the object
          * @returns A Promise which resolves once the update operation has completed
          */
-        protected abstract _updateObject(event: Event, formData?: object): Promise<unknown>;
+        protected abstract _updateObject(
+            event: Event,
+            formData?: object
+        ): Promise<unknown>;
 
         /**
          * Activate a named TinyMCE text editor
@@ -216,7 +233,10 @@ declare global {
          * @param remove - Remove the editor after saving its content
          *                 (default: `true`)
          */
-        saveEditor(name: string, { remove }?: { remove?: boolean }): Promise<void>;
+        saveEditor(
+            name: string,
+            { remove }?: { remove?: boolean }
+        ): Promise<void>;
 
         /**
          * Activate an editor instance present within the form
@@ -236,8 +256,8 @@ declare global {
                 remove: boolean;
             }
         ): {
-            menu: ReturnType<typeof ProseMirrorMenu["build"]>;
-            keyMaps: ReturnType<typeof ProseMirrorKeyMaps["build"]>;
+            menu: ReturnType<(typeof ProseMirrorMenu)['build']>;
+            keyMaps: ReturnType<(typeof ProseMirrorKeyMaps)['build']>;
         };
 
         /**
@@ -277,8 +297,8 @@ declare global {
             target: string;
             button: HTMLElement;
             hasButton: boolean;
-            instance: Awaited<ReturnType<typeof TextEditor["create"]>> | null;
-            mce: Awaited<ReturnType<typeof TextEditor["create"]>> | null;
+            instance: Awaited<ReturnType<(typeof TextEditor)['create']>> | null;
+            mce: Awaited<ReturnType<(typeof TextEditor)['create']>> | null;
             active: boolean;
             changed: boolean;
             options: TextEditor.Options;
@@ -309,7 +329,10 @@ declare global {
     }
 
     interface DocumentSheetOptions<
-        ConcreteDocument extends foundry.abstract.Document<any, any> = foundry.abstract.Document<any, any>
+        ConcreteDocument extends foundry.abstract.Document<
+            any,
+            any
+        > = foundry.abstract.Document<any, any>
     > extends FormApplicationOptions {
         /**
          * The default permissions required to view this Document sheet.
@@ -330,7 +353,10 @@ declare global {
      */
     abstract class DocumentSheet<
         Options extends DocumentSheetOptions<ConcreteDocument>,
-        ConcreteDocument extends foundry.abstract.Document<any, any> = foundry.abstract.Document<any, any>
+        ConcreteDocument extends foundry.abstract.Document<
+            any,
+            any
+        > = foundry.abstract.Document<any, any>
     > extends FormApplication<Options, ConcreteDocument> {
         /**
          * @param object  - A Document instance which should be managed by this form.
@@ -372,7 +398,9 @@ declare global {
 
         override getData(options?: Partial<Options>): MaybePromise<object>;
 
-        protected override _activateCoreListeners(html: JQuery<HTMLElement>): void;
+        protected override _activateCoreListeners(
+            html: JQuery<HTMLElement>
+        ): void;
 
         override activateEditor(
             name: string,
@@ -380,7 +408,10 @@ declare global {
             initialContent?: string | undefined
         ): Promise<Editor | EditorView>;
 
-        override render(force?: boolean, options?: Application.RenderOptions<Options>): this;
+        override render(
+            force?: boolean,
+            options?: Application.RenderOptions<Options>
+        ): this;
 
         protected override _renderOuter(): Promise<JQuery<HTMLElement>>;
 
@@ -415,7 +446,10 @@ declare global {
          * @param content - The new content.
          * @returns The updated Document.
          */
-        protected _updateSecret(secret: HTMLElement, content: string): Promise<ConcreteDocument | void>;
+        protected _updateSecret(
+            secret: HTMLElement,
+            content: string
+        ): Promise<ConcreteDocument | void>;
 
         /**
          * Handle requests to configure the default sheet used by this Document
@@ -423,6 +457,9 @@ declare global {
          */
         protected _onConfigureSheet(event: JQuery.ClickEvent): void;
 
-        protected override _updateObject(event: Event, formData: object): Promise<unknown>;
+        protected override _updateObject(
+            event: Event,
+            formData: object
+        ): Promise<unknown>;
     }
 }

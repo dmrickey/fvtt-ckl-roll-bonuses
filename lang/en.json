@@ -1,16 +1,68 @@
 {
     "ckl-roll-bonuses": {
+        "alignment": {
+            "lawful": "Lawful",
+            "chaotic": "Chaotic",
+            "good": "Good",
+            "evil": "Evil"
+        },
         "all-spells": "All Spells",
         "all-spell-cl": "All Spells CL",
         "all-spell-dc": "All Spells DC",
         "armor-focus": "Armor Focus",
-        "bonus": {
-            "attack": {
-                "label": "Attack Bonus"
+        "bonus-target": {
+            "bonus": {
+                "hint": {
+                    "agile": "Grants dex to damage for attacks",
+                    "attack": "Formula input for increasing attack.",
+                    "crit-keen": "Doubles the critical threat range of a weapon",
+                    "crit-mult": "Increases or Decreases the critical multiplier",
+                    "crit-offset": "Modify the critical threat range of a weapon. This modification happens after Keen.",
+                    "effective-size": "Formula input for increasing a sizeRoll formula's Effective Size. This is used for buffs like Lead Blades, Gravity Bow, etc.",
+                    "finesse": "Uses dex for attack rolls instead of strength",
+                    "fortune": "Roll twice and take the better. Multiple bonuses stack which means you could roll 3, 4, or more dice.",
+                    "misfortune": "Roll twice and take the worse. Multiple bonuses stack which means you could roll 3, 4, or more dice."
+                },
+                "label": {
+                    "agile": "Agile",
+                    "attack": "Attack Bonus",
+                    "crit": "Critical",
+                    "crit-keen": "Keen",
+                    "crit-mult": "Crit Multiplier",
+                    "crit-offset": "Crit Offset",
+                    "effective-size": "Effective Size",
+                    "finesse": "Finesse",
+                    "fortune": "Fortune",
+                    "misfortune": "Misfortune"
+                }
             },
             "target": {
+                "hint": {
+                    "alignment": "This enables bonuses for an action based on the active targeted tokens when the action is performed.",
+                    "all": "Bonuses will be active for any action that can accept the bonus.",
+                    "finesse": "Bonuses will be active for all finesse-able targets. Thsi requires the weapon/attack to have the Finesse Weapon property, be in the Natural Attack weapon group, or have the `finesse-override` boolean flag.",
+                    "is-melee": "Bonuses will be active whenever an action used that is configured as a melee attack",
+                    "is-ranged": "Bonuses will be active whenever an action used that is configured as a ranged attack",
+                    "is-spell": "Bonuses will be active whenever an action used that is configured as a spell attack",
+                    "is-weapon": "Bonuses will be active whenever an action used that is configured as a physical weapon attack",
+                    "item": "Bonuses will be applied to actions uses for these specific Items",
+                    "self": "Applies bonuses to all actions on this same Item",
+                    "spell": "Bonuses will be applied to actions uses for these specific spells",
+                    "token": "Bonuses are applied when using an action while specific tokens are targeted. When this buff is activate, a dialog will show up that allows you to choose from tokens in the scene.",
+                    "weapon": "Bonuses will be applied to actions uses for these specific Attacks and Weapons",
+                    "weapon-group": "Bonuses will be applied when using an action for any weapon in the chosen Weapon Group(s). Attacks and Weapons must be properly configured with weapon groups.",
+                    "weapon-type": "Bonuses will be applied when using an action for any weapon that has this Equipment Base Type. Attacks and Weapons must be properly configured with Equipment Base Types."
+                },
                 "label": {
+                    "alignment": "Alignment Targets",
+                    "all": "All Targets",
+                    "finesse": "Finesse",
+                    "is-melee": "Targets All Melee Weapons",
+                    "is-ranged": "Targets All Ranged Weapons",
+                    "is-spell": "Targets All Spells",
+                    "is-weapon": "Targets All Weapons",
                     "item": "Item Targets",
+                    "self": "Targets Self",
                     "spell": "Spell Targets",
                     "target": "Targets",
                     "token": "Token Targets",
@@ -24,14 +76,16 @@
         "cancel": "Cancel",
         "cl-mod": "{mod} CL",
         "cl-label-mod": "{mod} CL ({label})",
+        "crit-mult": "Crit Multiplier",
+        "crit-mult-mod": "Crit Multiplier ({mod})",
         "crit-mult-offset-all": "Crit Multiplier Offset (all)",
         "crit-mult-offset-self": "Crit Multiplier Offset (self)",
         "crit-mult-offset-targeted": "Crit Multiplier Offset ({id})",
-        "crit-mult": "Crit Multiplier ({mod})",
+        "crit-offset": "Crit Offset",
         "crit-offset-all": "Crit Offset (all)",
+        "crit-offset-mod": "Crit Threat ({mod})",
         "crit-offset-self": "Crit Offset (self)",
         "crit-offset-targeted": "Crit Offset ({id})",
-        "crit-offset": "Crit Threat ({mod})",
         "crit-damage-label": {
             "crit": " (Crit Only)",
             "nonCrit": " (Non-crit Only)",
@@ -39,11 +93,22 @@
         },
         "dc-mod": "{mod} DC",
         "dc-label-mod": "{mod} DC ({label})",
+        "effective-size": {
+            "hint": "Size: {mod}"
+        },
         "elementalFocus": "Elemental Focus",
         "elemental-cl": "Elemental CL",
         "elemental-dc": "Elemental DC",
         "fates-favored": "Fate's Favored",
         "fortune": "Fortune",
+        "generic-bonus": {
+            "hint": {
+                "furious-focus": "Negates the attack penalty of power attack on the first attack made each round."
+            },
+            "label": {
+                "furious-focus": "Furious Focus"
+            }
+        },
         "greaterElementalFocus": "Greater Elemental Focus",
         "greaterSpellFocus": "Greater Spell Focus",
         "greater-weapon-focus": "Greater Weapon Focus",
@@ -89,15 +154,30 @@
                 "hint": "The name of the 'Armor Focus' feat. This is to support translations without having to translate the mod.",
                 "default": "Armor Focus"
             },
+            "debug": {
+                "name": "Debug Mode",
+                "hint": "Enable this to turn on extra logging which may help in tracking down certain issues. Defaults to `false`.",
+                "default": false
+            },
             "elementalFocus": {
                 "name": "Elemental Focus",
                 "hint": "The name of the 'Elemental Focus' feat. This is to support translations without having to translate the mod.",
                 "default": "Elemental Focus"
             },
+            "extreme-mood-swings": {
+                "name": "Extreme Mood Swings",
+                "hint": "The name of the 'Extreme Mood Swings' feat. This is to support translations without having to translate the mod.",
+                "default": "Extreme Mood Swings"
+            },
             "fortuneStacks": {
                 "name": "Fortune Stacks",
                 "hint": "If true (default), multiple fortunes/misfortunes from different sources will stack. So you could potentially end up with 4d20kh. If false, then multiple fortunes/misfortunes will only go to a max of two dice. Multiple misfortune and fortunes affecting the same roll will cancel out (e.g. 3 differnt fortunes vs 2 different misfortunes means you are \"more fortunate\" and will be rolling with a bonus. If you have an equal number of fortune vs misfortune, then you \"break even\" and roll normally.)",
                 "default": true
+            },
+            "furious-focus": {
+                "name": "Furious Focus",
+                "hint": "The name of the feat 'Furious Focus'. This is to support translations without having to translate the mod.",
+                "default": "Furious Focus"
             },
             "greaterElementalFocus": {
                 "name": "Greater Elemental Focus",
@@ -178,6 +258,11 @@
                 "name": "Weapon Focus",
                 "hint": "The name of the 'Weapon Focus' feat. This is to support translations without having to translate the mod.",
                 "default": "Weapon Focus"
+            },
+            "weapon-finesse": {
+                "name": "Weapon Finesse",
+                "hint": "The name of the 'Weapon Finesse' feat. This is to support translations without having to translate the mod.",
+                "default": "Weapon Finesse"
             },
             "weapon-specialization": {
                 "name": "Weapon Specialization",

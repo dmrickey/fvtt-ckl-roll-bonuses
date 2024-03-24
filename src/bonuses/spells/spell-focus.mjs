@@ -1,7 +1,7 @@
 import { MODULE_NAME } from "../../consts.mjs";
 import { keyValueSelect } from "../../handlebars-handlers/bonus-inputs/key-value-select.mjs";
 import { KeyedDFlagHelper, getDocDFlags } from "../../util/flag-helpers.mjs";
-import { localHooks } from "../../util/hooks.mjs";
+import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize } from "../../util/localize.mjs";
 import { registerSetting } from "../../util/settings.mjs";
@@ -30,7 +30,7 @@ class Settings {
 }
 
 // add Info to chat card
-Hooks.on(localHooks.itemGetTypeChatData, (
+Hooks.on(customGlobalHooks.itemGetTypeChatData, (
     /** @type {ItemPF} */ item,
     /** @type {string[]} */ props,
     /** @type {RollData} */ rollData,
@@ -164,6 +164,8 @@ Hooks.on('renderItemSheet', (
     /** @type {[HTMLElement]} */[html],
     /** @type {unknown} */ _data
 ) => {
+    if (!(item instanceof pf1.documents.item.ItemPF)) return;
+
     /**
      * @type {string | undefined}
      */

@@ -1,10 +1,10 @@
-import { MODULE_NAME } from "../consts.mjs";
 import { textInput } from "../handlebars-handlers/bonus-inputs/text-input.mjs";
 import { hasAnyBFlag, getDocDFlagsStartsWith, KeyedDFlagHelper, FormulaCacheHelper } from "../util/flag-helpers.mjs";
-import { localHooks } from "../util/hooks.mjs";
+import { LocalHookHandler, customGlobalHooks, localHooks } from "../util/hooks.mjs";
 import { registerItemHint } from "../util/item-hints.mjs";
 import { localize } from "../util/localize.mjs";
 import { signed } from "../util/to-signed-string.mjs";
+import { truthiness } from '../util/truthiness.mjs';
 
 const selfKeen = 'keen-self';
 const keenAll = 'keen-all';
@@ -20,6 +20,12 @@ const critMultOffsetId = (/** @type {IdObject} */ { id }) => `crit-mult-offset_$
 
 FormulaCacheHelper.registerDictionaryFlag(critOffsetSelf, critOffsetAll, critMultOffsetSelf, critMultOffsetAll);
 FormulaCacheHelper.registerPartialDictionaryFlag('crit-offset_', 'crit-mult-offset_');
+
+/**
+ * @param {ItemPF} item
+ * @returns {boolean} true if this item has a legacy crit flag
+ */
+export const hasLegacyCritFlag = (item) => !!Object.keys(getDocDFlagsStartsWith(item, 'crit-')).length;
 
 // register keen on bonus
 registerItemHint((hintcls, _actor, item, _data) => {
@@ -40,16 +46,28 @@ registerItemHint((hintcls, _actor, item, _data,) => {
     // return early if it has a self mod because that's encompassed in the "show on target" hint
     if (item.getItemDictionaryFlag(critOffsetSelf)) return;
 
-    const mod = FormulaCacheHelper.getDictionaryFlagValue(item, critOffsetAll)
-        + FormulaCacheHelper.getPartialDictionaryFlagValue(item, 'crit-offset_');
+    const formula = [
+        FormulaCacheHelper.getDictionaryFlagFormula(item, critOffsetAll)[critOffsetAll],
+        ...Object.values(FormulaCacheHelper.getPartialDictionaryFlagFormula(item, 'crit-offset_')),
+    ]
+        .filter(truthiness)
+        .join(' + ');
 
-    if (mod === 0) {
-        return;
+    const roll = RollPF.safeRoll(formula);
+    if (roll.isNumber) {
+        const mod = roll.total;
+        if (!mod) {
+            return;
+        }
+
+        const label = localize('crit-offset-mod', { mod: signed(mod) });
+        const hint = hintcls.create(label, [], {});
+        return hint;
     }
-
-    const label = localize('crit-offset', { mod: signed(mod) });
-    const hint = hintcls.create(label, [], {});
-    return hint;
+    else {
+        const hint = hintcls.create(localize('crit-offset'), [], { hint: roll.simplifiedFormula });
+        return hint;
+    }
 });
 
 // register crit mult hint on bonus
@@ -57,16 +75,28 @@ registerItemHint((hintcls, _actor, item, _data,) => {
     // return early if it has a self mod because that's encompassed in the "show on target" hint
     if (item.getItemDictionaryFlag(critMultOffsetSelf)) return;
 
-    const mod = FormulaCacheHelper.getDictionaryFlagValue(item, critMultOffsetAll)
-        + FormulaCacheHelper.getPartialDictionaryFlagValue(item, 'crit-mult-offset_');
+    const formula = [
+        FormulaCacheHelper.getDictionaryFlagFormula(item, critMultOffsetAll)[critMultOffsetAll],
+        ...Object.values(FormulaCacheHelper.getPartialDictionaryFlagFormula(item, 'crit-mult-offset_')),
+    ]
+        .filter(truthiness)
+        .join(' + ');
 
-    if (mod === 0) {
-        return;
+    const roll = RollPF.safeRoll(formula);
+    if (roll.isNumber) {
+        const mod = roll.total;
+        if (!mod) {
+            return;
+        }
+
+        const label = localize('crit-mult-mod', { mod: signed(mod) });
+        const hint = hintcls.create(label, [], {});
+        return hint;
     }
-
-    const label = localize('crit-mult', { mod: signed(mod) });
-    const hint = hintcls.create(label, [], {});
-    return hint;
+    else {
+        const hint = hintcls.create(localize('crit-mult'), [], { hint: roll.simplifiedFormula });
+        return hint;
+    }
 });
 
 // register crit bonus on specific target
@@ -149,7 +179,7 @@ Hooks.on('pf1GetRollData', (
             .sumAll()
             + FormulaCacheHelper.getDictionaryFlagValue(item, critMultOffsetSelf);
 
-        return +(rollData.action.ability.critMult || 2) + sum;
+        return +(rollData.action?.ability.critMult || 2) + sum;
     };
 
     const mult = calculateMult();
@@ -158,7 +188,7 @@ Hooks.on('pf1GetRollData', (
 
     // update critRange
     const calculateRange = () => {
-        const current = rollData.action.ability.critRange;
+        const current = rollData.action?.ability.critRange ?? 20;
 
         if (isBroken) {
             return 20;
@@ -186,13 +216,12 @@ Hooks.on('pf1GetRollData', (
 });
 
 /**
- * @param {() => number} wrapped
- * @this {ItemAction}
+ * @param {number} current
+ * @param {ItemAction} action
  * @returns {number}
  */
-function handleItemActionCritRangeWrapper(wrapped) {
-    const { actor, item } = this;
-    const action = this;
+function handleItemActionCritRangeWrapper(current, action) {
+    const { actor, item } = action;
 
     if (!!item.system.broken) {
         return 20;
@@ -205,10 +234,9 @@ function handleItemActionCritRangeWrapper(wrapped) {
     const offset = new KeyedDFlagHelper(actor, {}, ...offsetFlags).sumAll()
         + FormulaCacheHelper.getDictionaryFlagValue(item, critOffsetSelf);
     if (!offset && !hasKeen) {
-        return wrapped();
+        return current;
     }
 
-    const current = action.data.ability.critRange;
     let range = hasKeen
         ? current * 2 - 21
         : current;
@@ -217,11 +245,9 @@ function handleItemActionCritRangeWrapper(wrapped) {
     range = Math.clamped(range, 2, 20);
     return range;
 }
-Hooks.once('init', () => {
-    libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.critRange', handleItemActionCritRangeWrapper, libWrapper.MIXED);
-});
+LocalHookHandler.registerHandler(localHooks.itemActionCritRangeWrapper, handleItemActionCritRangeWrapper);
 
-Hooks.on(localHooks.chatAttackAttackNotes, (
+Hooks.on(customGlobalHooks.chatAttackFootnotes, (
     /** @type {ChatAttack} */ { action, attackNotes }
 ) => {
     const hasKeen = action.item.hasItemBooleanFlag(selfKeen)
@@ -262,6 +288,8 @@ Hooks.on('renderItemSheet', (
     /** @type {[HTMLElement]} */[html],
     /** @type {unknown} */ _data
 ) => {
+    if (!(item instanceof pf1.documents.item.ItemPF)) return;
+
     const has = getDocDFlagsStartsWith(item, 'crit-');
 
     // the current array only can have a single element since this is from an item and not an actor

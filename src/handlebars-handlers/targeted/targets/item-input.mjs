@@ -55,7 +55,7 @@ export function showItemInput({
 
     addNodeToRollBonus(parent, div);
 }
-
+/** @ts-ignore */
 /** @extends {DocumentSheet<ItemSelectorOptions, ItemPF>} */
 class ItemSelector extends DocumentSheet {
     /** @override */
@@ -97,16 +97,19 @@ class ItemSelector extends DocumentSheet {
         return templateData;
     }
 
-    /** @override */
+    /**
+     * @override
+     * @param {Record<string, unknown>} updateData
+     * @returns
+     */
     _getSubmitData(updateData) {
         const path = this.options.path;
 
-        // /** @type {{[key: string]: Nullable<string> | Nullable<string>[]}} */
-        // /** @type {Record<string, string | string[]>} */
         const formData = super._getSubmitData(updateData);
         formData[path] = Array.isArray(formData[path])
             ? formData[path]
             : [formData[path]];
+        // @ts-ignore
         formData[path] = formData[path].filter(truthiness);
 
         const submitData = foundry.utils.expandObject(formData);

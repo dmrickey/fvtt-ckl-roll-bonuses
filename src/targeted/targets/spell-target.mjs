@@ -10,5 +10,5 @@ export class SpellTarget extends ItemTarget {
     /**
      * @override
      */
-    static get type() { return 'spell'; }
+    static get targetKey() { return 'spell'; }
 }

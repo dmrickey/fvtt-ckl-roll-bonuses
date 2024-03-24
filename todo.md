@@ -12,7 +12,6 @@
   - [Ranger](#ranger)
 - [Feats](#feats)
   - [Bomber's eye](#bombers-eye)
-  - [Extreme Mood Swings](#extreme-mood-swings)
   - [Improved Critical](#improved-critical)
   - [Longshot](#longshot)
   - [Spell Perfection](#spell-perfection)
@@ -33,9 +32,15 @@
 - [Housekeeping](#housekeeping)
 - [Checklist for new (and existing features)](#checklist-for-new-and-existing-features)
 - [Deprecate](#deprecate)
+- [Add Quench Testings](#add-quench-testings)
+- [Add create hooks for initializing some items (like anything based off of name/id)](#add-create-hooks-for-initializing-some-items-like-anything-based-off-of-nameid)
+- [in pf1 V10](#in-pf1-v10)
+- [Not Possible](#not-possible)
+- [This release must include](#this-release-must-include)
 
 # TODO
-- Figure out a way to support multiple target groups on a single item (so I can add "Holy" and "Flaming" on a single weapon)
+- Figure out a way to support multiple target groups on a single Item (so I can add `Favored Enemy (Human) +4` and `Favored Enemy (goblin) +2` on a single Item)
+  - (see 3.0 scaffolding branch for a super rought start on this)
 
 # UI
 ## Add In-Game Documentation
@@ -43,30 +48,35 @@
   - link to specific compendium page for this bonus when it's detected on the sheet
 - create "id getter" ui for things like keen or fortune (fortune will need a lot more as well)
 - Always show roll bonuses header in the advanced tab, and add a Cog to itself to configure which bonuses should be on this item (useful for bonuses that can't be auto-detected base on the Feat name/id)
-- Add some kind of preview to targeting UI to show all currently effect Items
+- Add some kind of preview to item targeting UI to show all currently affected Items
+- ### Add text filter to item input target
 
 # Bonus Targets
 ## Bonuses
-- formula input
-  - Spell level
-    - target spells 0-9, all
-  - CL Bonus*
-  - DC Bonus*
-    - *Would deprecate everything under "spells"
+- Spell level
+  - target spells 0-9, all
+- CL Bonus*
+- DC Bonus*
 - Move Crit to Bonus (would deprecate crit)
 
+*Would deprecate everything under "spells"
+
 ## Targets
-- Have target for "me" item, so I can create buffs bonuses that are available only with this weapon
 - Have creature type/subtype based targeting - would support [Ranger](#ranger)'s Favored Enemy
-- Have alignment-based targeting
 - All healing
 - Spellbook target
 - Spell preparation Qty
 - Spell School target*
 - Damage Type target*
 - Subschool Target*
-- Spell Type Target*
-  - *Would deprecate everything under "spells"
+- Skill Target
+  - Include "smart groups" that will give options e.g.
+    - specific ability skills (e.g. all int skills)
+    - The default layout will group subskills under the base skill and checking the base skill will automatically check all subskills
+- While in Combat
+  - [Scarred by War](https://www.aonprd.com/TraitDisplay.aspx?ItemName=Scarred%20by%20War) (used to grant diplomacy bonus while not in combat)
+
+*Would deprecate everything under "spells"
 
 # Class Features
 ## Cleric
@@ -85,9 +95,6 @@
 # Feats
 ## Bomber's eye
 - Increase throwing range
-## Extreme Mood Swings
-- Increase each morale bonus you receive by 1.
-- https://www.d20pfsrd.com/feats/general-feats/extreme-mood-swings/
 ## Improved Critical
 - Selects individual weapon types (like Weapon Focus) and grants keen to all of those
 ## Longshot
@@ -132,7 +139,6 @@
   - idea is to create a a flag on a buff that will add the bonus in "prehook" (and/or use built in changes) but use the new pf1 v.next posthook to disable the buff when it is consumed
 
 ## Bonuses
-- Size increase (a.k.a. Gravity Bow or Lead Blades)
 - "x per dice"
 
 ## Targeting
@@ -150,7 +156,6 @@
 - Has hint on affected Item (Weapon/Attack/Spell/etc)
 - Has info/attack note
 - Actually affects what it's supposed to (duh)
-- Make sure `rollData` is using the item that has the bonus, not the item's that's being targeted nor the actor's
 
 # Deprecate
 - Weapon Focus (use bonus targets instead)
@@ -158,3 +163,29 @@
 - Weapon Specialization (use bonus targets instead)
 - as of v9, PF1 now defers Roll Bonuses. So that means that the `Bonus` on the Skill settings can go away
 - It should create a new Feature with a change that includes the current formula as part of migration for deleting this
+
+# Add Quench Testings
+# Add create hooks for initializing some items (like anything based off of name/id)
+
+# in pf1 V10
+- Ammo
+  - Attack Notes to add to individual attacks
+    - This should be doable via patching pf1.actionUse.ChatAttack.prototype. addEffectNotes (formerly setEffectNotesHTML)
+      - (assuming my PR is merged)
+- Targeting
+  - descriptor-based targeting
+
+# Not Possible
+- Attempt to create a "resource offset"
+  - includes showing anything modifying a given resource in the resource's sheet near the formula so it can see why the total is not what that sheet says it should be
+  - Sad day. Not possible for basically the same reason custom changes aren't possible
+- Custom changes that effect only specific targets :(
+  - changes are generated and applied too early and too broadly in the system prep. I can either create a change that applies to everything (pointless) or I can create a specific change that exists for the specified target, but it's created too late to both be reduced to the best bonus type and actually be added to the roll
+
+# This release must include
+- Show icon next to skills that roll inspiration for free
+  - permanent-skill-bonuses
+- Add crit deprecation
+- localize
+  - All labels
+- BaseBonus - rename `type` to `bonusKey`

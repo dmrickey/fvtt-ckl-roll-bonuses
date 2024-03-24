@@ -22,3 +22,16 @@ export const intersection = (a, b) => {
     const overlap = [...setA].filter(x => setB.has(x));
     return overlap;
 }
+
+/**
+ * @template T
+ * @param {T[]|Set<T>} a
+ * @param {T[]|Set<T>} b
+ * @returns {T[]} items in collection a that aren't in collection b
+ */
+export const difference = (a, b) => {
+    const setA = Array.isArray(a) ? new Set(a) : a;
+    const setB = Array.isArray(b) ? new Set(b) : b;
+    const diff = [...setA].filter(x => !setB.has(x));
+    return diff;
+}

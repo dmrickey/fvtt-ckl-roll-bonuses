@@ -9,24 +9,30 @@ Supports PF1 v9+
 - [Class Features](#class-features)
   - [Versatile Performance](#versatile-performance)
 - [Generic Targets](#generic-targets)
+  - [Alignment Target](#alignment-target)
+  - [All](#all)
+  - [Finesse](#finesse)
   - [Item Target](#item-target)
+  - [Item Type Target](#item-type-target)
+  - [Self Target](#self-target)
   - [Spell Target](#spell-target)
   - [Token Target](#token-target)
   - [Weapon Group Target](#weapon-group-target)
   - [Weapon Target](#weapon-target)
   - [Weapon Type Target](#weapon-type-target)
 - [Generic Bonuses](#generic-bonuses)
+  - [Agile](#agile)
   - [Attack Bonus](#attack-bonus)
+  - [Critical Bonuses](#critical-bonuses)
   - [Damage Bonus](#damage-bonus)
+  - [Effective Size Bonus](#effective-size-bonus)
+  - [Finesse](#finesse-1)
+  - [Fortune/Misfortune](#fortunemisfortune)
 - [Targeted Bonus Examples](#targeted-bonus-examples)
-  - [Fighter Weapon Training](#fighter-weapon-training)
-  - [Gunslinginer Gun Training](#gunslinginer-gun-training)
-  - [Magus Arcane Weapon Enhcancement](#magus-arcane-weapon-enhcancement)
-  - [Paladin Smite](#paladin-smite)
-  - [Slayer's Studied Target](#slayers-studied-target)
 - [Feats](#feats)
   - [Armor Focus](#armor-focus)
   - [Elemental Focus](#elemental-focus)
+  - [Furious Focus](#furious-focus)
   - [Martial Focus](#martial-focus)
   - [Spell Focus](#spell-focus)
   - [Spell Specialization](#spell-specialization)
@@ -71,16 +77,41 @@ Choose your perform. Choose the two skills it replaces. Whenever you roll those 
 ---
 
 # Generic Targets
-I've come up with a system for pairing bonuses (see [Generic Bonuses](#generic-bonuses)) with different targets. There are various categories of targets. You can combine multiple targets, then each buff will apply to all of those targets. E.g. you can combine "Weapon Group - Hammers" but also include "Weapon - _My Custom Sword +1_"  and then you'd get the chosen bonus for all hammers and your custom sword. You could even add in "Weapon Type - Dagger" to target all your daggers. And maybe even "Spell - Fireball" 
+This is a system for pairing bonuses (see [Generic Bonuses](#generic-bonuses)) with different targets. There are various categories of targets. You can combine multiple targets, then each buff will apply to Items that match all of those targets. E.g. you can combine "Weapon Group - Hammers" but also include "Weapon - _My Custom Sword +1_"  and then you'd get the chosen bonus for all hammers and your custom sword. You could even add in "Weapon Type - Dagger" to target all your daggers. And maybe even "Spell - Fireball".
+
+If you combine multiple targets, then the Item/Action being used must match all targets. For example, if you target both "Weapon Group - Natural" and "Is Ranged" then the bonus will apply only to ranged natural weapons. If you combine "Is Melee" and "Is Weapon" then you'll get a bonus to all melee attacks--but not spells or combat maneuvers.
+
+## Alignment Target
+This will make any [Generic Bonuses](#generic-bonuses) kick in only when the action is being used while a token with the specific alignment is targeted (targeted via "T" (foundry default button) with crosshairs -- not "selected" which means the token simply has a selected border). Use with `target_alignment`.
+
+## All
+This will make any [Generic Bonuses](#generic-bonuses) configured on this Item apply to any Action that they are able to. Use with `target_all`. 
+
+## Finesse
+This will make any [Generic Bonuses](#generic-bonuses) configured on this Item apply to any finesse-able attacks. Configure with the boolean flag `target_finesse` This is intended for use alongside the Weapon Finesse feat. For any Item to be considered finesse-able, it needs to fulfill at least one of the following three criteria
+- it must be a weapon that has the `Finesse` Weapon property checked on the weapon's details tab
+- it must be an attack or a weapon that has the Natural weapon group selected
+- it must have its own boolean flag `finesse-override`
+  - this last case is to cover "Attacks" that are made from weapons. Once an Attack has been created from a weapon, it no longer has a "Finesse" weapon property available to it as the PF1 system has those reserved purely for Weapons and no other Item types.
 
 ## Item Target
 An "Item" within Foundry basically means anything that you can drag onto your character sheet. So as far as Foundry is concerned, an Item can your class, spell, feat, trait, buff, attack, weapon, inventory item, etc. This target will let you choose any of those items that are configured to have an action (because only actions are rolled and can have roll bonuses). To configure add a boolean flag `target_item` and the input will show up below.
+
+## Item Type Target
+These will apply [Generic Bonuses](#generic-bonuses) to Actions that are configured for specific kinds of attacks.
+- `target_is-melee` will target melee weapons, spells, and combat maneuvers
+- `target_is-ranged` will target ranged weapons, spells, combat maneuvers, and thrown weapons (thrown is only avilable in pf1 v10)
+- `target_is-spell` will target spells
+- `target_is-weapon` will target weapon attacks
+
+## Self Target
+Any [Generic Bonuses](#generic-bonuses) defined on this item will only apply to rolls made with this item. This is most useful for for [Fortune/Misfortune](#fortunemisfortune) as that cant' be done on the item itself. But it can also be used for extra [damage](#damage-bonus) or an [effective size bonus](#effective-size-bonus) (or any other bonus) if you don't want to modify the formulas on the weapon itself. Use with boolean flag `target_self`.
 
 ## Spell Target
 Exactly like [Item Target](#item-target) but filtered to show only Spells. Use with boolean flag `target_spell`.
 
 ## Token Target
-This makes it so any bonuses are only enabled when the specified tokens are targeted (targeted via "T" (foundry default button) with crosshairs -- not "selected" which means the token simply has a selected border). It is configured by adding the `target_token` boolean flag. This is primarily useful for buffs that have a short duration and conditional targeting -- abilities like a Paladin's Smite, Cavalier's Challenge, or a Slayer's Studied Target. After setting the target, whenever an ability is used while the token is targeted, then it will be rolled with the specified bonus.
+This makes it so any [Generic Bonus](#generic-bonuses) are only enabled when the specified tokens are targeted (targeted via "T" (foundry default button) with crosshairs -- not "selected" which means the token simply has a selected border). It is configured by adding the `target_token` boolean flag. This is primarily useful for buffs that have a short duration and conditional targeting -- abilities like a Paladin's Smite, Cavalier's Challenge, or a Slayer's Studied Target. After setting the target, whenever an ability is used while the token is targeted, then it will be rolled with the specified bonus.
 
 Whenever a buff (or other ability with this configured) is activated, a dialog will pop up letting you select your target from all visible tokens (for the GM this will include not-visible tokens, for the players it will not). By default, any tokens you currently have targeted will be preselected and you can verify and hit ok. There is a client setting that will skip this dialog if you already have tokens selected and it will just assume your current targets are your desired targets--while this setting is enabled, if you have no targets the dialog will still open.
 
@@ -98,24 +129,46 @@ This allows you to target specific Weapon Types. When choosing a type, it looks 
 # Generic Bonuses
 Paired with targets above (see [Generic Targets](#generic-targets)), will grant your chosen targets the specified bonuses.
 
+## Agile
+Automatically makes targeted attacks use Dex instead of Str for damage rolls. Use with boolean flag `bonus_agile`.
+
 ## Attack Bonus
 Give a flat value or a formula to increase the target's attack roll. Use with boolean flag `bonus_attack`.
+
+## Critical Bonuses
+This comes with three different options. Keen, Critical Range Modifier, and Critical Multiplier Modifier. Keen will double the threat range of the target. The range modifier will allow you to increase or decrease the range modifier (useful for homebrew or 3.5 adaptations), or increase the critical multiplier (useful for abilities such as a Swashbuckler's level 20 ability). Use with boolean flag `bonus_crit`. Multiple buffs affecting crit do work together, however the Item Hints will look a bit weird--but the resulting roll will be using the correct total. _This handles everything already done by [Critical Helpers](#critical-helpers) but allows for better fine-tuning. At this point there's no reason to use critical helpers_.
 
 ## Damage Bonus
 Input multiple damage formula (including types) to increase the target's damage. Use with boolean flag `bonus_damage`.
 
+## Effective Size Bonus
+Increase the value used by any `sizeRoll` formula in the target (typically in the damage formula). Use with boolean flag `bonus_effective-size`. This is useful for spells like Gravity Bow, Lead Blades, Strong Jaw, temporarily granting the Impact quality to a specific weapon, etc.
+
+## Finesse
+Automatically makes targeted attacks use Dex instead of Str for attack rolls. Use with boolean flag `bonus_finesse`.
+
+## Fortune/Misfortune
+Applies a fortune effect (`2d20kh`) (or misfortune (`2d20kl`)) to the [targeted](#generic-targets) actions. This will only work for actions, but not for generic abilities such as skills, ability checks, etc. If you need a fortune effect for _everything_ or a _specific type of roll that can't be targeted_, then use the non-targeted [Fortune and Misfortune](#fortune-and-misfortune) option.
+
 ---
  
 # Targeted Bonus Examples
+- [Fighter Weapon Training](#fighter-weapon-training)
+- [Gunslinginer Gun Training](#gunslinginer-gun-training)
+- [Lead Blades, Gravity Bow, Strong Jaw, and Impact Weapon](#lead-blades-gravity-bow-strong-jaw-and-impact-weapon)
+- [Magus Arcane Weapon Enhcancement](#magus-arcane-weapon-enhcancement)
+- [Paladin Smite](#paladin-smite)
+- [Slayer's Studied Target](#slayers-studied-target)
+- [Unchained Rogue's Finesse Training](#unchained-rogues-finesse-training)
 
-## Fighter Weapon Training
+### Fighter Weapon Training
 
 <details>
   <summary>How to configure Fighter Weapon Training (click to expand)</summary>
 
   - To configure the feature add the boolean flags `target_weapon-group`, `bonus_attack`, and `bonus_damage`. You'll need a new feature for each tier so you can appropriately target each separate weapon group with the appropriate bonus.
   - Damage/Attack
-    - If you don't use Advanced Weeapon Training (which keeps your attack/damage bonuses from improving) then your formula is `max(0, floor((@classes.fighter.level - 1) / 4))` for your first tier. This formula will keep improving as you level up. For your second tier you can use the same formula but subtract 1, then for your third subtract 2, etc. You can also just use plain numbers - but you'll have to update those as you level up.
+    - If you don't use Advanced Weapon Training (which keeps your attack/damage bonuses from improving) then your formula is `max(0, floor((@classes.fighter.level - 1) / 4))` for your first tier. This formula will keep improving as you level up. For your second tier you can use the same formula but subtract 1, then for your third subtract 2, etc. You can also just use plain numbers - but you'll have to update those as you level up.
   - For your weapon group simply hit the edit button and select your group
 
 ![image](https://github.com/dmrickey/fvtt-ckl-roll-bonuses/assets/3664822/369e808e-ce8e-4006-a73c-5358a27784ea)
@@ -124,7 +177,7 @@ Input multiple damage formula (including types) to increase the target's damage.
 
 ---
 
-## Gunslinginer Gun Training
+### Gunslinginer Gun Training
 
 <details>
   <summary>How to configure Gunslinginer Gun Training (click to expand)</summary>
@@ -137,7 +190,23 @@ Input multiple damage formula (including types) to increase the target's damage.
 
 ---
 
-## Magus Arcane Weapon Enhcancement
+### Lead Blades, Gravity Bow, Strong Jaw, and Impact Weapon
+
+<details>
+    <summary>How to configure</summary>
+
+  These buffs are a combination of [Effective Size Bonus](#effective-size-bonus) and [Item Type Target](#item-type-target).
+  - Bonus
+    - Add the flag `bonus_effective-size` ans set the formula to `1` (use `2` for Strong Jaw)
+  - Target - use one of the following depending on which buff you're creating.
+    - For Lead Blades, add the target flags `target_is-melee` and `target_is-weapon`
+    - For Gravity Bow, add the target flags `target_is-ranged` and `target_is-weapon`
+    - For Strong Jaw, add the target flag `target_weapon-group` and choose the group `natural`
+    - Impact Weapon is a bit different, you'll probably want to use [Weapon Target](#weapon-target) to target a specific weapon. Or [Self Target](#self-target) if you're putting the bonus on the item itself and don't want to change the default formula.
+
+</details>
+
+### Magus Arcane Weapon Enhcancement
 
 <details>
   <summary>How to configure Magus Arcane Weapon Enhcancement (click to expand)</summary>
@@ -152,7 +221,7 @@ Input multiple damage formula (including types) to increase the target's damage.
 
 </details>
 
-## Paladin Smite
+### Paladin Smite
 
 <details>
   <summary>How to configure Paladin Smite (click to expand)</summary>
@@ -164,13 +233,23 @@ Input multiple damage formula (including types) to increase the target's damage.
 
 </details>
 
-## Slayer's Studied Target
+### Slayer's Studied Target
 
 <details>
   <summary>How to configure Slayer's Studied Target (click to expand)</summary>
 
   - Create a buff with the boolean flags `target_token`, `bonus_attack`, and `bonus_damage`.
     - attack/damage bonus: `1 + floor(@classes.slayer.level / 5)`
+
+</details>
+
+### Unchained Rogue's Finesse Training
+
+<details>
+  <summary>How to configure Slayer's Studied Target (click to expand)</summary>
+
+  - This is a combination of [Agile](#agile) (`bonus_agile`) and [Weapon Type Target](#weapon-type-target) (`target_weapon-type`)
+    - Don't forget that to correctly configure the weapon type target, the weapon you want to use must be configured with a `Base Equipment Type`
 
 </details>
 
@@ -211,9 +290,22 @@ Increase the DC by +1 of any spell you're casting for a specific element.
   <summary>How to customize Elemental Focus (click to expand)</summary>
 
   - Follows the same basic setup as [Spell Focus](#spell-focus).
-  - You can manually configure it by setting a flag on the feat with a key of `elementalFocus`, `greaterElementalFocus`, or `mythicElementalFocus` and the mod will automatically add the inputs for you below the dictionary flags section.
+  - You can manually configure it by setting a dictionary flag on the feat with a key of `elementalFocus`, `greaterElementalFocus`, or `mythicElementalFocus` and the mod will automatically add the inputs for you below the dictionary flags section.
   - The accepted values are `acid`, `cold`, `electric`, or `fire`.
   - The damage for the spell you're casting must be configured using one of the system's predefined types.
+
+</details>
+
+---
+
+## Furious Focus
+Negate the Power Attack penalty for the first attack of each round.
+
+<details>
+  <summary>How to enable Furious Focus (click to expand)</summary>
+
+  - Add the boolean flag `furious-focus`. This should be detected automatically the first time you go into the feat to edit it--if it is not then you can manually add the flag.
+  - This only works once each round. If your GM is not advancing game time (happens automatically when advancing rounds in combat), then the penalty will not be taken away with following power attacks.
 
 </details>
 
@@ -343,7 +435,7 @@ Automatically add +2 damage to chosen weapons types for `Weapon Specialization` 
 # Misc
 
 ## Ammunition
-Ammunition now has inputs for attack and damage bonuses. You can find these on the item's advanced tab.
+Ammunition now has inputs for masterwork, enhancement, attack, and damage bonuses. You can find these on the item's advanced tab.
 
 ## Change Offset
 Modify the results of any `change` type. This is essentially a very generic form of [Fate's Favored](#fates-favored) -- but this will allow you to increase or decrease any `change` type instead of only modifying luck bonuses by +1.

@@ -1,7 +1,9 @@
 import { MODULE_NAME } from '../../src/consts.mjs';
+import { BaseBonus } from '../../src/targeted/bonuses/base-bonus.mjs';
+import { BaseTarget } from '../../src/targeted/targets/base-target.mjs';
 import Document from '../foundry/common/abstract/document.mjs';
 
-export { };
+export {};
 
 declare global {
     abstract class BaseDocument extends Document {
@@ -10,9 +12,10 @@ declare global {
         async setFlag<T>(moduleName: string, key: string, value: T);
         updateSource(changes: Partial<this>, options?: object);
         uuid: string;
+        update(data: Record<string, any>);
     }
 
-    abstract class ItemDocument extends BaseDocument { }
+    abstract class ItemDocument extends BaseDocument {}
 
     interface Abilities {
         str: 'Strength';
@@ -27,6 +30,10 @@ declare global {
 
     class ActorPF extends BaseDocument {
         getSkillInfo(skillId: string): SkillRollData;
+
+        [MODULE_NAME]: {
+            [key: string]: number | string | object | array;
+        };
 
         /**
          * Gets the actor's roll data.
@@ -50,6 +57,9 @@ declare global {
         name: string;
 
         system: {
+            details: {
+                alignment: string;
+            };
             skills: {
                 [key: string]: {
                     name: string;
@@ -74,17 +84,23 @@ declare global {
 
     class ActionUseShared {
         action: any;
-        conditionals: any;
         attackBonus: string[];
-        damageBonus: string[];
-        rollData: RollData;
-        conditionalPartsCommon: any;
         attacks: any;
+        conditionalPartsCommon: any;
+        conditionals: any;
+        damageBonus: string[];
+        dice: string;
+        powerAttack: boolean;
+        rollData: RollData;
+
+        // custom data
+        fortuneCount;
+        misfortuneCount;
     }
-    class ActionUse {
+    class ActionUse<T extends ItemPF = ItemPF> {
         action: Action;
         actor: ActorPF;
-        item: ItemPF;
+        item: T;
         shared: ActionUseShared;
     }
 
@@ -93,7 +109,39 @@ declare global {
         attackNotes: string[];
         effectNotes: string[];
         rollData: RollData;
+        attack: D20RollPF;
+
+        d20: Die;
+        dice: Die[];
+
+        flavor: string;
+        formula: string;
+        isCrit: boolean;
+        isDeterministic: boolean;
+        isFumble: boolean;
+        isNat1: boolean;
+        isNat20: boolean;
+        isNormal: boolean;
+        isNumber: boolean;
+        isStatic: boolean;
+        natural: number;
+        result: string;
+        simplifiedFormula: string;
+        total: number;
+        totalHalved: number;
     }
+
+    class Die {
+        faces: number;
+        isIntermediate: boolean;
+        modifiers: string[];
+        number: number;
+        options: { flavor?: string };
+        results: { result: number; active: boolean }[];
+    }
+
+    interface D20RollPF<T extends RollData = RollData<SystemItemData>>
+        extends RollPF<T> {}
 
     class ChatMessagePF extends BaseDocument {
         content: string;
@@ -132,7 +180,7 @@ declare global {
                 attack: string;
                 critMult: number;
                 critRange: number;
-                damage: string;
+                damage: keyof Abilities;
                 damageMult: number;
             };
             actionType: ActionType;
@@ -145,80 +193,29 @@ declare global {
         hasAttack: boolean;
     }
 
-    interface ItemAttackPF extends ItemPF {
-        system: SystemItemAttackPF;
-    }
-    interface ItemEquipmentPF extends ItemPF {
-        system: SystemItemEquipmentPF;
-    }
-    interface ItemSpellPF extends ItemPF {
-        learnedAt: {
-            class: { [key: string]: number };
-            domain: { [key: string]: number };
-        };
-        system: SystemItemSpellPF;
-
-        /** @deprecated Spells don't have tags */
-        tag: string;
-    }
-    interface ItemFeatPF extends ItemPF { }
-    interface ItemLootPF extends ItemPF {
-        subType: 'gear' | 'ammo' | 'tradeGoods' | 'misc';
-    }
-    interface ItemWeaponPF extends ItemPF {
-        system: SystemWeaponPF;
-    }
-
     interface ItemChange {
-        //hardcoded bonus type to use instead of modifier
+        /** hardcoded bonus type to use instead of modifier */
         type: string | null | undefined;
         modifier: BonusModifers;
         parent: undefined | ItemPF;
-    }
 
-    interface SystemItem {
-        links: { children: { name: string; id: string }[]; charges: unknown[] };
-        broken: boolean;
-        flags: {
-            boolean: {};
-            dictionary: DictionaryFlags;
-        };
-        tag: string;
-        tags: string[];
-    }
-    interface SystemItemAttackPF extends SystemItem {
-        baseTypes: string[];
-        links: { children: { name: string; id: string }[] };
-        weaponGroups: TraitSelector?;
-    }
-    interface SystemItemEquipmentPF extends SystemItem {
-        armor: {
-            acp: number;
-            dex: number | null;
-            enh: number;
+        data: {
+            flavor: undefined;
+            formula: string;
+            modifier: BonusModifers;
+            operator: '+' | '-';
+            priority: number;
+            subTarget: 'skill.kna';
+            target: BuffTarget = 'skillzz';
             value: number;
         };
-        baseTypes: string[];
-        links: { children: { name: string; id: string }[] };
-        proficient: boolean;
-        slot: 'armor' | 'shield';
-    }
-    interface SystemItemSpellPF extends SystemItem {
-        school: string;
-        types: string;
-    }
-    interface SystemWeaponPF extends SystemItem {
-        baseTypes: string[];
-        links: { children: { name: string; id: string }[] };
-        proficient: boolean;
-        weaponGroups: TraitSelector;
     }
 
     /** used for weapons and attacks */
-    interface TraitSelector {
+    interface TraitSelector<T extends string = string> {
         /** custom entries split by ; */
         custom: string;
-        value: string[];
+        value: T[];
     }
 
     /** used for damage parts */
@@ -243,7 +240,7 @@ declare global {
         | /** observer */ 2
         | /** owner */ 3;
 
-    interface TokenPF extends ItemDocument {
+    interface TokenDocumentPF extends ItemDocument {
         id: string;
         actor: ActorPF;
         displayName: 0 | 10 | 20 | 30 | 40 | 50;
@@ -252,10 +249,21 @@ declare global {
         permission: PermissionLevel;
         texture: { src: string };
         visible: boolean;
+        object: TokenPF;
     }
 
-    interface ItemPF extends ItemDocument {
-        [MODULE_NAME]: { [key: string]: number | string | object | array };
+    interface TokenPF {
+        isVisible: boolean;
+    }
+
+    class ItemPF<
+        SystemData extends SystemItemData = SystemItemData
+    > extends ItemDocument {
+        [MODULE_NAME]: {
+            bonuses: (typeof BaseBonus)[];
+            targets: (typeof BaseTarget)[];
+            [key: string]: number | string | object | array;
+        };
 
         get hasAction(): boolean;
         actions: EmbeddedCollection<ItemAction>;
@@ -263,9 +271,7 @@ declare global {
         actor: ActorPF;
         firstAction: ItemAction;
         flags: {
-            core: {
-                sourceId: string;
-            };
+            core: { sourceId: string };
             [key: string]: any;
         };
         id: string;
@@ -279,7 +285,7 @@ declare global {
          * @deprecated use @see actor
          */
         parentActor: ActorPF;
-        system: SystemItem;
+        system: SystemData;
         type: ItemType;
 
         /**
@@ -303,7 +309,7 @@ declare global {
         getItemDictionaryFlags(): DictionaryFlags;
 
         /**
-         * Sets teh given dictionary flag on the item
+         * Sets the given dictionary flag on the item
          * @param key
          * @param value
          */
@@ -316,60 +322,295 @@ declare global {
         hasItemBooleanFlag(key: string): boolean;
     }
 
+    class ItemAttackPF extends ItemPF<SystemItemDataAttackPF> {}
+    class ItemEquipmentPF extends ItemPF<SystemItemDataEquipmentPF> {}
+    class ItemFeatPF extends ItemPF {}
+    class ItemLootPF extends ItemPF {
+        subType: 'gear' | 'ammo' | 'tradeGoods' | 'misc';
+    }
+    class ItemSpellPF extends ItemPF<SystemItemDataSpellPF> {
+        learnedAt: {
+            class: { [key: string]: number };
+            domain: { [key: string]: number };
+        };
+
+        /** @deprecated Spells don't have tags */
+        tag: string;
+    }
+    class ItemWeaponPF extends ItemPF<SystemWeaponPF> {}
+
+    class SystemItemData {
+        links: {
+            children: { name: string; id: string }[];
+            charges?: unknown[];
+        };
+        broken: boolean;
+        flags: {
+            boolean: Record<string, boolean>;
+            dictionary: DictionaryFlags;
+        };
+        tag: string;
+        tags: string[];
+    }
+    class SystemItemDataAttackPF extends SystemItemData {
+        baseTypes: string[];
+        // links: { children: { name: string; id: string }[] };
+        weaponGroups: TraitSelector<keyof WeaponGroups>?;
+    }
+    class SystemIteMDataBuffPF extends SystemItemData {}
+    class SystemItemDataEquipmentPF extends SystemItemData {
+        armor: {
+            acp: number;
+            dex: number | null;
+            enh: number;
+            value: number;
+        };
+        baseTypes: string[];
+        // links: { children: { name: string; id: string }[] };
+        proficient: boolean;
+        slot: 'armor' | 'shield';
+    }
+    class SystemItemDataSpellPF extends SystemItemData {
+        /** @deprecated not until v10 */
+        descriptors: {
+            value: string[];
+            custom: string[];
+        };
+        school: string;
+
+        /** @deprecated use until v10 */
+        types: string;
+    }
+    class SystemWeaponPF extends SystemItemData {
+        baseTypes: string[];
+        enh: number;
+        // links: { children: { name: string; id: string }[] };
+        masterwork: boolean;
+        proficient: boolean;
+        properties: Record<keyof WeaponProperties, boolean>;
+        weaponGroups: TraitSelector<keyof WeaponGroups>;
+    }
+
     type ItemType =
         | 'attack'
+        | 'base'
         | 'buff'
         | 'class'
         | 'consumable'
+        | 'container'
         | 'equipment'
         | 'feat'
         | 'loot'
+        | 'race'
         | 'spell'
         | 'weapon';
 
+    interface AbilityRollData {
+        base: number;
+        baseMod: number;
+        checkMod: number;
+        damage: number;
+        drain: number;
+        mod: number;
+        penalty: number;
+        total: number;
+        userPenalty: number;
+        value: number;
+    }
+    interface ACRollData {
+        base: number;
+        enh: number;
+        misc: number;
+        total: number;
+    }
+    interface CurrencyRollData {
+        pp: number;
+        gp: number;
+        sp: number;
+        cp: number;
+    }
+    interface AttributeRollData {
+        // todo
+    }
+    interface ClassRollData {
+        bab: 'low' | 'med' | 'high';
+        fc: { hp: number; skill: number; alt: number };
+        hd: number;
+        hitDice: number;
+        hp: boolean;
+        level: number;
+        mythicTier: number;
+        name: string;
+        savingThrows: { fort: number; ref: number; will: number };
+    }
+    interface DetailsRollData {
+        age: string;
+        alignment: 'lg' | 'ln' | 'le' | 'ng' | 'tn' | 'ne' | 'cg' | 'cn' | 'ce';
+        biography: { value: string };
+        bonusFeatFormula: string;
+        bonusSkillRankFormula: string;
+        carryCapacity: {
+            bonus: { user: number; total: number };
+            multiplier: { base: number; user: number; total: number };
+        };
+        cr: { base: number };
+        deity: string;
+        gender: string;
+        height: string;
+        level: { value: number; min: number; max: number };
+        mythicTier: number;
+        notes: { value: string };
+        tooltip: {
+            hideArmor: boolean;
+            hideBuffs: boolean;
+            hideClothing: boolean;
+            hideConditions: boolean;
+            hideHeld: boolean;
+            hideName: boolean;
+            name: string;
+        };
+        weight: string;
+        xp: { value: number; max: number; pct: number };
+    }
+    interface ResourceRollData {
+        max: number;
+        value: number;
+        _id: string;
+    }
     interface SkillRollData {
         ability: keyof Abilities;
         acp: boolean;
         changeBonus: number;
         cs: boolean;
-        /** compendium link returned for custom skills */
-        journal: string | undefined;
         rank: number;
         rt: boolean;
-
-        name?: string;
         subSkills?: SkillRollData[];
+
+        /** custom skills */
+        background?: boolean;
+        /** compendium link */
+        journal?: string;
+        name?: string;
+    }
+    interface TraitsRollData {
+        // TODO
+        armorProf: {
+            custom: string;
+            customTotal: string;
+            total: ('lgt' | 'med' | 'hvy' | 'shl' | 'twr')[];
+            value: [];
+        };
+        aura: { custom: string };
+        ci: { value: string[]; custom: string };
+        cres: string;
+        di: { value: string[]; custom: string };
+        dr: { value: string[]; custom: string };
+        dv: { value: string[]; custom: string };
+        eres: { value: string[]; custom: string };
+        fastHealing: string;
+        humanoid: true;
+        languages: {
+            value: string[];
+            custom: string;
+            total: string[];
+            customTotal: string;
+        };
+        regen: string;
+        senses: {
+            bs: number;
+            bse: number;
+            custom: string;
+            dv: number;
+            ll: { enabled: true; multiplier: { dim: number; bright: number } };
+            sc: number;
+            si: boolean;
+            sid: boolean;
+            tr: boolean;
+            ts: number;
+        };
+        size: ActorSize;
+        stature: ActorStature;
+        type: string;
+        weaponProf: {
+            custom: string;
+            customTotal: string;
+            total: string[];
+            value: string[];
+        };
+    }
+    interface SpellBookRollData {
+        ability: keyof Abilities;
+        abilityMod: number;
+        altName: string;
+        arcaneSpellFailure: true;
+        autoSpellLevelCalculation: true;
+        autoSpellLevels: true;
+        baseDCFormula: string;
+        castPerDayAllOffsetFormula: string;
+        casterType: SpellcastingLevelType;
+        cl: {
+            formula: string;
+            autoSpellLevelCalculationFormula: string;
+            total: number;
+            autoSpellLevelTotal: number;
+        };
+        clNotes: string;
+        class: string;
+        concentration: { total: number };
+        concentrationFormula: string;
+        concentrationNotes: string;
+        domainSlotValue: number;
+        hasCantrips: true;
+        inUse: true;
+        label: string;
+        name: string;
+        preparedAllOffsetFormula: string;
+        psychic: false;
+        range: { close: number; medium: number; long: number; cl: number };
+        spellPoints: {
+            useSystem: false;
+            value: number;
+            maxFormula: string;
+            restoreFormula: string;
+            max: number;
+        };
+        spellPreparationMode: SpellcastingType;
+        spellSlotAbilityBonusFormula: string;
+    }
+    interface SpellRollData {
+        // TODO
     }
 
     /**
      * Roll Data used for resolving formulas
      */
-    interface RollData {
-        action: {
-            _id: string;
-            damage: {
-                parts: { formula: string; type: TraitSelectorValuePlural }[];
-            };
-            ability: {
-                attack: string;
-                critMult: number | string;
-                critRange: number;
-                damage: string;
-                damageMult: number;
-            };
+    interface RollData<T extends SystemItemData = SystemItemData> {
+        [MODULE_NAME]: {
+            [key: string]: number | string | object | array;
         };
+        abilities: Record<keyof Abilities, AbilityRollData>;
+        ac: ACRollData;
+        altCurrency: CurrencyRollData;
         armor: {
             ac: number;
             enh: number;
             total: number;
             type: number;
         };
-        chargeCostBonus: number;
-        cl: number;
-        conditionals: any;
-        dcBonus: number;
+        attributes: AttributeRollData;
+        classes: Record<string, ClassRollData>;
+        conditions: { loseDexToAC: boolean };
+        currency: CurrencyRollData;
+        customSkills: Record<unknown, unknown>;
         dFlags: ItemDictionaryFlags;
-        item: ItemPF;
+        dc: number;
+        details: DetailsRollData;
+        range: {
+            melee: number;
+            reach: number;
+        };
+        resources: Record<string, ResourceRollData>;
+
         shield: {
             ac: number;
             enh: number;
@@ -377,12 +618,71 @@ declare global {
             type: number;
         };
         size: number;
-        skills: { [key: string]: SkillRollData };
-        spells: any;
+        skills: Record<string, SkillRollData>;
+        spells: Record<string, SpellBookRollData>;
+        traits: TraitsRollData;
         // [key: string]: any,
+
+        // TODO where does this come from?
+        conditionals?: any;
+
+        // item roll data
+        dFlags?: DictionaryFlags;
+        item: T;
+
+        // buff roll data
+        level?: number;
+
+        // spell roll data
+        cl?: number;
+        sl?: number;
+        classLevel?: number;
+        ablMod?: number;
+
+        // action roll data
+        action?: {
+            _id: string;
+            ability: {
+                attack: keyof Abilities;
+                critMult: number | string;
+                critRange: number;
+                damage: keyof Abilities;
+                damageMult: number;
+            };
+            damage: {
+                parts: { formula: string; type: TraitSelectorValuePlural }[];
+            };
+        };
+
+        // action use roll data
+        attackCount: number;
+        chargeCostBonus?: number;
+        d20?: string;
+        dcBonus?: number;
+        powerAttackBonus?: number;
+        powerAttackPenalty?: number;
     }
 
-    interface RollPF {
+    interface ItemActionRollAttackHookArgs {
+        formula: string;
+        options: RollOptions;
+    }
+    interface RollOptions {
+        bonus: string;
+        critical: number;
+        flavor: string;
+        fumble: number;
+        staticRoll?: string?;
+    }
+
+    interface RollPF<T extends RollData = RollData<SystemItemData>>
+        extends Roll<T> {
+        /** returns true if formula has no flavor and no dice (i.e. reduces to a single number) */
+        isNumber: boolean;
+        simplifiedFormula: string;
+
+        prototype: typeof RollPF;
+
         /**
          * Safely get the result of a roll, returns 0 if unsafe.
          * @param formula - The string that should resolve to a number
@@ -401,8 +701,10 @@ declare global {
         static safeRoll(
             formula: string | number,
             rollData?: Nullable<RollData>
-        ): { total: number, formula: string };
+        ): RollPF;
     }
+
+    interface DamageRoll extends RollPF {}
 
     type BonusModifers =
         | 'alchemical'
@@ -568,6 +870,7 @@ declare global {
             | 'allDamage' // when target is 'damage'
             | 'dc' // when target is 'effect'
             | 'charges' // when target is 'misc'
+            | '' // size
             | undefined; // no subtarget for 'size'
         target: 'attack' | 'damage' | 'effect' | 'misc' | 'size';
         type: Nullable<BonusModifers | string>;
@@ -618,18 +921,37 @@ declare global {
         title: string;
     }
 
+    declare type ActorSize =
+        | 'fine'
+        | 'dim'
+        | 'tiny'
+        | 'sm'
+        | 'med'
+        | 'lg'
+        | 'huge'
+        | 'grg'
+        | 'col';
+
+    declare type ActorStature = 'tall' | 'long';
+
+    declare type SpellcastingType = 'spontaneous' | 'prepared' | 'hybrid';
+    declare type SpellcastingLevelType = 'low' | 'med' | 'high';
+
     interface ActorTraitSelector {
         setPosition(position?: Position);
         get position(): Position;
         render(show: boolean);
     }
+
     interface pf1 {
+        actorSizes: Record<ActorSize, string>;
+        actorStatures: Record<ActorStature, string>;
         applications: {
             ActorTraitSelector: {
-                new(doc: Document, options: object): ActorTraitSelector;
+                new (doc: BaseDocument, options: object): ActorTraitSelector;
             };
             DamageTypeSelector: {
-                new(
+                new (
                     object: { id: string; update({ [dataPath]: object }) },
                     dataPath: string,
                     data: {},
@@ -643,7 +965,7 @@ declare global {
             ItemAction: typeof ItemAction;
             // ItemAction: ItemAction ;
             ItemChange: {
-                new(
+                new (
                     args: {
                         flavor: string;
                         formula: string | number;
@@ -682,8 +1004,16 @@ declare global {
                     _label: 'Misc';
                 };
             };
-            abilities;
+            abilities: Abilities;
             bonusModifiers: { [key in BonusModifers]: string };
+            damageResistances: {
+                magic: 'Magic';
+                epic: 'Epic';
+                lawful: 'Lawful';
+                chaotic: 'Chaotic';
+                good: 'Good';
+                evil: 'Evil';
+            };
             damageTypes: {
                 untyped: 'Untyped';
                 slashing: 'Slashing';
@@ -704,24 +1034,30 @@ declare global {
             skillCompendiumEntries: { [key: string]: string };
             skills;
             spellSchools: { [key: string]: string };
-            weaponGroups: { [key: string]: string };
+            weaponGroups: WeaponGroups;
         };
         documents: {
             actor: {
-                ActorPF: { new(): ActorPF };
+                ActorPF: { new (): ActorPF };
             };
             item: {
-                ItemAttackPF: { new(): ItemAttackPF };
-                ItemEquipmentPF: { new(): ItemEquipmentPF };
-                ItemFeatPF: { new(): ItemFeatPF };
-                ItemLootPF: { new(): ItemLootPF };
-                ItemPF: { new(): ItemPF };
-                ItemSpellPF: { new(): ItemSpellPF };
-                ItemWeaponPF: { new(): ItemWeaponPF };
+                ItemAttackPF: { new (): ItemAttackPF };
+                ItemEquipmentPF: { new (): ItemEquipmentPF };
+                ItemFeatPF: { new (): ItemFeatPF };
+                ItemLootPF: { new (): ItemLootPF };
+                ItemPF: { new (): ItemPF };
+                ItemSpellPF: { new (): ItemSpellPF };
+                ItemWeaponPF: { new (): ItemWeaponPF };
             };
         };
         registry: {
             damageTypes: EmbeddedCollection<DamageType>;
+        };
+        spellcasting: {
+            type: SpellcastingType;
+        };
+        utils: {
+            createTag(name: string): string;
         };
     }
 
@@ -729,5 +1065,48 @@ declare global {
         fort: 'Fortitude';
         ref: 'Reflex';
         will: 'Will';
+    }
+
+    interface WeaponGroups {
+        axes: 'Axes';
+        bladesHeavy: 'Blades, Heavy';
+        bladesLight: 'Blades, Light';
+        bows: 'Bows';
+        close: 'Close';
+        crossbows: 'Crossbows';
+        double: 'Double';
+        firearms: 'Firearms';
+        flails: 'Flails';
+        hammers: 'Hammers';
+        monk: 'Monk';
+        natural: 'Natural';
+        polearms: 'Polearms';
+        siegeEngines: 'Siege Engines';
+        spears: 'Spears';
+        thrown: 'Thrown';
+        tribal: 'Tribal';
+    }
+
+    interface WeaponProperties {
+        ato: 'Automatic';
+        blc: 'Blocking';
+        brc: 'Brace';
+        dbl: 'Double';
+        dea: 'Deadly';
+        dis: 'Disarm';
+        dst: 'Distracting';
+        fin: 'Finesse';
+        frg: 'Fragile';
+        grp: 'Grapple';
+        imp: 'Improvised';
+        mnk: 'Monk';
+        nnl: 'Non-lethal';
+        prf: 'Performance';
+        rch: 'Reach';
+        sct: 'Scatter';
+        snd: 'Sunder';
+        spc: 'Special';
+        thr: 'Thrown';
+        trp: 'Trip';
     }
 }

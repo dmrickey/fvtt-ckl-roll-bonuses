@@ -60,6 +60,10 @@
     flex: 0;
 }
 
+.pf1.sheet .roll-bonuses .form-fields .label {
+    text-align: end;
+}
+
 .versatile-performance-selector td {
     padding-inline: 2px;
 }

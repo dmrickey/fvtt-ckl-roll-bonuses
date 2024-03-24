@@ -28,7 +28,7 @@ export class CklSkillConfig {
         }];
         const { inputs: output, buttons: result } = await warpgate.menu({ buttons, inputs }, { title: localize('skills.config') });
         if (result) {
-            const inspiration = output[0].trim() || `1d6[${localize('skills.inspiration')}]`;
+            const inspiration = `${output[0]}`.trim() || `1d6[${localize('skills.inspiration')}]`;
 
             // todo validate input formula
 

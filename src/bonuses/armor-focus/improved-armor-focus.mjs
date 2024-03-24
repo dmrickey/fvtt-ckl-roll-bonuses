@@ -49,7 +49,7 @@ registerItemHint((hintcls, actor, item, _data) => {
 
 /**
  * @param {ActorPF | ItemPF | ItemAction} doc
- * @param {RollData} rollData
+ * @param {RollData<SystemItemDataEquipmentPF>} rollData
  */
 function handleArmorFocusRollData(doc, rollData) {
     if (!(doc instanceof pf1.documents.item.ItemEquipmentPF)) return;
@@ -112,6 +112,8 @@ Hooks.on('renderItemSheet', (
     /** @type {[HTMLElement]} */[html],
     /** @type {unknown} */ _data
 ) => {
+    if (!(item instanceof pf1.documents.item.ItemPF)) return;
+
     const name = item?.name?.toLowerCase() ?? '';
     const sourceId = item?.flags.core?.sourceId ?? '';
     if (!((name.includes(Settings.armorFocus) && name.includes(Settings.improved))

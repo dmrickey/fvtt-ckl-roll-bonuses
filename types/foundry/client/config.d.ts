@@ -6,6 +6,17 @@
  * session or modified by system and module developers to adjust how the application behaves.
  */
 interface CONFIG {
+    Dice: {
+        rolls: {
+            D20RollPF: {
+                new (
+                    formula: string,
+                    rollData: RollData,
+                    options: InexactPartial<Options>
+                ): D20RollPF;
+            };
+        };
+    };
     /**
      * Configure debugging flags to display additional information
      */
@@ -64,10 +75,14 @@ interface CONFIG {
             /** @defaultValue `2` */
             decimals: number;
         };
-    }
+    };
+
+    Item: {
+        typeLabels: Record<ItemType, string>;
+    };
 }
 
 type ConfiguredDocumentClassOrDefault<Fallback extends DocumentConstructor> =
-    Fallback["metadata"]["name"] extends keyof DocumentClassConfig
-    ? DocumentClassConfig[Fallback["metadata"]["name"]]
-    : Fallback;
+    Fallback['metadata']['name'] extends keyof DocumentClassConfig
+        ? DocumentClassConfig[Fallback['metadata']['name']]
+        : Fallback;

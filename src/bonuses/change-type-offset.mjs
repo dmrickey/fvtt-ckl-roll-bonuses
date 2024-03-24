@@ -1,11 +1,12 @@
 import { textInputAndKeyValueSelect } from "../handlebars-handlers/bonus-inputs/text-input-and-key-value-select.mjs";
 import { KeyedDFlagHelper, getDocDFlags, FormulaCacheHelper } from "../util/flag-helpers.mjs";
-import { HookWrapperHandler, localHooks } from "../util/hooks.mjs";
+import { LocalHookHandler, localHooks } from "../util/hooks.mjs";
 import { localize } from "../util/localize.mjs";
 
-const bonusKey = 'change-type-offset';
-const formulaKey = 'change-type-offset-formula';
+export const bonusKey = 'change-type-offset';
+export const formulaKey = 'change-type-offset-formula';
 
+FormulaCacheHelper.registerUncacheableDictionaryFlag(bonusKey);
 FormulaCacheHelper.registerDictionaryFlag(formulaKey);
 
 /**
@@ -38,7 +39,7 @@ function patchChangeValue(value, itemChange) {
 
     return value;
 }
-HookWrapperHandler.registerHandler(localHooks.patchChangeValue, patchChangeValue);
+LocalHookHandler.registerHandler(localHooks.patchChangeValue, patchChangeValue);
 
 /**
  * @param {string} html
@@ -48,6 +49,8 @@ Hooks.on('renderItemSheet', (
     /** @type {[HTMLElement]} */[html],
     /** @type {unknown} */ _data
 ) => {
+    if (!(item instanceof pf1.documents.item.ItemPF)) return;
+
     const { bonusModifiers } = pf1.config;
 
     const hasKey = item.system.flags.dictionary[bonusKey] !== undefined

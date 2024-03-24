@@ -11,11 +11,16 @@ interface Game {
         };
     };
 
+    /**
+     * @returns {boolean} True if the game has already fired the 'ready' hook
+     */
+    ready: boolean;
+
     system: { version: string };
 
     scenes: {
         active: {
-            tokens: EmbeddedCollection<TokenPF>;
+            tokens: EmbeddedCollection<TokenDocumentPF>;
         };
     };
 
@@ -23,6 +28,8 @@ interface Game {
      * Client settings which are used to configure application behavior
      */
     settings: ClientSettings;
+
+    time: { worldTime: number };
 
     user: User;
     userId: string;

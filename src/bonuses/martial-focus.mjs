@@ -5,7 +5,7 @@ import { MODULE_NAME } from "../consts.mjs";
 import { keyValueSelect } from "../handlebars-handlers/bonus-inputs/key-value-select.mjs";
 import { intersects } from "../util/array-intersects.mjs";
 import { KeyedDFlagHelper, getDocDFlags } from "../util/flag-helpers.mjs";
-import { localHooks } from "../util/hooks.mjs";
+import { customGlobalHooks } from "../util/hooks.mjs";
 import { registerItemHint } from "../util/item-hints.mjs";
 import { localize } from "../util/localize.mjs";
 import { registerSetting } from "../util/settings.mjs";
@@ -25,7 +25,7 @@ class Settings {
 
 // register hint on source feat
 registerItemHint((hintcls, _actor, item, _data) => {
-    const current = item.getItemDictionaryFlag(key);
+    const current = /** @type {keyof WeaponGroups} */ (item.getItemDictionaryFlag(key));
     if (current) {
         return hintcls.create(pf1.config.weaponGroups[current] ?? current, [], {});
     }
@@ -72,7 +72,7 @@ function addMartialFocus({ actor, item, shared }) {
         shared.damageBonus.push(`${1}[${localize(key)}]`);
     }
 }
-Hooks.on(localHooks.actionUseAlterRollData, addMartialFocus);
+Hooks.on(customGlobalHooks.actionUseAlterRollData, addMartialFocus);
 
 /**
  * Add Martial Focus to damage tooltip
@@ -112,7 +112,7 @@ function actionDamageSources({ item }, sources) {
     return sources;
 
 };
-Hooks.on(localHooks.actionDamageSources, actionDamageSources);
+Hooks.on(customGlobalHooks.actionDamageSources, actionDamageSources);
 
 // this is a lot better, but it doesn't work because action.use doesn't read this data off of the roll data -- it re-looks it up itself.
 // /**
@@ -154,6 +154,8 @@ Hooks.on('renderItemSheet', (
     /** @type {[HTMLElement]} */[html],
     /** @type {unknown} */ _data
 ) => {
+    if (!(item instanceof pf1.documents.item.ItemPF)) return;
+
     const name = item?.name?.toLowerCase() ?? '';
     const sourceId = item?.flags.core?.sourceId ?? '';
     if (!(name === Settings.martialFocus || item.system.flags.dictionary[key] !== undefined || sourceId.includes(compendiumId))) {

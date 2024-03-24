@@ -1,6 +1,6 @@
-import { MODULE_NAME } from "../../consts.mjs";
 import { textInput } from "../../handlebars-handlers/bonus-inputs/text-input.mjs";
 import { FormulaCacheHelper } from "../../util/flag-helpers.mjs";
+import { signed } from "../../util/to-signed-string.mjs";
 import { BaseBonus } from "./base-bonus.mjs";
 
 /**
@@ -14,16 +14,6 @@ export class AttackBonus extends BaseBonus {
     static get type() { return 'attack'; }
 
     /**
-     * @override
-     * @param {ItemPF} item
-     * @returns {boolean}
-     */
-    static isBonusSource(item) {
-        const value = this.#getAttackBonus(item);
-        return !!value;
-    };
-
-    /**
      * Register Item Hint on bonus
      *
      * @override
@@ -31,10 +21,12 @@ export class AttackBonus extends BaseBonus {
      * @returns {Nullable<string[]>}
      */
     static getHints(source) {
-        const formula = source.getFlag(MODULE_NAME, this.key)?.trim();
-        if (formula) {
-            return [formula];
-        }
+        const formula = FormulaCacheHelper.getModuleFlagFormula(source, this.key)[this.key];
+        const roll = RollPF.safeRoll(formula);
+
+        return roll.isNumber && roll.total
+            ? [`${signed(roll.total)}`]
+            : [`${formula}`];
     }
 
     /**
@@ -78,23 +70,19 @@ export class AttackBonus extends BaseBonus {
      * @param {HTMLElement} options.html
      */
     static showInputOnItemSheet({ item, html }) {
-        const hasFlag = item.hasItemBooleanFlag(this.key);
-        if (!hasFlag) {
-            return;
-        }
-
         textInput({
             item,
             key: this.key,
             parent: html,
             label: this.label,
         }, {
-            isFlag: true,
+            isModuleFlag: true,
         });
     }
 
     /**
      * @param {ItemPF} item
+     * @return {number}
      */
     static #getAttackBonus(item) {
         const value = FormulaCacheHelper.getModuleFlagValue(item, this.key);

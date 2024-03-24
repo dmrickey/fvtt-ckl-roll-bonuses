@@ -12,7 +12,7 @@ import { createTemplate, templates } from "../templates.mjs";
  * @param {object} [o]
  * @param {string} [o.placeholder]
  * @param {boolean} [o.isFormula]
- * @param {boolean} [o.isFlag] - false (default) if this is a dictionary flag, true if this is a data flag
+ * @param {boolean} [o.isModuleFlag] - false (default) if this is a dictionary flag, true if this is a data flag
  */
 export function textInput({
     current = '',
@@ -23,14 +23,12 @@ export function textInput({
 }, {
     placeholder = '',
     isFormula = true,
-    isFlag = false,
+    isModuleFlag = false,
 } = {}
 ) {
-    if (!current) {
-        current = isFlag
-            ? item.getFlag(MODULE_NAME, key)
-            : item.getItemDictionaryFlag(key);
-    }
+    current ||= isModuleFlag
+        ? item.getFlag(MODULE_NAME, key)
+        : item.getItemDictionaryFlag(key);
 
     const div = createTemplate(
         templates.textInput,
@@ -45,7 +43,7 @@ export function textInput({
             // @ts-ignore - event.target is HTMLTextAreaElement
             const /** @type {HTMLTextAreaElement} */ target = event.target;
 
-            isFlag
+            isModuleFlag
                 ? await item.setFlag(MODULE_NAME, key, target?.value)
                 : await item.setItemDictionaryFlag(key, target?.value);
         },

@@ -35,7 +35,7 @@ export class TokenTarget extends BaseTarget {
     /**
      * @override
      */
-    static get type() { return 'token'; }
+    static get targetKey() { return 'token'; }
 
     /**
      * @override
@@ -54,7 +54,7 @@ export class TokenTarget extends BaseTarget {
      * @param {ItemPF | ActionUse | ItemAction} doc
      * @returns {ItemPF[]}
      */
-    static getBonusSourcesForTarget(doc) {
+    static getSourcesFor(doc) {
         if (!this.#currentTargetUuids.length) {
             return [];
         }

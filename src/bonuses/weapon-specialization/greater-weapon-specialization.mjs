@@ -5,7 +5,7 @@ import { MODULE_NAME } from "../../consts.mjs";
 import { stringSelect } from "../../handlebars-handlers/bonus-inputs/string-select.mjs";
 import { intersection, intersects } from "../../util/array-intersects.mjs";
 import { KeyedDFlagHelper, getDocDFlags } from "../../util/flag-helpers.mjs";
-import { localHooks } from "../../util/hooks.mjs";
+import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize } from "../../util/localize.mjs";
 import { registerSetting } from "../../util/settings.mjs";
@@ -66,7 +66,7 @@ function addWeaponSpecialization({ actor, item, shared }) {
         shared.damageBonus.push(`${2}[${localize(key)}]`);
     }
 }
-Hooks.on(localHooks.actionUseAlterRollData, addWeaponSpecialization);
+Hooks.on(customGlobalHooks.actionUseAlterRollData, addWeaponSpecialization);
 
 /**
  * @param {ItemAction} action
@@ -104,7 +104,7 @@ function actionDamageSources({ item }, sources) {
     return sources;
 
 };
-Hooks.on(localHooks.actionDamageSources, actionDamageSources);
+Hooks.on(customGlobalHooks.actionDamageSources, actionDamageSources);
 
 // todo - update for weapon spec.
 // this is a lot better, but it doesn't work because action.use doesn't read this data off of the roll data -- it re-looks it up itself.
@@ -147,11 +147,14 @@ Hooks.on('renderItemSheet', (
     /** @type {[HTMLElement]} */[html],
     /** @type {unknown} */ _data
 ) => {
+    if (!(item instanceof pf1.documents.item.ItemPF)) return;
+
     const name = item?.name?.toLowerCase() ?? '';
     const sourceId = item?.flags.core?.sourceId ?? '';
     if (!((name.includes(WeaponSpecializationSettings.weaponSpecialization) && name.includes(Settings.weaponSpecialization))
         || item.system.flags.dictionary[key] !== undefined
         || sourceId.includes(compendiumId))
+        || !actor
     ) {
         return;
     }

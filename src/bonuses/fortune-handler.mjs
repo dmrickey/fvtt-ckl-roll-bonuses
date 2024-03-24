@@ -1,6 +1,6 @@
 import { MODULE_NAME } from '../consts.mjs';
 import { countBFlags } from '../util/flag-helpers.mjs';
-import { localHooks } from '../util/hooks.mjs';
+import { customGlobalHooks } from '../util/hooks.mjs';
 import { registerItemHint } from '../util/item-hints.mjs';
 import { localize } from '../util/localize.mjs';
 import { registerSetting } from '../util/settings.mjs';
@@ -37,6 +37,7 @@ let fortuneHintLookup = {};
 
 Hooks.once('ready', () => {
     fortuneHintLookup = {
+        // @ts-ignore - because I typed Abilities too strongly and ignoring here is easier
         [abilityFortune]: (key) => key ? pf1.config.abilities[key] : localize('PF1.Ability'),
         [attackFortune]: (key) => !key ? localize('PF1.Attack') : key === 'melee' ? localize('PF1.Melee') : localize('PF1.Ranged'),
         [babFortune]: () => localize('PF1.BABAbbr'),
@@ -101,38 +102,42 @@ registerItemHint((hintcls, actor, item, _data) => {
     return hints;
 });
 
-const handleFortune = (
-    /** @type {{ dice?: any; fortuneCount: any; misfortuneCount: any; actionID?: any; }} */ options,
-) => {
+/**
+ *
+ * @param {object} options
+ * @param {Nullable<string>} [options.dice]
+ * @param {Nullable<number>} [options.fortuneCount]
+ * @param {Nullable<number>} [options.misfortuneCount]
+ * @returns
+ */
+export const handleFortune = (options) => {
     options.dice ||= '1d20';
     options.fortuneCount ||= 0;
     options.misfortuneCount ||= 0;
 
-    {
-        const test = new Roll(options.dice).roll({ async: false });
-        const dice = test.dice[0];
-        if (!dice) {
-            // no actual roll, a static number was probably given
-            return;
-        }
-        const { modifiers, results } = dice;
-        const totalThrown = results.length;
-        if (test.dice.length !== 1 // if there was more than a single dice term
-            || dice.faces !== 20 // if the die is not a d20
-            || modifiers.length > 1 // if there were somehow multiple dice modifier text on the throw
-            || results.filter(x => !x.discarded).length !== 1 // if more than a single die was kept into the result
-        ) {
-            // then don't calculate fortune/misfortune because it's a weird roll that either I can't assume the rules for or the system won't allow
-            return;
-        }
+    const roll = RollPF.safeRoll(options.dice);
+    const dice = roll.dice[0];
+    if (!dice) {
+        // no actual roll, a static number was probably given
+        return;
+    }
+    const { modifiers, results } = dice;
+    const totalThrown = results.length;
+    if (roll.dice.length !== 1 // if there was more than a single dice term
+        || dice.faces !== 20 // if the die is not a d20
+        || modifiers.length > 1 // if there were somehow multiple dice modifier text on the throw
+        || results.filter(x => !x.discarded).length !== 1 // if more than a single die was kept into the result
+    ) {
+        // then don't calculate fortune/misfortune because it's a weird roll that either I can't assume the rules for or the system won't allow
+        return;
+    }
 
-        const mod = modifiers[0] || '';
-        if (mod.includes('dh') || mod.includes('kl')) {
-            options.misfortuneCount += (totalThrown - 1);
-        }
-        else if (mod.includes('kh') || mod.includes('dl')) {
-            options.fortuneCount += (totalThrown - 1);
-        }
+    const mod = modifiers[0] || '';
+    if (mod.includes('dh') || mod.includes('kl')) {
+        options.misfortuneCount += (totalThrown - 1);
+    }
+    else if (mod.includes('kh') || mod.includes('dl')) {
+        options.fortuneCount += (totalThrown - 1);
     }
 
     if (options.fortuneCount === options.misfortuneCount) {
@@ -201,14 +206,14 @@ Hooks.once('init', () => {
 });
 
 // item use does not fire through this hook, so it needs its own dice handling below
-Hooks.on(localHooks.d20Roll, ( /** @type {{ dice?: any; fortuneCount: any; misfortuneCount: any; actionID?: any; }} */ options) => handleFortune(options));
+Hooks.on(customGlobalHooks.d20Roll, ( /** @type {{ dice?: any; fortuneCount: any; misfortuneCount: any; actionID?: any; }} */ options) => handleFortune(options));
 
-Hooks.on(localHooks.itemUse, (
+Hooks.on(customGlobalHooks.itemUse, (
     /** @type {ItemPF} */ item,
     /** @type {{ fortuneCount: number; misfortuneCount: number; actionID: any; }} */ options
 ) => {
-    options.fortuneCount ||= 0;
-    options.misfortuneCount ||= 0;
+    options.fortuneCount = 0;
+    options.misfortuneCount = 0;
 
     if (item.hasItemBooleanFlag(selfFortune)) {
         options.fortuneCount++;
