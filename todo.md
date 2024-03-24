@@ -189,4 +189,3 @@
 - localize
   - All labels
 - BaseBonus - rename `type` to `bonusKey`
-- Add weapon finesse auto configuration
