@@ -53,8 +53,11 @@ registerItemHint((hintcls, actor, item, _data) => {
     handleBonusesFor(
         item,
         (bonusType, sourceItem) => {
-            const hints = bonusType.getHints(sourceItem, item);
+            let hints = bonusType.getHints(sourceItem, item);
             if (hints?.length) {
+                if (hints.length === 1 && hints[0] === bonusType.label) {
+                    hints = [];
+                }
                 bonusHints.push({ itemName: sourceItem.name, bonusName: bonusType.label, hints });
             }
         },
