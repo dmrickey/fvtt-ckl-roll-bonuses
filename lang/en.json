@@ -56,7 +56,7 @@
                 "label": {
                     "alignment": "Alignment Targets",
                     "all": "All Targets",
-                    "finesse": "Finesse.",
+                    "finesse": "Finesse",
                     "is-melee": "Targets All Melee Weapons",
                     "is-ranged": "Targets All Ranged Weapons",
                     "is-spell": "Targets All Spells",

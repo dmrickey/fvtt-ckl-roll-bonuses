@@ -147,7 +147,7 @@ export class DamageBonus extends BaseBonus {
 
         return damages.map((damage, i) => ({
             ...damage,
-            formula: item[MODULE_NAME][this.key][i],
+            formula: item[MODULE_NAME][this.key]?.[i],
         }));
     }
 
