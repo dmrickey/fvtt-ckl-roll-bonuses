@@ -96,7 +96,7 @@ export class DamageBonus extends BaseBonus {
         const conditional = this.#createConditional(damages, target.name);
         return conditional.modifiers?.length
             ? conditional
-            : null;;
+            : null;
     }
 
     /**

@@ -186,10 +186,7 @@
 - Show icon next to skills that roll inspiration for free
   - permanent-skill-bonuses
 - Add crit deprecation
-- Verification
-  - alignment based targets
-  - crit bonus
-    - make sure different bonuses apply crit bonuses work together
 - localize
   - All labels
 - BaseBonus - rename `type` to `bonusKey`
+- Add weapon finesse auto configuration

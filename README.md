@@ -31,6 +31,7 @@ Supports PF1 v9+
 - [Targeted Bonus Examples](#targeted-bonus-examples)
   - [Fighter Weapon Training](#fighter-weapon-training)
   - [Gunslinginer Gun Training](#gunslinginer-gun-training)
+  - [Lead Blades, Gravity Bow, Strong Jaw, and Impact Weapon](#lead-blades-gravity-bow-strong-jaw-and-impact-weapon)
   - [Magus Arcane Weapon Enhcancement](#magus-arcane-weapon-enhcancement)
   - [Paladin Smite](#paladin-smite)
   - [Slayer's Studied Target](#slayers-studied-target)
@@ -141,7 +142,7 @@ Automatically makes targeted attacks use Dex instead of Str for damage rolls. Us
 Give a flat value or a formula to increase the target's attack roll. Use with boolean flag `bonus_attack`.
 
 ## Critical Bonuses
-This comes with three different options. Keen, Critical Range Modifier, and Critical Multiplier Modifier. Keen will double the threat range of the target. The range modifier will allow you to increase or decrease the range modifier (useful for homebrew or 3.5 adaptations), or increase the critical multiplier (useful for abilities such as a Swashbuckler's level 20 ability). Use with boolean flag `bonus_crit`. _This handles everything already done by [Critical Helpers](#critical-helpers) but allows for better fine-tuning. At this point there's no reason to use critical helpers_.
+This comes with three different options. Keen, Critical Range Modifier, and Critical Multiplier Modifier. Keen will double the threat range of the target. The range modifier will allow you to increase or decrease the range modifier (useful for homebrew or 3.5 adaptations), or increase the critical multiplier (useful for abilities such as a Swashbuckler's level 20 ability). Use with boolean flag `bonus_crit`. Multiple buffs affecting crit do work together, however the Item Hints will look a bit weird--but the resulting roll will be using the correct total. _This handles everything already done by [Critical Helpers](#critical-helpers) but allows for better fine-tuning. At this point there's no reason to use critical helpers_.
 
 ## Damage Bonus
 Input multiple damage formula (including types) to increase the target's damage. Use with boolean flag `bonus_damage`.
@@ -187,6 +188,22 @@ Applies a fortune effect (`2d20kh`) (or misfortune (`2d20kl`)) to the [targeted]
 </details>
 
 ---
+
+## Lead Blades, Gravity Bow, Strong Jaw, and Impact Weapon
+
+<details>
+    <summary>How to configure</summary>
+
+  These buffs are a combination of [Effective Size Bonus](#effective-size-bonus) and [Item Type Target](#item-type-target).
+  - Bonus
+    - Add the flag `bonus_effective-size` ans set the formula to `1` (use `2` for Strong Jaw)
+  - Target - use one of the following depending on which buff you're creating.
+    - For Lead Blades, add the target flags `target_is-melee` and `target_is-weapon`
+    - For Gravity Bow, add the target flags `target_is-ranged` and `target_is-weapon`
+    - For Strong Jaw, add the target flag `target_weapon-group` and choose the group `natural`
+    - Impact Weapon is a bit different, you'll probably want to use [Weapon Target](#weapon-target) to target a specific weapon. Or [Self Target](#self-target) if you're putting the bonus on the item itself and don't want to change the default formula.
+
+</details>
 
 ## Magus Arcane Weapon Enhcancement
 

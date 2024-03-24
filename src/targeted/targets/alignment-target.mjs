@@ -39,7 +39,10 @@ export class AlignmentTarget extends BaseTarget {
      * @override
      */
     static init() {
-        Object.entries(choices).forEach(([key, value]) => choices[key] = localize(value));
+
+        Hooks.once('ready', () =>
+            Object.entries(choices).forEach(([key, value]) => choices[key] = localize(value))
+        );
     }
 
     /** @type {ActorPF[]} */
