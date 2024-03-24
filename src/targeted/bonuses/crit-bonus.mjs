@@ -5,6 +5,7 @@ import { textInput } from "../../handlebars-handlers/bonus-inputs/text-input.mjs
 import { handleBonusTypeFor } from '../../target-and-bonus-join.mjs';
 import { FormulaCacheHelper } from "../../util/flag-helpers.mjs";
 import { LocalHookHandler, localHooks } from '../../util/hooks.mjs';
+import { localize } from '../../util/localize.mjs';
 import { SelfTarget } from '../targets/self-target.mjs';
 import { BaseBonus } from "./base-bonus.mjs";
 
@@ -223,7 +224,7 @@ export class CritBonus extends BaseBonus {
             item,
             key: this.#critKeenKey,
             parent: html,
-            label: 'TODO - crit keen',
+            label: localize('bonus-target.bonus.label.crit-keen'),
         }, {
             isModuleFlag: true,
         });
@@ -231,7 +232,7 @@ export class CritBonus extends BaseBonus {
             item,
             key: this.#critMultKey,
             parent: html,
-            label: 'TODO - crit mult',
+            label: localize('bonus-target.bonus.label.crit-mult'),
         }, {
             isModuleFlag: true,
         });
@@ -239,7 +240,7 @@ export class CritBonus extends BaseBonus {
             item,
             key: this.#critOffsetKey,
             parent: html,
-            label: 'TODO - crit offset',
+            label: localize('bonus-target.bonus.label.crit-offset'),
         }, {
             isModuleFlag: true,
         });

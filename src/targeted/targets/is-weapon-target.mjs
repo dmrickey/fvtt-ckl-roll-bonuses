@@ -14,6 +14,14 @@ export class IsWeaponTarget extends BaseIsItemTarget {
      * @returns {boolean}
      */
     static extendedItemFilter({ action = null }) {
+        const item = action?.item;
+
+        if (item instanceof pf1.documents.item.ItemWeaponPF || item instanceof pf1.documents.item.ItemAttackPF) {
+            if (item.system.weaponGroups?.value.includes("natural")) {
+                return false;
+            }
+        }
+
         return ['mwak', 'rwak', 'twak'].includes(action?.data.actionType ?? '');
     }
 }

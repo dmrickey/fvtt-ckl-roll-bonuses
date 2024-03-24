@@ -51,6 +51,10 @@ export class FinesseTarget extends BaseTarget {
             ? doc
             : doc.item;
 
+        if (!item) {
+            return [];
+        }
+
         if (item instanceof pf1.documents.item.ItemWeaponPF
             && !(item.system.properties.fin
                 || item.system.weaponGroups.value.includes('natural')

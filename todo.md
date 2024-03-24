@@ -183,16 +183,11 @@
   - changes are generated and applied too early and too broadly in the system prep. I can either create a change that applies to everything (pointless) or I can create a specific change that exists for the specified target, but it's created too late to both be reduced to the best bonus type and actually be added to the roll
 
 # This release must include
-- Add `showEnabledLabel` for inputs that don't have them (like fate's favored)
-  - fortune-handler
-    - Add customized labels for fortune effects that have variable targets
 - Show icon next to skills that roll inspiration for free
   - permanent-skill-bonuses
 - Add crit deprecation
 - Verification
-  - Weapon Finesse
   - alignment based targets
-  - all based targets
   - crit bonus
     - make sure different bonuses apply crit bonuses work together
 - Extreme Mood Swings
@@ -204,18 +199,10 @@
   - find out if I need a better name than `weapon finesse` (maybe `dex-to-attack`?)
   - Update tooltip for Actor's sheet in Attack column
   - Verify that the dex bonus is higher than the str bonus being swapped out
-- Add Agile to automatically swap to dex for damage
 - localize
-  - Weapon Finesse
-  - Crit labels
   - All labels
-  - "is item" labels
-    - weapon
-    - spell
-    - melee
-    - ranged
 - BaseBonus - rename `type` to `bonusKey`
-- It looks like Fortune is always adding kh, so I'm getting `1d20kh`
 - remove conditional logic for `showInputOnItemSheet` from bonuses because target-and-bonus-join already does that
   - see if there are other methods doing the same
   - also check targets
+- Make "non customizeable bonuses" smart enough to only show once and not "label + bonus" when label and bonus are the same

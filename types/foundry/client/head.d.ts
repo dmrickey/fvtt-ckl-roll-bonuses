@@ -21,6 +21,7 @@ declare global {
 
     let foundry: {
         utils: {
+            objectsEqual<T>(a: T, b: T): boolean;
             expandObject(_: object, depth?: number): Record<string, unknown>;
             randomID(): string;
             /**

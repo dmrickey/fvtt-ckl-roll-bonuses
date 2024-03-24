@@ -6,6 +6,17 @@
  * session or modified by system and module developers to adjust how the application behaves.
  */
 interface CONFIG {
+    Dice: {
+        rolls: {
+            D20RollPF: {
+                new (
+                    formula: string,
+                    rollData: RollData,
+                    options: InexactPartial<Options>
+                ): D20RollPF;
+            };
+        };
+    };
     /**
      * Configure debugging flags to display additional information
      */
