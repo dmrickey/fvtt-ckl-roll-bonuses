@@ -1,5 +1,6 @@
 import { MODULE_NAME } from "../../consts.mjs";
 import { keyValueSelect } from '../../handlebars-handlers/bonus-inputs/key-value-select.mjs';
+import { localize } from '../../util/localize.mjs';
 import { truthiness } from '../../util/truthiness.mjs';
 import { BaseTarget } from "./base-target.mjs";
 
@@ -33,6 +34,13 @@ export class AlignmentTarget extends BaseTarget {
      * @override
      */
     static get targetKey() { return 'alignment'; }
+
+    /**
+     * @override
+     */
+    static init() {
+        Object.entries(choices).forEach(([key, value]) => choices[key] = localize(value));
+    }
 
     /** @type {ActorPF[]} */
     static get #currentTargetedActors() {
@@ -94,7 +102,7 @@ export class AlignmentTarget extends BaseTarget {
             const bonusAlignment = this.#getFlagLetter(source);
             if (!bonusAlignment) return false;
 
-            return !this.#currentTargetedActors.some((actor) => actor.system.details.alignment?.includes(bonusAlignment));
+            return this.#currentTargetedActors.some((actor) => actor.system.details.alignment?.includes(bonusAlignment));
         });
 
         return bonusSources;
@@ -121,6 +129,8 @@ export class AlignmentTarget extends BaseTarget {
             key: this.key,
             label: this.label,
             parent: html,
+        }, {
+            isModuleFlag: true
         });
     }
 }
