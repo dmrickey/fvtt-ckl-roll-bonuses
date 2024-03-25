@@ -88,7 +88,14 @@ class MyFormApplication extends FormApplication {
         super.activateListeners(html);
     }
 
+    /**
+     * @param {Event} event
+     * @param {any} formData
+     */
     async _updateObject(event, formData) {
+        console.log('Updating item', this.object.name);
         console.log(formData.exampleInput);
+        // TODO update this.object (ItemPF)
+        super.close();
     }
 }

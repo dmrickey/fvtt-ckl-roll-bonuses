@@ -16,11 +16,7 @@ export class SelfTarget extends BaseTarget {
      * @returns {Nullable<string[]>}
      */
     static getHints(source) {
-        /** @type {string[]} */
-        if (source.getFlag(MODULE_NAME, this.key)) {
-            return [this.label];
-        }
-        return;
+        return [this.label];
     }
 
     /**

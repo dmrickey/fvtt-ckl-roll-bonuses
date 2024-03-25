@@ -17,7 +17,6 @@ export class WeaponTypeTarget extends BaseTarget {
      * @returns {Nullable<string[]>}
      */
     static getHints(source) {
-        /** @type {string[]} */
         const groups = source.getFlag(MODULE_NAME, this.key) ?? [];
         return groups.filter(truthiness);
     }

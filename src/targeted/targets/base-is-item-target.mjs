@@ -32,10 +32,7 @@ export class BaseIsItemTarget extends BaseTarget {
      * @returns {Nullable<string[]>}
      */
     static getHints(source) {
-        /** @type {string[]} */
-        if (this.isSource(source)) {
-            return [this.label];
-        }
+        return [this.label];
     }
 
     /**
