@@ -25,6 +25,9 @@ export const templates = {
 
     // targeted - bonus or target
     textInputList: `modules/${MODULE_NAME}/hbs/targeted/text-input-list.hbs`,
+
+    // bonus picker application
+    bonusPicker: `modules/${MODULE_NAME}/hbs/bonus-picker.hbs`,
 };
 
 /**

@@ -1,0 +1,28 @@
+<div>
+    <div>
+        <div>
+            {{#each targets}}
+            <div data-tooltip="{{this.tooltip}}">
+                <input type="checkbox" id="{{this.key}}" name="scales" value="{{this.value}}" />
+                <label for="{{this.key}}">{{this.label}}</label>
+            </div>
+            {{/each}}
+        </div>
+        <div>
+            {{#each bonuses}}
+            <div data-tooltip="{{this.tooltip}}">
+                <input type="checkbox" id="{{this.key}}" name="scales" value="{{this.value}}" />
+                <label for="{{this.key}}">{{this.label}}</label>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+    <div>
+        {{#each specifics}}
+            <div data-tooltip="{{this.tooltip}}">
+                <input type="checkbox" id="{{this.key}}" name="scales" value="{{this.value}}" />
+                <label for="{{this.key}}">{{this.label}}</label>
+            </div>
+        {{/each}}
+    </div>
+</div>
