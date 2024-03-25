@@ -187,5 +187,6 @@
   - permanent-skill-bonuses
 - Add crit deprecation
 - localize
+  - Function Target
   - All labels
 - BaseBonus - rename `type` to `bonusKey`
