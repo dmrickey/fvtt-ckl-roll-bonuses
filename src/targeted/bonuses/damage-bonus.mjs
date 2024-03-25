@@ -15,7 +15,7 @@ export class DamageBonus extends BaseBonus {
      * @inheritdoc
      * @override
      */
-    static get type() { return 'damage'; }
+    static get sourceKey() { return 'damage'; }
 
     /**
      * @inheritdoc

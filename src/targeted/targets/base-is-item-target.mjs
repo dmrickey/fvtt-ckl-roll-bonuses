@@ -33,7 +33,7 @@ export class BaseIsItemTarget extends BaseTarget {
      */
     static getHints(source) {
         /** @type {string[]} */
-        if (this.isTargetSource(source)) {
+        if (this.isSource(source)) {
             return [this.label];
         }
     }

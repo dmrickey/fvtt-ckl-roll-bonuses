@@ -8,7 +8,7 @@ export class FinesseBonus extends BaseBonus {
      * @override
      * @returns { string }
      */
-    static get type() { return 'finesse'; }
+    static get sourceKey() { return 'finesse'; }
 
     /**
      * Get Item Hints tooltip value
@@ -19,9 +19,7 @@ export class FinesseBonus extends BaseBonus {
      * @returns {Nullable<string[]>}
      */
     static getHints(source, target = undefined) {
-        if (this.isBonusSource(source)) {
-            return [this.label];
-        }
+        return [this.label];
     }
 
     /**

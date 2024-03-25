@@ -11,7 +11,7 @@ export class FunctionTarget extends BaseTarget {
     /**
      * @override
      */
-    static get targetKey() { return 'function'; }
+    static get sourceKey() { return 'function'; }
 
     /**
      * @inheritdoc

@@ -9,7 +9,7 @@ export class FinesseTarget extends BaseTarget {
     /**
      * @override
      */
-    static get targetKey() { return 'finesse'; }
+    static get sourceKey() { return 'finesse'; }
 
     /**
      * @inheritdoc

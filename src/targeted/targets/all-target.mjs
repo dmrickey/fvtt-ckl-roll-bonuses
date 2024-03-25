@@ -10,7 +10,7 @@ export class AllTarget extends BaseTarget {
      * @inheritdoc
      * @override
      */
-    static get targetKey() { return 'all'; }
+    static get sourceKey() { return 'all'; }
 
     /**
      * @inheritdoc
@@ -20,7 +20,7 @@ export class AllTarget extends BaseTarget {
      */
     static getHints(source) {
         /** @type {string[]} */
-        if (this.isTargetSource(source)) {
+        if (this.isSource(source)) {
             return [this.label];
         }
     }

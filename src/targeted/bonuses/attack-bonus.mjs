@@ -11,7 +11,7 @@ export class AttackBonus extends BaseBonus {
      * @inheritdoc
      * @override
      */
-    static get type() { return 'attack'; }
+    static get sourceKey() { return 'attack'; }
 
     /**
      * Register Item Hint on bonus

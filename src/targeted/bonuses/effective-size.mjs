@@ -9,7 +9,7 @@ export class EffectiveSizeBonus extends BaseBonus {
      * @inheritdoc
      * @override
      */
-    static get type() { return 'effective-size'; }
+    static get sourceKey() { return 'effective-size'; }
 
     // todo figure out how to override formula used in Item list in character sheet
 
@@ -28,7 +28,7 @@ export class EffectiveSizeBonus extends BaseBonus {
             ? signed(size)
             : formula;
 
-        return [localize(`${this.type}.hint`, { mod })];
+        return [localize(`${this.sourceKey}.hint`, { mod })];
     }
 
     /**

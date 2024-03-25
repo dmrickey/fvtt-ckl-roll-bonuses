@@ -12,7 +12,7 @@ export class ModifiersBonus extends BaseBonus {
      * @inheritdoc
      * @override
      */
-    static get type() { return 'modifiers'; }
+    static get sourceKey() { return 'modifiers'; }
 
     /**
      * @override

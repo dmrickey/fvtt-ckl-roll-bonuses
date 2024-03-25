@@ -11,7 +11,7 @@ export class FortuneBonus extends BaseBonus {
      * @override
      * @inheritdoc
      */
-    static get type() { return 'fortune'; }
+    static get sourceKey() { return 'fortune'; }
 
     /**
     * @inheritdoc
@@ -20,10 +20,7 @@ export class FortuneBonus extends BaseBonus {
     * @returns {Nullable<string[]>}
     */
     static getHints(source) {
-        /** @type {string[]} */
-        if (this.isBonusSource(source)) {
-            return [this.label];
-        }
+        return [this.label];
     }
 
     /**

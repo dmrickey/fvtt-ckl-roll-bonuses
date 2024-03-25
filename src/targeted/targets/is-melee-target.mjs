@@ -5,7 +5,7 @@ export class IsMeleeTarget extends BaseIsItemTarget {
     /**
      * @override
      */
-    static get targetKey() { return 'is-melee'; }
+    static get sourceKey() { return 'is-melee'; }
 
     /**
      * @override

@@ -5,7 +5,7 @@ export class IsWeaponTarget extends BaseIsItemTarget {
     /**
      * @override
      */
-    static get targetKey() { return 'is-weapon'; }
+    static get sourceKey() { return 'is-weapon'; }
 
     /**
      * @override

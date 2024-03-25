@@ -6,7 +6,7 @@ export class IsRangedTarget extends BaseIsItemTarget {
      * @inheritdoc
      * @override
      */
-    static get targetKey() { return 'is-ranged'; }
+    static get sourceKey() { return 'is-ranged'; }
 
     /**
      * @inheritdoc

@@ -284,13 +284,13 @@ const prepare = (item, _rollData) => {
     item[MODULE_NAME].targets = [];
 
     allBonusTypes.forEach((bonusType) => {
-        if (bonusType.isBonusSource(item)) {
+        if (bonusType.isSource(item)) {
             item[MODULE_NAME].bonuses.push(bonusType);
             bonusType.prepareData(item, _rollData);
         }
     });
     allTargetTypes.forEach((targetType) => {
-        if (targetType.isTargetSource(item)) {
+        if (targetType.isSource(item)) {
             item[MODULE_NAME].targets.push(targetType);
             targetType.prepareData(item, _rollData);
         }

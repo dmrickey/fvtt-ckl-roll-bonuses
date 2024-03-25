@@ -33,7 +33,7 @@ export class AlignmentTarget extends BaseTarget {
      * @inheritdoc
      * @override
      */
-    static get targetKey() { return 'alignment'; }
+    static get sourceKey() { return 'alignment'; }
 
     /**
      * @override

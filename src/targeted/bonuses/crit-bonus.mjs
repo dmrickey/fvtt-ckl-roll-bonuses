@@ -17,7 +17,7 @@ export class CritBonus extends BaseBonus {
      * @inheritdoc
      * @override
      */
-    static get type() { return 'crit'; }
+    static get sourceKey() { return 'crit'; }
 
     static get #critKeenKey() { return `${this.key}-keen`; }
     static get #critMultKey() { return `${this.key}-mult`; }
@@ -29,7 +29,7 @@ export class CritBonus extends BaseBonus {
      * @param {ItemPF} source
      * @returns {boolean}
      */
-    static isBonusSource(source) { return super.isBonusSource(source) && !hasLegacyCritFlag(source); };
+    static isSource(source) { return super.isSource(source) && !hasLegacyCritFlag(source); };
 
     /**
      * If the item is providing keen
@@ -145,7 +145,7 @@ export class CritBonus extends BaseBonus {
      * @returns {Nullable<string[]>}
      */
     static getHints(source, target = undefined) {
-        if (SelfTarget.isTargetSource(source)) {
+        if (SelfTarget.isSource(source)) {
             target = source.firstAction;
         }
 

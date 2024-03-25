@@ -7,7 +7,7 @@ export class SelfTarget extends BaseTarget {
     /**
      * @override
      */
-    static get targetKey() { return 'self'; }
+    static get sourceKey() { return 'self'; }
 
     /**
      * @inheritdoc

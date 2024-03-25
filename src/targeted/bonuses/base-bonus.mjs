@@ -1,53 +1,23 @@
-import { localizeTargetedBonusLabel } from "../../util/localize.mjs";
+import { localizeTargetedBonusHint, localizeTargetedBonusLabel } from "../../util/localize.mjs";
 import { customGlobalHooks } from "../../util/hooks.mjs";
+import { BaseSource } from '../base-source.mjs';
 
 /**
  * @abstract
  */
-export class BaseBonus {
+export class BaseBonus extends BaseSource {
 
     /**
+     * @override
      * @returns { string }
      */
-    static get key() { return `bonus_${this.type}`; }
+    static get label() { return localizeTargetedBonusLabel(this.sourceKey); }
 
     /**
+     * @override
      * @returns { string }
      */
-    static get label() { return localizeTargetedBonusLabel(this.type); }
-
-    /**
-     * @abstract
-     * @returns { string }
-     */
-    static get type() { throw new Error('must be overridden'); }
-
-    /**
-     * If the item is a source for this bonus
-     *
-     * @param {ItemPF} item
-     * @returns {boolean}
-     */
-    static isBonusSource(item) { return item.hasItemBooleanFlag(this.key); };
-
-    /**
-     * @abstract
-     * @param {object} options
-     * @param {ActorPF | null} options.actor
-     * @param {ItemPF} options.item
-     * @param {HTMLElement} options.html
-     */
-    static showInputOnItemSheet({ actor, item, html }) { throw new Error("must be overridden."); }
-
-    /**
-     * Get Item Hints tooltip value
-     *
-     * @abstract
-     * @param {ItemPF} source The source of the bonus
-     * @param {(ActionUse | ItemPF | ItemAction)?} [target] The target for contextually aware hints
-     * @returns {Nullable<string[]>}
-     */
-    static getHints(source, target = undefined) { return; }
+    static get sourceBaseType() { return 'bonus'; }
 
     /**
      * Gets Conditional used for the action
@@ -133,23 +103,16 @@ export class BaseBonus {
 
     /**
      * @abstract
-     * @param {ItemPF} item
-     * @param {RollData} rollData
-     */
-    static prepareData(item, rollData) { }
-
-    /**
-     * Initializes anything specific to the bonus
-     *
-     * @abstract
-     */
-    static init() { }
-
-    /**
-     * @abstract
      * @param {ItemPF} source The source of the bonus
      * @param {(ActionUse | ItemPF | ItemAction)?} [item] The item receiving the bonus for contextually aware hints.
      * @returns {string[]}
      */
     static getFootnotes(source, item) { return []; }
+
+    /**
+     * @override
+     * @inheritdoc
+     * @returns { string }
+     */
+    static get tooltip() { return localizeTargetedBonusHint(this.sourceKey); }
 }
