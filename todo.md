@@ -46,8 +46,6 @@
 ## Add In-Game Documentation
 - create a compendium with details on how to configure each bonus
   - link to specific compendium page for this bonus when it's detected on the sheet
-- create "id getter" ui for things like keen or fortune (fortune will need a lot more as well)
-- Always show roll bonuses header in the advanced tab, and add a Cog to itself to configure which bonuses should be on this item (useful for bonuses that can't be auto-detected based on the Feat name/id)
 - ### Add text filter to item input target
 
 # Bonus Targets
@@ -112,6 +110,8 @@
 ## Int Headband
 - configure an item to give you specific ranks (0.82.5 only gives bonus ranks, not ranks to specific skills)
   - See versatile performance for ideas.
+- Show icon next to skills that roll inspiration for free
+  - permanent-skill-bonuses
 
 # Misc
 ## I am targeted
@@ -155,6 +155,7 @@
 - as of v9, PF1 now defers Roll Bonuses. So that means that the `Bonus` on the Skill settings can go away
 - It should create a new Feature with a change that includes the current formula as part of migration for deleting this
 - all specific DC/CL bonuses (after v10 once descriptor-based targeting is available)
+- specific crit bonuses
 
 # Add Quench Testings
 # Add create hooks for initializing some items (like anything based off of name/id)
@@ -176,11 +177,12 @@
   - changes are generated and applied too early and too broadly in the system prep. I can either create a change that applies to everything (pointless) or I can create a specific change that exists for the specified target, but it's created too late to both be reduced to the best bonus type and actually be added to the roll
 
 # This release must include
-- Show icon next to skills that roll inspiration for free
-  - permanent-skill-bonuses
-- Add crit deprecation
 - localize
   - Function Target
   - All labels
-- make sure works
+- verify
+  - damage target
   - function target
+- Always show Roll Bonuses Header
+  - Add cog to configure which bonuses are available
+- Show tooltip for all bonuses
