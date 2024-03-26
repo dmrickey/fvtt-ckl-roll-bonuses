@@ -13,6 +13,8 @@ import { armorFocusKey } from "./ids.mjs";
 const key = 'improved-armor-focus';
 const compendiumId = 'WmEE6BOuP5Uh7pEE';
 
+export { key as improvedArmorFocusKey };
+
 registerSetting({ key: key });
 
 class Settings {
@@ -27,23 +29,6 @@ registerItemHint((hintcls, _actor, item, _data) => {
     const current = item.getItemDictionaryFlag(key);
     if (current) {
         return hintcls.create(`${current}`, [], {});
-    }
-});
-
-// register hint on focused item
-registerItemHint((hintcls, actor, item, _data) => {
-    if (!(item instanceof pf1.documents.item.ItemEquipmentPF)) return;
-
-    const isArmor = item.isActive && item.system.slot === 'armor';
-    const baseTypes = item.system.baseTypes;
-    if (!baseTypes?.length) return;
-
-    const armorFocuses = new KeyedDFlagHelper(actor, {}, key).valuesForFlag(key);
-    const isFocused = intersects(armorFocuses, baseTypes);
-
-    if (isArmor && isFocused) {
-        const hint = hintcls.create(localize(key), [], { hint: localize('acp-mod', { mod: -1 }) });
-        return hint;
     }
 });
 

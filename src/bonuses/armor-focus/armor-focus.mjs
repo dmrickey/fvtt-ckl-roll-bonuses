@@ -10,6 +10,7 @@ import { registerItemHint } from "../../util/item-hints.mjs";
 import { registerSetting } from "../../util/settings.mjs";
 import { uniqueArray } from "../../util/unique-array.mjs";
 import { stringSelect } from "../../handlebars-handlers/bonus-inputs/string-select.mjs";
+import { improvedArmorFocusKey } from './improved-armor-focus.mjs';
 
 const compendiumId = 'zBrrZynIB0EXagds';
 
@@ -37,11 +38,18 @@ registerItemHint((hintcls, actor, item, _data) => {
     const baseTypes = item.system.baseTypes;
     if (!baseTypes?.length) return;
 
-    const armorFocuses = new KeyedDFlagHelper(actor, {}, key).valuesForFlag(key);
+    const helper = new KeyedDFlagHelper(actor, {}, key, improvedArmorFocusKey);
+    const armorFocuses = helper.valuesForFlag(key);
+    const improvedFocuses = helper.valuesForFlag(improvedArmorFocusKey);
     const isFocused = intersects(armorFocuses, baseTypes);
+    const isImprovedFocus = intersects(improvedFocuses, baseTypes);
 
     if (isArmor && isFocused) {
-        const hint = hintcls.create(localize(key), [], { hint: localize('ac-mod', { mod: '+1' }) });
+        const tips = [localize(key), localize('ac-mod', { mod: '+1' })];
+        if (isImprovedFocus) {
+            tips.push('', localize(improvedArmorFocusKey), localize('acp-mod', { mod: -1 }));
+        }
+        const hint = hintcls.create('', [], { icon: 'fas fa-helmet-battle', hint: tips.join('\n') });
         return hint;
     }
 });
