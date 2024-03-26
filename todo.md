@@ -60,7 +60,6 @@
 - All healing
 - Spellbook target
 - Spell preparation Qty
-- Damage Type target*
 - Skill Target
   - Include "smart groups" that will give options e.g.
     - specific ability skills (e.g. all int skills)
@@ -155,6 +154,7 @@
 - Weapon Specialization (use bonus targets instead)
 - as of v9, PF1 now defers Roll Bonuses. So that means that the `Bonus` on the Skill settings can go away
 - It should create a new Feature with a change that includes the current formula as part of migration for deleting this
+- all specific DC/CL bonuses (after v10 once descriptor-based targeting is available)
 
 # Add Quench Testings
 # Add create hooks for initializing some items (like anything based off of name/id)
@@ -182,3 +182,5 @@
 - localize
   - Function Target
   - All labels
+- make sure works
+  - function target

@@ -98,7 +98,7 @@ declare global {
         misfortuneCount;
     }
     class ActionUse<T extends ItemPF = ItemPF> {
-        action: Action;
+        action: ItemAction;
         actor: ActorPF;
         item: T;
         shared: ActionUseShared;
@@ -944,6 +944,10 @@ declare global {
     }
 
     interface pf1 {
+        actionUse: {
+            ActionUse: typeof ActionUse;
+            ChatAttack: typeof ChatAttack;
+        };
         actorSizes: Record<ActorSize, string>;
         actorStatures: Record<ActorStature, string>;
         applications: {

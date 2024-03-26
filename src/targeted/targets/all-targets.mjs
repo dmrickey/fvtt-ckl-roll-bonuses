@@ -22,6 +22,7 @@ import { SpellSchoolTarget } from './spell-school-target.mjs';
 export const allTargetTypes = [
     AlignmentTarget,
     AllTarget,
+    DamageTypeTarget,
     FinesseTarget,
     FunctionTarget,
     IsMeleeTarget,
@@ -39,5 +40,4 @@ export const allTargetTypes = [
 
     // todo later
     // ActionTarget,
-    // DamageTypeTarget,
 ];

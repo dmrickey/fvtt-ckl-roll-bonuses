@@ -1,5 +1,5 @@
 
-/** @typedef {{ primaryKey: string, label: string, hint: string, type: 'dictionary' | 'boolean' }} BonusRegistration */
+/** @typedef {{ primaryKey: string, label: string, tooltip: string, type: 'dictionary' | 'boolean' }} BonusRegistration */
 
 export class SpecificBonuses {
 

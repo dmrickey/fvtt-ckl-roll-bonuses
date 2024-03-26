@@ -1,4 +1,4 @@
-import { localizeTargetedBonusHint, localizeTargetedBonusLabel } from "../../util/localize.mjs";
+import { localizeTargetedBonusTooltip, localizeTargetedBonusLabel } from "../../util/localize.mjs";
 import { customGlobalHooks } from "../../util/hooks.mjs";
 import { BaseSource } from '../base-source.mjs';
 
@@ -124,5 +124,5 @@ export class BaseBonus extends BaseSource {
      * @inheritdoc
      * @returns { string }
      */
-    static get tooltip() { return localizeTargetedBonusHint(this.sourceKey); }
+    static get tooltip() { return localizeTargetedBonusTooltip(this.sourceKey); }
 }

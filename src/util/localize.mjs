@@ -28,7 +28,7 @@ const localize = (key, opts = {}) => {
  * @param {Record<string, unknown>} [opts]
  * @returns {string}
  */
-const localizeGenericBonusHint = (key, opts = {}) => localize(`generic-bonus.hint.${key}`, opts);
+const localizeGenericBonusTooltip = (key, opts = {}) => localize(`generic-bonus.hint.${key}`, opts);
 
 /**
  * @param {string} key
@@ -42,7 +42,7 @@ const localizeGenericBonusLabel = (key, opts = {}) => localize(`generic-bonus.la
  * @param {Record<string, unknown>} [opts]
  * @returns {string}
  */
-const localizeTargetedBonusHint = (key, opts = {}) => localize(`bonus-target.bonus.hint.${key}`, opts);
+const localizeTargetedBonusTooltip = (key, opts = {}) => localize(`bonus-target.bonus.hint.${key}`, opts);
 
 /**
  * @param {string} key
@@ -56,7 +56,7 @@ const localizeTargetedBonusLabel = (key, opts = {}) => localize(`bonus-target.bo
  * @param {Record<string, unknown>} [opts]
  * @returns {string}
  */
-const localizeTargetedTargetHint = (key, opts = {}) => localize(`bonus-target.target.hint.${key}`, opts);
+const localizeTargetedTargetTooltip = (key, opts = {}) => localize(`bonus-target.target.hint.${key}`, opts);
 
 /**
  * @param {string} key
@@ -66,11 +66,11 @@ const localizeTargetedTargetHint = (key, opts = {}) => localize(`bonus-target.ta
 const localizeTargetedTargetLabel = (key, opts = {}) => localize(`bonus-target.target.label.${key}`, opts);
 
 export {
-    localizeGenericBonusHint,
+    localizeGenericBonusTooltip,
     localizeGenericBonusLabel,
-    localizeTargetedBonusHint,
+    localizeTargetedBonusTooltip,
     localizeTargetedBonusLabel,
-    localizeTargetedTargetHint,
+    localizeTargetedTargetTooltip,
     localizeTargetedTargetLabel,
     localize,
 };

@@ -8,11 +8,13 @@ import { BaseTarget } from "./base-target.mjs";
 export class WeaponTypeTarget extends BaseTarget {
     /**
      * @override
+     * @inheritdoc
      */
     static get sourceKey() { return 'weapon-type'; }
 
     /**
      * @override
+     * @inheritdoc
      * @param {ItemPF} source
      * @returns {Nullable<string[]>}
      */
@@ -23,6 +25,7 @@ export class WeaponTypeTarget extends BaseTarget {
 
     /**
      * @override
+     * @inheritdoc
      * @param {ItemPF | ActionUse | ItemAction} doc
      * @returns {ItemPF[]}
      */
@@ -57,6 +60,7 @@ export class WeaponTypeTarget extends BaseTarget {
 
     /**
      * @override
+     * @inheritdoc
      * @param {object} options
      * @param {ActorPF | null | undefined} options.actor
      * @param {ItemPF} options.item

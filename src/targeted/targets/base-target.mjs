@@ -1,4 +1,4 @@
-import { localizeTargetedTargetHint, localizeTargetedTargetLabel } from "../../util/localize.mjs";
+import { localizeTargetedTargetTooltip, localizeTargetedTargetLabel } from "../../util/localize.mjs";
 import { BaseSource } from '../base-source.mjs';
 
 /**
@@ -68,6 +68,6 @@ export class BaseTarget extends BaseSource {
      * @inheritdoc
      * @returns { string }
      */
-    static get tooltip() { return localizeTargetedTargetHint(this.sourceKey); }
+    static get tooltip() { return localizeTargetedTargetTooltip(this.sourceKey); }
 
 }

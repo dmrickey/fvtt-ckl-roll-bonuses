@@ -12,7 +12,7 @@
         "armor-focus": "Armor Focus",
         "bonus-target": {
             "bonus": {
-                "hint": {
+                "tooltip": {
                     "agile": "Grants dex to damage for attacks",
                     "attack": "Formula input for increasing attack.",
                     "cl": "Modify a spell's Caster Level",
@@ -41,7 +41,7 @@
                 }
             },
             "target": {
-                "hint": {
+                "tooltip": {
                     "alignment": "This enables bonuses for an action based on the active targeted tokens when the action is performed.",
                     "all": "Bonuses will be active for any action that can accept the bonus.",
                     "finesse": "Bonuses will be active for all finesse-able targets. Thsi requires the weapon/attack to have the Finesse Weapon property, be in the Natural Attack weapon group, or have the `finesse-override` boolean flag.",

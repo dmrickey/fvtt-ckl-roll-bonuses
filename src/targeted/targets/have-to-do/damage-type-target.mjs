@@ -1,47 +1,107 @@
-// @ts-nocheck
+import { MODULE_NAME } from '../../../consts.mjs';
+import { showChecklist } from '../../../handlebars-handlers/targeted/targets/checked-items-input.mjs';
 import { intersects } from "../../../util/array-intersects.mjs";
 import { truthiness } from "../../../util/truthiness.mjs";
 import { uniqueArray } from "../../../util/unique-array.mjs";
 import { BaseTarget } from "../base-target.mjs";
 
 export class DamageTypeTarget extends BaseTarget {
-    /** @type {TraitSelectorValuePlural} */
-    damageTypes = { custom: '', values: [] };
-    get #damageTypesArray() {
-        return [...this.damageTypes.values, ...this.damageTypes.custom.split(';')]
-            .map(x => x.trim()).filter(truthiness);
+
+    /**
+     * @override
+     * @inheritdoc
+     */
+    static get sourceKey() { return 'damage-type'; }
+
+    /**
+     * @override
+     * @inheritdoc
+     * @param {ItemPF} source
+     * @returns {Nullable<string[]>}
+     */
+    static getHints(source) {
+        const groups = source.getFlag(MODULE_NAME, this.key) ?? [];
+        return groups.filter(truthiness);
     }
 
     /**
-     * @inheritdoc
      * @override
+     * @inheritdoc
+     * @param {ItemPF | ActionUse | ItemAction} doc
+     * @returns {ItemPF[]}
      */
-    static get key() { return 'damage-type'; }
+    static getSourcesFor(doc) {
+        const item = doc instanceof pf1.documents.item.ItemPF
+            ? doc
+            : doc.item;
+        const bonusSources = item.actor.itemFlags.boolean[this.key]?.sources ?? [];
+
+        const filteredSources = bonusSources.filter((source) => {
+            const targetedTypes = source.getFlag(MODULE_NAME, this.key);
+
+            const action = doc instanceof pf1.components.ItemAction
+                ? doc
+                : doc instanceof pf1.actionUse.ActionUse
+                    ? doc.action
+                    : null;
+            if (action) {
+                const actionDamageTypes = uniqueArray(
+                    action.data.damage.parts
+                        .flatMap((part) => [...part.type.custom.split(';'), ...part.type.values])
+                        .map(x => x.trim())
+                        .filter(truthiness)
+                );
+                return intersects(actionDamageTypes, targetedTypes);
+            }
+
+            if (doc instanceof pf1.documents.item.ItemPF) {
+                const itemDamageTypes = uniqueArray(
+                    doc.actions
+                        .flatMap((action) => action.data.damage.parts.flatMap((part) => [...part.type.custom.split(';'), ...part.type.values]))
+                        .map(x => x.trim())
+                        .filter(truthiness)
+                );
+                return intersects(itemDamageTypes, targetedTypes);
+            }
+
+            return false;
+        });
+
+        return filteredSources;
+    }
 
     /**
-     * @inheritdoc
      * @override
-     * @param {ItemPF | ActionUse} arg
+     * @inheritdoc
+     * @param {object} options
+     * @param {ActorPF | null | undefined} options.actor
+     * @param {ItemPF} options.item
+     * @param {HTMLElement} options.html
      */
-    static getSourcesFor(arg) {
-        if (arg instanceof pf1.components.ItemAction) {
-            const actionDamageTypes = uniqueArray(
-                arg.data.damage.parts.flatMap((part) => [...part.type.custom.split(';'), ...part.type.values])
-                    .map(x => x.toLowerCase().trim())
-                    .filter(truthiness)
-            );
-            return intersects(actionDamageTypes, this.#damageTypesArray);
-        }
+    static showInputOnItemSheet({ actor, item, html }) {
+        const custom = uniqueArray(
+            actor?.items
+                .flatMap((i) => [...i.actions])
+                .filter(truthiness)
+                .flatMap((action) => action.data.damage)
+                .flatMap((damagePart) => damagePart.parts)
+                .flatMap((part) => (part.type?.custom ?? '').split(';'))
+                .filter(truthiness)
+            ?? []
+        );
+        custom.sort();
 
-        if (arg instanceof pf1.documents.item.ItemAttackPF || arg instanceof pf1.documents.item.ItemWeaponPF) {
-            const itemDamageTypes = uniqueArray(
-                arg.actions.flatMap((action) => action.data.damage.parts.flatMap((part) => [...part.type.custom.split(';'), ...part.type.values]))
-                    .map(x => x.toLowerCase().trim())
-                    .filter(truthiness)
-            );
-            return intersects(itemDamageTypes, this.#damageTypesArray);
-        }
+        const options = {
+            ...pf1.config.damageTypes,
+            ...custom.reduce((acc, curr) => ({ ...acc, [curr]: curr, }), {})
+        };
 
-        return false;
+        showChecklist({
+            item,
+            flag: this.key,
+            label: this.label,
+            parent: html,
+            options,
+        });
     }
 }
