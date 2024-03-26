@@ -60,9 +60,7 @@
 - All healing
 - Spellbook target
 - Spell preparation Qty
-- Spell School target*
 - Damage Type target*
-- Subschool Target*
 - Skill Target
   - Include "smart groups" that will give options e.g.
     - specific ability skills (e.g. all int skills)
@@ -168,6 +166,7 @@
       - (assuming my PR is merged)
 - Targeting
   - descriptor-based targeting
+  - sub-school target
 
 # Not Possible
 - Attempt to create a "resource offset"
