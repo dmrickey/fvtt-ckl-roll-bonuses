@@ -16,6 +16,7 @@ import { WeaponTypeTarget } from "./weapon-type-target.mjs";
 import { AllTarget } from './all-target.mjs';
 import { FinesseTarget } from './finesse-target.mjs';
 import { FunctionTarget } from './function-target.mjs';
+import { SpellSchoolTarget } from './spell-school-target.mjs';
 
 /** @type {typeof BaseTarget[]} */
 export const allTargetTypes = [
@@ -29,6 +30,7 @@ export const allTargetTypes = [
     IsWeaponTarget,
     ItemTarget,
     SelfTarget,
+    SpellSchoolTarget,
     SpellTarget,
     TokenTarget,
     WeaponGroupTarget,
