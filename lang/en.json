@@ -1,5 +1,7 @@
 {
     "ckl-roll-bonuses": {
+        "ac-mod": "{mod} AC",
+        "acp-mod": "{mod} ACP",
         "alignment": {
             "lawful": "Lawful",
             "chaotic": "Chaotic",

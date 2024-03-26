@@ -42,7 +42,7 @@ registerItemHint((hintcls, actor, item, _data) => {
     const isFocused = intersects(armorFocuses, baseTypes);
 
     if (isArmor && isFocused) {
-        const hint = hintcls.create(localize(key), [], {});
+        const hint = hintcls.create(localize(key), [], { hint: localize('acp-mod', { mod: -1 }) });
         return hint;
     }
 });
