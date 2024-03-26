@@ -56,22 +56,10 @@ declare global {
 
         name: string;
 
-        system: {
-            details: {
-                alignment: string;
-            };
-            skills: {
-                [key: string]: {
-                    name: string;
-                    subSkills: {
-                        [key: string]: {
-                            name: string;
-                        };
-                    };
-                };
-            };
-        };
+        system: SystemActorData;
     }
+
+    type ArmorType = 'lgt' | 'med' | 'hvy' | 'shl' | 'twr';
 
     type ConditionalPart = [number | string, TraitSelectorValuePlural, false];
     class ConditionalPartsResults {
@@ -80,6 +68,14 @@ declare global {
         'damage.crit': ConditionalPart[];
         'damage.nonCrit': ConditionalPart[];
         'damage.normal': ConditionalPart[];
+    }
+
+    interface FlyManeuverabilities {
+        average: 'Average';
+        clumsy: 'Clumsy';
+        good: 'Good';
+        perfect: 'Perfect';
+        poor: 'Poor';
     }
 
     class ActionUseShared {
@@ -339,6 +335,367 @@ declare global {
     }
     class ItemWeaponPF extends ItemPF<SystemWeaponPF> {}
 
+    class SkillData {
+        ability: keyof Abilities;
+        acp: boolean;
+        background?: boolean;
+        changeBonus: number;
+        cs: boolean;
+        mod: number;
+        name?: string;
+        rank: number;
+        rt: boolean;
+        subSkills?: Record<string, SkillData & { journal: string }>;
+    }
+
+    declare type SpellbookKey =
+        | 'primary'
+        | 'secondary'
+        | 'tertiary'
+        | 'spelllike';
+
+    class SpellRanges {
+        close: number;
+        medium: number;
+        long: number;
+        cl: number;
+    }
+
+    class SpellbookData {
+        ability: keyof Abilities;
+        altName: string;
+        arcaneSpellFailure: boolean;
+        autoSpellLevelCalculation: boolean;
+        autoSpellLevels: boolean;
+        baseDCFormula: string;
+        castPerDayAllOffsetFormula: string;
+        casterType: SpellcastingLevelType;
+        cl: {
+            formula: string;
+            autoSpellLevelCalculationFormula: string;
+            total: number;
+        };
+        clNotes: string;
+        class: string;
+        concentration: { total: number };
+        concentrationFormula: string;
+        concentrationNotes: string;
+        domainSlotValue: number;
+        hasCantrips: boolean;
+        inUse: boolean;
+        label: string;
+        name: string;
+        preparedAllOffsetFormula: string;
+        psychic: boolean;
+        range: SpellRanges;
+        spellPoints: {
+            useSystem: boolean;
+            value: number;
+            maxFormula: string;
+            restoreFormula: string;
+            max: number;
+        };
+        spellPreparationMode: SpellcastingType;
+        spellSlotAbilityBonusFormula: string;
+        spells: Record<
+            SpellLevel,
+            {
+                base: Nullable<number>;
+                castPerDayOffsetFormula: string;
+                max: number;
+                preparedOffsetFormula: string;
+                value: number;
+            }
+        >;
+        spontaneous: boolean;
+    }
+
+    class SystemActorData {
+        abilities: Record<
+            keyof Abilities,
+            {
+                base: number;
+                baseMod: number;
+                checkMod: number;
+                damage: number;
+                drain: number;
+                mod: number;
+                penalty: number;
+                total: number;
+                userPenalty: number;
+                value: number;
+            }
+        >;
+        ac: {
+            natural: {
+                total: number;
+                base: number;
+                misc: number;
+                enh: number;
+            };
+            normal: {
+                total: number;
+                base: number;
+                enh: number;
+                misc: number;
+            };
+            shield: {
+                total: number;
+                base: number;
+                enh: number;
+                misc: number;
+            };
+        };
+        altCurrency: { pp: number; gp: number; sp: number; cp: number };
+        attributes: {
+            ac: {
+                flatFooted: { total: number };
+                normal: { ability: keyof Abilities; total: number };
+                touch: { ability: keyof Abilities; total: number };
+            };
+            acNotes: '';
+            acp: {
+                armorBonus: number;
+                attackPenalty: number;
+                encumbrance: number;
+                gear: number;
+                shieldBonus: number;
+                total: number;
+            };
+            attack: {
+                critConfirm: number;
+                general: number;
+                melee: number;
+                meleeAbility: keyof Abilities;
+                ranged: number;
+                rangedAbility: keyof Abilities;
+                shared: number;
+            };
+            bab: { total: number; value: number };
+            clCheck: false;
+            cmb: { bonus: number; total: number; value: number };
+            cmbAbility: keyof Abilities;
+            cmd: {
+                strAbility: keyof Abilities;
+                dexAbility: keyof Abilities;
+                total: number;
+                flatFootedTotal: number;
+            };
+            cmdNotes: string;
+            conditions: {
+                battered: boolean;
+                bleed: boolean;
+                confused: boolean;
+                cowering: boolean;
+                dazed: boolean;
+                dazzled: boolean;
+                entangled: boolean;
+                exhausted: boolean;
+                fatigued: boolean;
+                frightened: boolean;
+                grappled: boolean;
+                helpless: boolean;
+                incorporeal: boolean;
+                invisible: boolean;
+                nauseated: boolean;
+                panicked: boolean;
+                paralyzed: boolean;
+                pf1_blind: boolean;
+                pf1_deaf: boolean;
+                pf1_prone: boolean;
+                pf1_sleep: boolean;
+                pinned: boolean;
+                shaken: boolean;
+                sickened: boolean;
+                squeezing: boolean;
+                staggered: boolean;
+                stunned: boolean;
+                undefined: boolean;
+            };
+            damage: {
+                general: number;
+                shared: number;
+                spell: number;
+                weapon: number;
+            };
+            encumbrance: {
+                carriedWeight: number;
+                level: number;
+                levels: {
+                    light: number;
+                    medium: number;
+                    heavy: number;
+                    carry: number;
+                    drag: number;
+                };
+            };
+            energyDrain: number;
+            hd: { total: number };
+            hp: {
+                base: number;
+                max: number;
+                nonlethal: number;
+                offset: number;
+                temp: number;
+                value: number;
+            };
+            hpAbility: keyof Abilities;
+            init: {
+                value: number;
+                ability: keyof Abilities;
+                bonus: number;
+                total: number;
+            };
+            mDex: { armorBonus: number; shieldBonus: number };
+            maxDexBonus: number;
+            naturalAC: number;
+            quadruped: false;
+            saveNotes: '';
+            savingThrows: {
+                fort: { base: number; ability: keyof Abilities; total: number };
+                ref: { base: number; ability: keyof Abilities; total: number };
+                will: { base: number; ability: keyof Abilities; total: number };
+            };
+            speed: {
+                burrow: { base: number; total: number };
+                climb: { base: number; total: number };
+                fly: {
+                    base: number;
+                    maneuverability: keyof FlyManeuverabilities;
+                    total: number;
+                };
+                land: { base: number; total: number };
+                swim: { base: number; total: number };
+            };
+            spells: {
+                spellbooks: Record<SpellbookKey, SpellbookData>;
+                usedSepllbooks: SpellbookKey[];
+            };
+            sr: { formula: string; total: number };
+            srNotes: string;
+            vigor: {
+                base: number;
+                max: number;
+                min: number;
+                offset: number;
+                temp: number;
+                value: number;
+            };
+            woundThresholds: {
+                level: number;
+                mod: number;
+                override: number;
+                penaltyBase: number;
+                penalty: number;
+            };
+            wounds: {
+                min: number;
+                base: number;
+                value: number;
+                max: number;
+                offset: number;
+            };
+        };
+
+        currency: { pp: number; gp: number; sp: number; cp: number };
+        customSkills: unknown;
+        details: {
+            age: string;
+            alignment: string;
+            biography: { value: string };
+            bonusFeatFormula: string;
+            bonusSkillRankFormula: string;
+            carryCapacity: {
+                bonus: { user: number; total: number };
+                multiplier: { base: number; user: number; total: number };
+            };
+            cr: { base: number };
+            deity: string;
+            gender: string;
+            height: string;
+            level: { value: number; min: number; max: number };
+            mythicTier: number;
+            notes: { value: string };
+            tooltip: {
+                hideArmor: boolean;
+                hideBuffs: boolean;
+                hideClothing: boolean;
+                hideConditions: boolean;
+                hideHeld: boolean;
+                hideName: boolean;
+                name: string;
+            };
+            weight: string;
+            xp: { value: number; max: number; pct: number };
+        };
+        resources: Record<
+            string,
+            {
+                value: number;
+                max: number;
+                _id: string;
+            }
+        >;
+        skills: Record<string, SkillData>;
+        traits: {
+            armorProf: {
+                value: [];
+                custom: string;
+                total: ArmorType[];
+                customTotal: 'No Metal Armors';
+            };
+            aura: { custom: string };
+            ci: { value: []; custom: string };
+            cres: string;
+            di: { value: []; custom: string };
+            dr: {
+                value: [
+                    {
+                        amount: number;
+                        operator: boolean;
+                        types: ['slashing', ''];
+                    }
+                ];
+                custom: string;
+            };
+            dv: { value: []; custom: string };
+            eres: { value: []; custom: '10 cold' };
+            fastHealing: string;
+            humanoid: boolean;
+            languages: {
+                value: [];
+                custom: string;
+                total: ['common'];
+                customTotal: 'Catfolk';
+            };
+            regen: string;
+            senses: {
+                bs: number;
+                bse: number;
+                custom: string;
+                dv: number;
+                ll: {
+                    enabled: boolean;
+                    multiplier: { bright: number; dim: number };
+                };
+                sc: number;
+                si: boolean;
+                sid: boolean;
+                tr: boolean;
+                ts: number;
+            };
+            size: ActorSize;
+            stature: ActorStature;
+            type: 'humanoid';
+            weaponProf: {
+                value: [];
+                custom: string;
+                total: (keyof WeaponProficiencies)[];
+                customTotal: 'Club;Dagger;Dart;Quarterstaff;Scimitar;Scythe;Sickle;Shortspear;Sling;Spear;Natural attacks';
+            };
+        };
+    }
+
     class SystemItemData {
         links: {
             children: { name: string; id: string }[];
@@ -497,7 +854,7 @@ declare global {
         armorProf: {
             custom: string;
             customTotal: string;
-            total: ('lgt' | 'med' | 'hvy' | 'shl' | 'twr')[];
+            total: ArmorType[];
             value: [];
         };
         aura: { custom: string };
@@ -936,6 +1293,22 @@ declare global {
 
     declare type SpellcastingType = 'spontaneous' | 'prepared' | 'hybrid';
     declare type SpellcastingLevelType = 'low' | 'med' | 'high';
+    declare type SpellLevel =
+        | 'spell0'
+        | 'spell1'
+        | 'spell2'
+        | 'spell3'
+        | 'spell4'
+        | 'spell5'
+        | 'spell6'
+        | 'spell7'
+        | 'spell8'
+        | 'spell9';
+
+    interface WeaponProficiencies {
+        mar: 'Martial Weapons';
+        sim: 'Simple Weapons';
+    }
 
     interface ActorTraitSelector {
         setPosition(position?: Position);
