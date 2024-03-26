@@ -47,19 +47,13 @@
 - create a compendium with details on how to configure each bonus
   - link to specific compendium page for this bonus when it's detected on the sheet
 - create "id getter" ui for things like keen or fortune (fortune will need a lot more as well)
-- Always show roll bonuses header in the advanced tab, and add a Cog to itself to configure which bonuses should be on this item (useful for bonuses that can't be auto-detected base on the Feat name/id)
-- Add some kind of preview to item targeting UI to show all currently affected Items
+- Always show roll bonuses header in the advanced tab, and add a Cog to itself to configure which bonuses should be on this item (useful for bonuses that can't be auto-detected based on the Feat name/id)
 - ### Add text filter to item input target
 
 # Bonus Targets
 ## Bonuses
 - Spell level
   - target spells 0-9, all
-- CL Bonus*
-- DC Bonus*
-- Move Crit to Bonus (would deprecate crit)
-
-*Would deprecate everything under "spells"
 
 ## Targets
 - Have creature type/subtype based targeting - would support [Ranger](#ranger)'s Favored Enemy
@@ -189,4 +183,3 @@
 - localize
   - Function Target
   - All labels
-- BaseBonus - rename `type` to `bonusKey`

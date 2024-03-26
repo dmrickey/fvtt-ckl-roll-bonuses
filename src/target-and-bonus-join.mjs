@@ -329,6 +329,19 @@ const itemActionRollDamage = async (seed, action, data) => {
 LocalHookHandler.registerHandler(localHooks.itemActionRollDamage, itemActionRollDamage);
 
 /**
+ * @param {ItemPF} item
+ * @param {string[]} props
+ * @param {RollData} rollData
+ */
+const itemGetTypeChatData = (item, props, rollData) => {
+    handleBonusesFor(
+        item,
+        (bonusType, sourceItem) => props.push(...(bonusType.getItemChatCardInfo(sourceItem, rollData) || []))
+    );
+}
+Hooks.on(customGlobalHooks.itemGetTypeChatData, itemGetTypeChatData);
+
+/**
  *
  * @param {ItemAction} action
  * @param {RollData} rollData

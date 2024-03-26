@@ -65,6 +65,16 @@ export class BaseBonus extends BaseSource {
     static actionUseAlterRollData(source, shared) { }
 
     /**
+     * Get extra info tags for the chat card for the owner to see
+     *
+     * @abstract
+     * @param {ItemPF} source
+     * @param {RollData} rollData
+     * @returns {Nullable<string[]>}
+     */
+    static getItemChatCardInfo(source, rollData) { return; }
+
+    /**
      * @abstract
      * @param {ItemPF} _source
      * @param {ItemActionRollAttackHookArgs} seed
