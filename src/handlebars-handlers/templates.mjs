@@ -1,6 +1,9 @@
 import { MODULE_NAME } from "../consts.mjs";
 
-export const templates = {
+export const templates =/** @type {const} */ ({
+    // bonus container for item sheets
+    rollBonusesContainer: `modules/${MODULE_NAME}/hbs/roll-bonuses-header.hbs`,
+
     // generic shortcuts
     checkboxInput: `modules/${MODULE_NAME}/hbs/checkbox-input.hbs`,
     enabledLabel: `modules/${MODULE_NAME}/hbs/enabled-label.hbs`,
@@ -28,19 +31,24 @@ export const templates = {
 
     // bonus picker application
     bonusPicker: `modules/${MODULE_NAME}/hbs/bonus-picker.hbs`,
-};
+});
 
 /**
- *
- * @param {string} template
- * @param {{[key: string]: any}} templateData
- * @returns {HTMLDivElement}
+ * @param {typeof templates[keyof typeof templates]} template
+ * @param {Record<string, any>} [templateData]
+ * @returns {Element}
  */
-export function createTemplate(template, templateData) {
+export function createTemplate(template, templateData = {}) {
     const div = document.createElement('div');
     div.innerHTML = Handlebars.partials[template](
         templateData,
         { allowProtoMethodsByDefault: true, allowProtoPropertiesByDefault: true },
     );
-    return div;
+
+    const child = div.firstChild;
+    if (child instanceof Element) {
+        return child;
+    }
+
+    throw new Error('should never happen');
 }

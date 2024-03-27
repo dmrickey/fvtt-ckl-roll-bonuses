@@ -1,10 +1,11 @@
 import { localize } from "../util/localize.mjs";
+import { createTemplate, templates } from './templates.mjs';
 
 const containerId = 'ckl-roll-bonus-container';
 
 const addNodeToRollBonus = (
     /** @type {HTMLElement} */ itemSheetHtml,
-    /** @type {HTMLDivElement} */ child,
+    /** @type {Element} */ child,
 ) => {
     const flagsContainer = itemSheetHtml.querySelector('.tab[data-tab="advanced"] .tags');
     if (!flagsContainer || !child) {
@@ -13,20 +14,7 @@ const addNodeToRollBonus = (
 
     let container = itemSheetHtml.querySelector(`#${containerId}`);
     if (!container) {
-        container = document.createElement('div');
-        container.id = containerId;
-
-        const header = document.createElement('h3');
-        header.textContent = localize('roll-bonuses');
-        header.classList.add('form-header');
-
-        const icon = document.createElement('i');
-        icon.classList.add('fal', 'fa-dice-d20');
-
-        header.prepend(icon);
-
-        container.appendChild(header);
-
+        container = createTemplate(templates.rollBonusesContainer);
         flagsContainer.after(container);
     }
 
