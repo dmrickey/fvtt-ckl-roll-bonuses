@@ -27,7 +27,10 @@ export class SpellSchoolTarget extends BaseTarget {
     */
     static getHints(source) {
         const groups = source.getFlag(MODULE_NAME, this.key) || [];
-        return groups.filter(truthiness);
+        const schools = groups
+            .filter(truthiness)
+            .map((/** @type {string} */ school) => pf1.config.spellSchools[school] || school);
+        return schools;
     }
 
     /**

@@ -97,10 +97,14 @@ export class FinesseBonus extends BaseBonus {
      * @returns {ItemActionRollAttackHookArgs}
      */
     static itemActionRollAttack(_source, seed, _action, data) {
-        const strRegex = new RegExp(`[0-9]+\\[${pf1.config.abilities.str}\\]`);
+        const strRegex = new RegExp(`[\\+-]\\s*[0-9]+\\[${pf1.config.abilities.str}\\]`);
         const dexIsGreater = data.abilities.dex.mod > data.abilities.str.mod;
-        if (data && seed.formula.match(strRegex) && dexIsGreater) {
-            seed.formula = seed.formula.replace(strRegex, `${data.abilities.dex.mod}[${pf1.config.abilities.dex}]`);
+        const dexFormula = `+ ${data.abilities.dex.mod}[${pf1.config.abilities.dex}]`;
+        if (seed.formula.match(strRegex) && dexIsGreater) {
+            seed.formula = seed.formula.replace(strRegex, dexFormula);
+        }
+        else if (dexIsGreater) {
+            seed.formula = `${seed.formula} ${dexFormula}`;
         }
         return seed;
     }
