@@ -43,5 +43,5 @@ export function showTokenInput({
         });
     });
 
-    addNodeToRollBonus(parent, div);
+    addNodeToRollBonus(parent, div, item);
 }

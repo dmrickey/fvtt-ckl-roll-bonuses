@@ -349,5 +349,5 @@ export function modifiersInput({
         );
     });
 
-    addNodeToRollBonus(parentElement, div);
+    addNodeToRollBonus(parentElement, div, item);
 }

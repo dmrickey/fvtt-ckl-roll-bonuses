@@ -51,5 +51,5 @@ export function showChecklist({ flag, item, label, options, parent }) {
         });
     });
 
-    addNodeToRollBonus(parent, div);
+    addNodeToRollBonus(parent, div, item);
 }

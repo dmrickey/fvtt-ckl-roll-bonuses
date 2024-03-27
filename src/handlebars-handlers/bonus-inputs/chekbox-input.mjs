@@ -50,5 +50,5 @@ export function checkboxInput({
         },
     );
 
-    addNodeToRollBonus(parent, div);
+    addNodeToRollBonus(parent, div, item);
 }

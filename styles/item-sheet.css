@@ -15,6 +15,10 @@
     height: unset;
 }
 
+#ckl-roll-bonus-container .settings {
+    float: inline-end;
+}
+
 /* copied from apps.less in pf1 repo */
 .pf1.sheet .roll-bonuses .delete-damage {
     width: 18px;

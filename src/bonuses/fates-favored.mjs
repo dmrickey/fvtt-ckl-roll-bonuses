@@ -64,6 +64,7 @@ Hooks.on('renderItemSheet', (
         return;
     }
     showEnabledLabel({
+        item,
         label: localize(fatesFavored),
         parent: html,
     });

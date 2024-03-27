@@ -3,11 +3,13 @@ import { createTemplate, templates } from "./templates.mjs";
 
 /**
  * @param {object} args
+ * @param {ItemPF} args.item
  * @param {string} args.label
  * @param {HTMLElement} args.parent,
  * @param {string} [args.subLabel]
  */
 export function showEnabledLabel({
+    item,
     label,
     parent,
     subLabel = '',
@@ -17,5 +19,5 @@ export function showEnabledLabel({
         { label, parent, subLabel, },
     );
 
-    addNodeToRollBonus(parent, div);
+    addNodeToRollBonus(parent, div, item);
 }

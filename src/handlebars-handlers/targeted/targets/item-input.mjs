@@ -55,7 +55,7 @@ export function showItemInput({
         });
     });
 
-    addNodeToRollBonus(parent, div);
+    addNodeToRollBonus(parent, div, item);
 }
 /** @ts-ignore */
 /** @extends {DocumentSheet<ItemSelectorOptions, ItemPF>} */

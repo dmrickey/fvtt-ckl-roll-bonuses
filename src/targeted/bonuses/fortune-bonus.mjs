@@ -24,13 +24,15 @@ export class FortuneBonus extends BaseBonus {
     }
 
     /**
-     * @inheritdoc
      * @override
+     * @inheritdoc
      * @param {object} options
      * @param {HTMLElement} options.html
+     * @param {ItemPF} options.item
      */
-    static showInputOnItemSheet({ html },) {
+    static showInputOnItemSheet({ html, item }) {
         showEnabledLabel({
+            item,
             label: this.label,
             parent: html,
         });

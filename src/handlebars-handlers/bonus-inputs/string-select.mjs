@@ -39,5 +39,5 @@ export function stringSelect({
         },
     );
 
-    addNodeToRollBonus(parent, div);
+    addNodeToRollBonus(parent, div, item);
 }

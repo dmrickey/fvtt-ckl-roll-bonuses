@@ -248,5 +248,5 @@ Hooks.on('renderItemSheet', (
     skill1Select?.addEventListener('change', updateVP);
     skill2Select?.addEventListener('change', updateVP);
 
-    addNodeToRollBonus(html, div);
+    addNodeToRollBonus(html, div, item);
 });

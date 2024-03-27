@@ -49,5 +49,5 @@ export function textInput({
         },
     );
 
-    addNodeToRollBonus(parent, div);
+    addNodeToRollBonus(parent, div, item);
 }

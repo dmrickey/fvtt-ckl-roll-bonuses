@@ -57,6 +57,7 @@ export class FunctionTarget extends BaseTarget {
         }
         else {
             showEnabledLabel({
+                item,
                 label: item.getFlag(MODULE_NAME, this.#hintLabelKey) || this.label,
                 parent: html,
             });

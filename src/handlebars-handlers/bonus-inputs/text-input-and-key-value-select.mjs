@@ -55,5 +55,5 @@ export function textInputAndKeyValueSelect({
         },
     );
 
-    addNodeToRollBonus(parent, div);
+    addNodeToRollBonus(parent, div, item);
 }

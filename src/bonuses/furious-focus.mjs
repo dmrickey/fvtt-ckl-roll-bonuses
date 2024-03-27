@@ -72,6 +72,7 @@ Hooks.on('renderItemSheet', (
         return;
     }
     showEnabledLabel({
+        item,
         label: label(),
         parent: html,
     });

@@ -56,5 +56,5 @@ export function keyValueSelect({
         },
     );
 
-    addNodeToRollBonus(parent, div);
+    addNodeToRollBonus(parent, div, item);
 }

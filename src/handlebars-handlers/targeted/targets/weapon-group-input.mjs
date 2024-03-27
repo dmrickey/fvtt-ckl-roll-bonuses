@@ -53,5 +53,5 @@ export function weaponTypeInput({
         });
     });
 
-    addNodeToRollBonus(parent, div);
+    addNodeToRollBonus(parent, div, item);
 }

@@ -27,11 +27,12 @@ export class AllTarget extends BaseTarget {
      * @override
      * @param {object} options
      * @param {ActorPF | null | undefined} options.actor
-     * @param {ItemPF} options.item
      * @param {HTMLElement} options.html
+     * @param {ItemPF} options.item
      */
-    static showInputOnItemSheet({ html }) {
+    static showInputOnItemSheet({ html, item }) {
         showEnabledLabel({
+            item,
             label: this.label,
             parent: html,
         });

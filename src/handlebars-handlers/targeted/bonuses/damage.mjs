@@ -147,5 +147,5 @@ export function damageInput({
         });
     });
 
-    addNodeToRollBonus(parent, div);
+    addNodeToRollBonus(parent, div, item);
 }

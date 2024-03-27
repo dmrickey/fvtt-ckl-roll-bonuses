@@ -87,6 +87,7 @@ export class AgileBonus extends BaseBonus {
      */
     static showInputOnItemSheet({ actor, item, html }) {
         showEnabledLabel({
+            item,
             label: this.label,
             parent: html,
         });
