@@ -20,6 +20,8 @@ export function showItemInput({
     label,
     parent,
 }) {
+    if (!item?.actor) return;
+
     /** @type {string[]} */
     const currentUuids = item.getFlag(MODULE_NAME, key) || [];
     const items = item.actor.items

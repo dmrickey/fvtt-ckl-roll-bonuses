@@ -74,7 +74,7 @@ export class FunctionTarget extends BaseTarget {
             ? doc
             : doc.item;
 
-        if (!item) {
+        if (!item?.actor) {
             return [];
         }
 

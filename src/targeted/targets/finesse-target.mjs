@@ -47,7 +47,7 @@ export class FinesseTarget extends BaseTarget {
             ? doc
             : doc.item;
 
-        if (!item) {
+        if (!item?.actor) {
             return [];
         }
 

@@ -34,6 +34,11 @@ export class DamageTypeTarget extends BaseTarget {
         const item = doc instanceof pf1.documents.item.ItemPF
             ? doc
             : doc.item;
+
+        if (!item?.actor) {
+            return [];
+        }
+
         const bonusSources = item.actor.itemFlags.boolean[this.key]?.sources ?? [];
 
         const filteredSources = bonusSources.filter((source) => {

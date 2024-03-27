@@ -264,7 +264,7 @@ declare global {
         get hasAction(): boolean;
         actions: EmbeddedCollection<ItemAction>;
 
-        actor: ActorPF;
+        actor?: ActorPF;
         firstAction: ItemAction;
         flags: {
             core: { sourceId: string };

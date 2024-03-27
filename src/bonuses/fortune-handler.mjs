@@ -212,6 +212,8 @@ Hooks.on(customGlobalHooks.itemUse, (
     /** @type {ItemPF} */ item,
     /** @type {{ fortuneCount: number; misfortuneCount: number; actionID: any; }} */ options
 ) => {
+    if (!item?.actor) return;
+
     options.fortuneCount = 0;
     options.misfortuneCount = 0;
 
@@ -252,7 +254,7 @@ Hooks.on(customGlobalHooks.itemUse, (
             break;
     }
 
-    const count = countBFlags(item.actor?.items, ...fortunesToFind, ...misfortunesToFind);
+    const count = countBFlags(item.actor.items, ...fortunesToFind, ...misfortunesToFind);
 
     fortunesToFind.forEach((f) => options.fortuneCount += count[f]);
     misfortunesToFind.forEach((f) => options.misfortuneCount += count[f]);

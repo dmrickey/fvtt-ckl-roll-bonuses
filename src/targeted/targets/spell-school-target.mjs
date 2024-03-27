@@ -43,6 +43,11 @@ export class SpellSchoolTarget extends BaseTarget {
         const item = doc instanceof pf1.documents.item.ItemPF
             ? doc
             : doc.item;
+
+        if (!item?.actor) {
+            return [];
+        }
+
         if (!(item instanceof pf1.documents.item.ItemSpellPF)
         ) {
             return [];
