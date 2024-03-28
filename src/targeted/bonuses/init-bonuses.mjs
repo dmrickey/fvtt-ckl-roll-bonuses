@@ -1,6 +1,6 @@
+import { Sources } from '../source-registration.mjs';
 import { AgileBonus } from './agile.mjs';
 import { AttackBonus } from "./attack-bonus.mjs";
-import { BaseBonus } from "./base-bonus.mjs";
 import { CasterLevelBonus } from './caster-level-bonus.mjs';
 import { CritBonus } from './crit-bonus.mjs';
 import { DamageBonus } from "./damage-bonus.mjs";
@@ -10,10 +10,7 @@ import { FinesseBonus as FinesseBonus } from './finesse-bonus.mjs';
 import { FortuneBonus } from './fortune-bonus.mjs';
 import { MisfortuneBonus } from './misfortune-bonus.mjs';
 
-/**
- * @type {typeof BaseBonus[]}
- */
-export const allBonusTypes = [
+export const registerBonuses = () => [
     AgileBonus,
     AttackBonus,
     CasterLevelBonus,
@@ -25,4 +22,4 @@ export const allBonusTypes = [
     FortuneBonus,
     MisfortuneBonus,
     // ModifiersBonus, // only if I can get the function to remove duplicates working (which needs to work with conditionals)
-];
+].forEach(Sources.registerSource);

@@ -1,6 +1,5 @@
 import { MODULE_NAME } from '../../consts.mjs';
 import { showEnabledLabel } from '../../handlebars-handlers/enabled-label.mjs';
-import { LocalHookHandler, localHooks } from '../../util/hooks.mjs';
 import { BaseBonus } from './base-bonus.mjs';
 
 export class AgileBonus extends BaseBonus {

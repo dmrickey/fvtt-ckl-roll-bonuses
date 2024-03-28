@@ -185,4 +185,7 @@
   - function target
 - Always show Roll Bonuses Header
   - Add cog to configure which bonuses are available
+- Add compendium with the current readme info
 - Show tooltip for all bonuses
+- FIX
+  - Agile is breaking damage types

@@ -1,18 +1,14 @@
 import { MODULE_NAME } from './consts.mjs';
-import { allBonusTypes } from "./targeted/bonuses/all-bonuses.mjs";
 import { BaseBonus } from './targeted/bonuses/base-bonus.mjs';
-import { allTargetTypes } from "./targeted/targets/all-targets.mjs";
 import { conditionalCalculator } from "./util/conditional-helpers.mjs";
 import { LocalHookHandler, customGlobalHooks, localHooks } from "./util/hooks.mjs";
 import { registerItemHint } from "./util/item-hints.mjs";
 import { localize } from "./util/localize.mjs";
 import { truthiness } from "./util/truthiness.mjs";
+import { initSources } from './targeted/init-sources.mjs';
+import { api } from './util/api.mjs';
 
-function init() {
-    allTargetTypes.forEach((targetType) => targetType.init());
-    allBonusTypes.forEach((bonusType) => bonusType.init());
-};
-init();
+initSources();
 
 registerItemHint((hintcls, actor, item, _data) => {
     if (!actor || item?.actor !== actor) {
@@ -90,7 +86,7 @@ registerItemHint((hintcls, actor, item, _data) => {
  * @param {boolean} [options.skipGenericTarget]
  */
 export const handleBonusesFor = (thing, func, { skipGenericTarget = false } = {}) => {
-    allTargetTypes
+    api.allTargetTypes
         .filter((targetType) => !skipGenericTarget || !targetType.isGenericTarget)
         .flatMap((targetType) => targetType.getSourcesFor(thing))
         // filter down to unique items in case one source item is affecting this target item through multiple "targets"
@@ -110,7 +106,7 @@ export const handleBonusesFor = (thing, func, { skipGenericTarget = false } = {}
  * @param {boolean} [options.skipGenericTarget]
  */
 export const handleBonusTypeFor = (thing, specificBonusType, func, { skipGenericTarget = false } = {}) => {
-    allTargetTypes
+    api.allTargetTypes
         .filter((targetType) => !skipGenericTarget || !targetType.isGenericTarget)
         .flatMap((targetType) => targetType.getSourcesFor(thing))
         // filter down to unique items in case one source item is affecting this target item through multiple "targets"
@@ -283,13 +279,13 @@ const prepare = (item, _rollData) => {
     item[MODULE_NAME].bonuses = [];
     item[MODULE_NAME].targets = [];
 
-    allBonusTypes.forEach((bonusType) => {
+    api.allBonusTypes.forEach((bonusType) => {
         if (bonusType.isSource(item)) {
             item[MODULE_NAME].bonuses.push(bonusType);
             bonusType.prepareData(item, _rollData);
         }
     });
-    allTargetTypes.forEach((targetType) => {
+    api.allTargetTypes.forEach((targetType) => {
         if (targetType.isSource(item)) {
             item[MODULE_NAME].targets.push(targetType);
             targetType.prepareData(item, _rollData);
