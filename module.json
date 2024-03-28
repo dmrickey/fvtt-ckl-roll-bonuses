@@ -21,6 +21,7 @@
     "styles": [
         "styles/actor-sheet.css",
         "styles/applications.css",
+        "styles/bonus-picker.css",
         "styles/item-hints.css",
         "styles/item-sheet.css",
         "styles/pf1-overrides.css"

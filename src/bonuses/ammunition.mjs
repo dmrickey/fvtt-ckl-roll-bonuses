@@ -103,7 +103,7 @@ Hooks.on('renderItemSheet', (
         item,
         key: legacyAmmoAttackKey,
         parent: html,
-        label: localize('bonus-target.bonus.label.attack'),
+        label: localize('source.bonus.label.attack'),
     }, {
         isModuleFlag: true,
     });

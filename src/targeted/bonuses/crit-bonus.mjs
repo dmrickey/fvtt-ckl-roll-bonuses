@@ -219,7 +219,7 @@ export class CritBonus extends BaseBonus {
             item,
             key: this.#critKeenKey,
             parent: html,
-            label: localize('bonus-target.bonus.label.crit-keen'),
+            label: localize('source.bonus.label.crit-keen'),
         }, {
             isModuleFlag: true,
         });
@@ -227,7 +227,7 @@ export class CritBonus extends BaseBonus {
             item,
             key: this.#critMultKey,
             parent: html,
-            label: localize('bonus-target.bonus.label.crit-mult'),
+            label: localize('source.bonus.label.crit-mult'),
         }, {
             isModuleFlag: true,
         });
@@ -235,7 +235,7 @@ export class CritBonus extends BaseBonus {
             item,
             key: this.#critOffsetKey,
             parent: html,
-            label: localize('bonus-target.bonus.label.crit-offset'),
+            label: localize('source.bonus.label.crit-offset'),
         }, {
             isModuleFlag: true,
         });

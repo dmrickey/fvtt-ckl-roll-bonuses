@@ -1,28 +1,34 @@
 <div>
-    <div>
+    <div class="sources">
         <div>
+            <span>{{ localize 'ckl-roll-bonuses.source.target.label.targets' }}</span>
             {{#each targets}}
             <div data-tooltip="{{this.tooltip}}">
-                <input type="checkbox" id="{{this.key}}" name="scales" value="{{this.value}}" />
+                <input type="checkbox" id="{{this.key}}" value="{{this.value}}" />
                 <label for="{{this.key}}">{{this.label}}</label>
             </div>
             {{/each}}
         </div>
         <div>
+            <span>{{ localize 'ckl-roll-bonuses.source.bonus.label.bonuses' }}</span>
             {{#each bonuses}}
             <div data-tooltip="{{this.tooltip}}">
-                <input type="checkbox" id="{{this.key}}" name="scales" value="{{this.value}}" />
+                <input type="checkbox" id="{{this.key}}" value="{{this.value}}" />
                 <label for="{{this.key}}">{{this.label}}</label>
             </div>
             {{/each}}
         </div>
     </div>
-    <div>
+
+    {{#if specifics.length}}
+    <span>{{ localize 'ckl-roll-bonuses.specific-bonuses' }}</span>
+    <div class="specific-bonuses">
         {{#each specifics}}
             <div data-tooltip="{{this.tooltip}}">
-                <input type="checkbox" id="{{this.key}}" name="scales" value="{{this.value}}" />
+                <input type="checkbox" id="{{this.key}}" value="{{this.value}}" />
                 <label for="{{this.key}}">{{this.label}}</label>
             </div>
         {{/each}}
     </div>
+    {{/if}}
 </div>

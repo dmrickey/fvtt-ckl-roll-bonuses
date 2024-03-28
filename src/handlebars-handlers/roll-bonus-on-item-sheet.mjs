@@ -18,11 +18,11 @@ const addNodeToRollBonus = (itemSheetHtml, child, item) => {
     if (!container) {
         container = createTemplate(templates.rollBonusesContainer);
 
-        // const settings = container.querySelector(`.settings`);
-        // settings?.addEventListener('click', (event) => {
-        //     event.preventDefault();
-        //     showBonusPicker({ item });
-        // });
+        const settings = container.querySelector(`.settings`);
+        settings?.addEventListener('click', (event) => {
+            event.preventDefault();
+            showBonusPicker({ item });
+        });
 
         flagsContainer.after(container);
     }

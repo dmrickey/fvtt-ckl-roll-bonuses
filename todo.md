@@ -178,8 +178,13 @@
 
 # This release must include
 - localize
-  - Function Target
-  - All labels
+  - Target
+    - Damage label/tooltip
+    - Function label/tooltip
+  - Bonus
+    - Critical tooltip
+    - Damage tooltip
+  - All specific bonuses
 - verify
   - damage target
   - function target
@@ -189,3 +194,4 @@
 - Show tooltip for all bonuses
 - FIX
   - Agile is breaking damage types
+  - Crit range is not stacking correctly. Actor test's greataxe is not critting on 17-18

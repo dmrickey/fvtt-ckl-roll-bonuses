@@ -12,7 +12,7 @@
         "all-spell-cl": "All Spells CL",
         "all-spell-dc": "All Spells DC",
         "armor-focus": "Armor Focus",
-        "bonus-target": {
+        "source": {
             "bonus": {
                 "tooltip": {
                     "agile": "Grants dex to damage for attacks",
@@ -30,6 +30,7 @@
                 "label": {
                     "agile": "Agile",
                     "attack": "Attack Bonus",
+                    "bonuses": "Bonuses",
                     "cl": "Caster Level",
                     "crit": "Critical",
                     "crit-keen": "Keen",
@@ -72,7 +73,7 @@
                     "self": "Targets Self",
                     "spell": "Spell Targets",
                     "spell-school": "Spell School Targets",
-                    "target": "Targets",
+                    "targets": "Targets",
                     "token": "Token Targets",
                     "weapon": "Weapon and Attack Targets",
                     "weapon-group": "Weapon Group Targets",
