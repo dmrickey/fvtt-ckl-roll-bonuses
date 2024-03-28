@@ -11,10 +11,19 @@ import { registerSetting } from "../../util/settings.mjs";
 import { uniqueArray } from "../../util/unique-array.mjs";
 import { stringSelect } from "../../handlebars-handlers/bonus-inputs/string-select.mjs";
 import { improvedArmorFocusKey } from './improved-armor-focus.mjs';
+import { SpecificBonuses } from '../all-specific-bonuses.mjs';
 
 const compendiumId = 'zBrrZynIB0EXagds';
 
-registerSetting({ key: key });
+registerSetting({ key });
+
+Hooks.once('ready', () =>
+    SpecificBonuses.registerSpecificBonus({
+        primaryKey: key,
+        label: localize(key),
+        tooltip: localize(`specific-bonus.tooltip.${key}`),
+        type: 'dictionary',
+    }));
 
 class Settings {
     static get armorFocus() { return Settings.#getSetting(key); }

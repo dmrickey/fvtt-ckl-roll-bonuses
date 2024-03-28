@@ -9,13 +9,22 @@ import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize } from "../../util/localize.mjs";
 import { registerSetting } from "../../util/settings.mjs";
+import { SpecificBonuses } from '../all-specific-bonuses.mjs';
 import { greaterWeaponFocusKey } from "../weapon-focus/ids.mjs";
 import { WeaponSpecializationSettings, weaponSpecializationKey } from "./weapon-specialization.mjs";
 
 const key = 'greater-weapon-specialization';
 const compendiumId = 'asmQDyDYTtuXg8b4';
 
-registerSetting({ key: key });
+registerSetting({ key });
+
+Hooks.once('ready', () =>
+    SpecificBonuses.registerSpecificBonus({
+        primaryKey: key,
+        label: localize(key),
+        tooltip: localize(`specific-bonus.tooltip.${key}`),
+        type: 'dictionary',
+    }));
 
 class Settings {
     static get weaponSpecialization() { return Settings.#getSetting(key); }

@@ -8,6 +8,7 @@ import { localize } from "../../util/localize.mjs";
 import { registerSetting } from "../../util/settings.mjs";
 import { signed } from '../../util/to-signed-string.mjs';
 import { uniqueArray } from "../../util/unique-array.mjs";
+import { SpecificBonuses } from '../all-specific-bonuses.mjs';
 import {
     gnomeWeaponFocusId,
     greaterWeaponFocusId,
@@ -24,6 +25,14 @@ const allKeys = [weaponFocusKey, greaterWeaponFocusKey, mythicWeaponFocusKey];
 registerSetting({ key: weaponFocusKey });
 registerSetting({ key: greaterWeaponFocusKey });
 registerSetting({ key: mythicWeaponFocusKey });
+
+Hooks.once('ready', () =>
+    allKeys.forEach((key) => SpecificBonuses.registerSpecificBonus({
+        primaryKey: key,
+        label: localize(key),
+        tooltip: localize(`specific-bonus.tooltip.${key}`),
+        type: 'dictionary',
+    })));
 
 class Settings {
     static get weaponFocus() { return Settings.#getSetting(weaponFocusKey); }

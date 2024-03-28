@@ -2,14 +2,23 @@ import { MODULE_NAME } from '../consts.mjs';
 import { showEnabledLabel } from '../handlebars-handlers/enabled-label.mjs';
 import { hasAnyBFlag } from '../util/flag-helpers.mjs';
 import { customGlobalHooks } from '../util/hooks.mjs';
-import { localizeGenericBonusLabel } from '../util/localize.mjs';
+import { localize, localizeGenericBonusLabel } from '../util/localize.mjs';
 import { registerSetting } from '../util/settings.mjs';
+import { SpecificBonuses } from './all-specific-bonuses.mjs';
 
 const furiousFocus = 'furious-focus';
 const furiousFocusTimestamp = 'furious-focus-timestamp';
 const compendiumId = 'UcEIgufLJlIfhHmu';
 
 registerSetting({ key: furiousFocus });
+
+Hooks.once('ready', () =>
+    SpecificBonuses.registerSpecificBonus({
+        primaryKey: furiousFocus,
+        label: localize(furiousFocus),
+        tooltip: localize(`specific-bonus.tooltip.${furiousFocus}`),
+        type: 'boolean',
+    }));
 
 class Settings {
     static get furiousFocus() { return Settings.#getSetting(furiousFocus); }

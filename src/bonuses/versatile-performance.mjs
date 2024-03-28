@@ -8,10 +8,19 @@ import { registerItemHint } from "../util/item-hints.mjs";
 import { localize } from "../util/localize.mjs";
 import { registerSetting } from "../util/settings.mjs";
 import { truthiness } from "../util/truthiness.mjs";
+import { SpecificBonuses } from './all-specific-bonuses.mjs';
 
 const key = 'versatile-performance';
 
 registerSetting({ key });
+
+Hooks.once('ready', () =>
+    SpecificBonuses.registerSpecificBonus({
+        primaryKey: key,
+        label: localize(key),
+        tooltip: localize(`specific-bonus.tooltip.${key}`),
+        type: 'dictionary',
+    }));
 
 class Settings {
     static get versatilePerformance() { return Settings.#getSetting(key); }

@@ -8,7 +8,7 @@ const key = 'weapon-finesse';
 const bonusKey = FinesseBonus.key;
 const targetKey = FinesseTarget.key;
 
-registerSetting({ key: key });
+registerSetting({ key });
 
 class Settings {
     static get name() { return Settings.#getSetting(key); }

@@ -2,12 +2,23 @@ import { textInputAndKeyValueSelect } from "../handlebars-handlers/bonus-inputs/
 import { KeyedDFlagHelper, getDocDFlags, FormulaCacheHelper } from "../util/flag-helpers.mjs";
 import { LocalHookHandler, localHooks } from "../util/hooks.mjs";
 import { localize } from "../util/localize.mjs";
+import { SpecificBonuses } from './all-specific-bonuses.mjs';
 
 export const bonusKey = 'change-type-offset';
 export const formulaKey = 'change-type-offset-formula';
 
 FormulaCacheHelper.registerUncacheableDictionaryFlag(bonusKey);
 FormulaCacheHelper.registerDictionaryFlag(formulaKey);
+
+Hooks.once('ready', () =>
+    SpecificBonuses.registerSpecificBonus({
+        primaryKey: bonusKey,
+        label: localize(bonusKey),
+        tooltip: localize(`specific-bonus.tooltip.${bonusKey}`),
+        type: 'dictionary',
+    },
+        formulaKey,
+    ));
 
 /**
  * @param {number | string} value

@@ -2,8 +2,17 @@ import { showEnabledLabel } from '../handlebars-handlers/enabled-label.mjs';
 import { hasAnyBFlag } from '../util/flag-helpers.mjs';
 import { LocalHookHandler, customGlobalHooks, localHooks } from '../util/hooks.mjs';
 import { localize } from '../util/localize.mjs';
+import { SpecificBonuses } from './all-specific-bonuses.mjs';
 
 const fatesFavored = 'fates-favored';
+
+Hooks.once('ready', () =>
+    SpecificBonuses.registerSpecificBonus({
+        primaryKey: fatesFavored,
+        label: localize(fatesFavored),
+        tooltip: localize(`specific-bonus.tooltip.${fatesFavored}`),
+        type: 'boolean',
+    }));
 
 /**
  * @param {number | string} value

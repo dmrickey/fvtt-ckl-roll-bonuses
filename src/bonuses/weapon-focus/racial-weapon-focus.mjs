@@ -1,17 +1,25 @@
 import { MODULE_NAME } from "../../consts.mjs";
 import { textInput } from "../../handlebars-handlers/bonus-inputs/text-input.mjs";
-import { intersects } from "../../util/array-intersects.mjs";
 import { KeyedDFlagHelper } from "../../util/flag-helpers.mjs";
 import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize } from "../../util/localize.mjs";
 import { registerSetting } from "../../util/settings.mjs";
+import { SpecificBonuses } from '../all-specific-bonuses.mjs';
 import { gnomeWeaponFocusId, racialWeaponFocusKey, weaponFocusKey } from "./ids.mjs";
 
 const key = 'racial-weapon-focus-default-race';
 
 registerSetting({ key, scope: 'client' });
 registerSetting({ key: racialWeaponFocusKey, scope: 'client' });
+
+Hooks.once('ready', () =>
+    SpecificBonuses.registerSpecificBonus({
+        primaryKey: key,
+        label: localize(key),
+        tooltip: localize(`specific-bonus.tooltip.${key}`),
+        type: 'dictionary',
+    }));
 
 class Settings {
     static get racialWeaponFocus() { return Settings.#getSetting(racialWeaponFocusKey); }

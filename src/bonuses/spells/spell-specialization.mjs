@@ -10,13 +10,22 @@ import { localize } from "../../util/localize.mjs";
 import { registerSetting } from "../../util/settings.mjs";
 import { truthiness } from "../../util/truthiness.mjs";
 import { uniqueArray } from "../../util/unique-array.mjs";
+import { SpecificBonuses } from '../all-specific-bonuses.mjs';
 import { spellFocusKey } from "./spell-focus.mjs";
 
 const key = 'spell-specialization';
 const exclusionKey = 'spell-specialization-exclusions';
 const compendiumId = 'CO2Qmj0aj76zJsew';
 
-registerSetting({ key: key });
+registerSetting({ key });
+
+Hooks.once('ready', () =>
+    SpecificBonuses.registerSpecificBonus({
+        primaryKey: key,
+        label: localize(key),
+        tooltip: localize(`specific-bonus.tooltip.${key}`),
+        type: 'dictionary',
+    }));
 
 class Settings {
     static get spellSpecialization() { return Settings.#getSetting(key); }

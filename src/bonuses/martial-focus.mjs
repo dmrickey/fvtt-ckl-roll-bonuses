@@ -11,11 +11,20 @@ import { localize } from "../util/localize.mjs";
 import { registerSetting } from "../util/settings.mjs";
 import { truthiness } from "../util/truthiness.mjs";
 import { uniqueArray } from "../util/unique-array.mjs";
+import { SpecificBonuses } from './all-specific-bonuses.mjs';
 
 const key = 'martial-focus';
 const compendiumId = 'W1eDSqiwljxDe0zl';
 
-registerSetting({ key: key });
+registerSetting({ key });
+
+Hooks.once('ready', () =>
+    SpecificBonuses.registerSpecificBonus({
+        primaryKey: key,
+        label: localize(key),
+        tooltip: localize(`specific-bonus.tooltip.${key}`),
+        type: 'dictionary',
+    }));
 
 class Settings {
     static get martialFocus() { return Settings.#getSetting(key); }

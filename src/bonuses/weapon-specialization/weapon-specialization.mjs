@@ -10,13 +10,22 @@ import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize } from "../../util/localize.mjs";
 import { registerSetting } from "../../util/settings.mjs";
 import { uniqueArray } from "../../util/unique-array.mjs";
+import { SpecificBonuses } from '../all-specific-bonuses.mjs';
 import { weaponFocusKey } from "../weapon-focus/ids.mjs";
 
 const key = 'weapon-specialization';
 export { key as weaponSpecializationKey };
 const compendiumId = 'YLCvMNeAF9V31m1h';
 
-registerSetting({ key: key });
+registerSetting({ key });
+
+Hooks.once('ready', () =>
+    SpecificBonuses.registerSpecificBonus({
+        primaryKey: key,
+        label: localize(key),
+        tooltip: localize(`specific-bonus.tooltip.${key}`),
+        type: 'dictionary',
+    }));
 
 class Settings {
     static get weaponSpecialization() { return Settings.#getSetting(key); }

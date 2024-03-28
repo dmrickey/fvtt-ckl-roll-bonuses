@@ -4,7 +4,6 @@
 export class SpecificBonuses {
 
     /**
-     *
      * @param {BonusRegistration} bonus
      * @param  {...string} extraKeys
      */

@@ -6,6 +6,7 @@ import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize } from "../../util/localize.mjs";
 import { registerSetting } from "../../util/settings.mjs";
 import { signed } from "../../util/to-signed-string.mjs";
+import { SpecificBonuses } from '../all-specific-bonuses.mjs';
 
 export const spellFocusKey = 'spellFocus';
 const greaterSpellFocusKey = 'greaterSpellFocus';
@@ -20,6 +21,14 @@ const mythicSpellFocusId = 'TOMEhAeZsgGHrSH6';
 registerSetting({ key: spellFocusKey });
 registerSetting({ key: greaterSpellFocusKey });
 registerSetting({ key: mythicSpellFocusKey });
+
+Hooks.once('ready', () =>
+    allKeys.forEach((key) => SpecificBonuses.registerSpecificBonus({
+        primaryKey: key,
+        label: localize(key),
+        tooltip: localize(`specific-bonus.tooltip.${key}`),
+        type: 'dictionary',
+    })));
 
 class Settings {
     static get spellFocus() { return Settings.#getSetting(spellFocusKey); }

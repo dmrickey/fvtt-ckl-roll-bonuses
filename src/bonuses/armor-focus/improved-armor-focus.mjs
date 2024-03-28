@@ -8,6 +8,7 @@ import { KeyedDFlagHelper, getDocDFlags } from "../../util/flag-helpers.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize } from "../../util/localize.mjs";
 import { registerSetting } from "../../util/settings.mjs";
+import { SpecificBonuses } from '../all-specific-bonuses.mjs';
 import { armorFocusKey } from "./ids.mjs";
 
 const key = 'improved-armor-focus';
@@ -15,7 +16,15 @@ const compendiumId = 'WmEE6BOuP5Uh7pEE';
 
 export { key as improvedArmorFocusKey };
 
-registerSetting({ key: key });
+registerSetting({ key });
+
+Hooks.once('ready', () =>
+    SpecificBonuses.registerSpecificBonus({
+        primaryKey: key,
+        label: localize(key),
+        tooltip: localize(`specific-bonus.tooltip.${key}`),
+        type: 'dictionary',
+    }));
 
 class Settings {
     static get armorFocus() { return Settings.#getSetting(armorFocusKey); }

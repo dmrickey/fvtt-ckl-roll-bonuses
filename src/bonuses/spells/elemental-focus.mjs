@@ -8,6 +8,7 @@ import { localize } from "../../util/localize.mjs";
 import { registerSetting } from "../../util/settings.mjs";
 import { signed } from "../../util/to-signed-string.mjs";
 import { truthiness } from "../../util/truthiness.mjs";
+import { SpecificBonuses } from '../all-specific-bonuses.mjs';
 
 const elementalFocusKey = 'elementalFocus';
 const greaterElementalFocusKey = 'greaterElementalFocus';
@@ -22,6 +23,18 @@ const mythicElementalFocusId = 'yelJyBhjWtiIMgci';
 registerSetting({ key: elementalFocusKey });
 registerSetting({ key: greaterElementalFocusKey });
 registerSetting({ key: mythicElementalFocusKey });
+
+Hooks.once('ready', () =>
+    [
+        elementalFocusKey,
+        greaterElementalFocusKey,
+        mythicElementalFocusKey,
+    ].forEach((key) => SpecificBonuses.registerSpecificBonus({
+        primaryKey: key,
+        label: localize(key),
+        tooltip: localize(`specific-bonus.tooltip.${key}`),
+        type: 'dictionary',
+    })));
 
 const icons = {
     acid: { icon: 'fas fa-droplet', css: 'ckl-acid-green' },

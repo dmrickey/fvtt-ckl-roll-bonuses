@@ -4,9 +4,20 @@ import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize } from "../../util/localize.mjs";
 import { signed } from "../../util/to-signed-string.mjs";
+import { SpecificBonuses } from '../all-specific-bonuses.mjs';
 
 const key = 'schoolClOffset';
 const formulaKey = 'schoolClOffsetFormula';
+
+Hooks.once('ready', () =>
+    SpecificBonuses.registerSpecificBonus({
+        primaryKey: key,
+        label: localize(key),
+        tooltip: localize(`specific-bonus.tooltip.${key}`),
+        type: 'dictionary',
+    },
+        formulaKey,
+    ));
 
 FormulaCacheHelper.registerUncacheableDictionaryFlag(key);
 FormulaCacheHelper.registerDictionaryFlag(formulaKey);
