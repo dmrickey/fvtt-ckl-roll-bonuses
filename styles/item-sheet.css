@@ -16,6 +16,7 @@
 }
 
 #ckl-roll-bonus-container .settings {
+    float: right;
     float: inline-end;
 }
 
