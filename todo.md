@@ -183,7 +183,7 @@
     - Function label/tooltip
   - Bonus
     - Critical tooltip
-    - Damage tooltip
+    - Damage Type tooltip
   - All specific bonuses
 - verify
   - damage target
