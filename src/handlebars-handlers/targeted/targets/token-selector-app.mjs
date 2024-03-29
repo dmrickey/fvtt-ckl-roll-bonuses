@@ -20,6 +20,15 @@ export class TokenSelectorApp extends DocumentSheet {
 
     get path() { return `flags.${MODULE_NAME}.${this.options.key}`; }
 
+    /**
+     * @override
+     * @param {JQuery} html
+     */
+    activateListeners(html) {
+        super.activateListeners(html);
+        html.find('button[type=reset]')?.click(this.close.bind(this));
+    }
+
     /** @override */
     async getData() {
         const item = this.object;

@@ -188,8 +188,12 @@
 - verify
   - damage target
   - function target
+  - double check input labels for all specific bonuses
 - Always show Roll Bonuses Header
 - Add compendium with the current readme info
 - Show tooltip for all bonuses
 - FIX
   - Crit range is not stacking correctly. Actor test's greataxe is not critting on 17-18
+- Move crit hint into `init` so it only shows one hint
+  - the name from each source can be the tooltip
+- Alphabetize specific bonuses in picker

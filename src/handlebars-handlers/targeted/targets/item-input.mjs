@@ -57,6 +57,7 @@ export function showItemInput({
 
     addNodeToRollBonus(parent, div, item);
 }
+
 /** @ts-ignore */
 /** @extends {DocumentSheet<ItemSelectorOptions, ItemPF>} */
 class ItemSelector extends DocumentSheet {
@@ -69,6 +70,15 @@ class ItemSelector extends DocumentSheet {
         options.title = localize('item-app.title');
 
         return options;
+    }
+
+    /**
+     * @override
+     * @param {JQuery} html
+     */
+    activateListeners(html) {
+        super.activateListeners(html);
+        html.find('button[type=reset]')?.click(this.close.bind(this));
     }
 
     /** @override */

@@ -28,6 +28,7 @@
     cursor: pointer;
 }
 
+.roll-bonuses-form .checkbox-label,
 .roll-bonuses-form.item-selector div.item-selector-contents {
     align-items: center;
     display: flex;

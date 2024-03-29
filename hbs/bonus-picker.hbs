@@ -1,40 +1,65 @@
-<div>
-    <div class="sources">
-        <div>
-            <span>{{ localize 'ckl-roll-bonuses.source.target.label.targets' }}</span>
-            {{#each targets}}
-            <div data-tooltip="{{this.tooltip}}">
-                <label>
-                    <input type="checkbox" id="{{this.key}}" {{ checked this.value }} />
-                    {{this.label}}
-                </label>
+<form class="roll-bonuses roll-bonuses-form bonus-picker">
+    <div class="form-body">
+        <div class="sources">
+            <div>
+                <h2>{{ localize 'ckl-roll-bonuses.source.target.label.targets' }}</h2>
+                {{#each targets}}
+                <div data-tooltip="{{this.tooltip}}">
+                    <label class="checkbox-label">
+                        <input
+                            type="checkbox"
+                            id="{{this.key}}"
+                            name="{{this.path}}"
+                            {{ checked this.value }}
+                        />
+                        {{this.label}}
+                    </label>
+                </div>
+                {{/each}}
             </div>
-            {{/each}}
-        </div>
-        <div>
-            <span>{{ localize 'ckl-roll-bonuses.source.bonus.label.bonuses' }}</span>
-            {{#each bonuses}}
-            <div data-tooltip="{{this.tooltip}}">
-                <label>
-                    <input type="checkbox" id="{{this.key}}" {{ checked this.value }} />
-                    {{this.label}}
-                </label>
+            <div>
+                <h2>{{ localize 'ckl-roll-bonuses.source.bonus.label.bonuses' }}</h2>
+                {{#each bonuses}}
+                <div data-tooltip="{{this.tooltip}}">
+                    <label class="checkbox-label">
+                        <input
+                            type="checkbox"
+                            id="{{this.key}}"
+                            name="{{this.path}}"
+                            {{ checked this.value }}
+                        />
+                        {{this.label}}
+                    </label>
+                </div>
+                {{/each}}
             </div>
-            {{/each}}
         </div>
-    </div>
 
-    {{#if specifics.length}}
-    <span>{{ localize 'ckl-roll-bonuses.specific-bonuses' }}</span>
-    <div class="specific-bonuses">
-        {{#each specifics}}
-            <div data-tooltip="{{this.tooltip}}">
-                <label>
-                    <input type="checkbox" id="{{this.key}}" {{ checked this.value }} />
-                    {{this.label}}
-                </label>
-            </div>
-        {{/each}}
+        {{#if specifics.length}}
+        <h2>{{ localize 'ckl-roll-bonuses.specific-bonuses' }}</h2>
+        <div class="specific-bonuses">
+            {{#each specifics}}
+                <div data-tooltip="{{this.tooltip}}">
+                    <label class="checkbox-label">
+                        <input
+                            type="checkbox"
+                            id="{{this.key}}"
+                            name="{{this.path}}"
+                            {{ checked this.value }}
+                        />
+                        {{this.label}}
+                    </label>
+                </div>
+            {{/each}}
+        </div>
+        {{/if}}
     </div>
-    {{/if}}
-</div>
+    <div class="control-group">
+        <button type="reset">
+            <i class="fas fa-rotate-left"></i> {{localize "ckl-roll-bonuses.cancel"}}
+        </button>
+        <button type="submit">
+            <i class="fas fa-save"></i> {{localize "ckl-roll-bonuses.ok"}}
+        </button>
+    </div>
+</form>

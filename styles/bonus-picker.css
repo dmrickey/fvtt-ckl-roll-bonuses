@@ -1,4 +1,4 @@
-#roll-bonuses-picker {
+.roll-bonuses-form.bonus-picker {
     .sources {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -10,5 +10,9 @@
         grid-template-columns: 1fr 1fr;
         grid-template-rows: auto;
         column-gap: 1rem;
+    }
+
+    & h2 {
+        text-align: center;
     }
 }

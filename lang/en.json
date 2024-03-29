@@ -114,6 +114,7 @@
             "config": "Skill Config",
             "inspiration": "Inspiration"
         },
+        "specific-bonuses": "Specific Bonuses",
         "to-hit-mod": "{mod} to hit",
         "versatilePerformance": {
             "error": "Versatile Performance - invalid skill IDs",

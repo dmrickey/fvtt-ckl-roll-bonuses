@@ -268,7 +268,7 @@ declare global {
         actor?: ActorPF;
         firstAction: ItemAction;
         flags: {
-            core: { sourceId: string };
+            core?: { sourceId: string };
             [key: string]: any;
         };
         id: string;
