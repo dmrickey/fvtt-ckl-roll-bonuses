@@ -3,7 +3,7 @@ import { textInput } from "../../handlebars-handlers/bonus-inputs/text-input.mjs
 import { KeyedDFlagHelper } from "../../util/flag-helpers.mjs";
 import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
-import { localize } from "../../util/localize.mjs";
+import { localize, localizeSpecificBonusLabel } from "../../util/localize.mjs";
 import { registerSetting } from "../../util/settings.mjs";
 import { SpecificBonuses } from '../all-specific-bonuses.mjs';
 import { gnomeWeaponFocusId, racialWeaponFocusKey, weaponFocusKey } from "./ids.mjs";
@@ -13,7 +13,10 @@ const key = 'racial-weapon-focus-default-race';
 registerSetting({ key, scope: 'client' });
 registerSetting({ key: racialWeaponFocusKey, scope: 'client' });
 
-Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ key }));
+Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({
+    key: racialWeaponFocusKey,
+    label: localize(`settings.${racialWeaponFocusKey}.name`),
+}));
 
 class Settings {
     static get racialWeaponFocus() { return Settings.#getSetting(racialWeaponFocusKey); }
@@ -48,7 +51,7 @@ registerItemHint((hintcls, actor, item, _data) => {
     }, racialWeaponFocusKey);
 
     if (helper.hasAnyFlags()) {
-        const label = localize(weaponFocusKey);
+        const label = localize(`settings.${racialWeaponFocusKey}.name`);
         return hintcls.create(label, [], {});
     }
 });
@@ -72,7 +75,7 @@ function getAttackSources(item, sources) {
     }, racialWeaponFocusKey);
 
     if (helper.hasAnyFlags()) {
-        sources.push({ value: 1, name: localize(weaponFocusKey), modifier: 'untyped', sort: -100 });
+        sources.push({ value: 1, name: localizeSpecificBonusLabel(weaponFocusKey), modifier: 'untyped', sort: -100 });
         return sources.sort((a, b) => b.sort - a.sort);
     }
 
@@ -96,7 +99,7 @@ function addWeaponFocusBonus({ actor, item, shared }) {
     }, racialWeaponFocusKey);
 
     if (helper.hasAnyFlags()) {
-        shared.attackBonus.push(`${1}[${localize(weaponFocusKey)}]`);
+        shared.attackBonus.push(`${1}[${localizeSpecificBonusLabel(weaponFocusKey)}]`);
     }
 }
 Hooks.on(customGlobalHooks.actionUseAlterRollData, addWeaponFocusBonus);
@@ -121,7 +124,7 @@ Hooks.on('renderItemSheet', (
         current,
         item,
         key,
-        label: localize(key),
+        label: localize(`settings.${racialWeaponFocusKey}.name`),
         parent: html,
     }, {
         isFormula: false,

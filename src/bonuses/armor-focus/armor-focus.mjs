@@ -4,7 +4,7 @@
 import { armorFocusKey as key } from "./ids.mjs";
 import { intersects } from "../../util/array-intersects.mjs";
 import { KeyedDFlagHelper } from "../../util/flag-helpers.mjs";
-import { localize } from "../../util/localize.mjs";
+import { localize, localizeSpecificBonusLabel } from "../../util/localize.mjs";
 import { MODULE_NAME } from "../../consts.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { registerSetting } from "../../util/settings.mjs";
@@ -48,9 +48,9 @@ registerItemHint((hintcls, actor, item, _data) => {
     const isImprovedFocus = intersects(improvedFocuses, baseTypes);
 
     if (isArmor && isFocused) {
-        const tips = [localize(key), localize('ac-mod', { mod: '+1' })];
+        const tips = [localizeSpecificBonusLabel(key), localize('ac-mod', { mod: '+1' })];
         if (isImprovedFocus) {
-            tips.push('', localize(improvedArmorFocusKey), localize('acp-mod', { mod: -1 }));
+            tips.push('', localizeSpecificBonusLabel(improvedArmorFocusKey), localize('acp-mod', { mod: -1 }));
         }
         const hint = hintcls.create('', [], { icon: 'fas fa-helmet-battle', hint: tips.join('\n') });
         return hint;
@@ -103,7 +103,7 @@ function handleArmorFocusChange(actor, tempChanges) {
 
     tempChanges.push(
         new pf1.components.ItemChange({
-            flavor: localize(key),
+            flavor: localizeSpecificBonusLabel(key),
             formula: 1,
             modifier: "untypedPerm",
             subTarget: "aac",
@@ -139,7 +139,7 @@ Hooks.on('renderItemSheet', (
         current,
         item,
         key,
-        label: localize(key),
+        label: localizeSpecificBonusLabel(key),
         parent: html
     });
 });

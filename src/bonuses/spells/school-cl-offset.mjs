@@ -2,7 +2,7 @@ import { textInputAndKeyValueSelect } from "../../handlebars-handlers/bonus-inpu
 import { FormulaCacheHelper, getDocDFlags, KeyedDFlagHelper } from "../../util/flag-helpers.mjs";
 import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
-import { localize } from "../../util/localize.mjs";
+import { localize, localizeSpecificBonusLabel } from "../../util/localize.mjs";
 import { signed } from "../../util/to-signed-string.mjs";
 import { SpecificBonuses } from '../all-specific-bonuses.mjs';
 
@@ -49,7 +49,7 @@ registerItemHint((hintcls, actor, item, _data) => {
     if (offset) {
         const school = pf1.config.spellSchools[item.system.school] ?? item.system.school;
         const label = localize('cl-label-mod', { mod: signed(offset), label: school });
-        const hint = hintcls.create(label, [], { hint: localize(key) });
+        const hint = hintcls.create(label, [], { hint: localizeSpecificBonusLabel(key) });
         return hint;
     }
 });
@@ -122,7 +122,7 @@ Hooks.on('renderItemSheet', (
         select: { current, choices, key },
         item,
         key,
-        label: localize(key),
+        label: localizeSpecificBonusLabel(key),
         parent: html
     });
 });

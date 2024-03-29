@@ -1,7 +1,7 @@
 import { showEnabledLabel } from '../handlebars-handlers/enabled-label.mjs';
 import { hasAnyBFlag } from '../util/flag-helpers.mjs';
 import { LocalHookHandler, customGlobalHooks, localHooks } from '../util/hooks.mjs';
-import { localize } from '../util/localize.mjs';
+import { localizeSpecificBonusLabel } from '../util/localize.mjs';
 import { SpecificBonuses } from './all-specific-bonuses.mjs';
 
 const fatesFavored = 'fates-favored';
@@ -44,7 +44,7 @@ function getAttackSources(item, sources) {
                 source.value = +value - 1;
             }
 
-            fatesFavoredSource = { name: localize(fatesFavored), modifier: 'luck', sort: source.sort + 1, value: 1 };
+            fatesFavoredSource = { name: localizeSpecificBonusLabel(fatesFavored), modifier: 'luck', sort: source.sort + 1, value: 1 };
         }
     });
 
@@ -70,7 +70,7 @@ Hooks.on('renderItemSheet', (
     }
     showEnabledLabel({
         item,
-        label: localize(fatesFavored),
+        label: localizeSpecificBonusLabel(fatesFavored),
         parent: html,
     });
 });

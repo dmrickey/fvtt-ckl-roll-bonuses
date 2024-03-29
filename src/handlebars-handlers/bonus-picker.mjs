@@ -43,7 +43,7 @@ export function showBonusPicker({
         })),
         specifics: Object.values(SpecificBonuses.allBonuses).map((bonus) => ({
             key: bonus.key,
-            label: localizeSpecificBonusLabel(bonus.key),
+            label: bonus.label || localizeSpecificBonusLabel(bonus.key),
             tooltip: localizeSpecificBonusTooltip(bonus.key),
             extraKeys: bonus.extraKeys,
             value: currentSpecificBonuses.includes(bonus.key),

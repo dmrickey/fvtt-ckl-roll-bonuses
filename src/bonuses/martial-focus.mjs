@@ -7,7 +7,7 @@ import { intersects } from "../util/array-intersects.mjs";
 import { KeyedDFlagHelper, getDocDFlags } from "../util/flag-helpers.mjs";
 import { customGlobalHooks } from "../util/hooks.mjs";
 import { registerItemHint } from "../util/item-hints.mjs";
-import { localize } from "../util/localize.mjs";
+import { localizeSpecificBonusLabel } from "../util/localize.mjs";
 import { registerSetting } from "../util/settings.mjs";
 import { truthiness } from "../util/truthiness.mjs";
 import { uniqueArray } from "../util/unique-array.mjs";
@@ -50,7 +50,7 @@ registerItemHint((hintcls, actor, item, _data) => {
     const isFocused = intersects(weaponGroups, focuses);
 
     if (isFocused) {
-        return hintcls.create(localize(key), [], {});
+        return hintcls.create(localizeSpecificBonusLabel(key), [], {});
     }
 });
 
@@ -72,7 +72,7 @@ function addMartialFocus({ actor, item, shared }) {
     const isFocused = intersects(weaponGroups, focuses);
 
     if (isFocused) {
-        shared.damageBonus.push(`${1}[${localize(key)}]`);
+        shared.damageBonus.push(`${1}[${localizeSpecificBonusLabel(key)}]`);
     }
 }
 Hooks.on(customGlobalHooks.actionUseAlterRollData, addMartialFocus);
@@ -91,7 +91,7 @@ function actionDamageSources({ item }, sources) {
         return sources;
     }
 
-    const name = localize(key);
+    const name = localizeSpecificBonusLabel(key);
 
     const martialFocuses = getDocDFlags(actor, key, { includeInactive: false });
     const groupsOnItem = [...(item.system.weaponGroups?.value || []), ...(item.system.weaponGroups?.custom || '').split(';')].filter(truthiness);
@@ -145,7 +145,7 @@ Hooks.on(customGlobalHooks.actionDamageSources, actionDamageSources);
 
 //     if (isFocused && rollData.action.damage?.parts?.length) {
 //         rollData.action.damage.parts.push({
-//             formula: `1[${localize(key)}]`,
+//             formula: `1[${localizeSpecificLabel(key)}]`,
 //             type: rollData.action.damage.parts[0].type,
 //         });
 //     }
@@ -186,7 +186,7 @@ Hooks.on('renderItemSheet', (
         current,
         item,
         key,
-        label: localize(key),
+        label: localizeSpecificBonusLabel(key),
         parent: html
     });
 });

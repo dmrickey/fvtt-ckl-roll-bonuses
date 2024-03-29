@@ -1,5 +1,5 @@
 
-/** @typedef {{ key: string, type: 'dictionary' | 'boolean' }} BonusRegistration */
+/** @typedef {{ key: string, type: 'dictionary' | 'boolean', label: Nullable<string> }} BonusRegistration */
 
 export class SpecificBonuses {
 
@@ -7,10 +7,11 @@ export class SpecificBonuses {
      * @param {object} bonus
      * @param {string} bonus.key
      * @param {'dictionary' | 'boolean'} [bonus.type]
+     * @param {Nullable<string>} [bonus.label]
      * @param  {...string} extraKeys
      */
-    static registerSpecificBonus({ key, type = 'dictionary' }, ...extraKeys) {
-        this.allBonuses[key] = { key, type, extraKeys, };
+    static registerSpecificBonus({ key, type = 'dictionary', label = null }, ...extraKeys) {
+        this.allBonuses[key] = { key, type, label: label, extraKeys, };
     }
 
     /**

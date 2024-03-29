@@ -3,7 +3,7 @@ import { keyValueSelect } from "../../handlebars-handlers/bonus-inputs/key-value
 import { KeyedDFlagHelper, getDocDFlags } from "../../util/flag-helpers.mjs";
 import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
-import { localize } from "../../util/localize.mjs";
+import { localize, localizeSpecificBonusLabel } from "../../util/localize.mjs";
 import { registerSetting } from "../../util/settings.mjs";
 import { signed } from "../../util/to-signed-string.mjs";
 import { SpecificBonuses } from '../all-specific-bonuses.mjs';
@@ -60,7 +60,7 @@ Hooks.on(customGlobalHooks.itemGetTypeChatData, (
         if (isFocused) bonus += 1;
         if (isGreater) bonus += 1;
         if (isMythic) bonus *= 2;
-        props.push(localize('dc-label-mod', { mod: signed(bonus), label: localize(spellFocusKey) }));
+        props.push(localize('dc-label-mod', { mod: signed(bonus), label: localizeSpecificBonusLabel(spellFocusKey) }));
     }
 });
 
@@ -80,15 +80,15 @@ registerItemHint((hintcls, actor, item, _data) => {
         const tips = []
         let bonus = 0;
         if (isFocused) {
-            tips.push(localize(spellFocusKey));
+            tips.push(localizeSpecificBonusLabel(spellFocusKey));
             bonus += 1;
         }
         if (isGreater) {
-            tips.push(localize(greaterSpellFocusKey));
+            tips.push(localizeSpecificBonusLabel(greaterSpellFocusKey));
             bonus += 1;
         }
         if (isMythic) {
-            tips.push(localize(mythicSpellFocusKey));
+            tips.push(localizeSpecificBonusLabel(mythicSpellFocusKey));
             bonus *= 2;
         }
         tips.push(localize('dc-mod', { mod: signed(bonus) }));
@@ -215,7 +215,7 @@ Hooks.on('renderItemSheet', (
         current,
         item,
         key,
-        label: localize(key),
+        label: localizeSpecificBonusLabel(key),
         parent: html
     });
 });

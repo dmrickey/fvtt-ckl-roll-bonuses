@@ -7,7 +7,7 @@ import { intersection, intersects } from "../../util/array-intersects.mjs";
 import { KeyedDFlagHelper, getDocDFlags } from "../../util/flag-helpers.mjs";
 import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
-import { localize } from "../../util/localize.mjs";
+import { localize, localizeSpecificBonusLabel } from "../../util/localize.mjs";
 import { registerSetting } from "../../util/settings.mjs";
 import { SpecificBonuses } from '../all-specific-bonuses.mjs';
 import { greaterWeaponFocusKey } from "../weapon-focus/ids.mjs";
@@ -48,7 +48,7 @@ registerItemHint((hintcls, actor, item, _data) => {
     const helper = new KeyedDFlagHelper(actor, {}, key);
 
     if (intersects(baseTypes, helper.valuesForFlag(key))) {
-        return hintcls.create(`+2 ${localize('PF1.Damage')}`, [], { hint: localize(key) });
+        return hintcls.create(`+2 ${localize('PF1.Damage')}`, [], { hint: localizeSpecificBonusLabel(key) });
     }
 });
 
@@ -66,7 +66,7 @@ function addWeaponSpecialization({ actor, item, shared }) {
 
     const helper = new KeyedDFlagHelper(actor, {}, key);
     if (intersects(baseTypes, helper.valuesForFlag(key))) {
-        shared.damageBonus.push(`${2}[${localize(key)}]`);
+        shared.damageBonus.push(`${2}[${localizeSpecificBonusLabel(key)}]`);
     }
 }
 Hooks.on(customGlobalHooks.actionUseAlterRollData, addWeaponSpecialization);
@@ -83,7 +83,7 @@ function actionDamageSources({ item }, sources) {
         return sources;
     }
 
-    const name = localize(key);
+    const name = localizeSpecificBonusLabel(key);
 
     const weaponSpecializationes = getDocDFlags(actor, key, { includeInactive: false });
     const baseTypes = item.system.baseTypes;
@@ -138,7 +138,7 @@ Hooks.on(customGlobalHooks.actionDamageSources, actionDamageSources);
 
 //     if (isFocused && rollData.action.damage?.parts?.length) {
 //         rollData.action.damage.parts.push({
-//             formula: `1[${localize(key)}]`,
+//             formula: `1[${localizeSpecificLabel(key)}]`,
 //             type: rollData.action.damage.parts[0].type,
 //         });
 //     }
@@ -174,7 +174,7 @@ Hooks.on('renderItemSheet', (
         current,
         item,
         key,
-        label: localize(key),
+        label: localizeSpecificBonusLabel(key),
         parent: html
     });
 });

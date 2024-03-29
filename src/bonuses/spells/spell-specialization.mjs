@@ -6,7 +6,7 @@ import { stringSelect } from "../../handlebars-handlers/bonus-inputs/string-sele
 import { getDocDFlags, KeyedDFlagHelper } from "../../util/flag-helpers.mjs";
 import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
-import { localize } from "../../util/localize.mjs";
+import { localize, localizeSpecificBonusLabel } from "../../util/localize.mjs";
 import { registerSetting } from "../../util/settings.mjs";
 import { truthiness } from "../../util/truthiness.mjs";
 import { uniqueArray } from "../../util/unique-array.mjs";
@@ -68,7 +68,7 @@ Hooks.on(customGlobalHooks.itemGetTypeChatData, (
     if (!actor) return;
 
     if (isSpecializedSpell(actor, item)) {
-        props.push(localize('cl-label-mod', { mod: '+2', label: localize(key) }));
+        props.push(localize('cl-label-mod', { mod: '+2', label: localizeSpecificBonusLabel(key) }));
     }
 });
 
@@ -82,7 +82,7 @@ registerItemHint((hintcls, actor, item, _data) => {
         return;
     }
 
-    const hint = hintcls.create(localize('cl-mod', { mod: '+2' }), [], { hint: localize(key) });
+    const hint = hintcls.create(localize('cl-mod', { mod: '+2' }), [], { hint: localizeSpecificBonusLabel(key) });
     return hint;
 });
 
@@ -155,7 +155,7 @@ Hooks.on('renderItemSheet', (
         current,
         item,
         key,
-        label: localize(key),
+        label: localizeSpecificBonusLabel(key),
         parent: html
     });
 });
