@@ -18,13 +18,7 @@ const compendiumId = 'W1eDSqiwljxDe0zl';
 
 registerSetting({ key });
 
-Hooks.once('ready', () =>
-    SpecificBonuses.registerSpecificBonus({
-        primaryKey: key,
-        label: localize(key),
-        tooltip: localize(`specific-bonus.tooltip.${key}`),
-        type: 'dictionary',
-    }));
+Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ key }));
 
 class Settings {
     static get martialFocus() { return Settings.#getSetting(key); }

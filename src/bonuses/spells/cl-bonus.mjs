@@ -10,13 +10,7 @@ const key = 'all-spell-cl'
 
 FormulaCacheHelper.registerDictionaryFlag(key);
 
-Hooks.once('ready', () =>
-    SpecificBonuses.registerSpecificBonus({
-        primaryKey: key,
-        label: localize(key),
-        tooltip: localize(`specific-bonus.tooltip.${key}`),
-        type: 'dictionary',
-    }));
+Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ key }));
 
 // add info to spell card
 Hooks.on(customGlobalHooks.itemGetTypeChatData, (

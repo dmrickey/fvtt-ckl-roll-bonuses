@@ -46,14 +46,11 @@ export function createElementalClOrDc(t) {
     FormulaCacheHelper.registerDictionaryFlag(formulaKey);
 
     Hooks.once('ready', () =>
-        SpecificBonuses.registerSpecificBonus({
-            primaryKey: key,
-            label: localize(key),
-            tooltip: localize(`specific-bonus.tooltip.${key}`),
-            type: 'dictionary',
-        },
+        SpecificBonuses.registerSpecificBonus(
+            { key },
             formulaKey,
-        ));
+        )
+    );
 
     /**
      *

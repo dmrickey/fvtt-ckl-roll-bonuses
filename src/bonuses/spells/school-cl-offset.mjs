@@ -10,14 +10,11 @@ const key = 'schoolClOffset';
 const formulaKey = 'schoolClOffsetFormula';
 
 Hooks.once('ready', () =>
-    SpecificBonuses.registerSpecificBonus({
-        primaryKey: key,
-        label: localize(key),
-        tooltip: localize(`specific-bonus.tooltip.${key}`),
-        type: 'dictionary',
-    },
+    SpecificBonuses.registerSpecificBonus(
+        { key },
         formulaKey,
-    ));
+    )
+);
 
 FormulaCacheHelper.registerUncacheableDictionaryFlag(key);
 FormulaCacheHelper.registerDictionaryFlag(formulaKey);

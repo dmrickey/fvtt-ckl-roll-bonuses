@@ -52,12 +52,12 @@
                     "is-ranged": "Bonuses will be active whenever an action used that is configured as a ranged attack",
                     "is-spell": "Bonuses will be active whenever an action used that is configured as a spell attack",
                     "is-weapon": "Bonuses will be active whenever an action used that is configured as a physical weapon attack",
-                    "item": "Bonuses will be applied to actions uses for these specific Items",
+                    "item": "Bonuses will be applied to actions for these specific Items",
                     "self": "Applies bonuses to all actions on this same Item",
-                    "spell": "Bonuses will be applied to actions uses for these specific spells",
+                    "spell": "Bonuses will be applied to actions for these specific spells",
                     "spell-school": "Bonuses will applied to spells of the chosen school(s)",
                     "token": "Bonuses are applied when using an action while specific tokens are targeted. When this buff is activate, a dialog will show up that allows you to choose from tokens in the scene.",
-                    "weapon": "Bonuses will be applied to actions uses for these specific Attacks and Weapons",
+                    "weapon": "Bonuses will be applied to actions for these specific Attacks and Weapons",
                     "weapon-group": "Bonuses will be applied when using an action for any weapon in the chosen Weapon Group(s). Attacks and Weapons must be properly configured with weapon groups.",
                     "weapon-type": "Bonuses will be applied when using an action for any weapon that has this Equipment Base Type. Attacks and Weapons must be properly configured with Equipment Base Types."
                 },
@@ -110,8 +110,8 @@
         "elemental-dc": "Elemental DC",
         "fates-favored": "Fate's Favored",
         "fortune": "Fortune",
-        "generic-bonus": {
-            "hint": {
+        "specific-bonus": {
+            "tooltip": {
                 "furious-focus": "Negates the attack penalty of power attack on the first attack made each round."
             },
             "label": {

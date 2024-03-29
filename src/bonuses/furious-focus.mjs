@@ -2,7 +2,7 @@ import { MODULE_NAME } from '../consts.mjs';
 import { showEnabledLabel } from '../handlebars-handlers/enabled-label.mjs';
 import { hasAnyBFlag } from '../util/flag-helpers.mjs';
 import { customGlobalHooks } from '../util/hooks.mjs';
-import { localize, localizeGenericBonusLabel } from '../util/localize.mjs';
+import { localizeSpecificBonusLabel, localizeSpecificBonusTooltip } from '../util/localize.mjs';
 import { registerSetting } from '../util/settings.mjs';
 import { SpecificBonuses } from './all-specific-bonuses.mjs';
 
@@ -14,11 +14,10 @@ registerSetting({ key: furiousFocus });
 
 Hooks.once('ready', () =>
     SpecificBonuses.registerSpecificBonus({
-        primaryKey: furiousFocus,
-        label: localize(furiousFocus),
-        tooltip: localize(`specific-bonus.tooltip.${furiousFocus}`),
+        key: furiousFocus,
         type: 'boolean',
-    }));
+    })
+);
 
 class Settings {
     static get furiousFocus() { return Settings.#getSetting(furiousFocus); }
@@ -27,7 +26,7 @@ class Settings {
 }
 
 /** @returns {string} */
-const label = () => { return localizeGenericBonusLabel(furiousFocus); }
+const label = () => { return localizeSpecificBonusLabel(furiousFocus); }
 
 /**
  * @param {ActionUse<ItemWeaponPF>} actionUse

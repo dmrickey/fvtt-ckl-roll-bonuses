@@ -27,12 +27,8 @@ registerSetting({ key: greaterWeaponFocusKey });
 registerSetting({ key: mythicWeaponFocusKey });
 
 Hooks.once('ready', () =>
-    allKeys.forEach((key) => SpecificBonuses.registerSpecificBonus({
-        primaryKey: key,
-        label: localize(key),
-        tooltip: localize(`specific-bonus.tooltip.${key}`),
-        type: 'dictionary',
-    })));
+    allKeys.forEach((key) => SpecificBonuses.registerSpecificBonus({ key }))
+);
 
 class Settings {
     static get weaponFocus() { return Settings.#getSetting(weaponFocusKey); }

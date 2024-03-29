@@ -11,12 +11,8 @@ FormulaCacheHelper.registerUncacheableDictionaryFlag(bonusKey);
 FormulaCacheHelper.registerDictionaryFlag(formulaKey);
 
 Hooks.once('ready', () =>
-    SpecificBonuses.registerSpecificBonus({
-        primaryKey: bonusKey,
-        label: localize(bonusKey),
-        tooltip: localize(`specific-bonus.tooltip.${bonusKey}`),
-        type: 'dictionary',
-    },
+    SpecificBonuses.registerSpecificBonus(
+        { key: bonusKey },
         formulaKey,
     ));
 

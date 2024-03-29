@@ -24,17 +24,7 @@ registerSetting({ key: elementalFocusKey });
 registerSetting({ key: greaterElementalFocusKey });
 registerSetting({ key: mythicElementalFocusKey });
 
-Hooks.once('ready', () =>
-    [
-        elementalFocusKey,
-        greaterElementalFocusKey,
-        mythicElementalFocusKey,
-    ].forEach((key) => SpecificBonuses.registerSpecificBonus({
-        primaryKey: key,
-        label: localize(key),
-        tooltip: localize(`specific-bonus.tooltip.${key}`),
-        type: 'dictionary',
-    })));
+Hooks.once('ready', () => allKeys.forEach((key) => SpecificBonuses.registerSpecificBonus({ key })));
 
 const icons = {
     acid: { icon: 'fas fa-droplet', css: 'ckl-acid-green' },

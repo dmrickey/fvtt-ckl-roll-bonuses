@@ -13,13 +13,7 @@ const key = 'racial-weapon-focus-default-race';
 registerSetting({ key, scope: 'client' });
 registerSetting({ key: racialWeaponFocusKey, scope: 'client' });
 
-Hooks.once('ready', () =>
-    SpecificBonuses.registerSpecificBonus({
-        primaryKey: key,
-        label: localize(key),
-        tooltip: localize(`specific-bonus.tooltip.${key}`),
-        type: 'dictionary',
-    }));
+Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ key }));
 
 class Settings {
     static get racialWeaponFocus() { return Settings.#getSetting(racialWeaponFocusKey); }

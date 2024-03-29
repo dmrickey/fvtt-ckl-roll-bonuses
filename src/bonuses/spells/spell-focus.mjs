@@ -23,12 +23,8 @@ registerSetting({ key: greaterSpellFocusKey });
 registerSetting({ key: mythicSpellFocusKey });
 
 Hooks.once('ready', () =>
-    allKeys.forEach((key) => SpecificBonuses.registerSpecificBonus({
-        primaryKey: key,
-        label: localize(key),
-        tooltip: localize(`specific-bonus.tooltip.${key}`),
-        type: 'dictionary',
-    })));
+    allKeys.forEach((key) => SpecificBonuses.registerSpecificBonus({ key }))
+);
 
 class Settings {
     static get spellFocus() { return Settings.#getSetting(spellFocusKey); }

@@ -19,13 +19,7 @@ const compendiumId = 'CO2Qmj0aj76zJsew';
 
 registerSetting({ key });
 
-Hooks.once('ready', () =>
-    SpecificBonuses.registerSpecificBonus({
-        primaryKey: key,
-        label: localize(key),
-        tooltip: localize(`specific-bonus.tooltip.${key}`),
-        type: 'dictionary',
-    }));
+Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ key }));
 
 class Settings {
     static get spellSpecialization() { return Settings.#getSetting(key); }

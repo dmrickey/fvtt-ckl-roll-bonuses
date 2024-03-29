@@ -7,12 +7,8 @@ import { SpecificBonuses } from './all-specific-bonuses.mjs';
 const fatesFavored = 'fates-favored';
 
 Hooks.once('ready', () =>
-    SpecificBonuses.registerSpecificBonus({
-        primaryKey: fatesFavored,
-        label: localize(fatesFavored),
-        tooltip: localize(`specific-bonus.tooltip.${fatesFavored}`),
-        type: 'boolean',
-    }));
+    SpecificBonuses.registerSpecificBonus({ key: fatesFavored, type: 'boolean' })
+);
 
 /**
  * @param {number | string} value

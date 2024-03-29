@@ -18,13 +18,7 @@ const compendiumId = 'asmQDyDYTtuXg8b4';
 
 registerSetting({ key });
 
-Hooks.once('ready', () =>
-    SpecificBonuses.registerSpecificBonus({
-        primaryKey: key,
-        label: localize(key),
-        tooltip: localize(`specific-bonus.tooltip.${key}`),
-        type: 'dictionary',
-    }));
+Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ key }));
 
 class Settings {
     static get weaponSpecialization() { return Settings.#getSetting(key); }

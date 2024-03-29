@@ -17,13 +17,7 @@ const compendiumId = 'zBrrZynIB0EXagds';
 
 registerSetting({ key });
 
-Hooks.once('ready', () =>
-    SpecificBonuses.registerSpecificBonus({
-        primaryKey: key,
-        label: localize(key),
-        tooltip: localize(`specific-bonus.tooltip.${key}`),
-        type: 'dictionary',
-    }));
+Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ key }));
 
 class Settings {
     static get armorFocus() { return Settings.#getSetting(key); }
