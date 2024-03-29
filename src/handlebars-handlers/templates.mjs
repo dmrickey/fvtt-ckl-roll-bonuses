@@ -50,5 +50,6 @@ export function createTemplate(template, templateData = {}) {
         return child;
     }
 
+    console.error('should never happen', template, div.innerHTML)
     throw new Error('should never happen');
 }

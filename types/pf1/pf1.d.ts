@@ -1033,6 +1033,14 @@ declare global {
         staticRoll?: string?;
     }
 
+    export class DamageRoll<
+        T extends RollData = RollData<SystemItemData>
+    > extends RollPF<T> {
+        get damageType(): string;
+        get isCritical(): boolean;
+        get type(): 'crit' | 'nonCrit' | 'normal';
+    }
+
     export class RollPF<
         T extends RollData = RollData<SystemItemData>
     > extends Roll<T> {
@@ -1346,7 +1354,6 @@ declare global {
             ItemConditional: typeof ItemConditional;
             ItemConditionalModifier: typeof ItemConditionalModifier;
             ItemAction: typeof ItemAction;
-            // ItemAction: ItemAction ;
             ItemChange: {
                 new (
                     args: {
