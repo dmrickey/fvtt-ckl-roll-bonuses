@@ -121,8 +121,6 @@ Hooks.on('renderItemSheet', (
         text: { current: formula, key: formulaKey },
         select: { current, choices, key },
         item,
-        key,
-        label: localizeBonusLabel(key),
         parent: html
     });
 });

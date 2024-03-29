@@ -19,18 +19,16 @@ export const registerSetting = ({
 }, {
     skipReady = false
 } = {}) => {
-    const doIt = () => {
-        defaultValue ||= localize(`settings.${key}.default`);
+    const doIt = () =>
         game.settings.register(MODULE_NAME, key, {
             name: `${MODULE_NAME}.settings.${key}.name`,
             hint: `${MODULE_NAME}.settings.${key}.hint`,
-            default: defaultValue,
+            default: localize(`settings.${key}.default`),
             scope,
             requiresReload: false,
             config: true,
             type: settingType
-        })
-    };
+        });
 
     game.ready || skipReady
         ? doIt()

@@ -117,8 +117,6 @@ Hooks.on('renderItemSheet', (
 
     textInputAndKeyValueSelect({
         item,
-        key,
-        label: localizeBonusLabel(key),
         parent: html,
         select: { current, choices, key },
         text: { current: getDocDFlags(item, formulaKey)[0] || '', key: formulaKey },

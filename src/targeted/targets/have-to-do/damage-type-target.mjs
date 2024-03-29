@@ -85,7 +85,7 @@ export class DamageTypeTarget extends BaseTarget {
      */
     static showInputOnItemSheet({ actor, item, html }) {
         const custom = uniqueArray(
-            actor?.items
+            [...(actor?.items ?? [])]
                 .flatMap((i) => [...i.actions])
                 .filter(truthiness)
                 .flatMap((action) => action.data.damage)
@@ -103,8 +103,7 @@ export class DamageTypeTarget extends BaseTarget {
 
         showChecklist({
             item,
-            flag: this.key,
-            label: this.label,
+            key: this.key,
             parent: html,
             options,
         });

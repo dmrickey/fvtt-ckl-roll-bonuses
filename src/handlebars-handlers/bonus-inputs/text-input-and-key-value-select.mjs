@@ -1,23 +1,24 @@
 import { addNodeToRollBonus } from "../add-bonus-to-item-sheet.mjs";
 import { createTemplate, templates } from "../templates.mjs";
-import { localize } from "../../util/localize.mjs";
+import { localize, localizeBonusLabel } from "../../util/localize.mjs";
 
 /**
  * @param {object} args
  * @param {{current: FlagValue, key: string, placeholder?: string}} args.text
  * @param {{current: FlagValue, key: string, choices: {key: string, label: string}[]}} args.select
  * @param {ItemPF} args.item
- * @param {string} args.key
- * @param {string} args.label
+ * @param {string} [args.label]
  * @param {HTMLElement} args.parent
  */
 export function textInputAndKeyValueSelect({
     item,
-    label,
+    label = '',
     parent,
     select,
     text,
 }) {
+    label ||= localizeBonusLabel(select.key);
+
     if ((!select.current && select.choices.length) || (select.choices.length === 1 && select.current !== select.choices[0].key)) {
         item.setItemDictionaryFlag(select.key, select.choices[0].key);
     }

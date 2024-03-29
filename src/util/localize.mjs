@@ -28,14 +28,22 @@ const localize = (key, opts = {}) => {
  * @param {Record<string, unknown>} [opts]
  * @returns {string}
  */
-const localizeBonusLabel = (key, opts = {}) => localize(`bonuses.label.${key}`, opts);
+const localizeBonusLabel = (key, opts = {}) => {
+    const split = key.split('_');
+    key = split[1] || split[0];
+    return localize(`bonuses.label.${key}`, opts);
+};
 
 /**
  * @param {string} key
  * @param {Record<string, unknown>} [opts]
  * @returns {string}
  */
-const localizeBonusTooltip = (key, opts = {}) => localize(`bonuses.tooltip.${key}`, opts);
+const localizeBonusTooltip = (key, opts = {}) => {
+    const split = key.split('_');
+    key = split[1] || split[0];
+    return localize(`bonuses.tooltip.${key}`, opts);
+};
 
 export {
     localize,

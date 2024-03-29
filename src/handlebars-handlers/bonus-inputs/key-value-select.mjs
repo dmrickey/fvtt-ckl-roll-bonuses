@@ -1,4 +1,5 @@
 import { MODULE_NAME } from '../../consts.mjs';
+import { localizeBonusLabel } from '../../util/localize.mjs';
 import { addNodeToRollBonus } from "../add-bonus-to-item-sheet.mjs";
 import { createTemplate, templates } from "../templates.mjs";
 
@@ -8,7 +9,7 @@ import { createTemplate, templates } from "../templates.mjs";
  * @param {FlagValue} [args.current]
  * @param {ItemPF} args.item
  * @param {string} args.key
- * @param {string} args.label
+ * @param {string} [args.label]
  * @param {HTMLElement} args.parent,
  * @param {object} [options]
  * @param {boolean} [options.isModuleFlag] - false (default) if this is a dictionary flag, true if this is a data flag
@@ -17,12 +18,13 @@ export function keyValueSelect({
     current,
     item,
     key,
-    label,
+    label = '',
     choices,
     parent,
 }, {
     isModuleFlag = false,
 } = {}) {
+    label ||= localizeBonusLabel(key);
     current ||= isModuleFlag
         ? item.getFlag(MODULE_NAME, key)
         : item.getItemDictionaryFlag(key);

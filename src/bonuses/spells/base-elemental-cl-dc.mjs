@@ -205,8 +205,6 @@ export function createElementalClOrDc(t) {
             text: { current: getDocDFlags(item, formulaKey)[0] || '', key: formulaKey },
             select: { current, choices, key },
             item,
-            key,
-            label: localizeBonusLabel(key),
             parent: html
         });
     });

@@ -86,8 +86,7 @@ export class SpellSchoolTarget extends BaseTarget {
 
         showChecklist({
             item,
-            flag: this.key,
-            label: this.label,
+            key: this.key,
             parent: html,
             options,
         });

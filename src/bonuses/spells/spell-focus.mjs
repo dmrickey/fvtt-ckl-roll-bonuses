@@ -215,7 +215,6 @@ Hooks.on('renderItemSheet', (
         current,
         item,
         key,
-        label: localizeBonusLabel(key),
         parent: html
     });
 });

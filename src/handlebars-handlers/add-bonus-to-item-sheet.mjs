@@ -29,7 +29,7 @@ const addNodeToRollBonus = (itemSheetHtml, child, item) => {
 
     const button = child.querySelector('[data-compendium-entry]');
     if (button) {
-        const uuid = button.dataset?.compendiumEntry;
+        // const uuid = button.dataset?.compendiumEntry;
         debugger;
     }
 

@@ -1,3 +1,4 @@
+import { localizeBonusLabel } from '../../util/localize.mjs';
 import { addNodeToRollBonus } from "../add-bonus-to-item-sheet.mjs";
 import { createTemplate, templates } from "../templates.mjs";
 
@@ -7,17 +8,19 @@ import { createTemplate, templates } from "../templates.mjs";
  * @param {FlagValue} args.current
  * @param {ItemPF} args.item
  * @param {string} args.key
- * @param {string} args.label
+ * @param {string} [args.label]
  * @param {HTMLElement} args.parent
  */
 export function stringSelect({
     current,
     item,
     key,
-    label,
+    label = '',
     choices,
     parent,
 }) {
+    label ||= localizeBonusLabel(key);
+
     choices.sort();
     if ((!current && choices.length) || (choices.length === 1 && current !== choices[0])) {
         item.setItemDictionaryFlag(key, choices[0]);

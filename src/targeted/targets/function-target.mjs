@@ -46,7 +46,6 @@ export class FunctionTarget extends BaseTarget {
                 isModuleFlag: true,
             });
             textInput({
-                label: this.label,
                 item,
                 key: this.key,
                 parent: html,

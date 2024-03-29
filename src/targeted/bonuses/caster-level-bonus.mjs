@@ -60,7 +60,6 @@ export class CasterLevelBonus extends BaseBonus {
         textInput({
             item,
             key: this.key,
-            label: this.label,
             parent: html,
         }, {
             isModuleFlag: true,

@@ -130,7 +130,6 @@ export class AlignmentTarget extends BaseTarget {
             choices,
             item,
             key: this.key,
-            label: this.label,
             parent: html,
         }, {
             isModuleFlag: true

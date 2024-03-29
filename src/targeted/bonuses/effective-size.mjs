@@ -56,7 +56,6 @@ export class EffectiveSizeBonus extends BaseBonus {
             item,
             key: this.key,
             parent: html,
-            label: this.label,
         }, {
             isModuleFlag: true,
         });

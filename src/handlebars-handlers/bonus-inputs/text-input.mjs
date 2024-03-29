@@ -1,4 +1,5 @@
 import { MODULE_NAME } from "../../consts.mjs";
+import { localizeBonusLabel } from '../../util/localize.mjs';
 import { addNodeToRollBonus } from "../add-bonus-to-item-sheet.mjs";
 import { createTemplate, templates } from "../templates.mjs";
 
@@ -7,7 +8,7 @@ import { createTemplate, templates } from "../templates.mjs";
  * @param {FlagValue} [args.current]
  * @param {ItemPF} args.item
  * @param {string} args.key
- * @param {string} args.label
+ * @param {string} [args.label]
  * @param {HTMLElement} args.parent,
  * @param {object} [o]
  * @param {string} [o.placeholder]
@@ -18,7 +19,7 @@ export function textInput({
     current = '',
     item,
     key,
-    label,
+    label = '',
     parent,
 }, {
     placeholder = '',
@@ -26,6 +27,7 @@ export function textInput({
     isModuleFlag = false,
 } = {}
 ) {
+    label ||= localizeBonusLabel(key);
     current ||= isModuleFlag
         ? item.getFlag(MODULE_NAME, key)
         : item.getItemDictionaryFlag(key);

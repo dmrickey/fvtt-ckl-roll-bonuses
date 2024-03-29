@@ -99,7 +99,6 @@ export class TokenTarget extends BaseTarget {
             item,
             key: this.key,
             parent: html,
-            label: this.label,
         });
     }
 
