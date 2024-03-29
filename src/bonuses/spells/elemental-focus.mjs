@@ -4,7 +4,7 @@ import { intersects } from "../../util/array-intersects.mjs";
 import { KeyedDFlagHelper, getDocDFlags } from "../../util/flag-helpers.mjs";
 import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
-import { localize, localizeSpecificBonusLabel } from "../../util/localize.mjs";
+import { localize, localizeBonusLabel } from "../../util/localize.mjs";
 import { registerSetting } from "../../util/settings.mjs";
 import { signed } from "../../util/to-signed-string.mjs";
 import { truthiness } from "../../util/truthiness.mjs";
@@ -64,7 +64,7 @@ Hooks.on(customGlobalHooks.itemGetTypeChatData, (
 
     const bonus = getDcBonus(action);
     if (bonus) {
-        props.push(localize('dc-label-mod', { mod: signed(bonus), label: localizeSpecificBonusLabel(elementalFocusKey) }));
+        props.push(localize('dc-label-mod', { mod: signed(bonus), label: localizeBonusLabel(elementalFocusKey) }));
     }
 });
 
@@ -97,7 +97,7 @@ registerItemHint((hintcls, actor, item, _data) => {
             // @ts-ignore
             const match = icons[element];
             const bonus = getDcBonus(action);
-            const tooltip = focuses.map((f) => localizeSpecificBonusLabel(f)).join('\n') + `\n${localize('dc-mod', { mod: signed(bonus) })}`;
+            const tooltip = focuses.map((f) => localizeBonusLabel(f)).join('\n') + `\n${localize('dc-mod', { mod: signed(bonus) })}`;
             const hint = hintcls.create('', [match.css], { icon: match.icon, hint: tooltip });
             hints.push(hint);
         }
@@ -221,7 +221,7 @@ Hooks.on('renderItemSheet', (
         current,
         item,
         key,
-        label: localizeSpecificBonusLabel(key),
+        label: localizeBonusLabel(key),
         parent: html
     });
 });

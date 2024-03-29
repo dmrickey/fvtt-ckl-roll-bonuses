@@ -1,7 +1,7 @@
 import { textInputAndKeyValueSelect } from "../handlebars-handlers/bonus-inputs/text-input-and-key-value-select.mjs";
 import { KeyedDFlagHelper, getDocDFlags, FormulaCacheHelper } from "../util/flag-helpers.mjs";
 import { LocalHookHandler, localHooks } from "../util/hooks.mjs";
-import { localizeSpecificBonusLabel } from "../util/localize.mjs";
+import { localizeBonusLabel } from "../util/localize.mjs";
 import { SpecificBonuses } from './all-specific-bonuses.mjs';
 
 export const bonusKey = 'change-type-offset';
@@ -77,7 +77,7 @@ Hooks.on('renderItemSheet', (
         select: { current, choices, key: bonusKey },
         item,
         key: bonusKey,
-        label: localizeSpecificBonusLabel(bonusKey),
+        label: localizeBonusLabel(bonusKey),
         parent: html
     });
 });

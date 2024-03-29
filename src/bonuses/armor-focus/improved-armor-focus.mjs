@@ -6,7 +6,7 @@ import { stringSelect } from "../../handlebars-handlers/bonus-inputs/string-sele
 import { intersects } from "../../util/array-intersects.mjs";
 import { KeyedDFlagHelper, getDocDFlags } from "../../util/flag-helpers.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
-import { localizeSpecificBonusLabel } from "../../util/localize.mjs";
+import { localizeBonusLabel } from "../../util/localize.mjs";
 import { registerSetting } from "../../util/settings.mjs";
 import { uniqueArray } from '../../util/unique-array.mjs';
 import { SpecificBonuses } from '../all-specific-bonuses.mjs';
@@ -86,7 +86,7 @@ function handleArmorFocusChange(actor, tempChanges) {
     if (current > 0) {
         tempChanges.push(
             new pf1.components.ItemChange({
-                flavor: localizeSpecificBonusLabel(key),
+                flavor: localizeBonusLabel(key),
                 formula: -1,
                 modifier: "untypedPerm",
                 subTarget: "acpA",
@@ -120,7 +120,7 @@ Hooks.on('renderItemSheet', (
         current,
         item,
         key,
-        label: localizeSpecificBonusLabel(key),
+        label: localizeBonusLabel(key),
         parent: html
     });
 });

@@ -4,7 +4,7 @@ import { intersects } from "../../util/array-intersects.mjs";
 import { KeyedDFlagHelper, getDocDFlags } from "../../util/flag-helpers.mjs";
 import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
-import { localize, localizeSpecificBonusLabel } from "../../util/localize.mjs";
+import { localize, localizeBonusLabel } from "../../util/localize.mjs";
 import { registerSetting } from "../../util/settings.mjs";
 import { signed } from '../../util/to-signed-string.mjs';
 import { uniqueArray } from "../../util/unique-array.mjs";
@@ -74,15 +74,15 @@ registerItemHint((hintcls, actor, item, _data) => {
         const tips = []
         let bonus = 0;
         if (isFocused) {
-            tips.push(localizeSpecificBonusLabel(weaponFocusKey));
+            tips.push(localizeBonusLabel(weaponFocusKey));
             bonus += 1;
         }
         if (isGreater) {
-            tips.push(localizeSpecificBonusLabel(greaterWeaponFocusKey));
+            tips.push(localizeBonusLabel(greaterWeaponFocusKey));
             bonus += 1;
         }
         if (isMythic) {
-            tips.push(localizeSpecificBonusLabel(mythicWeaponFocusKey));
+            tips.push(localizeBonusLabel(mythicWeaponFocusKey));
             bonus *= 2;
         }
         tips.push(localize('to-hit-mod', { mod: signed(bonus) }));
@@ -106,7 +106,7 @@ function getAttackSources(item, sources) {
 
     const baseTypes = item.system.baseTypes;
     let value = 0;
-    let name = localizeSpecificBonusLabel(weaponFocusKey);
+    let name = localizeBonusLabel(weaponFocusKey);
 
     const helper = new KeyedDFlagHelper(actor, {}, weaponFocusKey, greaterWeaponFocusKey, mythicWeaponFocusKey);
 
@@ -115,11 +115,11 @@ function getAttackSources(item, sources) {
     }
     if (baseTypes.find(bt => helper.valuesForFlag(greaterWeaponFocusKey).includes(bt))) {
         value += 1;
-        name = localizeSpecificBonusLabel(greaterWeaponFocusKey);
+        name = localizeBonusLabel(greaterWeaponFocusKey);
     }
     if (baseTypes.find(bt => helper.valuesForFlag(mythicWeaponFocusKey).includes(bt))) {
         value *= 2;
-        name = localizeSpecificBonusLabel(mythicWeaponFocusKey);
+        name = localizeBonusLabel(mythicWeaponFocusKey);
     }
 
     if (value) {
@@ -160,7 +160,7 @@ function addWeaponFocusBonus({ actor, item, shared }) {
     }
 
     if (value) {
-        shared.attackBonus.push(`${value}[${localizeSpecificBonusLabel(key)}]`);
+        shared.attackBonus.push(`${value}[${localizeBonusLabel(key)}]`);
     }
 }
 Hooks.on(customGlobalHooks.actionUseAlterRollData, addWeaponFocusBonus);
@@ -229,7 +229,7 @@ Hooks.on('renderItemSheet', (
         current,
         item,
         key,
-        label: localizeSpecificBonusLabel(key),
+        label: localizeBonusLabel(key),
         parent: html
     });
 });

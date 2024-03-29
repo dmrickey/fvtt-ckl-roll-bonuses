@@ -3,7 +3,7 @@ import { intersection } from "../../util/array-intersects.mjs";
 import { FormulaCacheHelper, KeyedDFlagHelper, getDocDFlags } from "../../util/flag-helpers.mjs";
 import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
-import { localize, localizeSpecificBonusLabel } from "../../util/localize.mjs";
+import { localize, localizeBonusLabel } from "../../util/localize.mjs";
 import { signed } from "../../util/to-signed-string.mjs";
 import { truthiness } from "../../util/truthiness.mjs";
 import { SpecificBonuses } from '../all-specific-bonuses.mjs';
@@ -142,7 +142,7 @@ export function createElementalClOrDc(t) {
 
         if (found?.offset) {
             const label = localize(`${t}-label-mod`, { mod: signed(found.offset), label: found.elements.join(', ') });
-            const hint = hintcls.create(label, [], { hint: localizeSpecificBonusLabel(key) });
+            const hint = hintcls.create(label, [], { hint: localizeBonusLabel(key) });
             return hint;
         }
     });
@@ -163,7 +163,7 @@ export function createElementalClOrDc(t) {
         const element = pf1.registry.damageTypes.get(`${currentElement}`)?.name ?? currentElement;
         const label = localize(`${t}-label-mod`, { mod, label: element });
 
-        const hint = hintcls.create(label, [], { hint: localizeSpecificBonusLabel(key) });
+        const hint = hintcls.create(label, [], { hint: localizeBonusLabel(key) });
         return hint;
     });
 
@@ -206,7 +206,7 @@ export function createElementalClOrDc(t) {
             select: { current, choices, key },
             item,
             key,
-            label: localizeSpecificBonusLabel(key),
+            label: localizeBonusLabel(key),
             parent: html
         });
     });

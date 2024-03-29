@@ -1,5 +1,5 @@
-import { MODULE_NAME } from '../../consts.mjs';
 import { showEnabledLabel } from '../../handlebars-handlers/enabled-label.mjs';
+import { localizeBonusLabel, localizeBonusTooltip } from '../../util/localize.mjs';
 import { BaseTarget } from './base-target.mjs';
 
 export class FinesseTarget extends BaseTarget {
@@ -10,6 +10,12 @@ export class FinesseTarget extends BaseTarget {
      * @override
      */
     static get sourceKey() { return 'finesse'; }
+
+    /** @override @returns { string } */
+    static get tooltip() { return localizeBonusTooltip('finesse-target'); }
+
+    /** @override @returns {string} */
+    static get label() { return localizeBonusLabel('finesse-target'); }
 
     /**
      * @inheritdoc

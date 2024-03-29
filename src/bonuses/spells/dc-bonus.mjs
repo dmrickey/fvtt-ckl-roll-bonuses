@@ -2,7 +2,7 @@ import { textInput } from "../../handlebars-handlers/bonus-inputs/text-input.mjs
 import { FormulaCacheHelper, KeyedDFlagHelper, getDocDFlags } from "../../util/flag-helpers.mjs";
 import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
-import { localize, localizeSpecificBonusLabel } from "../../util/localize.mjs";
+import { localize, localizeBonusLabel } from "../../util/localize.mjs";
 import { signed } from "../../util/to-signed-string.mjs";
 import { SpecificBonuses } from '../all-specific-bonuses.mjs';
 
@@ -13,7 +13,7 @@ FormulaCacheHelper.registerDictionaryFlag(key);
 
 Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({
     key,
-    label: localizeSpecificBonusLabel('all-spell-dc'),
+    label: localizeBonusLabel('all-spell-dc'),
 }));
 
 // add info to spell card
@@ -81,7 +81,7 @@ Hooks.on('renderItemSheet', (
         current,
         item,
         key,
-        label: localizeSpecificBonusLabel('all-spell-dc'),
+        label: localizeBonusLabel('all-spell-dc'),
         parent: html,
     });
 });

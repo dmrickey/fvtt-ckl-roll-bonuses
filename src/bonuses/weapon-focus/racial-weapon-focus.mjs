@@ -3,7 +3,7 @@ import { textInput } from "../../handlebars-handlers/bonus-inputs/text-input.mjs
 import { KeyedDFlagHelper } from "../../util/flag-helpers.mjs";
 import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
-import { localize, localizeSpecificBonusLabel } from "../../util/localize.mjs";
+import { localize, localizeBonusLabel } from "../../util/localize.mjs";
 import { registerSetting } from "../../util/settings.mjs";
 import { SpecificBonuses } from '../all-specific-bonuses.mjs';
 import { gnomeWeaponFocusId, racialWeaponFocusKey, weaponFocusKey } from "./ids.mjs";
@@ -75,7 +75,7 @@ function getAttackSources(item, sources) {
     }, racialWeaponFocusKey);
 
     if (helper.hasAnyFlags()) {
-        sources.push({ value: 1, name: localizeSpecificBonusLabel(weaponFocusKey), modifier: 'untyped', sort: -100 });
+        sources.push({ value: 1, name: localizeBonusLabel(weaponFocusKey), modifier: 'untyped', sort: -100 });
         return sources.sort((a, b) => b.sort - a.sort);
     }
 
@@ -99,7 +99,7 @@ function addWeaponFocusBonus({ actor, item, shared }) {
     }, racialWeaponFocusKey);
 
     if (helper.hasAnyFlags()) {
-        shared.attackBonus.push(`${1}[${localizeSpecificBonusLabel(weaponFocusKey)}]`);
+        shared.attackBonus.push(`${1}[${localizeBonusLabel(weaponFocusKey)}]`);
     }
 }
 Hooks.on(customGlobalHooks.actionUseAlterRollData, addWeaponFocusBonus);

@@ -40,7 +40,7 @@ registerItemHint((hintcls, actor, item, _data) => {
     });
 
     if (targetHints.length) {
-        allHints.push(hintcls.create(localize('source.target.label.targets'), [], { hint: targetHints.join('\n\n') }));
+        allHints.push(hintcls.create(localize('bonuses.label.targets'), [], { hint: targetHints.join('\n\n') }));
     }
 
     /** @type {{itemName: string, bonusName: string, hints: string[]}[]} */

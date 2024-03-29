@@ -1,5 +1,7 @@
+
 import { MODULE_NAME } from '../../consts.mjs';
 import { showEnabledLabel } from '../../handlebars-handlers/enabled-label.mjs';
+import { localizeBonusLabel, localizeBonusTooltip } from '../../util/localize.mjs';
 import { BaseBonus } from './base-bonus.mjs';
 
 export class FinesseBonus extends BaseBonus {
@@ -9,6 +11,12 @@ export class FinesseBonus extends BaseBonus {
      * @returns { string }
      */
     static get sourceKey() { return 'finesse'; }
+
+    /** @override @returns { string } */
+    static get tooltip() { return localizeBonusTooltip('finesse-bonus'); }
+
+    /** @override @returns {string} */
+    static get label() { return localizeBonusLabel('finesse-bonus'); }
 
     /**
      * Get Item Hints tooltip value

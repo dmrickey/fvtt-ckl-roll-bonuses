@@ -2,7 +2,7 @@
 import { SpecificBonuses } from '../bonuses/all-specific-bonuses.mjs';
 import { api } from '../util/api.mjs';
 import { intersection } from '../util/array-intersects.mjs';
-import { localize, localizeSpecificBonusLabel, localizeSpecificBonusTooltip } from '../util/localize.mjs';
+import { localize, localizeBonusLabel, localizeBonusTooltip } from '../util/localize.mjs';
 import { templates } from './templates.mjs';
 
 /**
@@ -50,9 +50,9 @@ export function showBonusPicker({
         })),
         specifics: Object.values(SpecificBonuses.allBonuses).map((bonus, i) => ({
             key: bonus.key,
-            label: bonus.label || localizeSpecificBonusLabel(bonus.key),
+            label: bonus.label || localizeBonusLabel(bonus.key),
             path: `specifics.${i}`,
-            tooltip: localizeSpecificBonusTooltip(bonus.key),
+            tooltip: localizeBonusTooltip(bonus.key),
             extraKeys: bonus.extraKeys,
             value: currentSpecificBonuses.includes(bonus.key),
         })),

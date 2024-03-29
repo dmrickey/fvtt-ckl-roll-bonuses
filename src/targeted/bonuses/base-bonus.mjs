@@ -1,4 +1,3 @@
-import { localizeTargetedBonusTooltip, localizeTargetedBonusLabel } from "../../util/localize.mjs";
 import { customGlobalHooks } from "../../util/hooks.mjs";
 import { BaseSource } from '../base-source.mjs';
 
@@ -6,12 +5,6 @@ import { BaseSource } from '../base-source.mjs';
  * @abstract
  */
 export class BaseBonus extends BaseSource {
-
-    /**
-     * @override
-     * @returns { string }
-     */
-    static get label() { return localizeTargetedBonusLabel(this.sourceKey); }
 
     /**
      * @override
@@ -28,13 +21,6 @@ export class BaseBonus extends BaseSource {
      * @returns {Nullable<ItemConditional>}
      */
     static getConditional(source) { return null; }
-
-    // /**
-    //  * @abstract
-    //  * @param {ActionUse} actionUse
-    //  * @returns {Nullable<ItemConditional>}
-    //  */
-    // static getDamageBonusesForRoll({ actor, item, shared }) { return; }
 
     /**
      * Add damage bonus to actor's Combat damage column tooltip
@@ -118,11 +104,4 @@ export class BaseBonus extends BaseSource {
      * @returns {string[]}
      */
     static getFootnotes(source, item) { return []; }
-
-    /**
-     * @override
-     * @inheritdoc
-     * @returns { string }
-     */
-    static get tooltip() { return localizeTargetedBonusTooltip(this.sourceKey); }
 }

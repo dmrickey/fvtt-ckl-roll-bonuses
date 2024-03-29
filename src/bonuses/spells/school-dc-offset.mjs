@@ -2,7 +2,7 @@ import { textInputAndKeyValueSelect } from "../../handlebars-handlers/bonus-inpu
 import { FormulaCacheHelper, KeyedDFlagHelper, getDocDFlags } from "../../util/flag-helpers.mjs";
 import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
-import { localize, localizeSpecificBonusLabel } from "../../util/localize.mjs";
+import { localize, localizeBonusLabel } from "../../util/localize.mjs";
 import { signed } from "../../util/to-signed-string.mjs";
 import { SpecificBonuses } from '../all-specific-bonuses.mjs';
 
@@ -49,7 +49,7 @@ registerItemHint((hintcls, actor, item, _data) => {
     if (offset) {
         const school = pf1.config.spellSchools[item.system.school] ?? item.system.school;
         const label = localize('dc-label-mod', { mod: signed(offset), label: school });
-        const hint = hintcls.create(label, [], { hint: localizeSpecificBonusLabel(key) });
+        const hint = hintcls.create(label, [], { hint: localizeBonusLabel(key) });
         return hint;
     }
 });
@@ -69,7 +69,7 @@ registerItemHint((hintcls, _actor, item, _data) => {
     const school = pf1.config.spellSchools[currentSchool] ?? currentSchool;
     const label = localize('dc-label-mod', { mod: signed(total), label: school });
 
-    const hint = hintcls.create(label, [], { hint: localizeSpecificBonusLabel(key) });
+    const hint = hintcls.create(label, [], { hint: localizeBonusLabel(key) });
     return hint;
 });
 
@@ -118,7 +118,7 @@ Hooks.on('renderItemSheet', (
     textInputAndKeyValueSelect({
         item,
         key,
-        label: localizeSpecificBonusLabel(key),
+        label: localizeBonusLabel(key),
         parent: html,
         select: { current, choices, key },
         text: { current: getDocDFlags(item, formulaKey)[0] || '', key: formulaKey },

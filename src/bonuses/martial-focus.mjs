@@ -7,7 +7,7 @@ import { intersects } from "../util/array-intersects.mjs";
 import { KeyedDFlagHelper, getDocDFlags } from "../util/flag-helpers.mjs";
 import { customGlobalHooks } from "../util/hooks.mjs";
 import { registerItemHint } from "../util/item-hints.mjs";
-import { localizeSpecificBonusLabel } from "../util/localize.mjs";
+import { localizeBonusLabel } from "../util/localize.mjs";
 import { registerSetting } from "../util/settings.mjs";
 import { truthiness } from "../util/truthiness.mjs";
 import { uniqueArray } from "../util/unique-array.mjs";
@@ -50,7 +50,7 @@ registerItemHint((hintcls, actor, item, _data) => {
     const isFocused = intersects(weaponGroups, focuses);
 
     if (isFocused) {
-        return hintcls.create(localizeSpecificBonusLabel(key), [], {});
+        return hintcls.create(localizeBonusLabel(key), [], {});
     }
 });
 
@@ -72,7 +72,7 @@ function addMartialFocus({ actor, item, shared }) {
     const isFocused = intersects(weaponGroups, focuses);
 
     if (isFocused) {
-        shared.damageBonus.push(`${1}[${localizeSpecificBonusLabel(key)}]`);
+        shared.damageBonus.push(`${1}[${localizeBonusLabel(key)}]`);
     }
 }
 Hooks.on(customGlobalHooks.actionUseAlterRollData, addMartialFocus);
@@ -91,7 +91,7 @@ function actionDamageSources({ item }, sources) {
         return sources;
     }
 
-    const name = localizeSpecificBonusLabel(key);
+    const name = localizeBonusLabel(key);
 
     const martialFocuses = getDocDFlags(actor, key, { includeInactive: false });
     const groupsOnItem = [...(item.system.weaponGroups?.value || []), ...(item.system.weaponGroups?.custom || '').split(';')].filter(truthiness);
@@ -186,7 +186,7 @@ Hooks.on('renderItemSheet', (
         current,
         item,
         key,
-        label: localizeSpecificBonusLabel(key),
+        label: localizeBonusLabel(key),
         parent: html
     });
 });

@@ -1,3 +1,5 @@
+import { localizeBonusLabel, localizeBonusTooltip } from '../util/localize.mjs';
+
 export class BaseSource {
 
     /**
@@ -25,11 +27,11 @@ export class BaseSource {
      */
     static isSource(source) { return source.hasItemBooleanFlag(this.key); };
 
-    /** @returns {string} */
-    static get label() { throw new Error('must be overridden'); }
-
     /** @returns { string } */
     static get key() { return `${this.sourceBaseType}_${this.sourceKey}`; }
+
+    /** @returns {string} */
+    static get label() { return localizeBonusLabel(this.sourceKey); }
 
     /**
      * @abstract
@@ -54,5 +56,5 @@ export class BaseSource {
     static get sourceKey() { throw new Error('must be overridden'); }
 
     /** @abstract @returns { string } */
-    static get tooltip() { throw new Error('must be overridden'); }
+    static get tooltip() { return localizeBonusTooltip(this.sourceKey); }
 }

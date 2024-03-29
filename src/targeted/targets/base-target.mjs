@@ -1,4 +1,3 @@
-import { localizeTargetedTargetTooltip, localizeTargetedTargetLabel } from "../../util/localize.mjs";
 import { BaseSource } from '../base-source.mjs';
 
 /**
@@ -42,13 +41,6 @@ export class BaseTarget extends BaseSource {
     static get isGenericTarget() { return false; }
 
     /**
-     * @override
-     * Label for this target source
-     * @returns { string }
-     */
-    static get label() { return localizeTargetedTargetLabel(this.sourceKey); }
-
-    /**
      * Returns true if this target should show its editor when the Item is made is active
      *
      * @abstract
@@ -62,12 +54,4 @@ export class BaseTarget extends BaseSource {
      * @param {ItemPF} source
      */
     static showTargetEditor(source) { }
-
-    /**
-     * @override
-     * @inheritdoc
-     * @returns { string }
-     */
-    static get tooltip() { return localizeTargetedTargetTooltip(this.sourceKey); }
-
 }
