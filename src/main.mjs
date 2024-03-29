@@ -273,9 +273,7 @@ async function itemActionRollDamage(wrapped, ...args) {
     return rolls;
 }
 
-Hooks.once('setup', () => {
-    debugSetup();
-});
+Hooks.once('setup', debugSetup);
 
 Hooks.once('init', () => {
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype._getConditionalParts', getConditionalParts, libWrapper.WRAPPER);

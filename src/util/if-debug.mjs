@@ -3,7 +3,7 @@ import { registerSetting } from './settings.mjs';
 
 const key = 'debug';
 
-const debugSetup = () => registerSetting({ key, settingType: Boolean });
+const debugSetup = () => registerSetting({ key, settingType: Boolean }, { skipReady: true });
 
 /**
  *

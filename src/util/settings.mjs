@@ -8,13 +8,17 @@ import { localize } from "./localize.mjs";
  * @param {any} [setting.defaultValue]
  * @param {'world' | 'client'} [setting.scope]
  * @param {BooleanConstructor | StringConstructor} [setting.settingType]
+ * @param {object} [options]
+ * @param {boolean} [options.skipReady]
  */
 export const registerSetting = ({
     key,
     defaultValue = null,
     scope = 'world',
     settingType = String,
-}) => {
+}, {
+    skipReady = false
+} = {}) => {
     const doIt = () => {
         defaultValue ||= localize(`settings.${key}.default`);
         game.settings.register(MODULE_NAME, key, {
@@ -28,7 +32,7 @@ export const registerSetting = ({
         })
     };
 
-    game.ready
+    game.ready || skipReady
         ? doIt()
-        : Hooks.once('ready', () => doIt());
+        : Hooks.once('ready', doIt);
 };
