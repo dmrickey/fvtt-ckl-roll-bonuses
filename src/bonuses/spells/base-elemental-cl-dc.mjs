@@ -7,7 +7,6 @@ import { localize } from "../../util/localize.mjs";
 import { signed } from "../../util/to-signed-string.mjs";
 import { truthiness } from "../../util/truthiness.mjs";
 import { SpecificBonuses } from '../all-specific-bonuses.mjs';
-import { getSpellTypes } from "./helper.mjs";
 
 /**
  * @type {{cl: keyof(RollData), dc: keyof(RollData)}}
@@ -23,6 +22,18 @@ const damageElements = [
     'electric',
     'fire'
 ];
+
+const regex = /([A-Za-z\- ])+/g;
+
+/**
+ * @param {ItemSpellPF} item
+ * @returns {string[]}
+ */
+const getSpellDescriptors = (item) => {
+    return [...(item?.system?.types || '').matchAll(regex)]
+        .flatMap(([a]) => a.split('or'))
+        .map((a) => a.trim().toLowerCase());
+}
 
 /**
  * @param {'cl' | 'dc'} t
@@ -72,7 +83,7 @@ export function createElementalClOrDc(t) {
             .flatMap(({ custom, values }) => ([...custom.split(';').map(x => x.trim()), ...values]))
             .filter(truthiness)
             .map((x) => x.toLowerCase());
-        const types = getSpellTypes(item);
+        const types = getSpellDescriptors(item);
         const domains = Object.keys(item.learnedAt?.domain || []).map((x) => x.toLowerCase());
 
         const comparators = damageElements.flatMap((element) => [element, pf1.registry.damageTypes.get(element)?.name?.toLowerCase() || element]);

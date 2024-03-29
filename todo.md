@@ -193,4 +193,3 @@
 - Show tooltip for all bonuses
 - FIX
   - Crit range is not stacking correctly. Actor test's greataxe is not critting on 17-18
-- move `getSpellTypes` helper into one file it's used

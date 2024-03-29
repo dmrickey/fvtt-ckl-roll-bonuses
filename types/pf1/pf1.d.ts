@@ -736,7 +736,7 @@ declare global {
         };
         school: string;
 
-        /** @deprecated use until v10 */
+        /** @deprecated use until v10 (then use @see {descriptors} ) */
         types: string;
     }
     class SystemWeaponPF extends SystemItemData {
