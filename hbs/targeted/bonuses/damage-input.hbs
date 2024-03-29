@@ -3,10 +3,9 @@ args:
 {
 damageTypes: pf1.registry.damageTypes.toObject(),
 isHealing: boolean
-parts: { formula: string, type: { custom: string, values: string[]}}[],
+parts: { formula: string, type: { custom: string, values: string[]} }[],
 }
 --}}
-
 <div class="damage roll-bonuses">
     <h4 class="damage-header">
         {{#unless isHealing }}{{localize "PF1.DamageFormula"}}{{ else }}{{localize "PF1.HealingFormula"}}{{/unless}}
