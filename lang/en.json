@@ -9,9 +9,6 @@
             "evil": "Evil"
         },
         "all-spells": "All Spells",
-        "all-spell-cl": "All Spells CL",
-        "all-spell-dc": "All Spells DC",
-        "armor-focus": "Armor Focus",
         "source": {
             "bonus": {
                 "tooltip": {
@@ -81,68 +78,43 @@
                 }
             }
         },
-        "change-type-offset": "Change Offset",
         "cancel": "Cancel",
         "cl-mod": "{mod} CL",
         "cl-label-mod": "{mod} CL ({label})",
-        "crit-mult": "Crit Multiplier",
-        "crit-mult-mod": "Crit Multiplier ({mod})",
-        "crit-mult-offset-all": "Crit Multiplier Offset (all)",
-        "crit-mult-offset-self": "Crit Multiplier Offset (self)",
-        "crit-mult-offset-targeted": "Crit Multiplier Offset ({id})",
-        "crit-offset": "Crit Offset",
-        "crit-offset-all": "Crit Offset (all)",
-        "crit-offset-mod": "Crit Threat ({mod})",
-        "crit-offset-self": "Crit Offset (self)",
-        "crit-offset-targeted": "Crit Offset ({id})",
         "crit-damage-label": {
             "crit": " (Crit Only)",
             "nonCrit": " (Non-crit Only)",
             "normal": ""
         },
+        "crit-mult-mod": "Crit Multiplier ({mod})",
+        "crit-mult-offset-all": "Crit Multiplier Offset (all)",
+        "crit-mult-offset-self": "Crit Multiplier Offset (self)",
+        "crit-mult-offset-targeted": "Crit Multiplier Offset ({id})",
+        "crit-mult": "Crit Multiplier",
+        "crit-offset-all": "Crit Offset (all)",
+        "crit-offset-mod": "Crit Threat ({mod})",
+        "crit-offset-self": "Crit Offset (self)",
+        "crit-offset-targeted": "Crit Offset ({id})",
+        "crit-offset": "Crit Offset",
         "dc-mod": "{mod} DC",
         "dc-label-mod": "{mod} DC ({label})",
         "effective-size": {
             "hint": "Size: {mod}"
         },
-        "elementalFocus": "Elemental Focus",
-        "elemental-cl": "Elemental CL",
-        "elemental-dc": "Elemental DC",
-        "fates-favored": "Fate's Favored",
         "fortune": "Fortune",
-        "specific-bonus": {
-            "tooltip": {
-                "furious-focus": "Negates the attack penalty of power attack on the first attack made each round."
-            },
-            "label": {
-                "furious-focus": "Furious Focus"
-            }
-        },
-        "greaterElementalFocus": "Greater Elemental Focus",
-        "greaterSpellFocus": "Greater Spell Focus",
-        "greater-weapon-focus": "Greater Weapon Focus",
-        "greater-weapon-specialization": "Greater Weapon Specialization",
-        "improved-armor-focus": "Improved Armor Focus",
         "item-app": {
             "title": "Item Selector"
         },
         "keen": "Keen",
-        "martial-focus": "Martial Focus",
-        "modifiers": "Modifiers",
         "misfortune": "Misfortune",
-        "mythicElementalFocus": "Mythic Elemental Focus",
-        "mythicSpellFocus": "Mythic Spell Focus",
-        "mythic-weapon-focus": "Mythic Weapon Focus",
+        "modifiers": "Modifiers",
         "ok": "OK",
         "roll-bonuses": "Roll Bonuses",
-        "school-dc": "Spell School DC",
-        "schoolClOffset": "Spell School CL",
-        "spellFocus": "Spell Focus",
         "skills": {
             "config": "Skill Config",
             "inspiration": "Inspiration"
         },
-        "spell-specialization": "Spell Specialization",
+        "to-hit-mod": "{mod} to hit",
         "versatilePerformance": {
             "error": "Versatile Performance - invalid skill IDs",
             "header": "Versatile Performance",
@@ -155,8 +127,6 @@
                 "skill2": "Skill 2"
             }
         },
-        "weapon-focus": "Weapon Focus",
-        "weapon-specialization": "Weapon Specialization",
         "settings": {
             "armor-focus": {
                 "name": "Armor Focus",
@@ -277,6 +247,38 @@
                 "name": "Weapon Specialization",
                 "hint": "The name of the 'Weapon Specialization' feat. This is to support translations without having to translate the mod.",
                 "default": "Weapon Specialization"
+            }
+        },
+        "specific-bonus": {
+            "tooltip": {
+                "furious-focus": "Negates the attack penalty of power attack on the first attack made each round."
+            },
+            "label": {
+                "all-spell-cl": "All Spells CL",
+                "all-spell-dc": "All Spells DC",
+                "armor-focus": "Armor Focus",
+                "change-type-offset": "Change Offset",
+                "elementalFocus": "Elemental Focus",
+                "elemental-cl": "Elemental CL",
+                "elemental-dc": "Elemental DC",
+                "fates-favored": "Fate's Favored",
+                "furious-focus": "Furious Focus",
+                "greaterElementalFocus": "Greater Elemental Focus",
+                "greaterSpellFocus": "Greater Spell Focus",
+                "greater-weapon-focus": "Greater Weapon Focus",
+                "greater-weapon-specialization": "Greater Weapon Specialization",
+                "improved-armor-focus": "Improved Armor Focus",
+                "martial-focus": "Martial Focus",
+                "mythicElementalFocus": "Mythic Elemental Focus",
+                "mythicSpellFocus": "Mythic Spell Focus",
+                "mythic-weapon-focus": "Mythic Weapon Focus",
+                "school-dc": "Spell School DC",
+                "schoolClOffset": "Spell School CL",
+                "spellFocus": "Spell Focus",
+                "spell-specialization": "Spell Specialization",
+                "versatile-performance": "Versatile Performance",
+                "weapon-focus": "Weapon Focus",
+                "weapon-specialization": "Weapon Specialization"
             }
         }
     }
