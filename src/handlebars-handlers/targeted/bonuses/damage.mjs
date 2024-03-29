@@ -1,6 +1,6 @@
 import { MODULE_NAME } from "../../../consts.mjs";
 import { createTemplate, templates } from "../../templates.mjs";
-import { addNodeToRollBonus } from "../../roll-bonus-on-item-sheet.mjs";
+import { addNodeToRollBonus } from "../../add-bonus-to-item-sheet.mjs";
 import { localize } from "../../../util/localize.mjs";
 
 /**

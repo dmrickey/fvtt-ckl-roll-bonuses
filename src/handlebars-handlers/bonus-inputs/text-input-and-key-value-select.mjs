@@ -1,4 +1,4 @@
-import { addNodeToRollBonus } from "../roll-bonus-on-item-sheet.mjs";
+import { addNodeToRollBonus } from "../add-bonus-to-item-sheet.mjs";
 import { createTemplate, templates } from "../templates.mjs";
 import { localize } from "../../util/localize.mjs";
 

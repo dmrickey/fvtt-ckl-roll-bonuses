@@ -1,7 +1,7 @@
 import { MODULE_NAME } from "../../../consts.mjs";
 import { getTokenDisplayName } from "../../../util/get-token-display-name.mjs";
 import { truthiness } from "../../../util/truthiness.mjs";
-import { addNodeToRollBonus } from "../../roll-bonus-on-item-sheet.mjs";
+import { addNodeToRollBonus } from "../../add-bonus-to-item-sheet.mjs";
 import { createTemplate, templates } from "../../templates.mjs";
 import { TokenSelectorApp } from "./token-selector-app.mjs";
 

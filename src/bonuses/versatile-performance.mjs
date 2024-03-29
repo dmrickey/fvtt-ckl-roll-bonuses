@@ -2,7 +2,7 @@
 
 import { MODULE_NAME } from "../consts.mjs";
 import { createTemplate, templates } from "../handlebars-handlers/templates.mjs";
-import { addNodeToRollBonus } from "../handlebars-handlers/roll-bonus-on-item-sheet.mjs";
+import { addNodeToRollBonus } from "../handlebars-handlers/add-bonus-to-item-sheet.mjs";
 import { getDocDFlags } from "../util/flag-helpers.mjs";
 import { registerItemHint } from "../util/item-hints.mjs";
 import { localize } from "../util/localize.mjs";
