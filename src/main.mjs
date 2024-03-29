@@ -242,7 +242,7 @@ async function itemActionRollAttack(
     LocalHookHandler.fireHookNoReturnSync(localHooks.itemActionRollAttack, seed, this, rollData);
 
     if (formula !== seed.formula || !foundry.utils.objectsEqual(options, seed.options)) {
-        const replaced = await new CONFIG.Dice.rolls.D20RollPF(seed.formula, rollData, seed.options).evaluate();
+        const replaced = await new pf1.dice.D20RollPF(seed.formula, rollData, seed.options).evaluate();
         return replaced;
     }
     return roll;
@@ -264,7 +264,7 @@ async function itemActionRollDamage(wrapped, ...args) {
         LocalHookHandler.fireHookNoReturnSync(localHooks.itemActionRollDamage, seed, this, rollData);
 
         if (formula !== seed.formula || !foundry.utils.objectsEqual(options, seed.options)) {
-            const replaced = await new CONFIG.Dice.rolls.D20RollPF(seed.formula, rollData, seed.options).evaluate();
+            const replaced = await new pf1.dice.DamageRoll(seed.formula, rollData, seed.options).evaluate();
             rolls[i] = replaced;
         }
         i++;

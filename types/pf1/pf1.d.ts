@@ -136,8 +136,9 @@ declare global {
         results: { result: number; active: boolean }[];
     }
 
-    interface D20RollPF<T extends RollData = RollData<SystemItemData>>
-        extends RollPF<T> {}
+    class D20RollPF<
+        T extends RollData = RollData<SystemItemData>
+    > extends RollPF<T> {}
 
     class ChatMessagePF extends BaseDocument {
         content: string;
@@ -1032,8 +1033,9 @@ declare global {
         staticRoll?: string?;
     }
 
-    interface RollPF<T extends RollData = RollData<SystemItemData>>
-        extends Roll<T> {
+    export class RollPF<
+        T extends RollData = RollData<SystemItemData>
+    > extends Roll<T> {
         /** returns true if formula has no flavor and no dice (i.e. reduces to a single number) */
         isNumber: boolean;
         simplifiedFormula: string;
@@ -1317,6 +1319,10 @@ declare global {
     }
 
     interface pf1 {
+        dice: {
+            DamageRoll: typeof DamageRoll;
+            D20RollPF: typeof D20RollPF;
+        };
         actionUse: {
             ActionUse: typeof ActionUse;
             ChatAttack: typeof ChatAttack;
