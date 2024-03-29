@@ -8,6 +8,7 @@ import { KeyedDFlagHelper, getDocDFlags } from "../../util/flag-helpers.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localizeSpecificBonusLabel } from "../../util/localize.mjs";
 import { registerSetting } from "../../util/settings.mjs";
+import { uniqueArray } from '../../util/unique-array.mjs';
 import { SpecificBonuses } from '../all-specific-bonuses.mjs';
 import { armorFocusKey } from "./ids.mjs";
 
@@ -112,7 +113,7 @@ Hooks.on('renderItemSheet', (
     }
 
     const current = item.getItemDictionaryFlag(key);
-    const choices = getDocDFlags(actor, armorFocusKey).map(x => `${x}`);
+    const choices = uniqueArray(getDocDFlags(actor, armorFocusKey).map(x => `${x}`));
 
     stringSelect({
         choices,

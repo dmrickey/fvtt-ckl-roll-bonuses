@@ -32,7 +32,6 @@ export function keyValueSelect({
     }
 
     if ((!current && choices.length) || (choices.length === 1 && current !== choices[0].key)) {
-        item.setItemDictionaryFlag(key, choices[0].key);
         isModuleFlag
             ? item.setFlag(MODULE_NAME, key, choices[0].key)
             : item.setItemDictionaryFlag(key, choices[0].key);
