@@ -8,6 +8,7 @@ import { createTemplate, templates } from "../templates.mjs";
  * @param {{key: string, label: string}[] | {[key: string]: string}} args.choices
  * @param {FlagValue} [args.current]
  * @param {ItemPF} args.item
+ * @param {string} args.journal
  * @param {string} args.key
  * @param {string} [args.label]
  * @param {string} [args.tooltip]
@@ -19,6 +20,7 @@ export function keyValueSelect({
     choices,
     current,
     item,
+    journal,
     key,
     label = '',
     parent,
@@ -47,6 +49,7 @@ export function keyValueSelect({
         {
             choices,
             current,
+            journal,
             key,
             label,
             tooltip,

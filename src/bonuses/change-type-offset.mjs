@@ -1,18 +1,18 @@
 import { textInputAndKeyValueSelect } from "../handlebars-handlers/bonus-inputs/text-input-and-key-value-select.mjs";
 import { KeyedDFlagHelper, getDocDFlags, FormulaCacheHelper } from "../util/flag-helpers.mjs";
 import { LocalHookHandler, localHooks } from "../util/hooks.mjs";
-import { localizeBonusLabel } from "../util/localize.mjs";
 import { SpecificBonuses } from './all-specific-bonuses.mjs';
 
 export const bonusKey = 'change-type-offset';
 export const formulaKey = 'change-type-offset-formula';
+const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#change-offset';
 
 FormulaCacheHelper.registerUncacheableDictionaryFlag(bonusKey);
 FormulaCacheHelper.registerDictionaryFlag(formulaKey);
 
 Hooks.once('ready', () =>
     SpecificBonuses.registerSpecificBonus(
-        { key: bonusKey },
+        { journal, key: bonusKey },
         formulaKey,
     ));
 
@@ -73,9 +73,10 @@ Hooks.on('renderItemSheet', (
         .map(([key, label]) => ({ key, label }));
 
     textInputAndKeyValueSelect({
-        text: { current: formula, key: formulaKey },
-        select: { current, choices, key: bonusKey },
         item,
-        parent: html
+        journal,
+        parent: html,
+        select: { current, choices, key: bonusKey },
+        text: { current: formula, key: formulaKey },
     });
 });

@@ -37,6 +37,12 @@ export class AlignmentTarget extends BaseTarget {
 
     /**
      * @override
+     * @returns {string}
+     */
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.iurMG1TBoX3auh5z#alignment'; }
+
+    /**
+     * @override
      */
     static init() {
 
@@ -129,8 +135,10 @@ export class AlignmentTarget extends BaseTarget {
         keyValueSelect({
             choices,
             item,
+            journal: this.journal,
             key: this.key,
             parent: html,
+            tooltip: this.tooltip,
         }, {
             isModuleFlag: true
         });

@@ -13,6 +13,12 @@ export class AllTarget extends BaseTarget {
     static get sourceKey() { return 'all'; }
 
     /**
+     * @override
+     * @returns {string}
+     */
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.iurMG1TBoX3auh5z#all'; }
+
+    /**
      * @inheritdoc
      * @override
      * @param {ItemPF} source
@@ -33,8 +39,10 @@ export class AllTarget extends BaseTarget {
     static showInputOnItemSheet({ html, item }) {
         showEnabledLabel({
             item,
+            journal: this.journal,
             key: this.key,
             parent: html,
+            tooltip: this.tooltip,
         });
     }
 

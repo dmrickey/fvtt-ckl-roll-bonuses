@@ -8,10 +8,12 @@ import { SpecificBonuses } from '../all-specific-bonuses.mjs';
 
 // todo refactor 'all-spell-dc'
 const key = 'genericSpellDC'
+const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#*modify-spell-dc-(all-spells,-specific-school,-or-specific-eleme';
 
 FormulaCacheHelper.registerDictionaryFlag(key);
 
 Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({
+    journal,
     key,
     label: localizeBonusLabel('all-spell-dc'),
 }));
@@ -80,6 +82,7 @@ Hooks.on('renderItemSheet', (
     textInput({
         current,
         item,
+        journal,
         key,
         label: localizeBonusLabel('all-spell-dc'),
         parent: html,

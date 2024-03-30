@@ -18,6 +18,12 @@ export class DamageBonus extends BaseBonus {
     static get sourceKey() { return 'damage'; }
 
     /**
+     * @override
+     * @returns {string}
+     */
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.PiyJbkTuzKHugPSk#damage'; }
+
+    /**
      * @inheritdoc
      * @override
      */
@@ -132,8 +138,10 @@ export class DamageBonus extends BaseBonus {
     static showInputOnItemSheet({ item, html }) {
         damageInput({
             item,
+            journal: this.journal,
             key: this.key,
             parent: html,
+            tooltip: this.tooltip,
         });
     }
 

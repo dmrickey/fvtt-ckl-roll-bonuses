@@ -16,10 +16,11 @@ import { weaponFocusKey } from "../weapon-focus/ids.mjs";
 const key = 'weapon-specialization';
 export { key as weaponSpecializationKey };
 const compendiumId = 'YLCvMNeAF9V31m1h';
+const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#weapon-specialization';
 
 registerSetting({ key });
 
-Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ key }));
+Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ journal, key }));
 
 class Settings {
     static get weaponSpecialization() { return Settings.#getSetting(key); }
@@ -174,6 +175,7 @@ Hooks.on('renderItemSheet', (
         choices,
         current,
         item,
+        journal,
         key,
         parent: html
     });

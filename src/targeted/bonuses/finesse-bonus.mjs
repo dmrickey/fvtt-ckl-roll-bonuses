@@ -12,6 +12,12 @@ export class FinesseBonus extends BaseBonus {
      */
     static get sourceKey() { return 'finesse'; }
 
+    /**
+     * @override
+     * @returns {string}
+     */
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.PiyJbkTuzKHugPSk#finesse'; }
+
     /** @override @returns { string } */
     static get tooltip() { return localizeBonusTooltip('finesse-bonus'); }
 
@@ -84,6 +90,7 @@ export class FinesseBonus extends BaseBonus {
     static showInputOnItemSheet({ actor, item, html }) {
         showEnabledLabel({
             item,
+            journal: this.journal,
             key: this.key,
             label: this.label,
             parent: html,

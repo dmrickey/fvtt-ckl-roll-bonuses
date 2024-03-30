@@ -11,7 +11,11 @@ export class EffectiveSizeBonus extends BaseBonus {
      */
     static get sourceKey() { return 'effective-size'; }
 
-    // todo figure out how to override formula used in Item list in character sheet
+    /**
+     * @override
+     * @returns {string}
+     */
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.PiyJbkTuzKHugPSk#effective-size'; }
 
     /**
      * @override
@@ -54,8 +58,10 @@ export class EffectiveSizeBonus extends BaseBonus {
     static showInputOnItemSheet({ item, html }) {
         textInput({
             item,
+            journal: this.journal,
             key: this.key,
             parent: html,
+            tooltip: this.tooltip,
         }, {
             isModuleFlag: true,
         });

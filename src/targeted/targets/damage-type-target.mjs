@@ -1,9 +1,9 @@
-import { MODULE_NAME } from '../../../consts.mjs';
-import { showChecklist } from '../../../handlebars-handlers/targeted/targets/checked-items-input.mjs';
-import { intersects } from "../../../util/array-intersects.mjs";
-import { truthiness } from "../../../util/truthiness.mjs";
-import { uniqueArray } from "../../../util/unique-array.mjs";
-import { BaseTarget } from "../base-target.mjs";
+import { MODULE_NAME } from '../../consts.mjs';
+import { showChecklist } from '../../handlebars-handlers/targeted/targets/checked-items-input.mjs';
+import { intersects } from "../../util/array-intersects.mjs";
+import { truthiness } from "../../util/truthiness.mjs";
+import { uniqueArray } from "../../util/unique-array.mjs";
+import { BaseTarget } from "./base-target.mjs";
 
 export class DamageTypeTarget extends BaseTarget {
 
@@ -12,6 +12,12 @@ export class DamageTypeTarget extends BaseTarget {
      * @inheritdoc
      */
     static get sourceKey() { return 'damage-type'; }
+
+    /**
+     * @override
+     * @returns {string}
+     */
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.iurMG1TBoX3auh5z#damage-type'; }
 
     /**
      * @override
@@ -103,9 +109,11 @@ export class DamageTypeTarget extends BaseTarget {
 
         showChecklist({
             item,
+            journal: this.journal,
             key: this.key,
-            parent: html,
             options,
+            parent: html,
+            tooltip: this.tooltip,
         });
     }
 }

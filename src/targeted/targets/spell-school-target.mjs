@@ -13,6 +13,12 @@ export class SpellSchoolTarget extends BaseTarget {
 
     /**
      * @override
+     * @returns {string}
+     */
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.iurMG1TBoX3auh5z#spell-school'; }
+
+    /**
+     * @override
      * @inheritdoc
     */
     static init() {
@@ -86,9 +92,11 @@ export class SpellSchoolTarget extends BaseTarget {
 
         showChecklist({
             item,
+            journal: this.journal,
             key: this.key,
-            parent: html,
             options,
+            parent: html,
+            tooltip: this.tooltip,
         });
     }
 }

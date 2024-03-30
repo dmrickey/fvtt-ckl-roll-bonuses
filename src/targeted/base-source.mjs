@@ -27,6 +27,12 @@ export class BaseSource {
      */
     static isSource(source) { return source.hasItemBooleanFlag(this.key); };
 
+    /**
+     * @abstract
+     * @returns {string}
+     */
+    static get journal() { throw new Error('must be overridden') }
+
     /** @returns { string } */
     static get key() { return `${this.sourceBaseType}_${this.sourceKey}`; }
 
@@ -47,7 +53,7 @@ export class BaseSource {
      * @param {ItemPF} options.item
      * @param {HTMLElement} options.html
      */
-    static showInputOnItemSheet({ actor, item, html }) { throw new Error('must be overridden.'); }
+    static showInputOnItemSheet({ actor, item, html }) { throw new Error('must be overridden'); }
 
     /** @abstract @returns { string } */
     static get sourceBaseType() { throw new Error('must be overridden'); }

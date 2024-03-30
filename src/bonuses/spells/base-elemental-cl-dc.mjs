@@ -41,13 +41,16 @@ const getSpellDescriptors = (item) => {
 export function createElementalClOrDc(t) {
     const key = `elemental-${t}`;
     const formulaKey = `elemental-${t}-formula`;
+    const journal = t === 'cl'
+        ? 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#*modify-spell-caster-level-(all-spells,-specific-school,-or-spec'
+        : 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#*modify-spell-dc-(all-spells,-specific-school,-or-specific-eleme';
 
     FormulaCacheHelper.registerUncacheableDictionaryFlag(key);
     FormulaCacheHelper.registerDictionaryFlag(formulaKey);
 
     Hooks.once('ready', () =>
         SpecificBonuses.registerSpecificBonus(
-            { key },
+            { journal, key },
             formulaKey,
         )
     );
@@ -202,10 +205,11 @@ export function createElementalClOrDc(t) {
             .map(element => ({ key: element, label: pf1.registry.damageTypes.get(element)?.name || element }));
 
         textInputAndKeyValueSelect({
-            text: { current: getDocDFlags(item, formulaKey)[0] || '', key: formulaKey },
-            select: { current, choices, key },
             item,
-            parent: html
+            journal,
+            parent: html,
+            select: { current, choices, key },
+            text: { current: getDocDFlags(item, formulaKey)[0] || '', key: formulaKey },
         });
     });
 }

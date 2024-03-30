@@ -5,9 +5,10 @@ import { createTemplate, templates } from "./templates.mjs";
 /**
  * @param {object} args
  * @param {ItemPF} args.item
+ * @param {string} args.journal
  * @param {string} args.key
  * @param {string} [args.label]
- * @param {HTMLElement} args.parent,
+ * @param {HTMLElement} args.parent
  * @param {string} [args.subLabel]
  * @param {string} [args.tooltip]
  */
@@ -15,6 +16,7 @@ export function showEnabledLabel({
     item,
     key,
     label = '',
+    journal,
     parent,
     subLabel = '',
     tooltip = '',
@@ -23,7 +25,13 @@ export function showEnabledLabel({
     tooltip ||= localizeBonusTooltip(key);
     const div = createTemplate(
         templates.enabledLabel,
-        { label, parent, subLabel, tooltip },
+        {
+            journal,
+            label,
+            parent,
+            subLabel,
+            tooltip,
+        },
     );
 
     addNodeToRollBonus(parent, div, item);

@@ -7,6 +7,12 @@ import { BaseTarget } from './base-target.mjs';
 export class BaseIsItemTarget extends BaseTarget {
 
     /**
+     * @override
+     * @returns {string}
+     */
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.iurMG1TBoX3auh5z#action-type'; }
+
+    /**
      * @param {object} args
      * @param {ItemPF} args.item,
      * @param {Nullable<ItemAction>} [args.action]
@@ -46,8 +52,10 @@ export class BaseIsItemTarget extends BaseTarget {
     static showInputOnItemSheet({ html, item }) {
         showEnabledLabel({
             item,
+            journal: this.journal,
             key: this.key,
             parent: html,
+            tooltip: this.tooltip,
         });
     }
 

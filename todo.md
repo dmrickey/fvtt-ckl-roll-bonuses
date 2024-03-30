@@ -192,6 +192,7 @@
   - damage target
   - function target
   - double check input labels for all specific bonuses
+  - Versatile Performance Label
 - Always show Roll Bonuses Header
 - Add compendium with the current readme info
 - Show tooltip for all bonuses
@@ -201,4 +202,8 @@
   - the name from each source can be the tooltip
 - Alphabetize specific bonuses in picker
 - Add safety check for "auto-configuration" for documents viewer doesn't own
-- Fill in compendium looks for Roll Bonuses compendium intro
+- Fill in compendium links for Roll Bonuses compendium intro
+- Add example function to Function Target readme
+- Change all HBS to use label.hbs
+- organize `specific bonuses` on bonus picker
+- add a function to exclude Sources from bonus picker

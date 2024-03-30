@@ -13,6 +13,12 @@ export class FunctionTarget extends BaseTarget {
     static get sourceKey() { return 'function'; }
 
     /**
+     * @override
+     * @returns {string}
+     */
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.iurMG1TBoX3auh5z#*function'; }
+
+    /**
      * @inheritdoc
      * @override
      * @param {ItemPF} source
@@ -37,16 +43,20 @@ export class FunctionTarget extends BaseTarget {
         if (game.user.isGM) {
             textInput({
                 item,
+                journal: this.journal,
                 key: this.#playerLabelKey,
                 parent: html,
+                tooltip: this.tooltip,
             }, {
                 isFormula: false,
                 isModuleFlag: true,
             });
             textInput({
                 item,
+                journal: this.journal,
                 key: this.key,
                 parent: html,
+                tooltip: this.tooltip,
             }, {
                 isFormula: false,
                 isModuleFlag: true,
@@ -54,9 +64,11 @@ export class FunctionTarget extends BaseTarget {
         }
         showEnabledLabel({
             item,
+            journal: this.journal,
             key: this.key,
             label: item.getFlag(MODULE_NAME, this.#playerLabelKey) || this.label,
             parent: html,
+            tooltip: this.tooltip,
         });
     }
 

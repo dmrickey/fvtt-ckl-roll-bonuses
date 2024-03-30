@@ -39,6 +39,12 @@ export class TokenTarget extends BaseTarget {
 
     /**
      * @override
+     * @returns {string}
+     */
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.iurMG1TBoX3auh5z#token'; }
+
+    /**
+     * @override
      * @param {ItemPF} source
      * @returns {Nullable<string[]>}
      */
@@ -97,8 +103,10 @@ export class TokenTarget extends BaseTarget {
 
         showTokenInput({
             item,
+            journal: this.journal,
             key: this.key,
             parent: html,
+            tooltip: this.tooltip,
         });
     }
 

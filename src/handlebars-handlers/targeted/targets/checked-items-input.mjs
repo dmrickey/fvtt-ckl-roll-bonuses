@@ -6,6 +6,7 @@ import { createTemplate, templates } from "../../templates.mjs";
 
 /**
  * @param {object} args
+ * @param {string} args.journal
  * @param {string} args.key
  * @param {ItemPF} args.item
  * @param {string} [args.label]
@@ -15,6 +16,7 @@ import { createTemplate, templates } from "../../templates.mjs";
  */
 export function showChecklist({
     item,
+    journal,
     key,
     label = '',
     options,
@@ -31,6 +33,7 @@ export function showChecklist({
     const templateData = {
         current,
         flag: key,
+        journal,
         label,
         options,
         tooltip,

@@ -19,6 +19,12 @@ export class CritBonus extends BaseBonus {
      */
     static get sourceKey() { return 'crit'; }
 
+    /**
+     * @override
+     * @returns {string}
+     */
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.PiyJbkTuzKHugPSk#critical-bonuses'; }
+
     static get #critKeenKey() { return `${this.key}-keen`; }
     static get #critMultKey() { return `${this.key}-mult`; }
     static get #critOffsetKey() { return `${this.key}-offset`; }
@@ -217,6 +223,7 @@ export class CritBonus extends BaseBonus {
     static showInputOnItemSheet({ item, html }) {
         checkboxInput({
             item,
+            journal: this.journal,
             key: this.#critKeenKey,
             parent: html,
         }, {
@@ -224,6 +231,7 @@ export class CritBonus extends BaseBonus {
         });
         textInput({
             item,
+            journal: this.journal,
             key: this.#critMultKey,
             parent: html,
         }, {
@@ -231,6 +239,7 @@ export class CritBonus extends BaseBonus {
         });
         textInput({
             item,
+            journal: this.journal,
             key: this.#critOffsetKey,
             parent: html,
         }, {

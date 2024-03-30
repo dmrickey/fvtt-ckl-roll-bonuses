@@ -11,4 +11,10 @@ export class WeaponTarget extends ItemTarget {
      * @override
      */
     static get sourceKey() { return 'weapon'; }
+
+    /**
+     * @override
+     * @returns {string}
+     */
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.iurMG1TBoX3auh5z#weapon'; }
 }

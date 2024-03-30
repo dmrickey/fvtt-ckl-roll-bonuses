@@ -14,6 +14,12 @@ export class FortuneBonus extends BaseBonus {
     static get sourceKey() { return 'fortune'; }
 
     /**
+     * @override
+     * @returns {string}
+     */
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.PiyJbkTuzKHugPSk#fortune/misfortune'; }
+
+    /**
     * @inheritdoc
     * @override
     * @param {ItemPF} source
@@ -33,8 +39,10 @@ export class FortuneBonus extends BaseBonus {
     static showInputOnItemSheet({ html, item }) {
         showEnabledLabel({
             item,
+            journal: this.journal,
             key: this.key,
             parent: html,
+            tooltip: this.tooltip,
         });
     }
 

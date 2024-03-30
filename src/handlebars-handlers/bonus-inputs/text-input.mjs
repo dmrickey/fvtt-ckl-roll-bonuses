@@ -7,6 +7,7 @@ import { createTemplate, templates } from "../templates.mjs";
  * @param {object} args
  * @param {FlagValue} [args.current]
  * @param {ItemPF} args.item
+ * @param {string} args.journal
  * @param {string} args.key
  * @param {string} [args.label]
  * @param {string} [args.tooltip]
@@ -19,6 +20,7 @@ import { createTemplate, templates } from "../templates.mjs";
 export function textInput({
     current = '',
     item,
+    journal,
     key,
     label = '',
     parent,
@@ -40,6 +42,7 @@ export function textInput({
         {
             current,
             isFormula,
+            journal,
             key,
             label,
             placeholder,

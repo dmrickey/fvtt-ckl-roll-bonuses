@@ -32,7 +32,7 @@ const addNodeToRollBonus = (itemSheetHtml, child, item) => {
         'click',
         async () => {
             // @ts-ignore // TODO
-            const uuid = button.dataset.compendiumEntry;
+            const uuid = button.dataset.journal;
             const document = await fromUuid(uuid);
 
             // @ts-ignore // TODO
@@ -43,10 +43,6 @@ const addNodeToRollBonus = (itemSheetHtml, child, item) => {
             }
         },
     );
-    if (button) {
-        // const uuid = button.dataset?.compendiumEntry;
-        // debugger;
-    }
 
     container.appendChild(child);
 }

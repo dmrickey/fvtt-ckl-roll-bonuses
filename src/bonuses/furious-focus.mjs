@@ -9,11 +9,13 @@ import { SpecificBonuses } from './all-specific-bonuses.mjs';
 const furiousFocus = 'furious-focus';
 const furiousFocusTimestamp = 'furious-focus-timestamp';
 const compendiumId = 'UcEIgufLJlIfhHmu';
+const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#furious-focus';
 
 registerSetting({ key: furiousFocus });
 
 Hooks.once('ready', () =>
     SpecificBonuses.registerSpecificBonus({
+        journal,
         key: furiousFocus,
         type: 'boolean',
     })
@@ -71,15 +73,15 @@ Hooks.on('renderItemSheet', (
     const hasFlag = item.system.flags.boolean?.hasOwnProperty(furiousFocus);
     const name = item?.name?.toLowerCase() ?? '';
     const sourceId = item?.flags.core?.sourceId ?? '';
-    if (!hasFlag && (name === Settings.furiousFocus || sourceId.includes(compendiumId))) {
-        item.update({ [`system.flags.boolean.${furiousFocus}`]: true });
+    if (!hasFlag) {
+        if (name === Settings.furiousFocus || sourceId.includes(compendiumId)) {
+            item.update({ [`system.flags.boolean.${furiousFocus}`]: true });
+        }
         return;
     }
 
-    if (!hasFlag) {
-        return;
-    }
     showEnabledLabel({
+        journal,
         key: furiousFocus,
         item,
         parent: html,

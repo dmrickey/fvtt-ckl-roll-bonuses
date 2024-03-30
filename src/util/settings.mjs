@@ -23,7 +23,7 @@ export const registerSetting = ({
         game.settings.register(MODULE_NAME, key, {
             name: `${MODULE_NAME}.settings.${key}.name`,
             hint: `${MODULE_NAME}.settings.${key}.hint`,
-            default: localize(`settings.${key}.default`),
+            default: defaultValue == null ? localize(`settings.${key}.default`) : defaultValue,
             scope,
             requiresReload: false,
             config: true,

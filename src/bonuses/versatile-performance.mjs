@@ -11,10 +11,11 @@ import { truthiness } from "../util/truthiness.mjs";
 import { SpecificBonuses } from './all-specific-bonuses.mjs';
 
 const key = 'versatile-performance';
+const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#versatile-performance';
 
 registerSetting({ key });
 
-Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ key }));
+Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ journal, key }));
 
 class Settings {
     static get versatilePerformance() { return Settings.#getSetting(key); }
@@ -231,7 +232,16 @@ Hooks.on('renderItemSheet', (
         item.setItemDictionaryFlag(key, `${performs[0].id}`);
     }
 
-    const templateData = { base, skill1, skill2, performs, allSkills };
+    const templateData = {
+        allSkills,
+        base,
+        journal,
+        label: localize('versatilePerformance.header'),
+        performs,
+        skill1,
+        skill2,
+        tooltip: localize('versatilePerformance.tooltip'),
+    };
 
     const div = createTemplate(templates.versatilePerformance, templateData);
 

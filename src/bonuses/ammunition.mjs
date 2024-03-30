@@ -14,6 +14,8 @@ const ammoAttackKey = 'ammo-attack';
 const ammoMasterworkKey = 'ammo-mw';
 const ammoEnhancementKey = 'ammo-enhancement'
 
+const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#ammunition';
+
 FormulaCacheHelper.registerModuleFlag(ammoAttackKey, ammoEnhancementKey);
 
 /**
@@ -85,6 +87,7 @@ Hooks.on('renderItemSheet', (
 
     checkboxInput({
         item,
+        journal,
         key: ammoMasterworkKey,
         label: localize('PF1.Masterwork'),
         parent: html,
@@ -93,22 +96,25 @@ Hooks.on('renderItemSheet', (
     });
     textInput({
         item,
+        journal,
         key: ammoEnhancementKey,
-        parent: html,
         label: localize('PF1.EnhancementBonus'),
+        parent: html,
     }, {
         isModuleFlag: true,
     });
     textInput({
         item,
+        journal,
         key: legacyAmmoAttackKey,
-        parent: html,
         label: localize('source.bonus.label.attack'),
+        parent: html,
     }, {
         isModuleFlag: true,
     });
     damageInput({
         item,
+        journal,
         key: legacyAmmoDamageKey,
         parent: html,
     });

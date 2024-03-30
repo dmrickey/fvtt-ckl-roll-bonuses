@@ -20,11 +20,13 @@ const elementalFocusId = '1frgqDSnQFiTq0MC';
 const greaterElementalFocusId = 'l4yE4RGFbORuDfp7';
 const mythicElementalFocusId = 'yelJyBhjWtiIMgci';
 
+const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#elemental-focus';
+
 registerSetting({ key: elementalFocusKey });
 registerSetting({ key: greaterElementalFocusKey });
 registerSetting({ key: mythicElementalFocusKey });
 
-Hooks.once('ready', () => allKeys.forEach((key) => SpecificBonuses.registerSpecificBonus({ key })));
+Hooks.once('ready', () => allKeys.forEach((key) => SpecificBonuses.registerSpecificBonus({ journal, key })));
 
 const icons = {
     acid: { icon: 'fas fa-droplet', css: 'ckl-acid-green' },
@@ -220,6 +222,7 @@ Hooks.on('renderItemSheet', (
         choices,
         current,
         item,
+        journal,
         key,
         parent: html
     });

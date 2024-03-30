@@ -9,6 +9,7 @@ import { TokenSelectorApp } from "./token-selector-app.mjs";
 /**
  * @param {object} args
  * @param {ItemPF} args.item,
+ * @param {string} args.journal,
  * @param {string} args.key,
  * @param {string} [args.label]
  * @param {string} [args.tooltip]
@@ -16,6 +17,7 @@ import { TokenSelectorApp } from "./token-selector-app.mjs";
  */
 export function showTokenInput({
     item,
+    journal,
     key,
     label = '',
     parent,
@@ -37,6 +39,7 @@ export function showTokenInput({
 
     const templateData = {
         current,
+        journal,
         label,
         tooltip,
     };

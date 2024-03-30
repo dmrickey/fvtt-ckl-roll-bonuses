@@ -14,6 +14,12 @@ export class AttackBonus extends BaseBonus {
     static get sourceKey() { return 'attack'; }
 
     /**
+     * @override
+     * @returns {string}
+     */
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.PiyJbkTuzKHugPSk#attack'; }
+
+    /**
      * Register Item Hint on bonus
      *
      * @override
@@ -72,8 +78,10 @@ export class AttackBonus extends BaseBonus {
     static showInputOnItemSheet({ item, html }) {
         textInput({
             item,
+            journal: this.journal,
             key: this.key,
             parent: html,
+            tooltip: this.tooltip,
         }, {
             isModuleFlag: true,
         });

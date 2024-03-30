@@ -21,13 +21,14 @@ import {
 } from "./ids.mjs";
 
 const allKeys = [weaponFocusKey, greaterWeaponFocusKey, mythicWeaponFocusKey];
+const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#weapon-focus';
 
 registerSetting({ key: weaponFocusKey });
 registerSetting({ key: greaterWeaponFocusKey });
 registerSetting({ key: mythicWeaponFocusKey });
 
 Hooks.once('ready', () =>
-    allKeys.forEach((key) => SpecificBonuses.registerSpecificBonus({ key }))
+    allKeys.forEach((key) => SpecificBonuses.registerSpecificBonus({ journal, key }))
 );
 
 class Settings {
@@ -228,6 +229,7 @@ Hooks.on('renderItemSheet', (
         choices,
         current,
         item,
+        journal,
         key,
         parent: html
     });

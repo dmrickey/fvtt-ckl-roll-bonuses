@@ -14,12 +14,13 @@ import { armorFocusKey } from "./ids.mjs";
 
 const key = 'improved-armor-focus';
 const compendiumId = 'WmEE6BOuP5Uh7pEE';
+const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#armor-focus';
 
 export { key as improvedArmorFocusKey };
 
 registerSetting({ key });
 
-Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ key }));
+Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ journal, key }));
 
 class Settings {
     static get armorFocus() { return Settings.#getSetting(armorFocusKey); }
@@ -119,6 +120,7 @@ Hooks.on('renderItemSheet', (
         choices,
         current,
         item,
+        journal,
         key,
         parent: html
     });

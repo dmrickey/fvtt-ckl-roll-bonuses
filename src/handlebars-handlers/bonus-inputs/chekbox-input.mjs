@@ -7,6 +7,7 @@ import { createTemplate, templates } from "../templates.mjs";
  * @param {object} args
  * @param {boolean} [args.current]
  * @param {ItemPF} args.item
+ * @param {string} args.journal
  * @param {string} args.key
  * @param {string} [args.label]
  * @param {HTMLElement} args.parent,
@@ -17,6 +18,7 @@ import { createTemplate, templates } from "../templates.mjs";
 export function checkboxInput({
     current = false,
     item,
+    journal,
     key,
     label = '',
     parent,
@@ -35,6 +37,7 @@ export function checkboxInput({
         templates.checkboxInput,
         {
             current,
+            journal,
             key,
             label,
             tooltip,

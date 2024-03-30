@@ -6,13 +6,17 @@ import { localize } from "../../../util/localize.mjs";
 /**
  * @param {object} args
  * @param {ItemPF} args.item
+ * @param {string} args.journal
  * @param {string} args.key
+ * @param {string} [args.tooltip]
  * @param {HTMLElement} args.parent
  */
 export function damageInput({
     item,
+    journal,
     key,
     parent,
+    tooltip,
 }) {
     const critChoices = {
         crit: localize('PF1.CritDamageBonusFormula'),
@@ -27,7 +31,9 @@ export function damageInput({
         damageTypes: pf1.registry.damageTypes.toObject(),
         isHealing: false,
         item,
+        journal,
         parts,
+        tooltip,
     };
 
     const div = createTemplate(

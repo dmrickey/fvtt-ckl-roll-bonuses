@@ -7,12 +7,14 @@ import { localize, localizeBonusLabel, localizeBonusTooltip } from "../../util/l
  * @param {{current: FlagValue, key: string, placeholder?: string}} args.text
  * @param {{current: FlagValue, key: string, choices: {key: string, label: string}[]}} args.select
  * @param {ItemPF} args.item
+ * @param {string} args.journal
  * @param {string} [args.label]
  * @param {HTMLElement} args.parent
  * @param {string} [args.tooltip]
  */
 export function textInputAndKeyValueSelect({
     item,
+    journal,
     label = '',
     parent,
     select,
@@ -32,6 +34,7 @@ export function textInputAndKeyValueSelect({
             choices: select.choices,
             current: select.current,
             formula: text.current,
+            journal,
             selectKey: select.key,
             textKey: text.key,
             label,

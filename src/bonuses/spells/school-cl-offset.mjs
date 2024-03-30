@@ -8,10 +8,11 @@ import { SpecificBonuses } from '../all-specific-bonuses.mjs';
 
 const key = 'schoolClOffset';
 const formulaKey = 'schoolClOffsetFormula';
+const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#*modify-spell-caster-level-(all-spells,-specific-school,-or-spec';
 
 Hooks.once('ready', () =>
     SpecificBonuses.registerSpecificBonus(
-        { key },
+        { journal, key },
         formulaKey,
     )
 );
@@ -118,9 +119,10 @@ Hooks.on('renderItemSheet', (
         .map((key) => ({ key, label: spellSchools[key] }));
 
     textInputAndKeyValueSelect({
-        text: { current: formula, key: formulaKey },
-        select: { current, choices, key },
         item,
-        parent: html
+        journal,
+        parent: html,
+        select: { current, choices, key },
+        text: { current: formula, key: formulaKey },
     });
 });

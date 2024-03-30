@@ -8,13 +8,14 @@ import { SpecificBonuses } from '../all-specific-bonuses.mjs';
 
 const key = 'school-dc';
 const formulaKey = 'school-dc-formula';
+const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#*modify-spell-dc-(all-spells,-specific-school,-or-specific-eleme';
 
 FormulaCacheHelper.registerUncacheableDictionaryFlag(key);
 FormulaCacheHelper.registerDictionaryFlag(formulaKey);
 
 Hooks.once('ready', () =>
     SpecificBonuses.registerSpecificBonus(
-        { key },
+        { journal, key },
         formulaKey,
     )
 );
@@ -117,6 +118,7 @@ Hooks.on('renderItemSheet', (
 
     textInputAndKeyValueSelect({
         item,
+        journal,
         parent: html,
         select: { current, choices, key },
         text: { current: getDocDFlags(item, formulaKey)[0] || '', key: formulaKey },

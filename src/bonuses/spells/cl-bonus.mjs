@@ -7,10 +7,11 @@ import { signed } from "../../util/to-signed-string.mjs";
 import { SpecificBonuses } from '../all-specific-bonuses.mjs';
 
 const key = 'all-spell-cl'
+const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#*modify-spell-caster-level-(all-spells,-specific-school,-or-spec';
 
 FormulaCacheHelper.registerDictionaryFlag(key);
 
-Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ key }));
+Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ journal, key }));
 
 // add info to spell card
 Hooks.on(customGlobalHooks.itemGetTypeChatData, (
@@ -76,6 +77,7 @@ Hooks.on('renderItemSheet', (
     textInput({
         current,
         item,
+        journal,
         key,
         parent: html,
     });

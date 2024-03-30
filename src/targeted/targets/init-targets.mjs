@@ -1,6 +1,6 @@
 import { ActionTarget } from "./have-to-do/action-target.mjs";
 import { AlignmentTarget } from './alignment-target.mjs';
-import { DamageTypeTarget } from "./have-to-do/damage-type-target.mjs";
+import { DamageTypeTarget } from "./damage-type-target.mjs";
 import { IsMeleeTarget } from './is-melee-target.mjs';
 import { IsRangedTarget } from './is-ranged-target.mjs';
 import { IsSpellTarget } from "./is-spell-target.mjs";

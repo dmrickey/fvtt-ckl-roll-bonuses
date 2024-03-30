@@ -11,6 +11,12 @@ export class AgileBonus extends BaseBonus {
     static get sourceKey() { return 'agile'; }
 
     /**
+     * @override
+     * @returns {string}
+     */
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.PiyJbkTuzKHugPSk#agile'; }
+
+    /**
      * Get Item Hints tooltip value
      *
      * @override
@@ -87,8 +93,10 @@ export class AgileBonus extends BaseBonus {
     static showInputOnItemSheet({ actor, item, html }) {
         showEnabledLabel({
             item,
+            journal: this.journal,
             key: this.key,
             parent: html,
+            tooltip: this.tooltip,
         });
     }
 

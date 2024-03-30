@@ -18,12 +18,14 @@ const spellFocusId = 'V2zY7BltkpSXwejy';
 const greaterSpellFocusId = 'LSykiaxYWzva2boF';
 const mythicSpellFocusId = 'TOMEhAeZsgGHrSH6';
 
+const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#spell-focus';
+
 registerSetting({ key: spellFocusKey });
 registerSetting({ key: greaterSpellFocusKey });
 registerSetting({ key: mythicSpellFocusKey });
 
 Hooks.once('ready', () =>
-    allKeys.forEach((key) => SpecificBonuses.registerSpecificBonus({ key }))
+    allKeys.forEach((key) => SpecificBonuses.registerSpecificBonus({ journal, key }))
 );
 
 class Settings {
@@ -214,6 +216,7 @@ Hooks.on('renderItemSheet', (
         choices,
         current,
         item,
+        journal,
         key,
         parent: html
     });

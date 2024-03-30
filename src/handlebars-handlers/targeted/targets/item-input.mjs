@@ -7,8 +7,9 @@ import { createTemplate, templates } from "../../templates.mjs";
 
 /**
  * @param {object} args
- * @param {ItemPF} args.item,
  * @param {(item: ItemPF) => boolean} args.filter,
+ * @param {ItemPF} args.item,
+ * @param {string} args.journal,
  * @param {string} args.key,
  * @param {string} [args.label]
  * @param {HTMLElement} args.parent
@@ -17,6 +18,7 @@ import { createTemplate, templates } from "../../templates.mjs";
 export function showItemInput({
     filter,
     item,
+    journal,
     key,
     label = '',
     parent,
@@ -44,6 +46,7 @@ export function showItemInput({
     const templateData = {
         badCurrent,
         current,
+        journal,
         label,
         tooltip,
     };
