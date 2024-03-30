@@ -66,6 +66,37 @@
             "flags": {}
         }
     ],
+    "packFolders": [
+        {
+            "name": "Roll Bonuses",
+            "packs": [
+                "roll-bonuses-buffs",
+                "roll-bonuses-documentation"
+            ]
+        }
+    ],
+    "packs": [
+        {
+            "label": "Roll Bonuses Buffs",
+            "name": "roll-bonuses-buffs",
+            "path": "packs/buffs.db",
+            "system": "pf1",
+            "type": "Item",
+            "ownership": {
+                "PLAYER": "OBSERVER"
+            }
+        },
+        {
+            "label": "Roll Bonuses Documentation",
+            "name": "roll-bonuses-documentation",
+            "path": "packs/documentation.db",
+            "system": "pf1",
+            "type": "JournalEntry",
+            "ownership": {
+                "PLAYER": "OBSERVER"
+            }
+        }
+    ],
     "license": "LICENSE",
     "readme": "https://github.com/dmrickey/fvtt-ckl-roll-bonuses#readme",
     "manifest": "This is auto replaced",

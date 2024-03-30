@@ -200,3 +200,4 @@
 - Move crit hint into `init` so it only shows one hint
   - the name from each source can be the tooltip
 - Alphabetize specific bonuses in picker
+- Add safety check for "auto-configuration" for documents viewer doesn't own
