@@ -201,3 +201,4 @@
   - the name from each source can be the tooltip
 - Alphabetize specific bonuses in picker
 - Add safety check for "auto-configuration" for documents viewer doesn't own
+- Fill in compendium looks for Roll Bonuses compendium intro

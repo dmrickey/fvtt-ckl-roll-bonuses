@@ -27,16 +27,10 @@
         "styles/pf1-overrides.css"
     ],
     "relationships": {
-        "systems": [
+        "recommends": [
             {
-                "id": "pf1",
-                "type": "system",
-                "manifest": "https://gitlab.com/foundryvtt_pathfinder1e/foundryvtt-pathfinder1/-/releases/permalink/latest/downloads/system.json",
-                "compatibility": {
-                    "minimum": 9,
-                    "verified": "9.6",
-                    "maximum": "9.6"
-                }
+                "id": "mkah-pf1-item-hints",
+                "type": "module"
             }
         ],
         "requires": [
@@ -54,6 +48,18 @@
                 "manifest": "https://github.com/ruipin/fvtt-lib-wrapper/releases/latest/download/module.json",
                 "compatibility": {
                     "verified": "1.12.11.0"
+                }
+            }
+        ],
+        "systems": [
+            {
+                "id": "pf1",
+                "type": "system",
+                "manifest": "https://gitlab.com/foundryvtt_pathfinder1e/foundryvtt-pathfinder1/-/releases/permalink/latest/downloads/system.json",
+                "compatibility": {
+                    "minimum": 9,
+                    "verified": "9.6",
+                    "maximum": "9.6"
                 }
             }
         ]
