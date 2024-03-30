@@ -1,3 +1,5 @@
+# This documentation is no longer kept up to date. All documentation can be found in the in-game compendium included with this mod.
+
 # Roll Bonuses
 
 Provides bonuses to various types of rolls. Some of these are for variable changes that the system can't handle (like Inspiration). Some are a fake implementation of changes that the system just doesn't support. All configuration is done in the Feat's Advanced Tab (or buff, class feature, etc.). Support for Mana's mod [Item Hints](https://gitlab.com/koboldworks/pf1/item-hints) has been included so that things are automatically tagged in the character sheet.
@@ -6,6 +8,7 @@ Supports PF1 v9+
 
 ### Table of contents
 
+- [This documentation is no longer kept up to date. All documentation can be found in the in-game compendium included with this mod.](#this-documentation-is-no-longer-kept-up-to-date-all-documentation-can-be-found-in-the-in-game-compendium-included-with-this-mod)
 - [Class Features](#class-features)
   - [Versatile Performance](#versatile-performance)
 - [Generic Targets](#generic-targets)
