@@ -28,9 +28,24 @@ const addNodeToRollBonus = (itemSheetHtml, child, item) => {
     }
 
     const button = child.querySelector('[data-compendium-entry]');
+    button?.addEventListener(
+        'click',
+        async () => {
+            // @ts-ignore // TODO
+            const uuid = button.dataset.compendiumEntry;
+            const document = await fromUuid(uuid);
+
+            // @ts-ignore // TODO
+            if (document instanceof JournalEntryPage) {
+                document.parent.sheet.render(true, { pageId: document.id });
+            } else {
+                document.sheet.render(true);
+            }
+        },
+    );
     if (button) {
         // const uuid = button.dataset?.compendiumEntry;
-        debugger;
+        // debugger;
     }
 
     container.appendChild(child);

@@ -1,5 +1,5 @@
 import { MODULE_NAME } from "../../consts.mjs";
-import { localizeBonusLabel } from '../../util/localize.mjs';
+import { localizeBonusLabel, localizeBonusTooltip } from '../../util/localize.mjs';
 import { addNodeToRollBonus } from "../add-bonus-to-item-sheet.mjs";
 import { createTemplate, templates } from "../templates.mjs";
 
@@ -9,6 +9,7 @@ import { createTemplate, templates } from "../templates.mjs";
  * @param {ItemPF} args.item
  * @param {string} args.key
  * @param {string} [args.label]
+ * @param {string} [args.tooltip]
  * @param {HTMLElement} args.parent,
  * @param {object} [o]
  * @param {string} [o.placeholder]
@@ -21,20 +22,29 @@ export function textInput({
     key,
     label = '',
     parent,
+    tooltip = '',
 }, {
     placeholder = '',
     isFormula = true,
     isModuleFlag = false,
 } = {}
 ) {
-    label ||= localizeBonusLabel(key);
     current ||= isModuleFlag
         ? item.getFlag(MODULE_NAME, key)
         : item.getItemDictionaryFlag(key);
+    label ||= localizeBonusLabel(key);
+    tooltip ||= localizeBonusTooltip(key);
 
     const div = createTemplate(
         templates.textInput,
-        { key, label, current, isFormula, placeholder },
+        {
+            current,
+            isFormula,
+            key,
+            label,
+            placeholder,
+            tooltip,
+        },
     );
     const select = div.querySelector(`#text-input-${key}`);
     select?.addEventListener(

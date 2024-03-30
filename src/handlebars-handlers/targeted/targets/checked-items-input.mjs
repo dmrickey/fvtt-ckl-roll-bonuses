@@ -1,5 +1,5 @@
 import { MODULE_NAME } from "../../../consts.mjs";
-import { localize, localizeBonusLabel } from "../../../util/localize.mjs";
+import { localize, localizeBonusLabel, localizeBonusTooltip } from "../../../util/localize.mjs";
 import { truthiness } from "../../../util/truthiness.mjs";
 import { addNodeToRollBonus } from "../../add-bonus-to-item-sheet.mjs";
 import { createTemplate, templates } from "../../templates.mjs";
@@ -9,22 +9,32 @@ import { createTemplate, templates } from "../../templates.mjs";
  * @param {string} args.key
  * @param {ItemPF} args.item
  * @param {string} [args.label]
+ * @param {string} [args.tooltip]
  * @param {string[] | {[key: string]: string}} args.options
  * @param {HTMLElement} args.parent
  */
 export function showChecklist({
-    key,
     item,
+    key,
     label = '',
     options,
     parent,
+    tooltip = '',
 }) {
     label ||= localizeBonusLabel(key);
+    tooltip ||= localizeBonusTooltip(key);
+
     if (Array.isArray(options)) {
         options = options.reduce((acc, curr) => ({ ...acc, [curr]: curr }), {});
     }
     const current = item.getFlag(MODULE_NAME, key) || [];
-    const templateData = { current, flag: key, label, options };
+    const templateData = {
+        current,
+        flag: key,
+        label,
+        options,
+        tooltip,
+    };
     const div = createTemplate(templates.checkedItems, templateData);
 
     div.querySelectorAll('.trait-selector').forEach((element) => {

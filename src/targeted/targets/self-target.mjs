@@ -1,4 +1,3 @@
-import { MODULE_NAME } from '../../consts.mjs';
 import { showEnabledLabel } from '../../handlebars-handlers/enabled-label.mjs';
 import { BaseTarget } from './base-target.mjs';
 
@@ -36,7 +35,7 @@ export class SelfTarget extends BaseTarget {
     static showInputOnItemSheet({ html, item }) {
         showEnabledLabel({
             item,
-            label: this.label,
+            key: this.key,
             parent: html,
         });
     }

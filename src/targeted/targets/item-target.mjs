@@ -71,7 +71,6 @@ export class ItemTarget extends BaseTarget {
             filter: this.itemFilter,
             key: this.key,
             parent: html,
-            label: this.label,
         });
     }
 }

@@ -52,9 +52,12 @@
 ## Bonuses
 - Spell level
   - target spells 0-9, all
+- add <ability> to damage for other ability scores (like agile but can be customized)
+- add <ability> to attack for other ability scores (like finesse but can be customized)
 
 ## Targets
 - Have creature type/subtype based targeting - would support [Ranger](#ranger)'s Favored Enemy
+- Ally/Hostile/Neutral multiselect
 - All healing
 - Spellbook target
 - Spell preparation Qty

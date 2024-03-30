@@ -1,12 +1,11 @@
 import { MODULE_NAME } from '../../consts.mjs';
 import { textInput } from '../../handlebars-handlers/bonus-inputs/text-input.mjs';
 import { showEnabledLabel } from '../../handlebars-handlers/enabled-label.mjs';
-import { localize } from '../../util/localize.mjs';
 import { BaseTarget } from './base-target.mjs';
 
 export class FunctionTarget extends BaseTarget {
 
-    static get #hintLabelKey() { return `${this.key}-hint-label`; }
+    static get #playerLabelKey() { return `${this.key}-player-label`; }
 
     /**
      * @override
@@ -22,7 +21,7 @@ export class FunctionTarget extends BaseTarget {
     static getHints(source) {
         /** @type {string[]} */
         if (source.getFlag(MODULE_NAME, this.key)) {
-            return [source.getFlag(MODULE_NAME, this.#hintLabelKey) || this.label];
+            return [source.getFlag(MODULE_NAME, this.#playerLabelKey) || this.label];
         }
     }
 
@@ -37,9 +36,8 @@ export class FunctionTarget extends BaseTarget {
     static showInputOnItemSheet({ html, item }) {
         if (game.user.isGM) {
             textInput({
-                label: localize(this.#hintLabelKey),
                 item,
-                key: this.#hintLabelKey,
+                key: this.#playerLabelKey,
                 parent: html,
             }, {
                 isFormula: false,
@@ -54,13 +52,12 @@ export class FunctionTarget extends BaseTarget {
                 isModuleFlag: true,
             });
         }
-        else {
-            showEnabledLabel({
-                item,
-                label: item.getFlag(MODULE_NAME, this.#hintLabelKey) || this.label,
-                parent: html,
-            });
-        }
+        showEnabledLabel({
+            item,
+            key: this.key,
+            label: item.getFlag(MODULE_NAME, this.#playerLabelKey) || this.label,
+            parent: html,
+        });
     }
 
     /**

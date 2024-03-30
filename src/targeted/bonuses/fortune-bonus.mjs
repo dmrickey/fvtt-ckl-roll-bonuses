@@ -33,7 +33,7 @@ export class FortuneBonus extends BaseBonus {
     static showInputOnItemSheet({ html, item }) {
         showEnabledLabel({
             item,
-            label: this.label,
+            key: this.key,
             parent: html,
         });
     }

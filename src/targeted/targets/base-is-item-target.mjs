@@ -46,7 +46,7 @@ export class BaseIsItemTarget extends BaseTarget {
     static showInputOnItemSheet({ html, item }) {
         showEnabledLabel({
             item,
-            label: this.label,
+            key: this.key,
             parent: html,
         });
     }

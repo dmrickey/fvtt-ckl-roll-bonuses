@@ -84,8 +84,10 @@ export class FinesseBonus extends BaseBonus {
     static showInputOnItemSheet({ actor, item, html }) {
         showEnabledLabel({
             item,
+            key: this.key,
             label: this.label,
             parent: html,
+            tooltip: this.tooltip,
         });
     }
 

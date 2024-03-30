@@ -1,5 +1,5 @@
 import { MODULE_NAME } from "../../consts.mjs";
-import { localizeBonusLabel } from '../../util/localize.mjs';
+import { localizeBonusLabel, localizeBonusTooltip } from '../../util/localize.mjs';
 import { addNodeToRollBonus } from "../add-bonus-to-item-sheet.mjs";
 import { createTemplate, templates } from "../templates.mjs";
 
@@ -10,6 +10,7 @@ import { createTemplate, templates } from "../templates.mjs";
  * @param {string} args.key
  * @param {string} [args.label]
  * @param {HTMLElement} args.parent,
+ * @param {string} [args.tooltip]
  * @param {object} [o]
  * @param {boolean} [o.isModuleFlag] - false (default) if this is a dictionary flag, true if this is a data flag
  */
@@ -19,18 +20,25 @@ export function checkboxInput({
     key,
     label = '',
     parent,
+    tooltip = '',
 }, {
     isModuleFlag = false,
 } = {}
 ) {
-    label ||= localizeBonusLabel(key);
     current ||= isModuleFlag
         ? item.getFlag(MODULE_NAME, key)
         : item.getItemDictionaryFlag(key);
+    label ||= localizeBonusLabel(key);
+    tooltip ||= localizeBonusTooltip(key);
 
     const div = createTemplate(
         templates.checkboxInput,
-        { key, label, current },
+        {
+            current,
+            key,
+            label,
+            tooltip,
+        },
     );
     /** @type {HTMLInputElement | null} */
     const checkbox = div.querySelector(`#checkbox-input-${key}`);

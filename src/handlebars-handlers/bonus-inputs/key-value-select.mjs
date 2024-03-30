@@ -1,5 +1,5 @@
 import { MODULE_NAME } from '../../consts.mjs';
-import { localizeBonusLabel } from '../../util/localize.mjs';
+import { localizeBonusLabel, localizeBonusTooltip } from '../../util/localize.mjs';
 import { addNodeToRollBonus } from "../add-bonus-to-item-sheet.mjs";
 import { createTemplate, templates } from "../templates.mjs";
 
@@ -10,21 +10,24 @@ import { createTemplate, templates } from "../templates.mjs";
  * @param {ItemPF} args.item
  * @param {string} args.key
  * @param {string} [args.label]
+ * @param {string} [args.tooltip]
  * @param {HTMLElement} args.parent,
  * @param {object} [options]
  * @param {boolean} [options.isModuleFlag] - false (default) if this is a dictionary flag, true if this is a data flag
  */
 export function keyValueSelect({
+    choices,
     current,
     item,
     key,
     label = '',
-    choices,
     parent,
+    tooltip = '',
 }, {
     isModuleFlag = false,
 } = {}) {
     label ||= localizeBonusLabel(key);
+    tooltip ||= localizeBonusTooltip(key);
     current ||= isModuleFlag
         ? item.getFlag(MODULE_NAME, key)
         : item.getItemDictionaryFlag(key);
@@ -41,7 +44,13 @@ export function keyValueSelect({
 
     const div = createTemplate(
         templates.keyValueSelect,
-        { key, label, current, choices },
+        {
+            choices,
+            current,
+            key,
+            label,
+            tooltip,
+        },
     );
     const select = div.querySelector(`#key-value-selector-${key}`);
     select?.addEventListener(

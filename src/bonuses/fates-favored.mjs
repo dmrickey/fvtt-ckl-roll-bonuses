@@ -69,8 +69,8 @@ Hooks.on('renderItemSheet', (
         return;
     }
     showEnabledLabel({
+        key: fatesFavored,
         item,
-        label: localizeBonusLabel(fatesFavored),
         parent: html,
     });
 });

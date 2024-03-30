@@ -1,5 +1,5 @@
 import { MODULE_NAME } from "../../../consts.mjs";
-import { localize } from "../../../util/localize.mjs";
+import { localize, localizeBonusLabel, localizeBonusTooltip } from "../../../util/localize.mjs";
 import { truthiness } from "../../../util/truthiness.mjs";
 import { uniqueArray } from "../../../util/unique-array.mjs";
 import { addNodeToRollBonus } from "../../add-bonus-to-item-sheet.mjs";
@@ -10,17 +10,22 @@ import { createTemplate, templates } from "../../templates.mjs";
  * @param {ItemPF} args.item,
  * @param {(item: ItemPF) => boolean} args.filter,
  * @param {string} args.key,
- * @param {string} args.label,
+ * @param {string} [args.label]
  * @param {HTMLElement} args.parent
+ * @param {string} [args.tooltip]
  */
 export function showItemInput({
-    item,
     filter,
+    item,
     key,
-    label,
+    label = '',
     parent,
+    tooltip = '',
 }) {
     if (!item?.actor) return;
+
+    label ||= localizeBonusLabel(key);
+    tooltip ||= localizeBonusTooltip(key);
 
     /** @type {string[]} */
     const currentUuids = item.getFlag(MODULE_NAME, key) || [];
@@ -37,9 +42,10 @@ export function showItemInput({
     const badCurrent = badCurrentUuids.map(fromUuidSync);
 
     const templateData = {
-        label,
-        current,
         badCurrent,
+        current,
+        label,
+        tooltip,
     };
     const div = createTemplate(templates.editableIcons, templateData);
 

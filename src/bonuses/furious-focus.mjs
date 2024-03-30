@@ -80,8 +80,8 @@ Hooks.on('renderItemSheet', (
         return;
     }
     showEnabledLabel({
+        key: furiousFocus,
         item,
-        label: label(),
         parent: html,
     });
 });

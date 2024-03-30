@@ -37,8 +37,10 @@ export class FinesseTarget extends BaseTarget {
     static showInputOnItemSheet({ html, item }) {
         showEnabledLabel({
             item,
+            key: this.key,
             label: this.label,
             parent: html,
+            tooltip: this.tooltip,
         });
     }
 

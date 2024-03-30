@@ -1,4 +1,4 @@
-import { localizeBonusLabel } from '../../util/localize.mjs';
+import { localizeBonusLabel, localizeBonusTooltip } from '../../util/localize.mjs';
 import { addNodeToRollBonus } from "../add-bonus-to-item-sheet.mjs";
 import { createTemplate, templates } from "../templates.mjs";
 
@@ -9,17 +9,20 @@ import { createTemplate, templates } from "../templates.mjs";
  * @param {ItemPF} args.item
  * @param {string} args.key
  * @param {string} [args.label]
+ * @param {string} [args.tooltip]
  * @param {HTMLElement} args.parent
  */
 export function stringSelect({
+    choices,
     current,
     item,
     key,
     label = '',
-    choices,
     parent,
+    tooltip = '',
 }) {
     label ||= localizeBonusLabel(key);
+    tooltip ||= localizeBonusTooltip(key);
 
     choices.sort();
     if ((!current && choices.length) || (choices.length === 1 && current !== choices[0])) {
@@ -28,7 +31,13 @@ export function stringSelect({
 
     const div = createTemplate(
         templates.stringSelect,
-        { key, label, current, choices },
+        {
+            choices,
+            current,
+            key,
+            label,
+            tooltip,
+        },
     );
     const select = div.querySelector(`#string-selector-${key}`);
     select?.addEventListener(
