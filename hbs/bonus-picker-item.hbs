@@ -1,11 +1,11 @@
 <div data-tooltip="{{this.tooltip}}">
-    <label class="checkbox-label">
+    {{!-- <label class="checkbox-label"> --}}
         <input
             type="checkbox"
             id="{{this.key}}"
             name="{{this.path}}"
             {{ checked this.value }}
         />
-        {{this.label}}
-    </label>
+        {{> "modules/ckl-roll-bonuses/hbs/label.hbs"}}
+    {{!-- </label> --}}
 </div>

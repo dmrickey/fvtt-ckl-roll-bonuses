@@ -35,6 +35,7 @@ export function showBonusPicker({
 
     const data = /** @type {BonusPickerData} */ ({
         targets: api.allTargetTypes.map((source, i) => ({
+            journal: source.journal,
             key: source.key,
             label: source.label,
             path: `targets.${i}`,
@@ -42,6 +43,7 @@ export function showBonusPicker({
             value: currentTargetSources.includes(source.key),
         })),
         bonuses: api.allBonusTypes.map((source, i) => ({
+            journal: source.journal,
             key: source.key,
             label: source.label,
             path: `bonuses.${i}`,
@@ -49,11 +51,12 @@ export function showBonusPicker({
             value: currentBonusSources.includes(source.key),
         })),
         specifics: Object.values(SpecificBonuses.allBonuses).map((bonus, i) => ({
+            extraKeys: bonus.extraKeys,
+            journal: bonus.journal,
             key: bonus.key,
             label: bonus.label || localizeBonusLabel(bonus.key),
             path: `specifics.${i}`,
             tooltip: localizeBonusTooltip(bonus.key),
-            extraKeys: bonus.extraKeys,
             value: currentSpecificBonuses.includes(bonus.key),
         })),
     });
@@ -104,6 +107,24 @@ class BonusPickerApp extends DocumentSheet {
     activateListeners(html) {
         super.activateListeners(html);
         html.find('button[type=reset]')?.click(this.close.bind(this));
+
+        const buttons = html.find('[data-journal]');
+        buttons?.on(
+            'click',
+            async (event) => {
+                const journal = event.currentTarget.dataset.journal;
+                // @ts-ignore // TODO
+                const [uuid, header] = journal.split('#');
+                const doc = await fromUuid(uuid);
+
+                // @ts-ignore // TODO
+                if (doc instanceof JournalEntryPage) {
+                    doc.parent.sheet.render(true, { pageId: doc.id, anchor: header });
+                } else {
+                    doc.sheet.render(true);
+                }
+            },
+        );
     }
 
     /**

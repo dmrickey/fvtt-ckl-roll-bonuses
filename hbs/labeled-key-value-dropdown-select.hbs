@@ -8,7 +8,7 @@ label: string (label for selector),
 }
 --}}
 <div class="form-group">
-    <label>{{label}}</label>
+    {{> "modules/ckl-roll-bonuses/hbs/label.hbs"}}
     <div class="form-fields">
         <select id="key-value-selector-{{key}}">
             {{selectOptions choices selected=current nameAttr="key" labelAttr="label"}}

@@ -7,7 +7,7 @@ parts: { formula: string, type: { custom: string, values: string[]} }[],
 }
 --}}
 <div class="damage roll-bonuses">
-    {{> "modules/ckl-roll-bonuses/hbs/label.hbs"}}
+    <div class="form-group">{{> "modules/ckl-roll-bonuses/hbs/label.hbs"}}</div>
     <ol class="damage-parts form-group tooltip">
         {{#each parts as |part i| }}
         <li class="damage-part flexrow" data-damage-part="{{i}}">

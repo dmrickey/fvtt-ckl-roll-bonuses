@@ -7,9 +7,7 @@ args:
 }
 --}}
 <div class="form-group roll-bonuses">
-    <h4 class="header">
-        {{label}}
-    </h4>
+    {{> "modules/ckl-roll-bonuses/hbs/label.hbs"}}
     <div class="form-fields">
         {{#each current}}
         <li data-index="{{@index}}">

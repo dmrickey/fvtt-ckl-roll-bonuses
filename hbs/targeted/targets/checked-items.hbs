@@ -5,7 +5,7 @@ label: string,
 // also reuses system classes for looks
 --}}
 <div class="form-group weapon-groups weapon-type-input roll-bonuses">
-  <label for="system.{{flag}}">{{label}}</label>
+  <div class="form-group">{{> "modules/ckl-roll-bonuses/hbs/label.hbs" for="system.{{flag}}"}}</div>
   <ul class="traits-list tag-list">
     {{#each current}}
       <li class="tag {{@key}}">{{lookup ../options this}}</li>

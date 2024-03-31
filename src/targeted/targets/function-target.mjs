@@ -62,14 +62,16 @@ export class FunctionTarget extends BaseTarget {
                 isModuleFlag: true,
             });
         }
-        showEnabledLabel({
-            item,
-            journal: this.journal,
-            key: this.key,
-            label: item.getFlag(MODULE_NAME, this.#playerLabelKey) || this.label,
-            parent: html,
-            tooltip: this.tooltip,
-        });
+        else {
+            showEnabledLabel({
+                item,
+                journal: this.journal,
+                key: this.key,
+                label: item.getFlag(MODULE_NAME, this.#playerLabelKey) || this.label,
+                parent: html,
+                tooltip: this.tooltip,
+            });
+        }
     }
 
     /**
