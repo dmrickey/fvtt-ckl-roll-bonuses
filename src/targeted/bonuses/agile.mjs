@@ -117,13 +117,19 @@ export class AgileBonus extends BaseBonus {
      * @returns {ItemActionRollAttackHookArgs}
      */
     static itemActionRollDamage(_source, seed, _action, data) {
+        const dexRegex = new RegExp(`[\\+-]\\s*[0-9]+\\[${pf1.config.abilities.dex}\\]`);
         const strRegex = new RegExp(`[\\+-]\\s*[0-9]+\\[${pf1.config.abilities.str}\\]`);
+
         const dexIsGreater = data.abilities.dex.mod > data.abilities.str.mod;
         const dexFormula = `+ ${data.abilities.dex.mod}[${pf1.config.abilities.dex}]`;
-        if (seed.formula.match(strRegex) && dexIsGreater) {
+
+        const dexMatch = seed.formula.match(dexRegex);
+        const strMatch = seed.formula.match(strRegex);
+
+        if (strMatch && !dexMatch && dexIsGreater) {
             seed.formula = seed.formula.replace(strRegex, dexFormula);
         }
-        else if (dexIsGreater) {
+        else if (!dexMatch && dexIsGreater) {
             seed.formula = `${seed.formula} ${dexFormula}`;
         }
         return seed;

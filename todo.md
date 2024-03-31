@@ -137,7 +137,8 @@
 
 ## Targeting
 - show warning if target has an inappropriate bonus
-- add ui to select targets/bonuses
+- add a way to affect other tokens (i.e. cavalier challenge which gives them -2 attack vs other targets)
+- inverse target - effect all tokens _except_ the tokens I have targets
 - add checkbox to toggle between union (current implementation) and intersection (item has to supply all targeting requirements)
 
 # Housekeeping
@@ -189,6 +190,11 @@
     - Damage Type tooltip
   - All specific bonuses
 - verify
+  - agile/finesse bonuses
+    - make sure they replace when negative strength
+    - make sure they replace when positive strength
+    - make sure they replace when no strength
+    - make sure they do not replace when already using dex
   - damage target
   - function target
   - double check input labels for all specific bonuses
