@@ -15,4 +15,8 @@
     & h2 {
         text-align: center;
     }
+
+    & .fas.fa-book {
+        margin-inline-start: 0.125rem;
+    }
 }

@@ -112,6 +112,7 @@ class BonusPickerApp extends DocumentSheet {
         buttons?.on(
             'click',
             async (event) => {
+                event.preventDefault();
                 const journal = event.currentTarget.dataset.journal;
                 // @ts-ignore // TODO
                 const [uuid, header] = journal.split('#');

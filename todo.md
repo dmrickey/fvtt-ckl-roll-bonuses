@@ -50,15 +50,16 @@
 
 # Bonus Targets
 ## Bonuses
-- Spell level
-  - target spells 0-9, all
 - add <ability> to damage for other ability scores (like agile but can be customized)
 - add <ability> to attack for other ability scores (like finesse but can be customized)
+- Attack bonus needs to give optional "crit only" attack bonuses
 
 ## Targets
 - Have creature type/subtype based targeting - would support [Ranger](#ranger)'s Favored Enemy
 - Ally/Hostile/Neutral multiselect
 - All healing
+- Distance-based targeting (point-blank shot)
+  - same logic for range penalties
 - Spellbook target
 - Spell preparation Qty
 - Skill Target

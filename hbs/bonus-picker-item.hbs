@@ -1,11 +1,14 @@
 <div data-tooltip="{{this.tooltip}}">
-    {{!-- <label class="checkbox-label"> --}}
+    <label class="checkbox-label">
         <input
             type="checkbox"
             id="{{this.key}}"
             name="{{this.path}}"
             {{ checked this.value }}
         />
-        {{> "modules/ckl-roll-bonuses/hbs/label.hbs"}}
-    {{!-- </label> --}}
+        {{this.label}}
+        <a data-journal="{{journal}}">
+            <i class="fas fa-book"></i>
+        </a>
+    </label>
 </div>

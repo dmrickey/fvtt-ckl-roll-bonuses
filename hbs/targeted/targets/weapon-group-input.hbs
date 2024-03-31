@@ -2,8 +2,7 @@
 current: { key1: label1, key2: label2, ... }
 --}}
 <div class="form-group weapon-groups weapon-type-input roll-bonuses">
-  {{!-- <label for="system.weaponGroups">{{localize "PF1.WeaponGroups"}}</label> --}}
-    {{> "modules/ckl-roll-bonuses/hbs/label.hbs" for="system.weaponGroups">{{localize "PF1.WeaponGroups"}} }}
+  {{> "modules/ckl-roll-bonuses/hbs/label.hbs">{{localize "PF1.WeaponGroups"}} }}
   <ul class="traits-list tag-list">
     {{#each current}}
       <li class="tag {{@key}}">{{this}}</li>
