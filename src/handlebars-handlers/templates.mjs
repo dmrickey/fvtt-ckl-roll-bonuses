@@ -31,6 +31,7 @@ export const templates =/** @type {const} */ ({
 
     // bonus picker application
     bonusPicker: `modules/${MODULE_NAME}/hbs/bonus-picker.hbs`,
+    bonusPickerItem: `modules/${MODULE_NAME}/hbs/bonus-picker-item.hbs`,
 
     // partials
     label: `modules/${MODULE_NAME}/hbs/label.hbs`,
