@@ -7,9 +7,7 @@ parts: { formula: string, type: { custom: string, values: string[]} }[],
 }
 --}}
 <div class="damage roll-bonuses">
-    <h4 class="damage-header">
-        {{#unless isHealing }}{{localize "PF1.DamageFormula"}}{{ else }}{{localize "PF1.HealingFormula"}}{{/unless}}
-    </h4>
+    {{> "modules/ckl-roll-bonuses/hbs/label.hbs"}}
     <ol class="damage-parts form-group tooltip">
         {{#each parts as |part i| }}
         <li class="damage-part flexrow" data-damage-part="{{i}}">

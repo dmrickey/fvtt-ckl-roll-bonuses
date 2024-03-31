@@ -24,14 +24,17 @@ export function damageInput({
         normal: localize('PF1.DamageFormula'),
     };
 
+    const isHealing = false;
+
     /** @type {DamageInputModel[]} */
     const parts = item.getFlag(MODULE_NAME, key) ?? [];
     const templateData = {
         critChoices,
         damageTypes: pf1.registry.damageTypes.toObject(),
-        isHealing: false,
+        isHealing,
         item,
         journal,
+        label: isHealing ? localize('PF1.HealingFormula') : localize('PF1.DamageFormula'),
         parts,
         tooltip,
     };
