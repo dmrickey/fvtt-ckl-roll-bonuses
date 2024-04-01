@@ -196,3 +196,4 @@
 - Add example function to Function Target readme
 - organize `specific bonuses` on bonus picker
 - add a function to exclude Sources from bonus picker
+- For `specific bonuses`, add "extra keys" as a sublist of child items
