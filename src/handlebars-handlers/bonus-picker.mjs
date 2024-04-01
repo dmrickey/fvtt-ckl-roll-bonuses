@@ -76,6 +76,10 @@ export function showBonusPicker({
             })),
     });
 
+    data.bonuses.sort((a, b) => a.label.localeCompare(b.label));
+    data.specifics.sort((a, b) => a.label.localeCompare(b.label));
+    data.targets.sort((a, b) => a.label.localeCompare(b.label));
+
     const app = new BonusPickerApp(item, data);
     app.render(true);
 }
