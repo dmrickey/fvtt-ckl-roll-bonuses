@@ -186,7 +186,14 @@
 
 # This release must include
 - localize
-  - All specific bonuses
+  - bonuses.tooltip.all-spell-cl
+  - bonuses.tooltip.genericSpellDC
+  - bonuses.tooltip.elemental-cl
+  - bonuses.tooltip.elemental-dc
+  - bonuses.tooltip.school-dc
+  - bonuses.tooltip.schoolClOffset
+  - versatilePerformance.tooltip
+  - bonuses.tooltip.racial-weapon-focus-default-race
 - verify
   - damage target
   - function target
@@ -197,3 +204,4 @@
 - organize `specific bonuses` on bonus picker
 - add a function to exclude Sources from bonus picker
 - For `specific bonuses`, add "extra keys" as a sublist of child items
+- Open up "all bonus types" buff on `player1` and verify 
