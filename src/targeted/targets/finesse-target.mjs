@@ -38,9 +38,10 @@ export class FinesseTarget extends BaseTarget {
      * @inheritdoc
      * @param {object} options
      * @param {HTMLElement} options.html
+     * @param {boolean} options.isEditable
      * @param {ItemPF} options.item
      */
-    static showInputOnItemSheet({ html, item }) {
+    static showInputOnItemSheet({ html, isEditable, item }) {
         showEnabledLabel({
             item,
             journal: this.journal,
@@ -48,6 +49,8 @@ export class FinesseTarget extends BaseTarget {
             label: this.label,
             parent: html,
             tooltip: this.tooltip,
+        }, {
+            canEdit: isEditable,
         });
     }
 

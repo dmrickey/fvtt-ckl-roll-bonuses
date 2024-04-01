@@ -84,10 +84,11 @@ export class SpellSchoolTarget extends BaseTarget {
      * @inheritdoc
      * @param {object} options
      * @param {ActorPF | null | undefined} options.actor
-     * @param {ItemPF} options.item
      * @param {HTMLElement} options.html
+     * @param {boolean} options.isEditable
+     * @param {ItemPF} options.item
      */
-    static showInputOnItemSheet({ actor, item, html }) {
+    static showInputOnItemSheet({ html, isEditable, item }) {
         const options = pf1.config.spellSchools;
 
         showChecklist({
@@ -97,6 +98,8 @@ export class SpellSchoolTarget extends BaseTarget {
             options,
             parent: html,
             tooltip: this.tooltip,
+        }, {
+            canEdit: isEditable,
         });
     }
 }

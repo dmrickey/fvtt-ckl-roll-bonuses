@@ -12,8 +12,8 @@ import { createTemplate, templates } from "../templates.mjs";
  * @param {string} [args.label]
  * @param {HTMLElement} args.parent,
  * @param {string} [args.tooltip]
- * @param {object} [options]
- * @param {boolean} [options.canEdit] - true (default)
+ * @param {object} options
+ * @param {boolean} options.canEdit
  * @param {boolean} [options.isModuleFlag] - false (default) if this is a dictionary flag, true if this is a data flag
  */
 export function checkboxInput({
@@ -25,9 +25,9 @@ export function checkboxInput({
     parent,
     tooltip = '',
 }, {
-    canEdit = true,
+    canEdit,
     isModuleFlag = false,
-} = {}
+}
 ) {
     current ||= isModuleFlag
         ? item.getFlag(MODULE_NAME, key)

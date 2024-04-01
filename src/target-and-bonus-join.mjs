@@ -231,11 +231,11 @@ Hooks.on('renderItemSheet', (
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
     item[MODULE_NAME].bonuses.forEach((bonusType) => {
-        bonusType.showInputOnItemSheet({ actor, item, html });
+        bonusType.showInputOnItemSheet({ actor, item, isEditable, html });
     });
 
     item[MODULE_NAME].targets.forEach((targetType) => {
-        targetType.showInputOnItemSheet({ actor, item, html });
+        targetType.showInputOnItemSheet({ actor, item, isEditable, html });
     });
 });
 

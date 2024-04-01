@@ -70,12 +70,14 @@ export class AttackBonus extends BaseBonus {
 
     /**
      * @override
+     * @inheritdoc
      * @param {object} options
      * @param {ActorPF | null} options.actor
-     * @param {ItemPF} options.item
      * @param {HTMLElement} options.html
+     * @param {boolean} options.isEditable
+     * @param {ItemPF} options.item
      */
-    static showInputOnItemSheet({ item, html }) {
+    static showInputOnItemSheet({ html, isEditable, item }) {
         textInput({
             item,
             journal: this.journal,
@@ -83,6 +85,7 @@ export class AttackBonus extends BaseBonus {
             parent: html,
             tooltip: this.tooltip,
         }, {
+            canEdit: isEditable,
             isModuleFlag: true,
         });
     }

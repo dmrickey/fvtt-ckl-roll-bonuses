@@ -11,8 +11,8 @@ import { createTemplate, templates } from "./templates.mjs";
  * @param {HTMLElement} args.parent
  * @param {string} [args.subLabel]
  * @param {string} [args.tooltip]
- * @param {object} [options]
- * @param {boolean} [options.canEdit] - true (default)
+ * @param {object} options
+ * @param {boolean} options.canEdit
  */
 export function showEnabledLabel({
     item,
@@ -23,8 +23,8 @@ export function showEnabledLabel({
     subLabel = '',
     tooltip = '',
 }, {
-    canEdit = true,
-} = {}) {
+    canEdit,
+}) {
     label ||= localizeBonusLabel(key);
     tooltip ||= localizeBonusTooltip(key);
     const div = createTemplate(

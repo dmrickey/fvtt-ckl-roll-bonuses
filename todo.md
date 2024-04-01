@@ -179,8 +179,6 @@
 
 # This release must include
 - make damage picker work with readonly
-- pass "canEdit" to `addToRollBonus`
-  - then `addToRollBonus` can `hide()` the config button if it's currently readonly
 - verify
   - bonus picker button is hidden on sheets that can't be edited
   - make sure readonly works
@@ -195,7 +193,6 @@
     - make sure it gives +1 to expected racially tagged weapons
   - Open up "all bonus types" buff on `player1` and make sure everything is localized
   - Open up bonus picker and make sure everything is localized
-- Show tooltip for all bonuses
 - Alphabetize specific bonuses in picker
 - Add example function to Function Target readme
 - organize `specific bonuses` on bonus picker

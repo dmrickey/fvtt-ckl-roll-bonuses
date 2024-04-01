@@ -14,8 +14,8 @@ import { TokenSelectorApp } from "./token-selector-app.mjs";
  * @param {string} [args.label]
  * @param {string} [args.tooltip]
  * @param {HTMLElement} args.parent
- * @param {object} [options]
- * @param {boolean} [options.canEdit] - true (default)
+ * @param {object} options
+ * @param {boolean} options.canEdit
  */
 export function showTokenInput({
     item,
@@ -25,8 +25,8 @@ export function showTokenInput({
     parent,
     tooltip = '',
 }, {
-    canEdit = true,
-} = {}) {
+    canEdit,
+}) {
     label ||= localizeBonusLabel(key);
     tooltip ||= localizeBonusTooltip(key);
 

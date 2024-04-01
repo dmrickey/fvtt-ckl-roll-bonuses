@@ -85,6 +85,8 @@ Hooks.on('renderItemSheet', (
         key: furiousFocus,
         item,
         parent: html,
+    }, {
+        canEdit: isEditable,
     });
 });
 

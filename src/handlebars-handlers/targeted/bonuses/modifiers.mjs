@@ -165,16 +165,16 @@ function createId(item, key) {
  * @param {ItemPF} args.item
  * @param {string} args.key
  * @param {HTMLElement} args.parentElement
- * @param {object} [options]
- * @param {boolean} [options.canEdit] - true (default)
+ * @param {object} options
+ * @param {boolean} options.canEdit
  */
 export function modifiersInput({
     item,
     key,
     parentElement,
 }, {
-    canEdit = true,
-} = {}) {
+    canEdit,
+}) {
     /** @type {ItemConditional[]} */
     let conditionals = (item.getFlag(MODULE_NAME, key) || [createConditional(item)]).map((/** @type {ItemConditional} */c) => createConditional(item, c));
     const templateData = {

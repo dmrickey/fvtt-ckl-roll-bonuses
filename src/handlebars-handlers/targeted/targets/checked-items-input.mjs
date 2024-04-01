@@ -13,8 +13,8 @@ import { createTemplate, templates } from "../../templates.mjs";
  * @param {string} [args.tooltip]
  * @param {string[] | {[key: string]: string}} args.options
  * @param {HTMLElement} args.parent
- * @param {object} [options]
- * @param {boolean} [options.canEdit] - true (default)
+ * @param {object} options
+ * @param {boolean} options.canEdit
  */
 export function showChecklist({
     item,
@@ -25,8 +25,8 @@ export function showChecklist({
     parent,
     tooltip = '',
 }, {
-    canEdit = true,
-} = {}) {
+    canEdit,
+}) {
     label ||= localizeBonusLabel(key);
     tooltip ||= localizeBonusTooltip(key);
 

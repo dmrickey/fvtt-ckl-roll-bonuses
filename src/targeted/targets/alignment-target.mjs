@@ -128,10 +128,11 @@ export class AlignmentTarget extends BaseTarget {
      * @override
      * @param {object} options
      * @param {ActorPF | null | undefined} options.actor
-     * @param {ItemPF} options.item
      * @param {HTMLElement} options.html
+     * @param {boolean} options.isEditable
+     * @param {ItemPF} options.item
      */
-    static showInputOnItemSheet({ actor, item, html }) {
+    static showInputOnItemSheet({ html, isEditable, item }) {
         keyValueSelect({
             choices,
             item,
@@ -140,6 +141,7 @@ export class AlignmentTarget extends BaseTarget {
             parent: html,
             tooltip: this.tooltip,
         }, {
+            canEdit: isEditable,
             isModuleFlag: true
         });
     }

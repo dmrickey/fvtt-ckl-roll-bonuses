@@ -74,10 +74,11 @@ export class WeaponTypeTarget extends BaseTarget {
      * @inheritdoc
      * @param {object} options
      * @param {ActorPF | null | undefined} options.actor
-     * @param {ItemPF} options.item
      * @param {HTMLElement} options.html
+     * @param {boolean} options.isEditable
+     * @param {ItemPF} options.item
      */
-    static showInputOnItemSheet({ actor, item, html }) {
+    static showInputOnItemSheet({ html, isEditable, item }) {
         const options = uniqueArray(item.actor?.items
             ?.filter(
                 /** @returns {item is ItemWeaponPF | ItemAttackPF} */
@@ -92,6 +93,8 @@ export class WeaponTypeTarget extends BaseTarget {
             options,
             parent: html,
             tooltip: this.tooltip,
+        }, {
+            canEdit: isEditable,
         });
     }
 }

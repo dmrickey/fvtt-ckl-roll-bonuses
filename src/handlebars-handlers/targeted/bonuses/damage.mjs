@@ -10,8 +10,8 @@ import { localize } from "../../../util/localize.mjs";
  * @param {string} args.key
  * @param {string} [args.tooltip]
  * @param {HTMLElement} args.parent
- * @param {object} [options]
- * @param {boolean} [options.canEdit] - true (default)
+ * @param {object} options
+ * @param {boolean} options.canEdit
  */
 export function damageInput({
     item,
@@ -20,8 +20,8 @@ export function damageInput({
     parent,
     tooltip,
 }, {
-    canEdit = true,
-} = {}) {
+    canEdit,
+}) {
     const critChoices = {
         crit: localize('PF1.CritDamageBonusFormula'),
         nonCrit: localize('PF1.NonCritDamageBonusFormula'),

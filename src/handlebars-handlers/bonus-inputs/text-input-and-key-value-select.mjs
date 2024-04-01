@@ -11,8 +11,8 @@ import { localize, localizeBonusLabel, localizeBonusTooltip } from "../../util/l
  * @param {string} [args.label]
  * @param {HTMLElement} args.parent
  * @param {string} [args.tooltip]
- * @param {object} [options]
- * @param {boolean} [options.canEdit] - true (default)
+ * @param {object} options
+ * @param {boolean} options.canEdit
  */
 export function textInputAndKeyValueSelect({
     item,
@@ -23,8 +23,8 @@ export function textInputAndKeyValueSelect({
     text,
     tooltip = '',
 }, {
-    canEdit = true
-} = {}) {
+    canEdit,
+}) {
     label ||= localizeBonusLabel(select.key);
     tooltip ||= localizeBonusTooltip(select.key);
 

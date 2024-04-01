@@ -36,10 +36,11 @@ export class FunctionTarget extends BaseTarget {
      * @override
      * @param {object} options
      * @param {ActorPF | null | undefined} options.actor
-     * @param {ItemPF} options.item
      * @param {HTMLElement} options.html
+     * @param {boolean} options.isEditable
+     * @param {ItemPF} options.item
      */
-    static showInputOnItemSheet({ html, item }) {
+    static showInputOnItemSheet({ html, isEditable, item }) {
         if (game.user.isGM) {
             textInput({
                 item,
@@ -48,6 +49,7 @@ export class FunctionTarget extends BaseTarget {
                 parent: html,
                 tooltip: this.tooltip,
             }, {
+                canEdit: isEditable,
                 isFormula: false,
                 isModuleFlag: true,
             });
@@ -58,6 +60,7 @@ export class FunctionTarget extends BaseTarget {
                 parent: html,
                 tooltip: this.tooltip,
             }, {
+                canEdit: isEditable,
                 isFormula: false,
                 isModuleFlag: true,
             });
@@ -70,6 +73,8 @@ export class FunctionTarget extends BaseTarget {
                 label: item.getFlag(MODULE_NAME, this.#playerLabelKey) || this.label,
                 parent: html,
                 tooltip: this.tooltip,
+            }, {
+                canEdit: isEditable,
             });
         }
     }

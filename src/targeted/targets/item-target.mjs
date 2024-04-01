@@ -68,10 +68,11 @@ export class ItemTarget extends BaseTarget {
      * @override
      * @param {object} options
      * @param {ActorPF | null | undefined} options.actor
-     * @param {ItemPF} options.item
      * @param {HTMLElement} options.html
+     * @param {boolean} options.isEditable
+     * @param {ItemPF} options.item
      */
-    static showInputOnItemSheet({ item, html }) {
+    static showInputOnItemSheet({ html, isEditable, item }) {
         showItemInput({
             filter: this.itemFilter,
             item,
@@ -79,6 +80,8 @@ export class ItemTarget extends BaseTarget {
             key: this.key,
             parent: html,
             tooltip: this.tooltip,
+        }, {
+            canEdit: isEditable,
         });
     }
 }

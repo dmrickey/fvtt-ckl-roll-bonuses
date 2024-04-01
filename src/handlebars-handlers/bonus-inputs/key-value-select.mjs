@@ -13,8 +13,8 @@ import { createTemplate, templates } from "../templates.mjs";
  * @param {string} [args.label]
  * @param {string} [args.tooltip]
  * @param {HTMLElement} args.parent,
- * @param {object} [options]
- * @param {boolean} [options.canEdit] - true (default)
+ * @param {object} options
+ * @param {boolean} options.canEdit
  * @param {boolean} [options.isModuleFlag] - false (default) if this is a dictionary flag, true if this is a data flag
  */
 export function keyValueSelect({
@@ -27,9 +27,9 @@ export function keyValueSelect({
     parent,
     tooltip = '',
 }, {
-    canEdit = true,
+    canEdit,
     isModuleFlag = false,
-} = {}) {
+}) {
     label ||= localizeBonusLabel(key);
     tooltip ||= localizeBonusTooltip(key);
     current ||= isModuleFlag

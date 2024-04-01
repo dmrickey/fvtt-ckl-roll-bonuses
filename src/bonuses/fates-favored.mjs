@@ -74,5 +74,7 @@ Hooks.on('renderItemSheet', (
         journal,
         key: fatesFavored,
         parent: html,
+    }, {
+        canEdit: isEditable,
     });
 });

@@ -12,8 +12,8 @@ import { createTemplate, templates } from "../templates.mjs";
  * @param {string} [args.label]
  * @param {string} [args.tooltip]
  * @param {HTMLElement} args.parent,
- * @param {object} [options]
- * @param {boolean} [options.canEdit] - true (default)
+ * @param {object} options
+ * @param {boolean} options.canEdit
  * @param {string} [options.placeholder]
  * @param {boolean} [options.isFormula]
  * @param {boolean} [options.isModuleFlag] - false (default) if this is a dictionary flag, true if this is a data flag
@@ -27,12 +27,11 @@ export function textInput({
     parent,
     tooltip = '',
 }, {
-    canEdit = true,
+    canEdit,
     isFormula = true,
     isModuleFlag = false,
     placeholder = '',
-} = {}
-) {
+}) {
     current ||= isModuleFlag
         ? item.getFlag(MODULE_NAME, key)
         : item.getItemDictionaryFlag(key);

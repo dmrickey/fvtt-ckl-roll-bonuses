@@ -87,16 +87,19 @@ export class AgileBonus extends BaseBonus {
      * @override
      * @param {object} options
      * @param {ActorPF | null} options.actor
-     * @param {ItemPF} options.item
      * @param {HTMLElement} options.html
+     * @param {boolean} options.isEditable
+     * @param {ItemPF} options.item
      */
-    static showInputOnItemSheet({ actor, item, html }) {
+    static showInputOnItemSheet({ html, isEditable, item }) {
         showEnabledLabel({
             item,
             journal: this.journal,
             key: this.key,
             parent: html,
             tooltip: this.tooltip,
+        }, {
+            canEdit: isEditable,
         });
     }
 

@@ -59,10 +59,11 @@ export class DCBonus extends BaseBonus {
      * @override
      * @inheritdoc
      * @param {object} options
-     * @param {ItemPF} options.item
      * @param {HTMLElement} options.html
+     * @param {boolean} options.isEditable
+     * @param {ItemPF} options.item
      */
-    static showInputOnItemSheet({ html, item },) {
+    static showInputOnItemSheet({ html, isEditable, item },) {
         textInput({
             item,
             journal: this.journal,
@@ -70,6 +71,7 @@ export class DCBonus extends BaseBonus {
             parent: html,
             tooltip: this.tooltip,
         }, {
+            canEdit: isEditable,
             isModuleFlag: true,
         });
     }

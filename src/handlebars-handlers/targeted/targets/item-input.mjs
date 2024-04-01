@@ -14,8 +14,8 @@ import { createTemplate, templates } from "../../templates.mjs";
  * @param {string} [args.label]
  * @param {HTMLElement} args.parent
  * @param {string} [args.tooltip]
- * @param {object} [options]
- * @param {boolean} [options.canEdit] - true (default)
+ * @param {object} options
+ * @param {boolean} options.canEdit
  */
 export function showItemInput({
     filter,
@@ -26,8 +26,8 @@ export function showItemInput({
     parent,
     tooltip = '',
 }, {
-    canEdit = true,
-} = {}) {
+    canEdit,
+}) {
     if (!item?.actor) return;
 
     label ||= localizeBonusLabel(key);

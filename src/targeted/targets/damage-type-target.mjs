@@ -86,10 +86,11 @@ export class DamageTypeTarget extends BaseTarget {
      * @inheritdoc
      * @param {object} options
      * @param {ActorPF | null | undefined} options.actor
-     * @param {ItemPF} options.item
      * @param {HTMLElement} options.html
+     * @param {boolean} options.isEditable
+     * @param {ItemPF} options.item
      */
-    static showInputOnItemSheet({ actor, item, html }) {
+    static showInputOnItemSheet({ actor, html, isEditable, item }) {
         const custom = uniqueArray(
             [...(actor?.items ?? [])]
                 .flatMap((i) => [...(i?.actions ?? [])])
@@ -114,6 +115,8 @@ export class DamageTypeTarget extends BaseTarget {
             options,
             parent: html,
             tooltip: this.tooltip,
+        }, {
+            canEdit: isEditable,
         });
     }
 }

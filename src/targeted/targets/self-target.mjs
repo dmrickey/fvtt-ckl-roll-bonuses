@@ -36,15 +36,18 @@ export class SelfTarget extends BaseTarget {
      * @param {object} options
      * @param {ActorPF | null | undefined} options.actor
      * @param {HTMLElement} options.html
+     * @param {boolean} options.isEditable
      * @param {ItemPF} options.item
      */
-    static showInputOnItemSheet({ html, item }) {
+    static showInputOnItemSheet({ html, isEditable, item }) {
         showEnabledLabel({
             item,
             journal: this.journal,
             key: this.key,
             parent: html,
             tooltip: this.tooltip,
+        }, {
+            canEdit: isEditable,
         });
     }
 

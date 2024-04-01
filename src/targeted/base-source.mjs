@@ -50,10 +50,11 @@ export class BaseSource {
      * @abstract
      * @param {object} options
      * @param {ActorPF | null} options.actor
-     * @param {ItemPF} options.item
      * @param {HTMLElement} options.html
+     * @param {boolean} options.isEditable
+     * @param {ItemPF} options.item
      */
-    static showInputOnItemSheet({ actor, item, html }) { throw new Error('must be overridden'); }
+    static showInputOnItemSheet({ actor, html, isEditable, item }) { throw new Error('must be overridden'); }
 
     /** @abstract @returns { string } */
     static get sourceBaseType() { throw new Error('must be overridden'); }
