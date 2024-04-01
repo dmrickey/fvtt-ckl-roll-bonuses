@@ -181,7 +181,7 @@
 - make damage picker work with readonly
 - verify
   - bonus picker button is hidden on sheets that can't be edited
-  - make sure readonly works
+  - make sure readonly works (add observer permissions for player1 actor to Player 2)
   - look at classes on "edit icons" and make sure they're the same so one isn't darker than the other
   - label on editable icons (it's not using label partial)
   - label on checked-items (it's wrapping the label partial in a form-group, delete that wrapper and verify if it's necessary or not)
