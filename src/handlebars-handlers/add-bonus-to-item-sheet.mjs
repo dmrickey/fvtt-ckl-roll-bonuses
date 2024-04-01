@@ -5,12 +5,12 @@ const containerId = 'ckl-roll-bonus-container';
 
 /**
  * @param {HTMLElement} itemSheetHtml
- * @param {Element} child
+ * @param {Element?} child
  * @param {ItemPF?} item
  */
 const addNodeToRollBonus = (itemSheetHtml, child, item) => {
     const flagsContainer = itemSheetHtml.querySelector('.tab[data-tab="advanced"] .tags');
-    if (!flagsContainer || !child || !item) {
+    if (!flagsContainer || !item) {
         return;
     }
 
@@ -25,6 +25,10 @@ const addNodeToRollBonus = (itemSheetHtml, child, item) => {
         });
 
         flagsContainer.after(container);
+    }
+
+    if (!child) {
+        return;
     }
 
     const button = child.querySelector('[data-journal]');

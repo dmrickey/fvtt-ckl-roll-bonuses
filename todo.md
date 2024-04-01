@@ -14,6 +14,7 @@
   - [Bomber's eye](#bombers-eye)
   - [Improved Critical](#improved-critical)
   - [Longshot](#longshot)
+  - [Snake Sidewind](#snake-sidewind)
   - [Spell Perfection](#spell-perfection)
   - [Spirited Charge](#spirited-charge)
   - [Weapon Finesse](#weapon-finesse)
@@ -92,6 +93,8 @@
 - Selects individual weapon types (like Weapon Focus) and grants keen to all of those
 ## Longshot
 - Increase bow range
+## Snake Sidewind
+- does a lot, but specifically swap Sense Motive for attack roll to confirm critical hits when Sense Motive mod is higher than current attack bonus (Agile bonus might give insight on this)
 ## Spell Perfection
 - https://www.d20pfsrd.com/feats/general-feats/spell-perfection/
 ## Spirited Charge
@@ -200,7 +203,6 @@
   - function target
   - double check input labels for all specific bonuses
   - Versatile Performance Label
-- Always show Roll Bonuses Header
 - Add compendium with the current readme info
 - Show tooltip for all bonuses
 - FIX
