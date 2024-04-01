@@ -77,11 +77,11 @@ function getConditionalParts(actionUse, result, atk, index) {
 Hooks.on(customGlobalHooks.getConditionalParts, getConditionalParts);
 
 Hooks.on('renderItemSheet', (
-    /** @type {ItemSheetPF} */ { actor, item },
+    /** @type {ItemSheetPF} */ { isEditable, item },
     /** @type {[HTMLElement]} */[html],
     /** @type {unknown} */ _data
 ) => {
-    if (!item.isOwner || item.pack) return;
+    if (!isEditable) return;
     if (!(item instanceof pf1.documents.item.ItemLootPF) || item.subType !== 'ammo') {
         return;
     }

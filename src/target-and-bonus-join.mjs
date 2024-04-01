@@ -224,12 +224,11 @@ function actionDamageSources(action, sources) {
 Hooks.on(customGlobalHooks.actionDamageSources, actionDamageSources);
 
 Hooks.on('renderItemSheet', (
-    /** @type {ItemSheetPF} */ itemSheet,
+    /** @type {ItemSheetPF} */ { actor, isEditable, item },
     /** @type {[HTMLElement]} */[html],
     /** @type {unknown} */ _data
 ) => {
-    const { actor, item } = itemSheet;
-    if (!item.isOwner || item.pack) return;
+    if (!isEditable) return;
 
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 

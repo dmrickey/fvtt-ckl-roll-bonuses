@@ -193,7 +193,6 @@
 - organize `specific bonuses` on bonus picker
 - add a function to exclude Sources from bonus picker
 - For `specific bonuses`, add "extra keys" as a sublist of child items
-- Use `sheet.isEditable` for verifying if the user can edit the sheet
 - Add FAQ to readme
   - I can't find the weapon type I want for Weapon Focus?
     - When determining which types are available, **Roll Bonuses**`** looks at all of the attacks and weapons on your sheet, and uses those to provide options. If the option you're looking for is not availble, then your weapon is not properly configured with its **Base Equipment Type**. All weapons and natural attacks (found in Monster Abilities) provided by the system are pre-configured with the proper values. If you're using a custom-made item or using an item pulled out of a compendium before pf1 v9, then you'll need to make sure to configure this value yourself.

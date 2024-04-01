@@ -59,11 +59,11 @@ function getAttackSources(item, sources) {
 Hooks.on(customGlobalHooks.itemGetAttackSources, getAttackSources);
 
 Hooks.on('renderItemSheet', (
-    /** @type {ItemSheetPF} */ { item },
+    /** @type {ItemSheetPF} */ { isEditable, item },
     /** @type {[HTMLElement]} */[html],
     /** @type {unknown} */ _data
 ) => {
-    if (!item.isOwner || item.pack) return;
+    if (!isEditable) return;
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
     const hasFlag = item.system.flags.boolean?.hasOwnProperty(fatesFavored);

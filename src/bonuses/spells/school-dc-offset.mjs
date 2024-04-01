@@ -92,11 +92,11 @@ Hooks.on('pf1GetRollData', (
 });
 
 Hooks.on('renderItemSheet', (
-    /** @type {ItemSheetPF} */ { item },
+    /** @type {ItemSheetPF} */ { isEditable, item },
     /** @type {[HTMLElement]} */[html],
     /** @type {unknown} */ _data
 ) => {
-    if (!item.isOwner || item.pack) return;
+    if (!isEditable) return;
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
     if (item.system.flags.dictionary[key] === undefined) {

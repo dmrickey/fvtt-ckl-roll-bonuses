@@ -114,11 +114,11 @@ function handleArmorFocusChange(actor, tempChanges) {
 Hooks.on('pf1GetRollData', handleArmorFocusRollData);
 
 Hooks.on('renderItemSheet', (
-    /** @type {ItemSheetPF} */ { actor, item },
+    /** @type {ItemSheetPF} */ { actor, isEditable, item },
     /** @type {[HTMLElement]} */[html],
     /** @type {unknown} */ _data
 ) => {
-    if (!item.isOwner || item.pack) return;
+    if (!isEditable) return;
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
     const name = item?.name?.toLowerCase() ?? '';

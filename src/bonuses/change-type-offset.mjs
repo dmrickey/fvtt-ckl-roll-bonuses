@@ -52,11 +52,11 @@ LocalHookHandler.registerHandler(localHooks.patchChangeValue, patchChangeValue);
  * @param {string} html
  */
 Hooks.on('renderItemSheet', (
-    /** @type {ItemSheetPF} */ { item },
+    /** @type {ItemSheetPF} */ { isEditable, item },
     /** @type {[HTMLElement]} */[html],
     /** @type {unknown} */ _data
 ) => {
-    if (!item.isOwner || item.pack) return;
+    if (!isEditable) return;
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
     const { bonusModifiers } = pf1.config;
