@@ -20,7 +20,7 @@ export { key as improvedArmorFocusKey };
 
 registerSetting({ key });
 
-Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ journal, key }));
+Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ journal, key, parent: armorFocusKey }));
 
 class Settings {
     static get armorFocus() { return Settings.#getSetting(armorFocusKey); }

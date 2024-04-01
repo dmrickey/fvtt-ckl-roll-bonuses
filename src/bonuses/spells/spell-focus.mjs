@@ -20,13 +20,11 @@ const mythicSpellFocusId = 'TOMEhAeZsgGHrSH6';
 
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#spell-focus';
 
-registerSetting({ key: spellFocusKey });
-registerSetting({ key: greaterSpellFocusKey });
-registerSetting({ key: mythicSpellFocusKey });
-
-Hooks.once('ready', () =>
-    allKeys.forEach((key) => SpecificBonuses.registerSpecificBonus({ journal, key }))
-);
+Hooks.once('ready', () => {
+    SpecificBonuses.registerSpecificBonus({ journal, key: spellFocusKey });
+    SpecificBonuses.registerSpecificBonus({ journal, key: greaterSpellFocusKey, parent: spellFocusKey });
+    SpecificBonuses.registerSpecificBonus({ journal, key: mythicSpellFocusKey, parent: spellFocusKey });
+});
 
 class Settings {
     static get spellFocus() { return Settings.#getSetting(spellFocusKey); }
@@ -34,6 +32,12 @@ class Settings {
     static get mythic() { return Settings.#getSetting(mythicSpellFocusKey); }
     // @ts-ignore
     static #getSetting(/** @type {string} */key) { return game.settings.get(MODULE_NAME, key).toLowerCase(); }
+
+    static {
+        registerSetting({ key: spellFocusKey });
+        registerSetting({ key: greaterSpellFocusKey });
+        registerSetting({ key: mythicSpellFocusKey });
+    }
 }
 
 // add Info to chat card

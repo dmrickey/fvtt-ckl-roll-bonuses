@@ -7,7 +7,7 @@ import { templates } from './templates.mjs';
 
 /**
  * @typedef {{key: string; label: string; tooltip: string; value: boolean; extraKeys?: string[];}} PickerData
- * @typedef {{ readonly targets: PickerData[]; readonly bonuses: PickerData[]; readonly specifics: PickerData[]; }} BonusPickerData
+ * @typedef {{ readonly targets: PickerData[]; readonly bonuses: PickerData[]; readonly specifics: (PickerData & {children?: PickerData[]})[]; }} BonusPickerData
  */
 
 /**
@@ -33,6 +33,8 @@ export function showBonusPicker({
         ...intersection(currentDictionaryKeys, SpecificBonuses.dictionaryKeys),
     ];
 
+    const specifics = Object.values(SpecificBonuses.allBonuses);
+
     const data = /** @type {BonusPickerData} */ ({
         targets: api.allTargetTypes.map((source, i) => ({
             journal: source.journal,
@@ -50,15 +52,28 @@ export function showBonusPicker({
             tooltip: source.tooltip,
             value: currentBonusSources.includes(source.key),
         })),
-        specifics: Object.values(SpecificBonuses.allBonuses).map((bonus, i) => ({
-            extraKeys: bonus.extraKeys,
-            journal: bonus.journal,
-            key: bonus.key,
-            label: bonus.label || localizeBonusLabel(bonus.key),
-            path: `specifics.${i}`,
-            tooltip: bonus.tooltip || localizeBonusTooltip(bonus.key),
-            value: currentSpecificBonuses.includes(bonus.key),
-        })),
+        specifics: specifics
+            .filter((bonus) => !bonus.parent)
+            .map((bonus, i) => ({
+                extraKeys: bonus.extraKeys,
+                journal: bonus.journal,
+                key: bonus.key,
+                label: bonus.label || localizeBonusLabel(bonus.key),
+                path: `specifics.${i}`,
+                tooltip: bonus.tooltip || localizeBonusTooltip(bonus.key),
+                value: currentSpecificBonuses.includes(bonus.key),
+                children: specifics
+                    .filter((child) => child.parent === bonus.key)
+                    .map((child, ii) => ({
+                        extraKeys: child.extraKeys,
+                        journal: child.journal,
+                        key: child.key,
+                        label: child.label || localizeBonusLabel(child.key),
+                        path: `specifics.${i}.${ii}`,
+                        tooltip: child.tooltip || localizeBonusTooltip(child.key),
+                        value: currentSpecificBonuses.includes(child.key),
+                    })),
+            })),
     });
 
     const app = new BonusPickerApp(item, data);
@@ -142,10 +157,10 @@ class BonusPickerApp extends DocumentSheet {
         let updateObj = null;
         Object.entries(formData).forEach(([key, value]) => {
             // @ts-ignore
-            const /** @type {[keyof BonusPickerData, string]} */[prop, index] = key.split('.');
+            const /** @type {[keyof BonusPickerData, string]} */[prop, index, childIndex] = key.split('.');
 
             /** @type {PickerData} */ // @ts-ignore
-            const bonusData = this.data[prop][index];
+            const bonusData = this.data[prop][index][childIndex] || this.data[prop][index];
 
             if (bonusData.value !== value) {
                 updateObj ||= {

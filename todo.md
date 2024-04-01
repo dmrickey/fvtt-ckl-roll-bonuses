@@ -7,6 +7,7 @@
   - [Targets](#targets)
 - [Class Features](#class-features)
   - [Cleric](#cleric)
+  - [Fighter](#fighter)
   - [Psychic](#psychic)
   - [Ranger](#ranger)
 - [Feats](#feats)
@@ -72,6 +73,9 @@
 ## Cleric
 ### Healing Domain - Healer's Blessing
 - Cure Spells are treated as if they're empowered (+50% healing)
+## Fighter
+### [Versatile Training](https://www.d20pfsrd.com/classes/core-classes/fighter/#:~:text=that%20he%20throws.-,Versatile%20Training,-(Ex)%20The)
+- Use BAB instead of ranks for given skills (see Versatile Performance implementation)
 ## Psychic
 ### Phrenic Amplification
   - increases DC of `mind-affecting` spells by 1/2/3
@@ -193,6 +197,7 @@
     - make sure it gives +1 to expected racially tagged weapons
   - Open up "all bonus types" buff on `player1` and make sure everything is localized
   - Open up bonus picker and make sure everything is localized
+  - make sure static setting registration works
 - Alphabetize specific bonuses in picker
 - Add example function to Function Target readme
 - organize `specific bonuses` on bonus picker

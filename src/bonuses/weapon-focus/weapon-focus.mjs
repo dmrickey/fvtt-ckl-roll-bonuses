@@ -23,13 +23,12 @@ import {
 const allKeys = [weaponFocusKey, greaterWeaponFocusKey, mythicWeaponFocusKey];
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#weapon-focus';
 
-registerSetting({ key: weaponFocusKey });
-registerSetting({ key: greaterWeaponFocusKey });
-registerSetting({ key: mythicWeaponFocusKey });
-
-Hooks.once('ready', () =>
-    allKeys.forEach((key) => SpecificBonuses.registerSpecificBonus({ journal, key }))
-);
+Hooks.once('ready', () => {
+    SpecificBonuses.registerSpecificBonus({ journal, key: weaponFocusKey });
+    SpecificBonuses.registerSpecificBonus({ journal, key: greaterWeaponFocusKey, parent: weaponFocusKey });
+    SpecificBonuses.registerSpecificBonus({ journal, key: mythicWeaponFocusKey, parent: weaponFocusKey });
+    SpecificBonuses.registerSpecificBonus({ journal, key: racialWeaponFocusKey, parent: weaponFocusKey });
+});
 
 class Settings {
     static get weaponFocus() { return Settings.#getSetting(weaponFocusKey); }
@@ -37,6 +36,12 @@ class Settings {
     static get mythic() { return Settings.#getSetting(mythicWeaponFocusKey); }
     // @ts-ignore
     static #getSetting(/** @type {string} */key) { return game.settings.get(MODULE_NAME, key).toLowerCase(); }
+
+    static {
+        registerSetting({ key: weaponFocusKey });
+        registerSetting({ key: greaterWeaponFocusKey });
+        registerSetting({ key: mythicWeaponFocusKey });
+    }
 }
 
 // register hint on source

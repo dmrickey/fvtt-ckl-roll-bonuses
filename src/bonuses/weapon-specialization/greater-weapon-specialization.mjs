@@ -19,7 +19,7 @@ const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalE
 
 registerSetting({ key });
 
-Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ journal, key }));
+Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ journal, key, parent: weaponSpecializationKey }));
 
 class Settings {
     static get weaponSpecialization() { return Settings.#getSetting(key); }

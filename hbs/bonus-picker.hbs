@@ -20,6 +20,11 @@
         <div class="specific-bonuses">
             {{#each specifics}}
             {{> "modules/ckl-roll-bonuses/hbs/bonus-picker-item.hbs"}}
+            {{#each children}}
+            <div class="child">
+                {{> "modules/ckl-roll-bonuses/hbs/bonus-picker-item.hbs"}}
+            </div>
+            {{/each}}
             {{/each}}
         </div>
         {{/if}}

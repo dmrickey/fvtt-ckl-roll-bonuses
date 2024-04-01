@@ -22,11 +22,11 @@ const mythicElementalFocusId = 'yelJyBhjWtiIMgci';
 
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#elemental-focus';
 
-registerSetting({ key: elementalFocusKey });
-registerSetting({ key: greaterElementalFocusKey });
-registerSetting({ key: mythicElementalFocusKey });
-
-Hooks.once('ready', () => allKeys.forEach((key) => SpecificBonuses.registerSpecificBonus({ journal, key })));
+Hooks.once('ready', () => {
+    SpecificBonuses.registerSpecificBonus({ journal, key: elementalFocusKey });
+    SpecificBonuses.registerSpecificBonus({ journal, key: greaterElementalFocusKey, parent: elementalFocusKey });
+    SpecificBonuses.registerSpecificBonus({ journal, key: mythicElementalFocusKey, parent: elementalFocusKey });
+});
 
 const icons = {
     acid: { icon: 'fas fa-droplet', css: 'ckl-acid-green' },
@@ -48,6 +48,12 @@ class Settings {
     static get mythic() { return Settings.#getSetting(mythicElementalFocusKey); }
     // @ts-ignore
     static #getSetting(/** @type {string} */key) { return game.settings.get(MODULE_NAME, key).toLowerCase(); }
+
+    static {
+        registerSetting({ key: elementalFocusKey });
+        registerSetting({ key: greaterElementalFocusKey });
+        registerSetting({ key: mythicElementalFocusKey });
+    }
 }
 
 // add Info to chat card
