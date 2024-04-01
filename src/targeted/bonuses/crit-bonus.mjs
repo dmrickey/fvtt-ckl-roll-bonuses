@@ -5,6 +5,7 @@ import { textInput } from "../../handlebars-handlers/bonus-inputs/text-input.mjs
 import { handleBonusTypeFor } from '../../target-and-bonus-join.mjs';
 import { FormulaCacheHelper } from "../../util/flag-helpers.mjs";
 import { LocalHookHandler, localHooks } from '../../util/hooks.mjs';
+import { registerItemHint } from '../../util/item-hints.mjs';
 import { localize } from '../../util/localize.mjs';
 import { SelfTarget } from '../targets/self-target.mjs';
 import { BaseBonus } from "./base-bonus.mjs";
@@ -57,6 +58,13 @@ export class CritBonus extends BaseBonus {
      * @returns {number}
      */
     static getOffsetValue(source) { return FormulaCacheHelper.getModuleFlagValue(source, this.#critOffsetKey); }
+
+    /**
+    * @override
+    * @inheritdoc
+    * @returns {boolean}
+    */
+    static get skipTargetedHint() { return true; }
 
     /**
      * @override
@@ -137,9 +145,51 @@ export class CritBonus extends BaseBonus {
             range -= offset;
             range = Math.clamped(range, 2, 20);
             rollData.action.ability.critRange = isBroken ? 20 : range;
-
         };
         LocalHookHandler.registerHandler(localHooks.updateItemActionRollData, updateItemActionRollData);
+
+        registerItemHint((hintcls, actor, item, _data) => {
+            if (!actor || !item?.firstAction) return;
+
+            const isBroken = !!item.system.broken;
+            const action = item.firstAction;
+
+            let hasKeen = false;
+            let offset = 0;
+            const currentRange = action.data.ability.critRange || 20;
+            let mult = action.data.ability?.critMult || 2;
+
+            /** @type {string[]} */
+            const sources = [];
+
+            handleBonusTypeFor(
+                action,
+                CritBonus,
+                (bonusType, sourceItem) => {
+                    sources.push(sourceItem.name);
+                    hasKeen ||= bonusType.hasKeen(sourceItem);
+                    offset += bonusType.getOffsetValue(sourceItem);
+                    mult += bonusType.getMultValue(sourceItem);
+                }
+            );
+
+            let range = hasKeen
+                ? currentRange * 2 - 21
+                : currentRange;
+            range -= offset;
+            range = Math.clamped(range, 2, 20);
+            range = isBroken ? 20 : range;
+            mult = isBroken ? 2 : mult;
+
+            if (mult === action.data.ability.critMult
+                && range === action.data.ability.critRange
+            ) return;
+
+            const rangeFormat = range === 20 ? '20' : `${range}-20`;
+            const label = `${rangeFormat}/x${mult}`;
+            const hint = hintcls.create(label, [], { hint: sources.join('\n') });
+            return hint;
+        });
     }
 
     /**

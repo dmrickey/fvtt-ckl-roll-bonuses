@@ -81,6 +81,15 @@ export class BaseBonus extends BaseSource {
     static itemActionRollDamage(_source, seed, _action, _data) { return seed; }
 
     /**
+     * Returns true the targeting is too generic to show a hint on a specific item
+     * - used for something like `crit` that needs to combine all hints in a single registration
+     *
+     * @abstract
+     * @returns {boolean}
+     */
+    static get skipTargetedHint() { return false; }
+
+    /**
      * @abstract
       * @param {ItemPF} source
       * @param {ItemAction} action

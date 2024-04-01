@@ -49,6 +49,7 @@ registerItemHint((hintcls, actor, item, _data) => {
     handleBonusesFor(
         item,
         (bonusType, sourceItem) => {
+            if (bonusType.skipTargetedHint) return;
             let hints = bonusType.getHints(sourceItem, item);
             if (hints?.length) {
                 if (hints.length === 1 && hints[0] === bonusType.label) {
