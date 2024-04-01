@@ -4,7 +4,6 @@ import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize, localizeBonusLabel } from "../../util/localize.mjs";
 import { signed } from "../../util/to-signed-string.mjs";
-import { SpecificBonuses } from '../all-specific-bonuses.mjs';
 
 // todo refactor 'all-spell-dc'
 const key = 'genericSpellDC'

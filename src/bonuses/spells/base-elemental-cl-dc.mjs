@@ -6,7 +6,6 @@ import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize, localizeBonusLabel } from "../../util/localize.mjs";
 import { signed } from "../../util/to-signed-string.mjs";
 import { truthiness } from "../../util/truthiness.mjs";
-import { SpecificBonuses } from '../all-specific-bonuses.mjs';
 
 /**
  * @type {{cl: keyof(RollData), dc: keyof(RollData)}}

@@ -2,9 +2,8 @@ import { textInput } from "../../handlebars-handlers/bonus-inputs/text-input.mjs
 import { FormulaCacheHelper, KeyedDFlagHelper, getDocDFlags } from "../../util/flag-helpers.mjs";
 import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
-import { localize, localizeBonusLabel } from "../../util/localize.mjs";
+import { localize } from "../../util/localize.mjs";
 import { signed } from "../../util/to-signed-string.mjs";
-import { SpecificBonuses } from '../all-specific-bonuses.mjs';
 
 const key = 'all-spell-cl'
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#*modify-spell-caster-level-(all-spells,-specific-school,-or-spec';
