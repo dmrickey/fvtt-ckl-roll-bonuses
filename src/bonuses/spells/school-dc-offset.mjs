@@ -96,7 +96,6 @@ Hooks.on('renderItemSheet', (
     /** @type {[HTMLElement]} */[html],
     /** @type {unknown} */ _data
 ) => {
-    if (!isEditable) return;
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
     if (item.system.flags.dictionary[key] === undefined) {
@@ -114,5 +113,7 @@ Hooks.on('renderItemSheet', (
         parent: html,
         select: { current, choices, key },
         text: { current: getDocDFlags(item, formulaKey)[0] || '', key: formulaKey },
+    }, {
+        canEdit: isEditable,
     });
 });

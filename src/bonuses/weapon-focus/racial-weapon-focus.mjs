@@ -114,7 +114,6 @@ Hooks.on('renderItemSheet', (
     /** @type {[HTMLElement]} */[html],
     /** @type {unknown} */ _data
 ) => {
-    if (!isEditable) return;
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
     const name = item?.name?.toLowerCase() ?? '';
@@ -130,6 +129,7 @@ Hooks.on('renderItemSheet', (
         key,
         parent: html,
     }, {
+        canEdit: isEditable,
         isFormula: false,
     });
 });

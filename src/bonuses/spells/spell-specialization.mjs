@@ -130,27 +130,31 @@ Hooks.on('renderItemSheet', (
     /** @type {[HTMLElement]} */[html],
     /** @type {unknown} */ _data
 ) => {
-    if (!isEditable) return;
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
     const hasKey = item.system.flags.dictionary[key] !== undefined;
     const hasName = item.name?.toLowerCase() === Settings.spellSpecialization;
     const hasId = !!item?.flags?.core?.sourceId?.includes(compendiumId);
-    if (!(hasKey || hasName || hasId) || !actor) {
+    if (!(hasKey || hasName || hasId)) {
         return;
     }
 
-    const helper = new KeyedDFlagHelper(actor, {}, spellFocusKey);
-    const focuses = helper.stringValuesForFlag(spellFocusKey);
     const current = item.getItemDictionaryFlag(key);
 
-    const spellChoices = actor?.items
-        .filter(
-            /** @returns {spell is ItemSpellPF} */
-            (spell) => spell instanceof pf1.documents.item.ItemSpellPF
-                && focuses.includes(spell.system.school))
-        ?? [];
-    const choices = uniqueArray(spellChoices.map(({ name }) => name)).sort();
+    /** @type {string[]} */
+    let choices = [];
+    if (actor && isEditable) {
+        const helper = new KeyedDFlagHelper(actor, {}, spellFocusKey);
+        const focuses = helper.stringValuesForFlag(spellFocusKey);
+
+        const spellChoices = actor?.items
+            .filter(
+                /** @returns {spell is ItemSpellPF} */
+                (spell) => spell instanceof pf1.documents.item.ItemSpellPF
+                    && focuses.includes(spell.system.school))
+            ?? [];
+        choices = uniqueArray(spellChoices.map(({ name }) => name)).sort();
+    }
 
     stringSelect({
         choices,
@@ -159,5 +163,7 @@ Hooks.on('renderItemSheet', (
         journal,
         key,
         parent: html
+    }, {
+        canEdit: isEditable,
     });
 });

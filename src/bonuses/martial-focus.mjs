@@ -158,7 +158,6 @@ Hooks.on('renderItemSheet', (
     /** @type {[HTMLElement]} */[html],
     /** @type {unknown} */ _data
 ) => {
-    if (!isEditable) return;
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
     const name = item?.name?.toLowerCase() ?? '';
@@ -169,16 +168,19 @@ Hooks.on('renderItemSheet', (
 
     const current = item.getItemDictionaryFlag(key);
 
-    const customs = uniqueArray(
-        actor?.items
-            .filter(
-                /** @returns {i is ItemWeaponPF | ItemAttackPF} */
-                (i) => i instanceof pf1.documents.item.ItemWeaponPF || i instanceof pf1.documents.item.ItemAttackPF
-            )
-            .flatMap((i) => (i.system.weaponGroups?.custom ?? '').split(';'))
-            .filter(truthiness)
-        ?? []
-    ).map((i) => ({ key: i, label: i }));
+    const customs =
+        !actor || !isEditable
+            ? []
+            : uniqueArray(
+                actor.items
+                    .filter(
+                        /** @returns {i is ItemWeaponPF | ItemAttackPF} */
+                        (i) => i instanceof pf1.documents.item.ItemWeaponPF || i instanceof pf1.documents.item.ItemAttackPF
+                    )
+                    .flatMap((i) => (i.system.weaponGroups?.custom ?? '').split(';'))
+                    .filter(truthiness)
+                ?? []
+            ).map((i) => ({ key: i, label: i }));
 
     const groups = Object.entries(pf1.config.weaponGroups).map(([key, label]) => ({ key, label }));
     const choices = [...groups, ...customs].sort();
@@ -190,5 +192,7 @@ Hooks.on('renderItemSheet', (
         journal,
         key,
         parent: html
+    }, {
+        canEdit: !isEditable,
     });
 });

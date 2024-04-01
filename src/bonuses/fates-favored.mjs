@@ -63,7 +63,6 @@ Hooks.on('renderItemSheet', (
     /** @type {[HTMLElement]} */[html],
     /** @type {unknown} */ _data
 ) => {
-    if (!isEditable) return;
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
     const hasFlag = item.system.flags.boolean?.hasOwnProperty(fatesFavored);

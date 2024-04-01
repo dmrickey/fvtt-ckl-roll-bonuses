@@ -169,9 +169,7 @@ Hooks.on('renderItemSheet', (
     /** @type {[HTMLElement]} */[html],
     /** @type {unknown} */ _data
 ) => {
-    if (!isEditable) return;
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
-    if (!actor) return;
 
     const name = item?.name?.toLowerCase() ?? '';
 
@@ -186,56 +184,63 @@ Hooks.on('renderItemSheet', (
     }
     const [baseId, ...substitutes] = `${currentVP}`.split(';');
     const [skill1Id, skill2Id] = substitutes;
+    const skillLookup = (/** @type {string}*/ id) => actor?.getSkillInfo(id) || pf1.config.skills[id] || { id, name: id };
     let base, skill1, skill2;
     if (baseId) {
-        base = actor.getSkillInfo(baseId);
+        base = skillLookup(baseId);
     }
     if (skill1Id) {
-        skill1 = actor.getSkillInfo(skill1Id);
+        skill1 = skillLookup(skill1Id);
     }
     if (skill2Id) {
-        skill2 = actor.getSkillInfo(skill2Id);
+        skill2 = skillLookup(skill2Id);
     }
 
-    const allSkills = (() => {
-        const skills = [];
-        for (const [id, s] of Object.entries(actor.getRollData().skills)) {
-            const skill = deepClone(s);
-            skill.id = id;
-            skills.push(skill);
-            skill.name = pf1.config.skills[id] ?? actor.system.skills[id].name;
+    let allSkills, performs;
+    if (isEditable) {
+        if (!actor) return;
 
-            for (const [subId, subS] of Object.entries(s.subSkills ?? {})) {
+        allSkills = (() => {
+            const skills = [];
+            for (const [id, s] of Object.entries(actor.getRollData().skills)) {
+                const skill = deepClone(s);
+                skill.id = id;
+                skills.push(skill);
+                skill.name = pf1.config.skills[id] ?? actor.system.skills[id].name;
+
+                for (const [subId, subS] of Object.entries(s.subSkills ?? {})) {
+                    const subSkill = deepClone(subS);
+                    subSkill.id = `${id}.subSkills.${subId}`;
+                    skills.push(subSkill);
+                }
+            }
+            return skills
+                .filter(truthiness)
+                .sort((a, b) => a.name.localeCompare(b.name));
+        })();
+
+        performs = (() => {
+            const skills = [];
+            const perform = actor.getSkillInfo('prf');
+            for (const [subId, subS] of Object.entries(perform.subSkills ?? {})) {
                 const subSkill = deepClone(subS);
-                subSkill.id = `${id}.subSkills.${subId}`;
+                subSkill.id = `prf.subSkills.${subId}`;
                 skills.push(subSkill);
             }
-        }
-        return skills
-            .filter(truthiness)
-            .sort((a, b) => a.name.localeCompare(b.name));
-    })();
+            return skills
+                .sort((a, b) => a.name.localeCompare(b.name));
+        })();
+        if (!performs.length) return;
 
-    const performs = (() => {
-        const skills = [];
-        const perform = actor.getSkillInfo('prf');
-        for (const [subId, subS] of Object.entries(perform.subSkills ?? {})) {
-            const subSkill = deepClone(subS);
-            subSkill.id = `prf.subSkills.${subId}`;
-            skills.push(subSkill);
+        if (performs.length && !base) {
+            item.setItemDictionaryFlag(key, `${performs[0].id}`);
         }
-        return skills
-            .sort((a, b) => a.name.localeCompare(b.name));
-    })();
-    if (!performs.length) return;
-
-    if (performs.length && !base) {
-        item.setItemDictionaryFlag(key, `${performs[0].id}`);
     }
 
     const templateData = {
         allSkills,
         base,
+        canEdit: !isEditable,
         journal,
         label: localize('versatilePerformance.header'),
         performs,

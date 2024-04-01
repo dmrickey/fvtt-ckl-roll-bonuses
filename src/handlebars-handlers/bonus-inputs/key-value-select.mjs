@@ -40,10 +40,12 @@ export function keyValueSelect({
         choices = Object.entries(choices).map(([k, v]) => ({ key: k, label: v }));
     }
 
-    if ((!current && choices.length) || (choices.length === 1 && current !== choices[0].key)) {
-        isModuleFlag
-            ? item.setFlag(MODULE_NAME, key, choices[0].key)
-            : item.setItemDictionaryFlag(key, choices[0].key);
+    if (canEdit) {
+        if ((!current && choices.length) || (choices.length === 1 && current !== choices[0].key)) {
+            isModuleFlag
+                ? item.setFlag(MODULE_NAME, key, choices[0].key)
+                : item.setItemDictionaryFlag(key, choices[0].key);
+        }
     }
 
     const div = createTemplate(

@@ -81,7 +81,6 @@ Hooks.on('renderItemSheet', (
     /** @type {[HTMLElement]} */[html],
     /** @type {unknown} */ _data
 ) => {
-    if (!isEditable) return;
     if (!(item instanceof pf1.documents.item.ItemLootPF) || item.subType !== 'ammo') {
         return;
     }
@@ -93,6 +92,7 @@ Hooks.on('renderItemSheet', (
         label: localize('PF1.Masterwork'),
         parent: html,
     }, {
+        canEdit: !isEditable,
         isModuleFlag: true,
     });
     textInput({
@@ -102,6 +102,7 @@ Hooks.on('renderItemSheet', (
         label: localize('PF1.EnhancementBonus'),
         parent: html,
     }, {
+        canEdit: !isEditable,
         isModuleFlag: true,
     });
     textInput({
@@ -111,6 +112,7 @@ Hooks.on('renderItemSheet', (
         label: localize('source.bonus.label.attack'),
         parent: html,
     }, {
+        canEdit: !isEditable,
         isModuleFlag: true,
     });
     damageInput({
@@ -118,6 +120,8 @@ Hooks.on('renderItemSheet', (
         journal,
         key: legacyAmmoDamageKey,
         parent: html,
+    }, {
+        canEdit: !isEditable,
     });
 });
 

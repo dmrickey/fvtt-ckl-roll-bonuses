@@ -28,8 +28,10 @@ export function textInputAndKeyValueSelect({
     label ||= localizeBonusLabel(select.key);
     tooltip ||= localizeBonusTooltip(select.key);
 
-    if ((!select.current && select.choices.length) || (select.choices.length === 1 && select.current !== select.choices[0].key)) {
-        item.setItemDictionaryFlag(select.key, select.choices[0].key);
+    if (canEdit) {
+        if ((!select.current && select.choices.length) || (select.choices.length === 1 && select.current !== select.choices[0].key)) {
+            item.setItemDictionaryFlag(select.key, select.choices[0].key);
+        }
     }
 
     const div = createTemplate(

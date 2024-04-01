@@ -112,48 +112,11 @@ function actionDamageSources({ item }, sources) {
 };
 Hooks.on(customGlobalHooks.actionDamageSources, actionDamageSources);
 
-// todo - update for weapon spec.
-// this is a lot better, but it doesn't work because action.use doesn't read this data off of the roll data -- it re-looks it up itself.
-// /**
-//  * @param {ItemAction} action
-//  * @param {RollData} rollData
-//  */
-// function getFocusedItemRollData(action, rollData) {
-//     if (!(action instanceof pf1.components.ItemAction)) {
-//         return;
-//     }
-
-//     const item = action.item;
-//     if (!(item instanceof pf1.documents.item.ItemWeaponPF) && !(item instanceof pf1.documents.item.ItemAttackPF)) {
-//         return;
-//     }
-
-//     if ((item instanceof pf1.documents.item.ItemWeaponPF && !item.system.proficient) || !item.system.weaponGroups) {
-//         return;
-//     }
-//     const actor = action.actor;
-//     if (!actor || !item.system.baseTypes?.length) return;
-
-//     const weaponGroups = [...item.system.weaponGroups.value, ...item.system.weaponGroups.custom.split(';')].map(x => x.trim()).filter(truthiness);
-//     const focuses = new KeyedDFlagHelper(actor, {}, key).valuesForFlag(key);
-
-//     const isFocused = intersects(weaponGroups, focuses);
-
-//     if (isFocused && rollData.action.damage?.parts?.length) {
-//         rollData.action.damage.parts.push({
-//             formula: `1[${localizeSpecificLabel(key)}]`,
-//             type: rollData.action.damage.parts[0].type,
-//         });
-//     }
-// }
-// Hooks.on('pf1GetRollData', getFocusedItemRollData);
-
 Hooks.on('renderItemSheet', (
     /** @type {ItemSheetPF} */ { actor, isEditable, item },
     /** @type {[HTMLElement]} */[html],
     /** @type {unknown} */ _data
 ) => {
-    if (!isEditable) return;
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
     const name = item?.name?.toLowerCase() ?? '';
@@ -162,15 +125,14 @@ Hooks.on('renderItemSheet', (
         return;
     }
 
-    if (!actor) {
-        return;
-    }
-
     const current = item.getItemDictionaryFlag(key);
 
-    const choices = uniqueArray(new KeyedDFlagHelper(actor, {}, weaponFocusKey).valuesForFlag(weaponFocusKey))
-        .map(x => '' + x)
-        .sort();
+
+    const choices = actor && isEditable
+        ? uniqueArray(new KeyedDFlagHelper(actor, {}, weaponFocusKey).valuesForFlag(weaponFocusKey))
+            .map(x => '' + x)
+            .sort()
+        : [];
 
     stringSelect({
         choices,
@@ -179,5 +141,7 @@ Hooks.on('renderItemSheet', (
         journal,
         key,
         parent: html
+    }, {
+        canEdit: isEditable,
     });
 });

@@ -118,7 +118,6 @@ Hooks.on('renderItemSheet', (
     /** @type {[HTMLElement]} */[html],
     /** @type {unknown} */ _data
 ) => {
-    if (!isEditable) return;
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
     const name = item?.name?.toLowerCase() ?? '';
@@ -128,13 +127,15 @@ Hooks.on('renderItemSheet', (
     }
 
     const current = item.getItemDictionaryFlag(key);
-    const choices = uniqueArray(actor?.items
-        ?.filter(
-            /** @returns {item is ItemEquipmentPF} */
-            (item) => item.type === 'equipment'
-                && item instanceof pf1.documents.item.ItemEquipmentPF
-                && item.system.slot === 'armor')
-        .flatMap((item) => item.system.baseTypes ?? []));
+    const choices = isEditable && actor
+        ? uniqueArray(actor.items
+            ?.filter(
+                /** @returns {item is ItemEquipmentPF} */
+                (item) => item.type === 'equipment'
+                    && item instanceof pf1.documents.item.ItemEquipmentPF
+                    && item.system.slot === 'armor')
+            .flatMap((item) => item.system.baseTypes ?? []))
+        : [];
 
     stringSelect({
         choices,
@@ -143,5 +144,7 @@ Hooks.on('renderItemSheet', (
         journal,
         key,
         parent: html
+    }, {
+        canEdit: isEditable,
     });
 });

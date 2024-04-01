@@ -102,7 +102,6 @@ Hooks.on('renderItemSheet', (
     /** @type {[HTMLElement]} */[html],
     /** @type {unknown} */ _data
 ) => {
-    if (!isEditable) return;
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
     const name = item?.name?.toLowerCase() ?? '';
@@ -115,7 +114,9 @@ Hooks.on('renderItemSheet', (
     }
 
     const current = item.getItemDictionaryFlag(key);
-    const choices = uniqueArray(getDocDFlags(actor, armorFocusKey).map(x => `${x}`));
+    const choices = isEditable
+        ? uniqueArray(getDocDFlags(actor, armorFocusKey).map(x => `${x}`))
+        : [];
 
     stringSelect({
         choices,
@@ -124,5 +125,7 @@ Hooks.on('renderItemSheet', (
         journal,
         key,
         parent: html
+    }, {
+        canEdit: isEditable
     });
 });

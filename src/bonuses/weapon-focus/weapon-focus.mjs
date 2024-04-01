@@ -171,16 +171,11 @@ Hooks.on('renderItemSheet', (
     /** @type {[HTMLElement]} */[html],
     /** @type {unknown} */ _data
 ) => {
-    if (!isEditable) return;
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
-    /**
-     * @type {string | undefined}
-     */
+    /** @type {string | undefined} */
     let key;
-    /**
-     * @type {(string)[]}
-     */
+    /** @type {(string)[]} */
     let choices = [];
 
     const name = item?.name?.toLowerCase() ?? '';
@@ -195,7 +190,6 @@ Hooks.on('renderItemSheet', (
         || item.system.flags.dictionary[racialWeaponFocusKey] !== undefined;
 
     if (isGreater || isMythic) {
-        key = greaterWeaponFocusKey;
         key = isGreater ? greaterWeaponFocusKey : mythicWeaponFocusKey;
 
         if (actor) {
@@ -217,21 +211,20 @@ Hooks.on('renderItemSheet', (
     }
 
     if (key === weaponFocusKey) {
-        choices = uniqueArray(item.actor?.items
+        choices = uniqueArray(actor?.items
             ?.filter(
                 /** @returns {item is ItemWeaponPF | ItemAttackPF} */
                 (item) => item.type === 'weapon' || item.type === 'attack')
             .flatMap((item) => item.system.baseTypes ?? []));
     }
 
-    const current = item.getItemDictionaryFlag(key);
-
     stringSelect({
         choices,
-        current,
         item,
         journal,
         key,
         parent: html
+    }, {
+        canEdit: isEditable,
     });
 });

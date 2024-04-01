@@ -1,3 +1,4 @@
+import { MODULE_NAME } from '../../consts.mjs';
 import { localizeBonusLabel, localizeBonusTooltip } from '../../util/localize.mjs';
 import { addNodeToRollBonus } from "../add-bonus-to-item-sheet.mjs";
 import { createTemplate, templates } from "../templates.mjs";
@@ -5,7 +6,7 @@ import { createTemplate, templates } from "../templates.mjs";
 /**
  * @param {object} args
  * @param {string[]} args.choices
- * @param {FlagValue} args.current
+ * @param {FlagValue} [args.current]
  * @param {ItemPF} args.item
  * @param {string} args.journal
  * @param {string} args.key
@@ -14,6 +15,7 @@ import { createTemplate, templates } from "../templates.mjs";
  * @param {HTMLElement} args.parent
  * @param {object} [options]
  * @param {boolean} [options.canEdit] - true (default)
+ * @param {boolean} [options.isModuleFlag] - false (default) if this is a dictionary flag, true if this is a data flag
  */
 export function stringSelect({
     choices,
@@ -26,13 +28,21 @@ export function stringSelect({
     tooltip = '',
 }, {
     canEdit = true,
+    isModuleFlag = false,
 } = {}) {
+    current ||= isModuleFlag
+        ? item.getFlag(MODULE_NAME, key)
+        : item.getItemDictionaryFlag(key);
     label ||= localizeBonusLabel(key);
     tooltip ||= localizeBonusTooltip(key);
 
     choices.sort();
-    if ((!current && choices.length) || (choices.length === 1 && current !== choices[0])) {
-        item.setItemDictionaryFlag(key, choices[0]);
+    if (canEdit) {
+        if ((!current && choices.length) || (choices.length === 1 && current !== choices[0])) {
+            isModuleFlag
+                ? item.setFlag(MODULE_NAME, key, choices[0])
+                : item.setItemDictionaryFlag(key, choices[0]);
+        }
     }
 
     const div = createTemplate(
@@ -55,7 +65,9 @@ export function stringSelect({
 
             // @ts-ignore - event.target is HTMLTextAreaElement
             const /** @type {HTMLTextAreaElement} */ target = event.target;
-            await item.setItemDictionaryFlag(key, target?.value);
+            isModuleFlag
+                ? await item.setFlag(MODULE_NAME, key, target?.value)
+                : await item.setItemDictionaryFlag(key, target?.value);
         },
     );
 

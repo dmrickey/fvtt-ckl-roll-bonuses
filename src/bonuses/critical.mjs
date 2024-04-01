@@ -290,7 +290,6 @@ Hooks.on('renderItemSheet', (
     /** @type {[HTMLElement]} */[html],
     /** @type {unknown} */ _data
 ) => {
-    if (!isEditable) return;
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
     const has = getDocDFlagsStartsWith(item, 'crit-');
@@ -304,6 +303,8 @@ Hooks.on('renderItemSheet', (
             key,
             label: labelLookup(key),
             parent: html,
+        }, {
+            canEdit: !isEditable,
         });
     });
 });
