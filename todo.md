@@ -186,12 +186,6 @@
 
 # This release must include
 - localize
-  - Target
-    - Damage label/tooltip
-    - Function label/tooltip
-  - Bonus
-    - Critical tooltip
-    - Damage Type tooltip
   - All specific bonuses
 - verify
   - agile/finesse bonuses
@@ -202,8 +196,6 @@
   - damage target
   - function target
   - double check input labels for all specific bonuses
-  - Versatile Performance Label
-- Add compendium with the current readme info
 - Show tooltip for all bonuses
 - FIX
   - Crit range is not stacking correctly. Actor test's greataxe is not critting on 17-18

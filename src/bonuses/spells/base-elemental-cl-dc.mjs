@@ -48,13 +48,6 @@ export function createElementalClOrDc(t) {
     FormulaCacheHelper.registerUncacheableDictionaryFlag(key);
     FormulaCacheHelper.registerDictionaryFlag(formulaKey);
 
-    Hooks.once('ready', () =>
-        SpecificBonuses.registerSpecificBonus(
-            { journal, key },
-            formulaKey,
-        )
-    );
-
     /**
      *
      * @param {ItemPF} item

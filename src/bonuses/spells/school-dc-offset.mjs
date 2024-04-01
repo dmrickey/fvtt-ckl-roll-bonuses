@@ -13,13 +13,6 @@ const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalE
 FormulaCacheHelper.registerUncacheableDictionaryFlag(key);
 FormulaCacheHelper.registerDictionaryFlag(formulaKey);
 
-Hooks.once('ready', () =>
-    SpecificBonuses.registerSpecificBonus(
-        { journal, key },
-        formulaKey,
-    )
-);
-
 // add Info to chat card
 Hooks.on(customGlobalHooks.itemGetTypeChatData, (
     /** @type {ItemPF} */ item,

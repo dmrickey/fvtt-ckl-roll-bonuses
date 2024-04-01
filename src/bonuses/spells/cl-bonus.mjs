@@ -11,8 +11,6 @@ const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalE
 
 FormulaCacheHelper.registerDictionaryFlag(key);
 
-Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ journal, key }));
-
 // add info to spell card
 Hooks.on(customGlobalHooks.itemGetTypeChatData, (
     /** @type {ItemPF} */ item,

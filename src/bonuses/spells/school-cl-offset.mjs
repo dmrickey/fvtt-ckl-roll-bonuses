@@ -10,13 +10,6 @@ const key = 'schoolClOffset';
 const formulaKey = 'schoolClOffsetFormula';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#*modify-spell-caster-level-(all-spells,-specific-school,-or-spec';
 
-Hooks.once('ready', () =>
-    SpecificBonuses.registerSpecificBonus(
-        { journal, key },
-        formulaKey,
-    )
-);
-
 FormulaCacheHelper.registerUncacheableDictionaryFlag(key);
 FormulaCacheHelper.registerDictionaryFlag(formulaKey);
 
