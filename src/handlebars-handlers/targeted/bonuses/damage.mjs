@@ -10,6 +10,8 @@ import { localize } from "../../../util/localize.mjs";
  * @param {string} args.key
  * @param {string} [args.tooltip]
  * @param {HTMLElement} args.parent
+ * @param {object} [options]
+ * @param {boolean} [options.canEdit] - true (default)
  */
 export function damageInput({
     item,
@@ -17,7 +19,9 @@ export function damageInput({
     key,
     parent,
     tooltip,
-}) {
+}, {
+    canEdit = true,
+} = {}) {
     const critChoices = {
         crit: localize('PF1.CritDamageBonusFormula'),
         nonCrit: localize('PF1.NonCritDamageBonusFormula'),
@@ -36,6 +40,7 @@ export function damageInput({
         journal,
         label: isHealing ? localize('PF1.HealingFormula') : localize('PF1.DamageFormula'),
         parts,
+        readonly: !canEdit,
         tooltip,
     };
 
@@ -156,5 +161,5 @@ export function damageInput({
         });
     });
 
-    addNodeToRollBonus(parent, div, item);
+    addNodeToRollBonus(parent, div, item, canEdit);
 }

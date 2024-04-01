@@ -12,10 +12,11 @@ import { createTemplate, templates } from "../templates.mjs";
  * @param {string} [args.label]
  * @param {string} [args.tooltip]
  * @param {HTMLElement} args.parent,
- * @param {object} [o]
- * @param {string} [o.placeholder]
- * @param {boolean} [o.isFormula]
- * @param {boolean} [o.isModuleFlag] - false (default) if this is a dictionary flag, true if this is a data flag
+ * @param {object} [options]
+ * @param {boolean} [options.canEdit] - true (default)
+ * @param {string} [options.placeholder]
+ * @param {boolean} [options.isFormula]
+ * @param {boolean} [options.isModuleFlag] - false (default) if this is a dictionary flag, true if this is a data flag
  */
 export function textInput({
     current = '',
@@ -26,9 +27,10 @@ export function textInput({
     parent,
     tooltip = '',
 }, {
-    placeholder = '',
+    canEdit = true,
     isFormula = true,
     isModuleFlag = false,
+    placeholder = '',
 } = {}
 ) {
     current ||= isModuleFlag
@@ -46,6 +48,7 @@ export function textInput({
             key,
             label,
             placeholder,
+            readonly: !canEdit,
             tooltip,
         },
     );
@@ -64,5 +67,5 @@ export function textInput({
         },
     );
 
-    addNodeToRollBonus(parent, div, item);
+    addNodeToRollBonus(parent, div, item, canEdit);
 }

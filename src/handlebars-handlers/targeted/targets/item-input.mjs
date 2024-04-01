@@ -14,6 +14,8 @@ import { createTemplate, templates } from "../../templates.mjs";
  * @param {string} [args.label]
  * @param {HTMLElement} args.parent
  * @param {string} [args.tooltip]
+ * @param {object} [options]
+ * @param {boolean} [options.canEdit] - true (default)
  */
 export function showItemInput({
     filter,
@@ -23,7 +25,9 @@ export function showItemInput({
     label = '',
     parent,
     tooltip = '',
-}) {
+}, {
+    canEdit = true,
+} = {}) {
     if (!item?.actor) return;
 
     label ||= localizeBonusLabel(key);
@@ -48,6 +52,7 @@ export function showItemInput({
         current,
         journal,
         label,
+        readonly: !canEdit,
         tooltip,
     };
     const div = createTemplate(templates.editableIcons, templateData);
@@ -64,7 +69,7 @@ export function showItemInput({
         });
     });
 
-    addNodeToRollBonus(parent, div, item);
+    addNodeToRollBonus(parent, div, item, canEdit);
 }
 
 /** @ts-ignore */

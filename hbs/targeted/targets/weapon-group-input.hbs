@@ -8,5 +8,7 @@ current: { key1: label1, key2: label2, ... }
       <li class="tag {{@key}}">{{this}}</li>
     {{/each}}
   </ul>
+  {{#unless readonly}}
   <a data-options="weaponGroups"><i class="fas fa-edit"></i></a>
+  {{/unless}}
 </div>

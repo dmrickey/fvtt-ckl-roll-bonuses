@@ -178,7 +178,15 @@
   - changes are generated and applied too early and too broadly in the system prep. I can either create a change that applies to everything (pointless) or I can create a specific change that exists for the specified target, but it's created too late to both be reduced to the best bonus type and actually be added to the roll
 
 # This release must include
+- make damage picker work with readonly
+- pass "canEdit" to `addToRollBonus`
+  - then `addToRollBonus` can `hide()` the config button if it's currently readonly
 - verify
+  - bonus picker button is hidden on sheets that can't be edited
+  - make sure readonly works
+  - look at classes on "edit icons" and make sure they're the same so one isn't darker than the other
+  - label on editable icons (it's not using label partial)
+  - label on checked-items (it's wrapping the label partial in a form-group, delete that wrapper and verify if it's necessary or not)
   - damage target
   - double check input labels for all specific bonuses
   - function target

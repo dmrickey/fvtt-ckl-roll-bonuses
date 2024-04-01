@@ -26,9 +26,6 @@ export const templates =/** @type {const} */ ({
     targetWeaponGroup: `modules/${MODULE_NAME}/hbs/targeted/targets/weapon-group-input.hbs`,
     tokenApp: `modules/${MODULE_NAME}/hbs/targeted/targets/token-application.hbs`,
 
-    // targeted - bonus or target
-    textInputList: `modules/${MODULE_NAME}/hbs/targeted/text-input-list.hbs`,
-
     // bonus picker application
     bonusPicker: `modules/${MODULE_NAME}/hbs/bonus-picker.hbs`,
     bonusPickerItem: `modules/${MODULE_NAME}/hbs/bonus-picker-item.hbs`,

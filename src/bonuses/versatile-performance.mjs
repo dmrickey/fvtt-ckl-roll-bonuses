@@ -171,9 +171,9 @@ Hooks.on('renderItemSheet', (
 ) => {
     if (!isEditable) return;
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
+    if (!actor) return;
 
     const name = item?.name?.toLowerCase() ?? '';
-    if (!actor) return;
 
     const currentVP = item.system.flags.dictionary[key];
     if (!currentVP && currentVP !== '') {
@@ -262,5 +262,5 @@ Hooks.on('renderItemSheet', (
     skill1Select?.addEventListener('change', updateVP);
     skill2Select?.addEventListener('change', updateVP);
 
-    addNodeToRollBonus(html, div, item);
+    addNodeToRollBonus(html, div, item, isEditable);
 });

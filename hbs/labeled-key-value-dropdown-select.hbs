@@ -1,17 +1,12 @@
-{{!--
-args:
-{
-choices: { key: string, label: string}[]
-current: string (key for current choice),
-key: string (used for uniquely identifying this selector),
-label: string (label for selector),
-}
---}}
 <div class="form-group">
     {{> "modules/ckl-roll-bonuses/hbs/label.hbs"}}
     <div class="form-fields">
+        {{#if readonly}}
+            <input type="text" readonly value="{{current.label}}" />
+        {{else}}
         <select id="key-value-selector-{{key}}">
             {{selectOptions choices selected=current nameAttr="key" labelAttr="label"}}
         </select>
+        {{/if}}
     </div>
 </div>

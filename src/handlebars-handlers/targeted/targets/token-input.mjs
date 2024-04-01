@@ -14,6 +14,8 @@ import { TokenSelectorApp } from "./token-selector-app.mjs";
  * @param {string} [args.label]
  * @param {string} [args.tooltip]
  * @param {HTMLElement} args.parent
+ * @param {object} [options]
+ * @param {boolean} [options.canEdit] - true (default)
  */
 export function showTokenInput({
     item,
@@ -22,7 +24,9 @@ export function showTokenInput({
     label = '',
     parent,
     tooltip = '',
-}) {
+}, {
+    canEdit = true,
+} = {}) {
     label ||= localizeBonusLabel(key);
     tooltip ||= localizeBonusTooltip(key);
 
@@ -41,6 +45,7 @@ export function showTokenInput({
         current,
         journal,
         label,
+        readonly: !canEdit,
         tooltip,
     };
     const div = createTemplate(templates.editableIcons, templateData);
@@ -53,5 +58,5 @@ export function showTokenInput({
         });
     });
 
-    addNodeToRollBonus(parent, div, item);
+    addNodeToRollBonus(parent, div, item, canEdit);
 }

@@ -9,7 +9,6 @@ Hooks.on(
         /** @type {[HTMLElement]} */[html],
         /** @type {unknown} */ _data
     ) => {
-        if (!isEditable) return;
-        addNodeToRollBonus(html, null, item);
+        addNodeToRollBonus(html, null, item, isEditable);
     }
 );

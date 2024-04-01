@@ -1,6 +1,11 @@
 <div class="form-group roll-bonuses">
     {{> "modules/ckl-roll-bonuses/hbs/label.hbs"}}
     <div class="form-fields">
-        <input type="checkbox" value="{{current}}" id="checkbox-input-{{key}}" />
+        <input
+            type="checkbox"
+            value="{{current}}"
+            id="checkbox-input-{{key}}"
+            {{#if readonly}}disabled{{/if}}
+        />
     </div>
 </div>

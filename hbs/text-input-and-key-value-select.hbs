@@ -1,10 +1,21 @@
 <div class="form-group input-select roll-bonuses">
     {{> "modules/ckl-roll-bonuses/hbs/label.hbs"}}
     <div class="form-fields">
-        <input type="text" class="formula" value="{{formula}}" id="text-input-{{textKey}}"
-            placeholder="{{placeholder}}" />
+        <input
+            type="text"
+            class="formula"
+            value="{{formula}}"
+            id="text-input-{{textKey}}"
+            placeholder="{{placeholder}}"
+            {{#if readonly}}readonly{{/if}}
+        />
+
+        {{#if readonly}}
+            <input type="text" readonly value="{{current.label}}" />
+        {{else}}
         <select id="key-value-selector-{{selectKey}}">
             {{selectOptions choices selected=current nameAttr="key" labelAttr="label"}}
         </select>
+        {{/if}}
     </div>
 </div>

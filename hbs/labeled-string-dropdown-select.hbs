@@ -1,15 +1,9 @@
-{{!--
-args:
-{
-choices: string[]
-current: string (current choice),
-key: string (used for uniquely identifying this selector), // todo
-label: string (label for selector),
-}
---}}
 <div class="form-group">
     {{> "modules/ckl-roll-bonuses/hbs/label.hbs"}}
     <div class="form-fields">
+        {{#if readonly}}
+            <input type="text" readonly value="{{current}}" />
+        {{else}}
         <select name="string-selector" id="string-selector-{{key}}">
             {{#select current}}
             {{#each choices}}
@@ -17,5 +11,6 @@ label: string (label for selector),
             {{/each}}
             {{/select}}
         </select>
+        {{/if}}
     </div>
 </div>

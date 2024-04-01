@@ -12,8 +12,9 @@ import { createTemplate, templates } from "../templates.mjs";
  * @param {string} [args.label]
  * @param {HTMLElement} args.parent,
  * @param {string} [args.tooltip]
- * @param {object} [o]
- * @param {boolean} [o.isModuleFlag] - false (default) if this is a dictionary flag, true if this is a data flag
+ * @param {object} [options]
+ * @param {boolean} [options.canEdit] - true (default)
+ * @param {boolean} [options.isModuleFlag] - false (default) if this is a dictionary flag, true if this is a data flag
  */
 export function checkboxInput({
     current = false,
@@ -24,6 +25,7 @@ export function checkboxInput({
     parent,
     tooltip = '',
 }, {
+    canEdit = true,
     isModuleFlag = false,
 } = {}
 ) {
@@ -40,6 +42,7 @@ export function checkboxInput({
             journal,
             key,
             label,
+            readonly: !canEdit,
             tooltip,
         },
     );
@@ -63,5 +66,5 @@ export function checkboxInput({
         },
     );
 
-    addNodeToRollBonus(parent, div, item);
+    addNodeToRollBonus(parent, div, item, canEdit);
 }

@@ -14,6 +14,7 @@ import { createTemplate, templates } from "../templates.mjs";
  * @param {string} [args.tooltip]
  * @param {HTMLElement} args.parent,
  * @param {object} [options]
+ * @param {boolean} [options.canEdit] - true (default)
  * @param {boolean} [options.isModuleFlag] - false (default) if this is a dictionary flag, true if this is a data flag
  */
 export function keyValueSelect({
@@ -26,6 +27,7 @@ export function keyValueSelect({
     parent,
     tooltip = '',
 }, {
+    canEdit = true,
     isModuleFlag = false,
 } = {}) {
     label ||= localizeBonusLabel(key);
@@ -52,6 +54,7 @@ export function keyValueSelect({
             journal,
             key,
             label,
+            readonly: !canEdit,
             tooltip,
         },
     );
@@ -69,5 +72,5 @@ export function keyValueSelect({
         },
     );
 
-    addNodeToRollBonus(parent, div, item);
+    addNodeToRollBonus(parent, div, item, canEdit);
 }

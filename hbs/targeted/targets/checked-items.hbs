@@ -1,9 +1,3 @@
-{{!--
-current: { key1: label1, key2: label2, ... }
-flag: used for id-ness
-label: string,
-// also reuses system classes for looks
---}}
 <div class="form-group weapon-groups weapon-type-input roll-bonuses">
   <div class="form-group">{{> "modules/ckl-roll-bonuses/hbs/label.hbs"}}</div>
   <ul class="traits-list tag-list">
@@ -11,5 +5,7 @@ label: string,
       <li class="tag {{@key}}">{{lookup ../options this}}</li>
     {{/each}}
   </ul>
+  {{#unless readonly}}
   <a class="trait-selector" data-options="{{flag}}"><i class="fas fa-edit"></i></a>
+  {{/unless}}
 </div>

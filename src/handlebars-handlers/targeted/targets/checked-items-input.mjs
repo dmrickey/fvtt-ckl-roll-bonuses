@@ -13,6 +13,8 @@ import { createTemplate, templates } from "../../templates.mjs";
  * @param {string} [args.tooltip]
  * @param {string[] | {[key: string]: string}} args.options
  * @param {HTMLElement} args.parent
+ * @param {object} [options]
+ * @param {boolean} [options.canEdit] - true (default)
  */
 export function showChecklist({
     item,
@@ -22,7 +24,9 @@ export function showChecklist({
     options,
     parent,
     tooltip = '',
-}) {
+}, {
+    canEdit = true,
+} = {}) {
     label ||= localizeBonusLabel(key);
     tooltip ||= localizeBonusTooltip(key);
 
@@ -36,6 +40,7 @@ export function showChecklist({
         journal,
         label,
         options,
+        readonly: !canEdit,
         tooltip,
     };
     const div = createTemplate(templates.checkedItems, templateData);
@@ -71,5 +76,5 @@ export function showChecklist({
         });
     });
 
-    addNodeToRollBonus(parent, div, item);
+    addNodeToRollBonus(parent, div, item, canEdit);
 }

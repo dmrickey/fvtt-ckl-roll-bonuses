@@ -11,6 +11,8 @@ import { localize, localizeBonusLabel, localizeBonusTooltip } from "../../util/l
  * @param {string} [args.label]
  * @param {HTMLElement} args.parent
  * @param {string} [args.tooltip]
+ * @param {object} [options]
+ * @param {boolean} [options.canEdit] - true (default)
  */
 export function textInputAndKeyValueSelect({
     item,
@@ -20,7 +22,9 @@ export function textInputAndKeyValueSelect({
     select,
     text,
     tooltip = '',
-}) {
+}, {
+    canEdit = true
+} = {}) {
     label ||= localizeBonusLabel(select.key);
     tooltip ||= localizeBonusTooltip(select.key);
 
@@ -35,10 +39,12 @@ export function textInputAndKeyValueSelect({
             current: select.current,
             formula: text.current,
             journal,
-            selectKey: select.key,
-            textKey: text.key,
             label,
             placeholder: text.placeholder || localize('PF1.Formula'),
+            readonly: !canEdit,
+            selectKey: select.key,
+            textKey: text.key,
+            tooltip,
         },
     );
 
@@ -62,5 +68,5 @@ export function textInputAndKeyValueSelect({
         },
     );
 
-    addNodeToRollBonus(parent, div, item);
+    addNodeToRollBonus(parent, div, item, canEdit);
 }

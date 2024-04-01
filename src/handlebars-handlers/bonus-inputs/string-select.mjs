@@ -12,6 +12,8 @@ import { createTemplate, templates } from "../templates.mjs";
  * @param {string} [args.label]
  * @param {string} [args.tooltip]
  * @param {HTMLElement} args.parent
+ * @param {object} [options]
+ * @param {boolean} [options.canEdit] - true (default)
  */
 export function stringSelect({
     choices,
@@ -22,7 +24,9 @@ export function stringSelect({
     label = '',
     parent,
     tooltip = '',
-}) {
+}, {
+    canEdit = true,
+} = {}) {
     label ||= localizeBonusLabel(key);
     tooltip ||= localizeBonusTooltip(key);
 
@@ -39,6 +43,7 @@ export function stringSelect({
             journal,
             key,
             label,
+            readonly: !canEdit,
             tooltip,
         },
     );
@@ -54,5 +59,5 @@ export function stringSelect({
         },
     );
 
-    addNodeToRollBonus(parent, div, item);
+    addNodeToRollBonus(parent, div, item, canEdit);
 }

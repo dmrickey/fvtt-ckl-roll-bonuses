@@ -7,8 +7,9 @@ const containerId = 'ckl-roll-bonus-container';
  * @param {HTMLElement} itemSheetHtml
  * @param {Element?} child
  * @param {ItemPF?} item
+ * @param {boolean} canEdit
  */
-const addNodeToRollBonus = (itemSheetHtml, child, item) => {
+const addNodeToRollBonus = (itemSheetHtml, child, item, canEdit) => {
     const flagsContainer = itemSheetHtml.querySelector('.tab[data-tab="advanced"] .tags');
     if (!flagsContainer || !item) {
         return;
@@ -19,10 +20,18 @@ const addNodeToRollBonus = (itemSheetHtml, child, item) => {
         container = createTemplate(templates.rollBonusesContainer);
 
         const settings = container.querySelector(`.settings`);
-        settings?.addEventListener('click', (event) => {
-            event.preventDefault();
-            showBonusPicker({ item });
-        });
+        if (canEdit) {
+            settings?.addEventListener('click', (event) => {
+                event.preventDefault();
+                showBonusPicker({ item });
+            });
+        }
+        else if (settings) {
+            // @ts-ignore
+            settings.hidden = true;
+            // @ts-ignore
+            settings.style.display = 'none';
+        }
 
         flagsContainer.after(container);
     }
