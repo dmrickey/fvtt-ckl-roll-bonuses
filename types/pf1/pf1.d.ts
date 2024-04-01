@@ -274,7 +274,9 @@ declare global {
         id: string;
         img: string;
         isActive: boolean;
+        isOwner: boolean;
         name: string;
+        pack: string;
 
         parent: ActorPF | ItemPF;
 

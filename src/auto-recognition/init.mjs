@@ -8,5 +8,8 @@ Hooks.on(
         /** @type {ItemSheetPF} */ { item },
         /** @type {[HTMLElement]} */[html],
         /** @type {unknown} */ _data
-    ) => addNodeToRollBonus(html, null, item)
+    ) => {
+        if (!item.isOwner || item.pack) return;
+        addNodeToRollBonus(html, null, item);
+    }
 );

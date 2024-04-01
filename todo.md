@@ -197,7 +197,6 @@
 - Move crit hint into `init` so it only shows one hint
   - the name from each source can be the tooltip
 - Alphabetize specific bonuses in picker
-- Add safety check for "auto-configuration" for documents viewer doesn't own
 - Add example function to Function Target readme
 - organize `specific bonuses` on bonus picker
 - add a function to exclude Sources from bonus picker

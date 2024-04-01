@@ -228,6 +228,7 @@ Hooks.on('renderItemSheet', (
     /** @type {unknown} */ _data
 ) => {
     const { actor, item } = itemSheet;
+    if (!item.isOwner || item.pack) return;
 
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 

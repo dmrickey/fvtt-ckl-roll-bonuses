@@ -68,6 +68,7 @@ Hooks.on('renderItemSheet', (
     /** @type {[HTMLElement]} */[html],
     /** @type {unknown} */ _data
 ) => {
+    if (!item.isOwner || item.pack) return;
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
     const hasFlag = item.system.flags.boolean?.hasOwnProperty(furiousFocus);
