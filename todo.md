@@ -192,8 +192,6 @@
   - function target
   - double check input labels for all specific bonuses
 - Show tooltip for all bonuses
-- Move crit hint into `init` so it only shows one hint
-  - the name from each source can be the tooltip
 - Alphabetize specific bonuses in picker
 - Add example function to Function Target readme
 - organize `specific bonuses` on bonus picker
