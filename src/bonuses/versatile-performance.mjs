@@ -241,7 +241,7 @@ Hooks.on('renderItemSheet', (
         performs,
         skill1,
         skill2,
-        tooltip: localize('versatilePerformance.tooltip'),
+        tooltip: localize('bonuses.tooltip.versatile-performance'),
     };
 
     const div = createTemplate(templates.versatilePerformance, templateData);

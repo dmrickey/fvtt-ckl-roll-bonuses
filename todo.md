@@ -2,7 +2,6 @@
 
 - [TODO](#todo)
 - [UI](#ui)
-  - [Add In-Game Documentation](#add-in-game-documentation)
 - [Bonus Targets](#bonus-targets)
   - [Bonuses](#bonuses)
   - [Targets](#targets)
@@ -12,12 +11,10 @@
   - [Ranger](#ranger)
 - [Feats](#feats)
   - [Bomber's eye](#bombers-eye)
-  - [Improved Critical](#improved-critical)
   - [Longshot](#longshot)
   - [Snake Sidewind](#snake-sidewind)
   - [Spell Perfection](#spell-perfection)
   - [Spirited Charge](#spirited-charge)
-  - [Weapon Finesse](#weapon-finesse)
 - [Racial Features](#racial-features)
   - [Sylph](#sylph)
   - [Kobold](#kobold)
@@ -33,6 +30,7 @@
 - [Housekeeping](#housekeeping)
 - [Checklist for new (and existing features)](#checklist-for-new-and-existing-features)
 - [Deprecate](#deprecate)
+- [Add Auto Config](#add-auto-config)
 - [Add Quench Testings](#add-quench-testings)
 - [Add create hooks for initializing some items (like anything based off of name/id)](#add-create-hooks-for-initializing-some-items-like-anything-based-off-of-nameid)
 - [in pf1 V10](#in-pf1-v10)
@@ -44,9 +42,7 @@
   - (see 3.0 scaffolding branch for a super rought start on this)
 
 # UI
-## Add In-Game Documentation
-- create a compendium with details on how to configure each bonus
-  - link to specific compendium page for this bonus when it's detected on the sheet
+- Add readonly mode to all inputs so you can still see the configuration if you can't edit (i.e. in a compendium)
 - ### Add text filter to item input target
 
 # Bonus Targets
@@ -69,8 +65,8 @@
     - The default layout will group subskills under the base skill and checking the base skill will automatically check all subskills
 - While in Combat
   - [Scarred by War](https://www.aonprd.com/TraitDisplay.aspx?ItemName=Scarred%20by%20War) (used to grant diplomacy bonus while not in combat)
-
-*Would deprecate everything under "spells"
+- add a way to affect other tokens (i.e. cavalier challenge which gives them -2 attack vs other targets)
+- inverse target - effect all tokens _except_ the tokens I have targets
 
 # Class Features
 ## Cleric
@@ -89,8 +85,6 @@
 # Feats
 ## Bomber's eye
 - Increase throwing range
-## Improved Critical
-- Selects individual weapon types (like Weapon Focus) and grants keen to all of those
 ## Longshot
 - Increase bow range
 ## Snake Sidewind
@@ -99,8 +93,6 @@
 - https://www.d20pfsrd.com/feats/general-feats/spell-perfection/
 ## Spirited Charge
 - Double Damage without critting
-## Weapon Finesse
-- Automatically switch to using dex for attack
 
 
 # Racial Features
@@ -141,8 +133,6 @@
 
 ## Targeting
 - show warning if target has an inappropriate bonus
-- add a way to affect other tokens (i.e. cavalier challenge which gives them -2 attack vs other targets)
-- inverse target - effect all tokens _except_ the tokens I have targets
 - add checkbox to toggle between union (current implementation) and intersection (item has to supply all targeting requirements)
 
 # Housekeeping
@@ -165,6 +155,9 @@
 - all specific DC/CL bonuses (after v10 once descriptor-based targeting is available)
 - specific crit bonuses
 
+# Add Auto Config
+- Improved Critical
+
 # Add Quench Testings
 # Add create hooks for initializing some items (like anything based off of name/id)
 
@@ -185,23 +178,22 @@
   - changes are generated and applied too early and too broadly in the system prep. I can either create a change that applies to everything (pointless) or I can create a specific change that exists for the specified target, but it's created too late to both be reduced to the best bonus type and actually be added to the roll
 
 # This release must include
-- localize
-  - bonuses.tooltip.all-spell-cl
-  - bonuses.tooltip.genericSpellDC
-  - bonuses.tooltip.elemental-cl
-  - bonuses.tooltip.elemental-dc
-  - bonuses.tooltip.school-dc
-  - bonuses.tooltip.schoolClOffset
-  - versatilePerformance.tooltip
-  - bonuses.tooltip.racial-weapon-focus-default-race
 - verify
   - damage target
-  - function target
   - double check input labels for all specific bonuses
+  - function target
+  - racial weapon focus
+    - make sure the default is recognized
+    - make sure it gives +1 to expected racially tagged weapons
+  - Open up "all bonus types" buff on `player1` and make sure everything is localized
+  - Open up bonus picker and make sure everything is localized
 - Show tooltip for all bonuses
 - Alphabetize specific bonuses in picker
 - Add example function to Function Target readme
 - organize `specific bonuses` on bonus picker
 - add a function to exclude Sources from bonus picker
 - For `specific bonuses`, add "extra keys" as a sublist of child items
-- Open up "all bonus types" buff on `player1` and verify 
+- Use `sheet.isEditable` for verifying if the user can edit the sheet
+- Add FAQ to readme
+  - I can't find the weapon type I want for Weapon Focus?
+    - When determining which types are available, **Roll Bonuses**`** looks at all of the attacks and weapons on your sheet, and uses those to provide options. If the option you're looking for is not availble, then your weapon is not properly configured with its **Base Equipment Type**. All weapons and natural attacks (found in Monster Abilities) provided by the system are pre-configured with the proper values. If you're using a custom-made item or using an item pulled out of a compendium before pf1 v9, then you'll need to make sure to configure this value yourself.

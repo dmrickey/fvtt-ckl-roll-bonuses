@@ -8,28 +8,31 @@ import { registerSetting } from "../../util/settings.mjs";
 import { SpecificBonuses } from '../all-specific-bonuses.mjs';
 import { gnomeWeaponFocusId, racialWeaponFocusKey, weaponFocusKey } from "./ids.mjs";
 
-const key = 'racial-weapon-focus-default-race';
+const key = racialWeaponFocusKey;
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#weapon-focus';
-
-registerSetting({ key, scope: 'client' });
-registerSetting({ key: racialWeaponFocusKey, scope: 'client' });
 
 Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({
     journal,
-    key: racialWeaponFocusKey,
-    label: localize(`settings.${racialWeaponFocusKey}.name`),
+    key,
 }));
 
 class Settings {
-    static get racialWeaponFocus() { return Settings.#getSetting(racialWeaponFocusKey); }
-    static get race() { return Settings.#getSetting(key); }
+    static defaultRaceKey = 'racial-weapon-focus-default-race';
+
+    static get racialWeaponFocus() { return Settings.#getSetting(key); }
+    static get defaultRace() { return Settings.#getSetting(this.defaultRaceKey); }
     // @ts-ignore
     static #getSetting(/** @type {string} */key) { return game.settings.get(MODULE_NAME, key).toLowerCase(); }
+
+    static {
+        registerSetting({ key, scope: 'client' });
+        registerSetting({ key: this.defaultRaceKey, scope: 'client' });
+    }
 }
 
 // register hint on source
 registerItemHint((hintcls, _actor, item, _data) => {
-    const current = item.getItemDictionaryFlag(racialWeaponFocusKey);
+    const current = item.getItemDictionaryFlag(key);
     if (!current) {
         return;
     }
@@ -42,18 +45,18 @@ registerItemHint((hintcls, _actor, item, _data) => {
 
 // register hint on focused weapon/attack
 registerItemHint((hintcls, actor, item, _data) => {
-    if (item.type !== 'attack' && item.type !== 'weapon') return;
+    if (!['attack', 'weapon'].includes(item.type)) return;
 
     const tags = (item.system.tags || []).map((tag) => tag.toLocaleLowerCase());
 
     const helper = new KeyedDFlagHelper(actor, {
         mustHave: {
-            [racialWeaponFocusKey]: (value) => tags.includes(`${value}`),
+            [key]: (value) => tags.includes(`${value}`.toLocaleLowerCase()),
         }
-    }, racialWeaponFocusKey);
+    }, key);
 
     if (helper.hasAnyFlags()) {
-        const label = localize(`settings.${racialWeaponFocusKey}.name`);
+        const label = localize(`settings.${key}.name`);
         return hintcls.create(label, [], {});
     }
 });
@@ -72,9 +75,9 @@ function getAttackSources(item, sources) {
 
     const helper = new KeyedDFlagHelper(actor, {
         mustHave: {
-            [racialWeaponFocusKey]: (value) => tags.includes(`${value}`),
+            [key]: (value) => tags.includes(`${value}`),
         }
-    }, racialWeaponFocusKey);
+    }, key);
 
     if (helper.hasAnyFlags()) {
         sources.push({ value: 1, name: localizeBonusLabel(weaponFocusKey), modifier: 'untyped', sort: -100 });
@@ -96,9 +99,9 @@ function addWeaponFocusBonus({ actor, item, shared }) {
 
     const helper = new KeyedDFlagHelper(actor, {
         mustHave: {
-            [racialWeaponFocusKey]: (value) => tags.includes(`${value}`),
+            [key]: (value) => tags.includes(`${value}`),
         }
-    }, racialWeaponFocusKey);
+    }, key);
 
     if (helper.hasAnyFlags()) {
         shared.attackBonus.push(`${1}[${localizeBonusLabel(weaponFocusKey)}]`);
@@ -117,18 +120,14 @@ Hooks.on('renderItemSheet', (
     const name = item?.name?.toLowerCase() ?? '';
     const sourceId = item?.flags.core?.sourceId ?? '';
     const isRacial = sourceId.includes(gnomeWeaponFocusId)
-        || item.system.flags.dictionary.hasOwnProperty(racialWeaponFocusKey)
-        || name.includes(Settings.racialWeaponFocus);
+        || item.system.flags.dictionary.hasOwnProperty(key)
+        || name.includes(Settings.defaultRace);
     if (!isRacial) return;
 
-    const current = item.getItemDictionaryFlag(racialWeaponFocusKey);
-
     textInput({
-        current,
         item,
         journal,
         key,
-        label: localize(`settings.${racialWeaponFocusKey}.name`),
         parent: html,
     }, {
         isFormula: false,

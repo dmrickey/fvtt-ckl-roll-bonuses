@@ -56,7 +56,7 @@ export function showBonusPicker({
             key: bonus.key,
             label: bonus.label || localizeBonusLabel(bonus.key),
             path: `specifics.${i}`,
-            tooltip: localizeBonusTooltip(bonus.key),
+            tooltip: bonus.tooltip || localizeBonusTooltip(bonus.key),
             value: currentSpecificBonuses.includes(bonus.key),
         })),
     });

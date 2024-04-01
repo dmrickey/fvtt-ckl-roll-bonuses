@@ -1264,11 +1264,19 @@ declare global {
     }
 
     interface ItemSheetPF {
+        actor: ActorPF | null;
         appId: number;
+        closing: boolean;
+        document: ItemPF;
         editors: { [key: string]: object };
+        element: HTMLElement;
         filepickers: unknown[];
+        id: string;
+        isEditable: boolean;
+        item: ItemPF;
         object: ItemPF;
         options: unknown;
+        popOut: boolean;
         position: {
             height: number;
             left: number;
@@ -1277,14 +1285,6 @@ declare global {
             width: number;
             zIndex: number;
         };
-        id: string;
-        actor: ActorPF | null;
-        closing: boolean;
-        document: ItemPF;
-        element: HTMLElement;
-        isEditable: boolean;
-        item: ItemPF;
-        popOut: boolean;
         rendered: boolean;
         template: string;
         title: string;
