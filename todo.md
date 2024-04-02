@@ -185,22 +185,22 @@
 - make damage picker work with readonly
 - verify
   - bonus picker button is hidden on sheets that can't be edited
-  - make sure readonly works (add observer permissions for player1 actor to Player 2)
+  - make sure readonly works (add observer permissions for player1 actor to Player 2 and look at "has all bonuses" buff)
   - look at classes on "edit icons" and make sure they're the same so one isn't darker than the other
-  - label on editable icons (it's not using label partial)
-  - label on checked-items (it's wrapping the label partial in a form-group, delete that wrapper and verify if it's necessary or not)
+  - <label> on editable icons (it's not using label partial)
+  - <label> on checked-items (it's wrapping the label partial in a form-group, delete that wrapper and verify if it's necessary or not)
   - damage target
   - double check input labels for all specific bonuses
   - racial weapon focus
     - make sure the default is recognized
     - make sure it gives +1 to expected racially tagged weapons
   - Open up "all bonus types" buff on `player1` and make sure everything is localized
-  - Open up bonus picker and make sure everything is localized
   - make sure static setting registration works
   - Alphabetize specific bonuses in picker
   - organize `specific bonuses` on bonus picker
   - For `specific bonuses`, add "extra keys" as a sublist of child items
-- Add example function to Function Target readme
+- Function
+  - Update journal formatting so it has the same styling from below
 - Maybe add example on how to target a specific Spell?
 - Update Smite Evil example for "Target Evil"
 - Add FAQ to readme
@@ -212,3 +212,26 @@
     - I have no idea. Maybe. I'm always updating my list with suggestions so feel free to ping me on discord and tell me what you have in mind.
   - Finesse Targeting isn't working
     - For a weapon to work with Finesse Targeting, it needs to have the `finesse` property checked on the weapon itself. You can find this in the weapon's details. Unfortunately, once an attack has been created, there is no longer an option for this, you can specifically add a `finesse-override` boolean flag so that this mod can find it. Also, any weapon/attack in the Natural Weapons weapon group is finesse-able. As long as at least one of those three criteria are fulfilled, then finesse targeting should be able to find the proper target.
+
+The `Custom Targeting Function` field takes a javascript function that is executed to determine what to target. This function takes a single argument. That argument can either be an ItemPF (`pf1.documents.item.ItemPF` or any of its subclasses as shown in the example below), an ActionUse (`pf1.actionUse.ActionUse`), or an ItemAction(`pf1.components.ItemAction`). You can type those into the debug console to get an idea of what's unique about each of them. So simply, the `Roll Bonuses` framework gives the function a "thing" and then the function returns true if the "thing" is a valid target (or false if it's a "thing" that shouldn't be targeted). This is essentially how all of Roll Bonuses targets work, but this makes it fully customizable.
+
+If you know javascript, but don't know enough about the particulars of PF1 to know what your options for this are, I suggest doing the following.
+1. Create a new actor
+   - don't give the actor any classes or anything else 
+2. Give that actor a specific weapon/spell/etc that you want to be affected.
+3. Give that actor a new buff with a Function target boolean flag.
+   - In the `Custom Targeting Function`, use this function `(doc) => console.log(doc)`. 
+4. Then take a look at the output in the console and see what values you can use to target.
+
+Here's a specific example that lets you target any spell that has `fear` in its descriptors (in v9 pf1 stores spell descriptors in `system.types`). Since the function accepts an `ItemAction` or an `ActionUse` (in addition to it being possibly being an `ItemPF`), the first line `const item = ...` is getting the item from either itself (if it's an item), or from the value's `item` property (i.e. if the passed in value is one of the two types of Actions).
+
+After having a reference to the `item`, I'm further verifying that the item is an `ItemSpellPF` since I only want this to work for spells. After I know it's a spell, I return true if it has the `"fear"` descriptor, otherwise it returns false.
+
+(doc) => {
+    const item = doc instanceof pf1.documents.item.ItemPF
+        ? doc
+        : doc.item;
+    if (item instanceof pf1.documents.item.ItemSpellPF) {
+        return !!(item.system?.types || '').includes('fear');
+    }
+}

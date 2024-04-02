@@ -1,3 +1,4 @@
+import { api } from '../util/api.mjs';
 import { localizeBonusLabel, localizeBonusTooltip } from '../util/localize.mjs';
 
 export class SpecificBonuses {
@@ -33,6 +34,8 @@ export class SpecificBonuses {
             .map((bonus) => bonus.key);
     }
 }
+
+api.SpecificBonuses = SpecificBonuses;
 
 class SpecificBonus {
     /**

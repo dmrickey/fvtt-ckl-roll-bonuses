@@ -1,9 +1,5 @@
 import { FRIENDLY_MODULE_NAME, MODULE_NAME } from './consts.mjs';
 
-// specifically set this up before importing anything else so it's ready to start being populated
-// game.modules.get(MODULE_NAME).api = {
-//     config: {},
-// };
 
 import { LocalHookHandler, customGlobalHooks, localHooks } from './util/hooks.mjs';
 
@@ -15,8 +11,10 @@ import { FormulaCacheHelper } from './util/flag-helpers.mjs';
 import { simplifyRollFormula } from './util/simplify-roll-formula.mjs';
 import { debugSetup } from './util/if-debug.mjs';
 import './auto-recognition/init.mjs';
-
+import { api } from './util/api.mjs';
 import './overrides/action-damage.mjs';
+
+Hooks.once('ready', () => game.modules.get(MODULE_NAME).api = api);
 
 /**
  * @param {() => any} wrapped
