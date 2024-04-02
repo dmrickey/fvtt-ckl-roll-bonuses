@@ -1,5 +1,4 @@
-
-/** @typedef {{ key: string, type: 'dictionary' | 'boolean', label: Nullable<string>, journal: string, tooltip?: Nullable<string>, parent?: Nullable<string> }} BonusRegistration */
+import { localizeBonusLabel, localizeBonusTooltip } from '../util/localize.mjs';
 
 export class SpecificBonuses {
 
@@ -9,16 +8,16 @@ export class SpecificBonuses {
      * @param {string} bonus.key
      * @param {Nullable<string>} [bonus.label]
      * @param {Nullable<string>?} [bonus.tooltip]
-     * @param {'dictionary' | 'boolean'} [bonus.type]
+     * @param {keyof SystemItemData['flags']} [bonus.type]
      * @param {Nullable<string>?} [bonus.parent]
      * @param  {...string} extraKeys
      */
     static registerSpecificBonus({ journal, label = null, key, type = 'dictionary', tooltip = undefined, parent }, ...extraKeys) {
-        this.allBonuses[key] = { extraKeys, journal, key, label, parent, tooltip, type };
+        this.allBonuses[key] = new SpecificBonus(extraKeys, journal, key, label, parent, tooltip, type);
     }
 
     /**
-     * @type {Record<string, BonusRegistration & {extraKeys: string[]}>}}
+     * @type {Record<string, SpecificBonus>}}
      */
     static allBonuses = {}
 
@@ -32,5 +31,34 @@ export class SpecificBonuses {
         return Object.values(this.allBonuses)
             .filter((bonus) => bonus.type === 'boolean')
             .map((bonus) => bonus.key);
+    }
+}
+
+class SpecificBonus {
+    /**
+     * @param {string[]} extraKeys
+     * @param {string} journal
+     * @param {string} key
+     * @param {Nullable<string>} label
+     * @param {Nullable<string>} parent
+     * @param {Nullable<string>} tooltip
+     * @param {keyof SystemItemData['flags']} type
+     */
+    constructor(
+        extraKeys,
+        journal,
+        key,
+        label,
+        parent,
+        tooltip,
+        type,
+    ) {
+        this.extraKeys = extraKeys;
+        this.journal = journal;
+        this.key = key;
+        this.label = label || localizeBonusLabel(key);
+        this.parent = parent;
+        this.tooltip = tooltip || localizeBonusTooltip(key);
+        this.type = type;
     }
 }

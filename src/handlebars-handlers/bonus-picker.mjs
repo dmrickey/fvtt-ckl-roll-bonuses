@@ -2,7 +2,7 @@
 import { SpecificBonuses } from '../bonuses/all-specific-bonuses.mjs';
 import { api } from '../util/api.mjs';
 import { intersection } from '../util/array-intersects.mjs';
-import { localize, localizeBonusLabel, localizeBonusTooltip } from '../util/localize.mjs';
+import { localize } from '../util/localize.mjs';
 import { templates } from './templates.mjs';
 
 /**
@@ -20,20 +20,31 @@ export function showBonusPicker({
     const currentBooleanKeys = Object.keys(item.system.flags.boolean);
     const currentDictionaryKeys = Object.keys(item.system.flags.dictionary);
 
-    const currentTargetSources = intersection(
-        api.allTargetTypes.map((source) => source.key),
+    const allBonuses = api.allBonusTypes
+        .filter((bonus) => !bonus.skipPicker)
+        .sort((a, b) => a.label.localeCompare(b.label));
+    const allTargets = api.allTargetTypes
+        .filter((bonus) => !bonus.skipPicker)
+        .sort((a, b) => a.label.localeCompare(b.label));
+    const specifics = Object.values(SpecificBonuses.allBonuses)
+        .sort((a, b) =>
+            !!a.parent || !!b.parent
+                ? 0
+                : a.label.localeCompare(b.label)
+        );
+
+    const currentBonusSources = intersection(
+        allBonuses.map((source) => source.key),
         currentBooleanKeys,
     );
-    const currentBonusSources = intersection(
-        api.allBonusTypes.map((source) => source.key),
+    const currentTargetSources = intersection(
+        allTargets.map((source) => source.key),
         currentBooleanKeys,
     );
     const currentSpecificBonuses = [
         ...intersection(currentBooleanKeys, SpecificBonuses.booleanKeys),
         ...intersection(currentDictionaryKeys, SpecificBonuses.dictionaryKeys),
     ];
-
-    const specifics = Object.values(SpecificBonuses.allBonuses);
 
     const data = /** @type {BonusPickerData} */ ({
         targets: api.allTargetTypes.map((source, i) => ({
@@ -58,9 +69,9 @@ export function showBonusPicker({
                 extraKeys: bonus.extraKeys,
                 journal: bonus.journal,
                 key: bonus.key,
-                label: bonus.label || localizeBonusLabel(bonus.key),
+                label: bonus.label,
                 path: `specifics.${i}`,
-                tooltip: bonus.tooltip || localizeBonusTooltip(bonus.key),
+                tooltip: bonus.tooltip,
                 value: currentSpecificBonuses.includes(bonus.key),
                 children: specifics
                     .filter((child) => child.parent === bonus.key)
@@ -68,17 +79,13 @@ export function showBonusPicker({
                         extraKeys: child.extraKeys,
                         journal: child.journal,
                         key: child.key,
-                        label: child.label || localizeBonusLabel(child.key),
+                        label: child.label,
                         path: `specifics.${i}.${ii}`,
-                        tooltip: child.tooltip || localizeBonusTooltip(child.key),
+                        tooltip: child.tooltip,
                         value: currentSpecificBonuses.includes(child.key),
                     })),
             })),
     });
-
-    data.bonuses.sort((a, b) => a.label.localeCompare(b.label));
-    data.specifics.sort((a, b) => a.label.localeCompare(b.label));
-    data.targets.sort((a, b) => a.label.localeCompare(b.label));
 
     const app = new BonusPickerApp(item, data);
     app.render(true);
@@ -88,7 +95,6 @@ export function showBonusPicker({
 /** @extends {DocumentSheet<BonusPickerData, ItemPF>} */
 class BonusPickerApp extends DocumentSheet {
     /**
-     *
      * @param {ItemPF} item
      * @param {BonusPickerData} data
      */

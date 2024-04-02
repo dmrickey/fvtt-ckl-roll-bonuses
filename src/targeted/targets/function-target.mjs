@@ -45,6 +45,31 @@ export class FunctionTarget extends BaseTarget {
     /**
      * @inheritdoc
      * @override
+     * @param {ItemPF | ActionUse | ItemAction} doc
+     * @returns {ItemPF[]}
+     */
+    static getSourcesFor(doc) {
+        const item = doc instanceof pf1.documents.item.ItemPF
+            ? doc
+            : doc.item;
+
+        if (!item?.actor) {
+            return [];
+        }
+
+        const sources = item.actor.itemFlags.boolean[this.key]?.sources ?? [];
+        const filtered = sources.filter((source) => {
+            const custom = source.getFlag(MODULE_NAME, this.key);
+            const func = eval(custom);
+            return !!custom && func(doc);
+        });
+
+        return filtered;
+    };
+
+    /**
+     * @inheritdoc
+     * @override
      * @param {object} options
      * @param {ActorPF | null | undefined} options.actor
      * @param {HTMLElement} options.html
@@ -90,28 +115,6 @@ export class FunctionTarget extends BaseTarget {
         }
     }
 
-    /**
-     * @inheritdoc
-     * @override
-     * @param {ItemPF | ActionUse | ItemAction} doc
-     * @returns {ItemPF[]}
-     */
-    static getSourcesFor(doc) {
-        const item = doc instanceof pf1.documents.item.ItemPF
-            ? doc
-            : doc.item;
-
-        if (!item?.actor) {
-            return [];
-        }
-
-        const sources = item.actor.itemFlags.boolean[this.key]?.sources ?? [];
-        const filtered = sources.filter((source) => {
-            const custom = source.getFlag(MODULE_NAME, this.key);
-            const func = eval(custom);
-            return !!custom && func(doc);
-        });
-
-        return filtered;
-    };
+    /** @override @returns { boolean } */
+    static get skipPicker() { return true; }
 }
