@@ -3,6 +3,17 @@ import { textInput } from '../../handlebars-handlers/bonus-inputs/text-input.mjs
 import { showEnabledLabel } from '../../handlebars-handlers/enabled-label.mjs';
 import { BaseTarget } from './base-target.mjs';
 
+/**
+ *
+   (doc) => {
+       const item = doc instanceof pf1.documents.item.ItemPF
+           ? doc
+           : doc.item;
+       if (item instanceof pf1.documents.item.ItemSpellPF) {
+           return !!(item.system?.types || '').includes('fear');
+       }
+   }
+ */
 export class FunctionTarget extends BaseTarget {
 
     static get #playerLabelKey() { return `${this.key}-player-label`; }

@@ -191,7 +191,6 @@
   - label on checked-items (it's wrapping the label partial in a form-group, delete that wrapper and verify if it's necessary or not)
   - damage target
   - double check input labels for all specific bonuses
-  - function target
   - racial weapon focus
     - make sure the default is recognized
     - make sure it gives +1 to expected racially tagged weapons
@@ -202,6 +201,14 @@
   - organize `specific bonuses` on bonus picker
   - For `specific bonuses`, add "extra keys" as a sublist of child items
 - Add example function to Function Target readme
+- Maybe add example on how to target a specific Spell?
+- Update Smite Evil example for "Target Evil"
 - Add FAQ to readme
   - I can't find the weapon type I want for Weapon Focus?
-    - When determining which types are available, **Roll Bonuses**`** looks at all of the attacks and weapons on your sheet, and uses those to provide options. If the option you're looking for is not availble, then your weapon is not properly configured with its **Base Equipment Type**. All weapons and natural attacks (found in Monster Abilities) provided by the system are pre-configured with the proper values. If you're using a custom-made item or using an item pulled out of a compendium before pf1 v9, then you'll need to make sure to configure this value yourself.
+    - When determining which types are available, **Roll Bonuses** looks at all of the attacks and weapons on your sheet, and uses those to provide options. If the option you're looking for is not availble, then your weapon is not properly configured with its **Base Equipment Type**. All weapons and natural attacks (found in Monster Abilities) provided by the system are pre-configured with the proper values. If you're using a custom-made item or using an item pulled out of a compendium before pf1 v9, then you'll need to make sure to configure this value yourself.
+  - How can I add +1 DC to `fear` spells for a Kobold Frightener or +1 to `mind-affecting` spells for a Psychic with Phrenic Amplification?
+    - See Function targeting.
+  - I have an idea, can you make Roll Bonuses do it?
+    - I have no idea. Maybe. I'm always updating my list with suggestions so feel free to ping me on discord and tell me what you have in mind.
+  - Finesse Targeting isn't working
+    - For a weapon to work with Finesse Targeting, it needs to have the `finesse` property checked on the weapon itself. You can find this in the weapon's details. Unfortunately, once an attack has been created, there is no longer an option for this, you can specifically add a `finesse-override` boolean flag so that this mod can find it. Also, any weapon/attack in the Natural Weapons weapon group is finesse-able. As long as at least one of those three criteria are fulfilled, then finesse targeting should be able to find the proper target.
