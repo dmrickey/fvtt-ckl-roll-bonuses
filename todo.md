@@ -204,16 +204,22 @@
   - Update journal formatting so it has the same styling from below
 - Maybe add example on how to target a specific Spell?
 - Update Smite Evil example for "Target Evil"
+- Make sure documentation for Targets and Bonuses both say something like
+  - Bonuses require at least one **Target** to work
+  - Targets require at least one **Bonus** to work
 - Add FAQ to readme
-  - I can't find the weapon type I want for Weapon Focus?
+  - I can't find the weapon type I want for Weapon Focus (or Armor Focus)?
     - When determining which types are available, **Roll Bonuses** looks at all of the attacks and weapons on your sheet, and uses those to provide options. If the option you're looking for is not availble, then your weapon is not properly configured with its **Base Equipment Type**. All weapons and natural attacks (found in Monster Abilities) provided by the system are pre-configured with the proper values. If you're using a custom-made item or using an item pulled out of a compendium before pf1 v9, then you'll need to make sure to configure this value yourself.
+
+    Armor Focus behaves the same way but checks only the armor in your inventory.
   - How can I add +1 DC to `fear` spells for a Kobold Frightener or +1 to `mind-affecting` spells for a Psychic with Phrenic Amplification?
-    - See Function targeting.
+    - See **Function targeting**.
   - I have an idea, can you make Roll Bonuses do it?
     - I have no idea. Maybe. I'm always updating my list with suggestions so feel free to ping me on discord and tell me what you have in mind.
   - Finesse Targeting isn't working
-    - For a weapon to work with Finesse Targeting, it needs to fulfill one of these three criteria. 
-      - It needs to be a weapon with the `finesse` property checked on the weapon itself. You can find this in the weapon's details. Unfortunately, once an attack has been created, there is no longer an option for this, you can specifically add a `finesse-override` boolean flag so that this mod can find it. Also, any weapon/attack in the Natural Weapons weapon group is finesse-able. As long as at least one of those three criteria are fulfilled, then finesse targeting should be able to find the proper target.
+    - Take a look at the criteria for **Finesse Targeting**
+  - I put a `bonus_...` on my weapon/spell/ability but it's not working.
+    - **Bonuses** don't work without being paired with a **Target**. Chances are your changes should go on a buff that's targeting a specific Item/Weapon Type/Weapon Group/etc. But if it is something you need only for that weapon that will always be enabled, then you can simply add the `target_self` target to turn on the bonuses for only that one item.
 
 The `Custom Targeting Function` field takes a javascript function that is executed to determine what to target. This function takes a single argument. That argument can either be an ItemPF (`pf1.documents.item.ItemPF` or any of its subclasses as shown in the example below), an ActionUse (`pf1.actionUse.ActionUse`), or an ItemAction(`pf1.components.ItemAction`). You can type those into the debug console to get an idea of what's unique about each of them. So simply, the `Roll Bonuses` framework gives the function a "thing" and then the function returns true if the "thing" is a valid target (or false if it's a "thing" that shouldn't be targeted). This is essentially how all of Roll Bonuses targets work, but this makes it fully customizable.
 
