@@ -57,7 +57,9 @@ export class ItemTarget extends BaseTarget {
             }
 
             /** @type {ItemPF[]} */
-            const targetedItems = targetedItemUuids.map((uuid) => fromUuidSync(uuid));
+            const targetedItems = targetedItemUuids
+                .map((uuid) => fromUuidSync(uuid))
+                .filter(truthiness);
             return !!targetedItems.find((ti) => ti.system.links.children.find(({ id }) => id === item.id));
         });
 

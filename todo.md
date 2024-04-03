@@ -183,8 +183,9 @@
 
 # This release must include
 - make damage picker work with readonly
+- Add readme info to "target item/spell/weapon" that gives info about targeting only works on the actor it's configured on and is not transferrable.
 - verify
-  - bonus picker button is hidden on sheets that can't be edited
+  - that bonus picker button is correctly hidden on sheets that can't be edited
   - make sure readonly works (add observer permissions for player1 actor to Player 2 and look at "has all bonuses" buff)
   - look at classes on "edit icons" and make sure they're the same so one isn't darker than the other
   - <label> on editable icons (it's not using label partial)
@@ -211,7 +212,8 @@
   - I have an idea, can you make Roll Bonuses do it?
     - I have no idea. Maybe. I'm always updating my list with suggestions so feel free to ping me on discord and tell me what you have in mind.
   - Finesse Targeting isn't working
-    - For a weapon to work with Finesse Targeting, it needs to have the `finesse` property checked on the weapon itself. You can find this in the weapon's details. Unfortunately, once an attack has been created, there is no longer an option for this, you can specifically add a `finesse-override` boolean flag so that this mod can find it. Also, any weapon/attack in the Natural Weapons weapon group is finesse-able. As long as at least one of those three criteria are fulfilled, then finesse targeting should be able to find the proper target.
+    - For a weapon to work with Finesse Targeting, it needs to fulfill one of these three criteria. 
+      - It needs to be a weapon with the `finesse` property checked on the weapon itself. You can find this in the weapon's details. Unfortunately, once an attack has been created, there is no longer an option for this, you can specifically add a `finesse-override` boolean flag so that this mod can find it. Also, any weapon/attack in the Natural Weapons weapon group is finesse-able. As long as at least one of those three criteria are fulfilled, then finesse targeting should be able to find the proper target.
 
 The `Custom Targeting Function` field takes a javascript function that is executed to determine what to target. This function takes a single argument. That argument can either be an ItemPF (`pf1.documents.item.ItemPF` or any of its subclasses as shown in the example below), an ActionUse (`pf1.actionUse.ActionUse`), or an ItemAction(`pf1.components.ItemAction`). You can type those into the debug console to get an idea of what's unique about each of them. So simply, the `Roll Bonuses` framework gives the function a "thing" and then the function returns true if the "thing" is a valid target (or false if it's a "thing" that shouldn't be targeted). This is essentially how all of Roll Bonuses targets work, but this makes it fully customizable.
 
@@ -225,7 +227,7 @@ If you know javascript, but don't know enough about the particulars of PF1 to kn
 
 Here's a specific example that lets you target any spell that has `fear` in its descriptors (in v9 pf1 stores spell descriptors in `system.types`). Since the function accepts an `ItemAction` or an `ActionUse` (in addition to it being possibly being an `ItemPF`), the first line `const item = ...` is getting the item from either itself (if it's an item), or from the value's `item` property (i.e. if the passed in value is one of the two types of Actions).
 
-After having a reference to the `item`, I'm further verifying that the item is an `ItemSpellPF` since I only want this to work for spells. After I know it's a spell, I return true if it has the `"fear"` descriptor, otherwise it returns false.
+After having a reference to the `item`, I'm further verifying that the item is an `ItemSpellPF` since I only want this to work for spells. After I know it's a spell, I return true if it has the `"fear"` descriptor, otherwise it returns false. You can easily modify this to target other descriptors by replacing `fear` with another one (e.g. `mind-affecting`).
 
 (doc) => {
     const item = doc instanceof pf1.documents.item.ItemPF
@@ -234,4 +236,29 @@ After having a reference to the `item`, I'm further verifying that the item is a
     if (item instanceof pf1.documents.item.ItemSpellPF) {
         return !!(item.system?.types || '').includes('fear');
     }
+}
+
+Here's another example on how to have a Target based on the tokens the user is targeting. This checks the targets' race to see if any of them are a catfolk.
+
+The method still accepts the item/action, but is not actually using it because this depends on targeted tokens. The javascript convention for that is to put an underscore in front of the argument name to indicate the argument isn't used in the method (it can also be omitted entirely). Then we grab all of the current user's targets, grab the actors from those targets, and then filter the list to just the actors that actually exist (there can be tokens on the map without actors, and if they don't have actors, then they obviously don't have a race). After we have the list or targeted actors, then we return true if any of them have the desired race.
+
+(_doc) => {
+    const currentTargets = [...game.user.targets]
+        .map(x => x.actor)
+        .filter(x => !!x);
+
+    return currentTargets.some((actor) => actor.race?.name === 'Catfolk');
+}
+
+Here's an example where the Target is only active while the user's HP is below 50%.
+
+(doc) => {
+    const item = doc instanceof pf1.documents.item.ItemPF
+        ? doc
+        : doc.item;
+
+    if (!item.actor) return false;
+
+    const { value, max } = item.actor.system.attributes.hp;
+    return value <= (max / 2);
 }
