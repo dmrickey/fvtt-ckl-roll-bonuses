@@ -184,9 +184,10 @@
 # This release must include
 - make damage picker work with readonly
 - Add readme info to "target item/spell/weapon" that gives info about targeting only works on the actor it's configured on and is not transferrable.
+- Rename `Generic Bonuses` and `Generic Targets` to just _Bonuses_ and _Targets_
 - verify
   - double check each journal link
-    - on character sheet
+    - on item sheet (i.e. All Bonuses... on player1)
     - within journals which reference other journals
   - damage target
   - double check input labels for all specific bonuses
