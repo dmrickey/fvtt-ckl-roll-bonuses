@@ -92,7 +92,7 @@ Hooks.on('renderItemSheet', (
         label: localize('PF1.Masterwork'),
         parent: html,
     }, {
-        canEdit: !isEditable,
+        canEdit: isEditable,
         isModuleFlag: true,
     });
     textInput({
@@ -102,7 +102,7 @@ Hooks.on('renderItemSheet', (
         label: localize('PF1.EnhancementBonus'),
         parent: html,
     }, {
-        canEdit: !isEditable,
+        canEdit: isEditable,
         isModuleFlag: true,
     });
     textInput({
@@ -112,7 +112,7 @@ Hooks.on('renderItemSheet', (
         label: localize('source.bonus.label.attack'),
         parent: html,
     }, {
-        canEdit: !isEditable,
+        canEdit: isEditable,
         isModuleFlag: true,
     });
     damageInput({
@@ -121,7 +121,7 @@ Hooks.on('renderItemSheet', (
         key: legacyAmmoDamageKey,
         parent: html,
     }, {
-        canEdit: !isEditable,
+        canEdit: isEditable,
     });
 });
 

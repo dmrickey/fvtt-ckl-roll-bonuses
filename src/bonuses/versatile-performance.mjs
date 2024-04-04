@@ -240,7 +240,7 @@ Hooks.on('renderItemSheet', (
     const templateData = {
         allSkills,
         base,
-        canEdit: !isEditable,
+        canEdit: isEditable,
         journal,
         label: localize('versatilePerformance.header'),
         performs,

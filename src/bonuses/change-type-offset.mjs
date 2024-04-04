@@ -79,6 +79,6 @@ Hooks.on('renderItemSheet', (
         select: { current, choices, key: bonusKey },
         text: { current: formula, key: formulaKey },
     }, {
-        canEdit: !isEditable,
+        canEdit: isEditable,
     });
 });

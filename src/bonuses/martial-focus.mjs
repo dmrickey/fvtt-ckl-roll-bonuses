@@ -193,6 +193,6 @@ Hooks.on('renderItemSheet', (
         key,
         parent: html
     }, {
-        canEdit: !isEditable,
+        canEdit: isEditable,
     });
 });

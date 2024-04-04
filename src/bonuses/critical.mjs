@@ -304,7 +304,7 @@ Hooks.on('renderItemSheet', (
             label: labelLookup(key),
             parent: html,
         }, {
-            canEdit: !isEditable,
+            canEdit: isEditable,
         });
     });
 });
