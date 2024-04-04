@@ -185,7 +185,6 @@
 - make damage picker work with readonly
 - Add readme info to "target item/spell/weapon" that gives info about targeting only works on the actor it's configured on and is not transferrable.
 - verify
-  - look at classes on "edit icons" and make sure they're the same so one isn't darker than the other
   - <label> on editable icons (it's not using label partial)
   - <label> on checked-items (it's wrapping the label partial in a form-group, delete that wrapper and verify if it's necessary or not)
   - damage target
@@ -195,3 +194,7 @@
     - make sure it gives +1 to expected racially tagged weapons
   - make sure static setting registration works
 - Update Smite Evil example for "Target Evil"
+- Item Targets are missing journal (no tooltip no link)
+  - Spell Targets
+  - Weapon and Attack Targets
+- Token Targets are missing journal (no tooltip no link)

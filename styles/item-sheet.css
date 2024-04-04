@@ -65,10 +65,6 @@
     visibility: hidden;
 }
 
-.pf1.sheet .roll-bonuses.editable-icon-input a {
-    flex: 0;
-}
-
 .pf1.sheet .roll-bonuses .form-fields .label {
     text-align: end;
 }
