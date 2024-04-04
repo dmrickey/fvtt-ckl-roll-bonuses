@@ -185,16 +185,12 @@
 - make damage picker work with readonly
 - Add readme info to "target item/spell/weapon" that gives info about targeting only works on the actor it's configured on and is not transferrable.
 - verify
-  - <label> on editable icons (it's not using label partial)
-  - <label> on checked-items (it's wrapping the label partial in a form-group, delete that wrapper and verify if it's necessary or not)
+  - double check each journal link
+    - on character sheet
+    - within journals which reference other journals
   - damage target
   - double check input labels for all specific bonuses
   - racial weapon focus
     - make sure the default is recognized
     - make sure it gives +1 to expected racially tagged weapons
   - make sure static setting registration works
-- Update Smite Evil example for "Target Evil"
-- Item Targets are missing journal (no tooltip no link)
-  - Spell Targets
-  - Weapon and Attack Targets
-- Token Targets are missing journal (no tooltip no link)

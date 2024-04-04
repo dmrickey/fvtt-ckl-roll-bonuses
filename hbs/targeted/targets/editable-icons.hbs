@@ -1,6 +1,5 @@
 <div class="form-group roll-bonuses editable-icon-input">
-    <label class="header">{{label}}</label>
-    {{!-- {{> "modules/ckl-roll-bonuses/hbs/label.hbs"}} TOOD --}}
+    <div class="form-group">{{> "modules/ckl-roll-bonuses/hbs/label.hbs"}}</div>
     <div class="form-fields">
         {{#each current}}
         <li data-index="{{@index}}" data-tooltip="{{this.name}}">
