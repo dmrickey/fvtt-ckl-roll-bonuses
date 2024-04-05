@@ -10,7 +10,10 @@ declare global {
         allBonusTypes: (typeof BaseBonus)[];
         allTargetTypes: (typeof BaseTarget)[];
         bonusTypeMap: Record<string, typeof BaseBonus>;
-        migrate(): Promise;
+        migrate: {
+            migrate(): Promise;
+            v1: {};
+        };
         sources: {
             BaseBonus: typeof BaseBonus;
             BaseSource: typeof BaseSource;
