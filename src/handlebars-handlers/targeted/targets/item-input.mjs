@@ -57,17 +57,19 @@ export function showItemInput({
     };
     const div = createTemplate(templates.editableIcons, templateData);
 
-    div.querySelectorAll('li,a').forEach((element) => {
-        element.addEventListener('click', (event) => {
-            event.preventDefault();
-            const options = {
-                currentUuids,
-                items,
-                path: `flags.${MODULE_NAME}.${key}`,
-            };
-            new ItemSelector(item, options).render(true);
+    if (canEdit) {
+        div.querySelectorAll('li,a').forEach((element) => {
+            element.addEventListener('click', (event) => {
+                event.preventDefault();
+                const options = {
+                    currentUuids,
+                    items,
+                    path: `flags.${MODULE_NAME}.${key}`,
+                };
+                new ItemSelector(item, options).render(true);
+            });
         });
-    });
+    }
 
     addNodeToRollBonus(parent, div, item, canEdit);
 }
