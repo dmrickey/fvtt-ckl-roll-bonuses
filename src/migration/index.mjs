@@ -55,6 +55,11 @@ export default async () => {
     Settings.migrationVersion = currentMigrationVersion;
 }
 
-api.migrate = async () => {
-    await v1.migrateV1();
+api.migrate = {
+    migrate: async () => {
+        await v1.migrateV1();
+    },
+    v1: {
+        migrateAmmoForActor: v1.migrateActor,
+    },
 };

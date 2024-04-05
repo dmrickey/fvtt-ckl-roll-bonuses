@@ -28,6 +28,17 @@ const migrateItem = async (item) => {
     }
 };
 
+/** @param {ActorPF} actor */
+export const migrateActor = async (actor) => {
+    log(`migrating items for actor '${actor?.name}'`);
+    if (actor?.items?.size) {
+        for (const item of actor.items) {
+            await migrateItem(item);
+        }
+    }
+    log('...finished migrating items');
+}
+
 const migrateGameItems = async () => {
     log('migrating game items');
 
