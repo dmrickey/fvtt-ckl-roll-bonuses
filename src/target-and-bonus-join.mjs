@@ -17,6 +17,19 @@ registerItemHint((hintcls, actor, item, _data) => {
 
     /** @type {Hint[]} */
     const allHints = [];
+
+    /** @type {string[]} */
+    const targetSourceHints = [];
+    // register hints on target source
+    item[MODULE_NAME].targets.forEach((targetType) => {
+        const hints = targetType.getHints(item);
+        if (hints?.length) {
+            targetSourceHints.push([...new Set([targetType.label, ...hints])].join('\n'));
+        }
+    });
+
+    /** @type {Hint[]} */
+    const bonusSourceHints = [];
     // register hints on bonus source
     item[MODULE_NAME].bonuses.forEach((bonusType) => {
         let hints = bonusType.getHints(item);
@@ -25,22 +38,36 @@ registerItemHint((hintcls, actor, item, _data) => {
             if (hints.length === 1 && hints[0] === bonusType.label) {
                 hints = [];
             }
-            allHints.push(hintcls.create(bonusType.label, [], { hint: hints.join('\n') }));
+
+            let classes = [];
+            let icon = '';
+            if (!targetSourceHints.length) {
+                classes.push('ckl-missing-source');
+                hints.push(localize('missing-targets'));
+                icon = 'fas fa-circle-exclamation';
+            }
+            bonusSourceHints.push(hintcls.create(
+                bonusType.label,
+                classes,
+                { hint: hints.join('\n'), icon },
+            ));
         }
     });
+    allHints.push(...bonusSourceHints);
 
-    /** @type {string[]} */
-    const targetHints = [];
-    // register hints on target source
-    item[MODULE_NAME].targets.forEach((targetType) => {
-        const hints = targetType.getHints(item);
-        if (hints?.length) {
-            targetHints.push([...new Set([targetType.label, ...hints])].join('\n'));
+    if (targetSourceHints.length) {
+        let classes = [];
+        let icon = '';
+        if (!bonusSourceHints.length) {
+            classes.push('ckl-missing-source');
+            icon = 'fas fa-circle-exclamation';
+            targetSourceHints.push(localize('missing-bonuses'));
         }
-    });
-
-    if (targetHints.length) {
-        allHints.push(hintcls.create(localize('bonuses.label.targets'), [], { hint: targetHints.join('\n\n') }));
+        allHints.push(hintcls.create(
+            localize('bonuses.label.targets'),
+            classes,
+            { hint: targetSourceHints.join('\n\n'), icon },
+        ));
     }
 
     /** @type {{itemName: string, bonusName: string, hints: string[]}[]} */

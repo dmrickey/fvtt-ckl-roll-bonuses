@@ -159,6 +159,8 @@
         },
         "keen": "Keen",
         "misfortune": "Misfortune",
+        "missing-bonuses": "There are no Bonuses configured.",
+        "missing-targets": "There are no Targets configured.",
         "modifiers": "Modifiers",
         "ok": "OK",
         "roll-bonuses": "Roll Bonuses",

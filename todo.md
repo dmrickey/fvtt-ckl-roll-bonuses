@@ -131,6 +131,7 @@
 - add the formula class to skill inputs
 - consumable buffs - requires later release (waiting on issue #1946) (did not make it into v9)
   - idea is to create a a flag on a buff that will add the bonus in "prehook" (and/or use built in changes) but use the new pf1 v.next posthook to disable the buff when it is consumed
+- Add hints for ammo
 
 ## Bonuses
 - "x per dice"
@@ -149,6 +150,8 @@
 - Has hint on affected Item (Weapon/Attack/Spell/etc)
 - Has info/attack note
 - Actually affects what it's supposed to (duh)
+- Has journal
+- Has tooltip
 
 # Deprecate
 - Weapon Focus (use bonus targets instead)
@@ -185,6 +188,9 @@
 - make damage picker work with readonly
 - Add readme info to "target item/spell/weapon" that gives info about targeting only works on the actor it's configured on and is not transferrable.
 - Rename `Generic Bonuses` and `Generic Targets` to just _Bonuses_ and _Targets_
+- Fix
+  - Localization for ammunition labels/hints
+  - Damage bonus for ammo throws errors
 - verify
   - double check each journal link
     - on item sheet (i.e. All Bonuses... on player1)
@@ -195,3 +201,4 @@
     - make sure the default is recognized
     - make sure it gives +1 to expected racially tagged weapons
   - make sure static setting registration works
+  - Hint for missing bonus/target source
