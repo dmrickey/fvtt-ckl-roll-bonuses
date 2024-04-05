@@ -85,6 +85,25 @@ Hooks.on('renderItemSheet', (
         return;
     }
 
+    // TODO move to migration
+    const obj = (item.flags?.[MODULE_NAME] || {});
+    if (isEditable && (obj.hasOwnProperty(legacyAmmoAttackKey) || obj.hasOwnProperty(legacyAmmoDamageKey))) {
+        const legacyAttack = item.getFlag(MODULE_NAME, legacyAmmoAttackKey) ?? [];
+        const legacyDamage = item.getFlag(MODULE_NAME, legacyAmmoDamageKey) ?? [];
+
+        const update = {
+            flags: {
+                [MODULE_NAME]: {
+                    [`-=${legacyAmmoAttackKey}`]: null,
+                    [`-=${legacyAmmoDamageKey}`]: null,
+                    [ammoAttackKey]: legacyAttack,
+                    [ammoDamageKey]: legacyDamage,
+                }
+            }
+        }
+        item.update(update);
+    }
+
     checkboxInput({
         item,
         journal,
@@ -108,7 +127,7 @@ Hooks.on('renderItemSheet', (
     textInput({
         item,
         journal,
-        key: legacyAmmoAttackKey,
+        key: ammoAttackKey,
         label: localize('source.bonus.label.attack'),
         parent: html,
     }, {
@@ -118,7 +137,7 @@ Hooks.on('renderItemSheet', (
     damageInput({
         item,
         journal,
-        key: legacyAmmoDamageKey,
+        key: ammoDamageKey,
         parent: html,
     }, {
         canEdit: isEditable,
