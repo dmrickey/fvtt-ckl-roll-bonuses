@@ -6,7 +6,6 @@ import './bonuses.mjs';
 import './patch/init.mjs';
 import { FormulaCacheHelper } from './util/flag-helpers.mjs';
 import { simplifyRollFormula } from './util/simplify-roll-formula.mjs';
-import { debugSetup } from './util/if-debug.mjs';
 import './auto-recognition/init.mjs';
 import { api } from './util/api.mjs';
 import './overrides/action-damage.mjs';
@@ -269,8 +268,6 @@ async function itemActionRollDamage(wrapped, ...args) {
 
     return rolls;
 }
-
-Hooks.once('setup', debugSetup);
 
 Hooks.once('init', () => {
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype._getConditionalParts', getConditionalParts, libWrapper.WRAPPER);
