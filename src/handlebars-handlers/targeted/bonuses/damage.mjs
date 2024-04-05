@@ -1,7 +1,7 @@
 import { MODULE_NAME } from "../../../consts.mjs";
 import { createTemplate, templates } from "../../templates.mjs";
 import { addNodeToRollBonus } from "../../add-bonus-to-item-sheet.mjs";
-import { localize } from "../../../util/localize.mjs";
+import { localize, localizeBonusTooltip } from "../../../util/localize.mjs";
 
 /**
  * @param {object} args
@@ -29,6 +29,7 @@ export function damageInput({
     };
 
     const isHealing = false;
+    tooltip ||= localizeBonusTooltip(key);
 
     /** @type {DamageInputModel[]} */
     const parts = item.getFlag(MODULE_NAME, key) ?? [];

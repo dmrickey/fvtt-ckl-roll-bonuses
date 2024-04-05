@@ -12,7 +12,7 @@ const legacyAmmoAttackKey = 'bonus_attack';
 const ammoDamageKey = 'ammo-damage';
 const ammoAttackKey = 'ammo-attack';
 const ammoMasterworkKey = 'ammo-mw';
-const ammoEnhancementKey = 'ammo-enhancement'
+const ammoEnhancementKey = 'ammo-enhancement';
 
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#ammunition';
 
@@ -128,7 +128,6 @@ Hooks.on('renderItemSheet', (
         item,
         journal,
         key: ammoAttackKey,
-        label: localize('source.bonus.label.attack'),
         parent: html,
     }, {
         canEdit: isEditable,

@@ -189,9 +189,8 @@
 - Add readme info to "target item/spell/weapon" that gives info about targeting only works on the actor it's configured on and is not transferrable.
 - Rename `Generic Bonuses` and `Generic Targets` to just _Bonuses_ and _Targets_
 - Fix
-  - Localization for ammunition labels/hints
+- Verify
   - Damage bonus for ammo throws errors
-- verify
   - double check each journal link
     - on item sheet (i.e. All Bonuses... on player1)
     - within journals which reference other journals
