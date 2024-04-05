@@ -26,7 +26,7 @@ FormulaCacheHelper.registerModuleFlag(ammoAttackKey, ammoEnhancementKey);
  */
 function getConditionalParts(actionUse, result, atk, index) {
     const ammoId = actionUse.shared?.attacks?.[index]?.ammo;
-    const ammo = actionUse.actor.items.get(ammoId);
+    const ammo = ammoId ? actionUse.actor.items.get(ammoId) : null;
     if (ammo) {
         const attack = FormulaCacheHelper.getModuleFlagFormula(ammo, ammoAttackKey)[ammoAttackKey];
         if (attack) {
