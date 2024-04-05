@@ -242,6 +242,7 @@ declare global {
         actor: ActorPF;
         displayName: 0 | 10 | 20 | 30 | 40 | 50;
         disposition: DispositionLevel;
+        isLinked: boolean;
         name: string;
         permission: PermissionLevel;
         texture: { src: string };

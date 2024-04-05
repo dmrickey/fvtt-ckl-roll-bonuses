@@ -4,16 +4,18 @@ import { localize } from "./localize.mjs";
 /**
  *
  * @param {object} setting
+ * @param {boolean} [setting.config]
  * @param {string} setting.key
  * @param {any} [setting.defaultValue]
  * @param {'world' | 'client'} [setting.scope]
- * @param {BooleanConstructor | StringConstructor} [setting.settingType]
+ * @param {BooleanConstructor | StringConstructor | NumberConstructor} [setting.settingType]
  * @param {object} [options]
  * @param {boolean} [options.skipReady]
  */
 export const registerSetting = ({
-    key,
+    config = true,
     defaultValue = null,
+    key,
     scope = 'world',
     settingType = String,
 }, {
@@ -26,7 +28,7 @@ export const registerSetting = ({
             default: defaultValue == null ? localize(`settings.${key}.default`) : defaultValue,
             scope,
             requiresReload: false,
-            config: true,
+            config,
             type: settingType
         });
 

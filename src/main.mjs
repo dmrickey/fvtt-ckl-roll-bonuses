@@ -1,8 +1,5 @@
 import { FRIENDLY_MODULE_NAME, MODULE_NAME } from './consts.mjs';
-
-
 import { LocalHookHandler, customGlobalHooks, localHooks } from './util/hooks.mjs';
-
 import './handlebars-handlers/init.mjs';
 import './util/item-hints.mjs';
 import './bonuses.mjs';
@@ -13,8 +10,10 @@ import { debugSetup } from './util/if-debug.mjs';
 import './auto-recognition/init.mjs';
 import { api } from './util/api.mjs';
 import './overrides/action-damage.mjs';
+import migrate from './migration/index.mjs';
 
 Hooks.once('ready', () => game.modules.get(MODULE_NAME).api = api);
+Hooks.once('pf1PostReady', () => migrate());
 
 /**
  * @param {() => any} wrapped

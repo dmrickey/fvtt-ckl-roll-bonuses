@@ -1,4 +1,10 @@
 interface Game {
+    actors: EmbeddedCollection<ActorPF>;
+    /**
+     * @remarks Initialized between the `"setup"` and `"ready"` hook events.
+     */
+    items?: EmbeddedCollection<ItemPF>;
+
     /**
      * Localization support
      */
@@ -11,6 +17,8 @@ interface Game {
         };
     };
 
+    packs: EmbeddedCollection<Pack>;
+
     /**
      * @returns {boolean} True if the game has already fired the 'ready' hook
      */
@@ -18,10 +26,8 @@ interface Game {
 
     system: { version: string };
 
-    scenes: {
-        active: {
-            tokens: EmbeddedCollection<TokenDocumentPF>;
-        };
+    scenes: EmbeddedCollection<Scene> & {
+        active: Scene;
     };
 
     /**
@@ -32,5 +38,10 @@ interface Game {
     time: { worldTime: number };
 
     user: User;
+    users: { activeGM: user } & EmbeddedCollection<User>;
     userId: string;
+}
+
+interface Scene {
+    tokens: EmbeddedCollection<TokenDocumentPF>;
 }

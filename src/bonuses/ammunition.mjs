@@ -6,9 +6,6 @@ import { FormulaCacheHelper } from '../util/flag-helpers.mjs';
 import { LocalHookHandler, customGlobalHooks, localHooks } from "../util/hooks.mjs";
 import { localize } from "../util/localize.mjs";
 
-const legacyAmmoDamageKey = 'bonus_damage';
-const legacyAmmoAttackKey = 'bonus_attack';
-
 const ammoDamageKey = 'ammo-damage';
 const ammoAttackKey = 'ammo-attack';
 const ammoMasterworkKey = 'ammo-mw';
@@ -83,25 +80,6 @@ Hooks.on('renderItemSheet', (
 ) => {
     if (!(item instanceof pf1.documents.item.ItemLootPF) || item.subType !== 'ammo') {
         return;
-    }
-
-    // TODO move to migration
-    const obj = (item.flags?.[MODULE_NAME] || {});
-    if (isEditable && (obj.hasOwnProperty(legacyAmmoAttackKey) || obj.hasOwnProperty(legacyAmmoDamageKey))) {
-        const legacyAttack = item.getFlag(MODULE_NAME, legacyAmmoAttackKey) ?? [];
-        const legacyDamage = item.getFlag(MODULE_NAME, legacyAmmoDamageKey) ?? [];
-
-        const update = {
-            flags: {
-                [MODULE_NAME]: {
-                    [`-=${legacyAmmoAttackKey}`]: null,
-                    [`-=${legacyAmmoDamageKey}`]: null,
-                    [ammoAttackKey]: legacyAttack,
-                    [ammoDamageKey]: legacyDamage,
-                }
-            }
-        }
-        item.update(update);
     }
 
     checkboxInput({

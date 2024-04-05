@@ -19,9 +19,7 @@ declare global {
          */
         size: number;
 
-        /**
-         * @deprecated - do not use
-         */
+        /** @deprecated - use {@link size} */
         length: unknown;
 
         get(id: string): T;

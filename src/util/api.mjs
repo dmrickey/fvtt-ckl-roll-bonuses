@@ -5,6 +5,7 @@ class Api {
     bonusTypeMap = {};
     sources = {};
     targetTypeMap = {};
+    migrate = async () => { };
 }
 
 const _api = new Api();
