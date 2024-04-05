@@ -5,12 +5,14 @@ import { MODULE_NAME } from '../consts.mjs';
 const compendiumId = 'WSRZEwNGpQUNcvI9';
 const key = 'extreme-mood-swings';
 
-registerSetting({ key });
-
 class Settings {
     static get name() { return Settings.#getSetting(key); }
     // @ts-ignore
     static #getSetting(/** @type {string} */key) { return game.settings.get(MODULE_NAME, key).toLowerCase(); }
+
+    static {
+        registerSetting({ key });
+    }
 }
 
 Hooks.on('renderItemSheet', (

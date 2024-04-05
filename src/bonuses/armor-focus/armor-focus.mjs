@@ -16,14 +16,16 @@ import { SpecificBonuses } from '../all-specific-bonuses.mjs';
 const compendiumId = 'zBrrZynIB0EXagds';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#armor-focus';
 
-registerSetting({ key });
-
 Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ key, journal }));
 
 class Settings {
     static get armorFocus() { return Settings.#getSetting(key); }
     // @ts-ignore
     static #getSetting(/** @type {string} */key) { return game.settings.get(MODULE_NAME, key).toLowerCase(); }
+
+    static {
+        registerSetting({ key });
+    }
 }
 
 // register hint on source feat

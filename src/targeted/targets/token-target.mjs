@@ -7,14 +7,14 @@ import { truthiness } from "../../util/truthiness.mjs";
 import { BaseTarget } from "./base-target.mjs";
 
 class Settings {
-    static tokenSettingKey = 'should-auto-target-tokens';
-    static get shouldAutoTarget() { return Settings.#getSetting(this.tokenSettingKey); }
+    static get #tokenSettingKey() { return 'should-auto-target-tokens'; }
+    static get shouldAutoTarget() { return Settings.#getSetting(this.#tokenSettingKey); }
     // @ts-ignore
     static #getSetting(/** @type {string} */key) { return game.settings.get(MODULE_NAME, key); }
 
-    static init() {
+    static {
         registerSetting({
-            key: this.tokenSettingKey,
+            key: this.#tokenSettingKey,
             scope: 'client',
             settingType: Boolean,
         });
@@ -22,13 +22,6 @@ class Settings {
 }
 
 export class TokenTarget extends BaseTarget {
-
-    /**
-     * @override
-     */
-    static init() {
-        Settings.init();
-    }
 
     static get #currentTargetUuids() { return [...game.user.targets].map(x => x.document?.uuid).filter(truthiness); }
 

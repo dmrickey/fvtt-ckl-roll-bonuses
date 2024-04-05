@@ -11,8 +11,6 @@ const furiousFocusTimestamp = 'furious-focus-timestamp';
 const compendiumId = 'UcEIgufLJlIfhHmu';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#furious-focus';
 
-registerSetting({ key: furiousFocus });
-
 Hooks.once('ready', () =>
     SpecificBonuses.registerSpecificBonus({
         journal,
@@ -25,6 +23,10 @@ class Settings {
     static get furiousFocus() { return Settings.#getSetting(furiousFocus); }
     // @ts-ignore
     static #getSetting(/** @type {string} */key) { return game.settings.get(MODULE_NAME, key).toLowerCase(); }
+
+    static {
+        registerSetting({ key: furiousFocus });
+    }
 }
 
 /** @returns {string} */

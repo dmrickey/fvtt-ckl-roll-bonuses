@@ -53,12 +53,16 @@ Hooks.once('ready', () => {
     };
 });
 
-const fortuneStacks = 'fortuneStacks';
-registerSetting({ key: fortuneStacks, settingType: Boolean, defaultValue: true });
 
 class Settings {
-    static get fortuneStacks() { return Settings.#getSetting(fortuneStacks); }
+    static get #fortuneStacksKey() { return 'fortuneStacks'; }
+
+    static get fortuneStacks() { return Settings.#getSetting(this.#fortuneStacksKey); }
     static #getSetting(/** @type {string} */key) { return game.settings.get(MODULE_NAME, key); }
+
+    static {
+        registerSetting({ key: this.#fortuneStacksKey, settingType: Boolean, defaultValue: true });
+    }
 }
 
 registerItemHint((hintcls, actor, item, _data) => {
