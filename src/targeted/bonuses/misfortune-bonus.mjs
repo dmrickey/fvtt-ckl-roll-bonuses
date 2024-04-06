@@ -11,7 +11,13 @@ export class MisfortuneBonus extends BaseBonus {
      * @override
      * @inheritdoc
      */
-    static get type() { return 'misfortune'; }
+    static get sourceKey() { return 'misfortune'; }
+
+    /**
+     * @override
+     * @returns {string}
+     */
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.PiyJbkTuzKHugPSk#fortune/misfortune'; }
 
     /**
     * @inheritdoc
@@ -20,10 +26,7 @@ export class MisfortuneBonus extends BaseBonus {
     * @returns {Nullable<string[]>}
     */
     static getHints(source) {
-        /** @type {string[]} */
-        if (this.isBonusSource(source)) {
-            return [this.label];
-        }
+        return [this.label];
     }
 
     /**
@@ -31,11 +34,18 @@ export class MisfortuneBonus extends BaseBonus {
      * @override
      * @param {object} options
      * @param {HTMLElement} options.html
+     * @param {boolean} options.isEditable
+     * @param {ItemPF} options.item
      */
-    static showInputOnItemSheet({ html },) {
+    static showInputOnItemSheet({ html, isEditable, item }) {
         showEnabledLabel({
-            label: this.label,
+            item,
+            journal: this.journal,
+            key: this.key,
             parent: html,
+            tooltip: this.tooltip,
+        }, {
+            canEdit: isEditable,
         });
     }
 

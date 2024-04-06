@@ -1,53 +1,16 @@
-import { localizeTargetedBonusLabel } from "../../util/localize.mjs";
 import { customGlobalHooks } from "../../util/hooks.mjs";
+import { BaseSource } from '../base-source.mjs';
 
 /**
  * @abstract
  */
-export class BaseBonus {
+export class BaseBonus extends BaseSource {
 
     /**
+     * @override
      * @returns { string }
      */
-    static get key() { return `bonus_${this.type}`; }
-
-    /**
-     * @returns { string }
-     */
-    static get label() { return localizeTargetedBonusLabel(this.type); }
-
-    /**
-     * @abstract
-     * @returns { string }
-     */
-    static get type() { throw new Error('must be overridden'); }
-
-    /**
-     * If the item is a source for this bonus
-     *
-     * @param {ItemPF} item
-     * @returns {boolean}
-     */
-    static isBonusSource(item) { return item.hasItemBooleanFlag(this.key); };
-
-    /**
-     * @abstract
-     * @param {object} options
-     * @param {ActorPF | null} options.actor
-     * @param {ItemPF} options.item
-     * @param {HTMLElement} options.html
-     */
-    static showInputOnItemSheet({ actor, item, html }) { throw new Error("must be overridden."); }
-
-    /**
-     * Get Item Hints tooltip value
-     *
-     * @abstract
-     * @param {ItemPF} source The source of the bonus
-     * @param {(ActionUse | ItemPF | ItemAction)?} [target] The target for contextually aware hints
-     * @returns {Nullable<string[]>}
-     */
-    static getHints(source, target = undefined) { return; }
+    static get sourceBaseType() { return 'bonus'; }
 
     /**
      * Gets Conditional used for the action
@@ -58,13 +21,6 @@ export class BaseBonus {
      * @returns {Nullable<ItemConditional>}
      */
     static getConditional(source) { return null; }
-
-    // /**
-    //  * @abstract
-    //  * @param {ActionUse} actionUse
-    //  * @returns {Nullable<ItemConditional>}
-    //  */
-    // static getDamageBonusesForRoll({ actor, item, shared }) { return; }
 
     /**
      * Add damage bonus to actor's Combat damage column tooltip
@@ -95,6 +51,16 @@ export class BaseBonus {
     static actionUseAlterRollData(source, shared) { }
 
     /**
+     * Get extra info tags for the chat card for the owner to see
+     *
+     * @abstract
+     * @param {ItemPF} source
+     * @param {RollData} rollData
+     * @returns {Nullable<string[]>}
+     */
+    static getItemChatCardInfo(source, rollData) { return; }
+
+    /**
      * @abstract
      * @param {ItemPF} _source
      * @param {ItemActionRollAttackHookArgs} seed
@@ -115,6 +81,15 @@ export class BaseBonus {
     static itemActionRollDamage(_source, seed, _action, _data) { return seed; }
 
     /**
+     * Returns true the targeting is too generic to show a hint on a specific item
+     * - used for something like `crit` that needs to combine all hints in a single registration
+     *
+     * @abstract
+     * @returns {boolean}
+     */
+    static get skipTargetedHint() { return false; }
+
+    /**
      * @abstract
       * @param {ItemPF} source
       * @param {ItemAction} action
@@ -130,20 +105,6 @@ export class BaseBonus {
      * @param {{ fortuneCount: number; misfortuneCount: number; actionID: any; }} options passed into ItemPF.use
      */
     static onItemUse(source, options) { }
-
-    /**
-     * @abstract
-     * @param {ItemPF} item
-     * @param {RollData} rollData
-     */
-    static prepareData(item, rollData) { }
-
-    /**
-     * Initializes anything specific to the bonus
-     *
-     * @abstract
-     */
-    static init() { }
 
     /**
      * @abstract

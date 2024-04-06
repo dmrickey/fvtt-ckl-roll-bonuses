@@ -1,5 +1,5 @@
 <div class="form-group roll-bonuses editable-icon-input">
-    <label class="header">{{label}}</label>
+    <div class="form-group">{{> "modules/ckl-roll-bonuses/hbs/label.hbs"}}</div>
     <div class="form-fields">
         {{#each current}}
         <li data-index="{{@index}}" data-tooltip="{{this.name}}">
@@ -8,5 +8,7 @@
         </li>
         {{/each}}
     </div>
-    <a><i class="fas fa-edit"></i></a>
+    {{#unless readonly}}
+    <a class="trait-selector"><i class="fas fa-edit"></i></a>
+    {{/unless}}
 </div>

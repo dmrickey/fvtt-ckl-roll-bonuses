@@ -1,5 +1,5 @@
 <div class="form-group versatile-performance-selector">
-    <label>{{localize 'ckl-roll-bonuses.versatilePerformance.header'}}</label>
+    {{> "modules/ckl-roll-bonuses/hbs/label.hbs"}}
     <div class="form-fields">
         <table>
             <thead>
@@ -11,6 +11,11 @@
             </thead>
             <tbody>
                 <tr>
+                    {{#if readonly}}
+                    <td><input type="text" readonly value="{{base.name}}" /></td>
+                    <td><input type="text" readonly value="{{skill1.name}}" /></td>
+                    <td><input type="text" readonly value="{{skill2.name}}" /></td>
+                    {{else}}
                     <td>
                         <select id="vp-base-selector">
                             {{#select base.id}}
@@ -38,6 +43,7 @@
                             {{/select}}
                         </select>
                     </td>
+                    {{/if}}
                 </tr>
             </tbody>
         </table>

@@ -2,21 +2,20 @@
 
 - [TODO](#todo)
 - [UI](#ui)
-  - [Add In-Game Documentation](#add-in-game-documentation)
 - [Bonus Targets](#bonus-targets)
   - [Bonuses](#bonuses)
   - [Targets](#targets)
 - [Class Features](#class-features)
   - [Cleric](#cleric)
+  - [Fighter](#fighter)
   - [Psychic](#psychic)
   - [Ranger](#ranger)
 - [Feats](#feats)
   - [Bomber's eye](#bombers-eye)
-  - [Improved Critical](#improved-critical)
   - [Longshot](#longshot)
+  - [Snake Sidewind](#snake-sidewind)
   - [Spell Perfection](#spell-perfection)
   - [Spirited Charge](#spirited-charge)
-  - [Weapon Finesse](#weapon-finesse)
 - [Racial Features](#racial-features)
   - [Sylph](#sylph)
   - [Kobold](#kobold)
@@ -32,6 +31,7 @@
 - [Housekeeping](#housekeeping)
 - [Checklist for new (and existing features)](#checklist-for-new-and-existing-features)
 - [Deprecate](#deprecate)
+- [Add Auto Config](#add-auto-config)
 - [Add Quench Testings](#add-quench-testings)
 - [Add create hooks for initializing some items (like anything based off of name/id)](#add-create-hooks-for-initializing-some-items-like-anything-based-off-of-nameid)
 - [in pf1 V10](#in-pf1-v10)
@@ -43,45 +43,39 @@
   - (see 3.0 scaffolding branch for a super rought start on this)
 
 # UI
-## Add In-Game Documentation
-- create a compendium with details on how to configure each bonus
-  - link to specific compendium page for this bonus when it's detected on the sheet
-- create "id getter" ui for things like keen or fortune (fortune will need a lot more as well)
-- Always show roll bonuses header in the advanced tab, and add a Cog to itself to configure which bonuses should be on this item (useful for bonuses that can't be auto-detected base on the Feat name/id)
-- Add some kind of preview to item targeting UI to show all currently affected Items
+- Add readonly mode to all inputs so you can still see the configuration if you can't edit (i.e. in a compendium)
 - ### Add text filter to item input target
 
 # Bonus Targets
 ## Bonuses
-- Spell level
-  - target spells 0-9, all
-- CL Bonus*
-- DC Bonus*
-- Move Crit to Bonus (would deprecate crit)
-
-*Would deprecate everything under "spells"
+- add <ability> to damage for other ability scores (like agile but can be customized)
+- add <ability> to attack for other ability scores (like finesse but can be customized)
+- Attack bonus needs to give optional "crit only" attack bonuses
 
 ## Targets
 - Have creature type/subtype based targeting - would support [Ranger](#ranger)'s Favored Enemy
+- Ally/Hostile/Neutral multiselect
 - All healing
+- Distance-based targeting (point-blank shot)
+  - same logic for range penalties
 - Spellbook target
 - Spell preparation Qty
-- Spell School target*
-- Damage Type target*
-- Subschool Target*
 - Skill Target
   - Include "smart groups" that will give options e.g.
     - specific ability skills (e.g. all int skills)
     - The default layout will group subskills under the base skill and checking the base skill will automatically check all subskills
 - While in Combat
   - [Scarred by War](https://www.aonprd.com/TraitDisplay.aspx?ItemName=Scarred%20by%20War) (used to grant diplomacy bonus while not in combat)
-
-*Would deprecate everything under "spells"
+- add a way to affect other tokens (i.e. cavalier challenge which gives them -2 attack vs other targets)
+- inverse target - effect all tokens _except_ the tokens I have targets
 
 # Class Features
 ## Cleric
 ### Healing Domain - Healer's Blessing
 - Cure Spells are treated as if they're empowered (+50% healing)
+## Fighter
+### [Versatile Training](https://www.d20pfsrd.com/classes/core-classes/fighter/#:~:text=that%20he%20throws.-,Versatile%20Training,-(Ex)%20The)
+- Use BAB instead of ranks for given skills (see Versatile Performance implementation)
 ## Psychic
 ### Phrenic Amplification
   - increases DC of `mind-affecting` spells by 1/2/3
@@ -95,16 +89,14 @@
 # Feats
 ## Bomber's eye
 - Increase throwing range
-## Improved Critical
-- Selects individual weapon types (like Weapon Focus) and grants keen to all of those
 ## Longshot
 - Increase bow range
+## Snake Sidewind
+- does a lot, but specifically swap Sense Motive for attack roll to confirm critical hits when Sense Motive mod is higher than current attack bonus (Agile bonus might give insight on this)
 ## Spell Perfection
 - https://www.d20pfsrd.com/feats/general-feats/spell-perfection/
 ## Spirited Charge
 - Double Damage without critting
-## Weapon Finesse
-- Automatically switch to using dex for attack
 
 
 # Racial Features
@@ -121,6 +113,8 @@
 ## Int Headband
 - configure an item to give you specific ranks (0.82.5 only gives bonus ranks, not ranks to specific skills)
   - See versatile performance for ideas.
+- Show icon next to skills that roll inspiration for free
+  - permanent-skill-bonuses
 
 # Misc
 ## I am targeted
@@ -137,13 +131,13 @@
 - add the formula class to skill inputs
 - consumable buffs - requires later release (waiting on issue #1946) (did not make it into v9)
   - idea is to create a a flag on a buff that will add the bonus in "prehook" (and/or use built in changes) but use the new pf1 v.next posthook to disable the buff when it is consumed
+- Add hints for ammo
 
 ## Bonuses
 - "x per dice"
 
 ## Targeting
 - show warning if target has an inappropriate bonus
-- add ui to select targets/bonuses
 - add checkbox to toggle between union (current implementation) and intersection (item has to supply all targeting requirements)
 
 # Housekeeping
@@ -156,6 +150,8 @@
 - Has hint on affected Item (Weapon/Attack/Spell/etc)
 - Has info/attack note
 - Actually affects what it's supposed to (duh)
+- Has journal
+- Has tooltip
 
 # Deprecate
 - Weapon Focus (use bonus targets instead)
@@ -163,6 +159,11 @@
 - Weapon Specialization (use bonus targets instead)
 - as of v9, PF1 now defers Roll Bonuses. So that means that the `Bonus` on the Skill settings can go away
 - It should create a new Feature with a change that includes the current formula as part of migration for deleting this
+- all specific DC/CL bonuses (after v10 once descriptor-based targeting is available)
+- specific crit bonuses
+
+# Add Auto Config
+- Improved Critical
 
 # Add Quench Testings
 # Add create hooks for initializing some items (like anything based off of name/id)
@@ -174,6 +175,7 @@
       - (assuming my PR is merged)
 - Targeting
   - descriptor-based targeting
+  - sub-school target
 
 # Not Possible
 - Attempt to create a "resource offset"
@@ -183,9 +185,19 @@
   - changes are generated and applied too early and too broadly in the system prep. I can either create a change that applies to everything (pointless) or I can create a specific change that exists for the specified target, but it's created too late to both be reduced to the best bonus type and actually be added to the roll
 
 # This release must include
-- Show icon next to skills that roll inspiration for free
-  - permanent-skill-bonuses
-- Add crit deprecation
-- localize
-  - All labels
-- BaseBonus - rename `type` to `bonusKey`
+- make damage picker work with readonly
+- Add readme info to "target item/spell/weapon" that gives info about targeting only works on the actor it's configured on and is not transferrable.
+- Rename `Generic Bonuses` and `Generic Targets` to just _Bonuses_ and _Targets_
+- Fix
+- Verify
+  - Damage bonus for ammo throws errors
+  - double check each journal link
+    - on item sheet (i.e. All Bonuses... on player1)
+    - within journals which reference other journals
+  - damage target
+  - double check input labels for all specific bonuses
+  - racial weapon focus
+    - make sure the default is recognized
+    - make sure it gives +1 to expected racially tagged weapons
+  - make sure static setting registration works
+  - Hint for missing bonus/target source

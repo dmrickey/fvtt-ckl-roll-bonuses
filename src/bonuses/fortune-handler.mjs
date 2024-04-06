@@ -53,12 +53,16 @@ Hooks.once('ready', () => {
     };
 });
 
-const fortuneStacks = 'fortuneStacks';
-registerSetting({ key: fortuneStacks, settingType: Boolean, defaultValue: true });
 
 class Settings {
-    static get fortuneStacks() { return Settings.#getSetting(fortuneStacks); }
+    static get #fortuneStacksKey() { return 'fortuneStacks'; }
+
+    static get fortuneStacks() { return Settings.#getSetting(this.#fortuneStacksKey); }
     static #getSetting(/** @type {string} */key) { return game.settings.get(MODULE_NAME, key); }
+
+    static {
+        registerSetting({ key: this.#fortuneStacksKey, settingType: Boolean, defaultValue: true });
+    }
 }
 
 registerItemHint((hintcls, actor, item, _data) => {
@@ -212,6 +216,8 @@ Hooks.on(customGlobalHooks.itemUse, (
     /** @type {ItemPF} */ item,
     /** @type {{ fortuneCount: number; misfortuneCount: number; actionID: any; }} */ options
 ) => {
+    if (!item?.actor) return;
+
     options.fortuneCount = 0;
     options.misfortuneCount = 0;
 
@@ -252,7 +258,7 @@ Hooks.on(customGlobalHooks.itemUse, (
             break;
     }
 
-    const count = countBFlags(item.actor?.items, ...fortunesToFind, ...misfortunesToFind);
+    const count = countBFlags(item.actor.items, ...fortunesToFind, ...misfortunesToFind);
 
     fortunesToFind.forEach((f) => options.fortuneCount += count[f]);
     misfortunesToFind.forEach((f) => options.misfortuneCount += count[f]);

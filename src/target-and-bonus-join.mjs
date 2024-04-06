@@ -1,18 +1,14 @@
 import { MODULE_NAME } from './consts.mjs';
-import { allBonusTypes } from "./targeted/bonuses/all-bonuses.mjs";
 import { BaseBonus } from './targeted/bonuses/base-bonus.mjs';
-import { allTargetTypes } from "./targeted/targets/all-targets.mjs";
 import { conditionalCalculator } from "./util/conditional-helpers.mjs";
 import { LocalHookHandler, customGlobalHooks, localHooks } from "./util/hooks.mjs";
 import { registerItemHint } from "./util/item-hints.mjs";
 import { localize } from "./util/localize.mjs";
 import { truthiness } from "./util/truthiness.mjs";
+import { initSources } from './targeted/init-sources.mjs';
+import { api } from './util/api.mjs';
 
-function init() {
-    allTargetTypes.forEach((targetType) => targetType.init());
-    allBonusTypes.forEach((bonusType) => bonusType.init());
-};
-init();
+initSources();
 
 registerItemHint((hintcls, actor, item, _data) => {
     if (!actor || item?.actor !== actor) {
@@ -21,6 +17,19 @@ registerItemHint((hintcls, actor, item, _data) => {
 
     /** @type {Hint[]} */
     const allHints = [];
+
+    /** @type {string[]} */
+    const targetSourceHints = [];
+    // register hints on target source
+    item[MODULE_NAME].targets.forEach((targetType) => {
+        const hints = targetType.getHints(item);
+        if (hints?.length) {
+            targetSourceHints.push([...new Set([targetType.label, ...hints])].join('\n'));
+        }
+    });
+
+    /** @type {Hint[]} */
+    const bonusSourceHints = [];
     // register hints on bonus source
     item[MODULE_NAME].bonuses.forEach((bonusType) => {
         let hints = bonusType.getHints(item);
@@ -29,22 +38,36 @@ registerItemHint((hintcls, actor, item, _data) => {
             if (hints.length === 1 && hints[0] === bonusType.label) {
                 hints = [];
             }
-            allHints.push(hintcls.create(bonusType.label, [], { hint: hints.join('\n') }));
+
+            let classes = [];
+            let icon = '';
+            if (!targetSourceHints.length) {
+                classes.push('ckl-missing-source');
+                hints.push(localize('missing-targets'));
+                icon = 'fas fa-circle-exclamation';
+            }
+            bonusSourceHints.push(hintcls.create(
+                bonusType.label,
+                classes,
+                { hint: hints.join('\n'), icon },
+            ));
         }
     });
+    allHints.push(...bonusSourceHints);
 
-    /** @type {string[]} */
-    const targetHints = [];
-    // register hints on target source
-    item[MODULE_NAME].targets.forEach((targetType) => {
-        const hints = targetType.getHints(item);
-        if (hints?.length) {
-            targetHints.push([...new Set([targetType.label, ...hints])].join('\n'));
+    if (targetSourceHints.length) {
+        let classes = [];
+        let icon = '';
+        if (!bonusSourceHints.length) {
+            classes.push('ckl-missing-source');
+            icon = 'fas fa-circle-exclamation';
+            targetSourceHints.push(localize('missing-bonuses'));
         }
-    });
-
-    if (targetHints.length) {
-        allHints.push(hintcls.create(localize('bonus-target.target.label.target'), [], { hint: targetHints.join('\n\n') }));
+        allHints.push(hintcls.create(
+            localize('bonuses.label.targets'),
+            classes,
+            { hint: targetSourceHints.join('\n\n'), icon },
+        ));
     }
 
     /** @type {{itemName: string, bonusName: string, hints: string[]}[]} */
@@ -53,6 +76,7 @@ registerItemHint((hintcls, actor, item, _data) => {
     handleBonusesFor(
         item,
         (bonusType, sourceItem) => {
+            if (bonusType.skipTargetedHint) return;
             let hints = bonusType.getHints(sourceItem, item);
             if (hints?.length) {
                 if (hints.length === 1 && hints[0] === bonusType.label) {
@@ -90,7 +114,7 @@ registerItemHint((hintcls, actor, item, _data) => {
  * @param {boolean} [options.skipGenericTarget]
  */
 export const handleBonusesFor = (thing, func, { skipGenericTarget = false } = {}) => {
-    allTargetTypes
+    api.allTargetTypes
         .filter((targetType) => !skipGenericTarget || !targetType.isGenericTarget)
         .flatMap((targetType) => targetType.getSourcesFor(thing))
         // filter down to unique items in case one source item is affecting this target item through multiple "targets"
@@ -110,7 +134,7 @@ export const handleBonusesFor = (thing, func, { skipGenericTarget = false } = {}
  * @param {boolean} [options.skipGenericTarget]
  */
 export const handleBonusTypeFor = (thing, specificBonusType, func, { skipGenericTarget = false } = {}) => {
-    allTargetTypes
+    api.allTargetTypes
         .filter((targetType) => !skipGenericTarget || !targetType.isGenericTarget)
         .flatMap((targetType) => targetType.getSourcesFor(thing))
         // filter down to unique items in case one source item is affecting this target item through multiple "targets"
@@ -227,20 +251,18 @@ function actionDamageSources(action, sources) {
 Hooks.on(customGlobalHooks.actionDamageSources, actionDamageSources);
 
 Hooks.on('renderItemSheet', (
-    /** @type {ItemSheetPF} */ itemSheet,
+    /** @type {ItemSheetPF} */ { actor, isEditable, item },
     /** @type {[HTMLElement]} */[html],
     /** @type {unknown} */ _data
 ) => {
-    const { actor, item } = itemSheet;
-
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
     item[MODULE_NAME].bonuses.forEach((bonusType) => {
-        bonusType.showInputOnItemSheet({ actor, item, html });
+        bonusType.showInputOnItemSheet({ actor, item, isEditable, html });
     });
 
     item[MODULE_NAME].targets.forEach((targetType) => {
-        targetType.showInputOnItemSheet({ actor, item, html });
+        targetType.showInputOnItemSheet({ actor, item, isEditable, html });
     });
 });
 
@@ -283,14 +305,14 @@ const prepare = (item, _rollData) => {
     item[MODULE_NAME].bonuses = [];
     item[MODULE_NAME].targets = [];
 
-    allBonusTypes.forEach((bonusType) => {
-        if (bonusType.isBonusSource(item)) {
+    api.allBonusTypes.forEach((bonusType) => {
+        if (bonusType.isSource(item)) {
             item[MODULE_NAME].bonuses.push(bonusType);
             bonusType.prepareData(item, _rollData);
         }
     });
-    allTargetTypes.forEach((targetType) => {
-        if (targetType.isTargetSource(item)) {
+    api.allTargetTypes.forEach((targetType) => {
+        if (targetType.isSource(item)) {
             item[MODULE_NAME].targets.push(targetType);
             targetType.prepareData(item, _rollData);
         }
@@ -327,6 +349,19 @@ const itemActionRollDamage = async (seed, action, data) => {
     return seed;
 }
 LocalHookHandler.registerHandler(localHooks.itemActionRollDamage, itemActionRollDamage);
+
+/**
+ * @param {ItemPF} item
+ * @param {string[]} props
+ * @param {RollData} rollData
+ */
+const itemGetTypeChatData = (item, props, rollData) => {
+    handleBonusesFor(
+        item,
+        (bonusType, sourceItem) => props.push(...(bonusType.getItemChatCardInfo(sourceItem, rollData) || []))
+    );
+}
+Hooks.on(customGlobalHooks.itemGetTypeChatData, itemGetTypeChatData);
 
 /**
  *

@@ -1,18 +1,26 @@
 import { MODULE_NAME } from "../../../consts.mjs";
 import { createTemplate, templates } from "../../templates.mjs";
-import { addNodeToRollBonus } from "../../roll-bonus-on-item-sheet.mjs";
-import { localize } from "../../../util/localize.mjs";
+import { addNodeToRollBonus } from "../../add-bonus-to-item-sheet.mjs";
+import { localize, localizeBonusTooltip } from "../../../util/localize.mjs";
 
 /**
  * @param {object} args
  * @param {ItemPF} args.item
+ * @param {string} args.journal
  * @param {string} args.key
+ * @param {string} [args.tooltip]
  * @param {HTMLElement} args.parent
+ * @param {object} options
+ * @param {boolean} options.canEdit
  */
 export function damageInput({
     item,
+    journal,
     key,
     parent,
+    tooltip,
+}, {
+    canEdit,
 }) {
     const critChoices = {
         crit: localize('PF1.CritDamageBonusFormula'),
@@ -20,14 +28,25 @@ export function damageInput({
         normal: localize('PF1.DamageFormula'),
     };
 
+    const isHealing = false;
+    const damageTypes = pf1.registry.damageTypes.toObject();
+    tooltip ||= localizeBonusTooltip(key);
+
     /** @type {DamageInputModel[]} */
     const parts = item.getFlag(MODULE_NAME, key) ?? [];
+    const partsLabels = parts.map((part) => part.type.values.map((x) => damageTypes[x].name).join('; ') + (part.type.custom ? `; ${part.type.custom}` : ''));
+
     const templateData = {
         critChoices,
-        damageTypes: pf1.registry.damageTypes.toObject(),
-        isHealing: false,
+        damageTypes,
+        isHealing,
         item,
+        journal,
+        label: isHealing ? localize('PF1.HealingFormula') : localize('PF1.DamageFormula'),
         parts,
+        partsLabels,
+        readonly: !canEdit,
+        tooltip,
     };
 
     const div = createTemplate(
@@ -147,5 +166,5 @@ export function damageInput({
         });
     });
 
-    addNodeToRollBonus(parent, div);
+    addNodeToRollBonus(parent, div, item, canEdit);
 }

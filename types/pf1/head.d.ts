@@ -1,7 +1,10 @@
 export {};
 
+import { RollPF } from './pf1';
+
 declare global {
-    let RollPF: RollPF;
+    let RollPF: typeof RollPF;
+    interface RollPF extends RollPF {}
     let pf1: pf1;
     let deepClone: (arg0: T) => T;
 

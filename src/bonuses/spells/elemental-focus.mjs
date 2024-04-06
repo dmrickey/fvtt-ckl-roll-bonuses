@@ -4,10 +4,11 @@ import { intersects } from "../../util/array-intersects.mjs";
 import { KeyedDFlagHelper, getDocDFlags } from "../../util/flag-helpers.mjs";
 import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
-import { localize } from "../../util/localize.mjs";
+import { localize, localizeBonusLabel } from "../../util/localize.mjs";
 import { registerSetting } from "../../util/settings.mjs";
 import { signed } from "../../util/to-signed-string.mjs";
 import { truthiness } from "../../util/truthiness.mjs";
+import { SpecificBonuses } from '../all-specific-bonuses.mjs';
 
 const elementalFocusKey = 'elementalFocus';
 const greaterElementalFocusKey = 'greaterElementalFocus';
@@ -19,9 +20,13 @@ const elementalFocusId = '1frgqDSnQFiTq0MC';
 const greaterElementalFocusId = 'l4yE4RGFbORuDfp7';
 const mythicElementalFocusId = 'yelJyBhjWtiIMgci';
 
-registerSetting({ key: elementalFocusKey });
-registerSetting({ key: greaterElementalFocusKey });
-registerSetting({ key: mythicElementalFocusKey });
+const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#elemental-focus';
+
+Hooks.once('ready', () => {
+    SpecificBonuses.registerSpecificBonus({ journal, key: elementalFocusKey });
+    SpecificBonuses.registerSpecificBonus({ journal, key: greaterElementalFocusKey, parent: elementalFocusKey });
+    SpecificBonuses.registerSpecificBonus({ journal, key: mythicElementalFocusKey, parent: elementalFocusKey });
+});
 
 const icons = {
     acid: { icon: 'fas fa-droplet', css: 'ckl-acid-green' },
@@ -43,6 +48,12 @@ class Settings {
     static get mythic() { return Settings.#getSetting(mythicElementalFocusKey); }
     // @ts-ignore
     static #getSetting(/** @type {string} */key) { return game.settings.get(MODULE_NAME, key).toLowerCase(); }
+
+    static {
+        registerSetting({ key: elementalFocusKey });
+        registerSetting({ key: greaterElementalFocusKey });
+        registerSetting({ key: mythicElementalFocusKey });
+    }
 }
 
 // add Info to chat card
@@ -61,7 +72,7 @@ Hooks.on(customGlobalHooks.itemGetTypeChatData, (
 
     const bonus = getDcBonus(action);
     if (bonus) {
-        props.push(localize('dc-label-mod', { mod: signed(bonus), label: localize(elementalFocusKey) }));
+        props.push(localize('dc-label-mod', { mod: signed(bonus), label: localizeBonusLabel(elementalFocusKey) }));
     }
 });
 
@@ -94,7 +105,7 @@ registerItemHint((hintcls, actor, item, _data) => {
             // @ts-ignore
             const match = icons[element];
             const bonus = getDcBonus(action);
-            const tooltip = focuses.map((f) => localize(f)).join('\n') + `\n${localize('dc-mod', { mod: signed(bonus) })}`;
+            const tooltip = focuses.map((f) => localizeBonusLabel(f)).join('\n') + `\n${localize('dc-mod', { mod: signed(bonus) })}`;
             const hint = hintcls.create('', [match.css], { icon: match.icon, hint: tooltip });
             hints.push(hint);
         }
@@ -166,7 +177,7 @@ Hooks.on('pf1GetRollData', (
 });
 
 Hooks.on('renderItemSheet', (
-    /** @type {ItemSheetPF} */ { actor, item },
+    /** @type {ItemSheetPF} */ { actor, isEditable, item },
     /** @type {[HTMLElement]} */[html],
     /** @type {unknown} */ _data
 ) => {
@@ -217,8 +228,10 @@ Hooks.on('renderItemSheet', (
         choices,
         current,
         item,
+        journal,
         key,
-        label: localize(key),
         parent: html
+    }, {
+        canEdit: isEditable
     });
 });

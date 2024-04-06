@@ -7,14 +7,14 @@ import { truthiness } from "../../util/truthiness.mjs";
 import { BaseTarget } from "./base-target.mjs";
 
 class Settings {
-    static tokenSettingKey = 'should-auto-target-tokens';
-    static get shouldAutoTarget() { return Settings.#getSetting(this.tokenSettingKey); }
+    static get #tokenSettingKey() { return 'should-auto-target-tokens'; }
+    static get shouldAutoTarget() { return Settings.#getSetting(this.#tokenSettingKey); }
     // @ts-ignore
     static #getSetting(/** @type {string} */key) { return game.settings.get(MODULE_NAME, key); }
 
-    static init() {
+    static {
         registerSetting({
-            key: this.tokenSettingKey,
+            key: this.#tokenSettingKey,
             scope: 'client',
             settingType: Boolean,
         });
@@ -23,19 +23,18 @@ class Settings {
 
 export class TokenTarget extends BaseTarget {
 
-    /**
-     * @override
-     */
-    static init() {
-        Settings.init();
-    }
-
     static get #currentTargetUuids() { return [...game.user.targets].map(x => x.document?.uuid).filter(truthiness); }
 
     /**
      * @override
      */
-    static get targetKey() { return 'token'; }
+    static get sourceKey() { return 'token'; }
+
+    /**
+     * @override
+     * @returns {string}
+     */
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.iurMG1TBoX3auh5z#token'; }
 
     /**
      * @override
@@ -87,19 +86,23 @@ export class TokenTarget extends BaseTarget {
      * @override
      * @param {object} options
      * @param {ActorPF | null | undefined} options.actor
-     * @param {ItemPF} options.item
      * @param {HTMLElement} options.html
+     * @param {boolean} options.isEditable
+     * @param {ItemPF} options.item
      */
-    static showInputOnItemSheet({ actor, item, html }) {
+    static showInputOnItemSheet({ actor, html, isEditable, item }) {
         if (!actor) {
             return;
         }
 
         showTokenInput({
             item,
+            journal: this.journal,
             key: this.key,
             parent: html,
-            label: this.label,
+            tooltip: this.tooltip,
+        }, {
+            canEdit: isEditable,
         });
     }
 

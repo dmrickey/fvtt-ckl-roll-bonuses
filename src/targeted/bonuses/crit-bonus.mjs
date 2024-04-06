@@ -5,6 +5,7 @@ import { textInput } from "../../handlebars-handlers/bonus-inputs/text-input.mjs
 import { handleBonusTypeFor } from '../../target-and-bonus-join.mjs';
 import { FormulaCacheHelper } from "../../util/flag-helpers.mjs";
 import { LocalHookHandler, localHooks } from '../../util/hooks.mjs';
+import { registerItemHint } from '../../util/item-hints.mjs';
 import { localize } from '../../util/localize.mjs';
 import { SelfTarget } from '../targets/self-target.mjs';
 import { BaseBonus } from "./base-bonus.mjs";
@@ -17,7 +18,13 @@ export class CritBonus extends BaseBonus {
      * @inheritdoc
      * @override
      */
-    static get type() { return 'crit'; }
+    static get sourceKey() { return 'crit'; }
+
+    /**
+     * @override
+     * @returns {string}
+     */
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.PiyJbkTuzKHugPSk#critical-bonuses'; }
 
     static get #critKeenKey() { return `${this.key}-keen`; }
     static get #critMultKey() { return `${this.key}-mult`; }
@@ -29,7 +36,7 @@ export class CritBonus extends BaseBonus {
      * @param {ItemPF} source
      * @returns {boolean}
      */
-    static isBonusSource(source) { return super.isBonusSource(source) && !hasLegacyCritFlag(source); };
+    static isSource(source) { return super.isSource(source) && !hasLegacyCritFlag(source); };
 
     /**
      * If the item is providing keen
@@ -51,6 +58,13 @@ export class CritBonus extends BaseBonus {
      * @returns {number}
      */
     static getOffsetValue(source) { return FormulaCacheHelper.getModuleFlagValue(source, this.#critOffsetKey); }
+
+    /**
+    * @override
+    * @inheritdoc
+    * @returns {boolean}
+    */
+    static get skipTargetedHint() { return true; }
 
     /**
      * @override
@@ -131,9 +145,51 @@ export class CritBonus extends BaseBonus {
             range -= offset;
             range = Math.clamped(range, 2, 20);
             rollData.action.ability.critRange = isBroken ? 20 : range;
-
         };
         LocalHookHandler.registerHandler(localHooks.updateItemActionRollData, updateItemActionRollData);
+
+        registerItemHint((hintcls, actor, item, _data) => {
+            if (!actor || !item?.firstAction) return;
+
+            const isBroken = !!item.system.broken;
+            const action = item.firstAction;
+
+            let hasKeen = false;
+            let offset = 0;
+            const currentRange = action.data.ability.critRange || 20;
+            let mult = action.data.ability?.critMult || 2;
+
+            /** @type {string[]} */
+            const sources = [];
+
+            handleBonusTypeFor(
+                action,
+                CritBonus,
+                (bonusType, sourceItem) => {
+                    sources.push(sourceItem.name);
+                    hasKeen ||= bonusType.hasKeen(sourceItem);
+                    offset += bonusType.getOffsetValue(sourceItem);
+                    mult += bonusType.getMultValue(sourceItem);
+                }
+            );
+
+            let range = hasKeen
+                ? currentRange * 2 - 21
+                : currentRange;
+            range -= offset;
+            range = Math.clamped(range, 2, 20);
+            range = isBroken ? 20 : range;
+            mult = isBroken ? 2 : mult;
+
+            if (mult === action.data.ability.critMult
+                && range === action.data.ability.critRange
+            ) return;
+
+            const rangeFormat = range === 20 ? '20' : `${range}-20`;
+            const label = `${rangeFormat}/x${mult}`;
+            const hint = hintcls.create(label, [], { hint: sources.join('\n') });
+            return hint;
+        });
     }
 
     /**
@@ -145,7 +201,7 @@ export class CritBonus extends BaseBonus {
      * @returns {Nullable<string[]>}
      */
     static getHints(source, target = undefined) {
-        if (SelfTarget.isTargetSource(source)) {
+        if (SelfTarget.isSource(source)) {
             target = source.firstAction;
         }
 
@@ -211,32 +267,36 @@ export class CritBonus extends BaseBonus {
      * @override
      * @param {object} options
      * @param {ActorPF | null} options.actor
-     * @param {ItemPF} options.item
      * @param {HTMLElement} options.html
+     * @param {boolean} options.isEditable
+     * @param {ItemPF} options.item
      */
-    static showInputOnItemSheet({ item, html }) {
+    static showInputOnItemSheet({ html, item, isEditable }) {
         checkboxInput({
             item,
+            journal: this.journal,
             key: this.#critKeenKey,
             parent: html,
-            label: localize('bonus-target.bonus.label.crit-keen'),
         }, {
+            canEdit: isEditable,
             isModuleFlag: true,
         });
         textInput({
             item,
+            journal: this.journal,
             key: this.#critMultKey,
             parent: html,
-            label: localize('bonus-target.bonus.label.crit-mult'),
         }, {
+            canEdit: isEditable,
             isModuleFlag: true,
         });
         textInput({
             item,
+            journal: this.journal,
             key: this.#critOffsetKey,
             parent: html,
-            label: localize('bonus-target.bonus.label.crit-offset'),
         }, {
+            canEdit: isEditable,
             isModuleFlag: true,
         });
     }

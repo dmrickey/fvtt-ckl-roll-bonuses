@@ -1,5 +1,7 @@
+
 import { MODULE_NAME } from '../../consts.mjs';
 import { showEnabledLabel } from '../../handlebars-handlers/enabled-label.mjs';
+import { localizeBonusLabel, localizeBonusTooltip } from '../../util/localize.mjs';
 import { BaseBonus } from './base-bonus.mjs';
 
 export class FinesseBonus extends BaseBonus {
@@ -8,7 +10,19 @@ export class FinesseBonus extends BaseBonus {
      * @override
      * @returns { string }
      */
-    static get type() { return 'finesse'; }
+    static get sourceKey() { return 'finesse'; }
+
+    /**
+     * @override
+     * @returns {string}
+     */
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.PiyJbkTuzKHugPSk#finesse'; }
+
+    /** @override @returns { string } */
+    static get tooltip() { return localizeBonusTooltip('finesse-bonus'); }
+
+    /** @override @returns {string} */
+    static get label() { return localizeBonusLabel('finesse-bonus'); }
 
     /**
      * Get Item Hints tooltip value
@@ -19,9 +33,7 @@ export class FinesseBonus extends BaseBonus {
      * @returns {Nullable<string[]>}
      */
     static getHints(source, target = undefined) {
-        if (this.isBonusSource(source)) {
-            return [this.label];
-        }
+        return [this.label];
     }
 
     /**
@@ -72,13 +84,20 @@ export class FinesseBonus extends BaseBonus {
      * @override
      * @param {object} options
      * @param {ActorPF | null} options.actor
-     * @param {ItemPF} options.item
      * @param {HTMLElement} options.html
+     * @param {boolean} options.isEditable
+     * @param {ItemPF} options.item
      */
-    static showInputOnItemSheet({ actor, item, html }) {
+    static showInputOnItemSheet({ html, isEditable, item }) {
         showEnabledLabel({
+            item,
+            journal: this.journal,
+            key: this.key,
             label: this.label,
             parent: html,
+            tooltip: this.tooltip,
+        }, {
+            canEdit: isEditable,
         });
     }
 
@@ -99,10 +118,20 @@ export class FinesseBonus extends BaseBonus {
      * @returns {ItemActionRollAttackHookArgs}
      */
     static itemActionRollAttack(_source, seed, _action, data) {
-        const strRegex = new RegExp(`[0-9]+\\[${pf1.config.abilities.str}\\]`);
+        const dexRegex = new RegExp(`[\\+-]\\s*[0-9]+\\[${pf1.config.abilities.dex}\\]`);
+        const strRegex = new RegExp(`[\\+-]\\s*[0-9]+\\[${pf1.config.abilities.str}\\]`);
+
         const dexIsGreater = data.abilities.dex.mod > data.abilities.str.mod;
-        if (data && seed.formula.match(strRegex) && dexIsGreater) {
-            seed.formula = seed.formula.replace(strRegex, `${data.abilities.dex.mod}[${pf1.config.abilities.dex}]`);
+        const dexFormula = `+ ${data.abilities.dex.mod}[${pf1.config.abilities.dex}]`;
+
+        const dexMatch = seed.formula.match(dexRegex);
+        const strMatch = seed.formula.match(strRegex);
+
+        if (strMatch && !dexMatch && dexIsGreater) {
+            seed.formula = seed.formula.replace(strRegex, dexFormula);
+        }
+        else if (!dexMatch && dexIsGreater) {
+            seed.formula = `${seed.formula} ${dexFormula}`;
         }
         return seed;
     }

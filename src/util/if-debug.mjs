@@ -3,10 +3,9 @@ import { registerSetting } from './settings.mjs';
 
 const key = 'debug';
 
-const debugSetup = () => registerSetting({ key, settingType: Boolean });
+Hooks.once('setup', () => registerSetting({ key, settingType: Boolean }, { skipReady: true }));
 
 /**
- *
  * @param {() => void} func
  * @returns
  */
@@ -17,4 +16,4 @@ const ifDebug = (func) => {
     }
 };
 
-export { ifDebug, debugSetup };
+export { ifDebug };

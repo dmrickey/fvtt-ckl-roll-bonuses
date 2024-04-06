@@ -12,17 +12,24 @@ export class ModifiersBonus extends BaseBonus {
      * @inheritdoc
      * @override
      */
-    static get type() { return 'modifiers'; }
+    static get sourceKey() { return 'modifiers'; }
 
     /**
      * @override
      * @param {object} options
      * @param {ActorPF | null} options.actor
-     * @param {ItemPF} options.item
      * @param {HTMLElement} options.html
+     * @param {boolean} options.isEditable
+     * @param {ItemPF} options.item
      */
-    static showInputOnItemSheet({ actor, item, html }) {
-        modifiersInput({ item, key: this.key, parentElement: html });
+    static showInputOnItemSheet({ html, isEditable, item }) {
+        modifiersInput({
+            item,
+            key: this.key,
+            parentElement: html,
+        }, {
+            canEdit: isEditable,
+        });
     }
 
     /**

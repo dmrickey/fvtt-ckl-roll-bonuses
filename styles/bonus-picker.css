@@ -1,0 +1,25 @@
+.roll-bonuses-form.bonus-picker {
+    .sources {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .specific-bonuses {
+        -webkit-column-count: 2;
+        -moz-column-count: 2;
+        column-count: 2;
+
+        & .child {
+            margin-inline-start: 1rem;
+        }
+    }
+
+    & h2 {
+        text-align: center;
+    }
+
+    & .fas.fa-book {
+        margin-inline-start: 0.25rem;
+    }
+}

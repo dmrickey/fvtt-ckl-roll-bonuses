@@ -5,7 +5,7 @@ export class IsSpellTarget extends BaseIsItemTarget {
     /**
      * @override
      */
-    static get targetKey() { return 'is-spell'; }
+    static get sourceKey() { return 'is-spell'; }
 
     /**
      * @override

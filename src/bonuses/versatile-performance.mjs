@@ -2,21 +2,27 @@
 
 import { MODULE_NAME } from "../consts.mjs";
 import { createTemplate, templates } from "../handlebars-handlers/templates.mjs";
-import { addNodeToRollBonus } from "../handlebars-handlers/roll-bonus-on-item-sheet.mjs";
+import { addNodeToRollBonus } from "../handlebars-handlers/add-bonus-to-item-sheet.mjs";
 import { getDocDFlags } from "../util/flag-helpers.mjs";
 import { registerItemHint } from "../util/item-hints.mjs";
 import { localize } from "../util/localize.mjs";
 import { registerSetting } from "../util/settings.mjs";
 import { truthiness } from "../util/truthiness.mjs";
+import { SpecificBonuses } from './all-specific-bonuses.mjs';
 
 const key = 'versatile-performance';
+const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#versatile-performance';
 
-registerSetting({ key });
+Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ journal, key }));
 
 class Settings {
     static get versatilePerformance() { return Settings.#getSetting(key); }
     // @ts-ignore
     static #getSetting(/** @type {string} */key) { return game.settings.get(MODULE_NAME, key).toLowerCase(); }
+
+    static {
+        registerSetting({ key });
+    }
 }
 
 const disabledKey = (
@@ -161,14 +167,13 @@ Hooks.once('init', () => {
 });
 
 Hooks.on('renderItemSheet', (
-    /** @type {ItemSheetPF} */ { actor, item },
+    /** @type {ItemSheetPF} */ { actor, isEditable, item },
     /** @type {[HTMLElement]} */[html],
     /** @type {unknown} */ _data
 ) => {
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
     const name = item?.name?.toLowerCase() ?? '';
-    if (!actor) return;
 
     const currentVP = item.system.flags.dictionary[key];
     if (!currentVP && currentVP !== '') {
@@ -181,54 +186,70 @@ Hooks.on('renderItemSheet', (
     }
     const [baseId, ...substitutes] = `${currentVP}`.split(';');
     const [skill1Id, skill2Id] = substitutes;
+    const skillLookup = (/** @type {string}*/ id) => actor?.getSkillInfo(id) || pf1.config.skills[id] || { id, name: id };
     let base, skill1, skill2;
     if (baseId) {
-        base = actor.getSkillInfo(baseId);
+        base = skillLookup(baseId);
     }
     if (skill1Id) {
-        skill1 = actor.getSkillInfo(skill1Id);
+        skill1 = skillLookup(skill1Id);
     }
     if (skill2Id) {
-        skill2 = actor.getSkillInfo(skill2Id);
+        skill2 = skillLookup(skill2Id);
     }
 
-    const allSkills = (() => {
-        const skills = [];
-        for (const [id, s] of Object.entries(actor.getRollData().skills)) {
-            const skill = deepClone(s);
-            skill.id = id;
-            skills.push(skill);
-            skill.name = pf1.config.skills[id] ?? actor.system.skills[id].name;
+    let allSkills, performs;
+    if (isEditable) {
+        if (!actor) return;
 
-            for (const [subId, subS] of Object.entries(s.subSkills ?? {})) {
+        allSkills = (() => {
+            const skills = [];
+            for (const [id, s] of Object.entries(actor.getRollData().skills)) {
+                const skill = deepClone(s);
+                skill.id = id;
+                skills.push(skill);
+                skill.name = pf1.config.skills[id] ?? actor.system.skills[id].name;
+
+                for (const [subId, subS] of Object.entries(s.subSkills ?? {})) {
+                    const subSkill = deepClone(subS);
+                    subSkill.id = `${id}.subSkills.${subId}`;
+                    skills.push(subSkill);
+                }
+            }
+            return skills
+                .filter(truthiness)
+                .sort((a, b) => a.name.localeCompare(b.name));
+        })();
+
+        performs = (() => {
+            const skills = [];
+            const perform = actor.getSkillInfo('prf');
+            for (const [subId, subS] of Object.entries(perform.subSkills ?? {})) {
                 const subSkill = deepClone(subS);
-                subSkill.id = `${id}.subSkills.${subId}`;
+                subSkill.id = `prf.subSkills.${subId}`;
                 skills.push(subSkill);
             }
-        }
-        return skills
-            .filter(truthiness)
-            .sort((a, b) => a.name.localeCompare(b.name));
-    })();
+            return skills
+                .sort((a, b) => a.name.localeCompare(b.name));
+        })();
+        if (!performs.length) return;
 
-    const performs = (() => {
-        const skills = [];
-        const perform = actor.getSkillInfo('prf');
-        for (const [subId, subS] of Object.entries(perform.subSkills ?? {})) {
-            const subSkill = deepClone(subS);
-            subSkill.id = `prf.subSkills.${subId}`;
-            skills.push(subSkill);
+        if (performs.length && !base) {
+            item.setItemDictionaryFlag(key, `${performs[0].id}`);
         }
-        return skills
-            .sort((a, b) => a.name.localeCompare(b.name));
-    })();
-    if (!performs.length) return;
-
-    if (performs.length && !base) {
-        item.setItemDictionaryFlag(key, `${performs[0].id}`);
     }
 
-    const templateData = { base, skill1, skill2, performs, allSkills };
+    const templateData = {
+        allSkills,
+        base,
+        canEdit: isEditable,
+        journal,
+        label: localize('versatilePerformance.header'),
+        performs,
+        skill1,
+        skill2,
+        tooltip: localize('bonuses.tooltip.versatile-performance'),
+    };
 
     const div = createTemplate(templates.versatilePerformance, templateData);
 
@@ -248,5 +269,5 @@ Hooks.on('renderItemSheet', (
     skill1Select?.addEventListener('change', updateVP);
     skill2Select?.addEventListener('change', updateVP);
 
-    addNodeToRollBonus(html, div);
+    addNodeToRollBonus(html, div, item, isEditable);
 });

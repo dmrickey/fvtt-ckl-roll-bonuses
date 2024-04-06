@@ -8,19 +8,22 @@ const key = 'weapon-finesse';
 const bonusKey = FinesseBonus.key;
 const targetKey = FinesseTarget.key;
 
-registerSetting({ key: key });
-
 class Settings {
     static get name() { return Settings.#getSetting(key); }
     // @ts-ignore
     static #getSetting(/** @type {string} */key) { return game.settings.get(MODULE_NAME, key).toLowerCase(); }
+
+    static {
+        registerSetting({ key });
+    }
 }
 
 Hooks.on('renderItemSheet', (
-    /** @type {ItemSheetPF} */ { actor, item },
+    /** @type {ItemSheetPF} */ { isEditable, item },
     /** @type {[HTMLElement]} */[html],
     /** @type {unknown} */ _data
 ) => {
+    if (!isEditable) return;
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
     const name = item?.name?.toLowerCase() ?? '';

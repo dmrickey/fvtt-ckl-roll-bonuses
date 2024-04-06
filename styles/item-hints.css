@@ -13,3 +13,7 @@
 .sheet itemHints.koboldworks .hint.ckl-fire-red {
     color: #ff0000;
 }
+
+.sheet itemHints.koboldworks .hint.ckl-missing-source {
+    background-color: rgba(255,0,0,.1);
+}

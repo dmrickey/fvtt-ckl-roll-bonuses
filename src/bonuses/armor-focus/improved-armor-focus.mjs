@@ -6,20 +6,29 @@ import { stringSelect } from "../../handlebars-handlers/bonus-inputs/string-sele
 import { intersects } from "../../util/array-intersects.mjs";
 import { KeyedDFlagHelper, getDocDFlags } from "../../util/flag-helpers.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
-import { localize } from "../../util/localize.mjs";
+import { localizeBonusLabel } from "../../util/localize.mjs";
 import { registerSetting } from "../../util/settings.mjs";
+import { uniqueArray } from '../../util/unique-array.mjs';
+import { SpecificBonuses } from '../all-specific-bonuses.mjs';
 import { armorFocusKey } from "./ids.mjs";
 
 const key = 'improved-armor-focus';
 const compendiumId = 'WmEE6BOuP5Uh7pEE';
+const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#armor-focus';
 
-registerSetting({ key: key });
+export { key as improvedArmorFocusKey };
+
+Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ journal, key, parent: armorFocusKey }));
 
 class Settings {
     static get armorFocus() { return Settings.#getSetting(armorFocusKey); }
     static get improved() { return Settings.#getSetting(key); }
     // @ts-ignore
     static #getSetting(/** @type {string} */key) { return game.settings.get(MODULE_NAME, key).toLowerCase(); }
+
+    static {
+        registerSetting({ key });
+    }
 }
 
 // register hint on source feat
@@ -27,23 +36,6 @@ registerItemHint((hintcls, _actor, item, _data) => {
     const current = item.getItemDictionaryFlag(key);
     if (current) {
         return hintcls.create(`${current}`, [], {});
-    }
-});
-
-// register hint on focused item
-registerItemHint((hintcls, actor, item, _data) => {
-    if (!(item instanceof pf1.documents.item.ItemEquipmentPF)) return;
-
-    const isArmor = item.isActive && item.system.slot === 'armor';
-    const baseTypes = item.system.baseTypes;
-    if (!baseTypes?.length) return;
-
-    const armorFocuses = new KeyedDFlagHelper(actor, {}, key).valuesForFlag(key);
-    const isFocused = intersects(armorFocuses, baseTypes);
-
-    if (isArmor && isFocused) {
-        const hint = hintcls.create(localize(key), [], {});
-        return hint;
     }
 });
 
@@ -97,7 +89,7 @@ function handleArmorFocusChange(actor, tempChanges) {
     if (current > 0) {
         tempChanges.push(
             new pf1.components.ItemChange({
-                flavor: localize(key),
+                flavor: localizeBonusLabel(key),
                 formula: -1,
                 modifier: "untypedPerm",
                 subTarget: "acpA",
@@ -108,7 +100,7 @@ function handleArmorFocusChange(actor, tempChanges) {
 Hooks.on('pf1AddDefaultChanges', handleArmorFocusChange);
 
 Hooks.on('renderItemSheet', (
-    /** @type {ItemSheetPF} */ { actor, item },
+    /** @type {ItemSheetPF} */ { actor, isEditable, item },
     /** @type {[HTMLElement]} */[html],
     /** @type {unknown} */ _data
 ) => {
@@ -124,14 +116,18 @@ Hooks.on('renderItemSheet', (
     }
 
     const current = item.getItemDictionaryFlag(key);
-    const choices = getDocDFlags(actor, armorFocusKey).map(x => `${x}`);
+    const choices = isEditable
+        ? uniqueArray(getDocDFlags(actor, armorFocusKey).map(x => `${x}`))
+        : [];
 
     stringSelect({
         choices,
         current,
         item,
+        journal,
         key,
-        label: localize(key),
         parent: html
+    }, {
+        canEdit: isEditable
     });
 });

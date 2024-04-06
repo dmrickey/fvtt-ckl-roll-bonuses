@@ -14,7 +14,13 @@ export class WeaponGroupTarget extends BaseTarget {
      * @inheritdoc
      * @override
      */
-    static get targetKey() { return 'weapon-group'; }
+    static get sourceKey() { return 'weapon-group'; }
+
+    /**
+     * @override
+     * @returns {string}
+     */
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.iurMG1TBoX3auh5z#weapon-group'; }
 
     /**
      * @override
@@ -37,6 +43,11 @@ export class WeaponGroupTarget extends BaseTarget {
         const item = doc instanceof pf1.documents.item.ItemPF
             ? doc
             : doc.item;
+
+        if (!item?.actor) {
+            return [];
+        }
+
         if (!(item instanceof pf1.documents.item.ItemAttackPF
             || item instanceof pf1.documents.item.ItemWeaponPF)
         ) {
@@ -64,10 +75,11 @@ export class WeaponGroupTarget extends BaseTarget {
      * @override
      * @param {object} options
      * @param {ActorPF | null | undefined} options.actor
-     * @param {ItemPF} options.item
      * @param {HTMLElement} options.html
+     * @param {boolean} options.isEditable
+     * @param {ItemPF} options.item
      */
-    static showInputOnItemSheet({ actor, item, html }) {
+    static showInputOnItemSheet({ actor, html, isEditable, item }) {
         const custom = uniqueArray(
             actor?.items
                 .filter(
@@ -87,10 +99,13 @@ export class WeaponGroupTarget extends BaseTarget {
 
         showChecklist({
             item,
-            flag: this.key,
-            label: this.label,
-            parent: html,
+            journal: this.journal,
+            key: this.key,
             options,
+            parent: html,
+            tooltip: this.tooltip,
+        }, {
+            canEdit: isEditable,
         });
     }
 }

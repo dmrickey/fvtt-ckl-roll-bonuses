@@ -1,6 +1,9 @@
 import { MODULE_NAME } from "../consts.mjs";
 
-export const templates = {
+export const templates =/** @type {const} */ ({
+    // bonus container for item sheets
+    rollBonusesContainer: `modules/${MODULE_NAME}/hbs/roll-bonuses-header.hbs`,
+
     // generic shortcuts
     checkboxInput: `modules/${MODULE_NAME}/hbs/checkbox-input.hbs`,
     enabledLabel: `modules/${MODULE_NAME}/hbs/enabled-label.hbs`,
@@ -23,21 +26,31 @@ export const templates = {
     targetWeaponGroup: `modules/${MODULE_NAME}/hbs/targeted/targets/weapon-group-input.hbs`,
     tokenApp: `modules/${MODULE_NAME}/hbs/targeted/targets/token-application.hbs`,
 
-    // targeted - bonus or target
-    textInputList: `modules/${MODULE_NAME}/hbs/targeted/text-input-list.hbs`,
-};
+    // bonus picker application
+    bonusPicker: `modules/${MODULE_NAME}/hbs/bonus-picker.hbs`,
+    bonusPickerItem: `modules/${MODULE_NAME}/hbs/bonus-picker-item.hbs`,
+
+    // partials
+    label: `modules/${MODULE_NAME}/hbs/label.hbs`,
+});
 
 /**
- *
- * @param {string} template
- * @param {{[key: string]: any}} templateData
- * @returns {HTMLDivElement}
+ * @param {typeof templates[keyof typeof templates]} template
+ * @param {Record<string, any>} [templateData]
+ * @returns {Element}
  */
-export function createTemplate(template, templateData) {
+export function createTemplate(template, templateData = {}) {
     const div = document.createElement('div');
     div.innerHTML = Handlebars.partials[template](
         templateData,
         { allowProtoMethodsByDefault: true, allowProtoPropertiesByDefault: true },
     );
-    return div;
+
+    const child = div.firstChild;
+    if (child instanceof Element) {
+        return child;
+    }
+
+    console.error('should never happen', template, div.innerHTML)
+    throw new Error('should never happen');
 }

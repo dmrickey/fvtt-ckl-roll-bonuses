@@ -3,10 +3,9 @@ import { intersection } from "../../util/array-intersects.mjs";
 import { FormulaCacheHelper, KeyedDFlagHelper, getDocDFlags } from "../../util/flag-helpers.mjs";
 import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
-import { localize } from "../../util/localize.mjs";
+import { localize, localizeBonusLabel } from "../../util/localize.mjs";
 import { signed } from "../../util/to-signed-string.mjs";
 import { truthiness } from "../../util/truthiness.mjs";
-import { getSpellTypes } from "./helper.mjs";
 
 /**
  * @type {{cl: keyof(RollData), dc: keyof(RollData)}}
@@ -23,12 +22,27 @@ const damageElements = [
     'fire'
 ];
 
+const regex = /([A-Za-z\- ])+/g;
+
+/**
+ * @param {ItemSpellPF} item
+ * @returns {string[]}
+ */
+const getSpellDescriptors = (item) => {
+    return [...(item?.system?.types || '').matchAll(regex)]
+        .flatMap(([a]) => a.split('or'))
+        .map((a) => a.trim().toLowerCase());
+}
+
 /**
  * @param {'cl' | 'dc'} t
  */
 export function createElementalClOrDc(t) {
     const key = `elemental-${t}`;
     const formulaKey = `elemental-${t}-formula`;
+    const journal = t === 'cl'
+        ? 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#*modify-spell-caster-level-(all-spells,-specific-school,-or-spec'
+        : 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#*modify-spell-dc-(all-spells,-specific-school,-or-specific-eleme';
 
     FormulaCacheHelper.registerUncacheableDictionaryFlag(key);
     FormulaCacheHelper.registerDictionaryFlag(formulaKey);
@@ -61,7 +75,7 @@ export function createElementalClOrDc(t) {
             .flatMap(({ custom, values }) => ([...custom.split(';').map(x => x.trim()), ...values]))
             .filter(truthiness)
             .map((x) => x.toLowerCase());
-        const types = getSpellTypes(item);
+        const types = getSpellDescriptors(item);
         const domains = Object.keys(item.learnedAt?.domain || []).map((x) => x.toLowerCase());
 
         const comparators = damageElements.flatMap((element) => [element, pf1.registry.damageTypes.get(element)?.name?.toLowerCase() || element]);
@@ -123,7 +137,7 @@ export function createElementalClOrDc(t) {
 
         if (found?.offset) {
             const label = localize(`${t}-label-mod`, { mod: signed(found.offset), label: found.elements.join(', ') });
-            const hint = hintcls.create(label, [], { hint: localize(key) });
+            const hint = hintcls.create(label, [], { hint: localizeBonusLabel(key) });
             return hint;
         }
     });
@@ -144,7 +158,7 @@ export function createElementalClOrDc(t) {
         const element = pf1.registry.damageTypes.get(`${currentElement}`)?.name ?? currentElement;
         const label = localize(`${t}-label-mod`, { mod, label: element });
 
-        const hint = hintcls.create(label, [], { hint: localize(key) });
+        const hint = hintcls.create(label, [], { hint: localizeBonusLabel(key) });
         return hint;
     });
 
@@ -168,7 +182,7 @@ export function createElementalClOrDc(t) {
     });
 
     Hooks.on('renderItemSheet', (
-    /** @type {ItemSheetPF} */ { item },
+    /** @type {ItemSheetPF} */ { isEditable, item },
     /** @type {[HTMLElement]} */[html],
     /** @type {unknown} */ _data
     ) => {
@@ -183,12 +197,13 @@ export function createElementalClOrDc(t) {
             .map(element => ({ key: element, label: pf1.registry.damageTypes.get(element)?.name || element }));
 
         textInputAndKeyValueSelect({
-            text: { current: getDocDFlags(item, formulaKey)[0] || '', key: formulaKey },
-            select: { current, choices, key },
             item,
-            key,
-            label: localize(key),
-            parent: html
+            journal,
+            parent: html,
+            select: { current, choices, key },
+            text: { current: getDocDFlags(item, formulaKey)[0] || '', key: formulaKey },
+        }, {
+            canEdit: isEditable,
         });
     });
 }

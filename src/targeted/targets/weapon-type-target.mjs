@@ -8,22 +8,30 @@ import { BaseTarget } from "./base-target.mjs";
 export class WeaponTypeTarget extends BaseTarget {
     /**
      * @override
+     * @inheritdoc
      */
-    static get targetKey() { return 'weapon-type'; }
+    static get sourceKey() { return 'weapon-type'; }
 
     /**
      * @override
+     * @returns {string}
+     */
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.iurMG1TBoX3auh5z#weapon-type'; }
+
+    /**
+     * @override
+     * @inheritdoc
      * @param {ItemPF} source
      * @returns {Nullable<string[]>}
      */
     static getHints(source) {
-        /** @type {string[]} */
         const groups = source.getFlag(MODULE_NAME, this.key) ?? [];
         return groups.filter(truthiness);
     }
 
     /**
      * @override
+     * @inheritdoc
      * @param {ItemPF | ActionUse | ItemAction} doc
      * @returns {ItemPF[]}
      */
@@ -31,6 +39,11 @@ export class WeaponTypeTarget extends BaseTarget {
         const item = doc instanceof pf1.documents.item.ItemPF
             ? doc
             : doc.item;
+
+        if (!item?.actor) {
+            return [];
+        }
+
         if (!(item instanceof pf1.documents.item.ItemAttackPF
             || item instanceof pf1.documents.item.ItemWeaponPF)
         ) {
@@ -58,12 +71,14 @@ export class WeaponTypeTarget extends BaseTarget {
 
     /**
      * @override
+     * @inheritdoc
      * @param {object} options
      * @param {ActorPF | null | undefined} options.actor
-     * @param {ItemPF} options.item
      * @param {HTMLElement} options.html
+     * @param {boolean} options.isEditable
+     * @param {ItemPF} options.item
      */
-    static showInputOnItemSheet({ actor, item, html }) {
+    static showInputOnItemSheet({ html, isEditable, item }) {
         const options = uniqueArray(item.actor?.items
             ?.filter(
                 /** @returns {item is ItemWeaponPF | ItemAttackPF} */
@@ -73,10 +88,13 @@ export class WeaponTypeTarget extends BaseTarget {
 
         showChecklist({
             item,
-            flag: this.key,
-            label: this.label,
-            parent: html,
+            journal: this.journal,
+            key: this.key,
             options,
+            parent: html,
+            tooltip: this.tooltip,
+        }, {
+            canEdit: isEditable,
         });
     }
 }

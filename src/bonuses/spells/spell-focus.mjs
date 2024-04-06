@@ -3,9 +3,10 @@ import { keyValueSelect } from "../../handlebars-handlers/bonus-inputs/key-value
 import { KeyedDFlagHelper, getDocDFlags } from "../../util/flag-helpers.mjs";
 import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
-import { localize } from "../../util/localize.mjs";
+import { localize, localizeBonusLabel } from "../../util/localize.mjs";
 import { registerSetting } from "../../util/settings.mjs";
 import { signed } from "../../util/to-signed-string.mjs";
+import { SpecificBonuses } from '../all-specific-bonuses.mjs';
 
 export const spellFocusKey = 'spellFocus';
 const greaterSpellFocusKey = 'greaterSpellFocus';
@@ -17,9 +18,13 @@ const spellFocusId = 'V2zY7BltkpSXwejy';
 const greaterSpellFocusId = 'LSykiaxYWzva2boF';
 const mythicSpellFocusId = 'TOMEhAeZsgGHrSH6';
 
-registerSetting({ key: spellFocusKey });
-registerSetting({ key: greaterSpellFocusKey });
-registerSetting({ key: mythicSpellFocusKey });
+const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#spell-focus';
+
+Hooks.once('ready', () => {
+    SpecificBonuses.registerSpecificBonus({ journal, key: spellFocusKey });
+    SpecificBonuses.registerSpecificBonus({ journal, key: greaterSpellFocusKey, parent: spellFocusKey });
+    SpecificBonuses.registerSpecificBonus({ journal, key: mythicSpellFocusKey, parent: spellFocusKey });
+});
 
 class Settings {
     static get spellFocus() { return Settings.#getSetting(spellFocusKey); }
@@ -27,6 +32,12 @@ class Settings {
     static get mythic() { return Settings.#getSetting(mythicSpellFocusKey); }
     // @ts-ignore
     static #getSetting(/** @type {string} */key) { return game.settings.get(MODULE_NAME, key).toLowerCase(); }
+
+    static {
+        registerSetting({ key: spellFocusKey });
+        registerSetting({ key: greaterSpellFocusKey });
+        registerSetting({ key: mythicSpellFocusKey });
+    }
 }
 
 // add Info to chat card
@@ -55,7 +66,7 @@ Hooks.on(customGlobalHooks.itemGetTypeChatData, (
         if (isFocused) bonus += 1;
         if (isGreater) bonus += 1;
         if (isMythic) bonus *= 2;
-        props.push(localize('dc-label-mod', { mod: signed(bonus), label: localize(spellFocusKey) }));
+        props.push(localize('dc-label-mod', { mod: signed(bonus), label: localizeBonusLabel(spellFocusKey) }));
     }
 });
 
@@ -75,15 +86,15 @@ registerItemHint((hintcls, actor, item, _data) => {
         const tips = []
         let bonus = 0;
         if (isFocused) {
-            tips.push(localize(spellFocusKey));
+            tips.push(localizeBonusLabel(spellFocusKey));
             bonus += 1;
         }
         if (isGreater) {
-            tips.push(localize(greaterSpellFocusKey));
+            tips.push(localizeBonusLabel(greaterSpellFocusKey));
             bonus += 1;
         }
         if (isMythic) {
-            tips.push(localize(mythicSpellFocusKey));
+            tips.push(localizeBonusLabel(mythicSpellFocusKey));
             bonus *= 2;
         }
         tips.push(localize('dc-mod', { mod: signed(bonus) }));
@@ -160,7 +171,7 @@ Hooks.on('pf1GetRollData', (
 });
 
 Hooks.on('renderItemSheet', (
-    /** @type {ItemSheetPF} */ { actor, item },
+    /** @type {ItemSheetPF} */ { actor, isEditable, item },
     /** @type {[HTMLElement]} */[html],
     /** @type {unknown} */ _data
 ) => {
@@ -209,8 +220,10 @@ Hooks.on('renderItemSheet', (
         choices,
         current,
         item,
+        journal,
         key,
-        label: localize(key),
         parent: html
+    }, {
+        canEdit: isEditable,
     });
 });

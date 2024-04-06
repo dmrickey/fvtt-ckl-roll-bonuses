@@ -7,20 +7,26 @@ import { intersects } from "../util/array-intersects.mjs";
 import { KeyedDFlagHelper, getDocDFlags } from "../util/flag-helpers.mjs";
 import { customGlobalHooks } from "../util/hooks.mjs";
 import { registerItemHint } from "../util/item-hints.mjs";
-import { localize } from "../util/localize.mjs";
+import { localizeBonusLabel } from "../util/localize.mjs";
 import { registerSetting } from "../util/settings.mjs";
 import { truthiness } from "../util/truthiness.mjs";
 import { uniqueArray } from "../util/unique-array.mjs";
+import { SpecificBonuses } from './all-specific-bonuses.mjs';
 
 const key = 'martial-focus';
 const compendiumId = 'W1eDSqiwljxDe0zl';
+const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#martial-focus';
 
-registerSetting({ key: key });
+Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ journal, key }));
 
 class Settings {
     static get martialFocus() { return Settings.#getSetting(key); }
     // @ts-ignore
     static #getSetting(/** @type {string} */key) { return game.settings.get(MODULE_NAME, key).toLowerCase(); }
+
+    static {
+        registerSetting({ key });
+    }
 }
 
 // register hint on source feat
@@ -47,7 +53,7 @@ registerItemHint((hintcls, actor, item, _data) => {
     const isFocused = intersects(weaponGroups, focuses);
 
     if (isFocused) {
-        return hintcls.create(localize(key), [], {});
+        return hintcls.create(localizeBonusLabel(key), [], {});
     }
 });
 
@@ -69,7 +75,7 @@ function addMartialFocus({ actor, item, shared }) {
     const isFocused = intersects(weaponGroups, focuses);
 
     if (isFocused) {
-        shared.damageBonus.push(`${1}[${localize(key)}]`);
+        shared.damageBonus.push(`${1}[${localizeBonusLabel(key)}]`);
     }
 }
 Hooks.on(customGlobalHooks.actionUseAlterRollData, addMartialFocus);
@@ -88,7 +94,7 @@ function actionDamageSources({ item }, sources) {
         return sources;
     }
 
-    const name = localize(key);
+    const name = localizeBonusLabel(key);
 
     const martialFocuses = getDocDFlags(actor, key, { includeInactive: false });
     const groupsOnItem = [...(item.system.weaponGroups?.value || []), ...(item.system.weaponGroups?.custom || '').split(';')].filter(truthiness);
@@ -142,7 +148,7 @@ Hooks.on(customGlobalHooks.actionDamageSources, actionDamageSources);
 
 //     if (isFocused && rollData.action.damage?.parts?.length) {
 //         rollData.action.damage.parts.push({
-//             formula: `1[${localize(key)}]`,
+//             formula: `1[${localizeSpecificLabel(key)}]`,
 //             type: rollData.action.damage.parts[0].type,
 //         });
 //     }
@@ -150,7 +156,7 @@ Hooks.on(customGlobalHooks.actionDamageSources, actionDamageSources);
 // Hooks.on('pf1GetRollData', getFocusedItemRollData);
 
 Hooks.on('renderItemSheet', (
-    /** @type {ItemSheetPF} */ { actor, item },
+    /** @type {ItemSheetPF} */ { actor, isEditable, item },
     /** @type {[HTMLElement]} */[html],
     /** @type {unknown} */ _data
 ) => {
@@ -164,16 +170,19 @@ Hooks.on('renderItemSheet', (
 
     const current = item.getItemDictionaryFlag(key);
 
-    const customs = uniqueArray(
-        actor?.items
-            .filter(
-                /** @returns {i is ItemWeaponPF | ItemAttackPF} */
-                (i) => i instanceof pf1.documents.item.ItemWeaponPF || i instanceof pf1.documents.item.ItemAttackPF
-            )
-            .flatMap((i) => (i.system.weaponGroups?.custom ?? '').split(';'))
-            .filter(truthiness)
-        ?? []
-    ).map((i) => ({ key: i, label: i }));
+    const customs =
+        !actor || !isEditable
+            ? []
+            : uniqueArray(
+                actor.items
+                    .filter(
+                        /** @returns {i is ItemWeaponPF | ItemAttackPF} */
+                        (i) => i instanceof pf1.documents.item.ItemWeaponPF || i instanceof pf1.documents.item.ItemAttackPF
+                    )
+                    .flatMap((i) => (i.system.weaponGroups?.custom ?? '').split(';'))
+                    .filter(truthiness)
+                ?? []
+            ).map((i) => ({ key: i, label: i }));
 
     const groups = Object.entries(pf1.config.weaponGroups).map(([key, label]) => ({ key, label }));
     const choices = [...groups, ...customs].sort();
@@ -182,8 +191,10 @@ Hooks.on('renderItemSheet', (
         choices,
         current,
         item,
+        journal,
         key,
-        label: localize(key),
         parent: html
+    }, {
+        canEdit: isEditable,
     });
 });

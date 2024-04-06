@@ -1,7 +1,7 @@
 import { MODULE_NAME } from "../../../consts.mjs";
 import { localize } from "../../../util/localize.mjs";
 import { createTemplate, templates } from "../../templates.mjs";
-import { addNodeToRollBonus } from "../../roll-bonus-on-item-sheet.mjs";
+import { addNodeToRollBonus } from "../../add-bonus-to-item-sheet.mjs";
 
 /**
  *
@@ -165,11 +165,15 @@ function createId(item, key) {
  * @param {ItemPF} args.item
  * @param {string} args.key
  * @param {HTMLElement} args.parentElement
+ * @param {object} options
+ * @param {boolean} options.canEdit
  */
 export function modifiersInput({
     item,
     key,
     parentElement,
+}, {
+    canEdit,
 }) {
     /** @type {ItemConditional[]} */
     let conditionals = (item.getFlag(MODULE_NAME, key) || [createConditional(item)]).map((/** @type {ItemConditional} */c) => createConditional(item, c));
@@ -349,5 +353,5 @@ export function modifiersInput({
         );
     });
 
-    addNodeToRollBonus(parentElement, div);
+    addNodeToRollBonus(parentElement, div, item, canEdit);
 }

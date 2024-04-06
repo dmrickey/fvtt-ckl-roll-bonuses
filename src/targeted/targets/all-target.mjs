@@ -10,7 +10,13 @@ export class AllTarget extends BaseTarget {
      * @inheritdoc
      * @override
      */
-    static get targetKey() { return 'all'; }
+    static get sourceKey() { return 'all'; }
+
+    /**
+     * @override
+     * @returns {string}
+     */
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.iurMG1TBoX3auh5z#all'; }
 
     /**
      * @inheritdoc
@@ -19,10 +25,7 @@ export class AllTarget extends BaseTarget {
      * @returns {Nullable<string[]>}
      */
     static getHints(source) {
-        /** @type {string[]} */
-        if (this.isTargetSource(source)) {
-            return [this.label];
-        }
+        return [this.label];
     }
 
     /**
@@ -30,13 +33,19 @@ export class AllTarget extends BaseTarget {
      * @override
      * @param {object} options
      * @param {ActorPF | null | undefined} options.actor
-     * @param {ItemPF} options.item
      * @param {HTMLElement} options.html
+     * @param {boolean} options.isEditable
+     * @param {ItemPF} options.item
      */
-    static showInputOnItemSheet({ html }) {
+    static showInputOnItemSheet({ html, isEditable, item }) {
         showEnabledLabel({
-            label: this.label,
+            item,
+            journal: this.journal,
+            key: this.key,
             parent: html,
+            tooltip: this.tooltip,
+        }, {
+            canEdit: isEditable,
         });
     }
 

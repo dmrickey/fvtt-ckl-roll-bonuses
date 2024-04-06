@@ -1,7 +1,6 @@
 import { ActionTarget } from "./have-to-do/action-target.mjs";
 import { AlignmentTarget } from './alignment-target.mjs';
-import { BaseTarget } from "./base-target.mjs";
-import { DamageTypeTarget } from "./have-to-do/damage-type-target.mjs";
+import { DamageTypeTarget } from "./damage-type-target.mjs";
 import { IsMeleeTarget } from './is-melee-target.mjs';
 import { IsRangedTarget } from './is-ranged-target.mjs';
 import { IsSpellTarget } from "./is-spell-target.mjs";
@@ -15,18 +14,23 @@ import { WeaponTarget } from "./weapon-target.mjs";
 import { WeaponTypeTarget } from "./weapon-type-target.mjs";
 import { AllTarget } from './all-target.mjs';
 import { FinesseTarget } from './finesse-target.mjs';
+import { FunctionTarget } from './function-target.mjs';
+import { SpellSchoolTarget } from './spell-school-target.mjs';
+import { Sources } from '../source-registration.mjs';
 
-/** @type {typeof BaseTarget[]} */
-export const allTargetTypes = [
+export const registerTargets = () => [
     AlignmentTarget,
     AllTarget,
+    DamageTypeTarget,
     FinesseTarget,
+    FunctionTarget,
     IsMeleeTarget,
     IsRangedTarget,
     IsSpellTarget,
     IsWeaponTarget,
     ItemTarget,
     SelfTarget,
+    SpellSchoolTarget,
     SpellTarget,
     TokenTarget,
     WeaponGroupTarget,
@@ -35,5 +39,4 @@ export const allTargetTypes = [
 
     // todo later
     // ActionTarget,
-    // DamageTypeTarget,
-];
+].forEach(Sources.registerSource);

@@ -1,9 +1,15 @@
 import { showEnabledLabel } from '../handlebars-handlers/enabled-label.mjs';
 import { hasAnyBFlag } from '../util/flag-helpers.mjs';
 import { LocalHookHandler, customGlobalHooks, localHooks } from '../util/hooks.mjs';
-import { localize } from '../util/localize.mjs';
+import { localizeBonusLabel } from '../util/localize.mjs';
+import { SpecificBonuses } from './all-specific-bonuses.mjs';
 
 const fatesFavored = 'fates-favored';
+const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#fates-favored';
+
+Hooks.once('ready', () =>
+    SpecificBonuses.registerSpecificBonus({ journal, key: fatesFavored, type: 'boolean' })
+);
 
 /**
  * @param {number | string} value
@@ -39,7 +45,7 @@ function getAttackSources(item, sources) {
                 source.value = +value - 1;
             }
 
-            fatesFavoredSource = { name: localize(fatesFavored), modifier: 'luck', sort: source.sort + 1, value: 1 };
+            fatesFavoredSource = { name: localizeBonusLabel(fatesFavored), modifier: 'luck', sort: source.sort + 1, value: 1 };
         }
     });
 
@@ -53,7 +59,7 @@ function getAttackSources(item, sources) {
 Hooks.on(customGlobalHooks.itemGetAttackSources, getAttackSources);
 
 Hooks.on('renderItemSheet', (
-    /** @type {ItemSheetPF} */ { item },
+    /** @type {ItemSheetPF} */ { isEditable, item },
     /** @type {[HTMLElement]} */[html],
     /** @type {unknown} */ _data
 ) => {
@@ -64,7 +70,11 @@ Hooks.on('renderItemSheet', (
         return;
     }
     showEnabledLabel({
-        label: localize(fatesFavored),
+        item,
+        journal,
+        key: fatesFavored,
         parent: html,
+    }, {
+        canEdit: isEditable,
     });
 });

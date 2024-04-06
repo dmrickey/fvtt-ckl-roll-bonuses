@@ -6,6 +6,7 @@ import { localize } from "../../util/localize.mjs";
 import { signed } from "../../util/to-signed-string.mjs";
 
 const key = 'all-spell-cl'
+const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#*modify-spell-caster-level-(all-spells,-specific-school,-or-spec';
 
 FormulaCacheHelper.registerDictionaryFlag(key);
 
@@ -57,7 +58,7 @@ Hooks.on('pf1GetRollData', (
 });
 
 Hooks.on('renderItemSheet', (
-    /** @type {ItemSheetPF} */ { item },
+    /** @type {ItemSheetPF} */ { isEditable, item },
     /** @type {[HTMLElement]} */[html],
     /** @type {unknown} */ _data
 ) => {
@@ -73,8 +74,10 @@ Hooks.on('renderItemSheet', (
     textInput({
         current,
         item,
+        journal,
         key,
-        label: localize('all-spell-cl'),
         parent: html,
+    }, {
+        canEdit: isEditable,
     });
 });

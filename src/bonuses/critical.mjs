@@ -18,6 +18,8 @@ const critMultOffsetSelf = 'crit-mult-offset-self';
 const critMultOffsetAll = 'crit-mult-offset-all';
 const critMultOffsetId = (/** @type {IdObject} */ { id }) => `crit-mult-offset_${id}`;
 
+const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#critical-helpers';
+
 FormulaCacheHelper.registerDictionaryFlag(critOffsetSelf, critOffsetAll, critMultOffsetSelf, critMultOffsetAll);
 FormulaCacheHelper.registerPartialDictionaryFlag('crit-offset_', 'crit-mult-offset_');
 
@@ -284,7 +286,7 @@ const labelLookup = (key) => {
 }
 
 Hooks.on('renderItemSheet', (
-    /** @type {ItemSheetPF} */ { item },
+    /** @type {ItemSheetPF} */ { isEditable, item },
     /** @type {[HTMLElement]} */[html],
     /** @type {unknown} */ _data
 ) => {
@@ -297,9 +299,12 @@ Hooks.on('renderItemSheet', (
         textInput({
             current,
             item,
+            journal,
             key,
             label: labelLookup(key),
             parent: html,
+        }, {
+            canEdit: isEditable,
         });
     });
 });

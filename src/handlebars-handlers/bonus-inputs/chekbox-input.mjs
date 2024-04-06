@@ -1,34 +1,50 @@
 import { MODULE_NAME } from "../../consts.mjs";
-import { addNodeToRollBonus } from "../roll-bonus-on-item-sheet.mjs";
+import { localizeBonusLabel, localizeBonusTooltip } from '../../util/localize.mjs';
+import { addNodeToRollBonus } from "../add-bonus-to-item-sheet.mjs";
 import { createTemplate, templates } from "../templates.mjs";
 
 /**
  * @param {object} args
  * @param {boolean} [args.current]
  * @param {ItemPF} args.item
+ * @param {string} args.journal
  * @param {string} args.key
- * @param {string} args.label
+ * @param {string} [args.label]
  * @param {HTMLElement} args.parent,
- * @param {object} [o]
- * @param {boolean} [o.isModuleFlag] - false (default) if this is a dictionary flag, true if this is a data flag
+ * @param {string} [args.tooltip]
+ * @param {object} options
+ * @param {boolean} options.canEdit
+ * @param {boolean} [options.isModuleFlag] - false (default) if this is a dictionary flag, true if this is a data flag
  */
 export function checkboxInput({
     current = false,
     item,
+    journal,
     key,
-    label,
+    label = '',
     parent,
+    tooltip = '',
 }, {
+    canEdit,
     isModuleFlag = false,
-} = {}
+}
 ) {
     current ||= isModuleFlag
         ? item.getFlag(MODULE_NAME, key)
         : item.getItemDictionaryFlag(key);
+    label ||= localizeBonusLabel(key);
+    tooltip ||= localizeBonusTooltip(key);
 
     const div = createTemplate(
         templates.checkboxInput,
-        { key, label, current },
+        {
+            current,
+            journal,
+            key,
+            label,
+            readonly: !canEdit,
+            tooltip,
+        },
     );
     /** @type {HTMLInputElement | null} */
     const checkbox = div.querySelector(`#checkbox-input-${key}`);
@@ -50,5 +66,5 @@ export function checkboxInput({
         },
     );
 
-    addNodeToRollBonus(parent, div);
+    addNodeToRollBonus(parent, div, item, canEdit);
 }

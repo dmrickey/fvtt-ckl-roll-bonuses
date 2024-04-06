@@ -2,11 +2,12 @@ import { textInput } from "../../handlebars-handlers/bonus-inputs/text-input.mjs
 import { FormulaCacheHelper, KeyedDFlagHelper, getDocDFlags } from "../../util/flag-helpers.mjs";
 import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
-import { localize } from "../../util/localize.mjs";
+import { localize, localizeBonusLabel } from "../../util/localize.mjs";
 import { signed } from "../../util/to-signed-string.mjs";
 
 // todo refactor 'all-spell-dc'
 const key = 'genericSpellDC'
+const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#*modify-spell-dc-(all-spells,-specific-school,-or-specific-eleme';
 
 FormulaCacheHelper.registerDictionaryFlag(key);
 
@@ -58,7 +59,7 @@ Hooks.on('pf1GetRollData', (
 });
 
 Hooks.on('renderItemSheet', (
-    /** @type {ItemSheetPF} */ { item },
+    /** @type {ItemSheetPF} */ { isEditable, item },
     /** @type {[HTMLElement]} */[html],
     /** @type {unknown} */ _data
 ) => {
@@ -74,8 +75,11 @@ Hooks.on('renderItemSheet', (
     textInput({
         current,
         item,
+        journal,
         key,
-        label: localize('all-spell-dc'),
+        label: localizeBonusLabel('all-spell-dc'),
         parent: html,
+    }, {
+        canEdit: isEditable,
     });
 });

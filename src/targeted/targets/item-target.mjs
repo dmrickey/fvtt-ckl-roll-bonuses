@@ -13,7 +13,13 @@ export class ItemTarget extends BaseTarget {
     /**
      * @override
      */
-    static get targetKey() { return 'item'; }
+    static get sourceKey() { return 'item'; }
+
+    /**
+     * @override
+     * @returns {string}
+     */
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.iurMG1TBoX3auh5z#item'; }
 
     /**
      * @override
@@ -51,7 +57,9 @@ export class ItemTarget extends BaseTarget {
             }
 
             /** @type {ItemPF[]} */
-            const targetedItems = targetedItemUuids.map((uuid) => fromUuidSync(uuid));
+            const targetedItems = targetedItemUuids
+                .map((uuid) => fromUuidSync(uuid))
+                .filter(truthiness);
             return !!targetedItems.find((ti) => ti.system.links.children.find(({ id }) => id === item.id));
         });
 
@@ -62,16 +70,20 @@ export class ItemTarget extends BaseTarget {
      * @override
      * @param {object} options
      * @param {ActorPF | null | undefined} options.actor
-     * @param {ItemPF} options.item
      * @param {HTMLElement} options.html
+     * @param {boolean} options.isEditable
+     * @param {ItemPF} options.item
      */
-    static showInputOnItemSheet({ item, html }) {
+    static showInputOnItemSheet({ html, isEditable, item }) {
         showItemInput({
-            item,
             filter: this.itemFilter,
+            item,
+            journal: this.journal,
             key: this.key,
             parent: html,
-            label: this.label,
+            tooltip: this.tooltip,
+        }, {
+            canEdit: isEditable,
         });
     }
 }

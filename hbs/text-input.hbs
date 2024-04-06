@@ -1,7 +1,13 @@
 <div class="form-group roll-bonuses">
-    <label>{{label}}</label>
+    {{> "modules/ckl-roll-bonuses/hbs/label.hbs"}}
     <div class="form-fields">
-        <input type="text" {{#if isFormula}}class="formula" {{/if}} value="{{current}}" id="text-input-{{key}}"
-            placeholder="{{placeholder}}" />
+        <input
+            type="text"
+            {{#if isFormula}}class="formula"{{/if}}
+            {{#if readonly}}readonly{{/if}}
+            value="{{current}}"
+            id="text-input-{{key}}"
+            placeholder="{{placeholder}}"
+        />
     </div>
 </div>

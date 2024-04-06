@@ -2,11 +2,12 @@ import { textInputAndKeyValueSelect } from "../../handlebars-handlers/bonus-inpu
 import { FormulaCacheHelper, getDocDFlags, KeyedDFlagHelper } from "../../util/flag-helpers.mjs";
 import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
-import { localize } from "../../util/localize.mjs";
+import { localize, localizeBonusLabel } from "../../util/localize.mjs";
 import { signed } from "../../util/to-signed-string.mjs";
 
 const key = 'schoolClOffset';
 const formulaKey = 'schoolClOffsetFormula';
+const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#*modify-spell-caster-level-(all-spells,-specific-school,-or-spec';
 
 FormulaCacheHelper.registerUncacheableDictionaryFlag(key);
 FormulaCacheHelper.registerDictionaryFlag(formulaKey);
@@ -41,7 +42,7 @@ registerItemHint((hintcls, actor, item, _data) => {
     if (offset) {
         const school = pf1.config.spellSchools[item.system.school] ?? item.system.school;
         const label = localize('cl-label-mod', { mod: signed(offset), label: school });
-        const hint = hintcls.create(label, [], { hint: localize(key) });
+        const hint = hintcls.create(label, [], { hint: localizeBonusLabel(key) });
         return hint;
     }
 });
@@ -90,7 +91,7 @@ Hooks.on('pf1GetRollData', (
  * @param {string} html
  */
 Hooks.on('renderItemSheet', (
-    /** @type {ItemSheetPF} */ { actor, item },
+    /** @type {ItemSheetPF} */ { isEditable, item },
     /** @type {[HTMLElement]} */[html],
     /** @type {unknown} */ _data
 ) => {
@@ -110,11 +111,12 @@ Hooks.on('renderItemSheet', (
         .map((key) => ({ key, label: spellSchools[key] }));
 
     textInputAndKeyValueSelect({
-        text: { current: formula, key: formulaKey },
-        select: { current, choices, key },
         item,
-        key,
-        label: localize(key),
-        parent: html
+        journal,
+        parent: html,
+        select: { current, choices, key },
+        text: { current: formula, key: formulaKey },
+    }, {
+        canEdit: isEditable,
     });
 });

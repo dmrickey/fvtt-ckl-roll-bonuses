@@ -11,7 +11,13 @@ export class AttackBonus extends BaseBonus {
      * @inheritdoc
      * @override
      */
-    static get type() { return 'attack'; }
+    static get sourceKey() { return 'attack'; }
+
+    /**
+     * @override
+     * @returns {string}
+     */
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.PiyJbkTuzKHugPSk#attack'; }
 
     /**
      * Register Item Hint on bonus
@@ -64,18 +70,22 @@ export class AttackBonus extends BaseBonus {
 
     /**
      * @override
+     * @inheritdoc
      * @param {object} options
      * @param {ActorPF | null} options.actor
-     * @param {ItemPF} options.item
      * @param {HTMLElement} options.html
+     * @param {boolean} options.isEditable
+     * @param {ItemPF} options.item
      */
-    static showInputOnItemSheet({ item, html }) {
+    static showInputOnItemSheet({ html, isEditable, item }) {
         textInput({
             item,
+            journal: this.journal,
             key: this.key,
             parent: html,
-            label: this.label,
+            tooltip: this.tooltip,
         }, {
+            canEdit: isEditable,
             isModuleFlag: true,
         });
     }

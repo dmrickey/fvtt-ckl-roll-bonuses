@@ -87,6 +87,33 @@ declare global {
         ): void;
 
         /**
+         * Register a new sub-settings menu
+         *
+         * @param namespace - The namespace under which the menu is registered
+         * @param key       - The key name for the setting under the namespace module
+         * @param data      - Configuration for setting data
+         * @typeParam N     - The namespace under which the menu is registered, as a type
+         * @typeParam K     - The key name for the setting under the namespace module, as a type
+         *
+         * @example Define a settings submenu which handles advanced configuration needs
+         * ```typescript
+         * game.settings.registerMenu("myModule", "mySettingsMenu", {
+         *   name: "My Settings Submenu",
+         *   label: "Settings Menu Label",      // The text label used in the button
+         *   hint: "A description of what will occur in the submenu dialog.",
+         *   icon: "fas fa-bars",               // A Font Awesome icon used in the submenu button
+         *   type: MySubmenuApplicationClass,   // A FormApplication subclass which should be created
+         *   restricted: true                   // Restrict this submenu to gamemaster only?
+         * });
+         * ```
+         */
+        registerMenu<N extends string, K extends string>(
+            namespace: N,
+            key: K,
+            data: ClientSettings.PartialSettingSubmenuConfig
+        ): void;
+
+        /**
          * Get the value of a game setting for a certain namespace and setting key
          *
          * @param namespace - The namespace under which the setting is registered
@@ -103,6 +130,34 @@ declare global {
             namespace: N,
             key: K
         ): ClientSettings.Values[`${N}.${K}`];
+
+        /**
+         * Set the value of a game setting for a certain namespace and setting key
+         *
+         * @param namespace - The namespace under which the setting is registered
+         * @param key       - The setting key to retrieve
+         * @param value     - The data to assign to the setting key
+         * @param options   - Additional options passed to the server when updating world-scope settings
+         * @typeParam N     - The namespace under which the setting is registered, as a type
+         * @typeParam K     - The setting key to retrieve, as a type
+         * @typeParam V     - The type of the value being set
+         *
+         * @example
+         * ```typescript
+         * // Update the current value of a setting
+         * game.settings.set("myModule", "myClientSetting", "b");
+         * ```
+         */
+        set<
+            N extends string,
+            K extends string,
+            V extends ClientSettings.Values[`${N}.${K}`]
+        >(
+            namespace: N,
+            key: K,
+            value: V,
+            options?: DocumentModificationContext
+        ): Promise<V>;
     }
 
     namespace ClientSettings {

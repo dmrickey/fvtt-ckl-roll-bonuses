@@ -1,25 +1,37 @@
-import { addNodeToRollBonus } from "../roll-bonus-on-item-sheet.mjs";
+import { addNodeToRollBonus } from "../add-bonus-to-item-sheet.mjs";
 import { createTemplate, templates } from "../templates.mjs";
-import { localize } from "../../util/localize.mjs";
+import { localize, localizeBonusLabel, localizeBonusTooltip } from "../../util/localize.mjs";
 
 /**
  * @param {object} args
  * @param {{current: FlagValue, key: string, placeholder?: string}} args.text
  * @param {{current: FlagValue, key: string, choices: {key: string, label: string}[]}} args.select
  * @param {ItemPF} args.item
- * @param {string} args.key
- * @param {string} args.label
+ * @param {string} args.journal
+ * @param {string} [args.label]
  * @param {HTMLElement} args.parent
+ * @param {string} [args.tooltip]
+ * @param {object} options
+ * @param {boolean} options.canEdit
  */
 export function textInputAndKeyValueSelect({
     item,
-    label,
+    journal,
+    label = '',
     parent,
     select,
     text,
+    tooltip = '',
+}, {
+    canEdit,
 }) {
-    if ((!select.current && select.choices.length) || (select.choices.length === 1 && select.current !== select.choices[0].key)) {
-        item.setItemDictionaryFlag(select.key, select.choices[0].key);
+    label ||= localizeBonusLabel(select.key);
+    tooltip ||= localizeBonusTooltip(select.key);
+
+    if (canEdit) {
+        if ((!select.current && select.choices.length) || (select.choices.length === 1 && select.current !== select.choices[0].key)) {
+            item.setItemDictionaryFlag(select.key, select.choices[0].key);
+        }
     }
 
     const div = createTemplate(
@@ -28,10 +40,13 @@ export function textInputAndKeyValueSelect({
             choices: select.choices,
             current: select.current,
             formula: text.current,
-            selectKey: select.key,
-            textKey: text.key,
+            journal,
             label,
             placeholder: text.placeholder || localize('PF1.Formula'),
+            readonly: !canEdit,
+            selectKey: select.key,
+            textKey: text.key,
+            tooltip,
         },
     );
 
@@ -55,5 +70,5 @@ export function textInputAndKeyValueSelect({
         },
     );
 
-    addNodeToRollBonus(parent, div);
+    addNodeToRollBonus(parent, div, item, canEdit);
 }

@@ -1,6 +1,5 @@
 import { MODULE_NAME } from "../../../consts.mjs";
 import { getTokenDisplayName } from "../../../util/get-token-display-name.mjs";
-import { localize } from "../../../util/localize.mjs";
 import { truthiness } from "../../../util/truthiness.mjs";
 import { uniqueArray } from "../../../util/unique-array.mjs";
 import { templates } from "../../templates.mjs";
@@ -13,12 +12,20 @@ export class TokenSelectorApp extends DocumentSheet {
 
         options.height = 'auto';
         options.template = templates.tokenApp;
-        options.title = localize('token-app.title');
 
         return options;
     }
 
     get path() { return `flags.${MODULE_NAME}.${this.options.key}`; }
+
+    /**
+     * @override
+     * @param {JQuery} html
+     */
+    activateListeners(html) {
+        super.activateListeners(html);
+        html.find('button[type=reset]')?.click(this.close.bind(this));
+    }
 
     /** @override */
     async getData() {
@@ -38,7 +45,7 @@ export class TokenSelectorApp extends DocumentSheet {
 
         const currentTargetUuids = [...game.user.targets].map(x => x.document.uuid);
         const availableTargets = game.scenes.active.tokens
-            .filter((token) => token.object.isVisible && token.actor.id !== item.actor.id)
+            .filter((token) => token.actor && token.object.isVisible && token.actor.id !== item.actor?.id)
             .map((token) => ({
                 id: token.id,
                 disposition: token.disposition,

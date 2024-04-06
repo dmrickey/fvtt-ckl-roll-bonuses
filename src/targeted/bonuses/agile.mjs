@@ -1,6 +1,5 @@
 import { MODULE_NAME } from '../../consts.mjs';
 import { showEnabledLabel } from '../../handlebars-handlers/enabled-label.mjs';
-import { LocalHookHandler, localHooks } from '../../util/hooks.mjs';
 import { BaseBonus } from './base-bonus.mjs';
 
 export class AgileBonus extends BaseBonus {
@@ -9,7 +8,13 @@ export class AgileBonus extends BaseBonus {
      * @override
      * @returns { string }
      */
-    static get type() { return 'agile'; }
+    static get sourceKey() { return 'agile'; }
+
+    /**
+     * @override
+     * @returns {string}
+     */
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.PiyJbkTuzKHugPSk#agile'; }
 
     /**
      * Get Item Hints tooltip value
@@ -20,9 +25,7 @@ export class AgileBonus extends BaseBonus {
      * @returns {Nullable<string[]>}
      */
     static getHints(source, target = undefined) {
-        if (this.isBonusSource(source)) {
-            return [this.label];
-        }
+        return [this.label];
     }
 
     /**
@@ -84,13 +87,19 @@ export class AgileBonus extends BaseBonus {
      * @override
      * @param {object} options
      * @param {ActorPF | null} options.actor
-     * @param {ItemPF} options.item
      * @param {HTMLElement} options.html
+     * @param {boolean} options.isEditable
+     * @param {ItemPF} options.item
      */
-    static showInputOnItemSheet({ actor, item, html }) {
+    static showInputOnItemSheet({ html, isEditable, item }) {
         showEnabledLabel({
-            label: this.label,
+            item,
+            journal: this.journal,
+            key: this.key,
             parent: html,
+            tooltip: this.tooltip,
+        }, {
+            canEdit: isEditable,
         });
     }
 
@@ -111,10 +120,20 @@ export class AgileBonus extends BaseBonus {
      * @returns {ItemActionRollAttackHookArgs}
      */
     static itemActionRollDamage(_source, seed, _action, data) {
-        const strRegex = new RegExp(`[0-9]+\\[${pf1.config.abilities.str}\\]`);
+        const dexRegex = new RegExp(`[\\+-]\\s*[0-9]+\\[${pf1.config.abilities.dex}\\]`);
+        const strRegex = new RegExp(`[\\+-]\\s*[0-9]+\\[${pf1.config.abilities.str}\\]`);
+
         const dexIsGreater = data.abilities.dex.mod > data.abilities.str.mod;
-        if (data && seed.formula.match(strRegex) && dexIsGreater) {
-            seed.formula = seed.formula.replace(strRegex, `${data.abilities.dex.mod}[${pf1.config.abilities.dex}]`);
+        const dexFormula = `+ ${data.abilities.dex.mod}[${pf1.config.abilities.dex}]`;
+
+        const dexMatch = seed.formula.match(dexRegex);
+        const strMatch = seed.formula.match(strRegex);
+
+        if (strMatch && !dexMatch && dexIsGreater) {
+            seed.formula = seed.formula.replace(strRegex, dexFormula);
+        }
+        else if (!dexMatch && dexIsGreater) {
+            seed.formula = `${seed.formula} ${dexFormula}`;
         }
         return seed;
     }

@@ -6,13 +6,12 @@ import { FormulaCacheHelper } from '../util/flag-helpers.mjs';
 import { LocalHookHandler, customGlobalHooks, localHooks } from "../util/hooks.mjs";
 import { localize } from "../util/localize.mjs";
 
-const legacyAmmoDamageKey = 'bonus_damage';
-const legacyAmmoAttackKey = 'bonus_attack';
-
 const ammoDamageKey = 'ammo-damage';
 const ammoAttackKey = 'ammo-attack';
 const ammoMasterworkKey = 'ammo-mw';
-const ammoEnhancementKey = 'ammo-enhancement'
+const ammoEnhancementKey = 'ammo-enhancement';
+
+const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#ammunition';
 
 FormulaCacheHelper.registerModuleFlag(ammoAttackKey, ammoEnhancementKey);
 
@@ -24,7 +23,7 @@ FormulaCacheHelper.registerModuleFlag(ammoAttackKey, ammoEnhancementKey);
  */
 function getConditionalParts(actionUse, result, atk, index) {
     const ammoId = actionUse.shared?.attacks?.[index]?.ammo;
-    const ammo = actionUse.actor.items.get(ammoId);
+    const ammo = ammoId ? actionUse.actor.items.get(ammoId) : null;
     if (ammo) {
         const attack = FormulaCacheHelper.getModuleFlagFormula(ammo, ammoAttackKey)[ammoAttackKey];
         if (attack) {
@@ -75,7 +74,7 @@ function getConditionalParts(actionUse, result, atk, index) {
 Hooks.on(customGlobalHooks.getConditionalParts, getConditionalParts);
 
 Hooks.on('renderItemSheet', (
-    /** @type {ItemSheetPF} */ { actor, item },
+    /** @type {ItemSheetPF} */ { isEditable, item },
     /** @type {[HTMLElement]} */[html],
     /** @type {unknown} */ _data
 ) => {
@@ -85,32 +84,40 @@ Hooks.on('renderItemSheet', (
 
     checkboxInput({
         item,
+        journal,
         key: ammoMasterworkKey,
         label: localize('PF1.Masterwork'),
         parent: html,
     }, {
+        canEdit: isEditable,
         isModuleFlag: true,
     });
     textInput({
         item,
+        journal,
         key: ammoEnhancementKey,
-        parent: html,
         label: localize('PF1.EnhancementBonus'),
+        parent: html,
     }, {
+        canEdit: isEditable,
         isModuleFlag: true,
     });
     textInput({
         item,
-        key: legacyAmmoAttackKey,
+        journal,
+        key: ammoAttackKey,
         parent: html,
-        label: localize('bonus-target.bonus.label.attack'),
     }, {
+        canEdit: isEditable,
         isModuleFlag: true,
     });
     damageInput({
         item,
-        key: legacyAmmoDamageKey,
+        journal,
+        key: ammoDamageKey,
         parent: html,
+    }, {
+        canEdit: isEditable,
     });
 });
 

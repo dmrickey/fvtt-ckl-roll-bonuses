@@ -21,21 +21,16 @@
     "styles": [
         "styles/actor-sheet.css",
         "styles/applications.css",
+        "styles/bonus-picker.css",
         "styles/item-hints.css",
         "styles/item-sheet.css",
         "styles/pf1-overrides.css"
     ],
     "relationships": {
-        "systems": [
+        "recommends": [
             {
-                "id": "pf1",
-                "type": "system",
-                "manifest": "https://gitlab.com/foundryvtt_pathfinder1e/foundryvtt-pathfinder1/-/releases/permalink/latest/downloads/system.json",
-                "compatibility": {
-                    "minimum": 9,
-                    "verified": "9.6",
-                    "maximum": "9.6"
-                }
+                "id": "mkah-pf1-item-hints",
+                "type": "module"
             }
         ],
         "requires": [
@@ -55,6 +50,18 @@
                     "verified": "1.12.11.0"
                 }
             }
+        ],
+        "systems": [
+            {
+                "id": "pf1",
+                "type": "system",
+                "manifest": "https://gitlab.com/foundryvtt_pathfinder1e/foundryvtt-pathfinder1/-/releases/permalink/latest/downloads/system.json",
+                "compatibility": {
+                    "minimum": 9,
+                    "verified": "9.6",
+                    "maximum": "9.6"
+                }
+            }
         ]
     },
     "languages": [
@@ -63,6 +70,37 @@
             "name": "English",
             "path": "lang/en.json",
             "flags": {}
+        }
+    ],
+    "packFolders": [
+        {
+            "name": "Roll Bonuses",
+            "packs": [
+                "roll-bonuses-buffs",
+                "roll-bonuses-documentation"
+            ]
+        }
+    ],
+    "packs": [
+        {
+            "label": "Roll Bonuses Buffs",
+            "name": "roll-bonuses-buffs",
+            "path": "packs/buffs.db",
+            "system": "pf1",
+            "type": "Item",
+            "ownership": {
+                "PLAYER": "OBSERVER"
+            }
+        },
+        {
+            "label": "Roll Bonuses Documentation",
+            "name": "roll-bonuses-documentation",
+            "path": "packs/documentation.db",
+            "system": "pf1",
+            "type": "JournalEntry",
+            "ownership": {
+                "PLAYER": "OBSERVER"
+            }
         }
     ],
     "license": "LICENSE",

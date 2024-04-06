@@ -1,0 +1,40 @@
+<form class="roll-bonuses roll-bonuses-form bonus-picker">
+    <div class="form-body">
+        <div class="sources">
+            <div>
+                <h2>{{ localize 'ckl-roll-bonuses.bonuses.label.targets' }}</h2>
+                {{#each targets}}
+                {{> "modules/ckl-roll-bonuses/hbs/bonus-picker-item.hbs"}}
+                {{/each}}
+            </div>
+            <div>
+                <h2>{{ localize 'ckl-roll-bonuses.bonuses.label.bonuses' }}</h2>
+                {{#each bonuses}}
+                {{> "modules/ckl-roll-bonuses/hbs/bonus-picker-item.hbs"}}
+                {{/each}}
+            </div>
+        </div>
+
+        {{#if specifics.length}}
+        <h2>{{ localize 'ckl-roll-bonuses.specific-bonuses' }}</h2>
+        <div class="specific-bonuses">
+            {{#each specifics}}
+            {{> "modules/ckl-roll-bonuses/hbs/bonus-picker-item.hbs"}}
+            {{#each children}}
+            <div class="child">
+                {{> "modules/ckl-roll-bonuses/hbs/bonus-picker-item.hbs"}}
+            </div>
+            {{/each}}
+            {{/each}}
+        </div>
+        {{/if}}
+    </div>
+    <div class="control-group">
+        <button type="reset">
+            <i class="fas fa-rotate-left"></i> {{localize "ckl-roll-bonuses.cancel"}}
+        </button>
+        <button type="submit">
+            <i class="fas fa-save"></i> {{localize "ckl-roll-bonuses.ok"}}
+        </button>
+    </div>
+</form>

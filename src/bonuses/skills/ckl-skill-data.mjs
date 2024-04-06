@@ -70,7 +70,7 @@ export class CklSkillData {
 
         const title = pf1.config.skills[skillId]
             || actor.system.skills[skillId]?.name
-            || actor.system.skills[skillId.split('.')[0]].subSkills[skillId.split('.').at(-1) ?? '']?.name;
+            || actor.system.skills[skillId.split('.')[0]].subSkills?.[skillId.split('.').at(-1) ?? '']?.name;
         const { inputs: output, buttons: result } = await warpgate.menu({ buttons, inputs }, { title });
         if (result) {
             const bonus = `${output[1]}`?.trim() || '';

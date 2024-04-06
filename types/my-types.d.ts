@@ -1,6 +1,28 @@
+import { BaseSource } from '../src/targeted/base-source.mjs';
+import { BaseBonus } from '../src/targeted/bonuses/base-bonus.mjs';
+import { BaseTarget } from '../src/targeted/targets/base-target.mjs';
+import { SpecificBonuses } from '../src/bonuses/all-specific-bonuses.mjs';
+
 export {};
 
 declare global {
+    interface RollBonusesAPI {
+        allBonusTypes: (typeof BaseBonus)[];
+        allTargetTypes: (typeof BaseTarget)[];
+        bonusTypeMap: Record<string, typeof BaseBonus>;
+        migrate: {
+            migrate(): Promise;
+            v1: {};
+        };
+        sources: {
+            BaseBonus: typeof BaseBonus;
+            BaseSource: typeof BaseSource;
+            BaseTarget: typeof BaseTarget;
+        };
+        targetTypeMap: Record<string, typeof BaseTarget>;
+        SpecificBonuses: typeof SpecificBonuses;
+    }
+
     interface IdObject {
         id: string;
     }

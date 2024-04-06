@@ -15,6 +15,15 @@
     height: unset;
 }
 
+#ckl-roll-bonus-container .settings {
+    float: right;
+    float: inline-end;
+}
+
+#ckl-roll-bonus-container .bonus-label .fas.fa-book {
+    margin-inline-start: 0.125rem;
+}
+
 /* copied from apps.less in pf1 repo */
 .pf1.sheet .roll-bonuses .delete-damage {
     width: 18px;
@@ -54,10 +63,6 @@
 
 .pf1.sheet .roll-bonuses.editable-icon-input .form-fields span {
     visibility: hidden;
-}
-
-.pf1.sheet .roll-bonuses.editable-icon-input a {
-    flex: 0;
 }
 
 .pf1.sheet .roll-bonuses .form-fields .label {

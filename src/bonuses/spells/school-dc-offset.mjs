@@ -2,11 +2,12 @@ import { textInputAndKeyValueSelect } from "../../handlebars-handlers/bonus-inpu
 import { FormulaCacheHelper, KeyedDFlagHelper, getDocDFlags } from "../../util/flag-helpers.mjs";
 import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
-import { localize } from "../../util/localize.mjs";
+import { localize, localizeBonusLabel } from "../../util/localize.mjs";
 import { signed } from "../../util/to-signed-string.mjs";
 
 const key = 'school-dc';
 const formulaKey = 'school-dc-formula';
+const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#*modify-spell-dc-(all-spells,-specific-school,-or-specific-eleme';
 
 FormulaCacheHelper.registerUncacheableDictionaryFlag(key);
 FormulaCacheHelper.registerDictionaryFlag(formulaKey);
@@ -41,7 +42,7 @@ registerItemHint((hintcls, actor, item, _data) => {
     if (offset) {
         const school = pf1.config.spellSchools[item.system.school] ?? item.system.school;
         const label = localize('dc-label-mod', { mod: signed(offset), label: school });
-        const hint = hintcls.create(label, [], { hint: localize(key) });
+        const hint = hintcls.create(label, [], { hint: localizeBonusLabel(key) });
         return hint;
     }
 });
@@ -61,7 +62,7 @@ registerItemHint((hintcls, _actor, item, _data) => {
     const school = pf1.config.spellSchools[currentSchool] ?? currentSchool;
     const label = localize('dc-label-mod', { mod: signed(total), label: school });
 
-    const hint = hintcls.create(label, [], { hint: localize(key) });
+    const hint = hintcls.create(label, [], { hint: localizeBonusLabel(key) });
     return hint;
 });
 
@@ -91,12 +92,11 @@ Hooks.on('pf1GetRollData', (
 });
 
 Hooks.on('renderItemSheet', (
-    /** @type {ItemSheetPF} */ { item },
+    /** @type {ItemSheetPF} */ { isEditable, item },
     /** @type {[HTMLElement]} */[html],
     /** @type {unknown} */ _data
 ) => {
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
-
 
     if (item.system.flags.dictionary[key] === undefined) {
         return;
@@ -109,10 +109,11 @@ Hooks.on('renderItemSheet', (
 
     textInputAndKeyValueSelect({
         item,
-        key,
-        label: localize(key),
+        journal,
         parent: html,
         select: { current, choices, key },
         text: { current: getDocDFlags(item, formulaKey)[0] || '', key: formulaKey },
+    }, {
+        canEdit: isEditable,
     });
 });

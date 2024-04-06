@@ -1,38 +1,55 @@
 import { MODULE_NAME } from "../../consts.mjs";
-import { addNodeToRollBonus } from "../roll-bonus-on-item-sheet.mjs";
+import { localizeBonusLabel, localizeBonusTooltip } from '../../util/localize.mjs';
+import { addNodeToRollBonus } from "../add-bonus-to-item-sheet.mjs";
 import { createTemplate, templates } from "../templates.mjs";
 
 /**
  * @param {object} args
  * @param {FlagValue} [args.current]
  * @param {ItemPF} args.item
+ * @param {string} args.journal
  * @param {string} args.key
- * @param {string} args.label
+ * @param {string} [args.label]
+ * @param {string} [args.tooltip]
  * @param {HTMLElement} args.parent,
- * @param {object} [o]
- * @param {string} [o.placeholder]
- * @param {boolean} [o.isFormula]
- * @param {boolean} [o.isModuleFlag] - false (default) if this is a dictionary flag, true if this is a data flag
+ * @param {object} options
+ * @param {boolean} options.canEdit
+ * @param {string} [options.placeholder]
+ * @param {boolean} [options.isFormula]
+ * @param {boolean} [options.isModuleFlag] - false (default) if this is a dictionary flag, true if this is a data flag
  */
 export function textInput({
     current = '',
     item,
+    journal,
     key,
-    label,
+    label = '',
     parent,
+    tooltip = '',
 }, {
-    placeholder = '',
+    canEdit,
     isFormula = true,
     isModuleFlag = false,
-} = {}
-) {
+    placeholder = '',
+}) {
     current ||= isModuleFlag
         ? item.getFlag(MODULE_NAME, key)
         : item.getItemDictionaryFlag(key);
+    label ||= localizeBonusLabel(key);
+    tooltip ||= localizeBonusTooltip(key);
 
     const div = createTemplate(
         templates.textInput,
-        { key, label, current, isFormula, placeholder },
+        {
+            current,
+            isFormula,
+            journal,
+            key,
+            label,
+            placeholder,
+            readonly: !canEdit,
+            tooltip,
+        },
     );
     const select = div.querySelector(`#text-input-${key}`);
     select?.addEventListener(
@@ -49,5 +66,5 @@ export function textInput({
         },
     );
 
-    addNodeToRollBonus(parent, div);
+    addNodeToRollBonus(parent, div, item, canEdit);
 }

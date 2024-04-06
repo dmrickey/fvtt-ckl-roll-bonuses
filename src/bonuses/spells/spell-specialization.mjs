@@ -6,22 +6,28 @@ import { stringSelect } from "../../handlebars-handlers/bonus-inputs/string-sele
 import { getDocDFlags, KeyedDFlagHelper } from "../../util/flag-helpers.mjs";
 import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
-import { localize } from "../../util/localize.mjs";
+import { localize, localizeBonusLabel } from "../../util/localize.mjs";
 import { registerSetting } from "../../util/settings.mjs";
 import { truthiness } from "../../util/truthiness.mjs";
 import { uniqueArray } from "../../util/unique-array.mjs";
+import { SpecificBonuses } from '../all-specific-bonuses.mjs';
 import { spellFocusKey } from "./spell-focus.mjs";
 
 const key = 'spell-specialization';
 const exclusionKey = 'spell-specialization-exclusions';
 const compendiumId = 'CO2Qmj0aj76zJsew';
+const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#spell-specialization';
 
-registerSetting({ key: key });
+Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ journal, key }));
 
 class Settings {
     static get spellSpecialization() { return Settings.#getSetting(key); }
     // @ts-ignore
     static #getSetting(/** @type {string} */key) { return game.settings.get(MODULE_NAME, key).toLowerCase(); }
+
+    static {
+        registerSetting({ key });
+    }
 }
 
 /**
@@ -65,7 +71,7 @@ Hooks.on(customGlobalHooks.itemGetTypeChatData, (
     if (!actor) return;
 
     if (isSpecializedSpell(actor, item)) {
-        props.push(localize('cl-label-mod', { mod: '+2', label: localize(key) }));
+        props.push(localize('cl-label-mod', { mod: '+2', label: localizeBonusLabel(key) }));
     }
 });
 
@@ -79,7 +85,7 @@ registerItemHint((hintcls, actor, item, _data) => {
         return;
     }
 
-    const hint = hintcls.create(localize('cl-mod', { mod: '+2' }), [], { hint: localize(key) });
+    const hint = hintcls.create(localize('cl-mod', { mod: '+2' }), [], { hint: localizeBonusLabel(key) });
     return hint;
 });
 
@@ -122,7 +128,7 @@ Hooks.on('pf1GetRollData', (
  * @param {string} html
  */
 Hooks.on('renderItemSheet', (
-    /** @type {ItemSheetPF} */ { actor, item },
+    /** @type {ItemSheetPF} */ { actor, isEditable, item },
     /** @type {[HTMLElement]} */[html],
     /** @type {unknown} */ _data
 ) => {
@@ -131,28 +137,35 @@ Hooks.on('renderItemSheet', (
     const hasKey = item.system.flags.dictionary[key] !== undefined;
     const hasName = item.name?.toLowerCase() === Settings.spellSpecialization;
     const hasId = !!item?.flags?.core?.sourceId?.includes(compendiumId);
-    if (!(hasKey || hasName || hasId) || !actor) {
+    if (!(hasKey || hasName || hasId)) {
         return;
     }
 
-    const helper = new KeyedDFlagHelper(actor, {}, spellFocusKey);
-    const focuses = helper.stringValuesForFlag(spellFocusKey);
     const current = item.getItemDictionaryFlag(key);
 
-    const spellChoices = actor?.items
-        .filter(
-            /** @returns {spell is ItemSpellPF} */
-            (spell) => spell instanceof pf1.documents.item.ItemSpellPF
-                && focuses.includes(spell.system.school))
-        ?? [];
-    const choices = uniqueArray(spellChoices.map(({ name }) => name)).sort();
+    /** @type {string[]} */
+    let choices = [];
+    if (actor && isEditable) {
+        const helper = new KeyedDFlagHelper(actor, {}, spellFocusKey);
+        const focuses = helper.stringValuesForFlag(spellFocusKey);
+
+        const spellChoices = actor?.items
+            .filter(
+                /** @returns {spell is ItemSpellPF} */
+                (spell) => spell instanceof pf1.documents.item.ItemSpellPF
+                    && focuses.includes(spell.system.school))
+            ?? [];
+        choices = uniqueArray(spellChoices.map(({ name }) => name)).sort();
+    }
 
     stringSelect({
         choices,
         current,
         item,
+        journal,
         key,
-        label: localize(key),
         parent: html
+    }, {
+        canEdit: isEditable,
     });
 });

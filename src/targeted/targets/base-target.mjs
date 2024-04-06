@@ -1,9 +1,15 @@
-import { localizeTargetedTargetLabel } from "../../util/localize.mjs";
+import { BaseSource } from '../base-source.mjs';
 
 /**
  * @abstract
  */
-export class BaseTarget {
+export class BaseTarget extends BaseSource {
+
+    /**
+     * @override
+     * @returns { string }
+     */
+    static get sourceBaseType() { return 'target'; }
 
     /**
      * If the arg is targeted by this
@@ -25,22 +31,6 @@ export class BaseTarget {
     }
 
     /**
-     * Get Item Hints tooltip value
-     *
-     * @abstract
-     * @param {ItemPF} source
-     * @returns {Nullable<string[]>}
-     */
-    static getHints(source) { return; }
-
-    /**
-     * Initialize any target-specific settings.
-     *
-     * @abstract
-     */
-    static init() { }
-
-    /**
      * Returns true the targeting is too generic to show a hint on a specific item
      * - generally means this is a "token" target that does not have a specific targeted item
      * - also used for "self item targets" which already show the bonus, so don't need to show the target as well on the same item
@@ -51,35 +41,6 @@ export class BaseTarget {
     static get isGenericTarget() { return false; }
 
     /**
-     * If the item is a source for this target
-     *
-     * @param {ItemPF} source
-     * @returns {boolean}
-     */
-    static isTargetSource(source) { return source.hasItemBooleanFlag(this.key); };
-
-    /**
-     * Key for flag on target source
-     * @returns { string }
-     */
-    static get key() { return `target_${this.targetKey}`; }
-
-    /**
-     * Label for this target source
-     * @returns { string }
-     */
-    static get label() { return localizeTargetedTargetLabel(this.targetKey); }
-
-    /**
-     * @abstract
-     * @param {object} options
-     * @param {ActorPF | null} options.actor
-     * @param {ItemPF} options.item
-     * @param {HTMLElement} options.html
-     */
-    static showInputOnItemSheet({ actor, item, html }) { throw new Error('must be overridden.'); }
-
-    /**
      * Returns true if this target should show its editor when the Item is made is active
      *
      * @abstract
@@ -88,27 +49,9 @@ export class BaseTarget {
     static get showOnActive() { return false; }
 
     /**
-     * @param {ItemPF} item
-     * @param {RollData} rollData
-     */
-    static prepareData(item, rollData) { }
-
-    /**
      * Shows editor for target
      *
      * @param {ItemPF} source
      */
     static showTargetEditor(source) { }
-
-    /**
-     * @abstract
-     * @returns { string }
-     */
-    static get targetKey() { throw new Error('must be overridden'); }
-
-    // /**
-    //  * Skip
-    //  * @returns {boolean}
-    //  */
-    // static get skipTargetHint { return false; }
 }

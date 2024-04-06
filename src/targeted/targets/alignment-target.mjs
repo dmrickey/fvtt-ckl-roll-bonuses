@@ -33,7 +33,13 @@ export class AlignmentTarget extends BaseTarget {
      * @inheritdoc
      * @override
      */
-    static get targetKey() { return 'alignment'; }
+    static get sourceKey() { return 'alignment'; }
+
+    /**
+     * @override
+     * @returns {string}
+     */
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.iurMG1TBoX3auh5z#alignment'; }
 
     /**
      * @override
@@ -122,17 +128,20 @@ export class AlignmentTarget extends BaseTarget {
      * @override
      * @param {object} options
      * @param {ActorPF | null | undefined} options.actor
-     * @param {ItemPF} options.item
      * @param {HTMLElement} options.html
+     * @param {boolean} options.isEditable
+     * @param {ItemPF} options.item
      */
-    static showInputOnItemSheet({ actor, item, html }) {
+    static showInputOnItemSheet({ html, isEditable, item }) {
         keyValueSelect({
             choices,
             item,
+            journal: this.journal,
             key: this.key,
-            label: this.label,
             parent: html,
+            tooltip: this.tooltip,
         }, {
+            canEdit: isEditable,
             isModuleFlag: true
         });
     }

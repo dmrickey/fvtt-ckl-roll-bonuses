@@ -4,10 +4,11 @@ import { intersects } from "../../util/array-intersects.mjs";
 import { KeyedDFlagHelper, getDocDFlags } from "../../util/flag-helpers.mjs";
 import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
-import { localize } from "../../util/localize.mjs";
+import { localize, localizeBonusLabel } from "../../util/localize.mjs";
 import { registerSetting } from "../../util/settings.mjs";
 import { signed } from '../../util/to-signed-string.mjs';
 import { uniqueArray } from "../../util/unique-array.mjs";
+import { SpecificBonuses } from '../all-specific-bonuses.mjs';
 import {
     gnomeWeaponFocusId,
     greaterWeaponFocusId,
@@ -20,10 +21,14 @@ import {
 } from "./ids.mjs";
 
 const allKeys = [weaponFocusKey, greaterWeaponFocusKey, mythicWeaponFocusKey];
+const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#weapon-focus';
 
-registerSetting({ key: weaponFocusKey });
-registerSetting({ key: greaterWeaponFocusKey });
-registerSetting({ key: mythicWeaponFocusKey });
+Hooks.once('ready', () => {
+    SpecificBonuses.registerSpecificBonus({ journal, key: weaponFocusKey });
+    SpecificBonuses.registerSpecificBonus({ journal, key: greaterWeaponFocusKey, parent: weaponFocusKey });
+    SpecificBonuses.registerSpecificBonus({ journal, key: mythicWeaponFocusKey, parent: weaponFocusKey });
+    SpecificBonuses.registerSpecificBonus({ journal, key: racialWeaponFocusKey, parent: weaponFocusKey });
+});
 
 class Settings {
     static get weaponFocus() { return Settings.#getSetting(weaponFocusKey); }
@@ -31,6 +36,12 @@ class Settings {
     static get mythic() { return Settings.#getSetting(mythicWeaponFocusKey); }
     // @ts-ignore
     static #getSetting(/** @type {string} */key) { return game.settings.get(MODULE_NAME, key).toLowerCase(); }
+
+    static {
+        registerSetting({ key: weaponFocusKey });
+        registerSetting({ key: greaterWeaponFocusKey });
+        registerSetting({ key: mythicWeaponFocusKey });
+    }
 }
 
 // register hint on source
@@ -69,18 +80,18 @@ registerItemHint((hintcls, actor, item, _data) => {
         const tips = []
         let bonus = 0;
         if (isFocused) {
-            tips.push(localize(weaponFocusKey));
+            tips.push(localizeBonusLabel(weaponFocusKey));
             bonus += 1;
         }
         if (isGreater) {
-            tips.push(localize(greaterWeaponFocusKey));
+            tips.push(localizeBonusLabel(greaterWeaponFocusKey));
             bonus += 1;
         }
         if (isMythic) {
-            tips.push(localize(mythicWeaponFocusKey));
+            tips.push(localizeBonusLabel(mythicWeaponFocusKey));
             bonus *= 2;
         }
-        tips.push(localize('dc-mod', { mod: signed(bonus) }));
+        tips.push(localize('to-hit-mod', { mod: signed(bonus) }));
         return hintcls.create('', [], { icon: 'fas fa-sword', hint: tips.join('\n') });
     }
 });
@@ -101,7 +112,7 @@ function getAttackSources(item, sources) {
 
     const baseTypes = item.system.baseTypes;
     let value = 0;
-    let name = localize(weaponFocusKey);
+    let name = localizeBonusLabel(weaponFocusKey);
 
     const helper = new KeyedDFlagHelper(actor, {}, weaponFocusKey, greaterWeaponFocusKey, mythicWeaponFocusKey);
 
@@ -110,11 +121,11 @@ function getAttackSources(item, sources) {
     }
     if (baseTypes.find(bt => helper.valuesForFlag(greaterWeaponFocusKey).includes(bt))) {
         value += 1;
-        name = localize(greaterWeaponFocusKey);
+        name = localizeBonusLabel(greaterWeaponFocusKey);
     }
     if (baseTypes.find(bt => helper.valuesForFlag(mythicWeaponFocusKey).includes(bt))) {
         value *= 2;
-        name = localize(mythicWeaponFocusKey);
+        name = localizeBonusLabel(mythicWeaponFocusKey);
     }
 
     if (value) {
@@ -155,25 +166,21 @@ function addWeaponFocusBonus({ actor, item, shared }) {
     }
 
     if (value) {
-        shared.attackBonus.push(`${value}[${localize(key)}]`);
+        shared.attackBonus.push(`${value}[${localizeBonusLabel(key)}]`);
     }
 }
 Hooks.on(customGlobalHooks.actionUseAlterRollData, addWeaponFocusBonus);
 
 Hooks.on('renderItemSheet', (
-    /** @type {ItemSheetPF} */ { actor, item },
+    /** @type {ItemSheetPF} */ { actor, isEditable, item },
     /** @type {[HTMLElement]} */[html],
     /** @type {unknown} */ _data
 ) => {
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
-    /**
-     * @type {string | undefined}
-     */
+    /** @type {string | undefined} */
     let key;
-    /**
-     * @type {(string)[]}
-     */
+    /** @type {(string)[]} */
     let choices = [];
 
     const name = item?.name?.toLowerCase() ?? '';
@@ -188,7 +195,6 @@ Hooks.on('renderItemSheet', (
         || item.system.flags.dictionary[racialWeaponFocusKey] !== undefined;
 
     if (isGreater || isMythic) {
-        key = greaterWeaponFocusKey;
         key = isGreater ? greaterWeaponFocusKey : mythicWeaponFocusKey;
 
         if (actor) {
@@ -210,21 +216,20 @@ Hooks.on('renderItemSheet', (
     }
 
     if (key === weaponFocusKey) {
-        choices = uniqueArray(item.actor?.items
+        choices = uniqueArray(actor?.items
             ?.filter(
                 /** @returns {item is ItemWeaponPF | ItemAttackPF} */
                 (item) => item.type === 'weapon' || item.type === 'attack')
             .flatMap((item) => item.system.baseTypes ?? []));
     }
 
-    const current = item.getItemDictionaryFlag(key);
-
     stringSelect({
         choices,
-        current,
         item,
+        journal,
         key,
-        label: localize(key),
         parent: html
+    }, {
+        canEdit: isEditable,
     });
 });

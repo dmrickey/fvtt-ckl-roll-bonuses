@@ -1,25 +1,38 @@
 import { MODULE_NAME } from "../../../consts.mjs";
-import { localize } from "../../../util/localize.mjs";
+import { localize, localizeBonusLabel, localizeBonusTooltip } from "../../../util/localize.mjs";
 import { truthiness } from "../../../util/truthiness.mjs";
 import { uniqueArray } from "../../../util/unique-array.mjs";
-import { addNodeToRollBonus } from "../../roll-bonus-on-item-sheet.mjs";
+import { addNodeToRollBonus } from "../../add-bonus-to-item-sheet.mjs";
 import { createTemplate, templates } from "../../templates.mjs";
 
 /**
  * @param {object} args
- * @param {ItemPF} args.item,
  * @param {(item: ItemPF) => boolean} args.filter,
+ * @param {ItemPF} args.item,
+ * @param {string} args.journal,
  * @param {string} args.key,
- * @param {string} args.label,
+ * @param {string} [args.label]
  * @param {HTMLElement} args.parent
+ * @param {string} [args.tooltip]
+ * @param {object} options
+ * @param {boolean} options.canEdit
  */
 export function showItemInput({
-    item,
     filter,
+    item,
+    journal,
     key,
-    label,
+    label = '',
     parent,
+    tooltip = '',
+}, {
+    canEdit,
 }) {
+    if (!item?.actor) return;
+
+    label ||= localizeBonusLabel(key);
+    tooltip ||= localizeBonusTooltip(key);
+
     /** @type {string[]} */
     const currentUuids = item.getFlag(MODULE_NAME, key) || [];
     const items = item.actor.items
@@ -35,26 +48,32 @@ export function showItemInput({
     const badCurrent = badCurrentUuids.map(fromUuidSync);
 
     const templateData = {
-        label,
-        current,
         badCurrent,
+        current,
+        journal,
+        label,
+        readonly: !canEdit,
+        tooltip,
     };
     const div = createTemplate(templates.editableIcons, templateData);
 
-    div.querySelectorAll('li,a').forEach((element) => {
-        element.addEventListener('click', (event) => {
-            event.preventDefault();
-            const options = {
-                currentUuids,
-                items,
-                path: `flags.${MODULE_NAME}.${key}`,
-            };
-            new ItemSelector(item, options).render(true);
+    if (canEdit) {
+        div.querySelectorAll('li,a').forEach((element) => {
+            element.addEventListener('click', (event) => {
+                event.preventDefault();
+                const options = {
+                    currentUuids,
+                    items,
+                    path: `flags.${MODULE_NAME}.${key}`,
+                };
+                new ItemSelector(item, options).render(true);
+            });
         });
-    });
+    }
 
-    addNodeToRollBonus(parent, div);
+    addNodeToRollBonus(parent, div, item, canEdit);
 }
+
 /** @ts-ignore */
 /** @extends {DocumentSheet<ItemSelectorOptions, ItemPF>} */
 class ItemSelector extends DocumentSheet {
@@ -67,6 +86,15 @@ class ItemSelector extends DocumentSheet {
         options.title = localize('item-app.title');
 
         return options;
+    }
+
+    /**
+     * @override
+     * @param {JQuery} html
+     */
+    activateListeners(html) {
+        super.activateListeners(html);
+        html.find('button[type=reset]')?.click(this.close.bind(this));
     }
 
     /** @override */

@@ -2,23 +2,35 @@ import { MODULE_NAME } from '../consts.mjs';
 import { showEnabledLabel } from '../handlebars-handlers/enabled-label.mjs';
 import { hasAnyBFlag } from '../util/flag-helpers.mjs';
 import { customGlobalHooks } from '../util/hooks.mjs';
-import { localizeGenericBonusLabel } from '../util/localize.mjs';
+import { localizeBonusLabel } from '../util/localize.mjs';
 import { registerSetting } from '../util/settings.mjs';
+import { SpecificBonuses } from './all-specific-bonuses.mjs';
 
 const furiousFocus = 'furious-focus';
 const furiousFocusTimestamp = 'furious-focus-timestamp';
 const compendiumId = 'UcEIgufLJlIfhHmu';
+const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#furious-focus';
 
-registerSetting({ key: furiousFocus });
+Hooks.once('ready', () =>
+    SpecificBonuses.registerSpecificBonus({
+        journal,
+        key: furiousFocus,
+        type: 'boolean',
+    })
+);
 
 class Settings {
     static get furiousFocus() { return Settings.#getSetting(furiousFocus); }
     // @ts-ignore
     static #getSetting(/** @type {string} */key) { return game.settings.get(MODULE_NAME, key).toLowerCase(); }
+
+    static {
+        registerSetting({ key: furiousFocus });
+    }
 }
 
 /** @returns {string} */
-const label = () => { return localizeGenericBonusLabel(furiousFocus); }
+const label = () => { return localizeBonusLabel(furiousFocus); }
 
 /**
  * @param {ActionUse<ItemWeaponPF>} actionUse
@@ -47,14 +59,14 @@ Hooks.on(customGlobalHooks.getConditionalParts, getConditionalParts);
  */
 function addFuriousFocusEffectNote(chatAttack) {
     const { attack, effectNotes } = chatAttack;
-    if (attack.terms.some((x) => x.options?.flavor === label())) {
+    if (attack?.terms.some((x) => x.options?.flavor === label())) {
         effectNotes.push(label());
     }
 }
 Hooks.on(customGlobalHooks.chatAttackEffectNotes, addFuriousFocusEffectNote);
 
 Hooks.on('renderItemSheet', (
-    /** @type {ItemSheetPF} */ { item },
+    /** @type {ItemSheetPF} */ { isEditable, item },
     /** @type {[HTMLElement]} */[html],
     /** @type {unknown} */ _data
 ) => {
@@ -63,17 +75,20 @@ Hooks.on('renderItemSheet', (
     const hasFlag = item.system.flags.boolean?.hasOwnProperty(furiousFocus);
     const name = item?.name?.toLowerCase() ?? '';
     const sourceId = item?.flags.core?.sourceId ?? '';
-    if (!hasFlag && (name === Settings.furiousFocus || sourceId.includes(compendiumId))) {
-        item.update({ [`system.flags.boolean.${furiousFocus}`]: true });
+    if (!hasFlag) {
+        if (name === Settings.furiousFocus || sourceId.includes(compendiumId)) {
+            item.update({ [`system.flags.boolean.${furiousFocus}`]: true });
+        }
         return;
     }
 
-    if (!hasFlag) {
-        return;
-    }
     showEnabledLabel({
-        label: label(),
+        journal,
+        key: furiousFocus,
+        item,
         parent: html,
+    }, {
+        canEdit: isEditable,
     });
 });
 

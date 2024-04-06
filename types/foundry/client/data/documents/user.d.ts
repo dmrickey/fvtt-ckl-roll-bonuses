@@ -1,5 +1,8 @@
-import { ConfiguredDocumentClass } from "../../../../types/helperTypes";
-import { DocumentDataType, DocumentModificationOptions } from "../../../common/abstract/document.mjs";
+import { ConfiguredDocumentClass } from '../../../../types/helperTypes';
+import {
+    DocumentDataType,
+    DocumentModificationOptions,
+} from '../../../common/abstract/document.mjs';
 
 declare global {
     class User extends ClientDocumentMixin(foundry.documents.BaseUser) {
@@ -7,5 +10,6 @@ declare global {
          * Track references to the current set of Tokens which are targeted by the User
          */
         targets: UserTargets;
+        isGM: boolean;
     }
 }

@@ -1,3 +1,5 @@
+# This documentation is no longer kept up to date. All documentation can be found in the in-game compendium included with this mod.
+
 # Roll Bonuses
 
 Provides bonuses to various types of rolls. Some of these are for variable changes that the system can't handle (like Inspiration). Some are a fake implementation of changes that the system just doesn't support. All configuration is done in the Feat's Advanced Tab (or buff, class feature, etc.). Support for Mana's mod [Item Hints](https://gitlab.com/koboldworks/pf1/item-hints) has been included so that things are automatically tagged in the character sheet.
@@ -6,6 +8,7 @@ Supports PF1 v9+
 
 ### Table of contents
 
+- [This documentation is no longer kept up to date. All documentation can be found in the in-game compendium included with this mod.](#this-documentation-is-no-longer-kept-up-to-date-all-documentation-can-be-found-in-the-in-game-compendium-included-with-this-mod)
 - [Class Features](#class-features)
   - [Versatile Performance](#versatile-performance)
 - [Generic Targets](#generic-targets)
@@ -245,8 +248,7 @@ Applies a fortune effect (`2d20kh`) (or misfortune (`2d20kl`)) to the [targeted]
 
 ### Unchained Rogue's Finesse Training
 
-<details>
-  <summary>How to configure Slayer's Studied Target (click to expand)</summary>
+<details>Unchained Rogue's Finesse Training's Studied Target (click to expand)</summary>
 
   - This is a combination of [Agile](#agile) (`bonus_agile`) and [Weapon Type Target](#weapon-type-target) (`target_weapon-type`)
     - Don't forget that to correctly configure the weapon type target, the weapon you want to use must be configured with a `Base Equipment Type`
@@ -351,7 +353,7 @@ Spell Focus, Greater Spell Focus, and Mythic Spell Focus now all have a drop dow
 Increase chosen spell CL by +2.
 
 <details>
-  <summary>How to configure Spell Specialization (clicke to expand)</summary>
+  <summary>How to configure Spell Specialization (click to expand)</summary>
 
   - The input will automatically be added for any ability named `Spell Specialization` (configurable in the mod settings)
   - You can manually add the `spell-specialization` dictionary flag for the input to show up
