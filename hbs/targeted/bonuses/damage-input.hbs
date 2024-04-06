@@ -7,20 +7,38 @@
                 class="damage-formula formula"
                 type="text"
                 name="{{i}}.formula"
-                placeholder="{{#unless isHealing }}{{localize "PF1.DamageFormula"}} {{ else }}{{localize "PF1.HealingFormula" }}{{/unless}}"
+                placeholder="{{label}}"
                 value="{{formula}}"
+                {{#if ../readonly}}readonly{{/if}}
             />
+            {{#if ../readonly}}
+            <input
+                class="damage-formula formula"
+                type="text"
+                value="{{lookup ../partsLabels i}}"
+                readonly
+            />
+            <input
+                class="damage-formula formula"
+                type="text"
+                value="{{crit}}"
+                readonly
+            />
+            {{else}}
             {{> "systems/pf1/templates/internal/damage-type-visual.hbs" data=type name="{{i}}.type" damageTypes=@root.damageTypes}}
             <select name="crit-selector" class="damage-crit">
                 {{ selectOptions ../critChoices selected=crit }}
             </select>
             <a class="damage-control delete-damage"><i class="fas fa-trash"></i></a>
+            {{/if}}
         </li>
         {{/each}}
+        {{#unless readonly}}
         <li class="damage-part flexrow">
             <a class="damage-control add-damage"><i class="fas fa-plus"></i>
-                {{#unless isHealing}}{{localize "PF1.AddDamage"}}{{else}}{{localize "PF1.AddHealing"}}{{/unless}}
+                {{#if isHealing}}{{localize "PF1.AddHealing"}}{{else}}{{localize "PF1.AddDamage"}}{{/if}}
             </a>
         </li>
+        {{/unless}}
     </ol>
 </div>

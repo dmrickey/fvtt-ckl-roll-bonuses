@@ -29,18 +29,22 @@ export function damageInput({
     };
 
     const isHealing = false;
+    const damageTypes = pf1.registry.damageTypes.toObject();
     tooltip ||= localizeBonusTooltip(key);
 
     /** @type {DamageInputModel[]} */
     const parts = item.getFlag(MODULE_NAME, key) ?? [];
+    const partsLabels = parts.map((part) => part.type.values.map((x) => damageTypes[x].name).join('; ') + (part.type.custom ? `; ${part.type.custom}` : ''));
+
     const templateData = {
         critChoices,
-        damageTypes: pf1.registry.damageTypes.toObject(),
+        damageTypes,
         isHealing,
         item,
         journal,
         label: isHealing ? localize('PF1.HealingFormula') : localize('PF1.DamageFormula'),
         parts,
+        partsLabels,
         readonly: !canEdit,
         tooltip,
     };
