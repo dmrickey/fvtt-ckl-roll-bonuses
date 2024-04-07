@@ -75,7 +75,7 @@ function getAttackSources(item, sources) {
 
     const helper = new KeyedDFlagHelper(actor, {
         mustHave: {
-            [key]: (value) => tags.includes(`${value}`),
+            [key]: (value) => tags.includes(`${value}`.toLocaleLowerCase()),
         }
     }, key);
 
@@ -99,7 +99,7 @@ function addWeaponFocusBonus({ actor, item, shared }) {
 
     const helper = new KeyedDFlagHelper(actor, {
         mustHave: {
-            [key]: (value) => tags.includes(`${value}`),
+            [key]: (value) => tags.includes(`${value}`.toLocaleLowerCase()),
         }
     }, key);
 
@@ -123,7 +123,13 @@ Hooks.on('renderItemSheet', (
         || name.includes(Settings.defaultRace);
     if (!isRacial) return;
 
+    const current = item.system?.flags?.dictionary?.[key];
+    if (!current) {
+        item.setItemDictionaryFlag(key, Settings.defaultRace);
+    }
+
     textInput({
+        current,
         item,
         journal,
         key,

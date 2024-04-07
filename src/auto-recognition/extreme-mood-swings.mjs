@@ -1,17 +1,14 @@
-import { registerSetting } from '../util/settings.mjs';
+import { LanguageSettings } from '../util/settings.mjs';
 import { bonusKey, formulaKey } from '../bonuses/change-type-offset.mjs';
-import { MODULE_NAME } from '../consts.mjs';
 
 const compendiumId = 'WSRZEwNGpQUNcvI9';
 const key = 'extreme-mood-swings';
 
 class Settings {
-    static get name() { return Settings.#getSetting(key); }
-    // @ts-ignore
-    static #getSetting(/** @type {string} */key) { return game.settings.get(MODULE_NAME, key).toLowerCase(); }
+    static get name() { return LanguageSettings.getTranslation(key); }
 
     static {
-        registerSetting({ key });
+        LanguageSettings.registerItemNameTranslation(key);
     }
 }
 

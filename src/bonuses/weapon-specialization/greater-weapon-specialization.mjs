@@ -1,14 +1,13 @@
 // https://www.d20pfsrd.com/feats/combat-feats/weapon-specialization-combat/
 // +2 damage on selected weapon type - requires Greater Weapon Focus and Weapon Specialization with selected weapon
 
-import { MODULE_NAME } from "../../consts.mjs";
 import { stringSelect } from "../../handlebars-handlers/bonus-inputs/string-select.mjs";
 import { intersection, intersects } from "../../util/array-intersects.mjs";
 import { KeyedDFlagHelper, getDocDFlags } from "../../util/flag-helpers.mjs";
 import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize, localizeBonusLabel } from "../../util/localize.mjs";
-import { registerSetting } from "../../util/settings.mjs";
+import { LanguageSettings } from '../../util/settings.mjs';
 import { SpecificBonuses } from '../all-specific-bonuses.mjs';
 import { greaterWeaponFocusKey } from "../weapon-focus/ids.mjs";
 import { WeaponSpecializationSettings, weaponSpecializationKey } from "./weapon-specialization.mjs";
@@ -18,16 +17,6 @@ const compendiumId = 'asmQDyDYTtuXg8b4';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#weapon-specialization';
 
 Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ journal, key, parent: weaponSpecializationKey }));
-
-class Settings {
-    static get weaponSpecialization() { return Settings.#getSetting(key); }
-    // @ts-ignore
-    static #getSetting(/** @type {string} */key) { return game.settings.get(MODULE_NAME, key).toLowerCase(); }
-
-    static {
-        registerSetting({ key });
-    }
-}
 
 // register hint on source feat
 registerItemHint((hintcls, _actor, item, _data) => {
@@ -121,7 +110,7 @@ Hooks.on('renderItemSheet', (
 
     const name = item?.name?.toLowerCase() ?? '';
     const sourceId = item?.flags.core?.sourceId ?? '';
-    if (!((name.includes(WeaponSpecializationSettings.weaponSpecialization) && name.includes(Settings.weaponSpecialization))
+    if (!((name.includes(WeaponSpecializationSettings.weaponSpecialization) && name.includes(LanguageSettings.greater))
         || item.system.flags.dictionary[key] !== undefined
         || sourceId.includes(compendiumId))
     ) {

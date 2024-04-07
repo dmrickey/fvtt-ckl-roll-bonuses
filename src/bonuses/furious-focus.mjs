@@ -3,7 +3,7 @@ import { showEnabledLabel } from '../handlebars-handlers/enabled-label.mjs';
 import { hasAnyBFlag } from '../util/flag-helpers.mjs';
 import { customGlobalHooks } from '../util/hooks.mjs';
 import { localizeBonusLabel } from '../util/localize.mjs';
-import { registerSetting } from '../util/settings.mjs';
+import { LanguageSettings } from '../util/settings.mjs';
 import { SpecificBonuses } from './all-specific-bonuses.mjs';
 
 const furiousFocus = 'furious-focus';
@@ -20,12 +20,10 @@ Hooks.once('ready', () =>
 );
 
 class Settings {
-    static get furiousFocus() { return Settings.#getSetting(furiousFocus); }
-    // @ts-ignore
-    static #getSetting(/** @type {string} */key) { return game.settings.get(MODULE_NAME, key).toLowerCase(); }
+    static get furiousFocus() { return LanguageSettings.getTranslation(furiousFocus); }
 
     static {
-        registerSetting({ key: furiousFocus });
+        LanguageSettings.registerItemNameTranslation(furiousFocus);
     }
 }
 

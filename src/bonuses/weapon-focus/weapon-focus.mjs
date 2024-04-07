@@ -1,11 +1,10 @@
-import { MODULE_NAME } from "../../consts.mjs";
 import { stringSelect } from "../../handlebars-handlers/bonus-inputs/string-select.mjs";
 import { intersects } from "../../util/array-intersects.mjs";
 import { KeyedDFlagHelper, getDocDFlags } from "../../util/flag-helpers.mjs";
 import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize, localizeBonusLabel } from "../../util/localize.mjs";
-import { registerSetting } from "../../util/settings.mjs";
+import { LanguageSettings } from "../../util/settings.mjs";
 import { signed } from '../../util/to-signed-string.mjs';
 import { uniqueArray } from "../../util/unique-array.mjs";
 import { SpecificBonuses } from '../all-specific-bonuses.mjs';
@@ -31,16 +30,10 @@ Hooks.once('ready', () => {
 });
 
 class Settings {
-    static get weaponFocus() { return Settings.#getSetting(weaponFocusKey); }
-    static get greater() { return Settings.#getSetting(greaterWeaponFocusKey); }
-    static get mythic() { return Settings.#getSetting(mythicWeaponFocusKey); }
-    // @ts-ignore
-    static #getSetting(/** @type {string} */key) { return game.settings.get(MODULE_NAME, key).toLowerCase(); }
+    static get weaponFocus() { return LanguageSettings.getTranslation(weaponFocusKey); }
 
     static {
-        registerSetting({ key: weaponFocusKey });
-        registerSetting({ key: greaterWeaponFocusKey });
-        registerSetting({ key: mythicWeaponFocusKey });
+        LanguageSettings.registerItemNameTranslation(weaponFocusKey);
     }
 }
 
@@ -185,10 +178,10 @@ Hooks.on('renderItemSheet', (
 
     const name = item?.name?.toLowerCase() ?? '';
     const sourceId = item?.flags.core?.sourceId ?? '';
-    const isGreater = (name.includes(Settings.weaponFocus) && name.includes(Settings.greater))
+    const isGreater = (name.includes(Settings.weaponFocus) && name.includes(LanguageSettings.greater))
         || sourceId.includes(greaterWeaponFocusId)
         || item.system.flags.dictionary[greaterWeaponFocusKey] !== undefined;
-    const isMythic = (name.includes(Settings.weaponFocus) && name.includes(Settings.mythic))
+    const isMythic = (name.includes(Settings.weaponFocus) && name.includes(LanguageSettings.mythic))
         || sourceId.includes(mythicWeaponFocusId)
         || item.system.flags.dictionary[mythicWeaponFocusKey] !== undefined;
     const isRacial = sourceId.includes(gnomeWeaponFocusId)

@@ -1,5 +1,4 @@
-import { registerSetting } from '../util/settings.mjs';
-import { MODULE_NAME } from '../consts.mjs';
+import { LanguageSettings } from '../util/settings.mjs';
 import { FinesseBonus } from '../targeted/bonuses/finesse-bonus.mjs';
 import { FinesseTarget } from '../targeted/targets/finesse-target.mjs';
 
@@ -9,12 +8,10 @@ const bonusKey = FinesseBonus.key;
 const targetKey = FinesseTarget.key;
 
 class Settings {
-    static get name() { return Settings.#getSetting(key); }
-    // @ts-ignore
-    static #getSetting(/** @type {string} */key) { return game.settings.get(MODULE_NAME, key).toLowerCase(); }
+    static get name() { return LanguageSettings.getTranslation(key); }
 
     static {
-        registerSetting({ key });
+        LanguageSettings.registerItemNameTranslation(key);
     }
 }
 

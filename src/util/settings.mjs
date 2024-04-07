@@ -1,14 +1,15 @@
 import { MODULE_NAME } from "../consts.mjs";
+import { templates } from '../handlebars-handlers/templates.mjs';
+import { difference } from './array-intersects.mjs';
 import { localize } from "./localize.mjs";
 
 /**
- *
  * @param {object} setting
  * @param {boolean} [setting.config]
  * @param {string} setting.key
  * @param {any} [setting.defaultValue]
  * @param {'world' | 'client'} [setting.scope]
- * @param {BooleanConstructor | StringConstructor | NumberConstructor} [setting.settingType]
+ * @param {BooleanConstructor | StringConstructor | NumberConstructor | ObjectConstructor} [setting.settingType]
  * @param {object} [options]
  * @param {boolean} [options.skipReady]
  */
@@ -36,3 +37,110 @@ export const registerSetting = ({
         ? doIt()
         : Hooks.once('ready', doIt);
 };
+
+export class LanguageSettings {
+
+    static get itemNameTranslationsKey() { return 'item-name-translations'; }
+
+    /** @type {string[]} */
+    static itemNameTranslationKeys = [];
+
+    /** @param {string} key */
+    static registerItemNameTranslation = (key) => this.itemNameTranslationKeys.push(key);
+
+    /** @param {string} key */
+    static getTranslation = (key) => {
+        const current = this.itemNameTranslations;
+        return (current[key] || localize(`item-name-translations.${key}.default`)).toLocaleLowerCase();
+    }
+
+    static get greater() { return this.getTranslation('greater'); }
+    static get improved() { return this.getTranslation('improved'); }
+    static get mythic() { return this.getTranslation('mythic'); }
+
+    /** @returns {Record<string, string>} */
+    static get itemNameTranslations() {
+        const current = game.settings.get(MODULE_NAME, this.itemNameTranslationsKey) || {};
+
+        return /** @type {Record<string, string>} */ (current);
+    }
+
+    static {
+        // register this setting once PF1 is ready so that all translation keys have already been registered before this is run
+        Hooks.once('pf1PostReady', () => {
+            this.itemNameTranslationKeys.sort();
+
+            registerSetting({
+                key: this.itemNameTranslationsKey,
+                config: false,
+                defaultValue: {},
+                settingType: Object,
+            })
+
+            game.settings.registerMenu(MODULE_NAME, this.itemNameTranslationsKey, {
+                name: localize('item-name-app.title'),
+                label: localize('item-name-app.label'),
+                hint: localize('item-name-app.hint'),
+                icon: "fas fa-table-list",
+                type: ItemNameTranslationConfig,
+                restricted: true,
+            });
+        });
+    }
+}
+
+class ItemNameTranslationConfig extends FormApplication {
+    /** @override */
+    static get defaultOptions() {
+        const options = super.defaultOptions;
+        options.id = "ckl-item-name-translation-config";
+        options.template = templates.itemNameTranslationConfigApp;
+        options.height = "auto";
+        options.width = 550;
+        options.title = localize('item-name-app.title');
+        return options;
+    }
+
+    /** @override */
+    getData(options = {}) {
+        let context = super.getData()
+        const current = LanguageSettings.itemNameTranslations;
+
+        const choices = LanguageSettings.itemNameTranslationKeys.map((key) => ({
+            key,
+            label: localize(`item-name-translations.${key}.name`),
+            value: current[key] || localize(`item-name-translations.${key}.default`),
+        }));
+
+        context.improved = {
+            key: 'improved',
+            label: localize(`item-name-translations.improved.name`),
+            value: current.improved || localize(`item-name-translations.improved.default`),
+        }
+        context.greater = {
+            key: 'greater',
+            label: localize(`item-name-translations.greater.name`),
+            value: current.greater || localize(`item-name-translations.greater.default`),
+        }
+        context.mythic = {
+            key: 'mythic',
+            label: localize(`item-name-translations.mythic.name`),
+            value: current.mythic || localize(`item-name-translations.mythic.default`),
+        }
+        context.key = LanguageSettings.itemNameTranslationsKey;
+
+        context.choices = choices;
+        return context
+    }
+
+    /**
+     * @override
+     * @inheritdoc
+     * @param {Event} _event
+     * @param {object} formData
+     */
+    async _updateObject(_event, formData) {
+        const update = expandObject(formData);
+        game.settings.set(MODULE_NAME, LanguageSettings.itemNameTranslationsKey, update);
+    }
+}

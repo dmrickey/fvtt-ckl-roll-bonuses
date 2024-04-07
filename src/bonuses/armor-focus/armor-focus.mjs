@@ -5,9 +5,8 @@ import { armorFocusKey as key } from "./ids.mjs";
 import { intersects } from "../../util/array-intersects.mjs";
 import { KeyedDFlagHelper } from "../../util/flag-helpers.mjs";
 import { localize, localizeBonusLabel } from "../../util/localize.mjs";
-import { MODULE_NAME } from "../../consts.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
-import { registerSetting } from "../../util/settings.mjs";
+import { LanguageSettings } from "../../util/settings.mjs";
 import { uniqueArray } from "../../util/unique-array.mjs";
 import { stringSelect } from "../../handlebars-handlers/bonus-inputs/string-select.mjs";
 import { improvedArmorFocusKey } from './improved-armor-focus.mjs';
@@ -19,12 +18,10 @@ const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalE
 Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ key, journal }));
 
 class Settings {
-    static get armorFocus() { return Settings.#getSetting(key); }
-    // @ts-ignore
-    static #getSetting(/** @type {string} */key) { return game.settings.get(MODULE_NAME, key).toLowerCase(); }
+    static get armorFocus() { return LanguageSettings.getTranslation(key); }
 
     static {
-        registerSetting({ key });
+        LanguageSettings.registerItemNameTranslation(key);
     }
 }
 
