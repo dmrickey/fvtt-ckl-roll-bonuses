@@ -67,7 +67,7 @@ export class DamageTypeTarget extends BaseTarget {
 
             if (doc instanceof pf1.documents.item.ItemPF) {
                 const itemDamageTypes = uniqueArray(
-                    doc.actions
+                    [...(doc.actions ?? [])]
                         .flatMap((action) => action.data.damage.parts.flatMap((part) => [...part.type.custom.split(';'), ...part.type.values]))
                         .map(x => x.trim())
                         .filter(truthiness)

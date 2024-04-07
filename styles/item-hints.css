@@ -1,19 +1,19 @@
-.sheet itemHints.koboldworks .hint.ckl-acid-green {
+.sheet .koboldworks.item-hints .hint.ckl-acid-green {
     color: #53c544;
 }
 
-.sheet itemHints.koboldworks .hint.ckl-cold-blue {
+.sheet .koboldworks.item-hints .hint.ckl-cold-blue {
     color: #6897e8;
 }
 
-.sheet itemHints.koboldworks .hint.ckl-electric-yellow {
+.sheet .koboldworks.item-hints .hint.ckl-electric-yellow {
     color: #999900;
 }
 
-.sheet itemHints.koboldworks .hint.ckl-fire-red {
+.sheet .koboldworks.item-hints .hint.ckl-fire-red {
     color: #ff0000;
 }
 
-.sheet itemHints.koboldworks .hint.ckl-missing-source {
-    background-color: rgba(255,0,0,.1);
+.sheet .koboldworks.item-hints .hint.ckl-missing-source {
+    color: #dd0000;
 }

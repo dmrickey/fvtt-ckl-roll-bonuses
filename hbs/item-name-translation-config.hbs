@@ -1,0 +1,34 @@
+<form>
+    <p style="text-align:center">{{{localize "ckl-roll-bonuses.item-name-app.description"}}}</p>
+    <header class="table-header flexrow">
+        <label>{{ localize "ckl-roll-bonuses.item-name-app.english-name" }}</label>
+        <label>{{ localize "ckl-roll-bonuses.item-name-app.translation" }}</label>
+    </header>
+
+    <ul class="action-list">
+        <li class="action form-group">
+            <div>{{improved.label}}</div>
+            <input name="{{improved.key}}" type="text" value="{{improved.value}}"/>
+        </li>
+        <li class="action form-group">
+            <div>{{greater.label}}</div>
+            <input name="{{greater.key}}" type="text" value="{{greater.value}}"/>
+        </li>
+        <li class="action form-group">
+            <div>{{mythic.label}}</div>
+            <input name="{{mythic.key}}" type="text" value="{{mythic.value}}"/>
+        </li>
+        <hr>
+        {{#each choices}}
+        <li class="action form-group">
+            <div>{{label}}</div>
+            <input name="{{key}}" type="text" value="{{value}}"/>
+        </li>
+        {{/each}}
+    </ul>
+    <div class="form-group">
+        <button type="submit">
+            <i class="fas fa-save"></i> {{localize 'PF1.Save'}}
+        </button>
+    </div>
+</form>

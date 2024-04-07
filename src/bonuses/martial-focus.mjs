@@ -1,14 +1,13 @@
 // https://www.d20pfsrd.com/feats/combat-feats/martial-focus-combat/
 // +1 damage to chosen weapon group with proficient weapon
 
-import { MODULE_NAME } from "../consts.mjs";
 import { keyValueSelect } from "../handlebars-handlers/bonus-inputs/key-value-select.mjs";
 import { intersects } from "../util/array-intersects.mjs";
 import { KeyedDFlagHelper, getDocDFlags } from "../util/flag-helpers.mjs";
 import { customGlobalHooks } from "../util/hooks.mjs";
 import { registerItemHint } from "../util/item-hints.mjs";
 import { localizeBonusLabel } from "../util/localize.mjs";
-import { registerSetting } from "../util/settings.mjs";
+import { LanguageSettings } from "../util/settings.mjs";
 import { truthiness } from "../util/truthiness.mjs";
 import { uniqueArray } from "../util/unique-array.mjs";
 import { SpecificBonuses } from './all-specific-bonuses.mjs';
@@ -20,12 +19,10 @@ const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalE
 Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ journal, key }));
 
 class Settings {
-    static get martialFocus() { return Settings.#getSetting(key); }
-    // @ts-ignore
-    static #getSetting(/** @type {string} */key) { return game.settings.get(MODULE_NAME, key).toLowerCase(); }
+    static get martialFocus() { return LanguageSettings.getTranslation(key); }
 
     static {
-        registerSetting({ key });
+        LanguageSettings.registerItemNameTranslation(key);
     }
 }
 

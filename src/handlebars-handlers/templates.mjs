@@ -1,7 +1,7 @@
 import { MODULE_NAME } from "../consts.mjs";
 
 export const templates =/** @type {const} */ ({
-    // bonus container for item sheets
+    /** bonus container for item sheets */
     rollBonusesContainer: `modules/${MODULE_NAME}/hbs/roll-bonuses-header.hbs`,
 
     // generic shortcuts
@@ -12,11 +12,13 @@ export const templates =/** @type {const} */ ({
     textInput: `modules/${MODULE_NAME}/hbs/text-input.hbs`,
     textInputAndKeyValueSelect: `modules/${MODULE_NAME}/hbs/text-input-and-key-value-select.hbs`,
 
-    // preloaded specifics
+    /** versatile performance picker used on item sheets */
     versatilePerformance: `modules/${MODULE_NAME}/hbs/versatile-performance-selector.hbs`,
 
-    // targeted - bonuses
+    /** damage input used on item sheets */
     damageInput: `modules/${MODULE_NAME}/hbs/targeted/bonuses/damage-input.hbs`,
+
+    /** not used */
     conditionals: 'systems/pf1/templates/apps/item-action/conditionals.hbs', // (targeted but belongs to pf1) belongs to pf1
 
     // targeted - targets
@@ -26,12 +28,16 @@ export const templates =/** @type {const} */ ({
     targetWeaponGroup: `modules/${MODULE_NAME}/hbs/targeted/targets/weapon-group-input.hbs`,
     tokenApp: `modules/${MODULE_NAME}/hbs/targeted/targets/token-application.hbs`,
 
-    // bonus picker application
+    /** bonus picker application */
     bonusPicker: `modules/${MODULE_NAME}/hbs/bonus-picker.hbs`,
+    /** bonus picker indivudal item row */
     bonusPickerItem: `modules/${MODULE_NAME}/hbs/bonus-picker-item.hbs`,
 
-    // partials
+    /** label used for all bonuses that shows label, tooltip, and journal */
     label: `modules/${MODULE_NAME}/hbs/label.hbs`,
+
+    /** item name translation app for auto-recognition */
+    itemNameTranslationConfigApp: `modules/${MODULE_NAME}/hbs/item-name-translation-config.hbs`,
 });
 
 /**

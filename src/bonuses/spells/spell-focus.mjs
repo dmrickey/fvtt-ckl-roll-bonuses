@@ -1,10 +1,9 @@
-import { MODULE_NAME } from "../../consts.mjs";
 import { keyValueSelect } from "../../handlebars-handlers/bonus-inputs/key-value-select.mjs";
 import { KeyedDFlagHelper, getDocDFlags } from "../../util/flag-helpers.mjs";
 import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize, localizeBonusLabel } from "../../util/localize.mjs";
-import { registerSetting } from "../../util/settings.mjs";
+import { LanguageSettings } from "../../util/settings.mjs";
 import { signed } from "../../util/to-signed-string.mjs";
 import { SpecificBonuses } from '../all-specific-bonuses.mjs';
 
@@ -27,16 +26,10 @@ Hooks.once('ready', () => {
 });
 
 class Settings {
-    static get spellFocus() { return Settings.#getSetting(spellFocusKey); }
-    static get greater() { return Settings.#getSetting(greaterSpellFocusKey); }
-    static get mythic() { return Settings.#getSetting(mythicSpellFocusKey); }
-    // @ts-ignore
-    static #getSetting(/** @type {string} */key) { return game.settings.get(MODULE_NAME, key).toLowerCase(); }
+    static get spellFocus() { return LanguageSettings.getTranslation(spellFocusKey); }
 
     static {
-        registerSetting({ key: spellFocusKey });
-        registerSetting({ key: greaterSpellFocusKey });
-        registerSetting({ key: mythicSpellFocusKey });
+        LanguageSettings.registerItemNameTranslation(spellFocusKey);
     }
 }
 
@@ -189,8 +182,8 @@ Hooks.on('renderItemSheet', (
         key = spellFocusKey;
     }
 
-    const isGreater = (name.includes(Settings.spellFocus) && name.includes(Settings.greater)) || sourceId.includes(greaterSpellFocusId);
-    const isMythic = (name.includes(Settings.spellFocus) && name.includes(Settings.mythic)) || sourceId.includes(mythicSpellFocusId);
+    const isGreater = (name.includes(Settings.spellFocus) && name.includes(LanguageSettings.greater)) || sourceId.includes(greaterSpellFocusId);
+    const isMythic = (name.includes(Settings.spellFocus) && name.includes(LanguageSettings.mythic)) || sourceId.includes(mythicSpellFocusId);
 
     if (isGreater || isMythic) {
         key = isGreater ? greaterSpellFocusKey : mythicSpellFocusKey;

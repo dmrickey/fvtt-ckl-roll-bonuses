@@ -6,7 +6,7 @@ import { addNodeToRollBonus } from "../handlebars-handlers/add-bonus-to-item-she
 import { getDocDFlags } from "../util/flag-helpers.mjs";
 import { registerItemHint } from "../util/item-hints.mjs";
 import { localize } from "../util/localize.mjs";
-import { registerSetting } from "../util/settings.mjs";
+import { LanguageSettings } from "../util/settings.mjs";
 import { truthiness } from "../util/truthiness.mjs";
 import { SpecificBonuses } from './all-specific-bonuses.mjs';
 
@@ -16,12 +16,10 @@ const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalE
 Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ journal, key }));
 
 class Settings {
-    static get versatilePerformance() { return Settings.#getSetting(key); }
-    // @ts-ignore
-    static #getSetting(/** @type {string} */key) { return game.settings.get(MODULE_NAME, key).toLowerCase(); }
+    static get versatilePerformance() { return LanguageSettings.getTranslation(key); }
 
     static {
-        registerSetting({ key });
+        LanguageSettings.registerItemNameTranslation(key);
     }
 }
 
@@ -242,7 +240,7 @@ Hooks.on('renderItemSheet', (
     const templateData = {
         allSkills,
         base,
-        canEdit: isEditable,
+        readonly: !isEditable,
         journal,
         label: localize('versatilePerformance.header'),
         performs,

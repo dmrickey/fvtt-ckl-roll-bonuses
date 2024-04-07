@@ -1,13 +1,12 @@
 // +2 CL to chosen spell from school with Spell Focus
 // https://www.d20pfsrd.com/feats/general-feats/spell-specialization/
 
-import { MODULE_NAME } from "../../consts.mjs";
 import { stringSelect } from "../../handlebars-handlers/bonus-inputs/string-select.mjs";
 import { getDocDFlags, KeyedDFlagHelper } from "../../util/flag-helpers.mjs";
 import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize, localizeBonusLabel } from "../../util/localize.mjs";
-import { registerSetting } from "../../util/settings.mjs";
+import { LanguageSettings } from "../../util/settings.mjs";
 import { truthiness } from "../../util/truthiness.mjs";
 import { uniqueArray } from "../../util/unique-array.mjs";
 import { SpecificBonuses } from '../all-specific-bonuses.mjs';
@@ -21,12 +20,10 @@ const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalE
 Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ journal, key }));
 
 class Settings {
-    static get spellSpecialization() { return Settings.#getSetting(key); }
-    // @ts-ignore
-    static #getSetting(/** @type {string} */key) { return game.settings.get(MODULE_NAME, key).toLowerCase(); }
+    static get spellSpecialization() { return LanguageSettings.getTranslation(key); }
 
     static {
-        registerSetting({ key });
+        LanguageSettings.registerItemNameTranslation(key);
     }
 }
 

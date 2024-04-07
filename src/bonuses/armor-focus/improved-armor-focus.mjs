@@ -1,13 +1,12 @@
 // improved armor focus - https://www.d20pfsrd.com/feats/combat-feats/improved-armor-focus-combat/
 // - ACP for chosen armor is decreased by one.
 
-import { MODULE_NAME } from "../../consts.mjs";
 import { stringSelect } from "../../handlebars-handlers/bonus-inputs/string-select.mjs";
 import { intersects } from "../../util/array-intersects.mjs";
 import { KeyedDFlagHelper, getDocDFlags } from "../../util/flag-helpers.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localizeBonusLabel } from "../../util/localize.mjs";
-import { registerSetting } from "../../util/settings.mjs";
+import { LanguageSettings } from '../../util/settings.mjs';
 import { uniqueArray } from '../../util/unique-array.mjs';
 import { SpecificBonuses } from '../all-specific-bonuses.mjs';
 import { armorFocusKey } from "./ids.mjs";
@@ -19,17 +18,6 @@ const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalE
 export { key as improvedArmorFocusKey };
 
 Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ journal, key, parent: armorFocusKey }));
-
-class Settings {
-    static get armorFocus() { return Settings.#getSetting(armorFocusKey); }
-    static get improved() { return Settings.#getSetting(key); }
-    // @ts-ignore
-    static #getSetting(/** @type {string} */key) { return game.settings.get(MODULE_NAME, key).toLowerCase(); }
-
-    static {
-        registerSetting({ key });
-    }
-}
 
 // register hint on source feat
 registerItemHint((hintcls, _actor, item, _data) => {
@@ -108,7 +96,7 @@ Hooks.on('renderItemSheet', (
 
     const name = item?.name?.toLowerCase() ?? '';
     const sourceId = item?.flags.core?.sourceId ?? '';
-    if (!((name.includes(Settings.armorFocus) && name.includes(Settings.improved))
+    if (!((name.includes(LanguageSettings.getTranslation(armorFocusKey)) && name.includes(LanguageSettings.improved))
         || item.system.flags.dictionary[key] !== undefined
         || sourceId.includes(compendiumId))
     ) {

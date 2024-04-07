@@ -1,11 +1,10 @@
-import { MODULE_NAME } from "../../consts.mjs";
 import { keyValueSelect } from "../../handlebars-handlers/bonus-inputs/key-value-select.mjs";
 import { intersects } from "../../util/array-intersects.mjs";
 import { KeyedDFlagHelper, getDocDFlags } from "../../util/flag-helpers.mjs";
 import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize, localizeBonusLabel } from "../../util/localize.mjs";
-import { registerSetting } from "../../util/settings.mjs";
+import { LanguageSettings } from "../../util/settings.mjs";
 import { signed } from "../../util/to-signed-string.mjs";
 import { truthiness } from "../../util/truthiness.mjs";
 import { SpecificBonuses } from '../all-specific-bonuses.mjs';
@@ -43,16 +42,10 @@ const damageElements = [
 ];
 
 class Settings {
-    static get elementalFocus() { return Settings.#getSetting(elementalFocusKey); }
-    static get greater() { return Settings.#getSetting(greaterElementalFocusKey); }
-    static get mythic() { return Settings.#getSetting(mythicElementalFocusKey); }
-    // @ts-ignore
-    static #getSetting(/** @type {string} */key) { return game.settings.get(MODULE_NAME, key).toLowerCase(); }
+    static get elementalFocus() { return LanguageSettings.getTranslation(elementalFocusKey); }
 
     static {
-        registerSetting({ key: elementalFocusKey });
-        registerSetting({ key: greaterElementalFocusKey });
-        registerSetting({ key: mythicElementalFocusKey });
+        LanguageSettings.registerItemNameTranslation(elementalFocusKey);
     }
 }
 
@@ -195,9 +188,9 @@ Hooks.on('renderItemSheet', (
         key = elementalFocusKey;
     }
 
-    const isGreater = (name.includes(Settings.elementalFocus) && name.includes(Settings.greater))
+    const isGreater = (name.includes(Settings.elementalFocus) && name.includes(LanguageSettings.greater))
         || sourceId.includes(greaterElementalFocusId);
-    const isMythic = (name.includes(Settings.elementalFocus) && name.includes(Settings.mythic))
+    const isMythic = (name.includes(Settings.elementalFocus) && name.includes(LanguageSettings.mythic))
         || sourceId.includes(mythicElementalFocusId);
 
     if (isGreater || isMythic) {

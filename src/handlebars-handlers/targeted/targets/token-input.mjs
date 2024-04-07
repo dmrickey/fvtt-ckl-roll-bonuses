@@ -50,7 +50,7 @@ export function showTokenInput({
     };
     const div = createTemplate(templates.editableIcons, templateData);
 
-    div.querySelectorAll('li,a').forEach((element) => {
+    div.querySelectorAll('li,a.trait-selector').forEach((element) => {
         element.addEventListener('click', (event) => {
             event.preventDefault();
             const options = { key };
