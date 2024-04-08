@@ -10,10 +10,11 @@ const ammoDamageKey = 'ammo-damage';
 const ammoAttackKey = 'ammo-attack';
 const ammoMasterworkKey = 'ammo-mw';
 const ammoEnhancementKey = 'ammo-enhancement';
+const ammoEnhancementStacksKey = 'ammo-enhancement-stacks';
 
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#ammunition';
 
-FormulaCacheHelper.registerModuleFlag(ammoAttackKey, ammoEnhancementKey);
+FormulaCacheHelper.registerModuleFlag(ammoAttackKey, ammoEnhancementKey, ammoEnhancementStacksKey);
 
 /**
  * @param {ActionUse<ItemWeaponPF>} actionUse
@@ -35,14 +36,20 @@ function getConditionalParts(actionUse, result, atk, index) {
 
         const mw = !!ammo.getFlag(MODULE_NAME, ammoMasterworkKey);
         const cachedEnhancementBonus = FormulaCacheHelper.getModuleFlagValue(ammo, ammoEnhancementKey);
-        if (mw && !actionUse.item.system.masterwork && !cachedEnhancementBonus && !actionUse.item.system.enh) {
+        const cachedEnhancementStacksBonus = FormulaCacheHelper.getModuleFlagValue(ammo, ammoEnhancementStacksKey);
+        if (mw
+            && !actionUse.item.system.masterwork
+            && !actionUse.item.system.enh
+            && !cachedEnhancementBonus
+            && !cachedEnhancementStacksBonus
+        ) {
             result['attack.normal'].push(`1[${ammo.name} - ${localize('PF1.Masterwork')}]`)
         }
-        else if (cachedEnhancementBonus) {
-            const diff = cachedEnhancementBonus - actionUse.item.system.enh;
+        else if (cachedEnhancementBonus || cachedEnhancementStacksBonus) {
+            const diff = cachedEnhancementBonus - actionUse.item.system.enh + cachedEnhancementStacksBonus;
             if (diff > 0) {
-                result['attack.normal'].push(`${diff}[${ammo.name} - ${localize('PF1.EnhancementBonus')} (${cachedEnhancementBonus})]`);
-                result['damage.normal'].push([`${diff}[${ammo.name} - ${localize('PF1.EnhancementBonus')} (${cachedEnhancementBonus})]`, { values: [], custom: ammo.name }, false]);
+                result['attack.normal'].push(`${diff}[${ammo.name} - ${localize('PF1.EnhancementBonus')} (${cachedEnhancementBonus + cachedEnhancementStacksBonus})]`);
+                result['damage.normal'].push([`${diff}[${ammo.name} - ${localize('PF1.EnhancementBonus')} (${cachedEnhancementBonus + cachedEnhancementStacksBonus})]`, { values: [], custom: ammo.name }, false]);
             }
         }
 
@@ -96,7 +103,15 @@ Hooks.on('renderItemSheet', (
         item,
         journal,
         key: ammoEnhancementKey,
-        label: localize('PF1.EnhancementBonus'),
+        parent: html,
+    }, {
+        canEdit: isEditable,
+        isModuleFlag: true,
+    });
+    textInput({
+        item,
+        journal,
+        key: ammoEnhancementStacksKey,
         parent: html,
     }, {
         canEdit: isEditable,

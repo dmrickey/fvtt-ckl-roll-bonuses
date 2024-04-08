@@ -190,3 +190,14 @@
   - changes are generated and applied too early and too broadly in the system prep. I can either create a change that applies to everything (pointless) or I can create a specific change that exists for the specified target, but it's created too late to both be reduced to the best bonus type and actually be added to the roll
 
 # This release must include
+- Targets
+  - DFlag target
+    - DFlag must exist for target to be enabled. e.g. if "rage" exists, then turn on raging.
+  - Buff target
+    - Enabled when a specified buff is turned on (could be gear or feat, as well)
+- Ammo
+  - finish implementing stacking vs non-stacking enhancement bonus
+- Investigate
+  - "target ammo" to see if I can add bonuses to individual attacks as part of using ammo
+- Documentation
+  - Ammo - stacking bonus

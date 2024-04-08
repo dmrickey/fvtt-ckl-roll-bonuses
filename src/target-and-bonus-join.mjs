@@ -159,7 +159,7 @@ function actionUseHandleConditionals(actionUse) {
     const conditionals = [];
     handleBonusesFor(
         actionUse,
-        (bonusType, sourceItem) => conditionals.push(bonusType.getConditional(sourceItem)),
+        (bonusType, sourceItem) => conditionals.push(bonusType.getConditional(sourceItem, actionUse)),
     );
 
     conditionals
@@ -215,7 +215,7 @@ function getAttackSources(item, sources) {
 
     handleBonusesFor(
         item,
-        (bonusType, sourceItem) => newSources.push(...bonusType.getAttackSourcesForTooltip(sourceItem)),
+        (bonusType, sourceItem) => newSources.push(...bonusType.getAttackSourcesForTooltip(sourceItem, item)),
     );
 
     newSources = newSources.filter(truthiness);
@@ -240,7 +240,7 @@ function actionDamageSources(action, sources) {
 
     handleBonusesFor(
         action,
-        (bonusType, sourceItem) => changes.push(...bonusType.getDamageSourcesForTooltip(sourceItem)),
+        (bonusType, sourceItem) => changes.push(...bonusType.getDamageSourcesForTooltip(sourceItem, action)),
     );
 
     const newChanges = changes.filter(truthiness);

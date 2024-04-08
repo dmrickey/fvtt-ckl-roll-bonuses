@@ -337,7 +337,7 @@ declare global {
         /** @deprecated Spells don't have tags */
         tag: string;
     }
-    class ItemWeaponPF extends ItemPF<SystemWeaponPF> {}
+    class ItemWeaponPF extends ItemPF<SystemItemDataWeaponPF> {}
 
     class SkillData {
         ability: keyof Abilities;
@@ -715,7 +715,9 @@ declare global {
     }
     class SystemItemDataAttackPF extends SystemItemData {
         baseTypes: string[];
+        enh: number;
         // links: { children: { name: string; id: string }[] };
+        masterwork: boolean;
         weaponGroups: TraitSelector<keyof WeaponGroups>?;
     }
     class SystemIteMDataBuffPF extends SystemItemData {}
@@ -742,7 +744,7 @@ declare global {
         /** @deprecated use until v10 (then use @see {descriptors} ) */
         types: string;
     }
-    class SystemWeaponPF extends SystemItemData {
+    class SystemItemDataWeaponPF extends SystemItemData {
         baseTypes: string[];
         enh: number;
         // links: { children: { name: string; id: string }[] };

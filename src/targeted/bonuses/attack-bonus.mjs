@@ -8,21 +8,21 @@ import { BaseBonus } from "./base-bonus.mjs";
  */
 export class AttackBonus extends BaseBonus {
     /**
-     * @inheritdoc
      * @override
+     * @inheritdoc
      */
     static get sourceKey() { return 'attack'; }
 
     /**
+     * @inheritdoc
      * @override
      * @returns {string}
      */
     static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.PiyJbkTuzKHugPSk#attack'; }
 
     /**
-     * Register Item Hint on bonus
-     *
      * @override
+     * @inheritdoc
      * @param {ItemPF} source
      * @returns {Nullable<string[]>}
      */
@@ -37,17 +37,18 @@ export class AttackBonus extends BaseBonus {
 
     /**
      * @override
-     * @param {ItemPF} targetSource
+     * @inheritdoc
+     * @param {ItemPF} source
      * @returns {ModifierSource[]}
      */
-    static getAttackSourcesForTooltip(targetSource) {
+    static getAttackSourcesForTooltip(source) {
         const /** @type {ModifierSource[]} */ sources = [];
 
-        const value = this.#getAttackBonus(targetSource);
+        const value = this.#getAttackBonus(source);
         if (value) {
             sources.push({
                 value,
-                name: targetSource.name,
+                name: source.name,
                 modifier: 'untyped',
                 sort: -100,
             });
@@ -58,6 +59,7 @@ export class AttackBonus extends BaseBonus {
 
     /**
      * @override
+     * @inheritdoc
      * @param {ItemPF} targetSource
      * @param {ActionUseShared} shared
      */
@@ -101,6 +103,7 @@ export class AttackBonus extends BaseBonus {
 
     /**
      * @override
+     * @inheritdoc
      */
     static init() {
         FormulaCacheHelper.registerModuleFlag(this.key);
