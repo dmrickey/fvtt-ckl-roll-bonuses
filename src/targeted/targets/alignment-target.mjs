@@ -119,6 +119,12 @@ export class AlignmentTarget extends BaseTarget {
 
     /**
      * @override
+     * @inheritdoc
+     */
+    static get isConditionalTarget() { return true; }
+
+    /**
+     * @override
      * @returns {boolean}
      */
     static get isGenericTarget() { return true; }

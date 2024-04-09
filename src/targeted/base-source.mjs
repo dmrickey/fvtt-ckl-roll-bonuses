@@ -59,7 +59,12 @@ export class BaseSource {
     /** @abstract @returns { string } */
     static get sourceBaseType() { throw new Error('must be overridden'); }
 
-    /** @abstract @returns { boolean } */
+    /**
+     * Whether or not this Source should be available in the picker application
+     *
+     * @abstract
+     * @returns { boolean }
+     */
     static get skipPicker() { return false; }
 
     /** @abstract @returns { string } */

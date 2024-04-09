@@ -194,9 +194,16 @@
   - finish implementing stacking vs non-stacking enhancement bonus
 - Investigate
   - "target ammo" to see if I can add bonuses to individual attacks as part of using ammo
+  - using Conditional Targets as a UI category for the picker
 - Documentation
   - Ammo - stacking bonus
-  - Snake Sidewind
+  - Bonus
+    - Enhancement Bonus
+  - Specific Bonus
+    - Snake Sidewind
+  - Target
+    - Has Boolean Flag
+    - Is Active
   - update Furious Focus to signify it always works _first_ outside of combat.
 - Warrior Versatile Performance
 - Item that grants skill ranks
@@ -204,3 +211,6 @@
 - Verify
   - Make sure Furious Focus still works
   - string-select with no choices (e.g. Weapon Focus)
+  - Snake Sidewind
+  - Has Boolean Flag Target
+  - Is Active Target

@@ -279,7 +279,7 @@ declare global {
         };
         id: string;
         img: string;
-        isActive: boolean;
+        get isActive(): boolean;
         isOwner: boolean;
         name: string;
         pack: string;

@@ -17,6 +17,8 @@ import { FinesseTarget } from './finesse-target.mjs';
 import { FunctionTarget } from './function-target.mjs';
 import { SpellSchoolTarget } from './spell-school-target.mjs';
 import { Sources } from '../source-registration.mjs';
+import { IsActiveTarget } from './is-active-target.mjs';
+import { HasBooleanFlagTarget } from './has-boolean-flag-target.mjs';
 
 export const registerTargets = () => [
     AlignmentTarget,
@@ -24,6 +26,8 @@ export const registerTargets = () => [
     DamageTypeTarget,
     FinesseTarget,
     FunctionTarget,
+    HasBooleanFlagTarget,
+    IsActiveTarget,
     IsMeleeTarget,
     IsRangedTarget,
     IsSpellTarget,

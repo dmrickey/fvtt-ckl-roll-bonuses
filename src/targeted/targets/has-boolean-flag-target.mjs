@@ -1,20 +1,23 @@
 import { MODULE_NAME } from '../../consts.mjs';
-import { showChecklist } from '../../handlebars-handlers/targeted/targets/checked-items-input.mjs';
-import { truthiness } from '../../util/truthiness.mjs';
+import { textInput } from '../../handlebars-handlers/bonus-inputs/text-input.mjs';
+import { hasAnyBFlag } from '../../util/flag-helpers.mjs';
 import { BaseTarget } from './base-target.mjs';
 
-export class SpellSchoolTarget extends BaseTarget {
+/**
+ * @extends {BaseTarget}
+ */
+export class HasBooleanFlagTarget extends BaseTarget {
     /**
      * @override
      * @inheritdoc
      */
-    static get sourceKey() { return 'spell-school'; }
+    static get sourceKey() { return 'has-boolean-flag'; }
 
     /**
      * @override
      * @returns {string}
      */
-    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.iurMG1TBoX3auh5z#spell-school'; }
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.iurMG1TBoX3auh5z#has-boolean-flag'; }
 
     /**
      * @override
@@ -23,11 +26,10 @@ export class SpellSchoolTarget extends BaseTarget {
      * @returns {Nullable<string[]>}
     */
     static getHints(source) {
-        const groups = source.getFlag(MODULE_NAME, this.key) || [];
-        const schools = groups
-            .filter(truthiness)
-            .map((/** @type {string} */ school) => pf1.config.spellSchools[school] || school);
-        return schools;
+        const value = source.getFlag(MODULE_NAME, this.key);
+        if (value) {
+            return value;
+        }
     }
 
     /**
@@ -45,30 +47,31 @@ export class SpellSchoolTarget extends BaseTarget {
             return [];
         }
 
-        if (!(item instanceof pf1.documents.item.ItemSpellPF)
-        ) {
-            return [];
-        }
-
-        const spellSchool = item.system.school;
-        if (!spellSchool) {
-            return [];
-        }
-
         const allSources = item.actor.itemFlags.boolean[this.key]?.sources ?? [];
         const filteredSources = allSources.filter((source) => {
-            /** @type {string[]} */
-            const schools = source.getFlag(MODULE_NAME, this.key) || [];
-            if (!schools.length) {
+            /** @type {string} */
+            const value = source.getFlag(MODULE_NAME, this.key);
+            if (!value) {
                 return false;
             }
 
-            const targetedSchools = schools.filter(truthiness);
-            return targetedSchools.includes(spellSchool);
+            return hasAnyBFlag(item.actor, value);
         });
 
         return filteredSources;
     }
+
+    /**
+     * @override
+     * @inheritdoc
+     */
+    static get isConditionalTarget() { return true; }
+
+    /**
+     * @override
+     * @inheritdoc
+     */
+    static get isGenericTarget() { return true; }
 
     /**
      * @override
@@ -80,16 +83,15 @@ export class SpellSchoolTarget extends BaseTarget {
      * @param {ItemPF} options.item
      */
     static showInputOnItemSheet({ html, isEditable, item }) {
-        const options = pf1.config.spellSchools;
-
-        showChecklist({
+        textInput({
             item,
             journal: this.journal,
             key: this.key,
-            options,
             parent: html,
             tooltip: this.tooltip,
         }, {
+            isFormula: false,
+            isModuleFlag: true,
             canEdit: isEditable,
         });
     }

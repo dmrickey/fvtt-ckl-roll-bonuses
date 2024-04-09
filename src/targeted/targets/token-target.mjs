@@ -27,17 +27,20 @@ export class TokenTarget extends BaseTarget {
 
     /**
      * @override
+     * @inheritdoc
      */
     static get sourceKey() { return 'token'; }
 
     /**
      * @override
+     * @inheritdoc
      * @returns {string}
      */
     static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.iurMG1TBoX3auh5z#token'; }
 
     /**
      * @override
+     * @inheritdoc
      * @param {ItemPF} source
      * @returns {Nullable<string[]>}
      */
@@ -50,6 +53,7 @@ export class TokenTarget extends BaseTarget {
 
     /**
      * @override
+     * @inheritdoc
      * @param {ItemPF | ActionUse | ItemAction} doc
      * @returns {ItemPF[]}
      */
@@ -78,12 +82,20 @@ export class TokenTarget extends BaseTarget {
 
     /**
      * @override
+     * @inheritdoc
+     */
+    static get isConditionalTarget() { return true; }
+
+    /**
+     * @override
+     * @inheritdoc
      * @returns {boolean}
      */
     static get isGenericTarget() { return true; }
 
     /**
      * @override
+     * @inheritdoc
      * @param {object} options
      * @param {ActorPF | null | undefined} options.actor
      * @param {HTMLElement} options.html
@@ -108,12 +120,14 @@ export class TokenTarget extends BaseTarget {
 
     /**
      * @override
+     * @inheritdoc
      * @returns {boolean}
      */
     static get showOnActive() { return true; }
 
     /**
      * @override
+     * @inheritdoc
      * @param {ItemPF} item
      */
     static showTargetEditor(item) {
