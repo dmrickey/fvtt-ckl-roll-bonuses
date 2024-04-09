@@ -104,13 +104,14 @@ export class FinesseBonus extends BaseBonus {
     /**
      * @override
      * @param {ItemPF} source The source of the bonus
-     * @param {(ActionUse | ItemPF | ItemAction)?} [item] The item receiving the bonus for contextually aware hints.
+     * @param {(ActionUse | ItemPF | ItemAction)?} [thing] The thing receiving the bonus for contextually aware hints.
      * @returns {string[]}
      */
-    static getFootnotes(source, item) { return [this.label]; }
+    static getFootnotes(source, thing) { return [this.label]; }
 
     /**
      * @override
+     * @inheritdoc
      * @param {ItemPF} _source
      * @param {ItemActionRollAttackHookArgs} seed
      * @param {ItemAction} _action

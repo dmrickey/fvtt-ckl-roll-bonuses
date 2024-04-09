@@ -62,6 +62,7 @@
                 "school-dc": "Spell School DC",
                 "schoolClOffset": "Spell School CL",
                 "self": "Targets Self",
+                "snake-sidewind": "Snake Sidewind",
                 "spell-school": "Spell School Targets",
                 "spell-specialization": "Spell Specialization",
                 "spell": "Spell Targets",
@@ -128,7 +129,8 @@
                 "racial-weapon-focus": "+1 bonus on attack rolls for chosen racial weapons. The weapon must be tagged with the race to be able to apply the bonus.",
                 "school-dc": "Modify DC for spells with the chosen school.",
                 "schoolClOffset": "Modify CL for spells with the chosen school.",
-                "self": "Applies bonuses to all actions on this same Item.",
+                "self": "Apply bonuses to all actions on this same Item.",
+                "snake-sidewind": "Use Sense Motive for critical confirmations when your maximum Sense Motive result is higher than your maximum attack roll.",
                 "spell-school": "Bonuses will applied to spells of the chosen school(s).",
                 "spell-specialization": "Increase CL by 1 for a chosen spell from a school that you have Spell Focus for.",
                 "spell": "Apply bonuses for actions for these specific spells.",
@@ -191,6 +193,7 @@
             "inspiration": "Inspiration"
         },
         "specific-bonuses": "Specific Bonuses",
+        "string-select.no-choices": "No valid choices.",
         "to-hit-mod": "{mod} to hit",
         "versatilePerformance": {
             "error": "Versatile Performance - invalid skill IDs",

@@ -24,6 +24,11 @@
     margin-inline-start: 0.125rem;
 }
 
+#ckl-roll-bonus-container .error-text {
+    color: darkred;
+    font-weight: bold;
+}
+
 /* copied from apps.less in pf1 repo */
 .pf1.sheet .roll-bonuses .delete-damage {
     width: 18px;

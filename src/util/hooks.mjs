@@ -16,6 +16,7 @@ export const customGlobalHooks = /** @type {const} */ ({
 });
 
 export const localHooks = /** @type {const} */ ({
+    chatAttackAddAttack: `${MODULE_NAME}_chatAttackAddAttack`,
     itemActionCritRangeWrapper: `${MODULE_NAME}_itemActionCritRangeWrapper`,
     itemActionRollAttack: `${MODULE_NAME}_itemActionRollAttack`,
     itemActionRollDamage: `${MODULE_NAME}_itemActionRollDamage`,
@@ -33,6 +34,13 @@ export const localHooks = /** @type {const} */ ({
 const handlers = {};
 
 export class LocalHookHandler {
+
+    /**
+     * @overload
+     * @param {typeof localHooks.chatAttackAddAttack} hook
+     * @param {(chatAttack: ChatAttack,  args: { noAttack: boolean, bonus: unknown, extraParts: unknown[], critical: boolean, conditionalParts: object }) => Promise} func
+     * @returns {void}
+     */
 
     /**
      * @overload
@@ -145,6 +153,27 @@ export class LocalHookHandler {
         }
 
         return value;
+    }
+
+    /**
+     * @overload
+     * @param {typeof localHooks.chatAttackAddAttack} hook
+     * @param {ChatAttack} chatAttack
+     * @param {{ noAttack: boolean, bonus: unknown, extraParts: unknown[], critical: boolean, conditionalParts: object }} args
+     * @returns {Promise<void>}
+     */
+
+    /**
+     * @param {Hook} hook
+     * @param {...any} args
+     * @returns {Promise<void>}
+     */
+    static async fireHookNoReturnAsync(hook, ...args) {
+        const funcs = handlers[hook] || [];
+
+        for (const func of funcs) {
+            await func(...args);
+        }
     }
 
     /**

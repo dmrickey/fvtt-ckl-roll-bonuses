@@ -23,7 +23,6 @@
   - [Int Headband](#int-headband)
 - [Misc](#misc)
   - [I am targeted](#i-am-targeted)
-  - [Attacks](#attacks)
   - [Magic](#magic)
   - [Misc](#misc-1)
   - [UX](#ux)
@@ -122,9 +121,6 @@
 - add bonuses / penalties to attacks that are specifically against me
   - include percentile miss chance
 
-## Attacks
-- Add Bane button on chat card to modify the current chat card to add +2 attack and +2d6 damage
-
 ## Magic
 - specialization schools (and opposed)
 
@@ -136,7 +132,6 @@
 ## UX
 - Add item hints for ammo
 - Add method for sources to say "I have a source key but no value" and show a broken item hint
-- Add extra tooltip for "String select" that shows when there are no options (a la misconfigured equipment for Armor/Weapon Focus)
 
 ## Bonuses
 - "x per dice"
@@ -201,3 +196,11 @@
   - "target ammo" to see if I can add bonuses to individual attacks as part of using ammo
 - Documentation
   - Ammo - stacking bonus
+  - Snake Sidewind
+  - update Furious Focus to signify it always works _first_ outside of combat.
+- Warrior Versatile Performance
+- Item that grants skill ranks
+- Update documentation for Furious Focus to show that it always works outside of combat (except on iteratives)
+- Verify
+  - Make sure Furious Focus still works
+  - string-select with no choices (e.g. Weapon Focus)

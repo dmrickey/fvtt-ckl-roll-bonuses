@@ -24,6 +24,23 @@ function setAttackNotesHTMLWrapper(wrapped) {
 }
 
 /**
+ * Used to alter the roll. The roll can be inspected, then replaced.
+ *
+ * @param {(args: any) => Promise<any>} wrapped
+ * @param {object} obj
+ * @param {boolean} [obj.noAttack]
+ * @param {unknown} [obj.bonus]
+ * @param {unknown[]} [obj.extraParts]
+ * @param {boolean} [obj.critical] Whether or not this roll is a for a critical confirmation
+ * @param {object} [obj.conditionalParts]
+ * @this {ChatAttack}
+ */
+async function chatAttackAddAttack(wrapped, { noAttack = false, bonus = null, extraParts = [], critical = false, conditionalParts = {} }) {
+    await wrapped({ noAttack, bonus, extraParts, critical, conditionalParts });
+    await LocalHookHandler.fireHookNoReturnAsync(localHooks.chatAttackAddAttack, this, { noAttack, bonus, extraParts, critical, conditionalParts });
+}
+
+/**
  * @param {() => any} wrapped
  * @this {ChatAttack}
  */
@@ -273,6 +290,7 @@ Hooks.once('init', () => {
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype._getConditionalParts', getConditionalParts, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype.alterRollData', actionUseAlterRollData, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype.handleConditionals', actionUseHandleConditionals, libWrapper.WRAPPER);
+    libWrapper.register(MODULE_NAME, 'pf1.actionUse.ChatAttack.prototype.addAttack', chatAttackAddAttack, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ChatAttack.prototype.setAttackNotesHTML', setAttackNotesHTMLWrapper, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ChatAttack.prototype.setEffectNotesHTML', setEffectNotesHTMLWrapper, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.damageSources', actionDamageSources, libWrapper.WRAPPER);

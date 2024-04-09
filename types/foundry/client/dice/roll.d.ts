@@ -151,11 +151,11 @@ declare global {
          * ```
          */
         evaluate(
-            options?: InexactPartial<Options> & { async: true }
-        ): Promise<Evaluated<this>>;
-        evaluate(
             options: InexactPartial<Options & { async: false }>
         ): Evaluated<this>;
+        evaluate(
+            options?: InexactPartial<Options> & { async: true }
+        ): Promise<Evaluated<this>>;
         evaluate(
             options?: InexactPartial<Options>
         ): Evaluated<this> | Promise<Evaluated<this>>;

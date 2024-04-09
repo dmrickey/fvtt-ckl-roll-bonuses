@@ -56,6 +56,11 @@ declare global {
 
         name: string;
 
+        rollSkill(
+            skillId: string,
+            arg1: { skipDialog: boolean }
+        ): Promise<ChatMessagePF>;
+
         system: SystemActorData;
     }
 
@@ -102,14 +107,12 @@ declare global {
 
     class ChatAttack {
         action: ItemAction;
-        attackNotes: string[];
-        effectNotes: string[];
-        rollData: RollData;
         attack: D20RollPF;
-
+        attackNotes: string[];
+        critConfirm: D20RollPF;
         d20: Die;
         dice: Die[];
-
+        effectNotes: string[];
         flavor: string;
         formula: string;
         isCrit: boolean;
@@ -122,6 +125,7 @@ declare global {
         isStatic: boolean;
         natural: number;
         result: string;
+        rollData: RollData;
         simplifiedFormula: string;
         total: number;
         totalHalved: number;
@@ -142,6 +146,7 @@ declare global {
 
     class ChatMessagePF extends BaseDocument {
         content: string;
+        roll: D20RollPF;
     }
 
     class CombatantPF {

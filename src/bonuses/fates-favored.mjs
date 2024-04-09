@@ -69,6 +69,7 @@ Hooks.on('renderItemSheet', (
     if (!hasFlag) {
         return;
     }
+
     showEnabledLabel({
         item,
         journal,

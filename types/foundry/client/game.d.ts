@@ -1,8 +1,12 @@
 interface Game {
     actors: EmbeddedCollection<ActorPF>;
-    /**
-     * @remarks Initialized between the `"setup"` and `"ready"` hook events.
-     */
+
+    combats: {
+        /** Gets the combat for the current scene */
+        active: CombatPF | undefined;
+    };
+
+    /** @remarks Initialized between the `"setup"` and `"ready"` hook events. */
     items?: EmbeddedCollection<ItemPF>;
 
     /**
