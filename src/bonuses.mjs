@@ -7,6 +7,7 @@ import './bonuses/change-type-offset.mjs';
 import './bonuses/fortune-handler.mjs';
 import './bonuses/furious-focus.mjs';
 import './bonuses/martial-focus.mjs';
+import './bonuses/skill-rank-override.mjs';
 import './bonuses/skills/init.mjs';
 import './bonuses/spells/init.mjs';
 import './bonuses/versatile-performance.mjs';

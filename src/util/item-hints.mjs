@@ -1,6 +1,5 @@
 import { truthiness } from "./truthiness.mjs";
 
-
 /**
  * @type {ItemHintsAPI}
  */

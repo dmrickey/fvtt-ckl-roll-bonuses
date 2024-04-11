@@ -189,7 +189,7 @@
 
 # This release must include
 - Investigate
-  - Creating "Conditions" which are targets that give global bonuses if a "condition" is true. This will update the following
+  - Creating "Conditionals" which are targets that give global bonuses if a "condition" is true. This will update the following
     - Has BFlag Target
     - IsActive Target
     - Target Alignment
@@ -204,16 +204,21 @@
 - Documentation
   - Ammo - stacking bonus
   - Bonus
+    - Effective Size
+      - Formula should result in how many steps up/down the chart it goes
     - Enhancement Bonus
   - Specific Bonus
+    - Skill Rank Override
     - Snake Sidewind
+    - Versatile Training
   - Target
-    - Has Boolean Flag
-    - Is Active
+    - Has Boolean Flag (Conditional)
+    - Is Active (Conditional)
   - update Furious Focus to signify it always works _first_ outside of combat.
 - Warrior Versatile Performance
 - Item that grants skill ranks
 - Update documentation for Furious Focus to show that it always works outside of combat (except on iteratives)
+- Localize Versatile Training
 - Verify
   - Make sure Furious Focus still works
   - string-select with no choices (e.g. Weapon Focus)
@@ -227,4 +232,4 @@
     - Spell Specialization
     - Weapon Specialization
   - `itemActionRollAttack` and `itemActionRollDamage` local hooks still work for `join` after removing their return types which didn't seem to be used.
-  - Verify that Versatile Performance and Training both roll skills properly with the hook
+  - That Versatile Performance and Training both roll skills properly with the hook

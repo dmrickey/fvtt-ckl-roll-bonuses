@@ -28,8 +28,13 @@ declare global {
 
     type ActionType = 'msak' | 'mwak' | 'rsak' | 'rwak' | 'mcman' | 'rcman';
 
+    declare type SkillInfo = SkillRollData & {
+        id: keyof typeof pf1.config.skills;
+        name: string;
+    };
     class ActorPF extends BaseDocument {
-        getSkillInfo(skillId: string): SkillRollData;
+        allSkills: Array<keyof typeof pf1.config.skills>;
+        getSkillInfo(skillId: string): SkillInfo;
 
         [MODULE_NAME]: {
             [key: string]: number | string | object | array;
@@ -980,7 +985,6 @@ declare global {
         acp: boolean;
         changeBonus: number;
         cs: boolean;
-        id?: string;
         rank: number;
         rt: boolean;
         subSkills?: SkillRollData[];

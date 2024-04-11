@@ -9,6 +9,7 @@ import { keyValueSelect } from '../handlebars-handlers/bonus-inputs/key-value-se
 import { showChecklist } from '../handlebars-handlers/targeted/targets/checklist-input.mjs';
 import { getDocFlags } from '../util/flag-helpers.mjs';
 import { LocalHookHandler, localHooks } from '../util/hooks.mjs';
+import { getSkillName } from '../util/get-skill-name.mjs';
 
 const key = 'versatile-training';
 const selectedKey = 'versatile-training-selected';
@@ -43,7 +44,6 @@ class Settings {
         'monk': sort([...allChoices, 'acr', 'esc']),
         'natural': sort([...allChoices, 'clm', 'fly', 'swm']),
         'polearms': sort([...allChoices, 'dip', 'sen']),
-        // @ts-ignore
         'siegeEngines': sort([...allChoices, 'clm', 'pro.subSkills.driver']),
         'spears': sort([...allChoices, 'han', 'rid']),
         'thrown': sort([...allChoices, 'acr', 'per']),
@@ -52,7 +52,7 @@ class Settings {
 })();
 
 registerItemHint((hintcls, actor, item, _data) => {
-    const vts = getDocFlags(actor, selectedKey, { includeInactive: false })
+    const vts = getDocFlags(item, selectedKey, { includeInactive: false })
         .flatMap(x => x)
         .filter(truthiness);
 
@@ -60,27 +60,21 @@ registerItemHint((hintcls, actor, item, _data) => {
         return;
     }
 
-    const hints = vts.map((vt) => {
-        const skills = vts.map((id) => actor.getSkillInfo(id).name).join(', ');
-        const hint = hintcls.create(localize('versatile-training.hint', { skills }), [], {});
-        return hint;
-    });
-
-    return hints;
+    const skills = vts.map((id) => getSkillName(actor, id)).join(', ');
+    const hint = hintcls.create(localize('versatile-training.hint', { skills }), [], {});
+    return hint;
 });
 
 /**
+ * @param {ActorPF} actor
  * @returns {HTMLElement}
  */
-function createVTIcon() {
+function createVTIcon(actor) {
     const icon = document.createElement('a');
-    icon.classList.add('fas', 'fa-swords');
-    icon.style.marginInlineStart = 'auto';
-    icon.style.width = '1.5rem';
-    icon.style.alignSelf = 'center';
-    icon.style.textAlign = 'center';
+    icon.classList.add('fas', 'fa-swords', 'ckl-skill-icon');
 
-    const tip = localize('versatile-training.skillTip');
+    const rollData = actor.getRollData();
+    const tip = localize('versatile-training.skillTip', { bab: rollData.attributes.bab.total });
     icon.setAttribute('data-tooltip', tip);
     icon.setAttribute('data-tooltip-direction', 'UP');
 
@@ -111,14 +105,14 @@ Hooks.on('renderActorSheetPF', (
         if (!skillId) return;
         if (!vts.includes(skillId)) return;
 
-        const icon = createVTIcon();
+        const icon = createVTIcon(actor);
         const name = li.querySelector('.skill-name');
         name?.appendChild(icon);
     });
 });
 
 /**
- * @param {{ skillId: string, options: object }} seed
+ * @param {{ skillId: keyof typeof pf1.config.skills, options: object }} seed
  * @param {ActorPF} actor
  * @returns {void}
  */
@@ -134,18 +128,17 @@ function versatileRollSkill(seed, actor) {
                 /** @type {object}*/ _options,
                 /** @type {string}*/ _userId,
         ) => {
-            const name = actor.getSkillInfo(seed.skillId).name;
+            const name = getSkillName(actor, seed.skillId);
             if (!name) {
                 return;
             }
             const vtTitle = localize('versatile-training.title', { skill: name });
-            // doc.updateSource({ content: doc.content.replace(baseName, `${journalLookup(skillId)} ${updatedTitle}<br />${journalLookup(baseId)} ${vtTitle}`) });
             doc.updateSource({ content: doc.content.replace(name, vtTitle) });
         });
     }
 }
 /**
- * @param {SkillRollData} skillInfo
+ * @param {SkillInfo} skillInfo
  * @param {ActorPF} actor
  * @param {RollData} rollData
  */
@@ -162,6 +155,9 @@ Hooks.once('init', () => {
     LocalHookHandler.registerHandler(localHooks.actorRollSkill, versatileRollSkill);
     LocalHookHandler.registerHandler(localHooks.actorGetSkillInfo, getSkillInfo);
 });
+
+/** @param {string} id */
+const isDriver = (id) => id === 'pro.subSkills.driver';
 
 Hooks.on('renderItemSheet', (
     /** @type {ItemSheetPF} */ { actor, isEditable, item },
@@ -180,26 +176,14 @@ Hooks.on('renderItemSheet', (
 
     /** @type {{[key: string]: string}} */
     const skillChoices = {};
-    if (isEditable) {
-        if (!actor) return;
-
+    if (isEditable && actor) {
         if (!currentVT) {
             currentVT =  /** @type {keyof typeof pf1.config.weaponGroups} */ (Object.keys(api.config.versatileTraining.mapping)[0]);
         }
 
-        const actorSkills = actor.getRollData().skills;
-        const getName = (/** @type {keyof typeof pf1.config.skills} */ skillId) => {
-            const [_id, sub] = skillId.split('.subSkills.');
-            const name =
-                sub
-                    ? getProperty(actorSkills, skillId).name
-                    : (pf1.config.skills[skillId] || actorSkills[skillId]?.name);
-            return name ||
-                // @ts-ignore
-                (skillId === 'pro.subSkills.driver'
-                    ? 'Profession (driver)'
-                    : skillId);
-        }
+        const getName = (/** @type {keyof typeof pf1.config.skills} */ skillId) => isDriver(skillId)
+            ? localize('driver')
+            : getSkillName(actor, skillId);
         api.config.versatileTraining.mapping[currentVT].forEach((skillId) => skillChoices[skillId] = getName(skillId));
     }
 
@@ -221,7 +205,6 @@ Hooks.on('renderItemSheet', (
         key: selectedKey,
         options: skillChoices,
         parent: html,
-        tooltip: localizeBonusTooltip(selectedKey),
     }, {
         canEdit: isEditable,
     });

@@ -40,14 +40,14 @@ export class LocalHookHandler {
     /**
      * @overload
      * @param {typeof localHooks.actorGetSkillInfo} hook
-     * @param {(skillInfo: SkillRollData, actor: ActorPF, rollData: RollData) => void} func
+     * @param {(skillInfo: SkillInfo, actor: ActorPF, rollData: RollData) => void} func
      * @returns {void}
      */
 
     /**
      * @overload
      * @param {typeof localHooks.actorRollSkill} hook
-     * @param {(seed: { skillId: string, options: object }, actor: ActorPF) => void} func
+     * @param {(seed: { skillId: keyof typeof pf1.config.skills, options: object }, actor: ActorPF) => void} func
      * @returns {void}
      */
 
@@ -195,7 +195,7 @@ export class LocalHookHandler {
     /**
      * @overload
      * @param {typeof localHooks.actorGetSkillInfo} hook
-     * @param {SkillRollData} skillInfo
+     * @param {SkillInfo} skillInfo
      * @param {ActorPF} actor
      * @param {RollData} rollData
      * @returns {void}
@@ -204,7 +204,7 @@ export class LocalHookHandler {
     /**
      * @overload
      * @param {typeof localHooks.actorRollSkill} hook
-     * @param {{ skillId: string, options: object }} seed
+     * @param {{ skillId: keyof typeof pf1.config.skills, options: object }} seed
      * @param {ActorPF} actor
      * @returns {void}
      */

@@ -63,11 +63,7 @@ function createVPIcon(actor, baseId, skillId) {
     const disabled = actor.getFlag(MODULE_NAME, disabledKey(baseId, skillId));
 
     const icon = document.createElement('a');
-    icon.classList.add('fas', disabled ? 'fa-music-slash' : 'fa-music');
-    icon.style.marginInlineStart = 'auto';
-    icon.style.width = '1.5rem';
-    icon.style.alignSelf = 'center';
-    icon.style.textAlign = 'center';
+    icon.classList.add('fas', disabled ? 'fa-music-slash' : 'fa-music', 'ckl-skill-icon');
 
     const tip = localize('versatilePerformance.skillTip', { base: baseSkill.name, enabled: localize(disabled ? 'PF1.Disabled' : 'PF1.Enabled') });
     icon.setAttribute('data-tooltip', tip);
@@ -198,9 +194,7 @@ Hooks.on('renderItemSheet', (
     }
 
     let allSkills, performs;
-    if (isEditable) {
-        if (!actor) return;
-
+    if (isEditable && actor) {
         allSkills = (() => {
             const skills = [];
             for (const [_id, s] of Object.entries(actor.getRollData().skills)) {
