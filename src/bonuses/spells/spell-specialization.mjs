@@ -138,8 +138,6 @@ Hooks.on('renderItemSheet', (
         return;
     }
 
-    const current = item.getItemDictionaryFlag(key);
-
     /** @type {string[]} */
     let choices = [];
     if (actor && isEditable) {
@@ -157,7 +155,6 @@ Hooks.on('renderItemSheet', (
 
     stringSelect({
         choices,
-        current,
         item,
         journal,
         key,

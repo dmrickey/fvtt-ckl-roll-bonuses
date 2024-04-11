@@ -6,6 +6,10 @@ class Api {
     sources = {};
     targetTypeMap = {};
     migrate = async () => { };
+
+    config = {
+        versatileTraining: {},
+    }
 }
 
 const _api = new Api();

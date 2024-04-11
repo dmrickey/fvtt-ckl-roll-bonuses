@@ -7,6 +7,15 @@ export {};
 
 declare global {
     interface RollBonusesAPI {
+        config: {
+            versatileTraining: {
+                default: Array<keyof typeof pf1.config.skills>;
+                mapping: Record<
+                    keyof typeof pf1.config.weaponGroups,
+                    Array<keyof typeof pf1.config.skills>
+                >;
+            };
+        };
         allBonusTypes: (typeof BaseBonus)[];
         allTargetTypes: (typeof BaseTarget)[];
         bonusTypeMap: Record<string, typeof BaseBonus>;

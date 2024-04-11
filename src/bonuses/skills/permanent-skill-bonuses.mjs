@@ -60,12 +60,16 @@ Hooks.on('renderActorSheetPF', (
         };
         ['.skill-mod', '.skill-rank', '.skill-cs', '.skill-acp', '.skill-rt', '.skill-ability'].forEach(addMissingForSpacing);
 
+        /**
+         * @returns {keyof typeof pf1.config.skills}
+         */
         const getSkillId = () => {
             const skillId = li.getAttribute('data-skill');
             const mainId = li.getAttribute('data-main-skill');
-            return mainId
+            const id = mainId
                 ? `${mainId}.subSkills.${skillId}`
                 : skillId;
+            return /** @type {keyof typeof pf1.config.skills} */ (id);
         }
 
         const skillId = getSkillId();

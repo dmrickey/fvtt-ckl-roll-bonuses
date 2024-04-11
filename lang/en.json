@@ -209,6 +209,12 @@
                 "skill2": "Skill 2"
             }
         },
+        "versatile-training": {
+            "header": "Versatile Training",
+            "hint": "{skills}",
+            "skillTip": "Versatile Trainiong - uses BAB ({bab}) instead of ranks",
+            "title": "Versatile Training - {skill}"
+        },
         "item-name-translations": {
             "improved": {
                 "name": "Improved",

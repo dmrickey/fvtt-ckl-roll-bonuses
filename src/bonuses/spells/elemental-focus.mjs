@@ -214,12 +214,10 @@ Hooks.on('renderItemSheet', (
         }
     }
 
-    const current = getDocDFlags(item, key)[0];
     const choices = Object.keys(elements).map((key) => ({ key, label: elements[key].name }));
 
     keyValueSelect({
         choices,
-        current,
         item,
         journal,
         key,

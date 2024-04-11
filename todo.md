@@ -51,11 +51,13 @@
 - add <ability> to damage for other ability scores (like agile but can be customized)
 - add <ability> to attack for other ability scores (like finesse but can be customized)
 - Attack bonus needs to give optional "crit only" attack bonuses
+- AC bonus
 
 ## Targets
 - Have creature type/subtype based targeting - would support [Ranger](#ranger)'s Favored Enemy
 - Ally/Hostile/Neutral multiselect
 - All healing
+- Armor Target (useful for something like Magic Vestment)
 - Distance-based targeting (point-blank shot)
   - same logic for range penalties
 - Spellbook target
@@ -68,6 +70,7 @@
   - [Scarred by War](https://www.aonprd.com/TraitDisplay.aspx?ItemName=Scarred%20by%20War) (used to grant diplomacy bonus while not in combat)
 - add a way to affect other tokens (i.e. cavalier challenge which gives them -2 attack vs other targets)
 - inverse target - effect all tokens _except_ the tokens I have targets
+  - Not super useful until v3
 
 # Class Features
 ## Cleric
@@ -185,11 +188,14 @@
   - changes are generated and applied too early and too broadly in the system prep. I can either create a change that applies to everything (pointless) or I can create a specific change that exists for the specified target, but it's created too late to both be reduced to the best bonus type and actually be added to the roll
 
 # This release must include
-- Targets
-  - DFlag target
-    - DFlag must exist for target to be enabled. e.g. if "rage" exists, then turn on raging.
-  - Buff target
-    - Enabled when a specified buff is turned on (could be gear or feat, as well)
+- Investigate
+  - Creating "Conditions" which are targets that give global bonuses if a "condition" is true. This will update the following
+    - Has BFlag Target
+    - IsActive Target
+    - Target Alignment
+    - Target Token
+  - Add limit to checklist
+  - Add subtext to checklist (could potentially default to the tooltip hint)
 - Ammo
   - finish implementing stacking vs non-stacking enhancement bonus
 - Investigate
@@ -214,3 +220,13 @@
   - Snake Sidewind
   - Has Boolean Flag Target
   - Is Active Target
+  - Make sure works after removing current from showing input
+    - Armor Focus input
+    - Element Focus
+    - Improved Armor Focus input
+    - Spell Specialization
+    - Weapon Specialization
+- Add local hook for
+  - `pf1.documents.actor.ActorPF.prototype.rollSkill`
+    - make use of in Versatile Performance and Training
+  - `pf1.documents.actor.ActorPF.prototype.getSkillInfo`

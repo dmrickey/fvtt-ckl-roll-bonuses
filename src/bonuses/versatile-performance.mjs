@@ -161,7 +161,7 @@ function versatileRollSkill(wrapped, skillId, options) {
     return wrapped(skillId, options);
 }
 Hooks.once('init', () => {
-    libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorPF.prototype.rollSkill', versatileRollSkill, libWrapper.WRAPPER);
+    // libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorPF.prototype.rollSkill', versatileRollSkill, libWrapper.WRAPPER);
 });
 
 Hooks.on('renderItemSheet', (
@@ -182,9 +182,11 @@ Hooks.on('renderItemSheet', (
             return;
         }
     }
-    const [baseId, ...substitutes] = `${currentVP}`.split(';');
+
+    const [baseId, ...substitutes] = /** @type {(keyof typeof pf1.config.skills)[]}*/(`${currentVP}`.split(';'));
+    /** @type {(keyof typeof pf1.config.skills)[]}*/
     const [skill1Id, skill2Id] = substitutes;
-    const skillLookup = (/** @type {string}*/ id) => actor?.getSkillInfo(id) || pf1.config.skills[id] || { id, name: id };
+    const skillLookup = (/** @type {keyof typeof pf1.config.skills}*/ id) => actor?.getSkillInfo(id) || pf1.config.skills[id] || { id, name: id };
     let base, skill1, skill2;
     if (baseId) {
         base = skillLookup(baseId);
@@ -202,7 +204,8 @@ Hooks.on('renderItemSheet', (
 
         allSkills = (() => {
             const skills = [];
-            for (const [id, s] of Object.entries(actor.getRollData().skills)) {
+            for (const [_id, s] of Object.entries(actor.getRollData().skills)) {
+                const id = /** @type {keyof typeof pf1.config.skills} */ (_id);
                 const skill = deepClone(s);
                 skill.id = id;
                 skills.push(skill);

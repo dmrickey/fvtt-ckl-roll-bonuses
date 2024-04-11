@@ -1,5 +1,5 @@
 import { MODULE_NAME } from '../../consts.mjs';
-import { showChecklist } from '../../handlebars-handlers/targeted/targets/checked-items-input.mjs';
+import { showChecklist } from '../../handlebars-handlers/targeted/targets/checklist-input.mjs';
 import { truthiness } from '../../util/truthiness.mjs';
 import { BaseTarget } from './base-target.mjs';
 

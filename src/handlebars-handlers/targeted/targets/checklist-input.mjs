@@ -43,13 +43,12 @@ export function showChecklist({
         readonly: !canEdit,
         tooltip,
     };
-    const div = createTemplate(templates.checkedItems, templateData);
+    const div = createTemplate(templates.checklist, templateData);
 
     div.querySelectorAll('.trait-selector').forEach((element) => {
         element.addEventListener('click', async (event) => {
             event.preventDefault();
 
-            const ok = localize('ok');
             const inputs = Object.entries(options).map(([key, label]) => ({
                 label,
                 type: 'checkbox',
