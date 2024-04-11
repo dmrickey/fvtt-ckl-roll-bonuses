@@ -10,11 +10,28 @@ import { LanguageSettings } from "../util/settings.mjs";
 import { truthiness } from "../util/truthiness.mjs";
 import { SpecificBonuses } from './all-specific-bonuses.mjs';
 import { LocalHookHandler, localHooks } from '../util/hooks.mjs';
+import { difference } from '../util/array-intersects.mjs';
 
 const key = 'versatile-performance';
+const expandedKey = 'expanded-versatile-performance';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#versatile-performance';
 
-Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ journal, key }));
+/** @type {Array<keyof typeof pf1.config.skills>} */
+const expandedChoices = [
+    'blf',
+    'dip',
+    'dis',
+    'esc',
+    'han',
+    'int',
+    'sen',
+    'umd',
+];
+
+Hooks.once('ready', () => {
+    SpecificBonuses.registerSpecificBonus({ journal, key });
+    SpecificBonuses.registerSpecificBonus({ journal, key: expandedKey, parent: key });
+});
 
 class Settings {
     static get versatilePerformance() { return LanguageSettings.getTranslation(key); }
@@ -264,4 +281,10 @@ Hooks.on('renderItemSheet', (
     skill2Select?.addEventListener('change', updateVP);
 
     addNodeToRollBonus(html, div, item, isEditable);
+
+    const hasExpanded = item.system.flags.boolean[expandedKey];
+    if (hasExpanded) {
+        const choices = difference(expandedChoices, [skill1Id, skill2Id]);
+
+    }
 });

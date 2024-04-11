@@ -210,7 +210,7 @@
             "header": "Versatile Performance",
             "hint": "{base} -> {skills}",
             "skillTip": "Can be used with Versatile Performance - {base} ({enabled})",
-            "title": "Versatile Performance - {skill}",
+            "title": "{skill} - Versatile Performance",
             "label": {
                 "perform": "Perform",
                 "skill1": "Skill 1",
@@ -220,8 +220,8 @@
         "versatile-training": {
             "header": "Versatile Training",
             "hint": "{skills}",
-            "skillTip": "Versatile Trainiong - uses BAB ({bab}) instead of ranks",
-            "title": "Versatile Training - {skill}"
+            "skillTip": "Versatile Training - uses BAB ({bab}) instead of ranks",
+            "title": "{skill} - Versatile Training"
         },
         "item-name-translations": {
             "improved": {

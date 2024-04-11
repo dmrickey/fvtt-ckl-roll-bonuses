@@ -1,5 +1,3 @@
-
-
 - [TODO](#todo)
 - [UI](#ui)
 - [Bonus Targets](#bonus-targets)
@@ -201,6 +199,9 @@
 - Investigate
   - "target ammo" to see if I can add bonuses to individual attacks as part of using ammo
   - using Conditional Targets as a UI category for the picker
+- Versatile Training
+  - Reset skill choices when Weapon Group choice changes
+  - 
 - Documentation
   - Ammo - stacking bonus
   - Bonus
