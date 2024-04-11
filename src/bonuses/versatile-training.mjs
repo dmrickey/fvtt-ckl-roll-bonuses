@@ -8,6 +8,7 @@ import { api } from '../util/api.mjs';
 import { keyValueSelect } from '../handlebars-handlers/bonus-inputs/key-value-select.mjs';
 import { showChecklist } from '../handlebars-handlers/targeted/targets/checklist-input.mjs';
 import { getDocFlags } from '../util/flag-helpers.mjs';
+import { LocalHookHandler, localHooks } from '../util/hooks.mjs';
 
 const key = 'versatile-training';
 const selectedKey = 'versatile-training-selected';
@@ -117,25 +118,23 @@ Hooks.on('renderActorSheetPF', (
 });
 
 /**
- * @param {(skillId: string, options: object) => any} wrapped
- * @param {string} skillId
- * @param {Object} options
- * @this {ActorPF}
- * @returns {ChatMessagePF|object|void} The chat message if one was created, or its data if not. `void` if the roll was cancelled.
+ * @param {{ skillId: string, options: object }} seed
+ * @param {ActorPF} actor
+ * @returns {void}
  */
-function versatileRollSkill(wrapped, skillId, options) {
-    const vts = getDocFlags(this, selectedKey, { includeInactive: false })
+function versatileRollSkill(seed, actor) {
+    const vts = getDocFlags(actor, selectedKey, { includeInactive: false })
         .flatMap(x => x)
         .filter(truthiness);
 
-    if (vts.includes(skillId)) {
+    if (vts.includes(seed.skillId)) {
         Hooks.once('preCreateChatMessage', (
                 /** @type {ChatMessagePF}*/ doc,
                 /** @type {object}*/ _data,
                 /** @type {object}*/ _options,
                 /** @type {string}*/ _userId,
         ) => {
-            const name = this.getSkillInfo(skillId).name;
+            const name = actor.getSkillInfo(seed.skillId).name;
             if (!name) {
                 return;
             }
@@ -144,33 +143,24 @@ function versatileRollSkill(wrapped, skillId, options) {
             doc.updateSource({ content: doc.content.replace(name, vtTitle) });
         });
     }
-
-    return wrapped(skillId, options);
 }
 /**
- * @param {(skillId: string, options?: { rollData?: RollData }) => SkillRollData} wrapped
- * @param {keyof typeof pf1.config.skills} skillId
- * @param {object} [options]
- * @param {RollData} [options.rollData]
- * @this {ActorPF}
- * @return {SkillRollData}
+ * @param {SkillRollData} skillInfo
+ * @param {ActorPF} actor
+ * @param {RollData} rollData
  */
-function getSkillInfo(wrapped, skillId, { rollData } = {}) {
-    rollData ||= this.getRollData();
-    var info = wrapped(skillId, { rollData });
-    const vts = getDocFlags(this, selectedKey, { includeInactive: false })
+function getSkillInfo(skillInfo, actor, rollData) {
+    const vts = getDocFlags(actor, selectedKey, { includeInactive: false })
         .flatMap(x => x)
         .filter(truthiness);
-    if (vts.includes(skillId)) {
-        info.rank = rollData.attributes.bab.total;
-        info.cs = true;
+    if (vts.includes(skillInfo.id)) {
+        skillInfo.rank = rollData.attributes.bab.total;
+        skillInfo.cs = true;
     }
-
-    return info;
 }
 Hooks.once('init', () => {
-    libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorPF.prototype.rollSkill', versatileRollSkill, libWrapper.WRAPPER);
-    libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorPF.prototype.getSkillInfo', getSkillInfo, libWrapper.WRAPPER);
+    LocalHookHandler.registerHandler(localHooks.actorRollSkill, versatileRollSkill);
+    LocalHookHandler.registerHandler(localHooks.actorGetSkillInfo, getSkillInfo);
 });
 
 Hooks.on('renderItemSheet', (

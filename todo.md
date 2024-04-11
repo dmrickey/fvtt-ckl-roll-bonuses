@@ -226,7 +226,5 @@
     - Improved Armor Focus input
     - Spell Specialization
     - Weapon Specialization
-- Add local hook for
-  - `pf1.documents.actor.ActorPF.prototype.rollSkill`
-    - make use of in Versatile Performance and Training
-  - `pf1.documents.actor.ActorPF.prototype.getSkillInfo`
+  - `itemActionRollAttack` and `itemActionRollDamage` local hooks still work for `join` after removing their return types which didn't seem to be used.
+  - Verify that Versatile Performance and Training both roll skills properly with the hook

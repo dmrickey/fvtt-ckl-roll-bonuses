@@ -324,14 +324,13 @@ LocalHookHandler.registerHandler(localHooks.prepareData, prepare);
  * @param {ItemActionRollAttackHookArgs} seed
  * @param {ItemAction} action
  * @param {RollData} data
- * @returns {Promise<ItemActionRollAttackHookArgs>}
+ * @returns {void}
  */
-const itemActionRollAttack = async (seed, action, data) => {
+const itemActionRollAttack = (seed, action, data) => {
     handleBonusesFor(
         action,
         (bonusType, sourceItem) => bonusType.itemActionRollAttack(sourceItem, seed, action, data),
     );
-    return seed;
 }
 LocalHookHandler.registerHandler(localHooks.itemActionRollAttack, itemActionRollAttack);
 
@@ -339,14 +338,13 @@ LocalHookHandler.registerHandler(localHooks.itemActionRollAttack, itemActionRoll
  * @param {ItemActionRollAttackHookArgs} seed
  * @param {ItemAction} action
  * @param {RollData} data
- * @returns {Promise<ItemActionRollAttackHookArgs>}
+ * @returns {void}
  */
-const itemActionRollDamage = async (seed, action, data) => {
+const itemActionRollDamage = (seed, action, data) => {
     handleBonusesFor(
         action,
         (bonusType, sourceItem) => bonusType.itemActionRollDamage(sourceItem, seed, action, data),
     );
-    return seed;
 }
 LocalHookHandler.registerHandler(localHooks.itemActionRollDamage, itemActionRollDamage);
 

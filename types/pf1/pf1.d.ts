@@ -980,6 +980,7 @@ declare global {
         acp: boolean;
         changeBonus: number;
         cs: boolean;
+        id?: string;
         rank: number;
         rt: boolean;
         subSkills?: SkillRollData[];

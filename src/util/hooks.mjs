@@ -16,6 +16,8 @@ export const customGlobalHooks = /** @type {const} */ ({
 });
 
 export const localHooks = /** @type {const} */ ({
+    actorGetSkillInfo: `${MODULE_NAME}_actorGetSkillInfo`,
+    actorRollSkill: `${MODULE_NAME}_actorRollSkill`,
     chatAttackAddAttack: `${MODULE_NAME}_chatAttackAddAttack`,
     itemActionCritRangeWrapper: `${MODULE_NAME}_itemActionCritRangeWrapper`,
     itemActionRollAttack: `${MODULE_NAME}_itemActionRollAttack`,
@@ -34,6 +36,20 @@ export const localHooks = /** @type {const} */ ({
 const handlers = {};
 
 export class LocalHookHandler {
+
+    /**
+     * @overload
+     * @param {typeof localHooks.actorGetSkillInfo} hook
+     * @param {(skillInfo: SkillRollData, actor: ActorPF, rollData: RollData) => void} func
+     * @returns {void}
+     */
+
+    /**
+     * @overload
+     * @param {typeof localHooks.actorRollSkill} hook
+     * @param {(seed: { skillId: string, options: object }, actor: ActorPF) => void} func
+     * @returns {void}
+     */
 
     /**
      * @overload
@@ -80,14 +96,14 @@ export class LocalHookHandler {
     /**
      * @overload
      * @param {typeof localHooks.itemActionRollAttack} hook
-     * @param {(seed: ItemActionRollAttackHookArgs, action: ItemAction, data: RollData) => Promise<ItemActionRollAttackHookArgs>} func
+     * @param {(seed: ItemActionRollAttackHookArgs, action: ItemAction, data: RollData) => void} func
      * @returns {void}
      */
 
     /**
      * @overload
      * @param {typeof localHooks.itemActionRollDamage} hook
-     * @param {(seed: ItemActionRollAttackHookArgs, action: ItemAction, data: RollData) => Promise<ItemActionRollAttackHookArgs>} func
+     * @param {(seed: ItemActionRollAttackHookArgs, action: ItemAction, data: RollData) => void} func
      * @returns {void}
      */
 
@@ -175,6 +191,23 @@ export class LocalHookHandler {
             await func(...args);
         }
     }
+
+    /**
+     * @overload
+     * @param {typeof localHooks.actorGetSkillInfo} hook
+     * @param {SkillRollData} skillInfo
+     * @param {ActorPF} actor
+     * @param {RollData} rollData
+     * @returns {void}
+     */
+
+    /**
+     * @overload
+     * @param {typeof localHooks.actorRollSkill} hook
+     * @param {{ skillId: string, options: object }} seed
+     * @param {ActorPF} actor
+     * @returns {void}
+     */
 
     /**
      * @overload

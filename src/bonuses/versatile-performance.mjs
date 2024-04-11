@@ -9,6 +9,7 @@ import { localize } from "../util/localize.mjs";
 import { LanguageSettings } from "../util/settings.mjs";
 import { truthiness } from "../util/truthiness.mjs";
 import { SpecificBonuses } from './all-specific-bonuses.mjs';
+import { LocalHookHandler, localHooks } from '../util/hooks.mjs';
 
 const key = 'versatile-performance';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#versatile-performance';
@@ -111,18 +112,17 @@ Hooks.on('renderActorSheetPF', (
     });
 });
 
+
 /**
- * @param {(skillId: string, options: object) => any} wrapped
- * @param {string} skillId
- * @param {Object} options
- * @this {ActorPF}
- * @returns {ChatMessagePF|object|void} The chat message if one was created, or its data if not. `void` if the roll was cancelled.
+ * @param {{ skillId: string, options: object }} seed
+ * @param {ActorPF} actor
+ * @returns {void}
  */
-function versatileRollSkill(wrapped, skillId, options) {
-    const vps = getDocDFlags(this, key, { includeInactive: false });
+function versatileRollSkill(seed, actor) {
+    const vps = getDocDFlags(actor, key, { includeInactive: false });
 
     const journalLookup = (/** @type {string} */ skl) => {
-        const link = this.getSkillInfo(skl.split('.subSkills')[0])?.journal || pf1.config.skillCompendiumEntries[skl.split('.subSkills')[0]] || '';
+        const link = actor.getSkillInfo(skl.split('.subSkills')[0])?.journal || pf1.config.skillCompendiumEntries[skl.split('.subSkills')[0]] || '';
         if (link) {
             return `
 <a data-tooltip="PF1.OpenAssociatedCompendiumEntry" data-action="open-compendium-entry" data-compendium-entry="${link}" data-document-type="JournalEntry">
@@ -133,11 +133,11 @@ function versatileRollSkill(wrapped, skillId, options) {
         return '';
     };
 
-    for (let i = 0; i < vps.length; i++) {
-        const [baseId, ...substitutes] = `${vps[i]}`.split(';').map(x => x.trim());
+    for (const vp of vps) {
+        const [baseId, ...substitutes] = `${vp}`.split(';').map(x => x.trim());
 
-        if (substitutes.includes(skillId) && !this.getFlag(MODULE_NAME, disabledKey(baseId, skillId))) {
-            const baseName = this.getSkillInfo(baseId).name;
+        if (substitutes.includes(seed.skillId) && !actor.getFlag(MODULE_NAME, disabledKey(baseId, seed.skillId))) {
+            const baseName = actor.getSkillInfo(baseId).name;
 
             Hooks.once('preCreateChatMessage', (
                 /** @type {ChatMessagePF}*/ doc,
@@ -146,22 +146,21 @@ function versatileRollSkill(wrapped, skillId, options) {
                 /** @type {string}*/ _userId,
             ) => {
                 const { content } = doc;
-                const currentTitle = this.getSkillInfo(skillId).name;
+                const currentTitle = actor.getSkillInfo(seed.skillId).name;
                 if (!currentTitle || !baseName || !content.includes(baseName)) {
                     return;
                 }
                 const updatedTitle = localize('PF1.SkillCheck', { skill: currentTitle });
                 const vpTitle = localize('versatilePerformance.title', { skill: baseName });
-                doc.updateSource({ content: doc.content.replace(baseName, `${journalLookup(skillId)} ${updatedTitle}<br />${journalLookup(baseId)} ${vpTitle}`) });
+                doc.updateSource({ content: doc.content.replace(baseName, `${journalLookup(seed.skillId)} ${updatedTitle}<br />${journalLookup(baseId)} ${vpTitle}`) });
             });
-            return wrapped(baseId, options);
+            seed.skillId = baseId;
+            return;
         }
     }
-
-    return wrapped(skillId, options);
 }
 Hooks.once('init', () => {
-    // libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorPF.prototype.rollSkill', versatileRollSkill, libWrapper.WRAPPER);
+    LocalHookHandler.registerHandler(localHooks.actorRollSkill, versatileRollSkill);
 });
 
 Hooks.on('renderItemSheet', (
