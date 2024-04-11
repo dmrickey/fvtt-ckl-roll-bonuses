@@ -286,6 +286,29 @@ async function itemActionRollDamage(wrapped, ...args) {
     return rolls;
 }
 
+/**
+ * @param {(skillId: string, options: object) => ChatMessagePF|object|void} wrapped
+ * @param {string} skillId
+ * @param {Object} options
+ * @this {ActorPF}
+ * @returns {ChatMessagePF|object|void} The chat message if one was created, or its data if not. `void` if the roll was cancelled.
+ */
+function actorRollSkill(wrapped, skillId, options) {
+    return wrapped(skillId, options);
+}
+
+/**
+ * @param {(skillId: string, options?: { rollData?: RollData }) => SkillRollData} wrapped
+ * @param {keyof typeof pf1.config.skills} skillId
+ * @param {object} [options]
+ * @param {RollData} [options.rollData]
+ * @this {ActorPF}
+ * @return {SkillRollData}
+ */
+function actorGetSkillInfo(wrapped, skillId, { rollData } = {}) {
+    return wrapped(skillId, { rollData });
+}
+
 Hooks.once('init', () => {
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype._getConditionalParts', getConditionalParts, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype.alterRollData', actionUseAlterRollData, libWrapper.WRAPPER);
@@ -305,6 +328,8 @@ Hooks.once('init', () => {
     libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorPF.prototype.prepareSpecificDerivedData', prepareActorDerivedData, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.rollAttack', itemActionRollAttack, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.rollDamage', itemActionRollDamage, libWrapper.WRAPPER);
+    libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorPF.prototype.rollSkill', actorRollSkill, libWrapper.WRAPPER);
+    libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorPF.prototype.getSkillInfo', actorGetSkillInfo, libWrapper.WRAPPER);
     // for patching resources - both
     // libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype._updateMaxUses', updateMaxUses, libWrapper.WRAPPER);
     // pf1.documents.actor.ActorPF.prototype.updateItemResources
