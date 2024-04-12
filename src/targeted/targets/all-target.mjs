@@ -21,10 +21,10 @@ export class AllTarget extends BaseTarget {
     /**
      * @inheritdoc
      * @override
-     * @param {ItemPF} source
+     * @param {ItemPF} _source
      * @returns {Nullable<string[]>}
      */
-    static getHints(source) {
+    static getHints(_source) {
         return [this.label];
     }
 
