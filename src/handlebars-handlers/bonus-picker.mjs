@@ -6,8 +6,20 @@ import { localize } from '../util/localize.mjs';
 import { templates } from './templates.mjs';
 
 /**
- * @typedef {{key: string; label: string; tooltip: string; value: boolean; extraKeys?: string[];}} PickerData
- * @typedef {{ readonly targets: PickerData[]; readonly bonuses: PickerData[]; readonly specifics: (PickerData & {children?: PickerData[]})[]; }} BonusPickerData
+ * @typedef {object} PickerItemData
+ * @property {string} key
+ * @property {string} label
+ * @property {string} tooltip
+ * @property {boolean} value
+ * @property {string[]} [extraKeys]
+ */
+
+/**
+ * @typedef {object} BonusPickerData
+ * @property {PickerItemData[]} targets
+ * @property {PickerItemData[]} conditionalTargets
+ * @property {PickerItemData[]} bonuses
+ * @property {(PickerItemData & {children?: PickerItemData[]})[]} specifics
  */
 
 /**
@@ -21,10 +33,13 @@ export function showBonusPicker({
     const currentDictionaryKeys = Object.keys(item.system.flags.dictionary);
 
     const allBonuses = api.allBonusTypes
-        .filter((bonus) => !bonus.skipPicker)
+        .filter((source) => !source.skipPicker)
         .sort((a, b) => a.label.localeCompare(b.label));
     const allTargets = api.allTargetTypes
-        .filter((bonus) => !bonus.skipPicker)
+        .filter((source) => !source.skipPicker && !source.isConditionalTarget)
+        .sort((a, b) => a.label.localeCompare(b.label));
+    const allConditionalTargets = api.allTargetTypes
+        .filter((source) => !source.skipPicker && source.isConditionalTarget)
         .sort((a, b) => a.label.localeCompare(b.label));
     const specifics = Object.values(SpecificBonuses.allBonuses)
         .sort((a, b) =>
@@ -37,6 +52,10 @@ export function showBonusPicker({
         allBonuses.map((source) => source.key),
         currentBooleanKeys,
     );
+    const currentConditionalTargetSources = intersection(
+        allConditionalTargets.map((source) => source.key),
+        currentBooleanKeys,
+    );
     const currentTargetSources = intersection(
         allTargets.map((source) => source.key),
         currentBooleanKeys,
@@ -46,8 +65,9 @@ export function showBonusPicker({
         ...intersection(currentDictionaryKeys, SpecificBonuses.dictionaryKeys),
     ];
 
-    const data = /** @type {BonusPickerData} */ ({
-        targets: api.allTargetTypes.map((source, i) => ({
+    /** @type {BonusPickerData} */
+    const data = {
+        targets: allTargets.map((source, i) => ({
             journal: source.journal,
             key: source.key,
             label: source.label,
@@ -55,7 +75,15 @@ export function showBonusPicker({
             tooltip: source.tooltip,
             value: currentTargetSources.includes(source.key),
         })),
-        bonuses: api.allBonusTypes.map((source, i) => ({
+        conditionalTargets: allConditionalTargets.map((source, i) => ({
+            journal: source.journal,
+            key: source.key,
+            label: source.label,
+            path: `conditionalTargets.${i}`,
+            tooltip: source.tooltip,
+            value: currentConditionalTargetSources.includes(source.key),
+        })),
+        bonuses: allBonuses.map((source, i) => ({
             journal: source.journal,
             key: source.key,
             label: source.label,
@@ -85,7 +113,7 @@ export function showBonusPicker({
                         value: currentSpecificBonuses.includes(child.key),
                     })),
             })),
-    });
+    };
 
     const app = new BonusPickerApp(item, data);
     app.render(true);
@@ -123,7 +151,7 @@ class BonusPickerApp extends DocumentSheet {
     }
 
     /** @type {(keyof BonusPickerData)[]} */
-    sources = ['bonuses', 'targets'];
+    sources = ['bonuses', 'conditionalTargets', 'targets'];
 
     /**
      * @override
@@ -169,7 +197,7 @@ class BonusPickerApp extends DocumentSheet {
             // @ts-ignore
             const /** @type {[keyof BonusPickerData, string]} */[prop, index, childIndex] = key.split('.');
 
-            /** @type {PickerData} */ // @ts-ignore
+            /** @type {PickerItemData} */ // @ts-ignore
             const bonusData = this.data[prop][index][childIndex] || this.data[prop][index];
 
             if (bonusData.value !== value) {

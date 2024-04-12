@@ -188,6 +188,7 @@
 # This release must include
 - Investigate
   - Creating "Conditionals" which are targets that give global bonuses if a "condition" is true. This will update the following
+    - All Targets
     - Has BFlag Target
     - IsActive Target
     - Target Alignment
@@ -199,22 +200,15 @@
 - Investigate
   - "target ammo" to see if I can add bonuses to individual attacks as part of using ammo
   - using Conditional Targets as a UI category for the picker
-- Versatile Training
-  - Reset skill choices when Weapon Group choice changes
-  - 
 - Documentation
   - Ammo - stacking bonus
   - Bonus
     - Effective Size
       - Formula should result in how many steps up/down the chart it goes
-    - Enhancement Bonus
   - Specific Bonus
     - Skill Rank Override
     - Snake Sidewind
     - Versatile Training
-  - Target
-    - Has Boolean Flag (Conditional)
-    - Is Active (Conditional)
   - update Furious Focus to signify it always works _first_ outside of combat.
 - Warrior Versatile Performance
 - Item that grants skill ranks
@@ -234,4 +228,5 @@
     - Weapon Specialization
   - `itemActionRollAttack` and `itemActionRollDamage` local hooks still work for `join` after removing their return types which didn't seem to be used.
   - That Versatile Performance and Training both roll skills properly with the hook
+    - expanded Versatile Performance
   - That everything using `keyValueSelect` still works

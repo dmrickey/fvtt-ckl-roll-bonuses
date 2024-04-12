@@ -21,7 +21,6 @@
                 "ammo-enhancement-stacks": "Stacking Enhancement Bonus",
                 "armor-focus": "Armor Focus",
                 "attack": "Attack Bonus",
-                "bonuses": "Bonuses",
                 "change-type-offset": "Change Offset",
                 "cl": "Caster Level",
                 "crit-keen": "Keen",
@@ -68,7 +67,6 @@
                 "spell-specialization": "Spell Specialization",
                 "spell": "Spell Targets",
                 "spellFocus": "Spell Focus",
-                "targets": "Targets",
                 "token": "Token Targets",
                 "versatile-performance": "Versatile Performance",
                 "weapon-focus": "Weapon Focus",
@@ -193,6 +191,24 @@
         "missing-targets": "There are no Targets configured.",
         "modifiers": "Modifiers",
         "ok": "OK",
+        "picker": {
+            "bonuses": {
+                "label": "Bonuses",
+                "tooltip": "These are the various Bonuses that can be applied to your abilities."
+            },
+            "conditional-targets": {
+                "label": "Conditional Targets",
+                "tooltip": "Conditional Targets will apply Bonuses to all applicable abilities if their specific conditions are met."
+            },
+            "specific-bonuses": {
+                "label": "Specific Bonuses",
+                "tooltip": "Specific Bonuses are more specific bonuses that are less configurable then generic bonuses. These are named after the specific ability they implement."
+            },
+            "targets": {
+                "label": "Targets",
+                "tooltip": "Targets determine exactly which abilities will be affected by Bonuses."
+            }
+        },
         "roll-bonuses": "Roll Bonuses",
         "skill-rank-override": {
             "skill-card-name": "{skillName} - ({sourceName} rank: {rank})",
@@ -202,7 +218,6 @@
             "config": "Skill Config",
             "inspiration": "Inspiration"
         },
-        "specific-bonuses": "Specific Bonuses",
         "string-select.no-choices": "No valid choices.",
         "to-hit-mod": "{mod} to hit",
         "versatilePerformance": {

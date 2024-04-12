@@ -1,5 +1,3 @@
-import { MODULE_NAME } from '../../consts.mjs';
-import { checkboxInput } from '../../handlebars-handlers/bonus-inputs/chekbox-input.mjs';
 import { textInput } from '../../handlebars-handlers/bonus-inputs/text-input.mjs';
 import { conditionalModToItemChange } from '../../util/conditional-helpers.mjs';
 import { FormulaCacheHelper } from '../../util/flag-helpers.mjs';
