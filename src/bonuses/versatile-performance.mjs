@@ -147,16 +147,16 @@ function versatileRollSkill(seed, actor) {
     const items = new KeyedDFlagHelper(actor, { includeInactive: false }, key)
         .itemsForFlag(key);
 
+    // todo v10 change this to use the single journal entry in `getSkillInfo`
     const journalLookup = (/** @type {string} */ skl) => {
         const link = actor.getSkillInfo(skl.split('.subSkills')[0])?.journal || pf1.config.skillCompendiumEntries[skl.split('.subSkills')[0]] || '';
-        if (link) {
-            return `
+        return link
+            ? `
 <a data-tooltip="PF1.OpenAssociatedCompendiumEntry" data-action="open-compendium-entry" data-compendium-entry="${link}" data-document-type="JournalEntry">
     <i class="fas fa-book"></i>
 </a>
-`;
-        }
-        return '';
+`
+            : '';
     };
 
     for (const item of items) {
