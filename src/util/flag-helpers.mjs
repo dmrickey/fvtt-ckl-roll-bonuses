@@ -115,15 +115,21 @@ const countBFlags = (items, ...flags) => {
 }
 
 /**
- *
  * @param {Nullable<ActorPF>} actor
  * @param  {...string} flags
- * @returns True if the actor has the boolean flag or not.
+ * @returns {boolean} True if the actor has the boolean flag or not.
  */
 const hasAnyBFlag = (
     actor,
     ...flags
 ) => !!actor && flags.some((flag) => !!actor?.itemFlags?.boolean?.[flag]);
+
+/**
+ * @param {ItemPF} item
+ * @param {string} flag
+ * @returns {boolean} True if the item has the dictionary flag.
+ */
+const hasDFlag = (item, flag) => item.system.flags.dictionary?.hasOwnProperty(flag);
 
 export {
     countBFlags,
@@ -131,6 +137,7 @@ export {
     getDocDFlagsStartsWith,
     getDocFlags,
     hasAnyBFlag,
+    hasDFlag,
 }
 
 export class KeyedDFlagHelper {
@@ -197,7 +204,6 @@ export class KeyedDFlagHelper {
     }
 
     /**
-     *
      * @returns {boolean} - whether or not any flags were found
      */
     hasAnyFlags() {
@@ -205,7 +211,15 @@ export class KeyedDFlagHelper {
     }
 
     /**
-     *
+     * @param {string} flag
+     * @returns {ItemPF[]}
+     */
+    itemsForFlag(flag) {
+        return Object.values(this.#items)
+            .filter((item) => hasDFlag(item, flag));
+    }
+
+    /**
      * @param {string} flag
      * @returns {FlagValue[]}
      */

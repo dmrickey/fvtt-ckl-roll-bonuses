@@ -3,14 +3,15 @@
 import { MODULE_NAME } from "../consts.mjs";
 import { createTemplate, templates } from "../handlebars-handlers/templates.mjs";
 import { addNodeToRollBonus } from "../handlebars-handlers/add-bonus-to-item-sheet.mjs";
-import { getDocDFlags } from "../util/flag-helpers.mjs";
+import { KeyedDFlagHelper, getDocDFlags } from "../util/flag-helpers.mjs";
 import { registerItemHint } from "../util/item-hints.mjs";
 import { localize } from "../util/localize.mjs";
 import { LanguageSettings } from "../util/settings.mjs";
-import { truthiness } from "../util/truthiness.mjs";
 import { SpecificBonuses } from './all-specific-bonuses.mjs';
 import { LocalHookHandler, localHooks } from '../util/hooks.mjs';
 import { difference } from '../util/array-intersects.mjs';
+import { getSkillName } from '../util/get-skill-name.mjs';
+import { keyValueSelect } from '../handlebars-handlers/bonus-inputs/key-value-select.mjs';
 
 const key = 'versatile-performance';
 const expandedKey = 'expanded-versatile-performance';
@@ -30,7 +31,7 @@ const expandedChoices = [
 
 Hooks.once('ready', () => {
     SpecificBonuses.registerSpecificBonus({ journal, key });
-    SpecificBonuses.registerSpecificBonus({ journal, key: expandedKey, parent: key });
+    SpecificBonuses.registerSpecificBonus({ journal, key: expandedKey, parent: key, type: 'boolean' });
 });
 
 class Settings {
@@ -48,21 +49,24 @@ const disabledKey = (
 
 registerItemHint((hintcls, actor, item, _data) => {
     if (!(item instanceof pf1.documents.item.ItemFeatPF)) return;
-    const vps = getDocDFlags(item, key);
+    const vps = getDocDFlags(item, key)[0];
+    if (!vps) return;
+
+    const expanded = item.getFlag(MODULE_NAME, expandedKey);
 
     const  /** @type {Hint[]} */ hints = [];
 
-    try {
-        for (let i = 0; i < vps.length; i++) {
-            const [base, ...substitutes] = `${vps[i]}`.split(';').map(x => x.trim());
-            const baseName = actor.getSkillInfo(base).name;
-            const skills = substitutes.map((id) => actor.getSkillInfo(id).name).join(', ');
-            const hint = hintcls.create(localize('versatilePerformance.hint', { base: baseName, skills }), [], {});
-            hints.push(hint);
-        }
-    } catch {
-        return hintcls.create(localize('versatilePerformance.error'), [], {});
+    const [base, ...substitutes] = /** @type {(keyof typeof pf1.config.skills)[]} */
+        (/** @type {unknown} */ `${vps}`.split(';').map(x => x.trim()));
+
+    if (expanded) {
+        substitutes.push(expanded);
     }
+
+    const baseName = getSkillName(actor, base);
+    const skills = substitutes.map((id) => getSkillName(actor, id)).join(', ');
+    const hint = hintcls.create(localize('versatilePerformance.hint', { base: baseName, skills }), [], {});
+    hints.push(hint);
 
     return hints;
 });
@@ -98,9 +102,10 @@ Hooks.on('renderActorSheetPF', (
     /** @type {{ find: (arg0: string) => { (): any; new (): any; each: { (arg0: { (_: any, element: HTMLElement): void; }): void; new (): any; }; }; }} */ html,
     /** @type {{ actor: ActorPF; }} */ { actor }
 ) => {
-    const vps = getDocDFlags(actor, key, { includeInactive: false });
+    const helper = new KeyedDFlagHelper(actor, { includeInactive: false, }, key);
+    const items = helper.itemsForFlag(key);
 
-    if (!vps?.length) return;
+    if (!items.length) return;
 
     html.find('.tab.skills .skills-list li.skill, .tab.skills .skills-list li.sub-skill').each((_, li) => {
         const getSkillId = () => {
@@ -114,8 +119,15 @@ Hooks.on('renderActorSheetPF', (
         const skillId = getSkillId();
         if (!skillId) return;
 
-        vps.forEach((vp) => {
+        items.forEach((item) => {
+            const [vp] = getDocDFlags(item, key, { includeInactive: false });
             const [baseId, ...targetIds] = `${vp}`.split(';');
+
+            const expanded = item.getFlag(MODULE_NAME, expandedKey);
+            if (expanded) {
+                targetIds.push(expanded);
+            }
+
             if (!targetIds.includes(skillId)) return;
 
             const icon = createVPIcon(actor, baseId, skillId);
@@ -132,7 +144,8 @@ Hooks.on('renderActorSheetPF', (
  * @returns {void}
  */
 function versatileRollSkill(seed, actor) {
-    const vps = getDocDFlags(actor, key, { includeInactive: false });
+    const items = new KeyedDFlagHelper(actor, { includeInactive: false }, key)
+        .itemsForFlag(key);
 
     const journalLookup = (/** @type {string} */ skl) => {
         const link = actor.getSkillInfo(skl.split('.subSkills')[0])?.journal || pf1.config.skillCompendiumEntries[skl.split('.subSkills')[0]] || '';
@@ -146,8 +159,14 @@ function versatileRollSkill(seed, actor) {
         return '';
     };
 
-    for (const vp of vps) {
+    for (const item of items) {
+        const [vp] = getDocDFlags(item, key, { includeInactive: false });
         const [baseId, ...substitutes] = `${vp}`.split(';').map(x => x.trim());
+
+        const expanded = item.getFlag(MODULE_NAME, expandedKey);
+        if (expanded) {
+            substitutes.push(expanded);
+        }
 
         if (substitutes.includes(seed.skillId) && !actor.getFlag(MODULE_NAME, disabledKey(baseId, seed.skillId))) {
             const baseName = actor.getSkillInfo(baseId).name;
@@ -184,16 +203,13 @@ Hooks.on('renderItemSheet', (
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
     const name = item?.name?.toLowerCase() ?? '';
+    const hasFlag = item.system.flags.dictionary?.hasOwnProperty(key);
+
+    if (!(name === Settings.versatilePerformance || hasFlag)) {
+        return;
+    }
 
     const currentVP = item.system.flags.dictionary[key];
-    if (!currentVP && currentVP !== '') {
-        if (name === Settings.versatilePerformance) {
-            item.setItemDictionaryFlag(key, '');
-        }
-        else {
-            return;
-        }
-    }
 
     const [baseId, ...substitutes] = /** @type {(keyof typeof pf1.config.skills)[]}*/(`${currentVP}`.split(';'));
     /** @type {(keyof typeof pf1.config.skills)[]}*/
@@ -210,27 +226,13 @@ Hooks.on('renderItemSheet', (
         skill2 = skillLookup(skill2Id);
     }
 
-    let allSkills, performs;
+    /** @type {{ id: keyof typeof pf1.config.skills, name: string }[]} */
+    let allSkills = [];
+    /** @type {{ id: keyof typeof pf1.config.skills, name: string }[]} */
+    let performs = [];
     if (isEditable && actor) {
-        allSkills = (() => {
-            const skills = [];
-            for (const [_id, s] of Object.entries(actor.getRollData().skills)) {
-                const id = /** @type {keyof typeof pf1.config.skills} */ (_id);
-                const skill = deepClone(s);
-                skill.id = id;
-                skills.push(skill);
-                skill.name = pf1.config.skills[id] ?? actor.system.skills[id].name;
-
-                for (const [subId, subS] of Object.entries(s.subSkills ?? {})) {
-                    const subSkill = deepClone(subS);
-                    subSkill.id = `${id}.subSkills.${subId}`;
-                    skills.push(subSkill);
-                }
-            }
-            return skills
-                .filter(truthiness)
-                .sort((a, b) => a.name.localeCompare(b.name));
-        })();
+        allSkills = actor.allSkills
+            .map((id) => ({ id, name: getSkillName(actor, id) }));
 
         performs = (() => {
             const skills = [];
@@ -241,9 +243,9 @@ Hooks.on('renderItemSheet', (
                 skills.push(subSkill);
             }
             return skills
-                .sort((a, b) => a.name.localeCompare(b.name));
+                .sort((a, b) => a.name.localeCompare(b.name))
+                .map(({ id, name }) => ({ id, name }));
         })();
-        if (!performs.length) return;
 
         if (performs.length && !base) {
             item.setItemDictionaryFlag(key, `${performs[0].id}`);
@@ -284,7 +286,18 @@ Hooks.on('renderItemSheet', (
 
     const hasExpanded = item.system.flags.boolean[expandedKey];
     if (hasExpanded) {
-        const choices = difference(expandedChoices, [skill1Id, skill2Id]);
+        const choices = difference(expandedChoices, [skill1Id, skill2Id])
+            .reduce((acc, id) => ({ ...acc, [id]: getSkillName(actor, id) }), {});
 
+        keyValueSelect({
+            choices,
+            item,
+            journal,
+            key: expandedKey,
+            parent: html
+        }, {
+            canEdit: isEditable,
+            isModuleFlag: true,
+        });
     }
 });

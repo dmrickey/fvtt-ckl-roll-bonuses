@@ -10,6 +10,7 @@ import { showChecklist } from '../handlebars-handlers/targeted/targets/checklist
 import { getDocFlags } from '../util/flag-helpers.mjs';
 import { LocalHookHandler, localHooks } from '../util/hooks.mjs';
 import { getSkillName } from '../util/get-skill-name.mjs';
+import { intersection } from '../util/array-intersects.mjs';
 
 const key = 'versatile-training';
 const selectedKey = 'versatile-training-selected';
@@ -52,15 +53,15 @@ class Settings {
 })();
 
 registerItemHint((hintcls, actor, item, _data) => {
-    const vts = getDocFlags(item, selectedKey, { includeInactive: false })
+    const selectedSkills = getDocFlags(item, selectedKey, { includeInactive: false })
         .flatMap(x => x)
         .filter(truthiness);
 
-    if (!vts.length) {
+    if (!selectedSkills.length) {
         return;
     }
 
-    const skills = vts.map((id) => getSkillName(actor, id)).join(', ');
+    const skills = selectedSkills.map((id) => getSkillName(actor, id)).join(', ');
     const hint = hintcls.create(localize('versatile-training.hint', { skills }), [], {});
     return hint;
 });
@@ -86,11 +87,11 @@ Hooks.on('renderActorSheetPF', (
     /** @type {{ find: (arg0: string) => { (): any; new (): any; each: { (arg0: { (_: any, element: HTMLElement): void; }): void; new (): any; }; }; }} */ html,
     /** @type {{ actor: ActorPF; }} */ { actor }
 ) => {
-    const vts = getDocFlags(actor, selectedKey, { includeInactive: false })
+    const selectedSkills = getDocFlags(actor, selectedKey, { includeInactive: false })
         .flatMap(x => x)
         .filter(truthiness);
 
-    if (!vts?.length) return;
+    if (!selectedSkills?.length) return;
 
     html.find('.tab.skills .skills-list li.skill, .tab.skills .skills-list li.sub-skill').each((_, li) => {
         const getSkillId = () => {
@@ -103,7 +104,7 @@ Hooks.on('renderActorSheetPF', (
 
         const skillId = getSkillId();
         if (!skillId) return;
-        if (!vts.includes(skillId)) return;
+        if (!selectedSkills.includes(skillId)) return;
 
         const icon = createVTIcon(actor);
         const name = li.querySelector('.skill-name');
@@ -117,11 +118,11 @@ Hooks.on('renderActorSheetPF', (
  * @returns {void}
  */
 function versatileRollSkill(seed, actor) {
-    const vts = getDocFlags(actor, selectedKey, { includeInactive: false })
+    const selectedSkills = getDocFlags(actor, selectedKey, { includeInactive: false })
         .flatMap(x => x)
         .filter(truthiness);
 
-    if (vts.includes(seed.skillId)) {
+    if (selectedSkills.includes(seed.skillId)) {
         Hooks.once('preCreateChatMessage', (
                 /** @type {ChatMessagePF}*/ doc,
                 /** @type {object}*/ _data,
@@ -143,10 +144,10 @@ function versatileRollSkill(seed, actor) {
  * @param {RollData} rollData
  */
 function getSkillInfo(skillInfo, actor, rollData) {
-    const vts = getDocFlags(actor, selectedKey, { includeInactive: false })
+    const selectedSkills = getDocFlags(actor, selectedKey, { includeInactive: false })
         .flatMap(x => x)
         .filter(truthiness);
-    if (vts.includes(skillInfo.id)) {
+    if (selectedSkills.includes(skillInfo.id)) {
         skillInfo.rank = rollData.attributes.bab.total;
         skillInfo.cs = true;
     }
@@ -172,25 +173,34 @@ Hooks.on('renderItemSheet', (
         return;
     }
 
-    let currentVT = /** @type {keyof typeof pf1.config.weaponGroups} */ (item.getFlag(MODULE_NAME, key));
+    let currentGroup = /** @type {keyof typeof pf1.config.weaponGroups} */ (item.getFlag(MODULE_NAME, key));
 
     /** @type {{[key: string]: string}} */
     const skillChoices = {};
     if (isEditable && actor) {
-        if (!currentVT) {
-            currentVT =  /** @type {keyof typeof pf1.config.weaponGroups} */ (Object.keys(api.config.versatileTraining.mapping)[0]);
+        if (!currentGroup) {
+            currentGroup =  /** @type {keyof typeof pf1.config.weaponGroups} */ (Object.keys(api.config.versatileTraining.mapping)[0]);
         }
 
         const getName = (/** @type {keyof typeof pf1.config.skills} */ skillId) => isDriver(skillId)
             ? localize('driver')
             : getSkillName(actor, skillId);
-        api.config.versatileTraining.mapping[currentVT].forEach((skillId) => skillChoices[skillId] = getName(skillId));
+        api.config.versatileTraining.mapping[currentGroup].forEach((skillId) => skillChoices[skillId] = getName(skillId));
+
+        const currentSkills = item.getFlag(MODULE_NAME, selectedKey);
+        const validSkills = intersection(
+            currentSkills,
+            api.config.versatileTraining.mapping[currentGroup],
+        );
+        if (currentSkills.length !== validSkills.length) {
+            item.setFlag(MODULE_NAME, selectedKey, validSkills);
+        }
     }
 
     keyValueSelect({
         // @ts-ignore
         choices: pf1.config.weaponGroups,
-        current: currentVT,
+        current: currentGroup,
         item,
         journal,
         key,

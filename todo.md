@@ -234,3 +234,4 @@
     - Weapon Specialization
   - `itemActionRollAttack` and `itemActionRollDamage` local hooks still work for `join` after removing their return types which didn't seem to be used.
   - That Versatile Performance and Training both roll skills properly with the hook
+  - That everything using `keyValueSelect` still works
