@@ -7,13 +7,15 @@ import { BaseTarget } from './base-target.mjs';
 export class AllTarget extends BaseTarget {
 
     /**
-     * @inheritdoc
      * @override
+     * @inheritdoc
+     * @returns {string}
      */
     static get sourceKey() { return 'all'; }
 
     /**
      * @override
+     * @inheritdoc
      * @returns {string}
      */
     static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.iurMG1TBoX3auh5z#all'; }
@@ -27,6 +29,12 @@ export class AllTarget extends BaseTarget {
     static getHints(_source) {
         return [this.label];
     }
+
+    /**
+     * @override
+     * @inheritdoc
+     */
+    static get isConditionalTarget() { return true; }
 
     /**
      * @inheritdoc
