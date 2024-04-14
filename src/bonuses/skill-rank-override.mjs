@@ -41,7 +41,7 @@ registerItemHint((hintcls, actor, item, _data) => {
  */
 function createRankIcon(itemName, rank) {
     const icon = document.createElement('a');
-    icon.classList.add('fas', 'head-side-brain', 'ckl-skill-icon');
+    icon.classList.add('fas', 'fa-head-side-brain', 'ckl-skill-icon');
 
     const tip = localize(`${key}.skill-sheet-tip`, { itemName, rank });
     icon.setAttribute('data-tooltip', tip);
