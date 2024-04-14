@@ -144,19 +144,27 @@ Hooks.on('renderActorSheetPF', (
  * @returns {void}
  */
 function versatileRollSkill(seed, actor) {
+    const { skillId } = seed;
     const items = new KeyedDFlagHelper(actor, { includeInactive: false }, key)
         .itemsForFlag(key);
 
     // todo v10 change this to use the single journal entry in `getSkillInfo`
-    const journalLookup = (/** @type {string} */ skl) => {
-        const link = actor.getSkillInfo(skl.split('.subSkills')[0])?.journal || pf1.config.skillCompendiumEntries[skl.split('.subSkills')[0]] || '';
-        return link
-            ? `
-<a data-tooltip="PF1.OpenAssociatedCompendiumEntry" data-action="open-compendium-entry" data-compendium-entry="${link}" data-document-type="JournalEntry">
+
+    const originalSkillElement = () => {
+        const parentId = skillId.split('.subSkills')[0];
+        const skillInfo = actor.getSkillInfo(skillId);
+        const link = skillInfo.journal || actor.getSkillInfo(parentId)?.journal || pf1.config.skillCompendiumEntries[parentId] || '';
+        const linkProp = link ? `data-compendium-entry="${link}"` : '';
+        const label = localize('PF1.SkillCheck', { skill: skillInfo.name });
+        const vpTitle = localize('versatilePerformance.title', { skill: label });
+        return `
+<span class="flavor-text">
+<a data-tooltip="PF1.OpenAssociatedCompendiumEntry" data-action="open-compendium-entry" ${linkProp} data-document-type="JournalEntry">
     <i class="fas fa-book"></i>
 </a>
-`
-            : '';
+${vpTitle}
+</span>
+`;
     };
 
     for (const item of items) {
@@ -178,13 +186,10 @@ function versatileRollSkill(seed, actor) {
                 /** @type {string}*/ _userId,
             ) => {
                 const { content } = doc;
-                const currentTitle = actor.getSkillInfo(seed.skillId).name;
-                if (!currentTitle || !baseName || !content.includes(baseName)) {
+                if (!baseName || !content.includes(baseName)) {
                     return;
                 }
-                const updatedTitle = localize('PF1.SkillCheck', { skill: currentTitle });
-                const vpTitle = localize('versatilePerformance.title', { skill: baseName });
-                doc.updateSource({ content: doc.content.replace(baseName, `${journalLookup(seed.skillId)} ${updatedTitle}<br />${journalLookup(baseId)} ${vpTitle}`) });
+                doc.updateSource({ content: originalSkillElement() + doc.content });
             });
             seed.skillId = baseId;
             return;
