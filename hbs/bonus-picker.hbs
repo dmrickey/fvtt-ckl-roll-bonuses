@@ -2,37 +2,43 @@
     <div class="form-body">
         <div class="sources">
             <div>
-                <h2>{{ localize 'ckl-roll-bonuses.picker.targets.label' }}</h2>
-                <a
-                    data-tooltip="{{localize 'ckl-roll-bonuses.picker.targets.tooltip'}}"
-                    data-journal="Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.iurMG1TBoX3auh5z"
-                >
-                    <i class="fas fa-book"></i>
-                </a>
+                <h2>
+                    {{ localize 'ckl-roll-bonuses.picker.targets.label' }}
+                    <a
+                        data-tooltip="{{localize 'ckl-roll-bonuses.picker.targets.tooltip'}}"
+                        data-journal="Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.iurMG1TBoX3auh5z"
+                    >
+                        <i class="fas fa-book"></i>
+                    </a>
+                </h2>
                 {{#each targets}}
                 {{> "modules/ckl-roll-bonuses/hbs/bonus-picker-item.hbs"}}
                 {{/each}}
             </div>
             <div>
-                <h2>{{ localize 'ckl-roll-bonuses.picker.conditional-targets.label' }}</h2>
-                <a
-                    data-tooltip="{{localize 'ckl-roll-bonuses.picker.conditional-targets.tooltip'}}"
-                    data-journal="Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.IpRhJqZEX2TUarSX"
-                >
-                    <i class="fas fa-book"></i>
-                </a>
+                <h2>
+                    {{ localize 'ckl-roll-bonuses.picker.conditional-targets.label' }}
+                    <a
+                        data-tooltip="{{localize 'ckl-roll-bonuses.picker.conditional-targets.tooltip'}}"
+                        data-journal="Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.IpRhJqZEX2TUarSX"
+                    >
+                        <i class="fas fa-book"></i>
+                    </a>
+                </h2>
                 {{#each conditionalTargets}}
                 {{> "modules/ckl-roll-bonuses/hbs/bonus-picker-item.hbs"}}
                 {{/each}}
             </div>
             <div>
-                <h2>{{ localize 'ckl-roll-bonuses.picker.bonuses.label' }}</h2>
-                <a
-                    data-tooltip="{{localize 'ckl-roll-bonuses.picker.bonuses.tooltip'}}"
-                    data-journal="Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.PiyJbkTuzKHugPSk"
-                >
-                    <i class="fas fa-book"></i>
-                </a>
+                <h2>
+                    {{ localize 'ckl-roll-bonuses.picker.bonuses.label' }}
+                    <a
+                        data-tooltip="{{localize 'ckl-roll-bonuses.picker.bonuses.tooltip'}}"
+                        data-journal="Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.PiyJbkTuzKHugPSk"
+                    >
+                        <i class="fas fa-book"></i>
+                    </a>
+                </h2>
                 {{#each bonuses}}
                 {{> "modules/ckl-roll-bonuses/hbs/bonus-picker-item.hbs"}}
                 {{/each}}
@@ -40,13 +46,15 @@
         </div>
 
         {{#if specifics.length}}
-        <h2>{{ localize 'ckl-roll-bonuses.specific-bonuses' }}</h2>
-        <a
-            data-tooltip="{{localize 'ckl-roll-bonuses.picker.specific-bonuses.tooltip'}}"
-            data-journal="Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor"
-        >
-            <i class="fas fa-book"></i>
-        </a>
+        <h2>
+            {{ localize 'ckl-roll-bonuses.picker.specific-bonuses.label' }}
+            <a
+                data-tooltip="{{localize 'ckl-roll-bonuses.picker.specific-bonuses.tooltip'}}"
+                data-journal="Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor"
+            >
+                <i class="fas fa-book"></i>
+            </a>
+        </h2>
         <div class="specific-bonuses">
             {{#each specifics}}
             {{> "modules/ckl-roll-bonuses/hbs/bonus-picker-item.hbs"}}

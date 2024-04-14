@@ -198,7 +198,7 @@ class BonusPickerApp extends DocumentSheet {
             const /** @type {[keyof BonusPickerData, string]} */[prop, index, childIndex] = key.split('.');
 
             /** @type {PickerItemData} */ // @ts-ignore
-            const bonusData = this.data[prop][index][childIndex] || this.data[prop][index];
+            const bonusData = this.data[prop][index].children?.[childIndex] || this.data[prop][index];
 
             if (bonusData.value !== value) {
                 updateObj ||= {
@@ -206,8 +206,8 @@ class BonusPickerApp extends DocumentSheet {
                     system: { flags: { boolean: {}, dictionary: {} } },
                 };
 
-                if (this.sources.includes(prop) || (prop === 'specifics'
-                    && SpecificBonuses.booleanKeys.includes(bonusData.key))
+                if (this.sources.includes(prop)
+                    || (prop === 'specifics' && SpecificBonuses.booleanKeys.includes(bonusData.key))
                 ) {
                     // set to true if value is true, delete if value is false
                     // @ts-ignore
