@@ -187,12 +187,6 @@
 
 # This release must include
 - Investigate
-  - Creating "Conditionals" which are targets that give global bonuses if a "condition" is true. This will update the following
-    - All Targets
-    - Has BFlag Target
-    - IsActive Target
-    - Target Alignment
-    - Target Token
   - Add limit to checklist
   - Add subtext to checklist (could potentially default to the tooltip hint)
 - Ammo
@@ -213,6 +207,8 @@
 - Warrior Versatile Performance
 - Item that grants skill ranks
 - Update documentation for Furious Focus to show that it always works outside of combat (except on iteratives)
+- Versatile Training
+  - Make it more obvious which skills are associated with which weapon groups.
 - Localize Versatile Training
 - Verify
   - Make sure Furious Focus still works

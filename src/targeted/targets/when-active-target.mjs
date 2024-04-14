@@ -1,7 +1,7 @@
 import { MODULE_NAME } from '../../consts.mjs';
 import { ItemTarget } from "./item-target.mjs";
 
-export class IsActiveTarget extends ItemTarget {
+export class WhenActiveTarget extends ItemTarget {
     /**
      * @override
      * @inheritdoc
@@ -13,7 +13,7 @@ export class IsActiveTarget extends ItemTarget {
      * @override
      * @inheritdoc
      */
-    static get sourceKey() { return 'is-active'; }
+    static get sourceKey() { return 'when-active'; }
 
     /**
      * @override
@@ -59,5 +59,5 @@ export class IsActiveTarget extends ItemTarget {
      * @inheritdoc
      * @returns {string}
      */
-    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.iurMG1TBoX3auh5z#is-active'; }
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.iurMG1TBoX3auh5z#when-active'; }
 }

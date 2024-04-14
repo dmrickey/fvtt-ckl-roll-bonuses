@@ -35,6 +35,7 @@
                 "elementalFocus": "Elemental Focus",
                 "enh": "Enhancement Bonus",
                 "enh-stacks": "Enhancement Bonus (Stacking)",
+                "expanded-versatile-performance": "Expanded Versatile Performance",
                 "fates-favored": "Fate's Favored",
                 "finesse-bonus": "Finesse (Bonus)",
                 "finesse-target": "Finesse (Target)",
@@ -62,6 +63,9 @@
                 "school-dc": "Spell School DC",
                 "schoolClOffset": "Spell School CL",
                 "self": "Targets Self",
+                "skill-rank-override": "Override Skill Ranks",
+                "skill-rank-override-formula": "Override Skill Ranks Formula",
+                "skill-rank-override-selected": "Skills to Override",
                 "snake-sidewind": "Snake Sidewind",
                 "spell-school": "Spell School Targets",
                 "spell-specialization": "Spell Specialization",
@@ -69,11 +73,13 @@
                 "spellFocus": "Spell Focus",
                 "token": "Token Targets",
                 "versatile-performance": "Versatile Performance",
+                "versatile-training": "Versatile Training",
                 "weapon-focus": "Weapon Focus",
                 "weapon-group": "Weapon Group Targets",
                 "weapon-specialization": "Weapon Specialization",
                 "weapon-type": "Weapon Type Targets",
-                "weapon": "Weapon and Attack Targets"
+                "weapon": "Weapon and Attack Targets",
+                "when-active": "When Active"
             },
             "tooltip": {
                 "agile": "Grant dex to damage for attacks.",
@@ -102,6 +108,7 @@
                 "elementalFocus": "+1 DC for chosen elemental spells.",
                 "enh": "Set an an attack's or weapon's enhancement bonus.",
                 "enh-stacks": "Modify an attack or weapon's enhancement bonus.",
+                "expanded-versatile-performance": "Select a third skill to associate with the selected Perform skill.",
                 "fates-favored": "Incrase all luck bonuses by 1.",
                 "finesse-bonus": "Use dex for attack rolls instead of strength.",
                 "finesse-target": "Activate bonuses for all finesse-able targets. This requires the weapon/attack to have the Finesse weapon property, be in the Natural Attack weapon group, or have the `finesse-override` boolean flag.",
@@ -130,6 +137,9 @@
                 "school-dc": "Modify DC for spells with the chosen school.",
                 "schoolClOffset": "Modify CL for spells with the chosen school.",
                 "self": "Apply bonuses to all actions on this same Item.",
+                "skill-rank-override": "Set skill rank for a chosen skill to a specific value. This is useful for an item such as a Headband of Vast Intellect.",
+                "skill-rank-override-formula": "Formula to set skill rank for chosen skill(s) to a specific value. This is useful for an item such as a Headband of Vast Intellect.",
+                "skill-rank-override-selected": "The skills to be overridden with the supplied formula.",
                 "snake-sidewind": "Use Sense Motive for critical confirmations when your maximum Sense Motive result is higher than your maximum attack roll.",
                 "spell-school": "Apply bonuses to spells of the chosen school(s).",
                 "spell-specialization": "Increase CL by 1 for a chosen spell from a school that you have Spell Focus for.",
@@ -137,11 +147,13 @@
                 "spellFocus": "+1 DC for chosen spell schools.",
                 "token": "Apply bonuses for actions while specific tokens are targeted. When this buff is activated, a dialog will show up that allows you to choose from tokens in the scene.",
                 "versatile-performance": "Replace two skills with a chosen perform skill.",
+                "versatile-training": "Use BAB instead of ranks for two skills associated with a weapon group.",
                 "weapon-focus": "+1 bonus on attack rolls for chosen weapon type. Attacks and Weapons must be properly configured with Equipment Base Types.",
                 "weapon-group": "Apply bonuses when using weapons from chosen Weapon Group(s). Attacks and Weapons must be properly configured with weapon groups.",
                 "weapon-specialization": "+2 damage rolsl for chosen weapon type. Attacks and Weapons must be properly configured with Equipment Base Types.",
                 "weapon-type": "Apply bonuses when using the chosen Weapon. Attacks and Weapons must be properly configured with Equipment Base Types.",
-                "weapon": "Choose specific Attacks and Weapons for bonuses."
+                "weapon": "Choose specific Attacks and Weapons for bonuses.",
+                "when-active": "Apply bonuses when specified Buff/Weapon/Feat/etc is active."
             }
         },
         "cancel": "Cancel",
@@ -219,6 +231,7 @@
             "inspiration": "Inspiration"
         },
         "string-select.no-choices": "No valid choices.",
+        "targets": "Targets",
         "to-hit-mod": "{mod} to hit",
         "versatilePerformance": {
             "error": "Versatile Performance - invalid skill IDs",
@@ -302,6 +315,10 @@
             "weapon-specialization": {
                 "name": "Weapon Specialization",
                 "default": "Weapon Specialization"
+            },
+            "versatile-training": {
+                "name": "Versatile Training",
+                "default": "Versatile Training"
             }
         },
         "settings": {

@@ -17,7 +17,7 @@ import { FinesseTarget } from './finesse-target.mjs';
 import { FunctionTarget } from './function-target.mjs';
 import { SpellSchoolTarget } from './spell-school-target.mjs';
 import { Sources } from '../source-registration.mjs';
-import { IsActiveTarget } from './is-active-target.mjs';
+import { WhenActiveTarget } from './when-active-target.mjs';
 import { HasBooleanFlagTarget } from './has-boolean-flag-target.mjs';
 
 export const registerTargets = () => [
@@ -27,7 +27,6 @@ export const registerTargets = () => [
     FinesseTarget,
     FunctionTarget,
     HasBooleanFlagTarget,
-    IsActiveTarget,
     IsMeleeTarget,
     IsRangedTarget,
     IsSpellTarget,
@@ -40,6 +39,7 @@ export const registerTargets = () => [
     WeaponGroupTarget,
     WeaponTarget,
     WeaponTypeTarget,
+    WhenActiveTarget,
 
     // todo later
     // ActionTarget,

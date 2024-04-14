@@ -29,6 +29,10 @@
     font-weight: bold;
 }
 
+#ckl-roll-bonus-container .traits-list.tag-list {
+    justify-content: flex-end;
+}
+
 /* copied from apps.less in pf1 repo */
 .pf1.sheet .roll-bonuses .delete-damage {
     width: 18px;

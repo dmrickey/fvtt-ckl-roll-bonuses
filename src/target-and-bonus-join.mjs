@@ -64,7 +64,7 @@ registerItemHint((hintcls, actor, item, _data) => {
             targetSourceHints.push(localize('missing-bonuses'));
         }
         allHints.push(hintcls.create(
-            localize('bonuses.label.targets'),
+            localize('targets'),
             classes,
             { hint: targetSourceHints.join('\n\n'), icon },
         ));
