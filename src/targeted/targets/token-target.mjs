@@ -18,6 +18,7 @@ class Settings {
             key: this.#tokenSettingKey,
             scope: 'client',
             settingType: Boolean,
+            defaultValue: false,
         });
     }
 }

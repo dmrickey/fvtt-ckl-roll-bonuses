@@ -329,13 +329,11 @@
         "settings": {
             "debug": {
                 "name": "Debug Mode",
-                "hint": "Enable this to turn on extra logging which may help in tracking down certain issues. Defaults to `false`.",
-                "default": false
+                "hint": "Enable this to turn on extra logging which may help in tracking down certain issues. Defaults to `false`."
             },
             "fortuneStacks": {
                 "name": "Fortune Stacks",
-                "hint": "If true (default), multiple fortunes/misfortunes from different sources will stack. So you could potentially end up with 4d20kh. If false, then multiple fortunes/misfortunes will only go to a max of two dice. Multiple misfortune and fortunes affecting the same roll will cancel out (e.g. 3 differnt fortunes vs 2 different misfortunes means you are \"more fortunate\" and will be rolling with a bonus. If you have an equal number of fortune vs misfortune, then you \"break even\" and roll normally.)",
-                "default": true
+                "hint": "If true (default), multiple fortunes/misfortunes from different sources will stack. So you could potentially end up with 4d20kh. If false, then multiple fortunes/misfortunes will only go to a max of two dice. Multiple misfortune and fortunes affecting the same roll will cancel out (e.g. 3 differnt fortunes vs 2 different misfortunes means you are \"more fortunate\" and will be rolling with a bonus. If you have an equal number of fortune vs misfortune, then you \"break even\" and roll normally.)"
             },
             "racial-weapon-focus": {
                 "name": "Racial Weapon Focus",
@@ -349,8 +347,7 @@
             },
             "should-auto-target-tokens": {
                 "name": "Automatically Target Tokens",
-                "hint": "When set to true and using the generic \"Token Target\", when the ability is enabled, the dialog will be skipped if you have tokens currently targeted and will automatically target those tokens. By default (false), the token target dialog opens with your currently targeted tokens pre-selected and you must verify those are the targets you actually want.",
-                "default": false
+                "hint": "When set to true and using the generic \"Token Target\", when the ability is enabled, the dialog will be skipped if you have tokens currently targeted and will automatically target those tokens. By default (false), the token target dialog opens with your currently targeted tokens pre-selected and you must verify those are the targets you actually want."
             }
         }
     }

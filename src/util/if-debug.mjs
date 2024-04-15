@@ -3,7 +3,7 @@ import { registerSetting } from './settings.mjs';
 
 const key = 'debug';
 
-Hooks.once('setup', () => registerSetting({ key, settingType: Boolean }, { skipReady: true }));
+Hooks.once('setup', () => registerSetting({ key, settingType: Boolean, defaultValue: false }, { skipReady: true }));
 
 /**
  * @param {() => void} func

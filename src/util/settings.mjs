@@ -1,6 +1,5 @@
 import { MODULE_NAME } from "../consts.mjs";
 import { templates } from '../handlebars-handlers/templates.mjs';
-import { difference } from './array-intersects.mjs';
 import { localize } from "./localize.mjs";
 
 /**
@@ -26,7 +25,7 @@ export const registerSetting = ({
         game.settings.register(MODULE_NAME, key, {
             name: `${MODULE_NAME}.settings.${key}.name`,
             hint: `${MODULE_NAME}.settings.${key}.hint`,
-            default: defaultValue == null ? localize(`settings.${key}.default`) : defaultValue,
+            default: defaultValue === null ? localize(`settings.${key}.default`) : defaultValue,
             scope,
             requiresReload: false,
             config,
