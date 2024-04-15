@@ -165,6 +165,14 @@ declare global {
         totalHalved: number;
     }
 
+    interface CombatPF {
+        combatants: CombatantPF[];
+    }
+
+    interface CombatantPF {
+        actorId: string;
+    }
+
     class Die {
         faces: number;
         isIntermediate: boolean;

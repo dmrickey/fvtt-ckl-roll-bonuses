@@ -182,6 +182,8 @@
     - Skill Rank Override
     - Snake Sidewind
     - Versatile Training
+  - Target
+    - When In Combat
   - update Furious Focus to signify it always works _first_ outside of combat.
 - Update documentation for Furious Focus to show that it always works outside of combat (except on iteratives)
 - Versatile Training

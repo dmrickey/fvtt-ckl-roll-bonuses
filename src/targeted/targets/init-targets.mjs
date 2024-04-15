@@ -19,6 +19,7 @@ import { SpellSchoolTarget } from './spell-school-target.mjs';
 import { Sources } from '../source-registration.mjs';
 import { WhenActiveTarget } from './when-active-target.mjs';
 import { HasBooleanFlagTarget } from './has-boolean-flag-target.mjs';
+import { WhenInCombatTarget } from './when-in-combat-target.mjs';
 
 export const registerTargets = () => [
     AlignmentTarget,
@@ -40,6 +41,7 @@ export const registerTargets = () => [
     WeaponTarget,
     WeaponTypeTarget,
     WhenActiveTarget,
+    WhenInCombatTarget,
 
     // todo later
     // ActionTarget,

@@ -1,19 +1,21 @@
 import { showEnabledLabel } from '../../handlebars-handlers/enabled-label.mjs';
-import { BaseTarget } from './base-target.mjs';
+import { isActorInCombat } from '../../util/is-actor-in-combat.mjs';
+import { ItemTarget } from "./item-target.mjs";
 
-export class SelfTarget extends BaseTarget {
+export class WhenInCombatTarget extends ItemTarget {
 
     /**
      * @override
+     * @inheritdoc
      */
-    static get sourceKey() { return 'self'; }
+    static get sourceKey() { return 'when-in-combat'; }
 
     /**
      * @override
      * @inheritdoc
      * @returns {string}
      */
-    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.iurMG1TBoX3auh5z#self'; }
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.iurMG1TBoX3auh5z#when-in-combat'; }
 
     /**
      * @override
@@ -24,6 +26,33 @@ export class SelfTarget extends BaseTarget {
     static getHints(_source) {
         return [this.label];
     }
+
+    /**
+     * @override
+     * @param {ItemPF | ActionUse | ItemAction} doc
+     * @returns {ItemPF[]}
+     */
+    static getSourcesFor(doc) {
+        const item = doc instanceof pf1.documents.item.ItemPF
+            ? doc
+            : doc.item;
+        if (!item.actor) {
+            return [];
+        }
+
+        if (!isActorInCombat(item.actor)) {
+            return [];
+        }
+
+        const flaggedItems = item.actor.itemFlags.boolean[this.key]?.sources ?? [];
+        return flaggedItems;
+    }
+
+    /**
+     * @override
+     * @inheritdoc
+     */
+    static get isConditionalTarget() { return true; }
 
     /**
      * @override
@@ -51,19 +80,4 @@ export class SelfTarget extends BaseTarget {
             canEdit: isEditable,
         });
     }
-
-    /**
-     * @inheritdoc
-     * @override
-     * @param {ItemPF | ActionUse | ItemAction} doc
-     * @returns {ItemPF[]}
-     */
-    static getSourcesFor(doc) {
-        const item = doc instanceof pf1.documents.item.ItemPF
-            ? doc
-            : doc.item;
-        return item.hasItemBooleanFlag(this.key)
-            ? [item]
-            : [];
-    };
 }

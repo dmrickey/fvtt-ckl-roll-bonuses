@@ -81,7 +81,8 @@
                 "weapon-specialization": "Weapon Specialization",
                 "weapon-type": "Weapon Type Targets",
                 "weapon": "Weapon and Attack Targets",
-                "when-active": "When Active"
+                "when-active": "When Active",
+                "when-in-combat": "When in Combat"
             },
             "tooltip": {
                 "agile": "Grant dex to damage for attacks.",
@@ -156,7 +157,8 @@
                 "weapon-specialization": "+2 damage rolsl for chosen weapon type. Attacks and Weapons must be properly configured with Equipment Base Types.",
                 "weapon-type": "Apply bonuses when using the chosen Weapon. Attacks and Weapons must be properly configured with Equipment Base Types.",
                 "weapon": "Choose specific Attacks and Weapons for bonuses.",
-                "when-active": "Apply bonuses when specified Buff/Weapon/Feat/etc is active."
+                "when-active": "Apply bonuses when specified Buff/Weapon/Feat/etc is active.",
+                "when-in-combat": "Active when this actor is in combat."
             }
         },
         "cancel": "Cancel",
