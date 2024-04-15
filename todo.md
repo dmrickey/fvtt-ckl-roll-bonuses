@@ -179,16 +179,13 @@
     - Effective Size
       - Formula should result in how many steps up/down the chart it goes
   - Specific Bonus
+    - Furious Focus
+      - update doc to say it always works outside of combat (for first iterative)
     - Skill Rank Override
     - Snake Sidewind
     - Versatile Training
   - Target
     - When In Combat
-  - update Furious Focus to signify it always works _first_ outside of combat.
-- Update documentation for Furious Focus to show that it always works outside of combat (except on iteratives)
-- Versatile Training
-  - Make it more obvious which skills are associated with which weapon groups.
-- Localize Versatile Training
 - Verify
   - Make sure Furious Focus still works
   - string-select with no choices shows proper warning (e.g. Weapon Focus)

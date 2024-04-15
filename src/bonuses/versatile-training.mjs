@@ -177,6 +177,8 @@ Hooks.on('renderItemSheet', (
 
     /** @type {{[key: string]: string}} */
     const skillChoices = {};
+    /** @type {{[key: string]: string}} */
+    const groupChoices = { ...pf1.config.weaponGroups };
     if (isEditable && actor) {
         if (!currentGroup) {
             currentGroup =  /** @type {keyof typeof pf1.config.weaponGroups} */ (Object.keys(api.config.versatileTraining.mapping)[0]);
@@ -186,6 +188,12 @@ Hooks.on('renderItemSheet', (
             ? localize('driver')
             : getSkillName(actor, skillId);
         api.config.versatileTraining.mapping[currentGroup].forEach((skillId) => skillChoices[skillId] = getName(skillId));
+        Object.entries(api.config.versatileTraining.mapping).forEach(([_group, skills]) => {
+            const group = /** @type {keyof typeof pf1.config.weaponGroups} */ (_group);
+            if (groupChoices[group]) {
+                groupChoices[group] = `${groupChoices[group]}: ${skills.map((skillId) => getName(skillId)).join(', ')}`;
+            }
+        });
 
         const currentSkills = item.getFlag(MODULE_NAME, selectedKey);
         const validSkills = intersection(
@@ -198,8 +206,7 @@ Hooks.on('renderItemSheet', (
     }
 
     keyValueSelect({
-        // @ts-ignore
-        choices: pf1.config.weaponGroups,
+        choices: groupChoices,
         current: currentGroup,
         item,
         journal,
