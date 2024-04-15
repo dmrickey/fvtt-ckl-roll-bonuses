@@ -9,6 +9,7 @@
             "evil": "Evil"
         },
         "all-spells": "All Spells",
+        "any-target-except": "Any target except:",
         "bonuses": {
             "label": {
                 "agile": "Agile",
@@ -72,6 +73,7 @@
                 "spell": "Spell Targets",
                 "spellFocus": "Spell Focus",
                 "token": "Token Targets",
+                "token-invert": "Invert Targets",
                 "versatile-performance": "Versatile Performance",
                 "versatile-training": "Versatile Training",
                 "weapon-focus": "Weapon Focus",
@@ -146,6 +148,7 @@
                 "spell": "Apply bonuses for actions for these specific spells.",
                 "spellFocus": "+1 DC for chosen spell schools.",
                 "token": "Apply bonuses for actions while specific tokens are targeted. When this buff is activated, a dialog will show up that allows you to choose from tokens in the scene.",
+                "token-invert": "Invert the selection, meaning bonuses will apply when any token is targeted that is not the chosen token.",
                 "versatile-performance": "Replace two skills with a chosen perform skill.",
                 "versatile-training": "Use BAB instead of ranks for two skills associated with a weapon group.",
                 "weapon-focus": "+1 bonus on attack rolls for chosen weapon type. Attacks and Weapons must be properly configured with Equipment Base Types.",

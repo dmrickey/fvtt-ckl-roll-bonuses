@@ -5,20 +5,16 @@
   - [Targets](#targets)
 - [Class Features](#class-features)
   - [Cleric](#cleric)
-  - [Fighter](#fighter)
   - [Psychic](#psychic)
   - [Ranger](#ranger)
 - [Feats](#feats)
   - [Bomber's eye](#bombers-eye)
   - [Longshot](#longshot)
-  - [Snake Sidewind](#snake-sidewind)
   - [Spell Perfection](#spell-perfection)
   - [Spirited Charge](#spirited-charge)
 - [Racial Features](#racial-features)
   - [Sylph](#sylph)
   - [Kobold](#kobold)
-- [Skills](#skills)
-  - [Int Headband](#int-headband)
 - [Misc](#misc)
   - [I am targeted](#i-am-targeted)
   - [Magic](#magic)
@@ -41,8 +37,7 @@
   - (see 3.0 scaffolding branch for a super rought start on this)
 
 # UI
-- Add readonly mode to all inputs so you can still see the configuration if you can't edit (i.e. in a compendium)
-- ### Add text filter to item input target
+### Add text filter to item input target
 
 # Bonus Targets
 ## Bonuses
@@ -67,16 +62,11 @@
 - While in Combat
   - [Scarred by War](https://www.aonprd.com/TraitDisplay.aspx?ItemName=Scarred%20by%20War) (used to grant diplomacy bonus while not in combat)
 - add a way to affect other tokens (i.e. cavalier challenge which gives them -2 attack vs other targets)
-- inverse target - effect all tokens _except_ the tokens I have targets
-  - Not super useful until v3
 
 # Class Features
 ## Cleric
 ### Healing Domain - Healer's Blessing
 - Cure Spells are treated as if they're empowered (+50% healing)
-## Fighter
-### [Versatile Training](https://www.d20pfsrd.com/classes/core-classes/fighter/#:~:text=that%20he%20throws.-,Versatile%20Training,-(Ex)%20The)
-- Use BAB instead of ranks for given skills (see Versatile Performance implementation)
 ## Psychic
 ### Phrenic Amplification
   - increases DC of `mind-affecting` spells by 1/2/3
@@ -92,8 +82,6 @@
 - Increase throwing range
 ## Longshot
 - Increase bow range
-## Snake Sidewind
-- does a lot, but specifically swap Sense Motive for attack roll to confirm critical hits when Sense Motive mod is higher than current attack bonus (Agile bonus might give insight on this)
 ## Spell Perfection
 - https://www.d20pfsrd.com/feats/general-feats/spell-perfection/
 ## Spirited Charge
@@ -109,13 +97,6 @@
 ## Kobold
 ### Frightener
   - +1 DC for `fear` spells
-
-# Skills
-## Int Headband
-- configure an item to give you specific ranks (0.82.5 only gives bonus ranks, not ranks to specific skills)
-  - See versatile performance for ideas.
-- Show icon next to skills that roll inspiration for free
-  - permanent-skill-bonuses
 
 # Misc
 ## I am targeted
@@ -142,7 +123,6 @@
 - add checkbox to toggle between union (current implementation) and intersection (item has to supply all targeting requirements)
 
 # Housekeeping
-- reduce duplication of `Improved` and `Greater` in so many different settings - they always use the same word in both German and Spanish (and English) so they don't need unique settings per usage
 - Consolidate weapon hints (Weapon Focus, Specialization, Martial) - find a way to make them more concise
 - Remove Inspiration from being added into the dialog and instead create a change as part of rolling the skill
 
@@ -189,13 +169,12 @@
 - Investigate
   - Add limit to checklist
   - Add subtext to checklist (could potentially default to the tooltip hint)
+  - Adding enh during item prep so I have a value that I can update for when multiple things are adding an enhancement bonus to a single target
 - Ammo
   - finish implementing stacking vs non-stacking enhancement bonus
-- Investigate
-  - "target ammo" to see if I can add bonuses to individual attacks as part of using ammo
-  - using Conditional Targets as a UI category for the picker
 - Documentation
   - Ammo - stacking bonus
+  - Target Token Inversion option
   - Bonus
     - Effective Size
       - Formula should result in how many steps up/down the chart it goes
@@ -204,18 +183,17 @@
     - Snake Sidewind
     - Versatile Training
   - update Furious Focus to signify it always works _first_ outside of combat.
-- Warrior Versatile Performance
-- Item that grants skill ranks
 - Update documentation for Furious Focus to show that it always works outside of combat (except on iteratives)
 - Versatile Training
   - Make it more obvious which skills are associated with which weapon groups.
 - Localize Versatile Training
 - Verify
   - Make sure Furious Focus still works
-  - string-select with no choices (e.g. Weapon Focus)
+  - string-select with no choices shows proper warning (e.g. Weapon Focus)
   - Snake Sidewind
   - Has Boolean Flag Target
-  - Is Active Target
+  - When Active Target
+  - Target Token Inversion option
   - Make sure works after removing current from showing input
     - Armor Focus input
     - Element Focus
@@ -223,6 +201,4 @@
     - Spell Specialization
     - Weapon Specialization
   - `itemActionRollAttack` and `itemActionRollDamage` local hooks still work for `join` after removing their return types which didn't seem to be used.
-  - That Versatile Performance and Training both roll skills properly with the hook
-    - expanded Versatile Performance
   - That everything using `keyValueSelect` still works

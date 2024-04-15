@@ -1,7 +1,9 @@
 import { MODULE_NAME } from "../../consts.mjs";
+import { checkboxInput } from '../../handlebars-handlers/bonus-inputs/chekbox-input.mjs';
 import { showTokenInput } from "../../handlebars-handlers/targeted/targets/token-input.mjs";
 import { TokenSelectorApp } from "../../handlebars-handlers/targeted/targets/token-selector-app.mjs";
-import { intersection, intersects } from "../../util/array-intersects.mjs";
+import { difference, intersection, intersects } from "../../util/array-intersects.mjs";
+import { localize } from '../../util/localize.mjs';
 import { registerSetting } from "../../util/settings.mjs";
 import { truthiness } from "../../util/truthiness.mjs";
 import { BaseTarget } from "./base-target.mjs";
@@ -9,7 +11,6 @@ import { BaseTarget } from "./base-target.mjs";
 class Settings {
     static get #tokenSettingKey() { return 'should-auto-target-tokens'; }
     static get shouldAutoTarget() { return Settings.#getSetting(this.#tokenSettingKey); }
-    // @ts-ignore
     static #getSetting(/** @type {string} */key) { return game.settings.get(MODULE_NAME, key); }
 
     static {
@@ -30,6 +31,7 @@ export class TokenTarget extends BaseTarget {
      * @inheritdoc
      */
     static get sourceKey() { return 'token'; }
+    static get #inversionKey() { return `${this.key}-invert`; }
 
     /**
      * @override
@@ -47,8 +49,16 @@ export class TokenTarget extends BaseTarget {
     static getHints(source) {
         /** @type {string[]} */
         const savedTargets = source.getFlag(MODULE_NAME, this.key) ?? [];
+        if (!savedTargets.length) {
+            return;
+        }
+
+        const isInverted = !!source.getFlag(MODULE_NAME, this.#inversionKey);
         const targets = intersection(savedTargets, this.#currentTargetUuids);
-        return targets.map((target) => fromUuidSync(target)?.name).filter(truthiness);
+        return [
+            isInverted ? localize('any-target-except') : '',
+            ...targets.map((target) => fromUuidSync(target)?.name)
+        ].filter(truthiness);
     }
 
     /**
@@ -71,10 +81,13 @@ export class TokenTarget extends BaseTarget {
 
         // fromUuidSync
         const flaggedItems = item.actor.itemFlags.boolean[this.key]?.sources ?? [];
-        const bonusSources = flaggedItems.filter((flagged) => {
+        const bonusSources = flaggedItems.filter((source) => {
             /** @type {string[]} */
-            const savedTargets = flagged.getFlag(MODULE_NAME, this.key) ?? [];
-            return intersects(this.#currentTargetUuids, savedTargets);
+            const savedTargets = source.getFlag(MODULE_NAME, this.key) ?? [];
+            const isInverted = !!source.getFlag(MODULE_NAME, this.#inversionKey);
+            return isInverted
+                ? difference(this.#currentTargetUuids, savedTargets)
+                : intersects(this.#currentTargetUuids, savedTargets);
         });
 
         return bonusSources;
@@ -115,6 +128,15 @@ export class TokenTarget extends BaseTarget {
             tooltip: this.tooltip,
         }, {
             canEdit: isEditable,
+        });
+        checkboxInput({
+            item,
+            journal: this.journal,
+            key: this.#inversionKey,
+            parent: html,
+        }, {
+            canEdit: isEditable,
+            isModuleFlag: true,
         });
     }
 
