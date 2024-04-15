@@ -187,9 +187,7 @@ class BonusPickerApp extends DocumentSheet {
      * @returns {Record<string, unknown>}
      */
     _getSubmitData(updateData) {
-        console.log('Updating item', this.object.name);
         const formData = super._getSubmitData(updateData);
-        console.log(formData);
 
         /** @type {Partial<ItemPF>} */ // @ts-ignore
         let updateObj = null;
