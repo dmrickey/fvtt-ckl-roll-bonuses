@@ -3,6 +3,7 @@ import { hasAnyBFlag } from '../util/flag-helpers.mjs';
 import { getSkillFormula } from '../util/get-skill-formula.mjs';
 import { LocalHookHandler, customGlobalHooks, localHooks } from '../util/hooks.mjs';
 import { localizeBonusLabel } from '../util/localize.mjs';
+import { LanguageSettings } from '../util/settings.mjs';
 import { SpecificBonuses } from './all-specific-bonuses.mjs';
 
 const key = 'snake-sidewind';
@@ -11,6 +12,14 @@ const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalE
 Hooks.once('ready', () =>
     SpecificBonuses.registerSpecificBonus({ journal, key, type: 'boolean' })
 );
+
+class Settings {
+    static get snakeSidewind() { return LanguageSettings.getTranslation(key); }
+
+    static {
+        LanguageSettings.registerItemNameTranslation(key);
+    }
+}
 
 /**
  * @param {string} formula
@@ -94,8 +103,13 @@ Hooks.on('renderItemSheet', (
 ) => {
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
+    const name = item?.name?.toLowerCase() ?? '';
+
     const hasFlag = item.system.flags.boolean?.hasOwnProperty(key);
     if (!hasFlag) {
+        if (name === Settings.snakeSidewind) {
+            item.update({ [`system.flags.boolean.${key}`]: true });
+        }
         return;
     }
 

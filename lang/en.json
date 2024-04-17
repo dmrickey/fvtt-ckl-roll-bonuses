@@ -283,6 +283,10 @@
                 "name": "Extreme Mood Swings",
                 "default": "Extreme Mood Swings"
             },
+            "fates-favored": {
+                "name": "Fate's Favored",
+                "default": "Fate's Favored"
+            },
             "furious-focus": {
                 "name": "Furious Focus",
                 "default": "Furious Focus"
@@ -298,6 +302,10 @@
             "racial-weapon-focus-default-race": {
                 "name": "Racial Weapon Focus (default race)",
                 "default": "Gnomish"
+            },
+            "snake-sidewind": {
+                "name": "Snake Sidewind",
+                "default": "Snake Sidewind"
             },
             "spellFocus": {
                 "name": "Spell Focus",

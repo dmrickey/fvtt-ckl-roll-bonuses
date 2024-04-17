@@ -110,6 +110,8 @@
 - add the formula class to skill inputs
 - consumable buffs - requires later release (waiting on issue #1946) (did not make it into v9)
   - idea is to create a a flag on a buff that will add the bonus in "prehook" (and/or use built in changes) but use the new pf1 v.next posthook to disable the buff when it is consumed
+- Alter bonus effect for crit confirmation only
+  - https://www.aonprd.com/MonsterTemplates.aspx?ItemName=Commando%20Construct#:~:text=to%20this%20ability.-,Precision,-(Ex)%3A%20A
 
 ## UX
 - Add item hints for ammo
@@ -170,26 +172,12 @@
   - Add limit to checklist
   - Add subtext to checklist (could potentially default to the tooltip hint)
   - Adding enh during item prep so I have a value that I can update for when multiple things are adding an enhancement bonus to a single target
-- Ammo
+- Ammo and enhancement bonus
   - finish implementing stacking vs non-stacking enhancement bonus
 - Documentation
-  - Ammo - stacking bonus
-  - Target Token Inversion option
-  - Bonus
-    - Effective Size
-      - Formula should result in how many steps up/down the chart it goes
-  - Specific Bonus
-    - Furious Focus
-      - update doc to say it always works outside of combat (for first iterative)
-    - Skill Rank Override
-    - Snake Sidewind
-    - Versatile Training
-  - Target
-    - When In Combat
+  - update journal links for conditional targets
 - Verify
   - Make sure Furious Focus still works
-  - string-select with no choices shows proper warning (e.g. Weapon Focus)
-  - Snake Sidewind
   - Has Boolean Flag Target
   - When Active Target
   - Target Token Inversion option
