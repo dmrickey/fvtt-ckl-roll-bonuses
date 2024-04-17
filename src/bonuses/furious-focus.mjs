@@ -92,6 +92,8 @@ Hooks.on('renderItemSheet', (
 });
 
 /** @param {ActorPF} actor */
-const hasUsedFF = (actor) => !isActorInCombat(actor) || actor.getFlag(MODULE_NAME, furiousFocusTimestamp) === game.time.worldTime;
+const hasUsedFF = (actor) => isActorInCombat(actor) && actor.getFlag(MODULE_NAME, furiousFocusTimestamp) === game.time.worldTime;
 /** @param {ActorPF} actor */
-const setUsedFF = (actor) => isActorInCombat(actor) && actor.setFlag(MODULE_NAME, furiousFocusTimestamp, game.time.worldTime);
+const setUsedFF = (actor) => isActorInCombat(actor)
+    ? actor.setFlag(MODULE_NAME, furiousFocusTimestamp, game.time.worldTime)
+    : actor.setFlag(MODULE_NAME, furiousFocusTimestamp, null);
