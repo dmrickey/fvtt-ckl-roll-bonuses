@@ -118,9 +118,13 @@ registerItemHint((hintcls, _actor, item, _data) => {
         return;
     }
 
+    // @ts-ignore
+    const match = icons[currentElement];
     const label = pf1.registry.damageTypes.get(`${currentElement}`) ?? currentElement;
 
-    const hint = hintcls.create(label.name, [], {});
+    const hint = match
+        ? hintcls.create('', [match.css], { hint: label.name, icon: match.icon })
+        : hintcls.create(label.name, [], {});
     return hint;
 });
 
