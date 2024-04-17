@@ -54,7 +54,7 @@ export class LocalHookHandler {
     /**
      * @overload
      * @param {typeof localHooks.chatAttackAddAttack} hook
-     * @param {(chatAttack: ChatAttack,  args: { noAttack: boolean, bonus: unknown, extraParts: unknown[], critical: boolean, conditionalParts: object }) => Promise} func
+     * @param {(chatAttack: ChatAttack,  args: { noAttack: boolean, bonus: unknown, extraParts: unknown[], critical: boolean, conditionalParts: object }) => Promise<void>} func
      * @returns {void}
      */
 

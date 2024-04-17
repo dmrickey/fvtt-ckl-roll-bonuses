@@ -1,4 +1,6 @@
 import { showEnabledLabel } from '../handlebars-handlers/enabled-label.mjs';
+import { hasAnyBFlag } from '../util/flag-helpers.mjs';
+import { getSkillFormula } from '../util/get-skill-formula.mjs';
 import { LocalHookHandler, localHooks } from '../util/hooks.mjs';
 import { SpecificBonuses } from './all-specific-bonuses.mjs';
 
@@ -8,6 +10,19 @@ const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalE
 Hooks.once('ready', () =>
     SpecificBonuses.registerSpecificBonus({ journal, key, type: 'boolean' })
 );
+
+/**
+ * @param {string} formula
+ * @param {RollData} rollData
+ * @returns {number}
+ */
+const getFormulaMax = (formula, rollData) => {
+    const mods = formula.substring(formula.indexOf(' ') + 1);
+    const safeFormula = `0 + ${mods}`
+    const roll = new pf1.dice.D20RollPF(safeFormula, rollData, { skipDialog: true }).evaluate({ maximize: true, async: false })
+    const max = roll.total;
+    return max;
+}
 
 /**
  * @param {ChatAttack} chatAttack
@@ -23,7 +38,8 @@ const chatAttackAddAttack = async (chatAttack, args) => {
         return;
     }
 
-    const hasFlag = chatAttack.action?.item?.system.flags.boolean?.hasOwnProperty(key);
+    // const hasFlag = chatAttack.action?.item?.system.flags.boolean?.hasOwnProperty(key);
+    const hasFlag = hasAnyBFlag(chatAttack.action?.actor, key);
     if (!hasFlag) {
         return;
     }
@@ -37,14 +53,14 @@ const chatAttackAddAttack = async (chatAttack, args) => {
     if (!actor) {
         return;
     }
-    const maxAttack = new pf1.dice.D20RollPF(critConfirm.simplifiedFormula, chatAttack.rollData).evaluate({ maximize: true, async: false }).total;
 
-    const chat = await actor.rollSkill('sen', { skipDialog: true });
-    const skillFormula = chat.roll.formula;
-    const skillTotal = new pf1.dice.D20RollPF(skillFormula, chatAttack.rollData).evaluate({ maximize: true, async: false });
+    const maxAttack = getFormulaMax(critConfirm.simplifiedFormula, chatAttack.rollData);
 
-    if (skillTotal > maxAttack) {
-        chatAttack.critConfirm = new pf1.dice.D20RollPF(skillFormula, chatAttack.rollData);
+    const skillFormula = getSkillFormula(actor, chatAttack.rollData, 'sen');
+    const skillMax = getFormulaMax(skillFormula, chatAttack.rollData);
+
+    if (skillMax >= maxAttack) {
+        chatAttack.critConfirm = new pf1.dice.D20RollPF(skillFormula, chatAttack.rollData, { skipDialog: true }).evaluate({ async: false });
     }
 }
 LocalHookHandler.registerHandler(localHooks.chatAttackAddAttack, chatAttackAddAttack);

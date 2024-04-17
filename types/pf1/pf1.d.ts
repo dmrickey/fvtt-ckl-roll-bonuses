@@ -188,6 +188,13 @@ declare global {
 
     class ChatMessagePF extends BaseDocument {
         content: string;
+        flags?: {
+            pf1?: {
+                subject?: {
+                    skill: keyof typeof pf1.config.skills;
+                };
+            };
+        };
         roll: D20RollPF;
     }
 

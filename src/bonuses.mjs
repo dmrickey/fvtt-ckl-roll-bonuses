@@ -9,6 +9,7 @@ import './bonuses/furious-focus.mjs';
 import './bonuses/martial-focus.mjs';
 import './bonuses/skill-rank-override.mjs';
 import './bonuses/skills/init.mjs';
+import './bonuses/snake-sidewind.mjs';
 import './bonuses/spells/init.mjs';
 import './bonuses/versatile-performance.mjs';
 import './bonuses/versatile-training.mjs';
