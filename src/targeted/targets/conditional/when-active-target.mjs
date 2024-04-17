@@ -1,5 +1,5 @@
-import { MODULE_NAME } from '../../consts.mjs';
-import { ItemTarget } from "./item-target.mjs";
+import { MODULE_NAME } from '../../../consts.mjs';
+import { ItemTarget } from "../item-target.mjs";
 
 export class WhenActiveTarget extends ItemTarget {
     /**
@@ -59,5 +59,5 @@ export class WhenActiveTarget extends ItemTarget {
      * @inheritdoc
      * @returns {string}
      */
-    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.iurMG1TBoX3auh5z#when-active'; }
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.IpRhJqZEX2TUarSX#when-active'; }
 }

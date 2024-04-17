@@ -167,6 +167,7 @@ declare global {
 
     interface CombatPF {
         combatants: CombatantPF[];
+        round: number;
     }
 
     interface CombatantPF {

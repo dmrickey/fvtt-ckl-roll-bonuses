@@ -1,5 +1,5 @@
-import { showEnabledLabel } from '../../handlebars-handlers/enabled-label.mjs';
-import { BaseTarget } from './base-target.mjs';
+import { showEnabledLabel } from '../../../handlebars-handlers/enabled-label.mjs';
+import { BaseTarget } from '../base-target.mjs';
 
 /**
  * @abstract
@@ -18,7 +18,7 @@ export class AllTarget extends BaseTarget {
      * @inheritdoc
      * @returns {string}
      */
-    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.iurMG1TBoX3auh5z#all'; }
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.IpRhJqZEX2TUarSX#all'; }
 
     /**
      * @inheritdoc

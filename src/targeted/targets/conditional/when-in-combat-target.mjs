@@ -1,6 +1,6 @@
-import { showEnabledLabel } from '../../handlebars-handlers/enabled-label.mjs';
-import { isActorInCombat } from '../../util/is-actor-in-combat.mjs';
-import { ItemTarget } from "./item-target.mjs";
+import { showEnabledLabel } from '../../../handlebars-handlers/enabled-label.mjs';
+import { isActorInCombat } from '../../../util/is-actor-in-combat.mjs';
+import { ItemTarget } from "../item-target.mjs";
 
 export class WhenInCombatTarget extends ItemTarget {
 
@@ -15,7 +15,7 @@ export class WhenInCombatTarget extends ItemTarget {
      * @inheritdoc
      * @returns {string}
      */
-    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.iurMG1TBoX3auh5z#when-in-combat'; }
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.IpRhJqZEX2TUarSX#when-in-combat'; }
 
     /**
      * @override

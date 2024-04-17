@@ -1,7 +1,7 @@
-import { MODULE_NAME } from '../../consts.mjs';
-import { textInput } from '../../handlebars-handlers/bonus-inputs/text-input.mjs';
-import { hasAnyBFlag } from '../../util/flag-helpers.mjs';
-import { BaseTarget } from './base-target.mjs';
+import { MODULE_NAME } from '../../../consts.mjs';
+import { textInput } from '../../../handlebars-handlers/bonus-inputs/text-input.mjs';
+import { hasAnyBFlag } from '../../../util/flag-helpers.mjs';
+import { BaseTarget } from '../base-target.mjs';
 
 /**
  * @extends {BaseTarget}
@@ -17,7 +17,7 @@ export class HasBooleanFlagTarget extends BaseTarget {
      * @override
      * @returns {string}
      */
-    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.iurMG1TBoX3auh5z#has-boolean-flag'; }
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.IpRhJqZEX2TUarSX#has-boolean-flag'; }
 
     /**
      * @override

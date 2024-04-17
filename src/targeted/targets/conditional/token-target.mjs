@@ -1,12 +1,12 @@
-import { MODULE_NAME } from "../../consts.mjs";
-import { checkboxInput } from '../../handlebars-handlers/bonus-inputs/chekbox-input.mjs';
-import { showTokenInput } from "../../handlebars-handlers/targeted/targets/token-input.mjs";
-import { TokenSelectorApp } from "../../handlebars-handlers/targeted/targets/token-selector-app.mjs";
-import { difference, intersection, intersects } from "../../util/array-intersects.mjs";
-import { localize } from '../../util/localize.mjs';
-import { registerSetting } from "../../util/settings.mjs";
-import { truthiness } from "../../util/truthiness.mjs";
-import { BaseTarget } from "./base-target.mjs";
+import { MODULE_NAME } from "../../../consts.mjs";
+import { checkboxInput } from '../../../handlebars-handlers/bonus-inputs/chekbox-input.mjs';
+import { showTokenInput } from "../../../handlebars-handlers/targeted/targets/token-input.mjs";
+import { TokenSelectorApp } from "../../../handlebars-handlers/targeted/targets/token-selector-app.mjs";
+import { difference, intersection, intersects } from "../../../util/array-intersects.mjs";
+import { localize } from '../../../util/localize.mjs';
+import { registerSetting } from "../../../util/settings.mjs";
+import { truthiness } from "../../../util/truthiness.mjs";
+import { BaseTarget } from "../base-target.mjs";
 
 class Settings {
     static get #tokenSettingKey() { return 'should-auto-target-tokens'; }
@@ -39,7 +39,7 @@ export class TokenTarget extends BaseTarget {
      * @inheritdoc
      * @returns {string}
      */
-    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.iurMG1TBoX3auh5z#token'; }
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.IpRhJqZEX2TUarSX#token'; }
 
     /**
      * @override
