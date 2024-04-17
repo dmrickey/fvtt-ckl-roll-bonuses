@@ -27,6 +27,13 @@ registerItemHint((hintcls, actor, item, _data) => {
             targetSourceHints.push([...new Set([targetType.label, ...hints])].join('\n'));
         }
     });
+    if (targetSourceHints.length) {
+        allHints.push(hintcls.create(
+            localize('targets'),
+            [],
+            { hint: targetSourceHints.join('\n\n') },
+        ));
+    }
 
     /** @type {Hint[]} */
     const bonusSourceHints = [];
@@ -38,37 +45,14 @@ registerItemHint((hintcls, actor, item, _data) => {
             if (hints.length === 1 && hints[0] === bonusType.label) {
                 hints = [];
             }
-
-            let classes = [];
-            let icon = '';
-            if (!targetSourceHints.length) {
-                classes.push('ckl-missing-source');
-                hints.push(localize('missing-targets'));
-                icon = 'fas fa-circle-exclamation';
-            }
             bonusSourceHints.push(hintcls.create(
                 bonusType.label,
-                classes,
-                { hint: hints.join('\n'), icon },
+                [],
+                { hint: hints.join('\n') },
             ));
         }
     });
     allHints.push(...bonusSourceHints);
-
-    if (targetSourceHints.length) {
-        let classes = [];
-        let icon = '';
-        if (!bonusSourceHints.length) {
-            classes.push('ckl-missing-source');
-            icon = 'fas fa-circle-exclamation';
-            targetSourceHints.push(localize('missing-bonuses'));
-        }
-        allHints.push(hintcls.create(
-            localize('targets'),
-            classes,
-            { hint: targetSourceHints.join('\n\n'), icon },
-        ));
-    }
 
     /** @type {{itemName: string, bonusName: string, hints: string[]}[]} */
     const bonusHints = [];
@@ -104,7 +88,17 @@ registerItemHint((hintcls, actor, item, _data) => {
             .forEach(([name, hint]) => allHints.push(hintcls.create(name, [], { hint })))
     }
 
-    return allHints;
+    if (item[MODULE_NAME].bonuses.length && !item[MODULE_NAME].targets.length) {
+        const hint = hintcls.create(localize('missing-targets'), ['ckl-missing-source'], { icon: 'fas fa-circle-exclamation' });
+        return [hint, ...allHints];
+    }
+    else if (item[MODULE_NAME].targets.length && !item[MODULE_NAME].bonuses.length) {
+        const hint = hintcls.create(localize('missing-bonuses'), ['ckl-missing-source'], { icon: 'fas fa-circle-exclamation' });
+        return [hint, ...allHints];
+    }
+    else {
+        return allHints;
+    }
 });
 
 /**
