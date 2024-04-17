@@ -1,7 +1,8 @@
 import { showEnabledLabel } from '../handlebars-handlers/enabled-label.mjs';
 import { hasAnyBFlag } from '../util/flag-helpers.mjs';
 import { getSkillFormula } from '../util/get-skill-formula.mjs';
-import { LocalHookHandler, localHooks } from '../util/hooks.mjs';
+import { LocalHookHandler, customGlobalHooks, localHooks } from '../util/hooks.mjs';
+import { localizeBonusLabel } from '../util/localize.mjs';
 import { SpecificBonuses } from './all-specific-bonuses.mjs';
 
 const key = 'snake-sidewind';
@@ -26,19 +27,9 @@ const getFormulaMax = (formula, rollData) => {
 
 /**
  * @param {ChatAttack} chatAttack
- * @param {object} args
- * @param {boolean} [args.noAttack]
- * @param {unknown} [args.bonus]
- * @param {unknown[]} [args.extraParts]
- * @param {boolean} [args.critical] Whether or not this roll is a for a critical confirmation
- * @param {object} [args.conditionalParts]
+ * @returns {string | undefined}
  */
-const chatAttackAddAttack = async (chatAttack, args) => {
-    if (!args.critical) {
-        return;
-    }
-
-    // const hasFlag = chatAttack.action?.item?.system.flags.boolean?.hasOwnProperty(key);
+const isSnakeSideWindCrit = (chatAttack) => {
     const hasFlag = hasAnyBFlag(chatAttack.action?.actor, key);
     if (!hasFlag) {
         return;
@@ -60,10 +51,41 @@ const chatAttackAddAttack = async (chatAttack, args) => {
     const skillMax = getFormulaMax(skillFormula, chatAttack.rollData);
 
     if (skillMax >= maxAttack) {
-        chatAttack.critConfirm = new pf1.dice.D20RollPF(skillFormula, chatAttack.rollData, { skipDialog: true }).evaluate({ async: false });
+        return skillFormula;
+    }
+}
+
+/**
+ * @param {ChatAttack} chatAttack
+ * @param {object} args
+ * @param {boolean} [args.noAttack]
+ * @param {unknown} [args.bonus]
+ * @param {unknown[]} [args.extraParts]
+ * @param {boolean} [args.critical] Whether or not this roll is a for a critical confirmation
+ * @param {object} [args.conditionalParts]
+ */
+const chatAttackAddAttack = async (chatAttack, args) => {
+    if (!args.critical) {
+        return;
+    }
+
+    const formula = isSnakeSideWindCrit(chatAttack)
+    if (formula) {
+        chatAttack.critConfirm = new pf1.dice.D20RollPF(formula, chatAttack.rollData, { skipDialog: true }).evaluate({ async: false });
     }
 }
 LocalHookHandler.registerHandler(localHooks.chatAttackAddAttack, chatAttackAddAttack);
+
+/** @param {ChatAttack} chatAttack */
+const addAttackNote = (chatAttack) => {
+    const { attack, effectNotes } = chatAttack;
+    if (attack.isCrit) {
+        if (isSnakeSideWindCrit(chatAttack)) {
+            effectNotes.push(localizeBonusLabel(key));
+        }
+    }
+};
+Hooks.on(customGlobalHooks.chatAttackEffectNotes, addAttackNote)
 
 Hooks.on('renderItemSheet', (
     /** @type {ItemSheetPF} */ { isEditable, item },

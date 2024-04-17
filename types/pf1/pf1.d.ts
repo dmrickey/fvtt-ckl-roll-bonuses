@@ -184,7 +184,9 @@ declare global {
 
     class D20RollPF<
         T extends RollData = RollData<SystemItemData>
-    > extends RollPF<T> {}
+    > extends RollPF<T> {
+        isCrit: boolean;
+    }
 
     class ChatMessagePF extends BaseDocument {
         content: string;
