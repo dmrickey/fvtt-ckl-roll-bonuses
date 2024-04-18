@@ -117,9 +117,14 @@ export class AgileBonus extends BaseBonus {
      * @param {ItemActionRollAttackHookArgs} seed
      * @param {ItemAction} _action
      * @param {RollData} data
-     * @returns {ItemActionRollAttackHookArgs}
+     * @param {number} index
      */
-    static itemActionRollDamage(_source, seed, _action, data) {
+    static itemActionRollDamage(_source, seed, _action, data, index) {
+        // if this isn't the first part of the attack roll, then return
+        if (index) {
+            return;
+        }
+
         const dexRegex = new RegExp(`[\\+-]\\s*[0-9]+\\[${pf1.config.abilities.dex}\\]`);
         const strRegex = new RegExp(`[\\+-]\\s*[0-9]+\\[${pf1.config.abilities.str}\\]`);
 
@@ -135,6 +140,5 @@ export class AgileBonus extends BaseBonus {
         else if (!dexMatch && dexIsGreater) {
             seed.formula = `${seed.formula} ${dexFormula}`;
         }
-        return seed;
     }
 }

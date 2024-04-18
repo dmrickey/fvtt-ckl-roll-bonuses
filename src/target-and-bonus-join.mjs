@@ -332,12 +332,13 @@ LocalHookHandler.registerHandler(localHooks.itemActionRollAttack, itemActionRoll
  * @param {ItemActionRollAttackHookArgs} seed
  * @param {ItemAction} action
  * @param {RollData} data
+ * @param {number} index
  * @returns {void}
  */
-const itemActionRollDamage = (seed, action, data) => {
+const itemActionRollDamage = (seed, action, data, index) => {
     handleBonusesFor(
         action,
-        (bonusType, sourceItem) => bonusType.itemActionRollDamage(sourceItem, seed, action, data),
+        (bonusType, sourceItem) => bonusType.itemActionRollDamage(sourceItem, seed, action, data, index),
     );
 }
 LocalHookHandler.registerHandler(localHooks.itemActionRollDamage, itemActionRollDamage);

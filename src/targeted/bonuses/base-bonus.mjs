@@ -66,22 +66,21 @@ export class BaseBonus extends BaseSource {
     /**
      * @abstract
      * @param {ItemPF} _source
-     * @param {ItemActionRollAttackHookArgs} seed
+     * @param {ItemActionRollAttackHookArgs} _seed
      * @param {ItemAction} _action
      * @param {RollData} _data
-     * @returns {ItemActionRollAttackHookArgs}
      */
-    static itemActionRollAttack(_source, seed, _action, _data) { return seed; }
+    static itemActionRollAttack(_source, _seed, _action, _data) { }
 
     /**
      * @abstract
      * @param {ItemPF} _source
-     * @param {ItemActionRollAttackHookArgs} seed
+     * @param {ItemActionRollAttackHookArgs} _seed
      * @param {ItemAction} _action
      * @param {RollData} _data
-     * @returns {ItemActionRollAttackHookArgs}
+     * @param {number} _index
      */
-    static itemActionRollDamage(_source, seed, _action, _data) { return seed; }
+    static itemActionRollDamage(_source, _seed, _action, _data, _index) { }
 
     /**
      * Returns true the targeting is too generic to show a hint on a specific item

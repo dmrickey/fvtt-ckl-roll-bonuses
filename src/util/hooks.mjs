@@ -103,7 +103,7 @@ export class LocalHookHandler {
     /**
      * @overload
      * @param {typeof localHooks.itemActionRollDamage} hook
-     * @param {(seed: ItemActionRollAttackHookArgs, action: ItemAction, data: RollData) => void} func
+     * @param {(seed: ItemActionRollAttackHookArgs, action: ItemAction, data: RollData, index: number) => void} func
      * @returns {void}
      */
 
@@ -224,6 +224,7 @@ export class LocalHookHandler {
      * @param {ItemActionRollAttackHookArgs} seed
      * @param {ItemAction} action
      * @param {RollData} data
+     * @param {number} index
      * @returns {void}
      */
 

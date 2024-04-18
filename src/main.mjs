@@ -274,7 +274,7 @@ async function itemActionRollDamage(wrapped, ...args) {
         const options = roll.options;
         const rollData = roll.data;
         const seed = { formula, options };
-        LocalHookHandler.fireHookNoReturnSync(localHooks.itemActionRollDamage, seed, this, rollData);
+        LocalHookHandler.fireHookNoReturnSync(localHooks.itemActionRollDamage, seed, this, rollData, i);
 
         if (formula !== seed.formula || !foundry.utils.objectsEqual(options, seed.options)) {
             const replaced = await new pf1.dice.DamageRoll(seed.formula, rollData, seed.options).evaluate();
