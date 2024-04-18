@@ -1,4 +1,5 @@
 import { MODULE_NAME } from "../../../consts.mjs";
+import { api } from '../../../util/api.mjs';
 import { getTokenDisplayName } from "../../../util/get-token-display-name.mjs";
 import { truthiness } from "../../../util/truthiness.mjs";
 import { uniqueArray } from "../../../util/unique-array.mjs";
@@ -90,3 +91,5 @@ export class TokenSelectorApp extends DocumentSheet {
         return submitData;
     }
 }
+
+api.applications.TokenSelectorApp = TokenSelectorApp;

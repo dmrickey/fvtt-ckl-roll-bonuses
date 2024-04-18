@@ -1,4 +1,5 @@
 import { addNodeToRollBonus } from "../add-bonus-to-item-sheet.mjs";
+import { api } from '../../util/api.mjs';
 import { createTemplate, templates } from "../templates.mjs";
 import { localize, localizeBonusLabel, localizeBonusTooltip } from "../../util/localize.mjs";
 
@@ -72,3 +73,5 @@ export function textInputAndKeyValueSelect({
 
     addNodeToRollBonus(parent, div, item, canEdit);
 }
+
+api.inputs.textInputAndKeyValueSelect = textInputAndKeyValueSelect;

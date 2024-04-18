@@ -1,4 +1,5 @@
 import { MODULE_NAME } from "../../../consts.mjs";
+import { api } from '../../../util/api.mjs';
 import { localize, localizeBonusLabel, localizeBonusTooltip } from "../../../util/localize.mjs";
 import { truthiness } from "../../../util/truthiness.mjs";
 import { addNodeToRollBonus } from "../../add-bonus-to-item-sheet.mjs";
@@ -77,3 +78,5 @@ export function showChecklist({
 
     addNodeToRollBonus(parent, div, item, canEdit);
 }
+
+api.inputs.showChecklist = showChecklist;

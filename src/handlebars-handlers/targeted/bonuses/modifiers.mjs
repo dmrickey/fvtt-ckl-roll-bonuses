@@ -2,6 +2,7 @@ import { MODULE_NAME } from "../../../consts.mjs";
 import { localize } from "../../../util/localize.mjs";
 import { createTemplate, templates } from "../../templates.mjs";
 import { addNodeToRollBonus } from "../../add-bonus-to-item-sheet.mjs";
+import { api } from '../../../util/api.mjs';
 
 /**
  *
@@ -355,3 +356,5 @@ export function modifiersInput({
 
     addNodeToRollBonus(parentElement, div, item, canEdit);
 }
+
+// api.inputs.modifiersInput = modifiersInput;

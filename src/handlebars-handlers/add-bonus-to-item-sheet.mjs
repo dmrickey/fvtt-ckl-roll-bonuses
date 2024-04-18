@@ -1,3 +1,4 @@
+import { api } from '../util/api.mjs';
 import { showBonusPicker } from './bonus-picker.mjs';
 import { createTemplate, templates } from './templates.mjs';
 
@@ -61,3 +62,5 @@ const addNodeToRollBonus = (itemSheetHtml, child, item, canEdit) => {
 }
 
 export { addNodeToRollBonus };
+
+api.inputs.addNodeToRollBonus = addNodeToRollBonus;

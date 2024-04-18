@@ -1,4 +1,5 @@
 import { MODULE_NAME } from "../../../consts.mjs";
+import { api } from '../../../util/api.mjs';
 import { localize, localizeBonusLabel, localizeBonusTooltip } from "../../../util/localize.mjs";
 import { truthiness } from "../../../util/truthiness.mjs";
 import { uniqueArray } from "../../../util/unique-array.mjs";
@@ -144,3 +145,5 @@ class ItemSelector extends DocumentSheet {
         return submitData;
     }
 }
+
+api.inputs.showItemInput = showItemInput;
