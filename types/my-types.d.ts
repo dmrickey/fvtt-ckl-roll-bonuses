@@ -7,6 +7,7 @@ export {};
 
 declare global {
     interface RollBonusesAPI {
+        applications: Record<string, DocumentSheet>;
         config: {
             versatileTraining: {
                 default: Array<keyof typeof pf1.config.skills>;
@@ -19,6 +20,7 @@ declare global {
         allBonusTypes: (typeof BaseBonus)[];
         allTargetTypes: (typeof BaseTarget)[];
         bonusTypeMap: Record<string, typeof BaseBonus>;
+        inputs: Record<string, (...args) => void>;
         migrate: {
             migrate(): Promise;
             v1: {};
@@ -28,8 +30,9 @@ declare global {
             BaseSource: typeof BaseSource;
             BaseTarget: typeof BaseTarget;
         };
-        targetTypeMap: Record<string, typeof BaseTarget>;
         SpecificBonuses: typeof SpecificBonuses;
+        targetTypeMap: Record<string, typeof BaseTarget>;
+        util: Record<string, (...args) => any>;
     }
 
     interface IdObject {
