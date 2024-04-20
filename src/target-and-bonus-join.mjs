@@ -113,8 +113,8 @@ export const handleBonusesFor = (thing, func, { skipGenericTarget = false } = {}
         .flatMap((targetType) => targetType.getSourcesFor(thing))
         // filter down to unique items in case one source item is affecting this target item through multiple "targets"
         .filter((sourceItem, i, self) => self.findIndex((nestedTarget) => sourceItem.id === nestedTarget.id) === i)
-        .filter((sourceItem) => sourceItem[MODULE_NAME].targets.every((baseTarget) =>
-            (!skipGenericTarget || !baseTarget.isGenericTarget) && baseTarget.doesTargetInclude(sourceItem, thing))
+        .filter((sourceItem) => sourceItem[MODULE_NAME].targets.every((sourceTarget) =>
+            sourceTarget.doesTargetInclude(sourceItem, thing))
         )
         .forEach((sourceItem) => sourceItem[MODULE_NAME].bonuses.forEach((bonusType) => func(bonusType, sourceItem)));
 }
@@ -133,8 +133,8 @@ export const handleBonusTypeFor = (thing, specificBonusType, func, { skipGeneric
         .flatMap((targetType) => targetType.getSourcesFor(thing))
         // filter down to unique items in case one source item is affecting this target item through multiple "targets"
         .filter((sourceItem, i, self) => self.findIndex((nestedTarget) => sourceItem.id === nestedTarget.id) === i)
-        .filter((sourceItem) => sourceItem[MODULE_NAME].targets.every((baseTarget) =>
-            (!skipGenericTarget || !baseTarget.isGenericTarget) && baseTarget.doesTargetInclude(sourceItem, thing))
+        .filter((sourceItem) => sourceItem[MODULE_NAME].targets.every((sourceTarget) =>
+            sourceTarget.doesTargetInclude(sourceItem, thing))
         )
         .forEach((sourceItem) => sourceItem[MODULE_NAME].bonuses.forEach((bonusType) => {
             if (bonusType === specificBonusType) {
