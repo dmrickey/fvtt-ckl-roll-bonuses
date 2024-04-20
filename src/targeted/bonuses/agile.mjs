@@ -6,32 +6,32 @@ export class AgileBonus extends BaseBonus {
 
     /**
      * @override
+     * @inheritdoc
      * @returns { string }
      */
     static get sourceKey() { return 'agile'; }
 
     /**
      * @override
+     * @inheritdoc
      * @returns {string}
      */
     static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.PiyJbkTuzKHugPSk#agile'; }
 
     /**
-     * Get Item Hints tooltip value
-     *
      * @override
-     * @param {ItemPF} source The source of the bonus
-     * @param {(ActionUse | ItemPF | ItemAction)?} [target] The target for contextually aware hints
+     * @inheritdoc
+     * @param {ItemPF} _source The source of the bonus
+     * @param {(ActionUse | ItemPF | ItemAction)?} [_target] The target for contextually aware hints
      * @returns {Nullable<string[]>}
      */
-    static getHints(source, target = undefined) {
+    static getHints(_source, _target = undefined) {
         return [this.label];
     }
 
     /**
-     * Add damage bonus to actor's Combat damage column tooltip
-     *
      * @override
+     * @inheritdoc
      * @param {ItemPF} source
      * @returns {ItemChange[]}
      */
@@ -73,6 +73,7 @@ export class AgileBonus extends BaseBonus {
 
     /**
      * @override
+     * @inheritdoc
      * @param {ItemPF} item
      * @param {RollData} rollData
      */
@@ -85,6 +86,7 @@ export class AgileBonus extends BaseBonus {
 
     /**
      * @override
+     * @inheritdoc
      * @param {object} options
      * @param {ActorPF | null} options.actor
      * @param {HTMLElement} options.html
@@ -105,6 +107,7 @@ export class AgileBonus extends BaseBonus {
 
     /**
      * @override
+     * @inheritdoc
      * @param {ItemPF} source The source of the bonus
      * @param {(ActionUse | ItemPF | ItemAction)?} [item] The item receiving the bonus for contextually aware hints.
      * @returns {string[]}
@@ -113,6 +116,7 @@ export class AgileBonus extends BaseBonus {
 
     /**
      * @override
+     * @inheritdoc
      * @param {ItemPF} _source
      * @param {ItemActionRollAttackHookArgs} seed
      * @param {ItemAction} _action
