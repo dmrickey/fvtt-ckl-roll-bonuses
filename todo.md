@@ -176,5 +176,4 @@
   - finish implementing stacking vs non-stacking enhancement bonus
 - Verify
   - Has Boolean Flag Target
-  - When Active Target
   - Target Token Inversion option

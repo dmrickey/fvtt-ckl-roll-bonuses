@@ -2,12 +2,16 @@ import { MODULE_NAME } from '../../../consts.mjs';
 import { ItemTarget } from "../item-target.mjs";
 
 export class WhenActiveTarget extends ItemTarget {
+
+    /** @type {ItemType[]} */
+    static itemTypes = ['buff', 'equipment', 'weapon', 'feat'];
+
     /**
      * @override
      * @inheritdoc
      * @returns {(item: ItemPF) => boolean}
      */
-    static get itemFilter() { return (/** @type {ItemPF} */ item) => ['buff', 'equipment', 'weapon'].includes(item.type); }
+    static get itemFilter() { return (/** @type {ItemPF} */ item) => this.itemTypes.includes(item.type); }
 
     /**
      * @override
