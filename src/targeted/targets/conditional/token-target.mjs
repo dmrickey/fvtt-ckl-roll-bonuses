@@ -55,11 +55,16 @@ export class TokenTarget extends BaseTarget {
         }
 
         const isInverted = !!source.getFlag(MODULE_NAME, this.#inversionKey);
-        const targets = intersection(savedTargets, this.#currentTargetUuids);
-        return [
-            isInverted ? localize('any-target-except') : '',
-            ...targets.map((target) => fromUuidSync(target)?.name)
-        ].filter(truthiness);
+
+        if (isInverted) {
+            return [
+                localize('any-target-except'),
+                ...savedTargets.map((uuid) => fromUuidSync(uuid)?.name)
+            ].filter(truthiness);
+        } {
+            const targets = intersection(savedTargets, this.#currentTargetUuids);
+            return targets.map((target) => fromUuidSync(target)?.name).filter(truthiness);
+        }
     }
 
     /**
@@ -87,7 +92,7 @@ export class TokenTarget extends BaseTarget {
             const savedTargets = source.getFlag(MODULE_NAME, this.key) ?? [];
             const isInverted = !!source.getFlag(MODULE_NAME, this.#inversionKey);
             return isInverted
-                ? difference(this.#currentTargetUuids, savedTargets)
+                ? difference(this.#currentTargetUuids, savedTargets).length
                 : intersects(this.#currentTargetUuids, savedTargets);
         });
 

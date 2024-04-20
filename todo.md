@@ -174,5 +174,3 @@
   - Adding enh during item prep so I have a value that I can update for when multiple things are adding an enhancement bonus to a single target
 - Ammo and enhancement bonus
   - finish implementing stacking vs non-stacking enhancement bonus
-- Verify
-  - Target Token Inversion option
