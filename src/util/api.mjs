@@ -21,7 +21,9 @@ class Api {
 
     SpecificBonuses = () => { };
 
-    util = {};
+    utils = {
+        array: {},
+    };
 }
 
 const _api = new Api();

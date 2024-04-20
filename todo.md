@@ -175,5 +175,4 @@
 - Ammo and enhancement bonus
   - finish implementing stacking vs non-stacking enhancement bonus
 - Verify
-  - Has Boolean Flag Target
   - Target Token Inversion option

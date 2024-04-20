@@ -1,3 +1,4 @@
+import { api } from './api.mjs';
 import { MODULE_NAME } from '../consts.mjs';
 import { registerSetting } from './settings.mjs';
 
@@ -17,3 +18,5 @@ const ifDebug = (func) => {
 };
 
 export { ifDebug };
+
+api.utils.ifDebug = ifDebug;

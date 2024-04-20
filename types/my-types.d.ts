@@ -32,7 +32,10 @@ declare global {
         };
         SpecificBonuses: typeof SpecificBonuses;
         targetTypeMap: Record<string, typeof BaseTarget>;
-        util: Record<string, (...args) => any>;
+        utils:
+            | { array: Record<string, (...args) => any> }
+            | Record<string, (...args) => any>
+            | any;
     }
 
     interface IdObject {

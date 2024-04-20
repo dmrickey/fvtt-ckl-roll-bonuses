@@ -1,4 +1,5 @@
 import { MODULE_NAME } from "../consts.mjs";
+import { api } from './api.mjs';
 import { difference, intersection } from './array-intersects.mjs';
 import { ifDebug } from './if-debug.mjs';
 import { truthiness } from "./truthiness.mjs";
@@ -140,7 +141,19 @@ export {
     hasDFlag,
 }
 
+api.utils.countBFlags = countBFlags;
+api.utils.getDocDFlags = getDocDFlags;
+api.utils.getDocDFlagsStartsWith = getDocDFlagsStartsWith;
+api.utils.getDocFlags = getDocFlags;
+api.utils.hasAnyBFlag = hasAnyBFlag;
+api.utils.hasDFlag = hasDFlag;
+
 export class KeyedDFlagHelper {
+
+    static {
+        api.utils.KeyedDFlagHelper = KeyedDFlagHelper;
+    }
+
     /** @type {{[key: string]: FlagValue[]}} */
     #byFlag = {};
 
@@ -303,6 +316,11 @@ export class KeyedDFlagHelper {
 }
 
 export class FormulaCacheHelper {
+
+    static {
+        api.utils.FormulaCacheHelper = FormulaCacheHelper;
+    }
+
     /** @type {string[]} */
     static #dictionaryFlags = [];
     /** @type {string[]} */

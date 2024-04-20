@@ -1,3 +1,5 @@
+import { api } from './api.mjs';
+
 /**
  * Reduces array of simple types to unique values
  * @template T
@@ -5,3 +7,5 @@
  * @returns {T[]} Array of distinct values from array
  */
 export const uniqueArray = x => [...new Set(x || [])];
+
+api.utils.array.uniqueArray = uniqueArray;
