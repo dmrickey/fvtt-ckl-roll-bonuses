@@ -13,7 +13,7 @@ Hooks.once('ready', () =>
 );
 
 class Settings {
-    static get snakeSidewind() { return LanguageSettings.getTranslation(fatesFavored); }
+    static get fatesFavored() { return LanguageSettings.getTranslation(fatesFavored); }
 
     static {
         LanguageSettings.registerItemNameTranslation(fatesFavored);
@@ -78,7 +78,7 @@ Hooks.on('renderItemSheet', (
 
     const hasFlag = item.system.flags.boolean?.hasOwnProperty(fatesFavored);
     if (!hasFlag) {
-        if (name === Settings.snakeSidewind) {
+        if (name === Settings.fatesFavored) {
             item.update({ [`system.flags.boolean.${fatesFavored}`]: true });
         }
         return;
