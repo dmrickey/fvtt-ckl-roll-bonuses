@@ -168,6 +168,4 @@
   - changes are generated and applied too early and too broadly in the system prep. I can either create a change that applies to everything (pointless) or I can create a specific change that exists for the specified target, but it's created too late to both be reduced to the best bonus type and actually be added to the roll
 
 # This release must include
-- Investigate
-  - Add limit to checklist
-  - Add subtext to checklist (could potentially default to the tooltip hint)
+- doublecheck "all bonuses" buff

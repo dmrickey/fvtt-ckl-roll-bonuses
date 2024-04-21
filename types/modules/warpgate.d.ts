@@ -21,6 +21,7 @@ declare global {
             },
             config: {
                 title: string;
+                render?: (args: HTMLElement[]) => void;
             }
         ): Promise<{ inputs: (string | boolean)[]; buttons: boolean }>;
     }

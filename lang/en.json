@@ -183,7 +183,7 @@
         "crit-offset": "Crit Offset",
         "dc-label-mod": "{mod} DC ({label})",
         "dc-mod": "{mod} DC",
-        "driver": "Profession (driver)",
+        "driver": "Profession (Driver)",
         "enh-mod-stacks": "{mod} Enhancement Bonus (Stacks)",
         "enh-mod": "Enhancement Bonus -> {mod}",
         "effective-size": {
@@ -253,6 +253,7 @@
             }
         },
         "versatile-training": {
+            "description": "Choose two skills to use BAB instead of their ranks.",
             "header": "Versatile Training",
             "hint": "{skills}",
             "skillTip": "Versatile Training - uses BAB ({bab}) instead of ranks",

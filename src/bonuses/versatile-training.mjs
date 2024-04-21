@@ -217,9 +217,11 @@ Hooks.on('renderItemSheet', (
         isModuleFlag: true,
     });
     showChecklist({
+        description: localize('versatile-training.description'),
         item,
         journal,
         key: selectedKey,
+        limit: 2,
         options: skillChoices,
         parent: html,
     }, {
