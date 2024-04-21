@@ -173,4 +173,3 @@
   - Add subtext to checklist (could potentially default to the tooltip hint)
   - Add functions to add external bonus sources / specific bonuses
   - Figure out if there's a way to trigger data prep when an external bonus is added
-- Make hints hide for sources that have only generic bonuses while making sure hints still show on specified targets that have both generic and non-generic targets

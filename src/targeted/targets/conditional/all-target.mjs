@@ -37,6 +37,12 @@ export class AllTarget extends BaseTarget {
     static get isConditionalTarget() { return true; }
 
     /**
+     * @override
+     * @inheritdoc
+     */
+    static get isGenericTarget() { return true; }
+
+    /**
      * @inheritdoc
      * @override
      * @param {object} options
