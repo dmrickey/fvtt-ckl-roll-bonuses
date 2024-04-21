@@ -118,9 +118,13 @@ registerItemHint((hintcls, _actor, item, _data) => {
         return;
     }
 
+    // @ts-ignore
+    const match = icons[currentElement];
     const label = pf1.registry.damageTypes.get(`${currentElement}`) ?? currentElement;
 
-    const hint = hintcls.create(label.name, [], {});
+    const hint = match
+        ? hintcls.create('', [match.css], { hint: label.name, icon: match.icon })
+        : hintcls.create(label.name, [], {});
     return hint;
 });
 
@@ -214,12 +218,10 @@ Hooks.on('renderItemSheet', (
         }
     }
 
-    const current = getDocDFlags(item, key)[0];
     const choices = Object.keys(elements).map((key) => ({ key, label: elements[key].name }));
 
     keyValueSelect({
         choices,
-        current,
         item,
         journal,
         key,

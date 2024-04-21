@@ -40,11 +40,22 @@ export class BaseSource {
     static get label() { return localizeBonusLabel(this.sourceKey); }
 
     /**
+     * Prepare data on any item so that it can be referenced by a source later
+     *
      * @abstract
      * @param {ItemPF} item
      * @param {RollData} rollData
      */
-    static prepareData(item, rollData) { }
+    static prepareBaseData(item, rollData) { }
+
+    /**
+     * Prepare data on the source that it needs to reference later
+     *
+     * @abstract
+     * @param {ItemPF} item
+     * @param {RollData} rollData
+     */
+    static prepareSourceData(item, rollData) { }
 
     /**
      * @abstract
@@ -59,7 +70,12 @@ export class BaseSource {
     /** @abstract @returns { string } */
     static get sourceBaseType() { throw new Error('must be overridden'); }
 
-    /** @abstract @returns { boolean } */
+    /**
+     * Whether or not this Source should be available in the picker application
+     *
+     * @abstract
+     * @returns { boolean }
+     */
     static get skipPicker() { return false; }
 
     /** @abstract @returns { string } */

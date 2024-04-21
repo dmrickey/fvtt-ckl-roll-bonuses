@@ -1,8 +1,8 @@
-import { MODULE_NAME } from "../../consts.mjs";
-import { keyValueSelect } from '../../handlebars-handlers/bonus-inputs/key-value-select.mjs';
-import { localize } from '../../util/localize.mjs';
-import { truthiness } from '../../util/truthiness.mjs';
-import { BaseTarget } from "./base-target.mjs";
+import { MODULE_NAME } from "../../../consts.mjs";
+import { keyValueSelect } from '../../../handlebars-handlers/bonus-inputs/key-value-select.mjs';
+import { localize } from '../../../util/localize.mjs';
+import { truthiness } from '../../../util/truthiness.mjs';
+import { BaseTarget } from "../base-target.mjs";
 
 // todo doesn't exist until v10
 // /** @type {Record<string, string>} */
@@ -39,7 +39,7 @@ export class AlignmentTarget extends BaseTarget {
      * @override
      * @returns {string}
      */
-    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.iurMG1TBoX3auh5z#alignment'; }
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.IpRhJqZEX2TUarSX#alignment'; }
 
     /**
      * @override
@@ -116,6 +116,12 @@ export class AlignmentTarget extends BaseTarget {
 
         return bonusSources;
     }
+
+    /**
+     * @override
+     * @inheritdoc
+     */
+    static get isConditionalTarget() { return true; }
 
     /**
      * @override

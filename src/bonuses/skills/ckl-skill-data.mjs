@@ -37,7 +37,7 @@ export class CklSkillData {
     /**
      *
      * @param {ActorPF} actor
-     * @param {string} skillId
+     * @param {keyof typeof pf1.config.skills} skillId
      * @param {Partial<CklSkillData>} data
      * @returns
      */
@@ -46,7 +46,7 @@ export class CklSkillData {
     /**
      *
      * @param {ActorPF} actor
-     * @param {string} skillId
+     * @param {keyof typeof pf1.config.skills} skillId
      */
     static async showSkillDataDialog(actor, skillId) {
         const data = this.getSkillData(actor, skillId);
@@ -70,7 +70,8 @@ export class CklSkillData {
 
         const title = pf1.config.skills[skillId]
             || actor.system.skills[skillId]?.name
-            || actor.system.skills[skillId.split('.')[0]].subSkills?.[skillId.split('.').at(-1) ?? '']?.name;
+            || actor.system.skills[skillId.split('.')[0]].subSkills?.[skillId.split('.').at(-1) ?? '']?.name
+            || '';
         const { inputs: output, buttons: result } = await warpgate.menu({ buttons, inputs }, { title });
         if (result) {
             const bonus = `${output[1]}`?.trim() || '';

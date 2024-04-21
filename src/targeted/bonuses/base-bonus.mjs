@@ -18,27 +18,30 @@ export class BaseBonus extends BaseSource {
      *
      * @abstract
      * @param {ItemPF} source
+     * @param {ActionUse | ItemAction} action The thing for the source is being applied to for contextually aware bonuses
      * @returns {Nullable<ItemConditional>}
      */
-    static getConditional(source) { return null; }
+    static getConditional(source, action) { return null; }
 
     /**
      * Add damage bonus to actor's Combat damage column tooltip
      *
      * @abstract
      * @param {ItemPF} source
+     * @param {ItemAction} action The thing for the source is being applied to for contextually aware bonuses
      * @returns {ItemChange[]}
      */
-    static getDamageSourcesForTooltip(source) { return []; }
+    static getDamageSourcesForTooltip(source, action) { return []; }
 
     /**
      * Add attack bonus to actor's Combat attacks column tooltip
      *
      * @abstract
      * @param {ItemPF} source
+     * @param {ItemPF} item The thing for the source is being applied to for contextually aware bonuses
      * @returns {ModifierSource[]}
      */
-    static getAttackSourcesForTooltip(source) { return []; }
+    static getAttackSourcesForTooltip(source, item) { return []; }
 
     /**
      * Alters roll data for attack rolls - for simple changes that don't need an ItemConditional/Modifier or ItemChange
@@ -63,22 +66,21 @@ export class BaseBonus extends BaseSource {
     /**
      * @abstract
      * @param {ItemPF} _source
-     * @param {ItemActionRollAttackHookArgs} seed
+     * @param {ItemActionRollAttackHookArgs} _seed
      * @param {ItemAction} _action
      * @param {RollData} _data
-     * @returns {ItemActionRollAttackHookArgs}
      */
-    static itemActionRollAttack(_source, seed, _action, _data) { return seed; }
+    static itemActionRollAttack(_source, _seed, _action, _data) { }
 
     /**
      * @abstract
      * @param {ItemPF} _source
-     * @param {ItemActionRollAttackHookArgs} seed
+     * @param {ItemActionRollAttackHookArgs} _seed
      * @param {ItemAction} _action
      * @param {RollData} _data
-     * @returns {ItemActionRollAttackHookArgs}
+     * @param {number} _index
      */
-    static itemActionRollDamage(_source, seed, _action, _data) { return seed; }
+    static itemActionRollDamage(_source, _seed, _action, _data, _index) { }
 
     /**
      * Returns true the targeting is too generic to show a hint on a specific item

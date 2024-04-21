@@ -1,11 +1,11 @@
 import { MODULE_NAME } from "../consts.mjs";
+import { api } from './api.mjs';
 import { difference, intersection } from './array-intersects.mjs';
 import { ifDebug } from './if-debug.mjs';
 import { truthiness } from "./truthiness.mjs";
 
-// todo update to use actor.itemFlags.dictionary or item.system.flags.dictionary
-//   can't really do this an support the same feat with different bonuses
 /**
+ * Get the matching dictionary flag from the given document
  *
  * @param {BaseDocument | undefined | null} doc - Item or Actor
  * @param {string} key
@@ -33,7 +33,7 @@ const getDocDFlags = (doc, key, { includeInactive = true } = {}) => {
 }
 
 /**
- * Get Document flags
+ * Get the matching module flag from the given document
  *
  * @param {BaseDocument | undefined | null} doc - Item or Actor
  * @param {string} key
@@ -58,6 +58,8 @@ const getDocFlags = (doc, key, { includeInactive = false } = {}) => {
 }
 
 /**
+ * Return any dictionary flags on the document that start with the given partial string
+ *
  * @param {BaseDocument} doc
  * @param {...string} keyStarts
  * @returns {{[key: string]: (number | string)[]}}
@@ -91,7 +93,6 @@ const getDocDFlagsStartsWith = (doc, ...keyStarts) => {
     return found;
 }
 
-// todo swap like individual method
 /**
  * Counts the amount of items that have a given boolean flags
  * @param {EmbeddedCollection<ItemPF>} items
@@ -115,15 +116,23 @@ const countBFlags = (items, ...flags) => {
 }
 
 /**
+ * Whether or not the actor has any of the given boolean flags
  *
  * @param {Nullable<ActorPF>} actor
  * @param  {...string} flags
- * @returns True if the actor has the boolean flag or not.
+ * @returns {boolean} True if the actor has any of the boolean flags.
  */
 const hasAnyBFlag = (
     actor,
     ...flags
 ) => !!actor && flags.some((flag) => !!actor?.itemFlags?.boolean?.[flag]);
+
+/**
+ * @param {ItemPF} item
+ * @param {string} flag
+ * @returns {boolean} True if the item has the dictionary flag.
+ */
+const hasDFlag = (item, flag) => item.system.flags.dictionary?.hasOwnProperty(flag);
 
 export {
     countBFlags,
@@ -131,9 +140,22 @@ export {
     getDocDFlagsStartsWith,
     getDocFlags,
     hasAnyBFlag,
+    hasDFlag,
 }
 
+api.utils.countBFlags = countBFlags;
+api.utils.getDocDFlags = getDocDFlags;
+api.utils.getDocDFlagsStartsWith = getDocDFlagsStartsWith;
+api.utils.getDocFlags = getDocFlags;
+api.utils.hasAnyBFlag = hasAnyBFlag;
+api.utils.hasDFlag = hasDFlag;
+
 export class KeyedDFlagHelper {
+
+    static {
+        api.utils.KeyedDFlagHelper = KeyedDFlagHelper;
+    }
+
     /** @type {{[key: string]: FlagValue[]}} */
     #byFlag = {};
 
@@ -197,7 +219,6 @@ export class KeyedDFlagHelper {
     }
 
     /**
-     *
      * @returns {boolean} - whether or not any flags were found
      */
     hasAnyFlags() {
@@ -205,7 +226,15 @@ export class KeyedDFlagHelper {
     }
 
     /**
-     *
+     * @param {string} flag
+     * @returns {ItemPF[]}
+     */
+    itemsForFlag(flag) {
+        return Object.values(this.#items)
+            .filter((item) => hasDFlag(item, flag));
+    }
+
+    /**
      * @param {string} flag
      * @returns {FlagValue[]}
      */
@@ -289,6 +318,11 @@ export class KeyedDFlagHelper {
 }
 
 export class FormulaCacheHelper {
+
+    static {
+        api.utils.FormulaCacheHelper = FormulaCacheHelper;
+    }
+
     /** @type {string[]} */
     static #dictionaryFlags = [];
     /** @type {string[]} */

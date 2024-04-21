@@ -1,4 +1,5 @@
 import { MODULE_NAME } from "../../../consts.mjs";
+import { api } from '../../../util/api.mjs';
 import { getTokenDisplayName } from "../../../util/get-token-display-name.mjs";
 import { localizeBonusLabel, localizeBonusTooltip } from '../../../util/localize.mjs';
 import { truthiness } from "../../../util/truthiness.mjs";
@@ -60,3 +61,5 @@ export function showTokenInput({
 
     addNodeToRollBonus(parent, div, item, canEdit);
 }
+
+api.inputs.showTokenInput = showTokenInput;

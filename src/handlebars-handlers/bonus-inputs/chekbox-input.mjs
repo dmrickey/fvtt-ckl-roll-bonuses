@@ -1,4 +1,5 @@
 import { MODULE_NAME } from "../../consts.mjs";
+import { api } from '../../util/api.mjs';
 import { localizeBonusLabel, localizeBonusTooltip } from '../../util/localize.mjs';
 import { addNodeToRollBonus } from "../add-bonus-to-item-sheet.mjs";
 import { createTemplate, templates } from "../templates.mjs";
@@ -68,3 +69,5 @@ export function checkboxInput({
 
     addNodeToRollBonus(parent, div, item, canEdit);
 }
+
+api.inputs.checkboxInput = checkboxInput;

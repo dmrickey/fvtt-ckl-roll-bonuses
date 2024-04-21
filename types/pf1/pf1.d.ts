@@ -28,8 +28,13 @@ declare global {
 
     type ActionType = 'msak' | 'mwak' | 'rsak' | 'rwak' | 'mcman' | 'rcman';
 
+    declare type SkillInfo = SkillRollData & {
+        id: keyof typeof pf1.config.skills;
+        name: string;
+    };
     class ActorPF extends BaseDocument {
-        getSkillInfo(skillId: string): SkillRollData;
+        allSkills: Array<keyof typeof pf1.config.skills>;
+        getSkillInfo(skillId: string): SkillInfo;
 
         [MODULE_NAME]: {
             [key: string]: number | string | object | array;
@@ -56,6 +61,11 @@ declare global {
 
         name: string;
 
+        rollSkill(
+            skillId: string,
+            arg1: { skipDialog: boolean }
+        ): Promise<ChatMessagePF>;
+
         system: SystemActorData;
     }
 
@@ -68,6 +78,35 @@ declare global {
         'damage.crit': ConditionalPart[];
         'damage.nonCrit': ConditionalPart[];
         'damage.normal': ConditionalPart[];
+    }
+
+    interface Conditions {
+        bleed: 'Bleed';
+        confused: 'Confused';
+        cowering: 'Cowering';
+        dazed: 'Dazed';
+        dazzled: 'Dazzled';
+        entangled: 'Entangled';
+        exhausted: 'Exhausted';
+        fatigued: 'Fatigued';
+        frightened: 'Frightened';
+        grappled: 'Grappled';
+        helpless: 'Helpless';
+        incorporeal: 'Incorporeal';
+        invisible: 'Invisible';
+        nauseated: 'Nauseated';
+        panicked: 'Panicked';
+        paralyzed: 'Paralyzed';
+        pf1_blind: 'Blind';
+        pf1_deaf: 'Deaf';
+        pf1_prone: 'Prone';
+        pf1_sleep: 'Sleep';
+        pinned: 'Pinned';
+        shaken: 'Shaken';
+        sickened: 'Sickened';
+        squeezing: 'Squeezing';
+        staggered: 'Staggered';
+        stunned: 'Stunned';
     }
 
     interface FlyManeuverabilities {
@@ -102,14 +141,12 @@ declare global {
 
     class ChatAttack {
         action: ItemAction;
-        attackNotes: string[];
-        effectNotes: string[];
-        rollData: RollData;
         attack: D20RollPF;
-
+        attackNotes: string[];
+        critConfirm: D20RollPF;
         d20: Die;
         dice: Die[];
-
+        effectNotes: string[];
         flavor: string;
         formula: string;
         isCrit: boolean;
@@ -122,9 +159,19 @@ declare global {
         isStatic: boolean;
         natural: number;
         result: string;
+        rollData: RollData;
         simplifiedFormula: string;
         total: number;
         totalHalved: number;
+    }
+
+    interface CombatPF {
+        combatants: CombatantPF[];
+        round: number;
+    }
+
+    interface CombatantPF {
+        actorId: string;
     }
 
     class Die {
@@ -138,10 +185,20 @@ declare global {
 
     class D20RollPF<
         T extends RollData = RollData<SystemItemData>
-    > extends RollPF<T> {}
+    > extends RollPF<T> {
+        isCrit: boolean;
+    }
 
     class ChatMessagePF extends BaseDocument {
         content: string;
+        flags?: {
+            pf1?: {
+                subject?: {
+                    skill: keyof typeof pf1.config.skills;
+                };
+            };
+        };
+        roll: D20RollPF;
     }
 
     class CombatantPF {
@@ -274,7 +331,7 @@ declare global {
         };
         id: string;
         img: string;
-        isActive: boolean;
+        get isActive(): boolean;
         isOwner: boolean;
         name: string;
         pack: string;
@@ -337,7 +394,7 @@ declare global {
         /** @deprecated Spells don't have tags */
         tag: string;
     }
-    class ItemWeaponPF extends ItemPF<SystemWeaponPF> {}
+    class ItemWeaponPF extends ItemPF<SystemItemDataWeaponPF> {}
 
     class SkillData {
         ability: keyof Abilities;
@@ -486,36 +543,7 @@ declare global {
                 flatFootedTotal: number;
             };
             cmdNotes: string;
-            conditions: {
-                battered: boolean;
-                bleed: boolean;
-                confused: boolean;
-                cowering: boolean;
-                dazed: boolean;
-                dazzled: boolean;
-                entangled: boolean;
-                exhausted: boolean;
-                fatigued: boolean;
-                frightened: boolean;
-                grappled: boolean;
-                helpless: boolean;
-                incorporeal: boolean;
-                invisible: boolean;
-                nauseated: boolean;
-                panicked: boolean;
-                paralyzed: boolean;
-                pf1_blind: boolean;
-                pf1_deaf: boolean;
-                pf1_prone: boolean;
-                pf1_sleep: boolean;
-                pinned: boolean;
-                shaken: boolean;
-                sickened: boolean;
-                squeezing: boolean;
-                staggered: boolean;
-                stunned: boolean;
-                undefined: boolean;
-            };
+            conditions: Record<keyof Conditions, boolean>;
             damage: {
                 general: number;
                 shared: number;
@@ -554,7 +582,7 @@ declare global {
             maxDexBonus: number;
             naturalAC: number;
             quadruped: false;
-            saveNotes: '';
+            saveNotes: string;
             savingThrows: {
                 fort: { base: number; ability: keyof Abilities; total: number };
                 ref: { base: number; ability: keyof Abilities; total: number };
@@ -593,11 +621,11 @@ declare global {
                 penalty: number;
             };
             wounds: {
-                min: number;
                 base: number;
-                value: number;
                 max: number;
+                min: number;
                 offset: number;
+                value: number;
             };
         };
 
@@ -715,7 +743,9 @@ declare global {
     }
     class SystemItemDataAttackPF extends SystemItemData {
         baseTypes: string[];
+        enh: number;
         // links: { children: { name: string; id: string }[] };
+        masterwork: boolean;
         weaponGroups: TraitSelector<keyof WeaponGroups>?;
     }
     class SystemIteMDataBuffPF extends SystemItemData {}
@@ -742,7 +772,7 @@ declare global {
         /** @deprecated use until v10 (then use @see {descriptors} ) */
         types: string;
     }
-    class SystemWeaponPF extends SystemItemData {
+    class SystemItemDataWeaponPF extends SystemItemData {
         baseTypes: string[];
         enh: number;
         // links: { children: { name: string; id: string }[] };
@@ -791,7 +821,137 @@ declare global {
         cp: number;
     }
     interface AttributeRollData {
-        // todo
+        ac: {
+            flatFooted: { total: number };
+            normal: { ability: keyof Abilities; total: number };
+            touch: { ability: keyof Abilities; total: number };
+        };
+        acNotes: string;
+        acp: {
+            armorBonus: number;
+            attackPenalty: number;
+            encumbrance: number;
+            gear: number;
+            shieldBonus: number;
+            total: number;
+        };
+        attack: {
+            critConfirm: number;
+            general: number;
+            melee: number;
+            meleeAbility: keyof Abilities;
+            ranged: number;
+            rangedAbility: keyof Abilities;
+            shared: number;
+        };
+        bab: {
+            total: number;
+            value: number;
+        };
+        clCheck: boolean;
+        cmb: {
+            bonus: number;
+            total: number;
+            value: number;
+        };
+        cmbAbility: keyof Abilities;
+        cmd: {
+            strAbility: keyof Abilities;
+            dexAbility: keyof Abilities;
+            total: number;
+            flatFootedTotal: number;
+        };
+        cmdNotes: string;
+        conditions: Record<keyof Conditions, boolean>;
+        damage: {
+            general: number;
+            shared: number;
+            spell: number;
+            weapon: number;
+        };
+        encumbrance: {
+            carriedWeight: number;
+            level: number;
+            levels: {
+                carry: number;
+                drag: number;
+                heavy: number;
+                light: number;
+                medium: number;
+            };
+        };
+        energyDrain: number;
+        hd: { total: number };
+        hp: {
+            base: number;
+            max: number;
+            nonlethal: number;
+            offset: number;
+            temp: number;
+            value: number;
+        };
+        hpAbility: keyof Abilities;
+        init: {
+            ability: keyof Abilities;
+            bonus: number;
+            total: number;
+            value: number;
+        };
+        mDex: {
+            armorBonus: number;
+            shieldBonus: number;
+        };
+        maxDexBonus: number;
+        naturalAC: number;
+        quadruped: boolean;
+        saveNotes: string;
+        savingThrows: {
+            fort: { base: number; ability: keyof Abilities; total: number };
+            ref: { base: number; ability: keyof Abilities; total: number };
+            will: { base: number; ability: keyof Abilities; total: number };
+        };
+        speed: {
+            burrow: { base: number; total: number };
+            climb: { base: number; total: number };
+            fly: {
+                base: number;
+                maneuverability: keyof FlyManeuverabilities;
+                total: number;
+            };
+            land: { base: number; total: number };
+            swim: { base: number; total: number };
+        };
+        spells: {
+            spellbooks: Record<
+                SpellbookKey,
+                SpellbookData & { abilityMod: number }
+            >;
+            usedSepllbooks: SpellbookKey[];
+        };
+        sr: { formula: string; total: number };
+        srNotes: string;
+        vigor: {
+            base: number;
+            max: number;
+            min: number;
+            offset: number;
+            temp: number;
+            value: number;
+        };
+        woundThresholds: {
+            level: number;
+            mod: number;
+            override: number;
+            penaltyBase: number;
+            penalty: number;
+        };
+        wounds: {
+            base: number;
+            max: number;
+            min: number;
+            offset: number;
+            value: number;
+        };
     }
     interface ClassRollData {
         bab: 'low' | 'med' | 'high';
@@ -979,7 +1139,7 @@ declare global {
             type: number;
         };
         size: number;
-        skills: Record<string, SkillRollData>;
+        skills: Record<keyof typeof pf1.config.skills, SkillRollData>;
         spells: Record<string, SpellBookRollData>;
         traits: TraitsRollData;
         // [key: string]: any,
@@ -1374,6 +1534,8 @@ declare global {
             };
         };
         config: {
+            backgroundOnlySkills: (keyof typeof pf1.config.skills)[];
+            conditions: Conditions;
             conditionalTargets: {
                 attack: {
                     _label: 'Attack Rolls';
@@ -1425,7 +1587,45 @@ declare global {
             };
             savingThrows: SavingThrows;
             skillCompendiumEntries: { [key: string]: string };
-            skills;
+            skills: {
+                acr: 'Acrobatics';
+                apr: 'Appraise';
+                art: 'Artistry';
+                blf: 'Bluff';
+                clm: 'Climb';
+                crf: 'Craft';
+                dev: 'Disable Device';
+                dip: 'Diplomacy';
+                dis: 'Disguise';
+                esc: 'Escape Artist';
+                fly: 'Fly';
+                han: 'Handle Animal';
+                hea: 'Heal';
+                int: 'Intimidate';
+                kar: 'Knowledge (Arcana)';
+                kdu: 'Knowledge (Dungeoneering)';
+                ken: 'Knowledge (Engineering)';
+                kge: 'Knowledge (Geography)';
+                khi: 'Knowledge (History)';
+                klo: 'Knowledge (Local)';
+                kna: 'Knowledge (Nature)';
+                kno: 'Knowledge (Nobility)';
+                kpl: 'Knowledge (Planes)';
+                kre: 'Knowledge (Religion)';
+                lin: 'Linguistics';
+                lor: 'Lore';
+                per: 'Perception';
+                prf: 'Perform';
+                pro: 'Profession';
+                rid: 'Ride';
+                sen: 'Sense Motive';
+                slt: 'Sleight of Hand';
+                spl: 'Spellcraft';
+                ste: 'Stealth';
+                sur: 'Survival';
+                swm: 'Swim';
+                umd: 'Use Magic Device';
+            };
             spellSchools: { [key: string]: string };
             weaponGroups: WeaponGroups;
         };

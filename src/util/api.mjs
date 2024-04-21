@@ -5,7 +5,25 @@ class Api {
     bonusTypeMap = {};
     sources = {};
     targetTypeMap = {};
-    migrate = async () => { };
+    migrate = {
+        migrate: async () => { },
+        v1: {
+            migrateAmmoForActor: async () => { },
+        },
+    };
+
+    applications = {};
+    config = {
+        versatileTraining: {},
+    }
+
+    inputs = {};
+
+    SpecificBonuses = () => { };
+
+    utils = {
+        array: {},
+    };
 }
 
 const _api = new Api();

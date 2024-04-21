@@ -1,8 +1,12 @@
 interface Game {
     actors: EmbeddedCollection<ActorPF>;
-    /**
-     * @remarks Initialized between the `"setup"` and `"ready"` hook events.
-     */
+
+    combats: {
+        /** Gets the combat for the current scene */
+        active: CombatPF | undefined;
+    };
+
+    /** @remarks Initialized between the `"setup"` and `"ready"` hook events. */
     items?: EmbeddedCollection<ItemPF>;
 
     /**
@@ -14,6 +18,9 @@ interface Game {
         get(moduleId: string): {
             active?: boolean;
             api?: any;
+
+            /** mod is fully ready and the api can be used safely */
+            ready?: boolean;
         };
     };
 

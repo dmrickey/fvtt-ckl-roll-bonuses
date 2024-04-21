@@ -2,6 +2,7 @@ import { showEnabledLabel } from '../handlebars-handlers/enabled-label.mjs';
 import { hasAnyBFlag } from '../util/flag-helpers.mjs';
 import { LocalHookHandler, customGlobalHooks, localHooks } from '../util/hooks.mjs';
 import { localizeBonusLabel } from '../util/localize.mjs';
+import { LanguageSettings } from '../util/settings.mjs';
 import { SpecificBonuses } from './all-specific-bonuses.mjs';
 
 const fatesFavored = 'fates-favored';
@@ -10,6 +11,14 @@ const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalE
 Hooks.once('ready', () =>
     SpecificBonuses.registerSpecificBonus({ journal, key: fatesFavored, type: 'boolean' })
 );
+
+class Settings {
+    static get fatesFavored() { return LanguageSettings.getTranslation(fatesFavored); }
+
+    static {
+        LanguageSettings.registerItemNameTranslation(fatesFavored);
+    }
+}
 
 /**
  * @param {number | string} value
@@ -65,10 +74,16 @@ Hooks.on('renderItemSheet', (
 ) => {
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
+    const name = item?.name?.toLowerCase() ?? '';
+
     const hasFlag = item.system.flags.boolean?.hasOwnProperty(fatesFavored);
     if (!hasFlag) {
+        if (name === Settings.fatesFavored) {
+            item.update({ [`system.flags.boolean.${fatesFavored}`]: true });
+        }
         return;
     }
+
     showEnabledLabel({
         item,
         journal,

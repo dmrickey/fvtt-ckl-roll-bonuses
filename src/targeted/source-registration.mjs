@@ -3,6 +3,8 @@ import { api } from '../util/api.mjs';
 export class Sources {
 
     /**
+     * Registers a targeted bonus/target source into the API
+     *
      * @param {RollBonusesAPI['sources']['BaseSource']} source
      */
     static registerSource(source) {
@@ -14,5 +16,9 @@ export class Sources {
             const target = /** @type {RollBonusesAPI['sources']['BaseTarget']} */ (/** @type {unknown} */ (source));
             api.targetTypeMap[source.key] = target;
         }
+    }
+
+    static {
+        api.utils.registerSource = Sources.registerSource;
     }
 }

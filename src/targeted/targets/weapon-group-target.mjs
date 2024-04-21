@@ -1,7 +1,6 @@
 import { MODULE_NAME } from "../../consts.mjs";
-import { showChecklist } from "../../handlebars-handlers/targeted/targets/checked-items-input.mjs";
+import { showChecklist } from "../../handlebars-handlers/targeted/targets/checklist-input.mjs";
 import { intersects } from "../../util/array-intersects.mjs";
-import { localize } from "../../util/localize.mjs";
 import { truthiness } from "../../util/truthiness.mjs";
 import { uniqueArray } from "../../util/unique-array.mjs";
 import { BaseTarget } from "./base-target.mjs";

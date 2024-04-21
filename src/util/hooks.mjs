@@ -16,6 +16,9 @@ export const customGlobalHooks = /** @type {const} */ ({
 });
 
 export const localHooks = /** @type {const} */ ({
+    actorGetSkillInfo: `${MODULE_NAME}_actorGetSkillInfo`,
+    actorRollSkill: `${MODULE_NAME}_actorRollSkill`,
+    chatAttackAddAttack: `${MODULE_NAME}_chatAttackAddAttack`,
     itemActionCritRangeWrapper: `${MODULE_NAME}_itemActionCritRangeWrapper`,
     itemActionRollAttack: `${MODULE_NAME}_itemActionRollAttack`,
     itemActionRollDamage: `${MODULE_NAME}_itemActionRollDamage`,
@@ -33,6 +36,27 @@ export const localHooks = /** @type {const} */ ({
 const handlers = {};
 
 export class LocalHookHandler {
+
+    /**
+     * @overload
+     * @param {typeof localHooks.actorGetSkillInfo} hook
+     * @param {(skillInfo: SkillInfo, actor: ActorPF, rollData: RollData) => void} func
+     * @returns {void}
+     */
+
+    /**
+     * @overload
+     * @param {typeof localHooks.actorRollSkill} hook
+     * @param {(seed: { skillId: keyof typeof pf1.config.skills, options: object }, actor: ActorPF) => void} func
+     * @returns {void}
+     */
+
+    /**
+     * @overload
+     * @param {typeof localHooks.chatAttackAddAttack} hook
+     * @param {(chatAttack: ChatAttack,  args: { noAttack: boolean, bonus: unknown, extraParts: unknown[], critical: boolean, conditionalParts: object }) => Promise<void>} func
+     * @returns {void}
+     */
 
     /**
      * @overload
@@ -72,14 +96,14 @@ export class LocalHookHandler {
     /**
      * @overload
      * @param {typeof localHooks.itemActionRollAttack} hook
-     * @param {(seed: ItemActionRollAttackHookArgs, action: ItemAction, data: RollData) => Promise<ItemActionRollAttackHookArgs>} func
+     * @param {(seed: ItemActionRollAttackHookArgs, action: ItemAction, data: RollData) => void} func
      * @returns {void}
      */
 
     /**
      * @overload
      * @param {typeof localHooks.itemActionRollDamage} hook
-     * @param {(seed: ItemActionRollAttackHookArgs, action: ItemAction, data: RollData) => Promise<ItemActionRollAttackHookArgs>} func
+     * @param {(seed: ItemActionRollAttackHookArgs, action: ItemAction, data: RollData, index: number) => void} func
      * @returns {void}
      */
 
@@ -149,6 +173,44 @@ export class LocalHookHandler {
 
     /**
      * @overload
+     * @param {typeof localHooks.chatAttackAddAttack} hook
+     * @param {ChatAttack} chatAttack
+     * @param {{ noAttack: boolean, bonus: unknown, extraParts: unknown[], critical: boolean, conditionalParts: object }} args
+     * @returns {Promise<void>}
+     */
+
+    /**
+     * @param {Hook} hook
+     * @param {...any} args
+     * @returns {Promise<void>}
+     */
+    static async fireHookNoReturnAsync(hook, ...args) {
+        const funcs = handlers[hook] || [];
+
+        for (const func of funcs) {
+            await func(...args);
+        }
+    }
+
+    /**
+     * @overload
+     * @param {typeof localHooks.actorGetSkillInfo} hook
+     * @param {SkillInfo} skillInfo
+     * @param {ActorPF} actor
+     * @param {RollData} rollData
+     * @returns {void}
+     */
+
+    /**
+     * @overload
+     * @param {typeof localHooks.actorRollSkill} hook
+     * @param {{ skillId: keyof typeof pf1.config.skills, options: object }} seed
+     * @param {ActorPF} actor
+     * @returns {void}
+     */
+
+    /**
+     * @overload
      * @param {typeof localHooks.itemActionRollAttack} hook
      * @param {ItemActionRollAttackHookArgs} seed
      * @param {ItemAction} action
@@ -162,6 +224,7 @@ export class LocalHookHandler {
      * @param {ItemActionRollAttackHookArgs} seed
      * @param {ItemAction} action
      * @param {RollData} data
+     * @param {number} index
      * @returns {void}
      */
 

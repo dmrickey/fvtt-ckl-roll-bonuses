@@ -10,23 +10,24 @@ export class SelfTarget extends BaseTarget {
 
     /**
      * @override
+     * @inheritdoc
      * @returns {string}
      */
     static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.iurMG1TBoX3auh5z#self'; }
 
     /**
-     * @inheritdoc
      * @override
-     * @param {ItemPF} source
+     * @inheritdoc
+     * @param {ItemPF} _source
      * @returns {Nullable<string[]>}
      */
-    static getHints(source) {
+    static getHints(_source) {
         return [this.label];
     }
 
     /**
-     * @inheritdoc
      * @override
+     * @inheritdoc
      */
     static get isGenericTarget() { return true; }
 

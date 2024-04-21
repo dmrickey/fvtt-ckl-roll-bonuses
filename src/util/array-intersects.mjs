@@ -1,3 +1,5 @@
+import { api } from './api.mjs';
+
 /**
  * @param {any[]} a
  * @param {any[]} b
@@ -35,3 +37,7 @@ export const difference = (a, b) => {
     const diff = [...setA].filter(x => !setB.has(x));
     return diff;
 }
+
+api.utils.array.difference = difference;
+api.utils.array.intersects = intersects;
+api.utils.array.intersection = intersection;

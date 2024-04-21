@@ -94,12 +94,12 @@ export class DamageBonus extends BaseBonus {
 
     /**
      * @override
-     * @param {ItemPF} target
+     * @param {ItemPF} source
      * @returns {Nullable<ItemConditional>}
      */
-    static getConditional(target) {
-        const damages = this.#getCachedDamageBonuses(target);
-        const conditional = this.#createConditional(damages, target.name);
+    static getConditional(source) {
+        const damages = this.#getCachedDamageBonuses(source);
+        const conditional = this.#createConditional(damages, source.name);
         return conditional.modifiers?.length
             ? conditional
             : null;
@@ -107,14 +107,14 @@ export class DamageBonus extends BaseBonus {
 
     /**
      * @override
-     * @param {ItemPF} target
+     * @param {ItemPF} source
      * @returns {ItemChange[]}
      */
-    static getDamageSourcesForTooltip(target) {
+    static getDamageSourcesForTooltip(source) {
         /** @type {ItemChange[]} */
         let sources = [];
 
-        const conditional = this.getConditional(target);
+        const conditional = this.getConditional(source);
         if (!conditional) {
             return sources;
         }

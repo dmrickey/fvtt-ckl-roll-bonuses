@@ -125,7 +125,6 @@ Hooks.on('renderItemSheet', (
         return;
     }
 
-    const current = item.getItemDictionaryFlag(key);
     const choices = isEditable && actor
         ? uniqueArray(actor.items
             ?.filter(
@@ -138,7 +137,6 @@ Hooks.on('renderItemSheet', (
 
     stringSelect({
         choices,
-        current,
         item,
         journal,
         key,

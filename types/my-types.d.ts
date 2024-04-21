@@ -7,20 +7,56 @@ export {};
 
 declare global {
     interface RollBonusesAPI {
+        /** Applications that the app uses that are used by various inputs */
+        applications: Record<string, DocumentSheet>;
+
+        /** config for specific inputs that can be modified by a script or mod */
+        config: {
+            versatileTraining: {
+                default: Array<keyof typeof pf1.config.skills>;
+                mapping: Record<
+                    keyof typeof pf1.config.weaponGroups,
+                    Array<keyof typeof pf1.config.skills>
+                >;
+            };
+        };
+
+        /** Array of all targeted bonuses */
         allBonusTypes: (typeof BaseBonus)[];
+
+        /** Array of all targeted targets */
         allTargetTypes: (typeof BaseTarget)[];
+
+        /** map of every targeted bonus from its key to its type */
         bonusTypeMap: Record<string, typeof BaseBonus>;
+
+        /** all the input helpers for adding various inputs for bonusees */
+        inputs: Record<string, (...args) => void>;
+
+        /** for being able to manually trigger an update in case something was missed */
         migrate: {
             migrate(): Promise;
             v1: {};
         };
+
+        /** Base source classes for extending */
         sources: {
             BaseBonus: typeof BaseBonus;
             BaseSource: typeof BaseSource;
             BaseTarget: typeof BaseTarget;
         };
-        targetTypeMap: Record<string, typeof BaseTarget>;
+
+        /** Helper class for registering non-targeted bonuses. Used mostly for the bonus picker application */
         SpecificBonuses: typeof SpecificBonuses;
+
+        /** map of every targeted target from its key to its type */
+        targetTypeMap: Record<string, typeof BaseTarget>;
+
+        /** various utility helper methods and classes used throughout the mod */
+        utils:
+            | { array: Record<string, (...args) => any> }
+            | Record<string, (...args) => any>
+            | any;
     }
 
     interface IdObject {

@@ -73,7 +73,7 @@ export class FinesseBonus extends BaseBonus {
      * @param {ItemPF} item
      * @param {RollData} rollData
      */
-    static prepareData(item, rollData) {
+    static prepareSourceData(item, rollData) {
         item[MODULE_NAME][this.key] = {
             dex: rollData.abilities.dex.mod,
             str: rollData.abilities.str.mod,
@@ -104,18 +104,18 @@ export class FinesseBonus extends BaseBonus {
     /**
      * @override
      * @param {ItemPF} source The source of the bonus
-     * @param {(ActionUse | ItemPF | ItemAction)?} [item] The item receiving the bonus for contextually aware hints.
+     * @param {(ActionUse | ItemPF | ItemAction)?} [thing] The thing receiving the bonus for contextually aware hints.
      * @returns {string[]}
      */
-    static getFootnotes(source, item) { return [this.label]; }
+    static getFootnotes(source, thing) { return [this.label]; }
 
     /**
      * @override
+     * @inheritdoc
      * @param {ItemPF} _source
      * @param {ItemActionRollAttackHookArgs} seed
      * @param {ItemAction} _action
      * @param {RollData} data
-     * @returns {ItemActionRollAttackHookArgs}
      */
     static itemActionRollAttack(_source, seed, _action, data) {
         const dexRegex = new RegExp(`[\\+-]\\s*[0-9]+\\[${pf1.config.abilities.dex}\\]`);
@@ -133,6 +133,5 @@ export class FinesseBonus extends BaseBonus {
         else if (!dexMatch && dexIsGreater) {
             seed.formula = `${seed.formula} ${dexFormula}`;
         }
-        return seed;
     }
 }

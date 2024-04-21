@@ -1,4 +1,5 @@
 import { MODULE_NAME } from '../../consts.mjs';
+import { api } from '../../util/api.mjs';
 import { localizeBonusLabel, localizeBonusTooltip } from '../../util/localize.mjs';
 import { addNodeToRollBonus } from "../add-bonus-to-item-sheet.mjs";
 import { createTemplate, templates } from "../templates.mjs";
@@ -41,7 +42,7 @@ export function keyValueSelect({
     }
 
     if (canEdit) {
-        if ((!current && choices.length) || (choices.length === 1 && current !== choices[0].key)) {
+        if ((choices.length && (!current || !choices.some((c) => c.key === current))) || (choices.length === 1 && current !== choices[0].key)) {
             isModuleFlag
                 ? item.setFlag(MODULE_NAME, key, choices[0].key)
                 : item.setItemDictionaryFlag(key, choices[0].key);
@@ -76,3 +77,5 @@ export function keyValueSelect({
 
     addNodeToRollBonus(parent, div, item, canEdit);
 }
+
+api.inputs.keyValueSelect = keyValueSelect;

@@ -9,7 +9,7 @@ import { MODULE_NAME } from "../consts.mjs";
  * @param {number} [value]  Value, if known
  * @returns {Array<string>} Array of target paths to modify
  */
-const getChangeFlat = function (target, modifierType, value) {
+export const getChangeFlat = function (target, modifierType, value) {
     // ** MY CHANGE */
     // initialize value to 0
     value ||= 0;

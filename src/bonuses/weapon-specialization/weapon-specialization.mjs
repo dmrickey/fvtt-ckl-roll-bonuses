@@ -124,9 +124,6 @@ Hooks.on('renderItemSheet', (
         return;
     }
 
-    const current = item.getItemDictionaryFlag(key);
-
-
     const choices = actor && isEditable
         ? uniqueArray(new KeyedDFlagHelper(actor, {}, weaponFocusKey).valuesForFlag(weaponFocusKey))
             .map(x => '' + x)
@@ -135,7 +132,6 @@ Hooks.on('renderItemSheet', (
 
     stringSelect({
         choices,
-        current,
         item,
         journal,
         key,

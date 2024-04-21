@@ -1,6 +1,5 @@
 import { MODULE_NAME } from '../../consts.mjs';
-import { showChecklist } from '../../handlebars-handlers/targeted/targets/checked-items-input.mjs';
-import { FormulaCacheHelper } from '../../util/flag-helpers.mjs';
+import { showChecklist } from '../../handlebars-handlers/targeted/targets/checklist-input.mjs';
 import { truthiness } from '../../util/truthiness.mjs';
 import { BaseTarget } from './base-target.mjs';
 
@@ -16,14 +15,6 @@ export class SpellSchoolTarget extends BaseTarget {
      * @returns {string}
      */
     static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.iurMG1TBoX3auh5z#spell-school'; }
-
-    /**
-     * @override
-     * @inheritdoc
-    */
-    static init() {
-        FormulaCacheHelper.registerModuleFlag(this.key);
-    }
 
     /**
      * @override

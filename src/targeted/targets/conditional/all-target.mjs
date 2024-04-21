@@ -1,5 +1,5 @@
-import { showEnabledLabel } from '../../handlebars-handlers/enabled-label.mjs';
-import { BaseTarget } from './base-target.mjs';
+import { showEnabledLabel } from '../../../handlebars-handlers/enabled-label.mjs';
+import { BaseTarget } from '../base-target.mjs';
 
 /**
  * @abstract
@@ -7,26 +7,40 @@ import { BaseTarget } from './base-target.mjs';
 export class AllTarget extends BaseTarget {
 
     /**
-     * @inheritdoc
      * @override
+     * @inheritdoc
+     * @returns {string}
      */
     static get sourceKey() { return 'all'; }
 
     /**
      * @override
+     * @inheritdoc
      * @returns {string}
      */
-    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.iurMG1TBoX3auh5z#all'; }
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.IpRhJqZEX2TUarSX#all'; }
 
     /**
      * @inheritdoc
      * @override
-     * @param {ItemPF} source
+     * @param {ItemPF} _source
      * @returns {Nullable<string[]>}
      */
-    static getHints(source) {
+    static getHints(_source) {
         return [this.label];
     }
+
+    /**
+     * @override
+     * @inheritdoc
+     */
+    static get isConditionalTarget() { return true; }
+
+    /**
+     * @override
+     * @inheritdoc
+     */
+    static get isGenericTarget() { return true; }
 
     /**
      * @inheritdoc

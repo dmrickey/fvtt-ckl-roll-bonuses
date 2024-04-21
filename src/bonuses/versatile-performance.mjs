@@ -3,17 +3,36 @@
 import { MODULE_NAME } from "../consts.mjs";
 import { createTemplate, templates } from "../handlebars-handlers/templates.mjs";
 import { addNodeToRollBonus } from "../handlebars-handlers/add-bonus-to-item-sheet.mjs";
-import { getDocDFlags } from "../util/flag-helpers.mjs";
+import { KeyedDFlagHelper, getDocDFlags } from "../util/flag-helpers.mjs";
 import { registerItemHint } from "../util/item-hints.mjs";
 import { localize } from "../util/localize.mjs";
 import { LanguageSettings } from "../util/settings.mjs";
-import { truthiness } from "../util/truthiness.mjs";
 import { SpecificBonuses } from './all-specific-bonuses.mjs';
+import { LocalHookHandler, localHooks } from '../util/hooks.mjs';
+import { difference } from '../util/array-intersects.mjs';
+import { getSkillName } from '../util/get-skill-name.mjs';
+import { keyValueSelect } from '../handlebars-handlers/bonus-inputs/key-value-select.mjs';
 
 const key = 'versatile-performance';
+const expandedKey = 'expanded-versatile-performance';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#versatile-performance';
 
-Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ journal, key }));
+/** @type {Array<keyof typeof pf1.config.skills>} */
+const expandedChoices = [
+    'blf',
+    'dip',
+    'dis',
+    'esc',
+    'han',
+    'int',
+    'sen',
+    'umd',
+];
+
+Hooks.once('ready', () => {
+    SpecificBonuses.registerSpecificBonus({ journal, key });
+    SpecificBonuses.registerSpecificBonus({ journal, key: expandedKey, parent: key, type: 'boolean' });
+});
 
 class Settings {
     static get versatilePerformance() { return LanguageSettings.getTranslation(key); }
@@ -30,21 +49,24 @@ const disabledKey = (
 
 registerItemHint((hintcls, actor, item, _data) => {
     if (!(item instanceof pf1.documents.item.ItemFeatPF)) return;
-    const vps = getDocDFlags(item, key);
+    const vps = getDocDFlags(item, key)[0];
+    if (!vps) return;
+
+    const expanded = item.getFlag(MODULE_NAME, expandedKey);
 
     const  /** @type {Hint[]} */ hints = [];
 
-    try {
-        for (let i = 0; i < vps.length; i++) {
-            const [base, ...substitutes] = `${vps[i]}`.split(';').map(x => x.trim());
-            const baseName = actor.getSkillInfo(base).name;
-            const skills = substitutes.map((id) => actor.getSkillInfo(id).name).join(', ');
-            const hint = hintcls.create(localize('versatilePerformance.hint', { base: baseName, skills }), [], {});
-            hints.push(hint);
-        }
-    } catch {
-        return hintcls.create(localize('versatilePerformance.error'), [], {});
+    const [base, ...substitutes] = /** @type {(keyof typeof pf1.config.skills)[]} */
+        (/** @type {unknown} */ `${vps}`.split(';').map(x => x.trim()));
+
+    if (expanded) {
+        substitutes.push(expanded);
     }
+
+    const baseName = getSkillName(actor, base);
+    const skills = substitutes.map((id) => getSkillName(actor, id)).join(', ');
+    const hint = hintcls.create(localize('versatilePerformance.hint', { base: baseName, skills }), [], {});
+    hints.push(hint);
 
     return hints;
 });
@@ -62,11 +84,7 @@ function createVPIcon(actor, baseId, skillId) {
     const disabled = actor.getFlag(MODULE_NAME, disabledKey(baseId, skillId));
 
     const icon = document.createElement('a');
-    icon.classList.add('fas', disabled ? 'fa-music-slash' : 'fa-music');
-    icon.style.marginInlineStart = 'auto';
-    icon.style.width = '1.5rem';
-    icon.style.alignSelf = 'center';
-    icon.style.textAlign = 'center';
+    icon.classList.add('fas', disabled ? 'fa-music-slash' : 'fa-music', 'ckl-skill-icon');
 
     const tip = localize('versatilePerformance.skillTip', { base: baseSkill.name, enabled: localize(disabled ? 'PF1.Disabled' : 'PF1.Enabled') });
     icon.setAttribute('data-tooltip', tip);
@@ -84,9 +102,10 @@ Hooks.on('renderActorSheetPF', (
     /** @type {{ find: (arg0: string) => { (): any; new (): any; each: { (arg0: { (_: any, element: HTMLElement): void; }): void; new (): any; }; }; }} */ html,
     /** @type {{ actor: ActorPF; }} */ { actor }
 ) => {
-    const vps = getDocDFlags(actor, key, { includeInactive: false });
+    const helper = new KeyedDFlagHelper(actor, { includeInactive: false, }, key);
+    const items = helper.itemsForFlag(key);
 
-    if (!vps?.length) return;
+    if (!items.length) return;
 
     html.find('.tab.skills .skills-list li.skill, .tab.skills .skills-list li.sub-skill').each((_, li) => {
         const getSkillId = () => {
@@ -100,8 +119,15 @@ Hooks.on('renderActorSheetPF', (
         const skillId = getSkillId();
         if (!skillId) return;
 
-        vps.forEach((vp) => {
+        items.forEach((item) => {
+            const [vp] = getDocDFlags(item, key, { includeInactive: false });
             const [baseId, ...targetIds] = `${vp}`.split(';');
+
+            const expanded = item.getFlag(MODULE_NAME, expandedKey);
+            if (expanded) {
+                targetIds.push(expanded);
+            }
+
             if (!targetIds.includes(skillId)) return;
 
             const icon = createVPIcon(actor, baseId, skillId);
@@ -111,33 +137,47 @@ Hooks.on('renderActorSheetPF', (
     });
 });
 
-/**
- * @param {(skillId: string, options: object) => any} wrapped
- * @param {string} skillId
- * @param {Object} options
- * @this {ActorPF}
- * @returns {ChatMessagePF|object|void} The chat message if one was created, or its data if not. `void` if the roll was cancelled.
- */
-function versatileRollSkill(wrapped, skillId, options) {
-    const vps = getDocDFlags(this, key, { includeInactive: false });
 
-    const journalLookup = (/** @type {string} */ skl) => {
-        const link = this.getSkillInfo(skl.split('.subSkills')[0])?.journal || pf1.config.skillCompendiumEntries[skl.split('.subSkills')[0]] || '';
-        if (link) {
-            return `
-<a data-tooltip="PF1.OpenAssociatedCompendiumEntry" data-action="open-compendium-entry" data-compendium-entry="${link}" data-document-type="JournalEntry">
+/**
+ * @param {{ skillId: string, options: object }} seed
+ * @param {ActorPF} actor
+ * @returns {void}
+ */
+function versatileRollSkill(seed, actor) {
+    const { skillId } = seed;
+    const items = new KeyedDFlagHelper(actor, { includeInactive: false }, key)
+        .itemsForFlag(key);
+
+    // todo v10 change this to use the single journal entry in `getSkillInfo`
+
+    const originalSkillElement = () => {
+        const parentId = skillId.split('.subSkills')[0];
+        const skillInfo = actor.getSkillInfo(skillId);
+        const link = skillInfo.journal || actor.getSkillInfo(parentId)?.journal || pf1.config.skillCompendiumEntries[parentId] || '';
+        const linkProp = link ? `data-compendium-entry="${link}"` : '';
+        const label = localize('PF1.SkillCheck', { skill: skillInfo.name });
+        const vpTitle = localize('versatilePerformance.title', { skill: label });
+        return `
+<span class="flavor-text">
+<a data-tooltip="PF1.OpenAssociatedCompendiumEntry" data-action="open-compendium-entry" ${linkProp} data-document-type="JournalEntry">
     <i class="fas fa-book"></i>
 </a>
+${vpTitle}
+</span>
 `;
-        }
-        return '';
     };
 
-    for (let i = 0; i < vps.length; i++) {
-        const [baseId, ...substitutes] = `${vps[i]}`.split(';').map(x => x.trim());
+    for (const item of items) {
+        const [vp] = getDocDFlags(item, key, { includeInactive: false });
+        const [baseId, ...substitutes] = `${vp}`.split(';').map(x => x.trim());
 
-        if (substitutes.includes(skillId) && !this.getFlag(MODULE_NAME, disabledKey(baseId, skillId))) {
-            const baseName = this.getSkillInfo(baseId).name;
+        const expanded = item.getFlag(MODULE_NAME, expandedKey);
+        if (expanded) {
+            substitutes.push(expanded);
+        }
+
+        if (substitutes.includes(seed.skillId) && !actor.getFlag(MODULE_NAME, disabledKey(baseId, seed.skillId))) {
+            const baseName = actor.getSkillInfo(baseId).name;
 
             Hooks.once('preCreateChatMessage', (
                 /** @type {ChatMessagePF}*/ doc,
@@ -146,22 +186,18 @@ function versatileRollSkill(wrapped, skillId, options) {
                 /** @type {string}*/ _userId,
             ) => {
                 const { content } = doc;
-                const currentTitle = this.getSkillInfo(skillId).name;
-                if (!currentTitle || !baseName || !content.includes(baseName)) {
+                if (!baseName || !content.includes(baseName)) {
                     return;
                 }
-                const updatedTitle = localize('PF1.SkillCheck', { skill: currentTitle });
-                const vpTitle = localize('versatilePerformance.title', { skill: baseName });
-                doc.updateSource({ content: doc.content.replace(baseName, `${journalLookup(skillId)} ${updatedTitle}<br />${journalLookup(baseId)} ${vpTitle}`) });
+                doc.updateSource({ content: originalSkillElement() + doc.content });
             });
-            return wrapped(baseId, options);
+            seed.skillId = baseId;
+            return;
         }
     }
-
-    return wrapped(skillId, options);
 }
 Hooks.once('init', () => {
-    libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorPF.prototype.rollSkill', versatileRollSkill, libWrapper.WRAPPER);
+    LocalHookHandler.registerHandler(localHooks.actorRollSkill, versatileRollSkill);
 });
 
 Hooks.on('renderItemSheet', (
@@ -172,19 +208,26 @@ Hooks.on('renderItemSheet', (
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
     const name = item?.name?.toLowerCase() ?? '';
+    const hasFlag = item.system.flags.dictionary?.hasOwnProperty(key);
+
+    if (!(name === Settings.versatilePerformance || hasFlag)) {
+        return;
+    }
 
     const currentVP = item.system.flags.dictionary[key];
-    if (!currentVP && currentVP !== '') {
-        if (name === Settings.versatilePerformance) {
-            item.setItemDictionaryFlag(key, '');
-        }
-        else {
-            return;
-        }
-    }
-    const [baseId, ...substitutes] = `${currentVP}`.split(';');
+
+    const [baseId, ...substitutes] = /** @type {(keyof typeof pf1.config.skills)[]}*/(`${currentVP}`.split(';'));
+    /** @type {(keyof typeof pf1.config.skills)[]}*/
     const [skill1Id, skill2Id] = substitutes;
-    const skillLookup = (/** @type {string}*/ id) => actor?.getSkillInfo(id) || pf1.config.skills[id] || { id, name: id };
+    const skillLookup = (/** @type {keyof typeof pf1.config.skills}*/ id) => {
+        try {
+            return actor?.getSkillInfo(id) || pf1.config.skills[id] || { id, name: id };
+        }
+        catch {
+            return null;
+        }
+    };
+
     let base, skill1, skill2;
     if (baseId) {
         base = skillLookup(baseId);
@@ -196,41 +239,42 @@ Hooks.on('renderItemSheet', (
         skill2 = skillLookup(skill2Id);
     }
 
-    let allSkills, performs;
+    /** @type {{ id: keyof typeof pf1.config.skills, name: string }[]} */
+    let allSkills = [];
+    /** @type {{ id: keyof typeof pf1.config.skills, name: string }[]} */
+    let performs = [];
     if (isEditable) {
-        if (!actor) return;
+        if (actor) {
+            allSkills = actor.allSkills
+                .filter((id) => game.settings.get('pf1', 'allowBackgroundSkills') || !pf1.config.backgroundOnlySkills.includes(id))
+                .map((id) => ({ id, name: getSkillName(actor, id) }));
 
-        allSkills = (() => {
-            const skills = [];
-            for (const [id, s] of Object.entries(actor.getRollData().skills)) {
-                const skill = deepClone(s);
-                skill.id = id;
-                skills.push(skill);
-                skill.name = pf1.config.skills[id] ?? actor.system.skills[id].name;
-
-                for (const [subId, subS] of Object.entries(s.subSkills ?? {})) {
+            performs = (() => {
+                const skills = [];
+                const perform = actor.getSkillInfo('prf');
+                for (const [subId, subS] of Object.entries(perform.subSkills ?? {})) {
                     const subSkill = deepClone(subS);
-                    subSkill.id = `${id}.subSkills.${subId}`;
+                    subSkill.id = `prf.subSkills.${subId}`;
                     skills.push(subSkill);
                 }
-            }
-            return skills
-                .filter(truthiness)
-                .sort((a, b) => a.name.localeCompare(b.name));
-        })();
-
-        performs = (() => {
-            const skills = [];
-            const perform = actor.getSkillInfo('prf');
-            for (const [subId, subS] of Object.entries(perform.subSkills ?? {})) {
-                const subSkill = deepClone(subS);
-                subSkill.id = `prf.subSkills.${subId}`;
-                skills.push(subSkill);
-            }
-            return skills
-                .sort((a, b) => a.name.localeCompare(b.name));
-        })();
-        if (!performs.length) return;
+                return skills
+                    .sort((a, b) => a.name.localeCompare(b.name))
+                    .map(({ id, name }) => ({ id, name }));
+            })();
+        }
+        else {
+            allSkills = Object.entries(pf1.config.skills)
+                .filter(
+                    ([id]) => {
+                        const _id = /** @type {keyof typeof pf1.config.skills} */ (/** @type {any} */ id);
+                        return game.settings.get('pf1', 'allowBackgroundSkills') || !pf1.config.backgroundOnlySkills.includes(_id);
+                    }
+                )
+                .map(([id, value]) => {
+                    const _id = /** @type {keyof typeof pf1.config.skills} */ (/** @type {any} */ id);
+                    return { id: _id, name: value }
+                });
+        }
 
         if (performs.length && !base) {
             item.setItemDictionaryFlag(key, `${performs[0].id}`);
@@ -268,4 +312,21 @@ Hooks.on('renderItemSheet', (
     skill2Select?.addEventListener('change', updateVP);
 
     addNodeToRollBonus(html, div, item, isEditable);
+
+    const hasExpanded = item.system.flags.boolean[expandedKey];
+    if (hasExpanded) {
+        const choices = difference(expandedChoices, [skill1Id, skill2Id])
+            .reduce((acc, id) => ({ ...acc, [id]: getSkillName(actor, id) }), {});
+
+        keyValueSelect({
+            choices,
+            item,
+            journal,
+            key: expandedKey,
+            parent: html
+        }, {
+            canEdit: isEditable,
+            isModuleFlag: true,
+        });
+    }
 });

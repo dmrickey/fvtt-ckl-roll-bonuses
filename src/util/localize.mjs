@@ -45,8 +45,20 @@ const localizeBonusTooltip = (key, opts = {}) => {
     return localize(`bonuses.tooltip.${key}`, opts);
 };
 
+/**
+ * @param {string} key
+ * @param {Record<string, unknown>} [opts]
+ * @returns {string}
+ */
+const localizeItemHint = (key, opts = {}) => {
+    const split = key.split('_');
+    key = split[1] || split[0];
+    return localize(`item-hints.${key}`, opts);
+};
+
 export {
     localize,
     localizeBonusLabel,
     localizeBonusTooltip,
+    localizeItemHint,
 };

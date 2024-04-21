@@ -21,6 +21,15 @@ export class BaseTarget extends BaseSource {
     static getSourcesFor(arg) { throw new Error('must be overridden'); };
 
     /**
+     * If this is a target based off of a condition rather then effecting a specific (sub)set of items.
+     * Inteded use is UI-based
+     * E.g. "am I targeting a specific token/alignment?", "is <this buff> active?"
+     *
+     * @abstract
+     */
+    static get isConditionalTarget() { return false; }
+
+    /**
      * For a given target source, does it target the `thing`?
      * @param {ItemPF} targetSource
      * @param {ActionUse | ItemPF | ItemAction} thing

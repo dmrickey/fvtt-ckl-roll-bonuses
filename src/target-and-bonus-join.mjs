@@ -27,6 +27,13 @@ registerItemHint((hintcls, actor, item, _data) => {
             targetSourceHints.push([...new Set([targetType.label, ...hints])].join('\n'));
         }
     });
+    if (targetSourceHints.length) {
+        allHints.push(hintcls.create(
+            localize('targets'),
+            [],
+            { hint: targetSourceHints.join('\n\n') },
+        ));
+    }
 
     /** @type {Hint[]} */
     const bonusSourceHints = [];
@@ -38,37 +45,14 @@ registerItemHint((hintcls, actor, item, _data) => {
             if (hints.length === 1 && hints[0] === bonusType.label) {
                 hints = [];
             }
-
-            let classes = [];
-            let icon = '';
-            if (!targetSourceHints.length) {
-                classes.push('ckl-missing-source');
-                hints.push(localize('missing-targets'));
-                icon = 'fas fa-circle-exclamation';
-            }
             bonusSourceHints.push(hintcls.create(
                 bonusType.label,
-                classes,
-                { hint: hints.join('\n'), icon },
+                [],
+                { hint: hints.join('\n') },
             ));
         }
     });
     allHints.push(...bonusSourceHints);
-
-    if (targetSourceHints.length) {
-        let classes = [];
-        let icon = '';
-        if (!bonusSourceHints.length) {
-            classes.push('ckl-missing-source');
-            icon = 'fas fa-circle-exclamation';
-            targetSourceHints.push(localize('missing-bonuses'));
-        }
-        allHints.push(hintcls.create(
-            localize('bonuses.label.targets'),
-            classes,
-            { hint: targetSourceHints.join('\n\n'), icon },
-        ));
-    }
 
     /** @type {{itemName: string, bonusName: string, hints: string[]}[]} */
     const bonusHints = [];
@@ -104,7 +88,17 @@ registerItemHint((hintcls, actor, item, _data) => {
             .forEach(([name, hint]) => allHints.push(hintcls.create(name, [], { hint })))
     }
 
-    return allHints;
+    if (item[MODULE_NAME].bonuses.length && !item[MODULE_NAME].targets.length) {
+        const hint = hintcls.create(localize('missing-targets'), ['ckl-missing-source'], { icon: 'fas fa-circle-exclamation' });
+        return [hint, ...allHints];
+    }
+    else if (item[MODULE_NAME].targets.length && !item[MODULE_NAME].bonuses.length) {
+        const hint = hintcls.create(localize('missing-bonuses'), ['ckl-missing-source'], { icon: 'fas fa-circle-exclamation' });
+        return [hint, ...allHints];
+    }
+    else {
+        return allHints;
+    }
 });
 
 /**
@@ -119,8 +113,10 @@ export const handleBonusesFor = (thing, func, { skipGenericTarget = false } = {}
         .flatMap((targetType) => targetType.getSourcesFor(thing))
         // filter down to unique items in case one source item is affecting this target item through multiple "targets"
         .filter((sourceItem, i, self) => self.findIndex((nestedTarget) => sourceItem.id === nestedTarget.id) === i)
-        .filter((sourceItem) => sourceItem[MODULE_NAME].targets.every((baseTarget) =>
-            (!skipGenericTarget || !baseTarget.isGenericTarget) && baseTarget.doesTargetInclude(sourceItem, thing))
+        .filter((sourceItem) =>
+            sourceItem[MODULE_NAME].targets
+                .filter((sourceTarget) => !skipGenericTarget || !sourceTarget.isGenericTarget)
+                .every((sourceTarget) => sourceTarget.doesTargetInclude(sourceItem, thing))
         )
         .forEach((sourceItem) => sourceItem[MODULE_NAME].bonuses.forEach((bonusType) => func(bonusType, sourceItem)));
 }
@@ -139,8 +135,9 @@ export const handleBonusTypeFor = (thing, specificBonusType, func, { skipGeneric
         .flatMap((targetType) => targetType.getSourcesFor(thing))
         // filter down to unique items in case one source item is affecting this target item through multiple "targets"
         .filter((sourceItem, i, self) => self.findIndex((nestedTarget) => sourceItem.id === nestedTarget.id) === i)
-        .filter((sourceItem) => sourceItem[MODULE_NAME].targets.every((baseTarget) =>
-            (!skipGenericTarget || !baseTarget.isGenericTarget) && baseTarget.doesTargetInclude(sourceItem, thing))
+        .filter((sourceItem) => sourceItem[MODULE_NAME].targets
+            .filter((sourceTarget) => !skipGenericTarget || !sourceTarget.isGenericTarget)
+            .every((sourceTarget) => sourceTarget.doesTargetInclude(sourceItem, thing))
         )
         .forEach((sourceItem) => sourceItem[MODULE_NAME].bonuses.forEach((bonusType) => {
             if (bonusType === specificBonusType) {
@@ -148,6 +145,9 @@ export const handleBonusTypeFor = (thing, specificBonusType, func, { skipGeneric
             }
         }));
 }
+
+api.utils.handleBonusesFor = handleBonusesFor;
+api.utils.handleBonusTypeFor = handleBonusTypeFor;
 
 /**
  * Adds conditional to action being used
@@ -159,7 +159,7 @@ function actionUseHandleConditionals(actionUse) {
     const conditionals = [];
     handleBonusesFor(
         actionUse,
-        (bonusType, sourceItem) => conditionals.push(bonusType.getConditional(sourceItem)),
+        (bonusType, sourceItem) => conditionals.push(bonusType.getConditional(sourceItem, actionUse)),
     );
 
     conditionals
@@ -215,7 +215,7 @@ function getAttackSources(item, sources) {
 
     handleBonusesFor(
         item,
-        (bonusType, sourceItem) => newSources.push(...bonusType.getAttackSourcesForTooltip(sourceItem)),
+        (bonusType, sourceItem) => newSources.push(...bonusType.getAttackSourcesForTooltip(sourceItem, item)),
     );
 
     newSources = newSources.filter(truthiness);
@@ -240,7 +240,7 @@ function actionDamageSources(action, sources) {
 
     handleBonusesFor(
         action,
-        (bonusType, sourceItem) => changes.push(...bonusType.getDamageSourcesForTooltip(sourceItem)),
+        (bonusType, sourceItem) => changes.push(...bonusType.getDamageSourcesForTooltip(sourceItem, action)),
     );
 
     const newChanges = changes.filter(truthiness);
@@ -299,22 +299,27 @@ Hooks.on(customGlobalHooks.itemUse, (
 
 /**
  * @param {ItemPF} item
- * @param {RollData} _rollData
+ * @param {RollData} rollData
  */
-const prepare = (item, _rollData) => {
+const prepare = (item, rollData) => {
     item[MODULE_NAME].bonuses = [];
     item[MODULE_NAME].targets = [];
+
+    [
+        ...api.allBonusTypes,
+        ...api.allTargetTypes,
+    ].forEach((source) => source.prepareBaseData(item, rollData));
 
     api.allBonusTypes.forEach((bonusType) => {
         if (bonusType.isSource(item)) {
             item[MODULE_NAME].bonuses.push(bonusType);
-            bonusType.prepareData(item, _rollData);
+            bonusType.prepareSourceData(item, rollData);
         }
     });
     api.allTargetTypes.forEach((targetType) => {
         if (targetType.isSource(item)) {
             item[MODULE_NAME].targets.push(targetType);
-            targetType.prepareData(item, _rollData);
+            targetType.prepareSourceData(item, rollData);
         }
     });
 };
@@ -324,14 +329,13 @@ LocalHookHandler.registerHandler(localHooks.prepareData, prepare);
  * @param {ItemActionRollAttackHookArgs} seed
  * @param {ItemAction} action
  * @param {RollData} data
- * @returns {Promise<ItemActionRollAttackHookArgs>}
+ * @returns {void}
  */
-const itemActionRollAttack = async (seed, action, data) => {
+const itemActionRollAttack = (seed, action, data) => {
     handleBonusesFor(
         action,
         (bonusType, sourceItem) => bonusType.itemActionRollAttack(sourceItem, seed, action, data),
     );
-    return seed;
 }
 LocalHookHandler.registerHandler(localHooks.itemActionRollAttack, itemActionRollAttack);
 
@@ -339,14 +343,14 @@ LocalHookHandler.registerHandler(localHooks.itemActionRollAttack, itemActionRoll
  * @param {ItemActionRollAttackHookArgs} seed
  * @param {ItemAction} action
  * @param {RollData} data
- * @returns {Promise<ItemActionRollAttackHookArgs>}
+ * @param {number} index
+ * @returns {void}
  */
-const itemActionRollDamage = async (seed, action, data) => {
+const itemActionRollDamage = (seed, action, data, index) => {
     handleBonusesFor(
         action,
-        (bonusType, sourceItem) => bonusType.itemActionRollDamage(sourceItem, seed, action, data),
+        (bonusType, sourceItem) => bonusType.itemActionRollDamage(sourceItem, seed, action, data, index),
     );
-    return seed;
 }
 LocalHookHandler.registerHandler(localHooks.itemActionRollDamage, itemActionRollDamage);
 

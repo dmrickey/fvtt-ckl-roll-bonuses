@@ -103,14 +103,12 @@ Hooks.on('renderItemSheet', (
         return;
     }
 
-    const current = item.getItemDictionaryFlag(key);
     const choices = isEditable
         ? uniqueArray(getDocDFlags(actor, armorFocusKey).map(x => `${x}`))
         : [];
 
     stringSelect({
         choices,
-        current,
         item,
         journal,
         key,

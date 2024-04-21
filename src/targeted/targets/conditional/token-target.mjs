@@ -1,15 +1,16 @@
-import { MODULE_NAME } from "../../consts.mjs";
-import { showTokenInput } from "../../handlebars-handlers/targeted/targets/token-input.mjs";
-import { TokenSelectorApp } from "../../handlebars-handlers/targeted/targets/token-selector-app.mjs";
-import { intersection, intersects } from "../../util/array-intersects.mjs";
-import { registerSetting } from "../../util/settings.mjs";
-import { truthiness } from "../../util/truthiness.mjs";
-import { BaseTarget } from "./base-target.mjs";
+import { MODULE_NAME } from "../../../consts.mjs";
+import { checkboxInput } from '../../../handlebars-handlers/bonus-inputs/chekbox-input.mjs';
+import { showTokenInput } from "../../../handlebars-handlers/targeted/targets/token-input.mjs";
+import { TokenSelectorApp } from "../../../handlebars-handlers/targeted/targets/token-selector-app.mjs";
+import { difference, intersection, intersects } from "../../../util/array-intersects.mjs";
+import { localize } from '../../../util/localize.mjs';
+import { registerSetting } from "../../../util/settings.mjs";
+import { truthiness } from "../../../util/truthiness.mjs";
+import { BaseTarget } from "../base-target.mjs";
 
 class Settings {
     static get #tokenSettingKey() { return 'should-auto-target-tokens'; }
     static get shouldAutoTarget() { return Settings.#getSetting(this.#tokenSettingKey); }
-    // @ts-ignore
     static #getSetting(/** @type {string} */key) { return game.settings.get(MODULE_NAME, key); }
 
     static {
@@ -17,6 +18,7 @@ class Settings {
             key: this.#tokenSettingKey,
             scope: 'client',
             settingType: Boolean,
+            defaultValue: false,
         });
     }
 }
@@ -27,29 +29,47 @@ export class TokenTarget extends BaseTarget {
 
     /**
      * @override
+     * @inheritdoc
      */
     static get sourceKey() { return 'token'; }
+    static get #inversionKey() { return `${this.key}-invert`; }
 
     /**
      * @override
+     * @inheritdoc
      * @returns {string}
      */
-    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.iurMG1TBoX3auh5z#token'; }
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.IpRhJqZEX2TUarSX#token'; }
 
     /**
      * @override
+     * @inheritdoc
      * @param {ItemPF} source
      * @returns {Nullable<string[]>}
      */
     static getHints(source) {
         /** @type {string[]} */
         const savedTargets = source.getFlag(MODULE_NAME, this.key) ?? [];
-        const targets = intersection(savedTargets, this.#currentTargetUuids);
-        return targets.map((target) => fromUuidSync(target)?.name).filter(truthiness);
+        if (!savedTargets.length) {
+            return;
+        }
+
+        const isInverted = !!source.getFlag(MODULE_NAME, this.#inversionKey);
+
+        if (isInverted) {
+            return [
+                localize('any-target-except'),
+                ...savedTargets.map((uuid) => fromUuidSync(uuid)?.name)
+            ].filter(truthiness);
+        } {
+            const targets = intersection(savedTargets, this.#currentTargetUuids);
+            return targets.map((target) => fromUuidSync(target)?.name).filter(truthiness);
+        }
     }
 
     /**
      * @override
+     * @inheritdoc
      * @param {ItemPF | ActionUse | ItemAction} doc
      * @returns {ItemPF[]}
      */
@@ -67,10 +87,13 @@ export class TokenTarget extends BaseTarget {
 
         // fromUuidSync
         const flaggedItems = item.actor.itemFlags.boolean[this.key]?.sources ?? [];
-        const bonusSources = flaggedItems.filter((flagged) => {
+        const bonusSources = flaggedItems.filter((source) => {
             /** @type {string[]} */
-            const savedTargets = flagged.getFlag(MODULE_NAME, this.key) ?? [];
-            return intersects(this.#currentTargetUuids, savedTargets);
+            const savedTargets = source.getFlag(MODULE_NAME, this.key) ?? [];
+            const isInverted = !!source.getFlag(MODULE_NAME, this.#inversionKey);
+            return isInverted
+                ? difference(this.#currentTargetUuids, savedTargets).length
+                : intersects(this.#currentTargetUuids, savedTargets);
         });
 
         return bonusSources;
@@ -78,12 +101,20 @@ export class TokenTarget extends BaseTarget {
 
     /**
      * @override
+     * @inheritdoc
+     */
+    static get isConditionalTarget() { return true; }
+
+    /**
+     * @override
+     * @inheritdoc
      * @returns {boolean}
      */
     static get isGenericTarget() { return true; }
 
     /**
      * @override
+     * @inheritdoc
      * @param {object} options
      * @param {ActorPF | null | undefined} options.actor
      * @param {HTMLElement} options.html
@@ -104,16 +135,27 @@ export class TokenTarget extends BaseTarget {
         }, {
             canEdit: isEditable,
         });
+        checkboxInput({
+            item,
+            journal: this.journal,
+            key: this.#inversionKey,
+            parent: html,
+        }, {
+            canEdit: isEditable,
+            isModuleFlag: true,
+        });
     }
 
     /**
      * @override
+     * @inheritdoc
      * @returns {boolean}
      */
     static get showOnActive() { return true; }
 
     /**
      * @override
+     * @inheritdoc
      * @param {ItemPF} item
      */
     static showTargetEditor(item) {

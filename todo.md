@@ -1,5 +1,3 @@
-
-
 - [TODO](#todo)
 - [UI](#ui)
 - [Bonus Targets](#bonus-targets)
@@ -7,23 +5,18 @@
   - [Targets](#targets)
 - [Class Features](#class-features)
   - [Cleric](#cleric)
-  - [Fighter](#fighter)
   - [Psychic](#psychic)
   - [Ranger](#ranger)
 - [Feats](#feats)
   - [Bomber's eye](#bombers-eye)
   - [Longshot](#longshot)
-  - [Snake Sidewind](#snake-sidewind)
   - [Spell Perfection](#spell-perfection)
   - [Spirited Charge](#spirited-charge)
 - [Racial Features](#racial-features)
   - [Sylph](#sylph)
   - [Kobold](#kobold)
-- [Skills](#skills)
-  - [Int Headband](#int-headband)
 - [Misc](#misc)
   - [I am targeted](#i-am-targeted)
-  - [Attacks](#attacks)
   - [Magic](#magic)
   - [Misc](#misc-1)
   - [UX](#ux)
@@ -37,26 +30,26 @@
 - [Add create hooks for initializing some items (like anything based off of name/id)](#add-create-hooks-for-initializing-some-items-like-anything-based-off-of-nameid)
 - [in pf1 V10](#in-pf1-v10)
 - [Not Possible](#not-possible)
-- [This release must include](#this-release-must-include)
 
 # TODO
 - Figure out a way to support multiple target groups on a single Item (so I can add `Favored Enemy (Human) +4` and `Favored Enemy (goblin) +2` on a single Item)
   - (see 3.0 scaffolding branch for a super rought start on this)
 
 # UI
-- Add readonly mode to all inputs so you can still see the configuration if you can't edit (i.e. in a compendium)
-- ### Add text filter to item input target
+### Add text filter to item input target
 
 # Bonus Targets
 ## Bonuses
 - add <ability> to damage for other ability scores (like agile but can be customized)
 - add <ability> to attack for other ability scores (like finesse but can be customized)
 - Attack bonus needs to give optional "crit only" attack bonuses
+- AC bonus
 
 ## Targets
 - Have creature type/subtype based targeting - would support [Ranger](#ranger)'s Favored Enemy
 - Ally/Hostile/Neutral multiselect
 - All healing
+- Armor Target (useful for something like Magic Vestment)
 - Distance-based targeting (point-blank shot)
   - same logic for range penalties
 - Spellbook target
@@ -68,15 +61,11 @@
 - While in Combat
   - [Scarred by War](https://www.aonprd.com/TraitDisplay.aspx?ItemName=Scarred%20by%20War) (used to grant diplomacy bonus while not in combat)
 - add a way to affect other tokens (i.e. cavalier challenge which gives them -2 attack vs other targets)
-- inverse target - effect all tokens _except_ the tokens I have targets
 
 # Class Features
 ## Cleric
 ### Healing Domain - Healer's Blessing
 - Cure Spells are treated as if they're empowered (+50% healing)
-## Fighter
-### [Versatile Training](https://www.d20pfsrd.com/classes/core-classes/fighter/#:~:text=that%20he%20throws.-,Versatile%20Training,-(Ex)%20The)
-- Use BAB instead of ranks for given skills (see Versatile Performance implementation)
 ## Psychic
 ### Phrenic Amplification
   - increases DC of `mind-affecting` spells by 1/2/3
@@ -92,8 +81,6 @@
 - Increase throwing range
 ## Longshot
 - Increase bow range
-## Snake Sidewind
-- does a lot, but specifically swap Sense Motive for attack roll to confirm critical hits when Sense Motive mod is higher than current attack bonus (Agile bonus might give insight on this)
 ## Spell Perfection
 - https://www.d20pfsrd.com/feats/general-feats/spell-perfection/
 ## Spirited Charge
@@ -110,20 +97,10 @@
 ### Frightener
   - +1 DC for `fear` spells
 
-# Skills
-## Int Headband
-- configure an item to give you specific ranks (0.82.5 only gives bonus ranks, not ranks to specific skills)
-  - See versatile performance for ideas.
-- Show icon next to skills that roll inspiration for free
-  - permanent-skill-bonuses
-
 # Misc
 ## I am targeted
 - add bonuses / penalties to attacks that are specifically against me
   - include percentile miss chance
-
-## Attacks
-- Add Bane button on chat card to modify the current chat card to add +2 attack and +2d6 damage
 
 ## Magic
 - specialization schools (and opposed)
@@ -132,11 +109,12 @@
 - add the formula class to skill inputs
 - consumable buffs - requires later release (waiting on issue #1946) (did not make it into v9)
   - idea is to create a a flag on a buff that will add the bonus in "prehook" (and/or use built in changes) but use the new pf1 v.next posthook to disable the buff when it is consumed
+- Alter bonus effect for crit confirmation only
+  - https://www.aonprd.com/MonsterTemplates.aspx?ItemName=Commando%20Construct#:~:text=to%20this%20ability.-,Precision,-(Ex)%3A%20A
 
 ## UX
 - Add item hints for ammo
 - Add method for sources to say "I have a source key but no value" and show a broken item hint
-- Add extra tooltip for "String select" that shows when there are no options (a la misconfigured equipment for Armor/Weapon Focus)
 
 ## Bonuses
 - "x per dice"
@@ -146,7 +124,6 @@
 - add checkbox to toggle between union (current implementation) and intersection (item has to supply all targeting requirements)
 
 # Housekeeping
-- reduce duplication of `Improved` and `Greater` in so many different settings - they always use the same word in both German and Spanish (and English) so they don't need unique settings per usage
 - Consolidate weapon hints (Weapon Focus, Specialization, Martial) - find a way to make them more concise
 - Remove Inspiration from being added into the dialog and instead create a change as part of rolling the skill
 
@@ -188,5 +165,3 @@
   - Sad day. Not possible for basically the same reason custom changes aren't possible
 - Custom changes that effect only specific targets :(
   - changes are generated and applied too early and too broadly in the system prep. I can either create a change that applies to everything (pointless) or I can create a specific change that exists for the specified target, but it's created too late to both be reduced to the best bonus type and actually be added to the roll
-
-# This release must include

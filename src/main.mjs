@@ -24,6 +24,23 @@ function setAttackNotesHTMLWrapper(wrapped) {
 }
 
 /**
+ * Used to alter the roll. The roll can be inspected, then replaced.
+ *
+ * @param {(args: any) => Promise<any>} wrapped
+ * @param {object} obj
+ * @param {boolean} [obj.noAttack]
+ * @param {unknown} [obj.bonus]
+ * @param {unknown[]} [obj.extraParts]
+ * @param {boolean} [obj.critical] Whether or not this roll is a for a critical confirmation
+ * @param {object} [obj.conditionalParts]
+ * @this {ChatAttack}
+ */
+async function chatAttackAddAttack(wrapped, { noAttack = false, bonus = null, extraParts = [], critical = false, conditionalParts = {} }) {
+    await wrapped({ noAttack, bonus, extraParts, critical, conditionalParts });
+    await LocalHookHandler.fireHookNoReturnAsync(localHooks.chatAttackAddAttack, this, { noAttack, bonus, extraParts, critical, conditionalParts });
+}
+
+/**
  * @param {() => any} wrapped
  * @this {ChatAttack}
  */
@@ -62,8 +79,8 @@ function prepareItemData(wrapped) {
 
     const item = this;
     /**
-     * initialize module data but make the individual portions initialize their own specific data so this part of the app doesn't need to know about all the properties/types
-     *  @type {any}
+     * Initialize module data but make the individual portions initialize their own specific data so this part of the app doesn't need to know about all the properties/types
+     * @type {any}
      */
     const empty = {};
     item[MODULE_NAME] = empty;
@@ -257,7 +274,7 @@ async function itemActionRollDamage(wrapped, ...args) {
         const options = roll.options;
         const rollData = roll.data;
         const seed = { formula, options };
-        LocalHookHandler.fireHookNoReturnSync(localHooks.itemActionRollDamage, seed, this, rollData);
+        LocalHookHandler.fireHookNoReturnSync(localHooks.itemActionRollDamage, seed, this, rollData, i);
 
         if (formula !== seed.formula || !foundry.utils.objectsEqual(options, seed.options)) {
             const replaced = await new pf1.dice.DamageRoll(seed.formula, rollData, seed.options).evaluate();
@@ -269,10 +286,39 @@ async function itemActionRollDamage(wrapped, ...args) {
     return rolls;
 }
 
+/**
+ * @param {(skillId: keyof typeof pf1.config.skills, options: object) => ChatMessagePF|object|void} wrapped
+ * @param {keyof typeof pf1.config.skills} skillId
+ * @param {Object} options
+ * @this {ActorPF}
+ * @returns {ChatMessagePF|object|void} The chat message if one was created, or its data if not. `void` if the roll was cancelled.
+ */
+function actorRollSkill(wrapped, skillId, options) {
+    const seed = { skillId, options };
+    LocalHookHandler.fireHookNoReturnSync(localHooks.actorRollSkill, seed, this);
+    return wrapped(seed.skillId, seed.options);
+}
+
+/**
+ * @param {(skillId: string, options?: { rollData?: RollData }) => SkillInfo} wrapped
+ * @param {keyof typeof pf1.config.skills} skillId
+ * @param {object} [options]
+ * @param {RollData} [options.rollData]
+ * @this {ActorPF}
+ * @return {SkillRollData}
+ */
+function actorGetSkillInfo(wrapped, skillId, { rollData } = {}) {
+    rollData ||= this.getRollData();
+    const skillInfo = wrapped(skillId, { rollData });
+    LocalHookHandler.fireHookNoReturnSync(localHooks.actorGetSkillInfo, skillInfo, this, rollData);
+    return skillInfo;
+}
+
 Hooks.once('init', () => {
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype._getConditionalParts', getConditionalParts, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype.alterRollData', actionUseAlterRollData, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype.handleConditionals', actionUseHandleConditionals, libWrapper.WRAPPER);
+    libWrapper.register(MODULE_NAME, 'pf1.actionUse.ChatAttack.prototype.addAttack', chatAttackAddAttack, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ChatAttack.prototype.setAttackNotesHTML', setAttackNotesHTMLWrapper, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ChatAttack.prototype.setEffectNotesHTML', setEffectNotesHTMLWrapper, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.damageSources', actionDamageSources, libWrapper.WRAPPER);
@@ -287,6 +333,8 @@ Hooks.once('init', () => {
     libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorPF.prototype.prepareSpecificDerivedData', prepareActorDerivedData, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.rollAttack', itemActionRollAttack, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.rollDamage', itemActionRollDamage, libWrapper.WRAPPER);
+    libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorPF.prototype.rollSkill', actorRollSkill, libWrapper.WRAPPER);
+    libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorPF.prototype.getSkillInfo', actorGetSkillInfo, libWrapper.WRAPPER);
     // for patching resources - both
     // libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype._updateMaxUses', updateMaxUses, libWrapper.WRAPPER);
     // pf1.documents.actor.ActorPF.prototype.updateItemResources
@@ -310,4 +358,6 @@ Hooks.once('init', () => {
     );
 
     console.log(`${FRIENDLY_MODULE_NAME} loaded`);
+    Hooks.callAll(`${MODULE_NAME}.ready`)
+    game.modules.get(MODULE_NAME).ready = true;
 });

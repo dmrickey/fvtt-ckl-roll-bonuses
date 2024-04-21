@@ -6,6 +6,7 @@ import { CritBonus } from './crit-bonus.mjs';
 import { DamageBonus } from "./damage-bonus.mjs";
 import { DCBonus } from './dc-bonus.mjs';
 import { EffectiveSizeBonus } from './effective-size.mjs';
+import { EnhancementBonus } from './enhancement-bonus.mjs';
 import { FinesseBonus as FinesseBonus } from './finesse-bonus.mjs';
 import { FortuneBonus } from './fortune-bonus.mjs';
 import { MisfortuneBonus } from './misfortune-bonus.mjs';
@@ -18,6 +19,7 @@ export const registerBonuses = () => [
     DamageBonus,
     DCBonus,
     EffectiveSizeBonus,
+    EnhancementBonus,
     FinesseBonus,
     FortuneBonus,
     MisfortuneBonus,
