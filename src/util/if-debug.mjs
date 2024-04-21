@@ -7,8 +7,8 @@ const key = 'debug';
 Hooks.once('setup', () => registerSetting({ key, settingType: Boolean, defaultValue: false }, { skipReady: true }));
 
 /**
+ * Executes the passed in function if the module's debug option is enabled. Most useful for logging `ifDebug(() => console.log('some message'));`. This way the source of the log is accurate in the debug console vs having a generic log function.
  * @param {() => void} func
- * @returns
  */
 const ifDebug = (func) => {
     const isDebug = game.settings?.settings.has(`${MODULE_NAME}.${key}`) && game.settings.get(MODULE_NAME, key);

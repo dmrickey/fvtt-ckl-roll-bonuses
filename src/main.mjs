@@ -79,8 +79,8 @@ function prepareItemData(wrapped) {
 
     const item = this;
     /**
-     * initialize module data but make the individual portions initialize their own specific data so this part of the app doesn't need to know about all the properties/types
-     *  @type {any}
+     * Initialize module data but make the individual portions initialize their own specific data so this part of the app doesn't need to know about all the properties/types
+     * @type {any}
      */
     const empty = {};
     item[MODULE_NAME] = empty;
@@ -358,4 +358,6 @@ Hooks.once('init', () => {
     );
 
     console.log(`${FRIENDLY_MODULE_NAME} loaded`);
+    Hooks.callAll(`${MODULE_NAME}.ready`)
+    api.ready = true;
 });

@@ -4,9 +4,8 @@ import { difference, intersection } from './array-intersects.mjs';
 import { ifDebug } from './if-debug.mjs';
 import { truthiness } from "./truthiness.mjs";
 
-// todo update to use actor.itemFlags.dictionary or item.system.flags.dictionary
-//   can't really do this an support the same feat with different bonuses
 /**
+ * Get the matching dictionary flag from the given document
  *
  * @param {BaseDocument | undefined | null} doc - Item or Actor
  * @param {string} key
@@ -34,7 +33,7 @@ const getDocDFlags = (doc, key, { includeInactive = true } = {}) => {
 }
 
 /**
- * Get Document flags
+ * Get the matching module flag from the given document
  *
  * @param {BaseDocument | undefined | null} doc - Item or Actor
  * @param {string} key
@@ -59,6 +58,8 @@ const getDocFlags = (doc, key, { includeInactive = false } = {}) => {
 }
 
 /**
+ * Return any dictionary flags on the document that start with the given partial string
+ *
  * @param {BaseDocument} doc
  * @param {...string} keyStarts
  * @returns {{[key: string]: (number | string)[]}}
@@ -92,7 +93,6 @@ const getDocDFlagsStartsWith = (doc, ...keyStarts) => {
     return found;
 }
 
-// todo swap like individual method
 /**
  * Counts the amount of items that have a given boolean flags
  * @param {EmbeddedCollection<ItemPF>} items
@@ -116,9 +116,11 @@ const countBFlags = (items, ...flags) => {
 }
 
 /**
+ * Whether or not the actor has any of the given boolean flags
+ *
  * @param {Nullable<ActorPF>} actor
  * @param  {...string} flags
- * @returns {boolean} True if the actor has the boolean flag or not.
+ * @returns {boolean} True if the actor has any of the boolean flags.
  */
 const hasAnyBFlag = (
     actor,

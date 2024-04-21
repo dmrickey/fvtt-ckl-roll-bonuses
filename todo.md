@@ -171,5 +171,3 @@
 - Investigate
   - Add limit to checklist
   - Add subtext to checklist (could potentially default to the tooltip hint)
-  - Add functions to add external bonus sources / specific bonuses
-  - Figure out if there's a way to trigger data prep when an external bonus is added
