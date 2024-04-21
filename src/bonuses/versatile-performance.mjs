@@ -219,7 +219,15 @@ Hooks.on('renderItemSheet', (
     const [baseId, ...substitutes] = /** @type {(keyof typeof pf1.config.skills)[]}*/(`${currentVP}`.split(';'));
     /** @type {(keyof typeof pf1.config.skills)[]}*/
     const [skill1Id, skill2Id] = substitutes;
-    const skillLookup = (/** @type {keyof typeof pf1.config.skills}*/ id) => actor?.getSkillInfo(id) || pf1.config.skills[id] || { id, name: id };
+    const skillLookup = (/** @type {keyof typeof pf1.config.skills}*/ id) => {
+        try {
+            return actor?.getSkillInfo(id) || pf1.config.skills[id] || { id, name: id };
+        }
+        catch {
+            return null;
+        }
+    };
+
     let base, skill1, skill2;
     if (baseId) {
         base = skillLookup(baseId);
@@ -235,22 +243,38 @@ Hooks.on('renderItemSheet', (
     let allSkills = [];
     /** @type {{ id: keyof typeof pf1.config.skills, name: string }[]} */
     let performs = [];
-    if (isEditable && actor) {
-        allSkills = actor.allSkills
-            .map((id) => ({ id, name: getSkillName(actor, id) }));
+    if (isEditable) {
+        if (actor) {
+            allSkills = actor.allSkills
+                .filter((id) => game.settings.get('pf1', 'allowBackgroundSkills') || !pf1.config.backgroundOnlySkills.includes(id))
+                .map((id) => ({ id, name: getSkillName(actor, id) }));
 
-        performs = (() => {
-            const skills = [];
-            const perform = actor.getSkillInfo('prf');
-            for (const [subId, subS] of Object.entries(perform.subSkills ?? {})) {
-                const subSkill = deepClone(subS);
-                subSkill.id = `prf.subSkills.${subId}`;
-                skills.push(subSkill);
-            }
-            return skills
-                .sort((a, b) => a.name.localeCompare(b.name))
-                .map(({ id, name }) => ({ id, name }));
-        })();
+            performs = (() => {
+                const skills = [];
+                const perform = actor.getSkillInfo('prf');
+                for (const [subId, subS] of Object.entries(perform.subSkills ?? {})) {
+                    const subSkill = deepClone(subS);
+                    subSkill.id = `prf.subSkills.${subId}`;
+                    skills.push(subSkill);
+                }
+                return skills
+                    .sort((a, b) => a.name.localeCompare(b.name))
+                    .map(({ id, name }) => ({ id, name }));
+            })();
+        }
+        else {
+            allSkills = Object.entries(pf1.config.skills)
+                .filter(
+                    ([id]) => {
+                        const _id = /** @type {keyof typeof pf1.config.skills} */ (/** @type {any} */ id);
+                        return game.settings.get('pf1', 'allowBackgroundSkills') || !pf1.config.backgroundOnlySkills.includes(_id);
+                    }
+                )
+                .map(([id, value]) => {
+                    const _id = /** @type {keyof typeof pf1.config.skills} */ (/** @type {any} */ id);
+                    return { id: _id, name: value }
+                });
+        }
 
         if (performs.length && !base) {
             item.setItemDictionaryFlag(key, `${performs[0].id}`);

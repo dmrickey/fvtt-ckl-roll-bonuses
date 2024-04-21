@@ -1534,6 +1534,7 @@ declare global {
             };
         };
         config: {
+            backgroundOnlySkills: (keyof typeof pf1.config.skills)[];
             conditions: Conditions;
             conditionalTargets: {
                 attack: {
