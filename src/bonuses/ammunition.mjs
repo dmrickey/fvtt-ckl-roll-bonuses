@@ -2,6 +2,7 @@ import { MODULE_NAME } from "../consts.mjs";
 import { checkboxInput } from '../handlebars-handlers/bonus-inputs/chekbox-input.mjs';
 import { textInput } from "../handlebars-handlers/bonus-inputs/text-input.mjs";
 import { damageInput } from "../handlebars-handlers/targeted/bonuses/damage.mjs";
+import { getCurrentEnhancementIncreases } from '../util/enhancement-bonus-helper.mjs';
 import { FormulaCacheHelper } from '../util/flag-helpers.mjs';
 import { LocalHookHandler, customGlobalHooks, localHooks } from "../util/hooks.mjs";
 import { localize } from "../util/localize.mjs";
@@ -34,22 +35,34 @@ function getConditionalParts(actionUse, result, atk, index) {
             result['attack.normal'].push(`${attack}${label}`);
         }
 
-        const mw = !!ammo.getFlag(MODULE_NAME, ammoMasterworkKey);
-        const cachedEnhancementBonus = FormulaCacheHelper.getModuleFlagValue(ammo, ammoEnhancementKey);
-        const cachedEnhancementStacksBonus = FormulaCacheHelper.getModuleFlagValue(ammo, ammoEnhancementStacksKey);
-        if (mw
-            && !actionUse.item.system.masterwork
-            && !actionUse.item.system.enh
-            && !cachedEnhancementBonus
-            && !cachedEnhancementStacksBonus
+        const item = actionUse.item;
+
+        const itemMw = item.system.masterwork;
+        const itemEnh = item.system.enh;
+
+        const { baseEnh: itemBaseEnh, stackingEnh: itemStackingEnh } = getCurrentEnhancementIncreases(item);
+
+        const ammoMw = !!ammo.getFlag(MODULE_NAME, ammoMasterworkKey);
+        const ammoEnhBonus = FormulaCacheHelper.getModuleFlagValue(ammo, ammoEnhancementKey);
+        const ammoEnhStacksBonus = FormulaCacheHelper.getModuleFlagValue(ammo, ammoEnhancementStacksKey);
+        if (ammoMw
+            && !itemMw
+            && !itemEnh
+            && !itemBaseEnh
+            && !itemStackingEnh
+            && !ammoEnhBonus
+            && !ammoEnhStacksBonus
         ) {
             result['attack.normal'].push(`1[${ammo.name} - ${localize('PF1.Masterwork')}]`)
         }
-        else if (cachedEnhancementBonus || cachedEnhancementStacksBonus) {
-            const diff = cachedEnhancementBonus - actionUse.item.system.enh + cachedEnhancementStacksBonus;
-            if (diff > 0) {
-                result['attack.normal'].push(`${diff}[${ammo.name} - ${localize('PF1.EnhancementBonus')} (${cachedEnhancementBonus + cachedEnhancementStacksBonus})]`);
-                result['damage.normal'].push([`${diff}[${ammo.name} - ${localize('PF1.EnhancementBonus')} (${cachedEnhancementBonus + cachedEnhancementStacksBonus})]`, { values: [], custom: ammo.name }, false]);
+        else {
+            if (ammoEnhBonus || ammoEnhStacksBonus) {
+                const current = Math.max(itemEnh, itemBaseEnh, ammoEnhBonus);
+                const diff = current + ammoEnhStacksBonus - Math.max(itemEnh, itemBaseEnh);
+                if (diff > 0) {
+                    result['attack.normal'].push(`${diff}[${ammo.name} - ${localize('PF1.EnhancementBonus')} (${ammoEnhBonus + ammoEnhStacksBonus})]`);
+                    result['damage.normal'].push([`${diff}[${ammo.name} - ${localize('PF1.EnhancementBonus')} (${ammoEnhBonus + ammoEnhStacksBonus})]`, { values: [], custom: ammo.name }, false]);
+                }
             }
         }
 

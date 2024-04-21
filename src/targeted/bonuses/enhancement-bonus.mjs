@@ -1,7 +1,7 @@
-import { MODULE_NAME } from '../../consts.mjs';
 import { textInput } from '../../handlebars-handlers/bonus-inputs/text-input.mjs';
-import { handleBonusTypeFor, handleBonusesFor } from '../../target-and-bonus-join.mjs';
+import { handleBonusTypeFor } from '../../target-and-bonus-join.mjs';
 import { conditionalCalculator, conditionalModToItemChange } from '../../util/conditional-helpers.mjs';
+import { setCurrentEnhancementIncreases } from '../../util/enhancement-bonus-helper.mjs';
 import { FormulaCacheHelper } from '../../util/flag-helpers.mjs';
 import { customGlobalHooks } from '../../util/hooks.mjs';
 import { localize } from '../../util/localize.mjs';
@@ -18,22 +18,6 @@ export class EnhancementBonus extends BaseBonus {
     static get sourceKey() { return 'enh'; }
 
     static get #stacksKey() { return `${this.key}-stacks`; }
-
-    /**
-     * @param {ItemPF} item
-     * @param {{ attackIncrease: number, damageIncrease: number }} increases
-     */
-    static setCurrentEnhancementIncreases(item, { attackIncrease, damageIncrease }) {
-        item[MODULE_NAME][this.key] = { attackIncrease, damageIncrease };
-    }
-    /**
-     * @param {ItemPF} item
-     * @returns {{ attackIncrease: number, damageIncrease: number }} increases
-     */
-    static getCurrentEnhancementIncreases(item) {
-        const { attackIncrease, damageIncrease } = item[MODULE_NAME][this.key];
-        return { attackIncrease: attackIncrease || 0, damageIncrease: damageIncrease || 0 };
-    }
 
     /**
      * @override
@@ -87,7 +71,10 @@ export class EnhancementBonus extends BaseBonus {
             }
 
             if (isWeapon) {
-                EnhancementBonus.setCurrentEnhancementIncreases(item, { attackIncrease, damageIncrease });
+                setCurrentEnhancementIncreases(item, {
+                    baseEnh: Math.max(currentEnh, baseEnh),
+                    stackingEnh,
+                });
             }
 
             const conditional = EnhancementBonus.#createConditional(attackIncrease, damageIncrease, EnhancementBonus.label);
