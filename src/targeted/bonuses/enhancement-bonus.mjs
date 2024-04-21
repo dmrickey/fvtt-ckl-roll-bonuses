@@ -1,6 +1,9 @@
+import { MODULE_NAME } from '../../consts.mjs';
 import { textInput } from '../../handlebars-handlers/bonus-inputs/text-input.mjs';
-import { conditionalModToItemChange } from '../../util/conditional-helpers.mjs';
+import { handleBonusTypeFor, handleBonusesFor } from '../../target-and-bonus-join.mjs';
+import { conditionalCalculator, conditionalModToItemChange } from '../../util/conditional-helpers.mjs';
 import { FormulaCacheHelper } from '../../util/flag-helpers.mjs';
+import { customGlobalHooks } from '../../util/hooks.mjs';
 import { localize } from '../../util/localize.mjs';
 import { signed } from '../../util/to-signed-string.mjs';
 import { truthiness } from '../../util/truthiness.mjs';
@@ -17,6 +20,22 @@ export class EnhancementBonus extends BaseBonus {
     static get #stacksKey() { return `${this.key}-stacks`; }
 
     /**
+     * @param {ItemPF} item
+     * @param {{ attackIncrease: number, damageIncrease: number }} increases
+     */
+    static setCurrentEnhancementIncreases(item, { attackIncrease, damageIncrease }) {
+        item[MODULE_NAME][this.key] = { attackIncrease, damageIncrease };
+    }
+    /**
+     * @param {ItemPF} item
+     * @returns {{ attackIncrease: number, damageIncrease: number }} increases
+     */
+    static getCurrentEnhancementIncreases(item) {
+        const { attackIncrease, damageIncrease } = item[MODULE_NAME][this.key];
+        return { attackIncrease: attackIncrease || 0, damageIncrease: damageIncrease || 0 };
+    }
+
+    /**
      * @override
      * @returns {string}
      */
@@ -28,6 +47,55 @@ export class EnhancementBonus extends BaseBonus {
      */
     static init() {
         FormulaCacheHelper.registerModuleFlag(this.key);
+        FormulaCacheHelper.registerModuleFlag(this.#stacksKey);
+
+        /**
+         * Adds conditional to action being used
+         *
+         * @param {ActionUse} actionUse
+         */
+        function actionUseHandleConditionals(actionUse) {
+            let baseEnh = 0;
+            let stackingEnh = 0;
+
+            handleBonusTypeFor(
+                actionUse,
+                EnhancementBonus,
+                (bonusType, sourceItem) => {
+                    const enh = FormulaCacheHelper.getModuleFlagValue(sourceItem, bonusType.key);
+                    baseEnh = Math.max(baseEnh, enh);
+
+                    const stacks = FormulaCacheHelper.getModuleFlagValue(sourceItem, bonusType.#stacksKey);
+                    stackingEnh += stacks;
+                },
+            );
+
+            const item = actionUse.item;
+            const isWeapon = item instanceof pf1.documents.item.ItemAttackPF || item instanceof pf1.documents.item.ItemWeaponPF;
+            let currentMasterwork = false;
+            let currentEnh = 0;
+            if (isWeapon) {
+                currentEnh = item.system.enh;
+                currentMasterwork = item.system.masterwork;
+            }
+
+            const attackIncrease = Math.max(currentEnh, baseEnh, currentMasterwork ? 1 : 0) + stackingEnh - Math.max(currentEnh, currentMasterwork ? 1 : 0);
+            const damageIncrease = Math.max(currentEnh, baseEnh) + stackingEnh - currentEnh;
+
+            if (!attackIncrease && !damageIncrease) {
+                return;
+            }
+
+            if (isWeapon) {
+                EnhancementBonus.setCurrentEnhancementIncreases(item, { attackIncrease, damageIncrease });
+            }
+
+            const conditional = EnhancementBonus.#createConditional(attackIncrease, damageIncrease, EnhancementBonus.label);
+            if (conditional.modifiers?.length) {
+                conditionalCalculator(actionUse.shared, conditional);
+            }
+        }
+        Hooks.on(customGlobalHooks.actionUseHandleConditionals, actionUseHandleConditionals);
     }
 
     /**
@@ -45,29 +113,12 @@ export class EnhancementBonus extends BaseBonus {
             sources.push({
                 value: bonus.attack,
                 name: source.name,
-                modifier: 'untyped',
+                modifier: 'enh',
                 sort: -100,
             });
         }
 
         return sources;
-    }
-
-    /**
-     * @override
-     * @inheritdoc
-     * @param {ItemPF} source
-     * @param {ActionUse | ItemAction} action
-     * @returns {Nullable<ItemConditional>}
-     */
-    static getConditional(source, action) {
-        const bonus = this.#getEnhancementBonus(source, action);
-        if (bonus) {
-            const conditional = this.#createConditional(bonus.attack, bonus.damage, source.name);
-            return conditional.modifiers?.length
-                ? conditional
-                : null;
-        }
     }
 
     /**
@@ -80,7 +131,16 @@ export class EnhancementBonus extends BaseBonus {
         /** @type {ItemChange[]} */
         let sources = [];
 
-        const conditional = this.getConditional(source, action);
+        const conditional = (() => {
+            const bonus = this.#getEnhancementBonus(source, action);
+            if (bonus) {
+                const conditional = this.#createConditional(bonus.attack, bonus.damage, source.name);
+                return conditional.modifiers?.length
+                    ? conditional
+                    : null;
+            }
+        })();
+
         if (!conditional) {
             return sources;
         }
@@ -102,12 +162,13 @@ export class EnhancementBonus extends BaseBonus {
     static getHints(source) {
         const hints = [];
 
-        const enh = FormulaCacheHelper.getModuleFlagValue(source, this.key);
-        if (enh) {
-            const mod = signed(enh);
-            hints.push(localize('enh-mod', { mod }));
+        const baseEnh = FormulaCacheHelper.getModuleFlagValue(source, this.key);
+        const stacks = FormulaCacheHelper.getModuleFlagValue(source, this.#stacksKey);
+
+        if (baseEnh) {
+            hints.push(localize('enh-mod', { mod: baseEnh }));
         }
-        const stacks = FormulaCacheHelper.getModuleFlagValue(source, this.key);
+
         if (stacks) {
             const mod = signed(stacks);
             hints.push(localize('enh-mod-stacks', { mod }));
@@ -148,11 +209,11 @@ export class EnhancementBonus extends BaseBonus {
     /**
      * @override
      * @inheritdoc
-     * @param {ItemPF} source
-     * @param {ItemAction} action
-     * @param {RollData} rollData
+     * @param {ItemPF} _source
+     * @param {ItemAction} _action
+     * @param {RollData} _rollData
      */
-    static updateItemActionRollData(source, action, rollData) {
+    static updateItemActionRollData(_source, _action, _rollData) {
         // just leaving this here to say this isn't possible so don't forget and try to add this in later (as of v9.6)
         // the enhancement data is only on the item within the rollData, and that's a full reference so it'll update the item in memory which will cause issues the next time the item is updated later.
         return;
@@ -164,7 +225,7 @@ export class EnhancementBonus extends BaseBonus {
      * @return {Nullable<{attack: number, damage: number}>}
      */
     static #getEnhancementBonus(source, thing) {
-        const enh = FormulaCacheHelper.getModuleFlagValue(source, this.key);
+        const baseEnh = FormulaCacheHelper.getModuleFlagValue(source, this.key);
         const stackingEnh = FormulaCacheHelper.getModuleFlagValue(source, this.#stacksKey);
 
         const item = thing instanceof pf1.documents.item.ItemPF
@@ -177,12 +238,8 @@ export class EnhancementBonus extends BaseBonus {
             currentMasterwork = item.system.masterwork;
         }
 
-        const attackIncrease = stackingEnh + (currentMasterwork
-            ? currentEnh
-                ? (enh - currentEnh)
-                : (enh - 1)
-            : enh);
-        const damageIncrease = enh - currentEnh + stackingEnh;
+        const attackIncrease = Math.max(currentEnh, baseEnh, currentMasterwork ? 1 : 0) + stackingEnh - Math.max(currentEnh, currentMasterwork ? 1 : 0);
+        const damageIncrease = Math.max(currentEnh, baseEnh) + stackingEnh - currentEnh;
 
         if (!attackIncrease && !damageIncrease) {
             return;
@@ -207,22 +264,22 @@ export class EnhancementBonus extends BaseBonus {
             modifiers.push({
                 _id: foundry.utils.randomID(),
                 critical: 'normal',
-                damageType: { custom: '', values: ['untyped'] },
+                damageType: { custom: '', values: [''] },
                 formula: `${attackBonus}`,
                 subTarget: 'allAttack',
                 target: 'attack',
-                type: pf1.config.damageTypes.untyped,
+                type: `${pf1.config.bonusModifiers.enh}+`,
             });
         }
         if (damageBonus) {
             modifiers.push({
                 _id: foundry.utils.randomID(),
                 critical: 'normal',
-                damageType: { custom: '', values: ['untyped'] },
+                damageType: { custom: name, values: [] },
                 formula: `${damageBonus}`,
                 subTarget: 'allDamage',
                 target: 'damage',
-                type: pf1.config.damageTypes.untyped,
+                type: `${pf1.config.bonusModifiers.enh}+`,
             });
         }
         return {

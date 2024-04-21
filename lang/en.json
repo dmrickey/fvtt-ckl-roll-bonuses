@@ -185,7 +185,7 @@
         "dc-mod": "{mod} DC",
         "driver": "Profession (driver)",
         "enh-mod-stacks": "{mod} Enhancement Bonus (Stacks)",
-        "enh-mod": "{mod} Enhancement Bonus",
+        "enh-mod": "Enhancement Bonus -> {mod}",
         "effective-size": {
             "hint": "Size: {mod}"
         },

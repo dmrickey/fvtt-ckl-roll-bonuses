@@ -143,6 +143,9 @@ export const handleBonusTypeFor = (thing, specificBonusType, func, { skipGeneric
         }));
 }
 
+api.utils.handleBonusesFor = handleBonusesFor;
+api.utils.handleBonusTypeFor = handleBonusTypeFor;
+
 /**
  * Adds conditional to action being used
  *
@@ -293,22 +296,27 @@ Hooks.on(customGlobalHooks.itemUse, (
 
 /**
  * @param {ItemPF} item
- * @param {RollData} _rollData
+ * @param {RollData} rollData
  */
-const prepare = (item, _rollData) => {
+const prepare = (item, rollData) => {
     item[MODULE_NAME].bonuses = [];
     item[MODULE_NAME].targets = [];
+
+    [
+        ...api.allBonusTypes,
+        ...api.allTargetTypes,
+    ].forEach((source) => source.prepareBaseData(item, rollData));
 
     api.allBonusTypes.forEach((bonusType) => {
         if (bonusType.isSource(item)) {
             item[MODULE_NAME].bonuses.push(bonusType);
-            bonusType.prepareData(item, _rollData);
+            bonusType.prepareSourceData(item, rollData);
         }
     });
     api.allTargetTypes.forEach((targetType) => {
         if (targetType.isSource(item)) {
             item[MODULE_NAME].targets.push(targetType);
-            targetType.prepareData(item, _rollData);
+            targetType.prepareSourceData(item, rollData);
         }
     });
 };

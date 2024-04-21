@@ -73,7 +73,7 @@ export class FinesseBonus extends BaseBonus {
      * @param {ItemPF} item
      * @param {RollData} rollData
      */
-    static prepareData(item, rollData) {
+    static prepareSourceData(item, rollData) {
         item[MODULE_NAME][this.key] = {
             dex: rollData.abilities.dex.mod,
             str: rollData.abilities.str.mod,
