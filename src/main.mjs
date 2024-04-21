@@ -359,5 +359,5 @@ Hooks.once('init', () => {
 
     console.log(`${FRIENDLY_MODULE_NAME} loaded`);
     Hooks.callAll(`${MODULE_NAME}.ready`)
-    api.ready = true;
+    game.modules.get(MODULE_NAME).ready = true;
 });

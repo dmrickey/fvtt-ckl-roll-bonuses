@@ -18,6 +18,9 @@ interface Game {
         get(moduleId: string): {
             active?: boolean;
             api?: any;
+
+            /** mod is fully ready and the api can be used safely */
+            ready?: boolean;
         };
     };
 

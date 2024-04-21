@@ -39,9 +39,6 @@ declare global {
             v1: {};
         };
 
-        /** mod is fully ready and the api can be used safely */
-        ready: boolean;
-
         /** Base source classes for extending */
         sources: {
             BaseBonus: typeof BaseBonus;
