@@ -170,3 +170,4 @@
 # vnext
 - Add EitR toggle that will autoconfigure weapon focus for weapon groups instead of weapon focus
 - Add FAQ for why some feats are automatically configured the way they are
+- distance-based targeting
