@@ -88,7 +88,7 @@ LocalHookHandler.registerHandler(localHooks.chatAttackAddAttack, chatAttackAddAt
 /** @param {ChatAttack} chatAttack */
 const addAttackNote = (chatAttack) => {
     const { attack, effectNotes } = chatAttack;
-    if (attack.isCrit) {
+    if (attack?.isCrit) {
         if (isSnakeSideWindCrit(chatAttack)) {
             effectNotes.push(localizeBonusLabel(key));
         }

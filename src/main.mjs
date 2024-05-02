@@ -26,6 +26,7 @@ function setAttackNotesHTMLWrapper(wrapped) {
 /**
  * Used to alter the roll. The roll can be inspected, then replaced.
  *
+ * @this {ChatAttack}
  * @param {(args: any) => Promise<any>} wrapped
  * @param {object} obj
  * @param {boolean} [obj.noAttack]
@@ -33,7 +34,6 @@ function setAttackNotesHTMLWrapper(wrapped) {
  * @param {unknown[]} [obj.extraParts]
  * @param {boolean} [obj.critical] Whether or not this roll is a for a critical confirmation
  * @param {object} [obj.conditionalParts]
- * @this {ChatAttack}
  */
 async function chatAttackAddAttack(wrapped, { noAttack = false, bonus = null, extraParts = [], critical = false, conditionalParts = {} }) {
     await wrapped({ noAttack, bonus, extraParts, critical, conditionalParts });
@@ -51,7 +51,7 @@ function setEffectNotesHTMLWrapper(wrapped) {
 
 /**
  * @param {() => number | string} wrapped
- * @this ItemChange
+ * @this {ItemChange}
  */
 function patchChangeValue(wrapped) {
     const seed = wrapped();
@@ -71,8 +71,8 @@ function d20RollWrapper(wrapped, options = {}) {
 }
 
 /**
- * @param {*} wrapped
  * @this {ItemPF}
+ * @param {*} wrapped
  */
 function prepareItemData(wrapped) {
     wrapped();
@@ -90,9 +90,9 @@ function prepareItemData(wrapped) {
 }
 
 /**
+ * @this {ItemPF}
  * @param {*} wrapped - original method
  * @param {*} options - options passed to ItemPF.use
- * @this {ItemPF}
  * @returns The result of the original method.
  */
 function itemUseWrapper(wrapped, options = {}) {
@@ -101,9 +101,9 @@ function itemUseWrapper(wrapped, options = {}) {
 }
 
 /**
+ * @this {ActionUse}
  * @param {(arg: object) => any} wrapped
  * @param {object} e - The attack dialog's JQuery form data or FormData object
- * @this ActionUse
  */
 function actionUseAlterRollData(wrapped, e) {
     wrapped(e);
@@ -118,7 +118,7 @@ function actionUseAlterRollData(wrapped, e) {
  * @param {object} options
  * @param {number} [options.index=0] - The index of the attack, in order of enabled attacks.
  * @returns {object} The conditional parts used.
- * @this ActionUse
+ * @this {ActionUse}
  */
 function getConditionalParts(wrapped, atk, { index = 0 }) {
     var result = wrapped(atk, { index });
@@ -142,7 +142,7 @@ function itemActionCritRangeWrapper(wrapped) {
  * Determines conditional parts used in an attack.
  *
  * @param {() => {}} wrapped
- * @this ActionUse
+ * @this {ActionUse}
  */
 function actionUseHandleConditionals(wrapped) {
     wrapped();
@@ -230,18 +230,17 @@ Hooks.on('pf1GetRollData', updateItemActionRollData);
 
 /**
  * @typedef {{data: RollData?, extraParts: unknown[], bonus:unknown, primaryAttack: boolean}} RollAttackArgs
- */
-/**
- * Place an attack roll using an item (weapon, feat, spell, or equipment)
- *
- * @param {(arg: RollAttackArgs) => Promise<D20RollPF>} wrapped
- * @param {object} [args]
- * @param {RollData?} [args.data]
- * @param {unknown[]} [args.extraParts]
- * @param {unknown} [args.bonus]
- * @param {boolean} [args.primaryAttack]
- * @this {ItemAction}
- */
+ */ /**
+* Place an attack roll using an item (weapon, feat, spell, or equipment)
+*
+* @this {ItemAction}
+* @param {(arg: RollAttackArgs) => Promise<D20RollPF>} wrapped
+* @param {object} [args]
+* @param {RollData?} [args.data]
+* @param {unknown[]} [args.extraParts]
+* @param {unknown} [args.bonus]
+* @param {boolean} [args.primaryAttack]
+*/
 async function itemActionRollAttack(
     wrapped,
     { data = null, extraParts = [], bonus = null, primaryAttack = true } = {}
@@ -287,10 +286,10 @@ async function itemActionRollDamage(wrapped, ...args) {
 }
 
 /**
+ * @this {ActorPF}
  * @param {(skillId: keyof typeof pf1.config.skills, options: object) => ChatMessagePF|object|void} wrapped
  * @param {keyof typeof pf1.config.skills} skillId
  * @param {Object} options
- * @this {ActorPF}
  * @returns {ChatMessagePF|object|void} The chat message if one was created, or its data if not. `void` if the roll was cancelled.
  */
 function actorRollSkill(wrapped, skillId, options) {
@@ -300,11 +299,11 @@ function actorRollSkill(wrapped, skillId, options) {
 }
 
 /**
+ * @this {ActorPF}
  * @param {(skillId: string, options?: { rollData?: RollData }) => SkillInfo} wrapped
  * @param {keyof typeof pf1.config.skills} skillId
  * @param {object} [options]
  * @param {RollData} [options.rollData]
- * @this {ActorPF}
  * @return {SkillRollData}
  */
 function actorGetSkillInfo(wrapped, skillId, { rollData } = {}) {

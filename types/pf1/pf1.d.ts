@@ -141,7 +141,7 @@ declare global {
 
     class ChatAttack {
         action: ItemAction;
-        attack: D20RollPF;
+        attack?: D20RollPF;
         attackNotes: string[];
         critConfirm: D20RollPF;
         d20: Die;
