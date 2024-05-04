@@ -88,13 +88,8 @@ export class DCBonus extends BaseBonus {
             return;
         }
 
-        const { actor, item } = action;
         const value = FormulaCacheHelper.getModuleFlagValue(source, this.key);
-        if (!actor
-            || !value
-            || !(item instanceof pf1.documents.item.ItemSpellPF)
-            || !rollData
-        ) {
+        if (!value || !rollData) {
             return;
         }
         rollData.dcBonus ||= 0;
