@@ -11,7 +11,6 @@ import { api } from './util/api.mjs';
 import './overrides/action-damage.mjs';
 import migrate from './migration/index.mjs';
 
-Hooks.once('ready', () => game.modules.get(MODULE_NAME).api = api);
 Hooks.once('pf1PostReady', () => migrate());
 
 /**
@@ -355,8 +354,11 @@ Hooks.once('init', () => {
             get: function () { return this.isDeterministic && !this.terms.every((x) => !!x.flavor); }
         }
     );
+});
 
+Hooks.once('ready', () => {
     console.log(`${FRIENDLY_MODULE_NAME} loaded`);
-    Hooks.callAll(`${MODULE_NAME}.ready`)
+    game.modules.get(MODULE_NAME).api = api;
     game.modules.get(MODULE_NAME).ready = true;
+    Hooks.callAll(`${MODULE_NAME}.ready`)
 });
