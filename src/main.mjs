@@ -354,9 +354,7 @@ Hooks.once('init', () => {
             get: function () { return this.isDeterministic && !this.terms.every((x) => !!x.flavor); }
         }
     );
-});
 
-Hooks.once('ready', () => {
     console.log(`${FRIENDLY_MODULE_NAME} loaded`);
     game.modules.get(MODULE_NAME).api = api;
     game.modules.get(MODULE_NAME).ready = true;
