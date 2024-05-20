@@ -10,6 +10,7 @@
 - [Feats](#feats)
   - [Bomber's eye](#bombers-eye)
   - [Longshot](#longshot)
+  - [Shared Remembrance](#shared-remembrance)
   - [Spell Perfection](#spell-perfection)
   - [Spirited Charge](#spirited-charge)
 - [Racial Features](#racial-features)
@@ -82,6 +83,8 @@
 - Increase throwing range
 ## Longshot
 - Increase bow range
+## Shared Remembrance
+- https://aonprd.com/FeatDisplay.aspx?ItemName=Shared%20Remembrance
 ## Spell Perfection
 - https://www.d20pfsrd.com/feats/general-feats/spell-perfection/
 ## Spirited Charge
