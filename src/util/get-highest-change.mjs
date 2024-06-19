@@ -13,8 +13,8 @@ export const getHighestChanges = function (changes, options = { ignoreTarget: fa
         ids: [],
         highestID: null,
     };
-    const highest = Object.keys(pf1.config.bonusModifiers).reduce((cur, k) => {
-        if (options.ignoreTarget) cur[k] = duplicate(highestTemplate);
+    const highest = Object.keys(pf1.config.bonusTypes).reduce((cur, k) => {
+        if (options.ignoreTarget) cur[k] = foundry.utils.deepClone(highestTemplate);
         else cur[k] = {};
         return cur;
     }, {});

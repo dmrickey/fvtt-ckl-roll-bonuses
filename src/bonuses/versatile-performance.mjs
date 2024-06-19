@@ -112,7 +112,7 @@ Hooks.on('renderActorSheetPF', (
             const skillId = li.getAttribute('data-skill');
             const mainId = li.getAttribute('data-main-skill');
             return mainId
-                ? `${mainId}.subSkills.${skillId}`
+                ? `${mainId}.${skillId}`
                 : skillId;
         }
 
@@ -151,7 +151,7 @@ function versatileRollSkill(seed, actor) {
     // todo v10 change this to use the single journal entry in `getSkillInfo`
 
     const originalSkillElement = () => {
-        const parentId = skillId.split('.subSkills')[0];
+        const parentId = skillId.split('.')[0];
         const skillInfo = actor.getSkillInfo(skillId);
         const link = skillInfo.journal || actor.getSkillInfo(parentId)?.journal || pf1.config.skillCompendiumEntries[parentId] || '';
         const linkProp = link ? `data-compendium-entry="${link}"` : '';
@@ -254,7 +254,7 @@ Hooks.on('renderItemSheet', (
                 const perform = actor.getSkillInfo('prf');
                 for (const [subId, subS] of Object.entries(perform.subSkills ?? {})) {
                     const subSkill = deepClone(subS);
-                    subSkill.id = `prf.subSkills.${subId}`;
+                    subSkill.id = `prf.${subId}`;
                     skills.push(subSkill);
                 }
                 return skills

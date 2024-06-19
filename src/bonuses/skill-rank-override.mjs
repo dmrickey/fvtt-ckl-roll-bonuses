@@ -74,7 +74,7 @@ Hooks.on('renderActorSheetPF', (
             const skillId = li.getAttribute('data-skill');
             const mainId = li.getAttribute('data-main-skill');
             return /** @type {keyof typeof pf1.config.skills} */ (mainId
-                ? `${mainId}.subSkills.${skillId}`
+                ? `${mainId}.${skillId}`
                 : skillId);
         }
 

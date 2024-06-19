@@ -1565,6 +1565,7 @@ declare global {
             };
             abilities: Abilities;
             bonusModifiers: { [key in BonusModifers]: string };
+            bonusTypes: { [key in BonusModifers]: string };
             damageResistances: {
                 magic: 'Magic';
                 epic: 'Epic';

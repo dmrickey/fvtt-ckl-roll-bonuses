@@ -57,11 +57,9 @@ export const getSkillFormula = (actor, rollData, skillId) => {
 
     // Add Wound Thresholds info
     if (rollData.attributes.woundThresholds?.penalty > 0) {
-        parts.push(
-            `- @attributes.woundThresholds.penalty[${game.i18n.localize(
-                pf1.config.woundThresholdConditions[rollData.attributes.woundThresholds.level]
-            )}]`
-        );
+        const label = pf1.config.woundThresholdConditions[rollData.attributes.woundThresholds.level];
+        notes.push(label);
+        parts.push(`- @attributes.woundThresholds.penalty[${label}]`);
     }
 
     // Add changes
@@ -75,8 +73,8 @@ export const getSkillFormula = (actor, rollData, skillId) => {
         }
     }
 
-    const props = [];
-    if (notes.length > 0) props.push({ header: game.i18n.localize("PF1.Notes"), value: notes });
+    // const props = [];
+    // if (notes.length > 0) props.push({ header: game.i18n.localize("PF1.Notes"), value: notes });
 
     // const token = options.token ?? actor.token;
 

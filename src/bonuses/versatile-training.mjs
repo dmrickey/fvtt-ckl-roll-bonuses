@@ -45,7 +45,7 @@ class Settings {
         'monk': sort([...allChoices, 'acr', 'esc']),
         'natural': sort([...allChoices, 'clm', 'fly', 'swm']),
         'polearms': sort([...allChoices, 'dip', 'sen']),
-        'siegeEngines': sort([...allChoices, 'clm', 'pro.subSkills.driver']),
+        'siegeEngines': sort([...allChoices, 'clm', 'pro.driver']),
         'spears': sort([...allChoices, 'han', 'rid']),
         'thrown': sort([...allChoices, 'acr', 'per']),
         'tribal': sort([...allChoices, 'clm', 'sur']),
