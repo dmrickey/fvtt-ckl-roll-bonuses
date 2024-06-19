@@ -190,14 +190,15 @@ Hooks.on(customGlobalHooks.actionUseAlterRollData, actionUseAlterRollData);
 
 /**
  * @param {ChatAttack} chatAttack
+ * @param {string[]} notes
  */
-function addFootnotes({ action, attackNotes }) {
+function addFootnotes({ action }, notes) {
     handleBonusesFor(
         action,
-        (bonusType, sourceItem) => attackNotes.push(...bonusType.getFootnotes(sourceItem, action))
+        (bonusType, sourceItem) => notes.push(...bonusType.getFootnotes(sourceItem, action))
     );
 }
-Hooks.on(customGlobalHooks.chatAttackFootnotes, addFootnotes);
+Hooks.on(customGlobalHooks.actionUseFootnotes, addFootnotes);
 
 /**
  * Add attack bonus to actor's Combat attacks column tooltip

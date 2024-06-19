@@ -128,6 +128,10 @@ declare global {
         powerAttack: boolean;
         rollData: RollData;
 
+        templateData: {
+            footnotes?: string[];
+        };
+
         // custom data
         fortuneCount;
         misfortuneCount;
@@ -268,7 +272,7 @@ declare global {
     /** used for weapons and attacks */
     interface TraitSelector<T extends string = string> {
         /** custom entries split by ; */
-        custom: string;
+        custom: string[];
         value: T[];
     }
 

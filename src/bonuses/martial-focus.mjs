@@ -44,7 +44,7 @@ registerItemHint((hintcls, actor, item, _data) => {
         return;
     }
 
-    const weaponGroups = [...item.system.weaponGroups.value, ...item.system.weaponGroups.custom.split(';')].map(x => x.trim()).filter(truthiness);
+    const weaponGroups = [...item.system.weaponGroups.value, ...item.system.weaponGroups.custom].map(x => x.trim()).filter(truthiness);
     const focuses = new KeyedDFlagHelper(actor, {}, key).valuesForFlag(key);
 
     const isFocused = intersects(weaponGroups, focuses);
@@ -66,7 +66,7 @@ function addMartialFocus({ actor, item, shared }) {
     }
     if (!actor || !item.system.baseTypes?.length) return;
 
-    const weaponGroups = [...item.system.weaponGroups.value, ...item.system.weaponGroups.custom.split(';')].map(x => x.trim()).filter(truthiness);
+    const weaponGroups = [...item.system.weaponGroups.value, ...item.system.weaponGroups.custom].map(x => x.trim()).filter(truthiness);
     const focuses = new KeyedDFlagHelper(actor, {}, key).valuesForFlag(key);
 
     const isFocused = intersects(weaponGroups, focuses);
@@ -94,7 +94,7 @@ function actionDamageSources({ item }, sources) {
     const name = localizeBonusLabel(key);
 
     const martialFocuses = getDocDFlags(actor, key, { includeInactive: false });
-    const groupsOnItem = [...(item.system.weaponGroups?.value || []), ...(item.system.weaponGroups?.custom || '').split(';')].filter(truthiness);
+    const groupsOnItem = [...(item.system.weaponGroups?.value || []), ...(item.system.weaponGroups?.custom || [])].filter(truthiness);
     const isFocused = intersects(groupsOnItem, martialFocuses);
 
     if (isFocused) {
@@ -138,7 +138,7 @@ Hooks.on(customGlobalHooks.actionDamageSources, actionDamageSources);
 //     const actor = action.actor;
 //     if (!actor || !item.system.baseTypes?.length) return;
 
-//     const weaponGroups = [...item.system.weaponGroups.value, ...item.system.weaponGroups.custom.split(';')].map(x => x.trim()).filter(truthiness);
+//     const weaponGroups = [...item.system.weaponGroups.value, ...item.system.weaponGroups.custom].map(x => x.trim()).filter(truthiness);
 //     const focuses = new KeyedDFlagHelper(actor, {}, key).valuesForFlag(key);
 
 //     const isFocused = intersects(weaponGroups, focuses);
@@ -176,7 +176,7 @@ Hooks.on('renderItemSheet', (
                         /** @returns {i is ItemWeaponPF | ItemAttackPF} */
                         (i) => i instanceof pf1.documents.item.ItemWeaponPF || i instanceof pf1.documents.item.ItemAttackPF
                     )
-                    .flatMap((i) => (i.system.weaponGroups?.custom ?? '').split(';'))
+                    .flatMap((i) => (i.system.weaponGroups?.custom ?? []))
                     .filter(truthiness)
                 ?? []
             ).map((i) => ({ key: i, label: i }));

@@ -249,13 +249,14 @@ function handleItemActionCritRangeWrapper(current, action) {
 }
 LocalHookHandler.registerHandler(localHooks.itemActionCritRangeWrapper, handleItemActionCritRangeWrapper);
 
-Hooks.on(customGlobalHooks.chatAttackFootnotes, (
-    /** @type {ChatAttack} */ { action, attackNotes }
+Hooks.on(customGlobalHooks.actionUseFootnotes, (
+    /** @type {ChatAttack} */ { action },
+    /** @type {string[]}  */ notes,
 ) => {
     const hasKeen = action.item.hasItemBooleanFlag(selfKeen)
         || hasAnyBFlag(action.item.actor, keenAll, keenId(action.item), keenId(action));
     if (hasKeen) {
-        attackNotes.push(localize('keen'));
+        notes.push(localize('keen'));
     }
 });
 

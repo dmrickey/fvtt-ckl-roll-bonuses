@@ -6,7 +6,7 @@ export const customGlobalHooks = /** @type {const} */ ({
     actionUseHandleConditionals: `${MODULE_NAME}_actionUseHandleConditionals`,
     /** Make sure to put the effect note on the specific attack effected and not all */
     chatAttackEffectNotes: `${MODULE_NAME}_chatAttackEffectNotes`,
-    chatAttackFootnotes: `${MODULE_NAME}_chatAttackFootnotes`,
+    actionUseFootnotes: `${MODULE_NAME}_actionUseFootnotes`,
     d20Roll: `${MODULE_NAME}_d20Roll`,
     getActorInitiativeFormula: `${MODULE_NAME}_getActorInitiativeFormula`,
     getConditionalParts: `${MODULE_NAME}_getConditionalParts`,

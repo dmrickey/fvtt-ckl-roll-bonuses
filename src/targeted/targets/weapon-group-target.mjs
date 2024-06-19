@@ -56,7 +56,7 @@ export class WeaponGroupTarget extends BaseTarget {
             return [];
         }
 
-        const groupsOnItem = [...item.system.weaponGroups.value, ...item.system.weaponGroups.custom.split(';')]
+        const groupsOnItem = [...item.system.weaponGroups.value, ...item.system.weaponGroups.custom]
             .map(x => x.trim())
             .filter(truthiness);
 
@@ -85,7 +85,7 @@ export class WeaponGroupTarget extends BaseTarget {
                     /** @returns {i is ItemWeaponPF | ItemAttackPF} */
                     (i) => i instanceof pf1.documents.item.ItemWeaponPF || i instanceof pf1.documents.item.ItemAttackPF
                 )
-                .flatMap((i) => (i.system.weaponGroups?.custom ?? '').split(';'))
+                .flatMap((i) => (i.system.weaponGroups?.custom ?? []))
                 .filter(truthiness)
             ?? []
         );
