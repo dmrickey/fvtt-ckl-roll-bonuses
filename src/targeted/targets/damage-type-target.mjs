@@ -104,7 +104,7 @@ export class DamageTypeTarget extends BaseTarget {
         custom.sort();
 
         const options = {
-            ...pf1.config.damageTypes,
+            ...pf1.registry.damageTypes.getLabels(),
             ...custom.reduce((acc, curr) => ({ ...acc, [curr]: curr, }), {})
         };
 

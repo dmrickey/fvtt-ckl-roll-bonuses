@@ -168,10 +168,10 @@ export class DamageBonus extends BaseBonus {
      */
     static #damagesTypeToString(types) {
         if (!types.custom?.trim() && !types.values?.length) {
-            return pf1.config.damageTypes.untyped;
+            return pf1.registry.damageTypes.get('untyped').name;
         }
 
-        const valueLookup = ( /** @type {keyof pf1['config']['damageTypes']} */ t) => pf1.config.damageTypes[t] || t;
+        const valueLookup = ( /** @type {DamageType['id']} */ t) => pf1.registry.damageTypes.getLabels()[t] || t;
         /**
          * @param {TraitSelectorValuePlural} t
          */

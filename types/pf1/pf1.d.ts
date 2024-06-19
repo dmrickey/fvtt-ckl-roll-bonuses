@@ -1336,14 +1336,29 @@ declare global {
         | 'wounds';
 
     interface DamageType {
-        category: 'physical' | 'energy';
+        abbr: string;
+        category: 'physical' | 'energy' | 'misc';
         color: string;
-        flags: { [key: string]: any };
+        flags: Record<string, any>;
         icon: string;
         isModifier: boolean;
         name: string;
         namepsace: 'pf1' | string;
-        get id(): string;
+        get id():
+            | 'untyped'
+            | 'slashing'
+            | 'piercing'
+            | 'bludgeoning'
+            | 'fire'
+            | 'cold'
+            | 'electric'
+            | 'acid'
+            | 'sonic'
+            | 'force'
+            | 'negative'
+            | 'positive'
+            | 'precision'
+            | 'nonlethal';
     }
 
     interface ItemChange {
@@ -1573,22 +1588,6 @@ declare global {
                 good: 'Good';
                 evil: 'Evil';
             };
-            damageTypes: {
-                untyped: 'Untyped';
-                slashing: 'Slashing';
-                piercing: 'Piercing';
-                bludgeoning: 'Bludgeoning';
-                fire: 'Fire';
-                cold: 'Cold';
-                electric: 'Electricity';
-                acid: 'Acid';
-                sonic: 'Sonic';
-                force: 'Force';
-                negative: 'Negative';
-                positive: 'Positive';
-                precision: 'Precision';
-                nonlethal: 'Nonlethal';
-            };
             savingThrows: SavingThrows;
             skillCompendiumEntries: { [key: string]: string };
             skills: {
@@ -1648,7 +1647,24 @@ declare global {
             };
         };
         registry: {
-            damageTypes: EmbeddedCollection<DamageType>;
+            damageTypes: EmbeddedCollection<DamageType> & {
+                getLabels(): {
+                    untyped: 'Untyped';
+                    slashing: 'Slashing';
+                    piercing: 'Piercing';
+                    bludgeoning: 'Bludgeoning';
+                    fire: 'Fire';
+                    cold: 'Cold';
+                    electric: 'Electricity';
+                    acid: 'Acid';
+                    sonic: 'Sonic';
+                    force: 'Force';
+                    negative: 'Negative';
+                    positive: 'Positive';
+                    precision: 'Precision';
+                    nonlethal: 'Nonlethal';
+                };
+            };
         };
         spellcasting: {
             type: SpellcastingType;

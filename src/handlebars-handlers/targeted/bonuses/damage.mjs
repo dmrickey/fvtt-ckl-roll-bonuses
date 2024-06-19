@@ -171,4 +171,3 @@ export function damageInput({
 }
 
 api.inputs.damageInput = damageInput;
-
