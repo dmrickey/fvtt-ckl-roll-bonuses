@@ -2,6 +2,8 @@
     "ckl-roll-bonuses": {
         "ac-mod": "{mod} AC",
         "acp-mod": "{mod} ACP",
+        "add-damage-formula": "Add Damage Formula",
+        "add-healing-formula": "Add Healing Formula",
         "alignment": {
             "lawful": "Lawful",
             "chaotic": "Chaotic",
