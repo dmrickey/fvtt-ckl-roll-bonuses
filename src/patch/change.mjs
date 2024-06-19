@@ -5,7 +5,7 @@ import { MODULE_NAME } from "../consts.mjs";
 /**
  * @this {ActorPF}
  * @param {BuffTarget} target Target (e.g. "ac" or "skills")
- * @param {BonusModifers} modifierType Type (e.g. "profane", "untyped", or "dodge"). If undefined, all valid targets will be returned.
+ * @param {BonusTypes} modifierType Type (e.g. "profane", "untyped", or "dodge"). If undefined, all valid targets will be returned.
  * @param {number} [value]  Value, if known
  * @returns {Array<string>} Array of target paths to modify
  */

@@ -255,7 +255,7 @@ export class EnhancementBonus extends BaseBonus {
                 formula: `${attackBonus}`,
                 subTarget: 'allAttack',
                 target: 'attack',
-                type: `${pf1.config.bonusModifiers.enh}+`,
+                type: `${pf1.config.bonusTypes.enh}+`,
             });
         }
         if (damageBonus) {
@@ -266,7 +266,7 @@ export class EnhancementBonus extends BaseBonus {
                 formula: `${damageBonus}`,
                 subTarget: 'allDamage',
                 target: 'damage',
-                type: `${pf1.config.bonusModifiers.enh}+`,
+                type: `${pf1.config.bonusTypes.enh}+`,
             });
         }
         return {

@@ -71,7 +71,7 @@ declare global {
         name: string;
 
         /** The damage type of this modifier */
-        modifier: Nullable<BonusModifers | string>;
+        modifier: Nullable<BonusTypes | string>;
 
         /** The sort priority for this modifier */
         sort: number;

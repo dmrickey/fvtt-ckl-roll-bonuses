@@ -254,13 +254,13 @@ declare global {
     interface ItemChange {
         /** hardcoded bonus type to use instead of modifier */
         type: string | null | undefined;
-        modifier: BonusModifers;
+        modifier: BonusTypes;
         parent: undefined | ItemPF;
 
         data: {
             flavor: undefined;
             formula: string;
-            modifier: BonusModifers;
+            modifier: BonusTypes;
             operator: '+' | '-';
             priority: number;
             subTarget: 'skill.kna';
@@ -1240,7 +1240,7 @@ declare global {
 
     interface DamageRoll extends RollPF {}
 
-    type BonusModifers =
+    type BonusTypes =
         | 'alchemical'
         | 'base'
         | 'circumstance'
@@ -1351,7 +1351,7 @@ declare global {
             args: {
                 flavor: string;
                 formula: string | number;
-                modifier: BonusModifers;
+                modifier: BonusTypes;
                 operator?: 'add' | 'function' | 'set';
                 priority?: number;
                 subTarget: BuffTarget;
@@ -1407,7 +1407,7 @@ declare global {
             | '' // size
             | undefined; // no subtarget for 'size'
         target: 'attack' | 'damage' | 'effect' | 'misc' | 'size';
-        type: Nullable<BonusModifers | string>;
+        type: Nullable<BonusTypes | string>;
 
         targets?: {
             attack: string;
@@ -1526,7 +1526,7 @@ declare global {
                     args: {
                         flavor: string;
                         formula: string | number;
-                        modifier?: BonusModifers | string;
+                        modifier?: BonusTypes | string;
                         operator?: 'add' | 'function' | 'set';
                         priority?: number;
                         subTarget: BuffTarget;
@@ -1564,8 +1564,7 @@ declare global {
                 };
             };
             abilities: Abilities;
-            bonusModifiers: { [key in BonusModifers]: string };
-            bonusTypes: { [key in BonusModifers]: string };
+            bonusTypes: { [key in BonusTypes]: string };
             damageResistances: {
                 magic: 'Magic';
                 epic: 'Epic';
