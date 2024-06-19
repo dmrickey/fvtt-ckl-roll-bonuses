@@ -1007,6 +1007,9 @@ declare global {
         acp: boolean;
         changeBonus: number;
         cs: boolean;
+        fullName: string;
+        mod: number;
+        name: string;
         rank: number;
         rt: boolean;
         subSkills?: SkillRollData[];
@@ -1015,7 +1018,6 @@ declare global {
         background?: boolean;
         /** compendium link */
         journal?: string;
-        name?: string;
     }
     interface TraitsRollData {
         // TODO

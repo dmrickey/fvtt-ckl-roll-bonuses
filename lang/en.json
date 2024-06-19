@@ -232,7 +232,7 @@
         },
         "roll-bonuses": "Roll Bonuses",
         "skill-rank-override": {
-            "skill-card-name": "{skillName} - ({sourceName} rank: {rank})",
+            "skill-card-name": "{skillName} - ({sourceName} ranks: {rank})",
             "skill-sheet-tip": "{itemName}\nSet skill ranks to {rank}."
         },
         "skills": {

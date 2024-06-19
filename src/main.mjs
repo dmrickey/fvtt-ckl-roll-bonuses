@@ -10,6 +10,7 @@ import './auto-recognition/init.mjs';
 import { api } from './util/api.mjs';
 import './overrides/action-damage.mjs';
 import migrate from './migration/index.mjs';
+import { ifDebug } from './util/if-debug.mjs';
 
 Hooks.once('pf1PostReady', () => migrate());
 
@@ -76,9 +77,12 @@ function d20RollWrapper(wrapped, options = {}) {
 /**
  * @this {ItemPF}
  * @param {*} wrapped
+ * @param {boolean} final
  */
-function prepareItemData(wrapped) {
-    wrapped();
+function prepareItemData(wrapped, final) {
+    wrapped(final);
+
+    if (!final) return;
 
     const item = this;
     /**
@@ -88,8 +92,11 @@ function prepareItemData(wrapped) {
     const empty = {};
     item[MODULE_NAME] = empty;
     const rollData = item.getRollData();
-    FormulaCacheHelper.cacheFormulas(item, rollData)
+    FormulaCacheHelper.cacheFormulas(item, rollData);
     LocalHookHandler.fireHookNoReturnSync(localHooks.prepareData, item, rollData);
+    ifDebug(() => {
+        console.info(`Cached info for '${item.name}':`, item[MODULE_NAME]);
+    });
 }
 
 /**
@@ -328,7 +335,7 @@ Hooks.once('init', () => {
     libWrapper.register(MODULE_NAME, 'pf1.dice.d20Roll', d20RollWrapper, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype.getAttackSources', itemGetAttackSources, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype.getTypeChatData', itemGetTypeChatData, libWrapper.WRAPPER);
-    libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype.prepareDerivedData', prepareItemData, libWrapper.WRAPPER);
+    libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype._prepareDependentData', prepareItemData, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype.use', itemUseWrapper, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemSpellPF.prototype.getTypeChatData', itemGetTypeChatData, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.critRange', itemActionCritRangeWrapper, libWrapper.WRAPPER);

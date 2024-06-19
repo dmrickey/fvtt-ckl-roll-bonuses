@@ -52,6 +52,7 @@ function createRankIcon(itemName, rank) {
 
 /**
  * @param {ActorPF} actor
+ * @return {Array<{name: string, rank: number, skills: Array<keyof typeof pf1.config.skills>}>}
  */
 const getSources = (actor) => (actor.itemFlags?.boolean?.[key]?.sources ?? [])
     .map((source) => ({
@@ -72,9 +73,9 @@ Hooks.on('renderActorSheetPF', (
         /** @returns {keyof typeof pf1.config.skills} */
         const getSkillId = () => {
             const skillId = li.getAttribute('data-skill');
-            const mainId = li.getAttribute('data-main-skill');
-            return /** @type {keyof typeof pf1.config.skills} */ (mainId
-                ? `${mainId}.${skillId}`
+            const subId = li.getAttribute('data-sub-skill');
+            return /** @type {keyof typeof pf1.config.skills} */ (subId
+                ? `${skillId}.${subId}`
                 : skillId);
         }
 
@@ -110,7 +111,7 @@ function rollSkill(seed, actor) {
         if (!name) {
             return;
         }
-        const title = localize(`${key}.skill-card-name`, { itemName: source.name, rank: source.rank, skillName: name })
+        const title = localize(`${key}.skill-card-name`, { sourceName: source.name, rank: source.rank, skillName: name })
         doc.updateSource({ content: doc.content.replace(name, title) });
     });
 }
