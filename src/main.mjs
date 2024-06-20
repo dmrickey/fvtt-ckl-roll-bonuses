@@ -54,16 +54,6 @@ function setEffectNotesHTMLWrapper(wrapped) {
 }
 
 /**
- * @param {() => number | string} wrapped
- * @this {ItemChange}
- */
-function patchChangeValue(wrapped) {
-    const seed = wrapped();
-    const value = LocalHookHandler.fireHookWithReturnSync(localHooks.patchChangeValue, seed, this);
-    return value;
-}
-
-/**
  * @param {*} wrapped
  * @param {*} options
  * @this {d20Roll}
@@ -324,6 +314,8 @@ function actorGetSkillInfo(wrapped, skillId, { rollData } = {}) {
 }
 
 Hooks.once('init', () => {
+    // change.mjs also fires a local hook for re-calculating changes.
+
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype._getConditionalParts', getConditionalParts, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype.addFootnotes', addFootnotes, libWrapper.WRAPPER); // good
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype.alterRollData', actionUseAlterRollData, libWrapper.WRAPPER);
@@ -331,7 +323,6 @@ Hooks.once('init', () => {
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ChatAttack.prototype.addAttack', chatAttackAddAttack, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ChatAttack.prototype.setEffectNotesHTML', setEffectNotesHTMLWrapper, libWrapper.WRAPPER);
     // libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.damageSources', actionDamageSources, libWrapper.WRAPPER);
-    // libWrapper.register(MODULE_NAME, 'pf1.components.ItemChange.prototype.value', patchChangeValue, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.dice.d20Roll', d20RollWrapper, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype.getAttackSources', itemGetAttackSources, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype.getTypeChatData', itemGetTypeChatData, libWrapper.WRAPPER);

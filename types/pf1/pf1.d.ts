@@ -253,8 +253,7 @@ declare global {
 
     interface ItemChange {
         /** hardcoded bonus type to use instead of modifier */
-        type: string | null | undefined;
-        modifier: BonusTypes;
+        type: Nullable<BonusTypes | string>;
         parent: undefined | ItemPF;
 
         data: {
@@ -1437,8 +1436,8 @@ declare global {
         conditionalModifierTypes?: { [x: string]: string };
         conditionalCritical?: {
             normal?: 'PF1.Normal';
-            crit?: 'PF1.CritDamageBonusFormula';
-            nonCrit?: 'PF1.NonCritDamageBonusFormula';
+            crit?: 'PF1.OnCritBonusFormula';
+            nonCrit?: 'PF1.NonMultBonusFormula';
         };
 
         constructor(any);

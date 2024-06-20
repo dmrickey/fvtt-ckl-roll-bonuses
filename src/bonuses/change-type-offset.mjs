@@ -32,7 +32,7 @@ function patchChangeValue(value, itemChange) {
         {
             onlyIncludeAllFlags: true,
             mustHave: {
-                [bonusKey]: (value) => value === itemChange.modifier,
+                [bonusKey]: (value) => value === itemChange.type,
             }
         },
         bonusKey,

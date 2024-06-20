@@ -48,7 +48,7 @@ Hooks.once('ready', () => {
         [initWarsightFortune]: () => localize('PF1.Initiative'),
         // @ts-ignore - because I typed SavingThrows too strongly and ignoring here is easier
         [saveFortune]: (key) => key ? pf1.config.savingThrows[key] : localize('PF1.Save'),
-        [selfFortune]: () => localize('PF1.TargetSelf'),
+        [selfFortune]: () => localize('targetSelf'),
         // @ts-ignore
         [skillFortune]:
             (/** @type {keyof typeof pf1.config.skills | undefined} */ key, actor) => !key ? localize('PF1.Skills') : pf1.config.skills[key] || getProperty(actor?.system.skills ?? {}, key)?.name,

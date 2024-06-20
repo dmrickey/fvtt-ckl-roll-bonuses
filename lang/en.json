@@ -241,6 +241,7 @@
         },
         "string-select.no-choices": "No valid choices.",
         "targets": "Targets",
+        "targetSelf": "Self",
         "to-hit-mod": "{mod} to hit",
         "versatilePerformance": {
             "error": "Versatile Performance - invalid skill IDs",
