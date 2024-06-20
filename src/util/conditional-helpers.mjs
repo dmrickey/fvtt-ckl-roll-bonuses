@@ -70,7 +70,7 @@ export function conditionalCalculator(shared, conditional) {
  * @param {boolean} [options.isDamage]
  * @returns {Nullable<ItemChange>}
  */
-export function conditionalModToItemChange(conditional, modifier, { isDamage = false } = {}) {
+export function conditionalModToItemChangeForDamageTooltip(conditional, modifier, { isDamage = false } = {}) {
     if (!modifier) return;
 
     const subTarget = modifier.target;
@@ -93,11 +93,12 @@ export function conditionalModToItemChange(conditional, modifier, { isDamage = f
         operator: 'add',
         priority: 0,
         subTarget,
-        value: modifier.formula,
     });
     if (isDamage) {
         change.type = modifier.type;
     }
+
+    change.value = modifier.formula;
 
     return change;
 }

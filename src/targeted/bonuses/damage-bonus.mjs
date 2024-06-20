@@ -1,6 +1,6 @@
 import { MODULE_NAME } from "../../consts.mjs";
 import { damageInput } from "../../handlebars-handlers/targeted/bonuses/damage.mjs";
-import { conditionalModToItemChange } from "../../util/conditional-helpers.mjs";
+import { conditionalModToItemChangeForDamageTooltip } from "../../util/conditional-helpers.mjs";
 import { LocalHookHandler, localHooks } from "../../util/hooks.mjs";
 import { localize } from "../../util/localize.mjs";
 import { signed } from '../../util/to-signed-string.mjs';
@@ -121,7 +121,7 @@ export class DamageBonus extends BaseBonus {
 
         sources = (conditional.modifiers ?? [])
             .filter((mod) => mod.target === 'damage')
-            .map((mod) => conditionalModToItemChange(conditional, mod, { isDamage: true }))
+            .map((mod) => conditionalModToItemChangeForDamageTooltip(conditional, mod, { isDamage: true }))
             .filter(truthiness);
 
         return sources;

@@ -255,6 +255,7 @@ declare global {
         /** hardcoded bonus type to use instead of modifier */
         type: Nullable<BonusTypes | string>;
         parent: undefined | ItemPF;
+        value: number | string;
 
         data: {
             flavor: undefined;

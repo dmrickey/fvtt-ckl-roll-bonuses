@@ -1,6 +1,6 @@
 import { MODULE_NAME } from "../../../consts.mjs";
 import { modifiersInput } from "../../../handlebars-handlers/targeted/bonuses/modifiers.mjs";
-import { conditionalAttackTooltipModSource, conditionalModToItemChange } from "../../../util/conditional-helpers.mjs";
+import { conditionalAttackTooltipModSource, conditionalModToItemChangeForDamageTooltip } from "../../../util/conditional-helpers.mjs";
 import { truthiness } from "../../../util/truthiness.mjs";
 import { BaseBonus } from "../base-bonus.mjs";
 
@@ -70,7 +70,7 @@ export class ModifiersBonus extends BaseBonus {
 
         sources = (conditional.modifiers ?? [])
             .filter((mod) => mod.target === 'damage')
-            .map((mod) => conditionalModToItemChange(conditional, mod, { isDamage: true }))
+            .map((mod) => conditionalModToItemChangeForDamageTooltip(conditional, mod, { isDamage: true }))
             .filter(truthiness);
 
         return sources;

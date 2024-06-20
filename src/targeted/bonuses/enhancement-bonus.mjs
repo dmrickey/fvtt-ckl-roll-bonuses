@@ -1,6 +1,6 @@
 import { textInput } from '../../handlebars-handlers/bonus-inputs/text-input.mjs';
 import { handleBonusTypeFor } from '../../target-and-bonus-join.mjs';
-import { conditionalCalculator, conditionalModToItemChange } from '../../util/conditional-helpers.mjs';
+import { conditionalCalculator, conditionalModToItemChangeForDamageTooltip } from '../../util/conditional-helpers.mjs';
 import { setCurrentEnhancementIncreases } from '../../util/enhancement-bonus-helper.mjs';
 import { FormulaCacheHelper } from '../../util/flag-helpers.mjs';
 import { customGlobalHooks } from '../../util/hooks.mjs';
@@ -134,7 +134,7 @@ export class EnhancementBonus extends BaseBonus {
 
         sources = (conditional.modifiers ?? [])
             .filter((mod) => mod.target === 'damage')
-            .map((mod) => conditionalModToItemChange(conditional, mod, { isDamage: true }))
+            .map((mod) => conditionalModToItemChangeForDamageTooltip(conditional, mod, { isDamage: true }))
             .filter(truthiness);
 
         return sources;
