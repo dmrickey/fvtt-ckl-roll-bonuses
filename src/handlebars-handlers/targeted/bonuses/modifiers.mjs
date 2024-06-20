@@ -96,8 +96,8 @@ function getConditionalCritical(target) {
         result = {
             ...result,
             normal: "PF1.Normal",
-            crit: "PF1.CritDamageBonusFormula", // TODO
-            nonCrit: "PF1.NonCritDamageBonusFormula", // TODO
+            crit: "PF1.OnCritBonusFormula", // TODO
+            nonCrit: "PF1.NonMultBonusFormula", // TODO
         };
     }
     return result;
