@@ -392,7 +392,7 @@ export class FormulaCacheHelper {
          */
         const cacheFormula = (exactFormula, flag) => {
             if (exactFormula) {
-                const roll = RollPF.safeRoll(exactFormula, rollData);
+                const roll = RollPF.safeRollSync(exactFormula, rollData);
                 item[MODULE_NAME][flag] = roll.simplifiedFormula;
             }
         }

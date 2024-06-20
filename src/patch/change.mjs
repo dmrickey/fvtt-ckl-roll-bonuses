@@ -544,7 +544,7 @@ function applyChange(actor, targets = null, { applySourceInfo = true } = {}) {
             } else if (this.isDeferred && RollPF.parse(this.formula).some((t) => !t.isDeterministic)) {
                 value = RollPF.replaceFormulaData(this.formula, rollData, { missing: 0 });
             } else {
-                value = RollPF.safeRoll(this.formula, rollData, [t, this, rollData], {
+                value = RollPF.safeRollSync(this.formula, rollData, [t, this, rollData], {
                     suppressError: this.parent && !this.parent.testUserPermission(game.user, "OWNER"),
                 }).total;
             }

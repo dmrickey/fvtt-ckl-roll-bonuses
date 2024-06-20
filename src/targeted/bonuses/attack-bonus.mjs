@@ -28,7 +28,7 @@ export class AttackBonus extends BaseBonus {
      */
     static getHints(source) {
         const formula = FormulaCacheHelper.getModuleFlagFormula(source, this.key)[this.key];
-        const roll = RollPF.safeRoll(formula);
+        const roll = RollPF.safeRollSync(formula);
 
         return roll.isNumber && roll.total
             ? [`${signed(roll.total)}`]

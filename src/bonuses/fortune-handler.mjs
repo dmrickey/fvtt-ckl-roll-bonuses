@@ -121,7 +121,7 @@ export const handleFortune = (options) => {
     options.fortuneCount ||= 0;
     options.misfortuneCount ||= 0;
 
-    const roll = RollPF.safeRoll(options.dice);
+    const roll = RollPF.safeRollSync(options.dice);
     const dice = roll.dice[0];
     if (!dice) {
         // no actual roll, a static number was probably given
@@ -230,7 +230,7 @@ Hooks.on(customGlobalHooks.itemUse, (
         options.misfortuneCount++;
     }
 
-    const action = options.actionID ? item.actions.get(options.actionID) : item.firstAction;
+    const action = options.actionID ? item.actions.get(options.actionID) : item.defaultAction;
 
     const fortunesToFind = [fortune, attackFortune];
     const misfortunesToFind = [misfortune, attackMisfortune];

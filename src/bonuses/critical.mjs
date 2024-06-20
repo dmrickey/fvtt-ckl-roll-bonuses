@@ -55,7 +55,7 @@ registerItemHint((hintcls, _actor, item, _data,) => {
         .filter(truthiness)
         .join(' + ');
 
-    const roll = RollPF.safeRoll(formula);
+    const roll = RollPF.safeRollSync(formula);
     if (roll.isNumber) {
         const mod = roll.total;
         if (!mod) {
@@ -84,7 +84,7 @@ registerItemHint((hintcls, _actor, item, _data,) => {
         .filter(truthiness)
         .join(' + ');
 
-    const roll = RollPF.safeRoll(formula);
+    const roll = RollPF.safeRollSync(formula);
     if (roll.isNumber) {
         const mod = roll.total;
         if (!mod) {
@@ -103,11 +103,11 @@ registerItemHint((hintcls, _actor, item, _data,) => {
 
 // register crit bonus on specific target
 registerItemHint((hintcls, actor, item, _data) => {
-    if (!actor || !item?.firstAction) return;
+    if (!actor || !item?.defaultAction) return;
 
     const isBroken = !!item.system.broken;
 
-    const action = item.firstAction;
+    const action = item.defaultAction;
     if (!(action?.hasAttack && action.data.ability?.critMult > 1)) return;
 
     const multFlags = [critMultOffsetAll, critMultOffsetId(action), critMultOffsetId(item)]

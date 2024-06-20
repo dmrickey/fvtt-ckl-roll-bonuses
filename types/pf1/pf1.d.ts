@@ -328,7 +328,7 @@ declare global {
         actions: EmbeddedCollection<ItemAction>;
 
         actor?: ActorPF;
-        firstAction: ItemAction;
+        defaultAction: ItemAction;
         flags: {
             core?: { sourceId: string };
             [key: string]: any;
@@ -1234,7 +1234,7 @@ declare global {
          * @param formula - The string that should resolve to a number
          * @param rollData - The roll data used for resolving any variables in the formula
          */
-        static safeRoll(
+        static safeRollSync(
             formula: string | number,
             rollData?: Nullable<RollData>
         ): RollPF;

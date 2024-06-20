@@ -76,7 +76,7 @@ export class BaseIsItemTarget extends BaseTarget {
             return [];
         }
 
-        const action = doc instanceof pf1.components.ItemAction ? doc : item.firstAction;
+        const action = doc instanceof pf1.components.ItemAction ? doc : item.defaultAction;
         if (!this._itemFilter({ item, action })) {
             return [];
         }

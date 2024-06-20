@@ -210,7 +210,7 @@ function safeTotal(
     formula,
     data,
 ) {
-    return (isNaN(+formula) ? RollPF.safeRoll(formula, data).total : +formula) || 0;
+    return (isNaN(+formula) ? RollPF.safeRollSync(formula, data).total : +formula) || 0;
 }
 
 /**
@@ -324,7 +324,7 @@ function actorGetSkillInfo(wrapped, skillId, { rollData } = {}) {
 }
 
 Hooks.once('init', () => {
-    // libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype._getConditionalParts', getConditionalParts, libWrapper.WRAPPER);
+    libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype._getConditionalParts', getConditionalParts, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype.addFootnotes', addFootnotes, libWrapper.WRAPPER); // good
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype.alterRollData', actionUseAlterRollData, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype.handleConditionals', actionUseHandleConditionals, libWrapper.WRAPPER);
