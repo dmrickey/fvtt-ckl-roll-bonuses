@@ -54,7 +54,6 @@ registerItemHint((hintcls, actor, item, _data) => {
     }
 });
 
-
 /**
  * @param {ActionUse} actionUse
  */

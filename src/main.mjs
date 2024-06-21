@@ -177,7 +177,7 @@ function itemGetTypeChatData(wrapped, data, labels, props, rollData) {
 }
 
 /**
- * Get damage sources for actor's combat tooltips
+ * Modify damage sources for actor's combat tooltips
  * @param {() => any} wrapped
  * @this {ItemAction}
  */
