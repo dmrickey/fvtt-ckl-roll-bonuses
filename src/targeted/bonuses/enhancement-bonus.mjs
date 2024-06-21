@@ -111,15 +111,15 @@ export class EnhancementBonus extends BaseBonus {
     /**
      * @override
      * @param {ItemPF} source
-     * @param {ItemAction} action
+     * @param {ItemPF} thing
      * @returns {ItemChange[]}
      */
-    static getDamageSourcesForTooltip(source, action) {
+    static getDamageSourcesForTooltip(source, thing) {
         /** @type {ItemChange[]} */
         let sources = [];
 
         const conditional = (() => {
-            const bonus = this.#getEnhancementBonus(source, action);
+            const bonus = this.#getEnhancementBonus(source, thing);
             if (bonus) {
                 const conditional = this.#createConditional(bonus.attack, bonus.damage, source.name);
                 return conditional.modifiers?.length

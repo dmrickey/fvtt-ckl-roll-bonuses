@@ -232,16 +232,16 @@ Hooks.on(customGlobalHooks.itemGetAttackSources, getAttackSources);
 /**
  * Add damage bonus to actor's Combat damage column tooltip
  *
- * @param {ItemAction} action
+ * @param {ItemPF} thing
  * @param {ItemChange[]} sources
  */
-function actionDamageSources(action, sources) {
+function getDamageTooltipSources(thing, sources) {
     /** @type {ItemChange[]} */
     const changes = [];
 
     handleBonusesFor(
-        action,
-        (bonusType, sourceItem) => changes.push(...bonusType.getDamageSourcesForTooltip(sourceItem, action)),
+        thing,
+        (bonusType, sourceItem) => changes.push(...bonusType.getDamageSourcesForTooltip(sourceItem, thing)),
     );
 
     const newChanges = changes.filter(truthiness);
@@ -249,7 +249,7 @@ function actionDamageSources(action, sources) {
     // todo increase luck bonus if actor has fate's favored flag (double check that there isn't a named bonus for that already)
     sources.push(...newChanges);
 }
-Hooks.on(customGlobalHooks.actionDamageSources, actionDamageSources);
+Hooks.on(customGlobalHooks.getDamageTooltipSources, getDamageTooltipSources);
 
 Hooks.on('renderItemSheet', (
     /** @type {ItemSheetPF} */ { actor, isEditable, item },

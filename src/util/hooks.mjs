@@ -1,7 +1,7 @@
 import { MODULE_NAME } from "../consts.mjs";
 
 export const customGlobalHooks = /** @type {const} */ ({
-    actionDamageSources: `${MODULE_NAME}_actionDamageSources`,
+    getDamageTooltipSources: `${MODULE_NAME}_getDamageTooltipSources`,
     actionUseAlterRollData: `${MODULE_NAME}_actionUseAlterRollData`,
     actionUseHandleConditionals: `${MODULE_NAME}_actionUseHandleConditionals`,
     /** Make sure to put the effect note on the specific attack effected and not all */

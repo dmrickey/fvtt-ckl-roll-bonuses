@@ -251,24 +251,6 @@ declare global {
         hasAttack: boolean;
     }
 
-    interface ItemChange {
-        /** hardcoded bonus type to use instead of modifier */
-        type: Nullable<BonusTypes | string>;
-        parent: undefined | ItemPF;
-        value: number | string;
-
-        data: {
-            flavor: undefined;
-            formula: string;
-            modifier: BonusTypes;
-            operator: '+' | '-';
-            priority: number;
-            subTarget: 'skill.kna';
-            target: BuffTarget = 'skillzz';
-            value: number;
-        };
-    }
-
     /** used for weapons and attacks */
     interface TraitSelector<T extends string = string> {
         /** custom entries split by ; */
@@ -1378,6 +1360,24 @@ declare global {
         );
 
         static create();
+
+        /** hardcoded bonus type to use instead of modifier */
+        flavor?: string;
+        name?: string;
+        parent?: undefined | ItemPF;
+        type?: Nullable<BonusTypes | string>;
+        value: number | string;
+
+        data: {
+            flavor: string;
+            formula: string;
+            modifier: BonusTypes;
+            operator: '+' | '-';
+            priority: number;
+            subTarget: 'skill.kna';
+            target: BuffTarget = 'skillzz';
+            value: number;
+        };
     }
 
     class ItemConditional {
@@ -1443,6 +1443,10 @@ declare global {
 
         constructor(any);
         static get defaultData(): any;
+    }
+
+    interface ActorSheetPF {
+        get actor(): ActorPF;
     }
 
     interface ItemSheetPF {

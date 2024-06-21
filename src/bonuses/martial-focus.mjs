@@ -3,6 +3,7 @@
 
 import { keyValueSelect } from "../handlebars-handlers/bonus-inputs/key-value-select.mjs";
 import { intersects } from "../util/array-intersects.mjs";
+import { createChangeForTooltip } from '../util/conditional-helpers.mjs';
 import { KeyedDFlagHelper, getDocDFlags } from "../util/flag-helpers.mjs";
 import { customGlobalHooks } from "../util/hooks.mjs";
 import { registerItemHint } from "../util/item-hints.mjs";
@@ -80,10 +81,10 @@ Hooks.on(customGlobalHooks.actionUseAlterRollData, addMartialFocus);
 /**
  * Add Martial Focus to damage tooltip
  *
- * @param {ItemAction} action
+ * @param {ItemPF} item
  * @param {ItemChange[]} sources
  */
-function actionDamageSources({ item }, sources) {
+function getDamageTooltipSources(item, sources) {
     const actor = item.actor;
     if (!actor) return sources;
 
@@ -98,24 +99,14 @@ function actionDamageSources({ item }, sources) {
     const isFocused = intersects(groupsOnItem, martialFocuses);
 
     if (isFocused) {
-        const change = new pf1.components.ItemChange(
-            {
-                flavor: name,
-                formula: 1,
-                modifier: 'untypedPerm',
-                operator: 'add',
-                priority: 0,
-                subTarget: 'damage',
-                value: 1,
-            }
-        );
+        const change = createChangeForTooltip({ name, value: 1 });
         return sources.push(change);
     }
 
     return sources;
 
 };
-Hooks.on(customGlobalHooks.actionDamageSources, actionDamageSources);
+Hooks.on(customGlobalHooks.getDamageTooltipSources, getDamageTooltipSources);
 
 // this is a lot better, but it doesn't work because action.use doesn't read this data off of the roll data -- it re-looks it up itself.
 // /**

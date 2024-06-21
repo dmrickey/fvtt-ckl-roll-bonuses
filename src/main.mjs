@@ -178,13 +178,28 @@ function itemGetTypeChatData(wrapped, data, labels, props, rollData) {
 
 /**
  * Modify damage sources for actor's combat tooltips
- * @param {() => any} wrapped
- * @this {ItemAction}
+ * @param {(fullId: string, context: { sources: Array<any>}) => void} wrapped
+ * @param {string} fullId
+ * @param {{sources: Array<any>}} context
+ * @this {ActorSheetPF}
  */
-function actionDamageSources(wrapped) {
-    const sources = wrapped();
-    Hooks.call(customGlobalHooks.actionDamageSources, this, sources);
-    return sources;
+function getDamageTooltipSources(wrapped, fullId, context) {
+    wrapped(fullId, context);
+
+    const re = /^(?<id>[\w-]+)(?:\.(?<detail>.*))?$/.exec(fullId);
+    const { id, detail } = re?.groups ?? {};
+    const [itemId, target] = detail?.split(".") ?? [];
+
+    if (id === "item" && target === "damage") {
+        const item = this.actor.items.get(itemId);
+        /** @type {ItemChange[]} */
+        const sources = [];
+        Hooks.call(customGlobalHooks.getDamageTooltipSources, item, sources);
+        if (sources.length) {
+            context.sources ||= [];
+            context.sources.push({ sources });
+        }
+    }
 
     // const filtered = getHighestChanges(sources, { ignoreTarget: true });
     // return filtered;
@@ -322,7 +337,7 @@ Hooks.once('init', () => {
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype.handleConditionals', actionUseHandleConditionals, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ChatAttack.prototype.addAttack', chatAttackAddAttack, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ChatAttack.prototype.setEffectNotesHTML', setEffectNotesHTMLWrapper, libWrapper.WRAPPER);
-    libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.damageSources', actionDamageSources, libWrapper.WRAPPER);
+    libWrapper.register(MODULE_NAME, 'pf1.applications.actor.ActorSheetPF.prototype._getTooltipContext', getDamageTooltipSources, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.dice.d20Roll', d20RollWrapper, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype.getAttackSources', itemGetAttackSources, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype.getTypeChatData', itemGetTypeChatData, libWrapper.WRAPPER);
