@@ -27,6 +27,7 @@
 #ckl-roll-bonus-container .error-text {
     color: darkred;
     font-weight: bold;
+    text-align: right;
 }
 
 #ckl-roll-bonus-container .traits-list.tag-list {

@@ -33,7 +33,6 @@
 - [in pf1 V10](#in-pf1-v10)
 - [Not Possible](#not-possible)
 - [vnext](#vnext)
-- [v10.1 compatibility](#v101-compatibility)
 
 # TODO
 - Figure out a way to support multiple target groups on a single Item (so I can add `Favored Enemy (Human) +4` and `Favored Enemy (goblin) +2` on a single Item)
@@ -190,8 +189,3 @@
     }
     Hooks.on('pf1PreActionUse', pf1PreActionUse);
    ```
-
-
-# v10.1 compatibility
-- No Valid Choices styling needs to be updated so it's right-aligned
-  - see Greater Weapon Specialization or hopefully any dropdown with no choices
