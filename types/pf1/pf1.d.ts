@@ -117,10 +117,14 @@ declare global {
         poor: 'Poor';
     }
 
+    interface ActionUseAttack {
+        ammo?: { document: ItemLootPF };
+    }
+
     class ActionUseShared {
         action: any;
         attackBonus: string[];
-        attacks: any;
+        attacks: ActionUseAttack[];
         conditionalPartsCommon: any;
         conditionals: any;
         damageBonus: string[];

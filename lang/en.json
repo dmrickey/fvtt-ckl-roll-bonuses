@@ -12,6 +12,7 @@
         },
         "all-spells": "All Spells",
         "any-target-except": "Any target except:",
+        "base-dice": "Base Dice",
         "bonuses": {
             "label": {
                 "agile": "Agile",
