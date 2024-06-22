@@ -96,7 +96,9 @@ function prepareItemData(wrapped, final) {
  * @returns The result of the original method.
  */
 function itemUseWrapper(wrapped, options = {}) {
-    Hooks.call(customGlobalHooks.itemUse, this, options);
+    if (pf1.documents.settings.getSkipActionPrompt() || options.dice) {
+        Hooks.call(customGlobalHooks.itemUse, this, options);
+    }
     return wrapped.call(this, options);
 }
 

@@ -1660,6 +1660,9 @@ declare global {
             weaponGroups: WeaponGroups;
         };
         documents: {
+            settings: {
+                getSkipActionPrompt(): boolean;
+            };
             actor: {
                 ActorPF: { new (): ActorPF };
             };

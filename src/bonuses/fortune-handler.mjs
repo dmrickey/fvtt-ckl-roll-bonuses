@@ -147,6 +147,7 @@ export const handleFortune = (options) => {
     }
 
     if (options.fortuneCount === options.misfortuneCount) {
+        options.dice = '1d20';
         return;
     }
 
