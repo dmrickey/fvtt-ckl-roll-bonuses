@@ -121,6 +121,21 @@ declare global {
         ammo?: { document: ItemLootPF };
     }
 
+    interface ActionuseFormData {
+        'attack-bonus': string;
+        'cl-check': undefined;
+        d20: string;
+        'damage-ability-multiplier': undefined;
+        fullAttack: boolean;
+        'haste-attack': boolean;
+        manyshot: undefined | boolean;
+        'measure-template': undefined | boolean;
+        'power-attack': undefined | boolean;
+        'primary-attack': undefined | boolean;
+        'rapid-shot': undefined | boolean;
+        rollMode: 'publicroll' | RollMode;
+    }
+
     class ActionUseShared {
         action: any;
         attackBonus: string[];
@@ -145,6 +160,7 @@ declare global {
         actor: ActorPF;
         item: T;
         shared: ActionUseShared;
+        formData: ActionuseFormData;
     }
 
     class ChatAttack {
@@ -253,6 +269,7 @@ declare global {
         item: ItemPF;
         static defaultDamageType: TraitSelectorValuePlural;
         hasAttack: boolean;
+        isCombatManeuver: boolean;
     }
 
     /** used for weapons and attacks */
