@@ -27,7 +27,7 @@ export class EffectiveSizeBonus extends BaseBonus {
         if (!size) return;
 
         const formula = FormulaCacheHelper.getModuleFlagFormula(source, this.key)[this.key];
-        const roll = RollPF.safeRoll(formula);
+        const roll = RollPF.safeRollSync(formula);
         const mod = roll.isNumber
             ? signed(size)
             : formula;

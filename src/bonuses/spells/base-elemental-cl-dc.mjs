@@ -67,7 +67,7 @@ export function createElementalClOrDc(t) {
         }
 
         if (!action) {
-            action = item?.firstAction;
+            action = item?.defaultAction;
         }
 
         const damageTypes = action.data.damage.parts

@@ -61,8 +61,8 @@ export class MisfortuneBonus extends BaseBonus {
             return;
         }
 
-        options.fortuneCount = 0;
         options.misfortuneCount = 1;
         handleFortune(options);
+        options.misfortuneCount = 0;
     }
 }

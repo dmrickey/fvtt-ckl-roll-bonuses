@@ -70,7 +70,7 @@ export function conditionalCalculator(shared, conditional) {
  * @param {boolean} [options.isDamage]
  * @returns {Nullable<ItemChange>}
  */
-export function conditionalModToItemChange(conditional, modifier, { isDamage = false } = {}) {
+export function conditionalModToItemChangeForDamageTooltip(conditional, modifier, { isDamage = false } = {}) {
     if (!modifier) return;
 
     const subTarget = modifier.target;
@@ -89,15 +89,48 @@ export function conditionalModToItemChange(conditional, modifier, { isDamage = f
     const change = new pf1.components.ItemChange({
         flavor: conditional.name,
         formula: modifier.formula,
-        modifier: modifier.type || undefined,
+        // @ts-ignore
+        modifier: modifier.type ? pf1.config.bonusTypes[modifier.type] : modifier.type || undefined,
         operator: 'add',
         priority: 0,
         subTarget,
-        value: modifier.formula,
     });
     if (isDamage) {
         change.type = modifier.type;
     }
+
+    change.value = modifier.formula;
+    change.name = change.flavor;
+
+    return change;
+}
+
+/**
+ * @param {object} args
+ * @param {string} args.name
+ * @param {number | string} args.value
+ * @param {BuffTarget} [args.subTarget]
+ * @param {BonusTypes} [args.type]
+ * @return {ItemChange}
+ */
+export function createChangeForTooltip({
+    name,
+    type = 'untypedPerm',
+    value,
+    subTarget = 'damage',
+}) {
+    const label = pf1.config.bonusTypes[type] || type;
+    const change = new pf1.components.ItemChange({
+        flavor: name,
+        formula: value,
+        modifier: label,
+        operator: 'add',
+        priority: 0,
+        subTarget,
+    });
+
+    change.value = value;
+    change.name = name;
 
     return change;
 }

@@ -24,8 +24,8 @@ export function damageInput({
     canEdit,
 }) {
     const critChoices = {
-        crit: localize('PF1.CritDamageBonusFormula'),
-        nonCrit: localize('PF1.NonCritDamageBonusFormula'),
+        crit: localize('PF1.OnCritBonusFormula'),
+        nonCrit: localize('PF1.NonMultBonusFormula'),
         normal: localize('PF1.DamageFormula'),
     };
 
@@ -171,4 +171,3 @@ export function damageInput({
 }
 
 api.inputs.damageInput = damageInput;
-

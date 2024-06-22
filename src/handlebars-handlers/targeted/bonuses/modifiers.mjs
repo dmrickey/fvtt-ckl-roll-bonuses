@@ -67,8 +67,8 @@ function getConditionalModifierTypes(target) {
     /** @type {{[key: string]: string}} */
     const result = {};
     if (target === "attack" || target === "damage") {
-        // Add bonusModifiers from PF1.bonusModifiers
-        for (const [k, v] of Object.entries(pf1.config.bonusModifiers)) {
+        // Add bonusTypes from pf1.config.bonusTypes
+        for (const [k, v] of Object.entries(pf1.config.bonusTypes)) {
             result[k] = v;
         }
     }
@@ -96,8 +96,8 @@ function getConditionalCritical(target) {
         result = {
             ...result,
             normal: "PF1.Normal",
-            crit: "PF1.CritDamageBonusFormula",
-            nonCrit: "PF1.NonCritDamageBonusFormula",
+            crit: "PF1.OnCritBonusFormula", // TODO
+            nonCrit: "PF1.NonMultBonusFormula", // TODO
         };
     }
     return result;

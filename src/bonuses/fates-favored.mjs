@@ -27,7 +27,7 @@ class Settings {
  */
 function patchChangeValue(value, itemChange) {
     const actor = itemChange.parent?.actor;
-    value = itemChange.modifier === 'luck' && hasAnyBFlag(actor, fatesFavored)
+    value = itemChange.type === 'luck' && hasAnyBFlag(actor, fatesFavored)
         ? isNaN(+value) ? `${value} + 1` : (+value + 1)
         : value;
     return value;

@@ -67,7 +67,7 @@ Hooks.on('renderActorSheetPF', (
             const skillId = li.getAttribute('data-skill');
             const mainId = li.getAttribute('data-main-skill');
             const id = mainId
-                ? `${mainId}.subSkills.${skillId}`
+                ? `${mainId}.${skillId}`
                 : skillId;
             return /** @type {keyof typeof pf1.config.skills} */ (id);
         }
@@ -82,10 +82,10 @@ Hooks.on('renderActorSheetPF', (
             async () => await CklSkillData.showSkillDataDialog(data.actor, skillId)
         );
 
-        let controls = li.querySelector('.skill-controls');
+        let controls = li.querySelector('.controls.lockable');
         if (!controls) {
             controls = document.createElement('div');
-            controls.classList.add('skill-controls', 'lockable');
+            controls.classList.add('controls', 'lockable');
             if (app._skillsLocked) {
                 controls.classList.add('hide-contents');
             }
@@ -111,7 +111,7 @@ Hooks.on('renderActorSheetPF', (
         // @ts-ignore
         controls.style.justifySelf = 'flex-end';
         // @ts-ignore
-        controls.style.marginInlineEnd = '0.25rem';
+        controls.style.marginInlineEnd = '-0.25rem';
 
         controls.appendChild(button);
     });

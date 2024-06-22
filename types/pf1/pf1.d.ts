@@ -117,16 +117,39 @@ declare global {
         poor: 'Poor';
     }
 
+    interface ActionUseAttack {
+        ammo?: { document: ItemLootPF };
+    }
+
+    interface ActionuseFormData {
+        'attack-bonus': string;
+        'cl-check': undefined;
+        d20: string;
+        'damage-ability-multiplier': undefined;
+        fullAttack: boolean;
+        'haste-attack': boolean;
+        manyshot: undefined | boolean;
+        'measure-template': undefined | boolean;
+        'power-attack': undefined | boolean;
+        'primary-attack': undefined | boolean;
+        'rapid-shot': undefined | boolean;
+        rollMode: 'publicroll' | RollMode;
+    }
+
     class ActionUseShared {
         action: any;
         attackBonus: string[];
-        attacks: any;
+        attacks: ActionUseAttack[];
         conditionalPartsCommon: any;
         conditionals: any;
         damageBonus: string[];
         dice: string;
         powerAttack: boolean;
         rollData: RollData;
+
+        templateData: {
+            footnotes?: string[];
+        };
 
         // custom data
         fortuneCount;
@@ -137,6 +160,7 @@ declare global {
         actor: ActorPF;
         item: T;
         shared: ActionUseShared;
+        formData: ActionuseFormData;
     }
 
     class ChatAttack {
@@ -245,30 +269,13 @@ declare global {
         item: ItemPF;
         static defaultDamageType: TraitSelectorValuePlural;
         hasAttack: boolean;
-    }
-
-    interface ItemChange {
-        /** hardcoded bonus type to use instead of modifier */
-        type: string | null | undefined;
-        modifier: BonusModifers;
-        parent: undefined | ItemPF;
-
-        data: {
-            flavor: undefined;
-            formula: string;
-            modifier: BonusModifers;
-            operator: '+' | '-';
-            priority: number;
-            subTarget: 'skill.kna';
-            target: BuffTarget = 'skillzz';
-            value: number;
-        };
+        isCombatManeuver: boolean;
     }
 
     /** used for weapons and attacks */
     interface TraitSelector<T extends string = string> {
         /** custom entries split by ; */
-        custom: string;
+        custom: string[];
         value: T[];
     }
 
@@ -324,7 +331,7 @@ declare global {
         actions: EmbeddedCollection<ItemAction>;
 
         actor?: ActorPF;
-        firstAction: ItemAction;
+        defaultAction: ItemAction;
         flags: {
             core?: { sourceId: string };
             [key: string]: any;
@@ -1003,6 +1010,9 @@ declare global {
         acp: boolean;
         changeBonus: number;
         cs: boolean;
+        fullName: string;
+        mod: number;
+        name: string;
         rank: number;
         rt: boolean;
         subSkills?: SkillRollData[];
@@ -1011,7 +1021,6 @@ declare global {
         background?: boolean;
         /** compendium link */
         journal?: string;
-        name?: string;
     }
     interface TraitsRollData {
         // TODO
@@ -1228,7 +1237,7 @@ declare global {
          * @param formula - The string that should resolve to a number
          * @param rollData - The roll data used for resolving any variables in the formula
          */
-        static safeRoll(
+        static safeRollSync(
             formula: string | number,
             rollData?: Nullable<RollData>
         ): RollPF;
@@ -1236,7 +1245,7 @@ declare global {
 
     interface DamageRoll extends RollPF {}
 
-    type BonusModifers =
+    type BonusTypes =
         | 'alchemical'
         | 'base'
         | 'circumstance'
@@ -1332,14 +1341,29 @@ declare global {
         | 'wounds';
 
     interface DamageType {
-        category: 'physical' | 'energy';
+        abbr: string;
+        category: 'physical' | 'energy' | 'misc';
         color: string;
-        flags: { [key: string]: any };
+        flags: Record<string, any>;
         icon: string;
         isModifier: boolean;
         name: string;
         namepsace: 'pf1' | string;
-        get id(): string;
+        get id():
+            | 'untyped'
+            | 'slashing'
+            | 'piercing'
+            | 'bludgeoning'
+            | 'fire'
+            | 'cold'
+            | 'electric'
+            | 'acid'
+            | 'sonic'
+            | 'force'
+            | 'negative'
+            | 'positive'
+            | 'precision'
+            | 'nonlethal';
     }
 
     interface ItemChange {
@@ -1347,7 +1371,7 @@ declare global {
             args: {
                 flavor: string;
                 formula: string | number;
-                modifier: BonusModifers;
+                modifier: BonusTypes;
                 operator?: 'add' | 'function' | 'set';
                 priority?: number;
                 subTarget: BuffTarget;
@@ -1357,6 +1381,24 @@ declare global {
         );
 
         static create();
+
+        /** hardcoded bonus type to use instead of modifier */
+        flavor?: string;
+        name?: string;
+        parent?: undefined | ItemPF;
+        type?: Nullable<BonusTypes | string>;
+        value: number | string;
+
+        data: {
+            flavor: string;
+            formula: string;
+            modifier: BonusTypes;
+            operator: '+' | '-';
+            priority: number;
+            subTarget: 'skill.kna';
+            target: BuffTarget = 'skillzz';
+            value: number;
+        };
     }
 
     class ItemConditional {
@@ -1403,7 +1445,7 @@ declare global {
             | '' // size
             | undefined; // no subtarget for 'size'
         target: 'attack' | 'damage' | 'effect' | 'misc' | 'size';
-        type: Nullable<BonusModifers | string>;
+        type: Nullable<BonusTypes | string>;
 
         targets?: {
             attack: string;
@@ -1416,12 +1458,16 @@ declare global {
         conditionalModifierTypes?: { [x: string]: string };
         conditionalCritical?: {
             normal?: 'PF1.Normal';
-            crit?: 'PF1.CritDamageBonusFormula';
-            nonCrit?: 'PF1.NonCritDamageBonusFormula';
+            crit?: 'PF1.OnCritBonusFormula';
+            nonCrit?: 'PF1.NonMultBonusFormula';
         };
 
         constructor(any);
         static get defaultData(): any;
+    }
+
+    interface ActorSheetPF {
+        get actor(): ActorPF;
     }
 
     interface ItemSheetPF {
@@ -1522,7 +1568,7 @@ declare global {
                     args: {
                         flavor: string;
                         formula: string | number;
-                        modifier?: BonusModifers | string;
+                        modifier?: BonusTypes | string;
                         operator?: 'add' | 'function' | 'set';
                         priority?: number;
                         subTarget: BuffTarget;
@@ -1560,7 +1606,7 @@ declare global {
                 };
             };
             abilities: Abilities;
-            bonusModifiers: { [key in BonusModifers]: string };
+            bonusTypes: { [key in BonusTypes]: string };
             damageResistances: {
                 magic: 'Magic';
                 epic: 'Epic';
@@ -1568,22 +1614,6 @@ declare global {
                 chaotic: 'Chaotic';
                 good: 'Good';
                 evil: 'Evil';
-            };
-            damageTypes: {
-                untyped: 'Untyped';
-                slashing: 'Slashing';
-                piercing: 'Piercing';
-                bludgeoning: 'Bludgeoning';
-                fire: 'Fire';
-                cold: 'Cold';
-                electric: 'Electricity';
-                acid: 'Acid';
-                sonic: 'Sonic';
-                force: 'Force';
-                negative: 'Negative';
-                positive: 'Positive';
-                precision: 'Precision';
-                nonlethal: 'Nonlethal';
             };
             savingThrows: SavingThrows;
             skillCompendiumEntries: { [key: string]: string };
@@ -1630,6 +1660,9 @@ declare global {
             weaponGroups: WeaponGroups;
         };
         documents: {
+            settings: {
+                getSkipActionPrompt(): boolean;
+            };
             actor: {
                 ActorPF: { new (): ActorPF };
             };
@@ -1644,7 +1677,24 @@ declare global {
             };
         };
         registry: {
-            damageTypes: EmbeddedCollection<DamageType>;
+            damageTypes: EmbeddedCollection<DamageType> & {
+                getLabels(): {
+                    untyped: 'Untyped';
+                    slashing: 'Slashing';
+                    piercing: 'Piercing';
+                    bludgeoning: 'Bludgeoning';
+                    fire: 'Fire';
+                    cold: 'Cold';
+                    electric: 'Electricity';
+                    acid: 'Acid';
+                    sonic: 'Sonic';
+                    force: 'Force';
+                    negative: 'Negative';
+                    positive: 'Positive';
+                    precision: 'Precision';
+                    nonlethal: 'Nonlethal';
+                };
+            };
         };
         spellcasting: {
             type: SpellcastingType;

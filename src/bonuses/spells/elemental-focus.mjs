@@ -60,7 +60,7 @@ Hooks.on(customGlobalHooks.itemGetTypeChatData, (
     const { actor } = item;
     if (!actor) return;
 
-    const action = item.firstAction;
+    const action = item.defaultAction;
     if (!action) return;
 
     const bonus = getDcBonus(action);
@@ -75,7 +75,7 @@ registerItemHint((hintcls, actor, item, _data) => {
         return;
     }
 
-    const action = item.firstAction;
+    const action = item.defaultAction;
     if (!action) {
         return;
     }

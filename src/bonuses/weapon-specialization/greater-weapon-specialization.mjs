@@ -3,6 +3,7 @@
 
 import { stringSelect } from "../../handlebars-handlers/bonus-inputs/string-select.mjs";
 import { intersection, intersects } from "../../util/array-intersects.mjs";
+import { createChangeForTooltip } from '../../util/conditional-helpers.mjs';
 import { KeyedDFlagHelper, getDocDFlags } from "../../util/flag-helpers.mjs";
 import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
@@ -44,7 +45,6 @@ registerItemHint((hintcls, actor, item, _data) => {
     }
 });
 
-
 /**
  * @param {ActionUse} actionUse
  */
@@ -64,10 +64,10 @@ function addWeaponSpecialization({ actor, item, shared }) {
 Hooks.on(customGlobalHooks.actionUseAlterRollData, addWeaponSpecialization);
 
 /**
- * @param {ItemAction} action
+ * @param {ItemPF} item
  * @param {ItemChange[]} sources
  */
-function actionDamageSources({ item }, sources) {
+function getDamageTooltipSources(item, sources) {
     const actor = item.actor;
     if (!actor) return sources;
 
@@ -82,24 +82,13 @@ function actionDamageSources({ item }, sources) {
     const isFocused = intersects(baseTypes, weaponSpecializationes);
 
     if (isFocused) {
-        const change = new pf1.components.ItemChange(
-            {
-                flavor: name,
-                formula: 2,
-                modifier: 'untypedPerm',
-                operator: 'add',
-                priority: 0,
-                subTarget: 'damage',
-                value: 2,
-            }
-        );
+        const change = createChangeForTooltip({ name, value: 2 });
         return sources.push(change);
     }
 
     return sources;
-
 };
-Hooks.on(customGlobalHooks.actionDamageSources, actionDamageSources);
+Hooks.on(customGlobalHooks.getDamageTooltipSources, getDamageTooltipSources);
 
 Hooks.on('renderItemSheet', (
     /** @type {ItemSheetPF} */ { actor, isEditable, item },

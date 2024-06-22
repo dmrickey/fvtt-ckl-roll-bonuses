@@ -5,10 +5,22 @@
             "# Roll Bonuses",
         ],
     },
+
     "[handlebars]": {
         "editor.formatOnSave": false
     },
+
     "js/ts.implicitProjectConfig.checkJs": true,
     "js/ts.implicitProjectConfig.strictNullChecks": false,
     "typescript.tsserver.experimental.enableProjectDiagnostics": true,
+
+  "editor.comments.ignoreEmptyLines": false,
+  "editor.tabSize": 2,
+
+  "prettier.arrowParens": "always",
+  "prettier.semi": true,
+  "prettier.singleQuote": true,
+  "prettier.tabWidth": 2,
+  "prettier.trailingComma": "all",
+  "prettier.useTabs": false,
 }

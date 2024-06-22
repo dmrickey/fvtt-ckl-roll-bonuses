@@ -62,7 +62,7 @@ export class FortuneBonus extends BaseBonus {
         }
 
         options.fortuneCount = 1;
-        options.misfortuneCount = 0;
         handleFortune(options);
+        options.fortuneCount = 0;
     }
 }

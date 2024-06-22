@@ -45,7 +45,7 @@ class Settings {
         'monk': sort([...allChoices, 'acr', 'esc']),
         'natural': sort([...allChoices, 'clm', 'fly', 'swm']),
         'polearms': sort([...allChoices, 'dip', 'sen']),
-        'siegeEngines': sort([...allChoices, 'clm', 'pro.subSkills.driver']),
+        'siegeEngines': sort([...allChoices, 'clm', 'pro.driver']),
         'spears': sort([...allChoices, 'han', 'rid']),
         'thrown': sort([...allChoices, 'acr', 'per']),
         'tribal': sort([...allChoices, 'clm', 'sur']),
@@ -96,9 +96,9 @@ Hooks.on('renderActorSheetPF', (
     html.find('.tab.skills .skills-list li.skill, .tab.skills .skills-list li.sub-skill').each((_, li) => {
         const getSkillId = () => {
             const skillId = li.getAttribute('data-skill');
-            const mainId = li.getAttribute('data-main-skill');
-            return mainId
-                ? `${mainId}.subSkills.${skillId}`
+            const subId = li.getAttribute('data-sub-skill');
+            return subId
+                ? `${skillId}.${subId}`
                 : skillId;
         }
 
@@ -157,8 +157,8 @@ Hooks.once('init', () => {
     LocalHookHandler.registerHandler(localHooks.actorGetSkillInfo, getSkillInfo);
 });
 
-/** @param {string} id */
-const isDriver = (id) => id === 'pro.subSkills.driver';
+/** @param {string} id  @returns {boolean} */
+const isDriver = (id) => id === 'pro.driver';
 
 Hooks.on('renderItemSheet', (
     /** @type {ItemSheetPF} */ { actor, isEditable, item },
@@ -195,7 +195,7 @@ Hooks.on('renderItemSheet', (
             }
         });
 
-        const currentSkills = item.getFlag(MODULE_NAME, selectedKey);
+        const currentSkills = item.getFlag(MODULE_NAME, selectedKey) || [];
         const validSkills = intersection(
             currentSkills,
             api.config.versatileTraining.mapping[currentGroup],

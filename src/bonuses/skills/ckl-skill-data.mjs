@@ -55,7 +55,7 @@ export class CklSkillData {
             { label: localize('ok'), value: true },
         ];
         const inputs = [{
-            label: localize('PF1.BaseDice'),
+            label: localize('base-dice'),
             type: 'text',
             options: data.dice ?? '',
         }, {

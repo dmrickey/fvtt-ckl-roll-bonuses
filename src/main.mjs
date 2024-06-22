@@ -10,16 +10,21 @@ import './auto-recognition/init.mjs';
 import { api } from './util/api.mjs';
 import './overrides/action-damage.mjs';
 import migrate from './migration/index.mjs';
+import { ifDebug } from './util/if-debug.mjs';
 
 Hooks.once('pf1PostReady', () => migrate());
 
 /**
  * @param {() => any} wrapped
- * @this {ChatAttack}
+ * @this {ActionUse}
 */
-function setAttackNotesHTMLWrapper(wrapped) {
-    Hooks.call(customGlobalHooks.chatAttackFootnotes, this);
-    return wrapped();
+function addFootnotes(wrapped) {
+    wrapped();
+
+    /** @type {string[]} */
+    const notes = this.shared.templateData.footnotes ?? [];
+    Hooks.call(customGlobalHooks.actionUseFootnotes, this, notes);
+    this.shared.templateData.footnotes = notes;
 }
 
 /**
@@ -49,16 +54,6 @@ function setEffectNotesHTMLWrapper(wrapped) {
 }
 
 /**
- * @param {() => number | string} wrapped
- * @this {ItemChange}
- */
-function patchChangeValue(wrapped) {
-    const seed = wrapped();
-    const value = LocalHookHandler.fireHookWithReturnSync(localHooks.patchChangeValue, seed, this);
-    return value;
-}
-
-/**
  * @param {*} wrapped
  * @param {*} options
  * @this {d20Roll}
@@ -72,9 +67,12 @@ function d20RollWrapper(wrapped, options = {}) {
 /**
  * @this {ItemPF}
  * @param {*} wrapped
+ * @param {boolean} final
  */
-function prepareItemData(wrapped) {
-    wrapped();
+function prepareItemData(wrapped, final) {
+    wrapped(final);
+
+    if (!final) return;
 
     const item = this;
     /**
@@ -84,8 +82,11 @@ function prepareItemData(wrapped) {
     const empty = {};
     item[MODULE_NAME] = empty;
     const rollData = item.getRollData();
-    FormulaCacheHelper.cacheFormulas(item, rollData)
+    FormulaCacheHelper.cacheFormulas(item, rollData);
     LocalHookHandler.fireHookNoReturnSync(localHooks.prepareData, item, rollData);
+    ifDebug(() => {
+        console.info(`Cached info for '${item.name}':`, item[MODULE_NAME]);
+    });
 }
 
 /**
@@ -95,7 +96,9 @@ function prepareItemData(wrapped) {
  * @returns The result of the original method.
  */
 function itemUseWrapper(wrapped, options = {}) {
-    Hooks.call(customGlobalHooks.itemUse, this, options);
+    if (pf1.documents.settings.getSkipActionPrompt() || options.dice) {
+        Hooks.call(customGlobalHooks.itemUse, this, options);
+    }
     return wrapped.call(this, options);
 }
 
@@ -176,14 +179,29 @@ function itemGetTypeChatData(wrapped, data, labels, props, rollData) {
 }
 
 /**
- * Get damage sources for actor's combat tooltips
- * @param {() => any} wrapped
- * @this {ItemAction}
+ * Modify damage sources for actor's combat tooltips
+ * @param {(fullId: string, context: { sources: Array<any>}) => void} wrapped
+ * @param {string} fullId
+ * @param {{sources: Array<any>}} context
+ * @this {ActorSheetPF}
  */
-function actionDamageSources(wrapped) {
-    const sources = wrapped();
-    Hooks.call(customGlobalHooks.actionDamageSources, this, sources);
-    return sources;
+function getDamageTooltipSources(wrapped, fullId, context) {
+    wrapped(fullId, context);
+
+    const re = /^(?<id>[\w-]+)(?:\.(?<detail>.*))?$/.exec(fullId);
+    const { id, detail } = re?.groups ?? {};
+    const [itemId, target] = detail?.split(".") ?? [];
+
+    if (id === "item" && target === "damage") {
+        const item = this.actor.items.get(itemId);
+        /** @type {ItemChange[]} */
+        const sources = [];
+        Hooks.call(customGlobalHooks.getDamageTooltipSources, item, sources);
+        if (sources.length) {
+            context.sources ||= [];
+            context.sources.push({ sources });
+        }
+    }
 
     // const filtered = getHighestChanges(sources, { ignoreTarget: true });
     // return filtered;
@@ -199,7 +217,7 @@ function safeTotal(
     formula,
     data,
 ) {
-    return (isNaN(+formula) ? RollPF.safeRoll(formula, data).total : +formula) || 0;
+    return (isNaN(+formula) ? RollPF.safeRollSync(formula, data).total : +formula) || 0;
 }
 
 /**
@@ -313,18 +331,19 @@ function actorGetSkillInfo(wrapped, skillId, { rollData } = {}) {
 }
 
 Hooks.once('init', () => {
+    // change.mjs also fires a local hook for re-calculating changes (e.g. Fate's Favored).
+
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype._getConditionalParts', getConditionalParts, libWrapper.WRAPPER);
+    libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype.addFootnotes', addFootnotes, libWrapper.WRAPPER); // good
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype.alterRollData', actionUseAlterRollData, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype.handleConditionals', actionUseHandleConditionals, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ChatAttack.prototype.addAttack', chatAttackAddAttack, libWrapper.WRAPPER);
-    libWrapper.register(MODULE_NAME, 'pf1.actionUse.ChatAttack.prototype.setAttackNotesHTML', setAttackNotesHTMLWrapper, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ChatAttack.prototype.setEffectNotesHTML', setEffectNotesHTMLWrapper, libWrapper.WRAPPER);
-    libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.damageSources', actionDamageSources, libWrapper.WRAPPER);
-    libWrapper.register(MODULE_NAME, 'pf1.components.ItemChange.prototype.value', patchChangeValue, libWrapper.WRAPPER);
+    libWrapper.register(MODULE_NAME, 'pf1.applications.actor.ActorSheetPF.prototype._getTooltipContext', getDamageTooltipSources, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.dice.d20Roll', d20RollWrapper, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype.getAttackSources', itemGetAttackSources, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype.getTypeChatData', itemGetTypeChatData, libWrapper.WRAPPER);
-    libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype.prepareDerivedItemData', prepareItemData, libWrapper.WRAPPER);
+    libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype._prepareDependentData', prepareItemData, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype.use', itemUseWrapper, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemSpellPF.prototype.getTypeChatData', itemGetTypeChatData, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.critRange', itemActionCritRangeWrapper, libWrapper.WRAPPER);
@@ -333,6 +352,7 @@ Hooks.once('init', () => {
     libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.rollDamage', itemActionRollDamage, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorPF.prototype.rollSkill', actorRollSkill, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorPF.prototype.getSkillInfo', actorGetSkillInfo, libWrapper.WRAPPER);
+
     // for patching resources - both
     // libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype._updateMaxUses', updateMaxUses, libWrapper.WRAPPER);
     // pf1.documents.actor.ActorPF.prototype.updateItemResources

@@ -26,7 +26,6 @@ Hooks.once('ready', () => {
     SpecificBonuses.registerSpecificBonus({ journal, key: weaponFocusKey });
     SpecificBonuses.registerSpecificBonus({ journal, key: greaterWeaponFocusKey, parent: weaponFocusKey });
     SpecificBonuses.registerSpecificBonus({ journal, key: mythicWeaponFocusKey, parent: weaponFocusKey });
-    SpecificBonuses.registerSpecificBonus({ journal, key: racialWeaponFocusKey, parent: weaponFocusKey });
 });
 
 class Settings {

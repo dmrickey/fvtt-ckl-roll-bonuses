@@ -3,7 +3,7 @@
 import { MODULE_NAME } from "../consts.mjs";
 import { createTemplate, templates } from "../handlebars-handlers/templates.mjs";
 import { addNodeToRollBonus } from "../handlebars-handlers/add-bonus-to-item-sheet.mjs";
-import { KeyedDFlagHelper, getDocDFlags } from "../util/flag-helpers.mjs";
+import { KeyedDFlagHelper, getDocDFlags, getDocFlags } from "../util/flag-helpers.mjs";
 import { registerItemHint } from "../util/item-hints.mjs";
 import { localize } from "../util/localize.mjs";
 import { LanguageSettings } from "../util/settings.mjs";
@@ -110,9 +110,9 @@ Hooks.on('renderActorSheetPF', (
     html.find('.tab.skills .skills-list li.skill, .tab.skills .skills-list li.sub-skill').each((_, li) => {
         const getSkillId = () => {
             const skillId = li.getAttribute('data-skill');
-            const mainId = li.getAttribute('data-main-skill');
-            return mainId
-                ? `${mainId}.subSkills.${skillId}`
+            const subId = li.getAttribute('data-sub-skill');
+            return subId
+                ? `${skillId}.${subId}`
                 : skillId;
         }
 
@@ -137,7 +137,44 @@ Hooks.on('renderActorSheetPF', (
     });
 });
 
+/**
+ * @param {SkillInfo} skillInfo
+ * @param {ActorPF} actor
+ * @param {RollData} rollData
+ */
+function getSkillInfo(skillInfo, actor, rollData) {
+    const helper = new KeyedDFlagHelper(actor, { includeInactive: false, }, key);
+    const items = helper.itemsForFlag(key);
 
+    if (!items.length) return;
+
+    items.forEach((item) => {
+        const [vp] = getDocDFlags(item, key, { includeInactive: false });
+        const [baseId, ...targetIds] = `${vp}`.split(';');
+
+        const expanded = item.getFlag(MODULE_NAME, expandedKey);
+        if (expanded) {
+            targetIds.push(expanded);
+        }
+
+        if (!targetIds.includes(skillInfo.id) || !!actor.getFlag(MODULE_NAME, disabledKey(baseId, skillInfo.id))) {
+            return skillInfo;
+        }
+
+        const baseSkill = actor.getSkillInfo(baseId);
+
+        skillInfo.ability = baseSkill.ability;
+        skillInfo.acp = baseSkill.acp;
+        skillInfo.cs = baseSkill.cs;
+        skillInfo.fullName = baseSkill.fullName;
+        // skillInfo.id = baseSkill.id;
+        // skillInfo.journal = baseSkill.journal;
+        skillInfo.mod = baseSkill.mod;
+        // skillInfo.name = baseSkill.name;
+        skillInfo.rank = baseSkill.rank;
+        skillInfo.rt = baseSkill.rt;
+    });
+}
 /**
  * @param {{ skillId: string, options: object }} seed
  * @param {ActorPF} actor
@@ -151,7 +188,7 @@ function versatileRollSkill(seed, actor) {
     // todo v10 change this to use the single journal entry in `getSkillInfo`
 
     const originalSkillElement = () => {
-        const parentId = skillId.split('.subSkills')[0];
+        const parentId = skillId.split('.')[0];
         const skillInfo = actor.getSkillInfo(skillId);
         const link = skillInfo.journal || actor.getSkillInfo(parentId)?.journal || pf1.config.skillCompendiumEntries[parentId] || '';
         const linkProp = link ? `data-compendium-entry="${link}"` : '';
@@ -197,6 +234,7 @@ ${vpTitle}
     }
 }
 Hooks.once('init', () => {
+    LocalHookHandler.registerHandler(localHooks.actorGetSkillInfo, getSkillInfo);
     LocalHookHandler.registerHandler(localHooks.actorRollSkill, versatileRollSkill);
 });
 
@@ -254,7 +292,7 @@ Hooks.on('renderItemSheet', (
                 const perform = actor.getSkillInfo('prf');
                 for (const [subId, subS] of Object.entries(perform.subSkills ?? {})) {
                     const subSkill = deepClone(subS);
-                    subSkill.id = `prf.subSkills.${subId}`;
+                    subSkill.id = `prf.${subId}`;
                     skills.push(subSkill);
                 }
                 return skills

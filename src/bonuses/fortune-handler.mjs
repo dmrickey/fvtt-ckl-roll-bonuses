@@ -48,7 +48,7 @@ Hooks.once('ready', () => {
         [initWarsightFortune]: () => localize('PF1.Initiative'),
         // @ts-ignore - because I typed SavingThrows too strongly and ignoring here is easier
         [saveFortune]: (key) => key ? pf1.config.savingThrows[key] : localize('PF1.Save'),
-        [selfFortune]: () => localize('PF1.TargetSelf'),
+        [selfFortune]: () => localize('targetSelf'),
         // @ts-ignore
         [skillFortune]:
             (/** @type {keyof typeof pf1.config.skills | undefined} */ key, actor) => !key ? localize('PF1.Skills') : pf1.config.skills[key] || getProperty(actor?.system.skills ?? {}, key)?.name,
@@ -121,7 +121,7 @@ export const handleFortune = (options) => {
     options.fortuneCount ||= 0;
     options.misfortuneCount ||= 0;
 
-    const roll = RollPF.safeRoll(options.dice);
+    const roll = RollPF.safeRollSync(options.dice);
     const dice = roll.dice[0];
     if (!dice) {
         // no actual roll, a static number was probably given
@@ -147,6 +147,7 @@ export const handleFortune = (options) => {
     }
 
     if (options.fortuneCount === options.misfortuneCount) {
+        options.dice = '1d20';
         return;
     }
 
@@ -230,7 +231,7 @@ Hooks.on(customGlobalHooks.itemUse, (
         options.misfortuneCount++;
     }
 
-    const action = options.actionID ? item.actions.get(options.actionID) : item.firstAction;
+    const action = options.actionID ? item.actions.get(options.actionID) : item.defaultAction;
 
     const fortunesToFind = [fortune, attackFortune];
     const misfortunesToFind = [misfortune, attackMisfortune];
@@ -248,14 +249,18 @@ Hooks.on(customGlobalHooks.itemUse, (
             break;
         case 'mcman':
             fortunesToFind.push(`${attackFortune}_melee`);
+            fortunesToFind.push(cmbFortune);
             fortunesToFind.push(`${cmbFortune}_melee`);
             misfortunesToFind.push(`${attackMisfortune}_melee`);
+            misfortunesToFind.push(cmbMisfortune);
             misfortunesToFind.push(`${cmbMisfortune}_melee`);
             break;
         case 'rcman':
             fortunesToFind.push(`${attackFortune}_ranged`);
+            fortunesToFind.push(cmbFortune);
             fortunesToFind.push(`${cmbFortune}_ranged`);
             misfortunesToFind.push(`${attackMisfortune}_ranged`);
+            misfortunesToFind.push(cmbMisfortune);
             misfortunesToFind.push(`${cmbMisfortune}_ranged`);
             break;
     }
@@ -421,29 +426,6 @@ const handleAbility = (
     options.misfortuneCount = misfortuneCount;
 };
 Hooks.on('pf1PreActorRollAbility', handleAbility);
-
-const handleCmb = (
-    /** @type {{ items: EmbeddedCollection<ItemPF>; }} */ actor,
-    /** @type {{ fortuneCount: number; misfortuneCount: number; }} */ options,
-) => {
-    let fortuneCount = 0;
-    let misfortuneCount = 0;
-
-    const count = countBFlags(actor?.items, fortune, misfortune, attackFortune, attackMisfortune, babFortune, babMisfortune, cmbFortune, cmbMisfortune);
-
-    fortuneCount += count[fortune];
-    misfortuneCount += count[misfortune];
-    fortuneCount += count[attackFortune];
-    misfortuneCount += count[attackMisfortune];
-    fortuneCount += count[babFortune];
-    misfortuneCount += count[babMisfortune];
-    fortuneCount += count[cmbFortune];
-    misfortuneCount += count[cmbMisfortune];
-
-    options.fortuneCount = fortuneCount;
-    options.misfortuneCount = misfortuneCount;
-};
-Hooks.on('pf1PreActorRollCmb', handleCmb);
 
 const handleSavingThrow = (
     /** @type {ActorPF} */ actor,

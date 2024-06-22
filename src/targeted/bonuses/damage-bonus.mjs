@@ -1,6 +1,6 @@
 import { MODULE_NAME } from "../../consts.mjs";
 import { damageInput } from "../../handlebars-handlers/targeted/bonuses/damage.mjs";
-import { conditionalModToItemChange } from "../../util/conditional-helpers.mjs";
+import { conditionalModToItemChangeForDamageTooltip } from "../../util/conditional-helpers.mjs";
 import { LocalHookHandler, localHooks } from "../../util/hooks.mjs";
 import { localize } from "../../util/localize.mjs";
 import { signed } from '../../util/to-signed-string.mjs';
@@ -37,7 +37,7 @@ export class DamageBonus extends BaseBonus {
             const damages = item.getFlag(MODULE_NAME, this.key) || [];
             damages.forEach((/** @type {DamageInputModel}*/ damage) => {
                 item[MODULE_NAME][this.key] ||= [];
-                const roll = RollPF.safeRoll(damage.formula, rollData);
+                const roll = RollPF.safeRollSync(damage.formula, rollData);
                 item[MODULE_NAME][this.key].push(roll.simplifiedFormula);
             });
         });
@@ -77,7 +77,7 @@ export class DamageBonus extends BaseBonus {
                 type,
                 crit,
                 formula: (() => {
-                    const roll = RollPF.safeRoll(formula);
+                    const roll = RollPF.safeRollSync(formula);
                     return roll.isNumber && roll.total
                         ? signed(roll.total)
                         : formula;
@@ -121,7 +121,7 @@ export class DamageBonus extends BaseBonus {
 
         sources = (conditional.modifiers ?? [])
             .filter((mod) => mod.target === 'damage')
-            .map((mod) => conditionalModToItemChange(conditional, mod, { isDamage: true }))
+            .map((mod) => conditionalModToItemChangeForDamageTooltip(conditional, mod, { isDamage: true }))
             .filter(truthiness);
 
         return sources;
@@ -168,10 +168,10 @@ export class DamageBonus extends BaseBonus {
      */
     static #damagesTypeToString(types) {
         if (!types.custom?.trim() && !types.values?.length) {
-            return pf1.config.damageTypes.untyped;
+            return pf1.registry.damageTypes.get('untyped').name;
         }
 
-        const valueLookup = ( /** @type {keyof pf1['config']['damageTypes']} */ t) => pf1.config.damageTypes[t] || t;
+        const valueLookup = ( /** @type {DamageType['id']} */ t) => pf1.registry.damageTypes.getLabels()[t] || t;
         /**
          * @param {TraitSelectorValuePlural} t
          */

@@ -1,6 +1,6 @@
 import { textInput } from '../../handlebars-handlers/bonus-inputs/text-input.mjs';
 import { handleBonusTypeFor } from '../../target-and-bonus-join.mjs';
-import { conditionalCalculator, conditionalModToItemChange } from '../../util/conditional-helpers.mjs';
+import { conditionalCalculator, conditionalModToItemChangeForDamageTooltip } from '../../util/conditional-helpers.mjs';
 import { setCurrentEnhancementIncreases } from '../../util/enhancement-bonus-helper.mjs';
 import { FormulaCacheHelper } from '../../util/flag-helpers.mjs';
 import { customGlobalHooks } from '../../util/hooks.mjs';
@@ -111,15 +111,15 @@ export class EnhancementBonus extends BaseBonus {
     /**
      * @override
      * @param {ItemPF} source
-     * @param {ItemAction} action
+     * @param {ItemPF} thing
      * @returns {ItemChange[]}
      */
-    static getDamageSourcesForTooltip(source, action) {
+    static getDamageSourcesForTooltip(source, thing) {
         /** @type {ItemChange[]} */
         let sources = [];
 
         const conditional = (() => {
-            const bonus = this.#getEnhancementBonus(source, action);
+            const bonus = this.#getEnhancementBonus(source, thing);
             if (bonus) {
                 const conditional = this.#createConditional(bonus.attack, bonus.damage, source.name);
                 return conditional.modifiers?.length
@@ -134,7 +134,7 @@ export class EnhancementBonus extends BaseBonus {
 
         sources = (conditional.modifiers ?? [])
             .filter((mod) => mod.target === 'damage')
-            .map((mod) => conditionalModToItemChange(conditional, mod, { isDamage: true }))
+            .map((mod) => conditionalModToItemChangeForDamageTooltip(conditional, mod, { isDamage: true }))
             .filter(truthiness);
 
         return sources;
@@ -255,7 +255,7 @@ export class EnhancementBonus extends BaseBonus {
                 formula: `${attackBonus}`,
                 subTarget: 'allAttack',
                 target: 'attack',
-                type: `${pf1.config.bonusModifiers.enh}+`,
+                type: `${pf1.config.bonusTypes.enh}+`,
             });
         }
         if (damageBonus) {
@@ -266,7 +266,7 @@ export class EnhancementBonus extends BaseBonus {
                 formula: `${damageBonus}`,
                 subTarget: 'allDamage',
                 target: 'damage',
-                type: `${pf1.config.bonusModifiers.enh}+`,
+                type: `${pf1.config.bonusTypes.enh}+`,
             });
         }
         return {

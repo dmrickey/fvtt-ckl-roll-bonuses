@@ -148,10 +148,10 @@ export class CritBonus extends BaseBonus {
         LocalHookHandler.registerHandler(localHooks.updateItemActionRollData, updateItemActionRollData);
 
         registerItemHint((hintcls, actor, item, _data) => {
-            if (!actor || !item?.firstAction) return;
+            if (!actor || !item?.defaultAction) return;
 
             const isBroken = !!item.system.broken;
-            const action = item.firstAction;
+            const action = item.defaultAction;
 
             let hasKeen = false;
             let offset = 0;
@@ -201,14 +201,14 @@ export class CritBonus extends BaseBonus {
      */
     static getHints(source, target = undefined) {
         if (SelfTarget.isSource(source)) {
-            target = source.firstAction;
+            target = source.defaultAction;
         }
 
         /** @type {Nullable<ItemAction>} */
         let itemAction;
         if (target) {
             itemAction = target instanceof pf1.documents.item.ItemPF
-                ? target.firstAction
+                ? target.defaultAction
                 : target instanceof pf1.components.ItemAction
                     ? target
                     : undefined;

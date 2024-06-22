@@ -32,7 +32,7 @@ function patchChangeValue(value, itemChange) {
         {
             onlyIncludeAllFlags: true,
             mustHave: {
-                [bonusKey]: (value) => value === itemChange.modifier,
+                [bonusKey]: (value) => value === itemChange.type,
             }
         },
         bonusKey,
@@ -58,7 +58,7 @@ Hooks.on('renderItemSheet', (
 ) => {
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
-    const { bonusModifiers } = pf1.config;
+    const { bonusTypes } = pf1.config;
 
     const hasKey = item.system.flags.dictionary[bonusKey] !== undefined
         || item.system.flags.dictionary[formulaKey] !== undefined;
@@ -69,7 +69,7 @@ Hooks.on('renderItemSheet', (
     const current = getDocDFlags(item, bonusKey)[0];
     const formula = getDocDFlags(item, formulaKey)[0];
 
-    const choices = Object.entries(bonusModifiers)
+    const choices = Object.entries(bonusTypes)
         .map(([key, label]) => ({ key, label }));
 
     textInputAndKeyValueSelect({

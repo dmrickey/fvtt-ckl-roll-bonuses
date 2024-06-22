@@ -29,6 +29,7 @@
 - [Add Auto Config](#add-auto-config)
 - [Add Quench Testings](#add-quench-testings)
 - [Add create hooks for initializing some items (like anything based off of name/id)](#add-create-hooks-for-initializing-some-items-like-anything-based-off-of-nameid)
+- [Improve Enhancement Bonuses](#improve-enhancement-bonuses)
 - [in pf1 V10](#in-pf1-v10)
 - [Not Possible](#not-possible)
 - [vnext](#vnext)
@@ -154,6 +155,11 @@
 # Add Quench Testings
 # Add create hooks for initializing some items (like anything based off of name/id)
 
+# Improve Enhancement Bonuses
+- Add `getEnhancement` bonus to utils and api
+  - this will allow for other mods to call into this mod to see what the total enhancement bonus for a given weapon is
+- add checkbox for "applies for DR" (some spell buffs don't appy for DR (e.g. Greater Magic Weapon))
+
 # in pf1 V10
 - Ammo
   - Attack Notes to add to individual attacks
@@ -175,3 +181,11 @@
 - Add FAQ for why some feats are automatically configured the way they are
 - distance-based targeting
 - Add FAQ about how to circumvent auto configuration
+- update mw and enhancement to modify the attack roll
+  - ```
+    function pf1PreActionUse(actionUse) {
+        actionUse.shared.attacks[0].chatAttack.ammo: {id: string}
+        actionUse.shared.attacks[0].chatAttack.attack
+    }
+    Hooks.on('pf1PreActionUse', pf1PreActionUse);
+   ```

@@ -28,10 +28,10 @@ export class BaseBonus extends BaseSource {
      *
      * @abstract
      * @param {ItemPF} source
-     * @param {ItemAction} action The thing for the source is being applied to for contextually aware bonuses
+     * @param {ItemPF} thing The thing for the source is being applied to for contextually aware bonuses
      * @returns {ItemChange[]}
      */
-    static getDamageSourcesForTooltip(source, action) { return []; }
+    static getDamageSourcesForTooltip(source, thing) { return []; }
 
     /**
      * Add attack bonus to actor's Combat attacks column tooltip

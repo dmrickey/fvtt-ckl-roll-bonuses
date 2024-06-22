@@ -24,8 +24,7 @@ FormulaCacheHelper.registerModuleFlag(ammoAttackKey, ammoEnhancementKey, ammoEnh
  * @param {number} index - The index of the attack, in order of enabled attacks.
  */
 function getConditionalParts(actionUse, result, atk, index) {
-    const ammoId = actionUse.shared?.attacks?.[index]?.ammo;
-    const ammo = ammoId ? actionUse.actor.items.get(ammoId) : null;
+    const ammo = actionUse.shared?.attacks?.[index]?.ammo?.document;
     if (ammo) {
         const attack = FormulaCacheHelper.getModuleFlagFormula(ammo, ammoAttackKey)[ammoAttackKey];
         if (attack) {
@@ -153,7 +152,7 @@ LocalHookHandler.registerHandler(localHooks.prepareData, (item, rollData) => {
     const damages = item.getFlag(MODULE_NAME, ammoDamageKey) || [];
     damages.forEach((/** @type {DamageInputModel}*/ damage) => {
         item[MODULE_NAME][ammoDamageKey] ||= [];
-        const roll = RollPF.safeRoll(damage.formula, rollData);
+        const roll = RollPF.safeRollSync(damage.formula, rollData);
         item[MODULE_NAME][ammoDamageKey].push(roll.simplifiedFormula);
     });
 });
