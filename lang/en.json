@@ -148,7 +148,7 @@
                 "skill-rank-override-selected": "The skills to be overridden with the supplied formula.",
                 "snake-sidewind": "Use Sense Motive for critical confirmations when your maximum Sense Motive result is higher than your maximum attack roll.",
                 "spell-school": "Apply bonuses to spells of the chosen school(s).",
-                "spell-specialization": "Increase CL by 1 for a chosen spell from a school that you have Spell Focus for.",
+                "spell-specialization": "Increase CL by 2 for a chosen spell from a school that you have Spell Focus for.",
                 "spell": "Apply bonuses for actions for these specific spells.",
                 "spellFocus": "+1 DC for chosen spell schools.",
                 "token": "Apply bonuses for actions while specific tokens are targeted. When this buff is activated, a dialog will show up that allows you to choose from tokens in the scene.",
