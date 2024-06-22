@@ -176,13 +176,14 @@ Hooks.on(customGlobalHooks.actionUseHandleConditionals, actionUseHandleCondition
  *
  * @param {ActionUse} actionUse
  */
-function actionUseAlterRollData({ actor, item, shared }) {
+function actionUseAlterRollData(actionUse) {
+    const { actor, item, shared } = actionUse;
     if (!actor || item.actor !== actor) {
         return;
     }
 
     handleBonusesFor(
-        item,
+        actionUse,
         (bonusType, sourceItem) => bonusType.actionUseAlterRollData(sourceItem, shared),
     );
 }
