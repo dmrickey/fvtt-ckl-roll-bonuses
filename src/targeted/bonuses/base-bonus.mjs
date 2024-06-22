@@ -18,7 +18,7 @@ export class BaseBonus extends BaseSource {
      *
      * @abstract
      * @param {ItemPF} source
-     * @param {ActionUse | ItemAction} action The thing for the source is being applied to for contextually aware bonuses
+     * @param {ActionUse | ItemAction} [action] The thing for the source is being applied to for contextually aware bonuses
      * @returns {Nullable<ItemConditional>}
      */
     static getConditional(source, action) { return null; }
