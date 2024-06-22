@@ -329,7 +329,7 @@ function actorGetSkillInfo(wrapped, skillId, { rollData } = {}) {
 }
 
 Hooks.once('init', () => {
-    // change.mjs also fires a local hook for re-calculating changes.
+    // change.mjs also fires a local hook for re-calculating changes (e.g. Fate's Favored).
 
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype._getConditionalParts', getConditionalParts, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype.addFootnotes', addFootnotes, libWrapper.WRAPPER); // good

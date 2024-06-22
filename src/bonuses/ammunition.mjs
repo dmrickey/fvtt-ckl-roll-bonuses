@@ -24,8 +24,7 @@ FormulaCacheHelper.registerModuleFlag(ammoAttackKey, ammoEnhancementKey, ammoEnh
  * @param {number} index - The index of the attack, in order of enabled attacks.
  */
 function getConditionalParts(actionUse, result, atk, index) {
-    const ammoId = actionUse.shared?.attacks?.[index]?.ammo;
-    const ammo = ammoId ? actionUse.actor.items.get(ammoId) : null;
+    const ammo = actionUse.shared?.attacks?.[index]?.ammo?.document;
     if (ammo) {
         const attack = FormulaCacheHelper.getModuleFlagFormula(ammo, ammoAttackKey)[ammoAttackKey];
         if (attack) {
