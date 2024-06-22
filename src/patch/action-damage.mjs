@@ -99,7 +99,8 @@ function actionDamage(action, { simplify = true, strict = true } = {}) {
 
     // Simplification turns 1d12+1d8+6-8+3-2 into 1d12+1d8-1
     try {
-        const final = pf1.utils.formula.simplify(semiFinal, { strict });
+        const rollData = semiFinal.indexOf("@") >= 0 ? lazy.rollData : undefined;
+        const final = pf1.utils.formula.simplify(semiFinal, rollData, { strict });
         return pf1.utils.formula.compress(final);
     } catch (err) {
         console.error("Invalid action damage formula:", parts.join(" + "), action, err);
