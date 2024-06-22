@@ -195,15 +195,3 @@
 # v10.1 compatibility
 - No Valid Choices styling needs to be updated so it's right-aligned
   - see Greater Weapon Specialization or hopefully any dropdown with no choices
-- targeted bonuses
-  - CritBonus,
-  - EnhancementBonus,
-- targeted targets
-  - AlignmentTarget,
-  - FunctionTarget,
-  - SelfTarget,
-  - SpellSchoolTarget,
-  - TokenTarget,
-  - WeaponTarget,
-  - WeaponTypeTarget,
-  - WhenActiveTarget,
