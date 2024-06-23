@@ -35,14 +35,6 @@
         ],
         "requires": [
             {
-                "id": "warpgate",
-                "type": "module",
-                "manifest": "https://github.com/trioderegion/warpgate/releases/latest/download/module.json",
-                "compatibility": {
-                    "verified": "1.15.4"
-                }
-            },
-            {
                 "id": "lib-wrapper",
                 "type": "module",
                 "manifest": "https://github.com/ruipin/fvtt-lib-wrapper/releases/latest/download/module.json",
