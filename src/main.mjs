@@ -8,7 +8,6 @@ import { FormulaCacheHelper } from './util/flag-helpers.mjs';
 import { simplifyRollFormula } from './util/simplify-roll-formula.mjs';
 import './auto-recognition/init.mjs';
 import { api } from './util/api.mjs';
-import './overrides/action-damage.mjs';
 import migrate from './migration/index.mjs';
 import { ifDebug } from './util/if-debug.mjs';
 
