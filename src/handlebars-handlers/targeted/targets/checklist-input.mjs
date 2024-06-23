@@ -2,6 +2,7 @@ import { MODULE_NAME } from "../../../consts.mjs";
 import { api } from '../../../util/api.mjs';
 import { localize, localizeBonusLabel, localizeBonusTooltip } from "../../../util/localize.mjs";
 import { truthiness } from "../../../util/truthiness.mjs";
+import { menu } from '../../../warpgate/menu.mjs';
 import { addNodeToRollBonus } from "../../add-bonus-to-item-sheet.mjs";
 import { createTemplate, templates } from "../../templates.mjs";
 
@@ -72,7 +73,7 @@ export function showChecklist({
                 { label: localize('PF1.Cancel'), value: false },
             ];
 
-            const results = await warpgate.menu(
+            const results = await menu(
                 { inputs, buttons },
                 {
                     title: `${label} - ${item.name}`,

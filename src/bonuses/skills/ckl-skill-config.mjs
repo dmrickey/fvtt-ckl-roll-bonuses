@@ -1,5 +1,6 @@
 import { MODULE_NAME } from "../../consts.mjs";
 import { localize } from "../../util/localize.mjs";
+import { menu } from '../../warpgate/menu.mjs';
 
 export class CklSkillConfig {
     static _inspiriationDieKey = 'inspiriationDie';
@@ -26,7 +27,7 @@ export class CklSkillConfig {
             type: 'text',
             options: this.loadInspiration(actor),
         }];
-        const { inputs: output, buttons: result } = await warpgate.menu({ buttons, inputs }, { title: localize('skills.config') });
+        const { inputs: output, buttons: result } = await menu({ buttons, inputs }, { title: localize('skills.config') });
         if (result) {
             const inspiration = `${output[0]}`.trim() || `1d6[${localize('skills.inspiration')}]`;
 

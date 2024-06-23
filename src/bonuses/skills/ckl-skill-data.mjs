@@ -1,5 +1,6 @@
 import { MODULE_NAME } from "../../consts.mjs";
 import { localize } from "../../util/localize.mjs";
+import { menu } from '../../warpgate/menu.mjs';
 
 export class CklSkillData {
     /**
@@ -72,7 +73,7 @@ export class CklSkillData {
             || actor.system.skills[skillId]?.name
             || actor.system.skills[skillId.split('.')[0]].subSkills?.[skillId.split('.').at(-1) ?? '']?.name
             || '';
-        const { inputs: output, buttons: result } = await warpgate.menu({ buttons, inputs }, { title });
+        const { inputs: output, buttons: result } = await menu({ buttons, inputs }, { title });
         if (result) {
             const bonus = `${output[1]}`?.trim() || '';
             const dice = `${output[0]}`.trim() || '';
