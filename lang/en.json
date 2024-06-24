@@ -67,7 +67,7 @@
                 "school-dc": "Spell School DC",
                 "schoolClOffset": "Spell School CL",
                 "self": "Targets Self",
-                "skill-rank-override": "Override Skill Ranks",
+                "skill-rank-override": "Skill Rank Override",
                 "skill-rank-override-formula": "Override Skill Ranks Formula",
                 "skill-rank-override-selected": "Skills to Override",
                 "snake-sidewind": "Snake Sidewind",
@@ -254,7 +254,8 @@
                 "perform": "Perform",
                 "skill1": "Skill 1",
                 "skill2": "Skill 2"
-            }
+            },
+            "replace-label": "{skill} (Replaced by {base})"
         },
         "versatile-training": {
             "description": "Choose two skills to use BAB instead of their ranks.",

@@ -166,7 +166,8 @@ function getSkillInfo(skillInfo, actor, rollData) {
         skillInfo.ability = baseSkill.ability;
         skillInfo.acp = baseSkill.acp;
         skillInfo.cs = baseSkill.cs;
-        skillInfo.fullName = baseSkill.fullName;
+        // skillInfo.fullName = baseSkill.fullName;
+        skillInfo.fullName = localize('versatilePerformance.replace-label', { skill: skillInfo.fullName, base: baseSkill.fullName });
         // skillInfo.id = baseSkill.id;
         // skillInfo.journal = baseSkill.journal;
         skillInfo.mod = baseSkill.mod;

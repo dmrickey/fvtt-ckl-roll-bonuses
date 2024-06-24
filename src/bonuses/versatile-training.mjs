@@ -72,7 +72,7 @@ registerItemHint((hintcls, actor, item, _data) => {
  */
 function createVTIcon(actor) {
     const icon = document.createElement('a');
-    icon.classList.add('fas', 'fa-swords', 'ckl-skill-icon');
+    icon.classList.add('ra', 'ra-crossed-swords', 'ckl-skill-icon');
 
     const rollData = actor.getRollData();
     const tip = localize('versatile-training.skillTip', { bab: rollData.attributes.bab.total });

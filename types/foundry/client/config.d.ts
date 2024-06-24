@@ -65,7 +65,7 @@ interface CONFIG {
         /** @defaultValue `CombatEncounters` */
         collection: ConstructorOf<CombatEncounters>;
 
-        /** @defaultValue `"fas fa-swords"` */
+        /** @defaultValue `"ra ra-crossed-swords"` */
         sidebarIcon: string;
 
         initiative: {

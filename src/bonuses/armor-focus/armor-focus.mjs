@@ -52,7 +52,7 @@ registerItemHint((hintcls, actor, item, _data) => {
         if (isImprovedFocus) {
             tips.push('', localizeBonusLabel(improvedArmorFocusKey), localize('acp-mod', { mod: -1 }));
         }
-        const hint = hintcls.create('', [], { icon: 'fas fa-helmet-battle', hint: tips.join('\n') });
+        const hint = hintcls.create('', [], { icon: 'ra ra-helmet', hint: tips.join('\n') });
         return hint;
     }
 });

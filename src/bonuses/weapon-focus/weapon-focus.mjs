@@ -84,7 +84,7 @@ registerItemHint((hintcls, actor, item, _data) => {
             bonus *= 2;
         }
         tips.push(localize('to-hit-mod', { mod: signed(bonus) }));
-        return hintcls.create('', [], { icon: 'fas fa-sword', hint: tips.join('\n') });
+        return hintcls.create('', [], { icon: 'ra ra-sword', hint: tips.join('\n') });
     }
 });
 
