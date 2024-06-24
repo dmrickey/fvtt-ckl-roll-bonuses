@@ -254,7 +254,8 @@
                 "perform": "Perform",
                 "skill1": "Skill 1",
                 "skill2": "Skill 2"
-            }
+            },
+            "replace-label": "{skill} (Replaced by {base})"
         },
         "versatile-training": {
             "description": "Choose two skills to use BAB instead of their ranks.",

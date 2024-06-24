@@ -28,7 +28,7 @@ Hooks.once('ready', () => {
 });
 
 const icons = {
-    acid: { icon: 'fas fa-droplet', css: 'ckl-acid-green' },
+    acid: { icon: 'ra ra-droplet', css: 'ckl-acid-green' },
     cold: { icon: 'far fa-snowflake', css: 'ckl-cold-blue' },
     electric: { icon: 'fas fa-bolt-lightning', css: 'ckl-electric-yellow' },
     fire: { icon: 'fas fa-fire-flame-curved', css: 'ckl-fire-red' },
