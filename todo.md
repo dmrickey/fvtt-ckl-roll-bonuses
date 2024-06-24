@@ -168,6 +168,8 @@
 - Targeting
   - descriptor-based targeting
   - sub-school target
+- Update FAQ for custom target with current example (current example uses v9 custom)
+- Use pf1's simplify util function instead of maintaining my own
 
 # Not Possible
 - Attempt to create a "resource offset"
