@@ -28,8 +28,8 @@ class Settings {
  */
 const getFormulaMax = (formula, rollData) => {
     const mods = formula.substring(formula.indexOf(' ') + 1);
-    const safeFormula = `0 + ${mods}`
-    const roll = new pf1.dice.D20RollPF(safeFormula, rollData, { skipDialog: true }).evaluate({ maximize: true, async: false })
+    const safeFormula = `0 + ${mods}`;
+    const roll = new pf1.dice.D20RollPF(safeFormula, rollData, { skipDialog: true }).evaluate({ maximize: true, async: false });
     const max = roll.total;
     return max;
 }
