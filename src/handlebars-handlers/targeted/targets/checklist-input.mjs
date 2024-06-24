@@ -55,7 +55,7 @@ export function showChecklist({
         element.addEventListener('click', async (event) => {
             event.preventDefault();
 
-            /** @type {WarpgateInput[]} */
+            /** @type {import('../../../warpgate/menu.mjs').MenuInput[]} */
             const inputs = Object.entries(options).map(([key, label]) => ({
                 label,
                 type: 'checkbox',
@@ -77,7 +77,7 @@ export function showChecklist({
                 { inputs, buttons },
                 {
                     title: `${label} - ${item.name}`,
-                    render: ([contents]) => {
+                    render: (/** @type {Array<HTMLElement>} */[contents]) => {
                         if (!limit) return;
 
                         const clazz = 'vt-checklist';

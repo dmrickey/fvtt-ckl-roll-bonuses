@@ -24,6 +24,7 @@
  * @typedef {Object} MenuInput
  * @prop {string} type Type of input, controlling display and return values. See "options property details," above, and {@link MenuResult MenuResult.button}.
  * @prop {string} label Display text for this inputs label element. Accepts HTML.
+ * @prop {string} [value]
  * @prop {boolean|string|Array<string|boolean>} [options] See "options property details," above.
  */
 
@@ -282,6 +283,7 @@ const dialogInputs = (data) => {
     return content;
 };
 
+/** @return {Promise<MenuResult>} */
 export const menu = async (prompts = {}, config = {}) => {
     /* apply defaults to optional params */
     const configDefaults = {
