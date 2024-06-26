@@ -124,6 +124,7 @@
 
 ## Bonuses
 - "x per dice"
+- Extra Attacks
 
 ## Targeting
 - show warning if target has an inappropriate bonus
