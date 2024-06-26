@@ -29,6 +29,7 @@
 - [Add Auto Config](#add-auto-config)
 - [Add Quench Testings](#add-quench-testings)
 - [Add create hooks for initializing some items (like anything based off of name/id)](#add-create-hooks-for-initializing-some-items-like-anything-based-off-of-nameid)
+- [Add inpsiration checkbox to roll dialogs](#add-inpsiration-checkbox-to-roll-dialogs)
 - [Improve Enhancement Bonuses](#improve-enhancement-bonuses)
 - [in pf1 V10](#in-pf1-v10)
 - [Not Possible](#not-possible)
@@ -155,6 +156,10 @@
 # Add Quench Testings
 # Add create hooks for initializing some items (like anything based off of name/id)
 
+# Add inpsiration checkbox to roll dialogs
+- https://gitlab.com/foundryvtt_pathfinder1e/foundryvtt-pathfinder1/-/merge_requests/2758
+- > "So actionUse.formData for actions and overriding _getFormData() for d20rolls"
+
 # Improve Enhancement Bonuses
 - Add `getEnhancement` bonus to utils and api
   - this will allow for other mods to call into this mod to see what the total enhancement bonus for a given weapon is
@@ -191,3 +196,6 @@
     }
     Hooks.on('pf1PreActionUse', pf1PreActionUse);
    ```
+- Fix "Target" link on first page of Bonuses readme (within compendium)
+- Look into adding an inline warning if targets/bonuses detected in an item sheet when the other is configured
+- Add a super obvious configuration button in the item sheet when there are no bonuses configured
