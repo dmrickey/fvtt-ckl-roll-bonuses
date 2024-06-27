@@ -197,6 +197,5 @@
     }
     Hooks.on('pf1PreActionUse', pf1PreActionUse);
    ```
-- Fix "Target" link on first page of Bonuses readme (within compendium)
 - Look into adding an inline warning if targets/bonuses detected in an item sheet when the other is configured
 - Add a super obvious configuration button in the item sheet when there are no bonuses configured
