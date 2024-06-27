@@ -8,6 +8,9 @@ const ammoAttackKey = 'ammo-attack';
 
 /** @param {ItemPF} item */
 const migrateItem = async (item) => {
+    if (!(item instanceof pf1.documents.item.ItemLootPF) || item.subType !== 'ammo') {
+        return;
+    }
 
     const obj = (item.flags?.[MODULE_NAME] || {});
     if (obj.hasOwnProperty(legacyAmmoAttackKey) || obj.hasOwnProperty(legacyAmmoDamageKey)) {
