@@ -77,7 +77,7 @@ export class AllTarget extends BaseTarget {
             return [];
         }
 
-        const flaggedItems = item.actor.itemFlags.boolean[this.key]?.sources ?? [];
+        const flaggedItems = item.actor.itemFlags?.boolean[this.key]?.sources ?? [];
         return flaggedItems;
     };
 }

@@ -45,7 +45,7 @@ export class DamageTypeTarget extends BaseTarget {
             return [];
         }
 
-        const bonusSources = item.actor.itemFlags.boolean[this.key]?.sources ?? [];
+        const bonusSources = item.actor.itemFlags?.boolean[this.key]?.sources ?? [];
 
         const filteredSources = bonusSources.filter((source) => {
             const targetedTypes = source.getFlag(MODULE_NAME, this.key);

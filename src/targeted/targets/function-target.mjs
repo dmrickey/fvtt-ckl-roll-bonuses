@@ -57,7 +57,7 @@ export class FunctionTarget extends BaseTarget {
             return [];
         }
 
-        const sources = item.actor.itemFlags.boolean[this.key]?.sources ?? [];
+        const sources = item.actor.itemFlags?.boolean[this.key]?.sources ?? [];
         const filtered = sources.filter((source) => {
             const custom = source.getFlag(MODULE_NAME, this.key);
             const func = eval(custom);

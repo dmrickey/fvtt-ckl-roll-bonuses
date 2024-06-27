@@ -49,7 +49,7 @@ declare global {
 
         id: string;
 
-        itemFlags: {
+        itemFlags?: {
             /**
              * The tags for Items that are active with a boolean flag
              */
@@ -1664,6 +1664,7 @@ declare global {
                 getSkipActionPrompt(): boolean;
             };
             actor: {
+                ActorBasePF: { new (): ActorBasePF };
                 ActorPF: { new (): ActorPF };
             };
             item: {

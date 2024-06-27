@@ -46,7 +46,7 @@ export class ItemTarget extends BaseTarget {
         }
 
         // fromUuidSync
-        const flaggedItems = item.actor.itemFlags.boolean[this.key]?.sources ?? [];
+        const flaggedItems = item.actor.itemFlags?.boolean[this.key]?.sources ?? [];
         const bonusSources = flaggedItems.filter((flagged) => {
             /** @type {string[]} */
             const targetedItemUuids = flagged.getFlag(MODULE_NAME, this.key) || [];

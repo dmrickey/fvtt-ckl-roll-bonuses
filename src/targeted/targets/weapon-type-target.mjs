@@ -54,7 +54,7 @@ export class WeaponTypeTarget extends BaseTarget {
             return [];
         }
 
-        const flaggedItems = item.actor.itemFlags.boolean[this.key]?.sources ?? [];
+        const flaggedItems = item.actor.itemFlags?.boolean[this.key]?.sources ?? [];
         const bonusSources = flaggedItems.filter((flagged) => {
             /** @type {string[]} */
             const types = flagged.getFlag(MODULE_NAME, this.key);

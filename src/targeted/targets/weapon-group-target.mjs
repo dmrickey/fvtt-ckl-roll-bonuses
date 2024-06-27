@@ -60,7 +60,7 @@ export class WeaponGroupTarget extends BaseTarget {
             .map(x => x.trim())
             .filter(truthiness);
 
-        const flaggedItems = item.actor.itemFlags.boolean[this.key]?.sources ?? [];
+        const flaggedItems = item.actor.itemFlags?.boolean[this.key]?.sources ?? [];
         const bonusSources = flaggedItems.filter((flagged) => {
             const targetedGroups = flagged.getFlag(MODULE_NAME, this.key) || [];
             return intersects(groupsOnItem, targetedGroups);

@@ -47,7 +47,7 @@ export class HasBooleanFlagTarget extends BaseTarget {
             return [];
         }
 
-        const allSources = item.actor.itemFlags.boolean[this.key]?.sources ?? [];
+        const allSources = item.actor.itemFlags?.boolean[this.key]?.sources ?? [];
         const filteredSources = allSources.filter((source) => {
             /** @type {string} */
             const value = source.getFlag(MODULE_NAME, this.key);
