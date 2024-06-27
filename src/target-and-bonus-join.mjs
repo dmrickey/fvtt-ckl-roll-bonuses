@@ -289,15 +289,16 @@ Hooks.on('updateItem', (
     });
 });
 
-Hooks.on(customGlobalHooks.itemUse, (
-    /** @type {ItemPF} */ item,
-    /** @type {{ fortuneCount: number; misfortuneCount: number; actionID: any; }} */ options
-) => {
+/**
+ * @param {ActionUse} actionUse
+ */
+function actionUseProcess(actionUse) {
     handleBonusesFor(
-        item,
-        (bonusType, sourceItem) => bonusType.onItemUse(sourceItem, options),
-    );
-});
+        actionUse,
+        (bonusType, sourceItem) => bonusType.actionUseProcess(sourceItem, actionUse),
+    )
+}
+LocalHookHandler.registerHandler(localHooks.actionUseProcess, actionUseProcess);
 
 /**
  * @param {ItemPF} item

@@ -12,10 +12,10 @@ export const customGlobalHooks = /** @type {const} */ ({
     getConditionalParts: `${MODULE_NAME}_getConditionalParts`,
     itemGetAttackSources: `${MODULE_NAME}_itemGetAttackSources`,
     itemGetTypeChatData: `${MODULE_NAME}_itemGetTypeChatData`,
-    itemUse: `${MODULE_NAME}_itemUse`,
 });
 
 export const localHooks = /** @type {const} */ ({
+    actionUseProcess: `${MODULE_NAME}_actionUseProcess`,
     actorGetSkillInfo: `${MODULE_NAME}_actorGetSkillInfo`,
     actorRollSkill: `${MODULE_NAME}_actorRollSkill`,
     chatAttackAddAttack: `${MODULE_NAME}_chatAttackAddAttack`,
@@ -36,6 +36,13 @@ export const localHooks = /** @type {const} */ ({
 const handlers = {};
 
 export class LocalHookHandler {
+
+    /**
+     * @overload
+     * @param {typeof localHooks.actionUseProcess} hook
+     * @param {(actionUse: ActionUse) => void} func
+     * @returns {void}
+     */
 
     /**
      * @overload
@@ -191,6 +198,13 @@ export class LocalHookHandler {
             await func(...args);
         }
     }
+
+    /**
+     * @overload
+     * @param {typeof localHooks.actionUseProcess} hook
+     * @param {ActionUse} action
+     * @returns {void}
+     */
 
     /**
      * @overload

@@ -1,6 +1,6 @@
 import { MODULE_NAME } from '../consts.mjs';
 import { countBFlags } from '../util/flag-helpers.mjs';
-import { customGlobalHooks } from '../util/hooks.mjs';
+import { LocalHookHandler, customGlobalHooks, localHooks } from '../util/hooks.mjs';
 import { registerItemHint } from '../util/item-hints.mjs';
 import { localize } from '../util/localize.mjs';
 import { registerSetting } from '../util/settings.mjs';
@@ -215,14 +215,17 @@ Hooks.once('init', () => {
 // item use does not fire through this hook, so it needs its own dice handling below
 Hooks.on(customGlobalHooks.d20Roll, ( /** @type {{ dice?: any; fortuneCount: any; misfortuneCount: any; actionID?: any; }} */ options) => handleFortune(options));
 
-Hooks.on(customGlobalHooks.itemUse, (
-    /** @type {ItemPF} */ item,
-    /** @type {{ fortuneCount: number; misfortuneCount: number; actionID: any; }} */ options
+const actionUseProcessFortune = (
+    /** @type {ActionUse} */ actionUse,
 ) => {
+    const { action, item } = actionUse;
     if (!item?.actor) return;
 
-    options.fortuneCount = 0;
-    options.misfortuneCount = 0;
+    const options = {
+        fortuneCount: 0,
+        misfortuneCount: 0,
+        dice: actionUse.shared.dice,
+    }
 
     if (item.hasItemBooleanFlag(selfFortune)) {
         options.fortuneCount++;
@@ -230,8 +233,6 @@ Hooks.on(customGlobalHooks.itemUse, (
     else if (item.hasItemBooleanFlag(selfMisfortune)) {
         options.misfortuneCount++;
     }
-
-    const action = options.actionID ? item.actions.get(options.actionID) : item.defaultAction;
 
     const fortunesToFind = [fortune, attackFortune];
     const misfortunesToFind = [misfortune, attackMisfortune];
@@ -271,7 +272,9 @@ Hooks.on(customGlobalHooks.itemUse, (
     misfortunesToFind.forEach((f) => options.misfortuneCount += count[f]);
 
     handleFortune(options);
-});
+    actionUse.shared.dice = options.dice;
+};
+LocalHookHandler.registerHandler(localHooks.actionUseProcess, actionUseProcessFortune)
 
 Hooks.on('pf1PreActorRollSkill', (
     /** @type {ActorPF} */ actor,

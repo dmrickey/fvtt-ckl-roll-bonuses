@@ -52,17 +52,23 @@ export class FortuneBonus extends BaseBonus {
     /**
      * @override
      * @inheritdoc
-     * @param {ItemPF} bonusTarget
-     * @param {{ fortuneCount: number; misfortuneCount: number; actionID: any; }} options passed into ItemPF.use
+     * @param {ItemPF} source
+     * @param {ActionUse} actionUse the action being used
      */
-    static onItemUse(bonusTarget, options) {
-        const hasFlag = bonusTarget.hasItemBooleanFlag(this.key);
+    static actionUseProcess(source, actionUse) {
+        const hasFlag = source.hasItemBooleanFlag(this.key);
         if (!hasFlag) {
             return;
         }
 
-        options.fortuneCount = 1;
+        const dice = actionUse.shared.dice;
+
+        const options = {
+            fortuneCount: 1,
+            dice,
+        }
         handleFortune(options);
-        options.fortuneCount = 0;
+
+        actionUse.shared.dice = options.dice;
     }
 }

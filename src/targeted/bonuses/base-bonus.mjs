@@ -100,13 +100,13 @@ export class BaseBonus extends BaseSource {
     static updateItemActionRollData(source, action, rollData) { }
 
     /**
-     * alters item use input via @see {@link customGlobalHooks.itemUse}
+     * Alter ActionUse (shared data) before action is used
      *
      * @abstract
      * @param {ItemPF} source
-     * @param {{ fortuneCount: number; misfortuneCount: number; actionID: any; }} options passed into ItemPF.use
+     * @param {ActionUse} actionUse
      */
-    static onItemUse(source, options) { }
+    static actionUseProcess(source, actionUse) { }
 
     /**
      * @abstract
