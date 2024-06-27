@@ -83,8 +83,27 @@ function createVPIcon(actor, baseId, skillId) {
 
     const disabled = actor.getFlag(MODULE_NAME, disabledKey(baseId, skillId));
 
-    const icon = document.createElement('a');
-    icon.classList.add('fas', disabled ? 'fa-music-slash' : 'fa-music', 'ckl-skill-icon');
+    /** @type {HTMLElement} */
+    let icon;
+
+    if (!disabled) {
+        icon = document.createElement('a');
+        icon.classList.add('fas', 'fa-music', 'ckl-skill-icon');
+    }
+    else {
+        icon = document.createElement('a');
+        icon.classList.add('ckl-skill-icon-container');
+
+        const music = document.createElement('icon');
+        music.classList.add('fas', 'fa-music', 'ckl-skill-icon');
+        icon.appendChild(music);
+        const slash = document.createElement('icon');
+        slash.classList.add('fas', 'fa-slash', 'ckl-skill-icon', 'ckl-skill-icon-slash1');
+        icon.appendChild(slash);
+        const slash2 = document.createElement('icon');
+        slash2.classList.add('fas', 'fa-slash', 'ckl-skill-icon', 'ckl-skill-icon-slash2');
+        icon.appendChild(slash2);
+    }
 
     const tip = localize('versatilePerformance.skillTip', { base: baseSkill.name, enabled: localize(disabled ? 'PF1.Disabled' : 'PF1.Enabled') });
     icon.setAttribute('data-tooltip', tip);

@@ -4,3 +4,15 @@
     text-align: center;
     width: 1.5rem;
 }
+
+.ckl-skill-icon-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+}
+.ckl-skill-icon-container .ckl-skill-icon {
+    grid-area: 1 / 1;
+}
+.ckl-skill-icon-slash-2 {
+    margin-inline-start: 1px;
+}

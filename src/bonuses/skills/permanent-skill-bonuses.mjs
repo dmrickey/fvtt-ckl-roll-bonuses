@@ -111,7 +111,7 @@ Hooks.on('renderActorSheetPF', (
         // @ts-ignore
         controls.style.justifySelf = 'flex-end';
         // @ts-ignore
-        controls.style.marginInlineEnd = '-0.25rem';
+        controls.style.marginInlineEnd = '-0.5rem';
 
         controls.appendChild(button);
     });
