@@ -69,7 +69,7 @@ const getDocDFlagsStartsWith = (doc, ...keyStarts) => {
     const found = {};
 
     if (doc instanceof pf1.documents.actor.ActorPF) {
-        Object.entries(doc.itemFlags.dictionary).forEach(([_itemTag, flags]) => {
+        Object.entries(doc.itemFlags?.dictionary ?? {}).forEach(([_itemTag, flags]) => {
             Object.entries(flags).forEach(([flag, value]) => {
                 keyStarts.forEach((keyStart) => {
                     if (flag.startsWith(keyStart)) {
