@@ -199,3 +199,9 @@
    ```
 - Look into adding an inline warning if targets/bonuses detected in an item sheet when the other is configured
 - Add a super obvious configuration button in the item sheet when there are no bonuses configured
+- Audit current wrappers and see which can be replaced with hooks
+  - actionUseProcess should be able to be replaced with `pf1CreateActionUse` (currently used for fortune/misfortune)
+    - try to use this for enh to see if the item's values can be modified now
+
+#2.12.4
+- targeted crit footnote

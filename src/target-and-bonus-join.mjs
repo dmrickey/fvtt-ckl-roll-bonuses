@@ -193,7 +193,8 @@ Hooks.on(customGlobalHooks.actionUseAlterRollData, actionUseAlterRollData);
  * @param {ChatAttack} chatAttack
  * @param {string[]} notes
  */
-function addFootnotes({ action }, notes) {
+function addFootnotes(chatAttack, notes) {
+    const { action } = chatAttack;
     handleBonusesFor(
         action,
         (bonusType, sourceItem) => notes.push(...bonusType.getFootnotes(sourceItem, action))

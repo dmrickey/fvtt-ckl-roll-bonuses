@@ -4,7 +4,7 @@ import { checkboxInput } from '../../handlebars-handlers/bonus-inputs/chekbox-in
 import { textInput } from "../../handlebars-handlers/bonus-inputs/text-input.mjs";
 import { handleBonusTypeFor } from '../../target-and-bonus-join.mjs';
 import { FormulaCacheHelper } from "../../util/flag-helpers.mjs";
-import { LocalHookHandler, localHooks } from '../../util/hooks.mjs';
+import { LocalHookHandler, customGlobalHooks, localHooks } from '../../util/hooks.mjs';
 import { registerItemHint } from '../../util/item-hints.mjs';
 import { SelfTarget } from '../targets/self-target.mjs';
 import { BaseBonus } from "./base-bonus.mjs";
@@ -189,6 +189,48 @@ export class CritBonus extends BaseBonus {
             const hint = hintcls.create(label, [], { hint: sources.join('\n') });
             return hint;
         });
+
+        /**
+         * @param {ChatAttack} chatAttack
+         * @param {string[]} notes
+         */
+        function addFootnotes({ action }, notes) {
+            if (!action?.data?.ability) {
+                return;
+            }
+
+            const { item } = action;
+            const isBroken = !!item.system.broken;
+
+            let hasKeen = false;
+            let offset = 0;
+            let mult = +action.data.ability.critMult || 2;
+
+            handleBonusTypeFor(
+                action,
+                CritBonus,
+                (bonusType, sourceItem) => {
+                    hasKeen ||= bonusType.hasKeen(sourceItem);
+                    offset += bonusType.getOffsetValue(sourceItem);
+                    mult += bonusType.getMultValue(sourceItem);
+                }
+            );
+
+            mult = isBroken ? 2 : mult;
+
+            const current = action.data.ability.critRange || 20;
+            let range = hasKeen
+                ? current * 2 - 21
+                : current;
+            range -= offset;
+            range = Math.clamped(range, 2, 20);
+            range = isBroken ? 20 : range;
+
+            const rangeFormat = range === 20 ? '20' : `${range}-20`;
+            const hint = `${rangeFormat}/x${mult}`;
+            notes.push(hint);
+        }
+        Hooks.on(customGlobalHooks.actionUseFootnotes, addFootnotes);
     }
 
     /**
@@ -298,16 +340,5 @@ export class CritBonus extends BaseBonus {
             canEdit: isEditable,
             isModuleFlag: true,
         });
-    }
-
-    /**
-     * @inheritdoc
-     * @override
-     * @param {ItemPF} source
-     * @param {(ActionUse | ItemPF | ItemAction)?} item
-     * @returns {string[]}
-     */
-    static getFootnotes(source, item) {
-        return this.getHints(source, item) || [];
     }
 }
