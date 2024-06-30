@@ -103,10 +103,10 @@ async function actionUseProcess(wrapped, options) {
 /**
  * @this {ActionUse}
  * @param {(arg: object) => any} wrapped
- * @param {object} e - The attack dialog's JQuery form data or FormData object
+ * @param {object} formData - The attack dialog's JQuery form data or FormData object
  */
-function actionUseAlterRollData(wrapped, e) {
-    wrapped(e);
+function actionUseAlterRollData(wrapped, formData) {
+    wrapped(formData);
     Hooks.call(customGlobalHooks.actionUseAlterRollData, this);
 }
 
