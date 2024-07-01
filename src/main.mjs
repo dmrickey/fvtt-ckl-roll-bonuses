@@ -14,6 +14,8 @@ import { ifDebug } from './util/if-debug.mjs';
 Hooks.once('pf1PostReady', () => migrate());
 
 /**
+ * Alter the notes presented at the bottom of an attack card
+ *
  * @param {() => any} wrapped
  * @this {ActionUse}
 */
@@ -24,6 +26,17 @@ function addFootnotes(wrapped) {
     const notes = this.shared.templateData.footnotes ?? [];
     Hooks.call(customGlobalHooks.actionUseFootnotes, this, notes);
     this.shared.templateData.footnotes = notes;
+}
+
+/**
+ * Alter the notes presented after an individual attack
+ *
+ * @param {() => Promise<void>} wrapped
+ * @this {ChatAttack}
+ */
+async function setEffectNotesHTMLWrapper(wrapped) {
+    await LocalHookHandler.fireHookNoReturnAsync(localHooks.chatAttackEffectNotes, this);
+    await wrapped();
 }
 
 /**
@@ -41,15 +54,6 @@ function addFootnotes(wrapped) {
 async function chatAttackAddAttack(wrapped, { noAttack = false, bonus = null, extraParts = [], critical = false, conditionalParts = {} }) {
     await wrapped({ noAttack, bonus, extraParts, critical, conditionalParts });
     await LocalHookHandler.fireHookNoReturnAsync(localHooks.chatAttackAddAttack, this, { noAttack, bonus, extraParts, critical, conditionalParts });
-}
-
-/**
- * @param {() => any} wrapped
- * @this {ChatAttack}
- */
-function setEffectNotesHTMLWrapper(wrapped) {
-    Hooks.call(customGlobalHooks.chatAttackEffectNotes, this);
-    return wrapped();
 }
 
 /**

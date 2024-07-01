@@ -69,6 +69,8 @@ declare global {
         system: SystemActorData;
     }
 
+    class ActorCharacterPF extends ActorPF {}
+
     type ArmorType = 'lgt' | 'med' | 'hvy' | 'shl' | 'twr';
 
     type ConditionalPart = [number | string, TraitSelectorValuePlural, false];
@@ -171,6 +173,7 @@ declare global {
         d20: Die;
         dice: Die[];
         effectNotes: string[];
+        effectNotesHTML: string;
         flavor: string;
         formula: string;
         isCrit: boolean;
@@ -187,6 +190,13 @@ declare global {
         simplifiedFormula: string;
         total: number;
         totalHalved: number;
+        actor: ActorCharacterPF;
+        ammo: {
+            id: string;
+            img: string;
+            misfire: boolean;
+            name: string;
+        };
     }
 
     interface CombatPF {

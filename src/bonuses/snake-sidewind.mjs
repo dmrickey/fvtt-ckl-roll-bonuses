@@ -85,16 +85,18 @@ const chatAttackAddAttack = async (chatAttack, args) => {
 }
 LocalHookHandler.registerHandler(localHooks.chatAttackAddAttack, chatAttackAddAttack);
 
-/** @param {ChatAttack} chatAttack */
-const addAttackNote = (chatAttack) => {
+/**
+ * @param {ChatAttack} chatAttack
+ */
+async function addEffectNotes(chatAttack) {
     const { attack, effectNotes } = chatAttack;
     if (attack?.isCrit) {
         if (isSnakeSideWindCrit(chatAttack)) {
             effectNotes.push(localizeBonusLabel(key));
         }
     }
-};
-Hooks.on(customGlobalHooks.chatAttackEffectNotes, addAttackNote)
+}
+LocalHookHandler.registerHandler(localHooks.chatAttackEffectNotes, addEffectNotes);
 
 Hooks.on('renderItemSheet', (
     /** @type {ItemSheetPF} */ { isEditable, item },

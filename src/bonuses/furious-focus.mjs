@@ -1,7 +1,7 @@
 import { MODULE_NAME } from '../consts.mjs';
 import { showEnabledLabel } from '../handlebars-handlers/enabled-label.mjs';
 import { hasAnyBFlag } from '../util/flag-helpers.mjs';
-import { customGlobalHooks } from '../util/hooks.mjs';
+import { LocalHookHandler, customGlobalHooks, localHooks } from '../util/hooks.mjs';
 import { isActorInCombat } from '../util/is-actor-in-combat.mjs';
 import { localizeBonusLabel } from '../util/localize.mjs';
 import { LanguageSettings } from '../util/settings.mjs';
@@ -56,13 +56,13 @@ Hooks.on(customGlobalHooks.getConditionalParts, getConditionalParts);
 /**
  * @param {ChatAttack} chatAttack
  */
-function addFuriousFocusEffectNote(chatAttack) {
+async function addEffectNotes(chatAttack) {
     const { attack, effectNotes } = chatAttack;
     if (attack?.terms.some((x) => x.options?.flavor === label())) {
         effectNotes.push(label());
     }
 }
-Hooks.on(customGlobalHooks.chatAttackEffectNotes, addFuriousFocusEffectNote);
+LocalHookHandler.registerHandler(localHooks.chatAttackEffectNotes, addEffectNotes);
 
 Hooks.on('renderItemSheet', (
     /** @type {ItemSheetPF} */ { isEditable, item },

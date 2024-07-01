@@ -7,11 +7,12 @@ import { FormulaCacheHelper } from '../util/flag-helpers.mjs';
 import { LocalHookHandler, customGlobalHooks, localHooks } from "../util/hooks.mjs";
 import { localize } from "../util/localize.mjs";
 
-const ammoDamageKey = 'ammo-damage';
 const ammoAttackKey = 'ammo-attack';
-const ammoMasterworkKey = 'ammo-mw';
+const ammoDamageKey = 'ammo-damage';
+const ammoEffectKey = 'ammo-effect';
 const ammoEnhancementKey = 'ammo-enhancement';
 const ammoEnhancementStacksKey = 'ammo-enhancement-stacks';
+const ammoMasterworkKey = 'ammo-mw';
 
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#ammunition';
 
@@ -92,6 +93,22 @@ function getConditionalParts(actionUse, result, atk, index) {
 }
 Hooks.on(customGlobalHooks.getConditionalParts, getConditionalParts);
 
+/**
+ * @param {ChatAttack} chatAttack
+ */
+async function addEffectNotes(chatAttack) {
+    if (chatAttack.ammo) {
+        const ammo = chatAttack.actor.items.get(chatAttack.ammo.id)
+        debugger;
+        const note = ammo.getFlag(MODULE_NAME, ammoEffectKey);
+        if (note) {
+            const enriched = await TextEditor.enrichHTML(`<div>${note}</div>`, { rollData: ammo.getRollData() })
+            chatAttack.effectNotes.push(enriched);
+        }
+    }
+}
+LocalHookHandler.registerHandler(localHooks.chatAttackEffectNotes, addEffectNotes);
+
 Hooks.on('renderItemSheet', (
     /** @type {ItemSheetPF} */ { isEditable, item },
     /** @type {[HTMLElement]} */[html],
@@ -145,6 +162,15 @@ Hooks.on('renderItemSheet', (
         parent: html,
     }, {
         canEdit: isEditable,
+    });
+    textInput({
+        item,
+        journal,
+        key: ammoEffectKey,
+        parent: html,
+    }, {
+        canEdit: isEditable,
+        isModuleFlag: true,
     });
 });
 

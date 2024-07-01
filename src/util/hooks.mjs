@@ -4,8 +4,6 @@ export const customGlobalHooks = /** @type {const} */ ({
     getDamageTooltipSources: `${MODULE_NAME}_getDamageTooltipSources`,
     actionUseAlterRollData: `${MODULE_NAME}_actionUseAlterRollData`,
     actionUseHandleConditionals: `${MODULE_NAME}_actionUseHandleConditionals`,
-    /** Make sure to put the effect note on the specific attack effected and not all */
-    chatAttackEffectNotes: `${MODULE_NAME}_chatAttackEffectNotes`,
     actionUseFootnotes: `${MODULE_NAME}_actionUseFootnotes`,
     d20Roll: `${MODULE_NAME}_d20Roll`,
     getActorInitiativeFormula: `${MODULE_NAME}_getActorInitiativeFormula`,
@@ -19,6 +17,7 @@ export const localHooks = /** @type {const} */ ({
     actorGetSkillInfo: `${MODULE_NAME}_actorGetSkillInfo`,
     actorRollSkill: `${MODULE_NAME}_actorRollSkill`,
     chatAttackAddAttack: `${MODULE_NAME}_chatAttackAddAttack`,
+    chatAttackEffectNotes: `${MODULE_NAME}_chatAttackEffectNotes`,
     itemActionCritRangeWrapper: `${MODULE_NAME}_itemActionCritRangeWrapper`,
     itemActionRollAttack: `${MODULE_NAME}_itemActionRollAttack`,
     itemActionRollDamage: `${MODULE_NAME}_itemActionRollDamage`,
@@ -63,6 +62,13 @@ export class LocalHookHandler {
      * @overload
      * @param {typeof localHooks.chatAttackAddAttack} hook
      * @param {(chatAttack: ChatAttack,  args: { noAttack: boolean, bonus: unknown, extraParts: unknown[], critical: boolean, conditionalParts: object }) => Promise<void>} func
+     * @returns {void}
+     */
+
+    /**
+     * @overload
+     * @param {typeof localHooks.chatAttackEffectNotes} hook
+     * @param {(chatAttack: ChatAttack) => Promise<void>} func
      * @returns {void}
      */
 
@@ -133,25 +139,6 @@ export class LocalHookHandler {
     }
 
     /**
-     * @param {Hook} hook
-     * @template T
-     * @param {T} seed
-     * @param {...any} args
-     * @returns {Promise<T>}
-     */
-    static async handleHookAsync(hook, seed, ...args) {
-        const funcs = handlers[hook] || [];
-
-        let value = seed;
-
-        for (const func of funcs) {
-            value = await func(value, ...args);
-        }
-
-        return value;
-    }
-
-    /**
      * @overload
      * @param {typeof localHooks.itemActionCritRangeWrapper} hook
      * @param {number | string} seed
@@ -185,6 +172,13 @@ export class LocalHookHandler {
 
         return value;
     }
+
+    /**
+     * @overload
+     * @param {typeof localHooks.chatAttackEffectNotes} hook
+     * @param {ChatAttack} chatAttack
+     * @returns {Promise<void>}
+     */
 
     /**
      * @overload
