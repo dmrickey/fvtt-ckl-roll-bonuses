@@ -229,17 +229,26 @@ function prepareActorDerivedData(wrapped) {
 }
 
 /**
- * @param {ActorPF | ItemPF | ItemAction} action
+ * @param {ActorPF | ItemPF | ItemAction} thing
  * @param {RollData} rollData
  */
-function updateItemActionRollData(action, rollData) {
-    if (!(action instanceof pf1.components.ItemAction)) return;
+function updateItemActionRollData(thing, rollData) {
+    if (thing instanceof pf1.components.ItemAction) {
+        const action = thing;
+        // safety for initialization during data prep where the bonuses havent' been set up yet
+        if (!action.item[MODULE_NAME]?.bonuses || !action.item[MODULE_NAME]?.targets) return;
 
-    // safety for initialization during data prep where the bonuses havent' been set up yet
-    if (!action.item[MODULE_NAME]?.bonuses || !action.item[MODULE_NAME]?.bonuses) return;
+        rollData[MODULE_NAME] ||= {};
+        LocalHookHandler.fireHookNoReturnSync(localHooks.updateItemActionRollData, action, rollData);
+    }
+    else if (thing instanceof pf1.documents.item.ItemPF) {
+        const item = thing;
+        // safety for initialization during data prep where the bonuses havent' been set up yet
+        if (!item[MODULE_NAME]?.bonuses || !item[MODULE_NAME]?.targets) return;
 
-    rollData[MODULE_NAME] ||= {};
-    LocalHookHandler.fireHookNoReturnSync(localHooks.updateItemActionRollData, action, rollData);
+        rollData[MODULE_NAME] ||= {};
+        LocalHookHandler.fireHookNoReturnSync(localHooks.updateItemRollData, item, rollData);
+    }
 }
 Hooks.on('pf1GetRollData', updateItemActionRollData);
 
@@ -332,8 +341,8 @@ Hooks.once('init', () => {
     // change.mjs also fires a local hook for re-calculating changes (e.g. Fate's Favored).
 
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype._getConditionalParts', getConditionalParts, libWrapper.WRAPPER);
-    libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype.addFootnotes', addFootnotes, libWrapper.WRAPPER); // good
-    libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype.process', actionUseProcess, libWrapper.WRAPPER); // good
+    libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype.addFootnotes', addFootnotes, libWrapper.WRAPPER);
+    libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype.process', actionUseProcess, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype.alterRollData', actionUseAlterRollData, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype.handleConditionals', actionUseHandleConditionals, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ChatAttack.prototype.addAttack', chatAttackAddAttack, libWrapper.WRAPPER);
