@@ -19,6 +19,7 @@ export const localHooks = /** @type {const} */ ({
     chatAttackAddAttack: `${MODULE_NAME}_chatAttackAddAttack`,
     chatAttackEffectNotes: `${MODULE_NAME}_chatAttackEffectNotes`,
     itemActionCritRangeWrapper: `${MODULE_NAME}_itemActionCritRangeWrapper`,
+    itemActionEnhancementBonus: `${MODULE_NAME}_itemActionEnhancementBonus`,
     itemActionRollAttack: `${MODULE_NAME}_itemActionRollAttack`,
     itemActionRollDamage: `${MODULE_NAME}_itemActionRollDamage`,
     patchChangeValue: `${MODULE_NAME}_patchChangeValue`,
@@ -36,6 +37,13 @@ export const localHooks = /** @type {const} */ ({
 const handlers = {};
 
 export class LocalHookHandler {
+
+    /**
+     * @overload
+     * @param {typeof localHooks.itemActionEnhancementBonus} hook
+     * @param {(seed: {base: number, stacks: number }, action: ItemAction) => void} func
+     * @returns {void}
+     */
 
     /**
      * @overload
@@ -137,6 +145,14 @@ export class LocalHookHandler {
         handlers[hook] ||= [];
         handlers[hook]?.push(func);
     }
+
+    /**
+     * @overload
+     * @param {typeof localHooks.itemActionEnhancementBonus} hook
+     * @param {{base: number, stacks: number }} seed
+     * @param {ItemAction} action
+     * @returns {void}
+     */
 
     /**
      * @overload

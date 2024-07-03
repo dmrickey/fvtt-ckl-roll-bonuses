@@ -32,112 +32,21 @@ export class EnhancementBonus extends BaseBonus {
     static init() {
         FormulaCacheHelper.registerModuleFlag(this.key);
         FormulaCacheHelper.registerModuleFlag(this.#stacksKey);
-
-        /**
-         * Adds conditional to action being used
-         *
-         * @param {ActionUse} actionUse
-         */
-        function actionUseHandleConditionals(actionUse) {
-            let baseEnh = 0;
-            let stackingEnh = 0;
-
-            handleBonusTypeFor(
-                actionUse,
-                EnhancementBonus,
-                (bonusType, sourceItem) => {
-                    const enh = FormulaCacheHelper.getModuleFlagValue(sourceItem, bonusType.key);
-                    baseEnh = Math.max(baseEnh, enh);
-
-                    const stacks = FormulaCacheHelper.getModuleFlagValue(sourceItem, bonusType.#stacksKey);
-                    stackingEnh += stacks;
-                },
-            );
-
-            const item = actionUse.item;
-            const isWeapon = item instanceof pf1.documents.item.ItemAttackPF || item instanceof pf1.documents.item.ItemWeaponPF;
-            let currentMasterwork = false;
-            let currentEnh = 0;
-            if (isWeapon) {
-                currentEnh = item.system.enh;
-                currentMasterwork = item.system.masterwork;
-            }
-
-            const attackIncrease = Math.max(currentEnh, baseEnh, currentMasterwork ? 1 : 0) + stackingEnh - Math.max(currentEnh, currentMasterwork ? 1 : 0);
-            const damageIncrease = Math.max(currentEnh, baseEnh) + stackingEnh - currentEnh;
-
-            if (!attackIncrease && !damageIncrease) {
-                return;
-            }
-
-            if (isWeapon) {
-                setCurrentEnhancementIncreases(item, {
-                    baseEnh: Math.max(currentEnh, baseEnh),
-                    stackingEnh,
-                });
-            }
-
-            const conditional = EnhancementBonus.#createConditional(attackIncrease, damageIncrease, EnhancementBonus.label);
-            if (conditional.modifiers?.length) {
-                conditionalCalculator(actionUse.shared, conditional);
-            }
-        }
-        Hooks.on(customGlobalHooks.actionUseHandleConditionals, actionUseHandleConditionals);
-    }
-
-    /**
-    * @override
-    * @inheritdoc
-    * @param {ItemPF} source
-    * @param {ItemPF} item
-    * @returns {ModifierSource[]}
-    */
-    static getAttackSourcesForTooltip(source, item) {
-        const /** @type {ModifierSource[]} */ sources = [];
-
-        const bonus = this.#getEnhancementBonus(source, item);
-        if (bonus?.attack) {
-            sources.push({
-                value: bonus.attack,
-                name: source.name,
-                modifier: 'enh',
-                sort: -100,
-            });
-        }
-
-        return sources;
     }
 
     /**
      * @override
+     * @inheritdoc
      * @param {ItemPF} source
-     * @param {ItemPF} thing
-     * @returns {ItemChange[]}
+     * @param {{base: number, stacks: number}} seed
+     * @param {ItemAction} action
      */
-    static getDamageSourcesForTooltip(source, thing) {
-        /** @type {ItemChange[]} */
-        let sources = [];
+    static itemActionEnhancementBonus(source, seed, action) {
+        const baseEnh = FormulaCacheHelper.getModuleFlagValue(source, this.key);
+        const stackingEnh = FormulaCacheHelper.getModuleFlagValue(source, this.#stacksKey);
 
-        const conditional = (() => {
-            const bonus = this.#getEnhancementBonus(source, thing);
-            if (bonus) {
-                const conditional = this.#createConditional(bonus.attack, bonus.damage, source.name);
-                return conditional.modifiers?.length
-                    ? conditional
-                    : null;
-            }
-        })();
-
-        if (!conditional) {
-            return sources;
-        }
-
-        sources = (conditional.modifiers ?? [])
-            .filter((mod) => mod.target === 'damage')
-            .map((mod) => conditionalModToItemChangeForDamageTooltip(conditional, mod, { isDamage: true }))
-            .filter(truthiness);
-
-        return sources;
+        seed.base = Math.max(seed.base, baseEnh);
+        seed.stacks += stackingEnh;
     }
 
     /**
@@ -203,77 +112,48 @@ export class EnhancementBonus extends BaseBonus {
     static updateItemActionRollData(_source, _action, _rollData) {
         // just leaving this here to say this isn't possible so don't forget and try to add this in later (as of v9.6)
         // the enhancement data is only on the item within the rollData, and that's a full reference so it'll update the item in memory which will cause issues the next time the item is updated later.
+
+        // enhancement bonus is fetched from either the item or the action when the attack/damage itself is rolled - not used from rollData
         return;
     }
 
-    /**
-     * @param {ItemPF} source
-     * @param {ActionUse | ItemAction | ItemPF} thing
-     * @return {Nullable<{attack: number, damage: number}>}
-     */
-    static #getEnhancementBonus(source, thing) {
-        const baseEnh = FormulaCacheHelper.getModuleFlagValue(source, this.key);
-        const stackingEnh = FormulaCacheHelper.getModuleFlagValue(source, this.#stacksKey);
-
-        const item = thing instanceof pf1.documents.item.ItemPF
-            ? thing
-            : thing.item;
-        let currentMasterwork = false;
-        let currentEnh = 0;
-        if (item instanceof pf1.documents.item.ItemAttackPF || item instanceof pf1.documents.item.ItemWeaponPF) {
-            currentEnh = item.system.enh;
-            currentMasterwork = item.system.masterwork;
-        }
-
-        const attackIncrease = Math.max(currentEnh, baseEnh, currentMasterwork ? 1 : 0) + stackingEnh - Math.max(currentEnh, currentMasterwork ? 1 : 0);
-        const damageIncrease = Math.max(currentEnh, baseEnh) + stackingEnh - currentEnh;
-
-        if (!attackIncrease && !damageIncrease) {
-            return;
-        }
-
-        return {
-            attack: attackIncrease,
-            damage: damageIncrease,
-        };
-    }
-
-    /**
-     * @param {number} attackBonus
-     * @param {number} damageBonus
-     * @param {string} name
-     * @returns {ItemConditional}
-     */
-    static #createConditional(attackBonus, damageBonus, name) {
-        /** @type {ItemConditionalModifier[]} */
-        const modifiers = [];
-        if (attackBonus) {
-            modifiers.push({
-                _id: foundry.utils.randomID(),
-                critical: 'normal',
-                damageType: { custom: '', values: [''] },
-                formula: `${attackBonus}`,
-                subTarget: 'allAttack',
-                target: 'attack',
-                type: `${pf1.config.bonusTypes.enh}+`,
-            });
-        }
-        if (damageBonus) {
-            modifiers.push({
-                _id: foundry.utils.randomID(),
-                critical: 'normal',
-                damageType: { custom: name, values: [] },
-                formula: `${damageBonus}`,
-                subTarget: 'allDamage',
-                target: 'damage',
-                type: `${pf1.config.bonusTypes.enh}+`,
-            });
-        }
-        return {
-            _id: foundry.utils.randomID(),
-            default: true,
-            name,
-            modifiers,
-        }
-    }
+    // leaving this here because it's a good example
+    // /**
+    //  * @param {number} attackBonus
+    //  * @param {number} damageBonus
+    //  * @param {string} name
+    //  * @returns {ItemConditional}
+    //  */
+    // static #createConditional(attackBonus, damageBonus, name) {
+    //     /** @type {ItemConditionalModifier[]} */
+    //     const modifiers = [];
+    //     if (attackBonus) {
+    //         modifiers.push({
+    //             _id: foundry.utils.randomID(),
+    //             critical: 'normal',
+    //             damageType: { custom: '', values: [''] },
+    //             formula: `${attackBonus}`,
+    //             subTarget: 'allAttack',
+    //             target: 'attack',
+    //             type: `${pf1.config.bonusTypes.enh}+`,
+    //         });
+    //     }
+    //     if (damageBonus) {
+    //         modifiers.push({
+    //             _id: foundry.utils.randomID(),
+    //             critical: 'normal',
+    //             damageType: { custom: name, values: [] },
+    //             formula: `${damageBonus}`,
+    //             subTarget: 'allDamage',
+    //             target: 'damage',
+    //             type: `${pf1.config.bonusTypes.enh}+`,
+    //         });
+    //     }
+    //     return {
+    //         _id: foundry.utils.randomID(),
+    //         default: true,
+    //         name,
+    //         modifiers,
+    //     }
+    // }
 }

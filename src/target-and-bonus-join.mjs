@@ -344,6 +344,18 @@ const itemActionRollAttack = (seed, action, data) => {
 LocalHookHandler.registerHandler(localHooks.itemActionRollAttack, itemActionRollAttack);
 
 /**
+ * @param {{base: number, stacks: number}} seed
+ * @param {ItemAction} action
+ */
+const itemActionEnhancementBonus = (seed, action) => {
+    handleBonusesFor(
+        action,
+        (bonusType, sourceItem) => bonusType.itemActionEnhancementBonus(sourceItem, seed, action),
+    );
+}
+LocalHookHandler.registerHandler(localHooks.itemActionEnhancementBonus, itemActionEnhancementBonus);
+
+/**
  * @param {ItemActionRollAttackHookArgs} seed
  * @param {ItemAction} action
  * @param {RollData} data

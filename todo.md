@@ -167,10 +167,6 @@
 - add checkbox for "applies for DR" (some spell buffs don't appy for DR (e.g. Greater Magic Weapon))
 
 # in pf1 V10
-- Ammo
-  - Attack Notes to add to individual attacks
-    - This should be doable via patching pf1.actionUse.ChatAttack.prototype. addEffectNotes (formerly setEffectNotesHTML)
-      - (assuming my PR is merged)
 - Targeting
   - descriptor-based targeting
   - sub-school target
@@ -215,6 +211,7 @@
         return [];
     }
     ```
+- copy flags from weapon to attack when new Attack Item is created
 
 #2.12.4
 - targeted crit footnote

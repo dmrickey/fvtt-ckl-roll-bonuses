@@ -31,14 +31,14 @@ function getConditionalParts(actionUse, result, atk, index) {
         if (attack) {
             const label = `${attack}`.trim().endsWith(']')
                 ? ''
-                : `[${ammo.name}]`;
+                : `[${localize('PF1.AmmunitionAbbr')}]`;
             result['attack.normal'].push(`${attack}${label}`);
         }
 
         const item = actionUse.item;
 
         const itemMw = item.system.masterwork;
-        const itemEnh = item.system.enh;
+        const itemEnh = actionUse.action.enhancementBonus;
 
         const { baseEnh: itemBaseEnh, stackingEnh: itemStackingEnh } = getCurrentEnhancementIncreases(item);
 
@@ -53,15 +53,15 @@ function getConditionalParts(actionUse, result, atk, index) {
             && !ammoEnhBonus
             && !ammoEnhStacksBonus
         ) {
-            result['attack.normal'].push(`1[${ammo.name} - ${localize('PF1.Masterwork')}]`)
+            result['attack.normal'].push(`1[${localize('PF1.AmmunitionAbbr')} - ${localize('PF1.Masterwork')}]`)
         }
         else {
             if (ammoEnhBonus || ammoEnhStacksBonus) {
                 const current = Math.max(itemEnh, itemBaseEnh, ammoEnhBonus);
                 const diff = current + ammoEnhStacksBonus - Math.max(itemEnh, itemBaseEnh);
                 if (diff > 0) {
-                    result['attack.normal'].push(`${diff}[${ammo.name} - ${localize('PF1.EnhancementBonus')} (${ammoEnhBonus + ammoEnhStacksBonus})]`);
-                    result['damage.normal'].push([`${diff}[${ammo.name} - ${localize('PF1.EnhancementBonus')} (${ammoEnhBonus + ammoEnhStacksBonus})]`, { values: [], custom: ammo.name }, false]);
+                    result['attack.normal'].push(`${diff}[${localize('PF1.AmmunitionAbbr')} - ${localize('PF1.EnhancementBonus')} (${ammoEnhBonus + ammoEnhStacksBonus})]`);
+                    result['damage.normal'].push([`${diff}[${localize('PF1.AmmunitionAbbr')} - ${localize('PF1.EnhancementBonus')} (${ammoEnhBonus + ammoEnhStacksBonus})]`, { values: [], custom: localize('PF1.AmmunitionAbbr') }, false]);
                 }
             }
         }
@@ -75,7 +75,7 @@ function getConditionalParts(actionUse, result, atk, index) {
 
                 const label = damage.formula?.trim().endsWith(']')
                     ? ''
-                    : `[${ammo.name}]`;
+                    : `[${localize('PF1.AmmunitionAbbr')}]`;
                 /** @type {ConditionalPart} */
                 const damageResult = [
                     `${damage.formula}${label}`,
@@ -99,7 +99,6 @@ Hooks.on(customGlobalHooks.getConditionalParts, getConditionalParts);
 async function addEffectNotes(chatAttack) {
     if (chatAttack.ammo) {
         const ammo = chatAttack.actor.items.get(chatAttack.ammo.id)
-        debugger;
         const note = ammo.getFlag(MODULE_NAME, ammoEffectKey);
         if (note) {
             const enriched = await TextEditor.enrichHTML(`<div>${note}</div>`, { rollData: ammo.getRollData() })

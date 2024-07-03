@@ -138,7 +138,7 @@ declare global {
         rollMode: 'publicroll' | RollMode;
     }
 
-    class ActionUseShared {
+    class ActionUseShared<T extends SystemItemData = SystemItemData> {
         action: any;
         attackBonus: string[];
         attacks: ActionUseAttack[];
@@ -147,7 +147,7 @@ declare global {
         damageBonus: string[];
         dice: string;
         powerAttack: boolean;
-        rollData: RollData;
+        rollData: RollData<T>;
 
         templateData: {
             footnotes?: string[];
@@ -280,6 +280,7 @@ declare global {
         static defaultDamageType: TraitSelectorValuePlural;
         hasAttack: boolean;
         isCombatManeuver: boolean;
+        get enhancementBonus(): number;
     }
 
     /** used for weapons and attacks */
