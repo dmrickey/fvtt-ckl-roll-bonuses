@@ -71,15 +71,19 @@ function actionDamage(action, { simplify = true, strict = true } = {}) {
 
     // Include ability score only if the string isn't too long yet
     const dmgAbl = actionData.ability.damage;
-    const dmgAblBaseMod = actorData?.abilities[dmgAbl]?.mod ?? 0;
-    const held = action.data?.held || item?.system.held || "normal";
-    let dmgMult =
-        actionData.ability.damageMult ?? (isNatural ? null : pf1.config.abilityDamageHeldMultipliers[held]) ?? 1;
-    if (isNatural && !(actionData.naturalAttack?.primaryAttack ?? true)) {
-        dmgMult = actionData.naturalAttack?.secondary?.damageMult ?? 0.5;
+    if (dmgAbl) {
+        const ablMax = actionData.ability?.max ?? Infinity;
+        const dmgAblBaseMod = Math.min(actorData?.abilities[dmgAbl]?.mod ?? 0, ablMax);
+        const held = action.data?.held || item?.system.held || "normal";
+        let ablDmgMult =
+            actionData.ability.damageMult ?? (isNatural ? null : pf1.config.abilityDamageHeldMultipliers[held]) ?? 1;
+        if (isNatural && !(actionData.naturalAttack?.primaryAttack ?? true)) {
+            ablDmgMult = actionData.naturalAttack?.secondary?.damageMult ?? 0.5;
+        }
+
+        const dmgAblMod = dmgAblBaseMod >= 0 ? Math.floor(dmgAblBaseMod * ablDmgMult) : dmgAblBaseMod;
+        if (dmgAblMod != 0) parts.push(dmgAblMod);
     }
-    const dmgAblMod = Math.floor(dmgAblBaseMod * dmgMult);
-    if (dmgAblMod != 0) parts.push(dmgAblMod);
 
     // Include damage parts that don't happen on crits
     handleParts(actionData.damage.nonCritParts);
