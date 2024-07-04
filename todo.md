@@ -211,7 +211,3 @@
         return [];
     }
     ```
-- copy flags from weapon to attack when new Attack Item is created
-
-#2.12.4
-- targeted crit footnote
