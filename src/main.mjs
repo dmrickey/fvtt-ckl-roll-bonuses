@@ -112,6 +112,16 @@ function actionUseAlterRollData(wrapped, formData) {
 }
 
 /**
+ * @param {ActionUse} actionUse
+ */
+function onCreateActionUse(actionUse) {
+    if (actionUse.shared.rollData.action) {
+        // for modifying actionUse.shared.rollData before attacks are rolled
+    }
+}
+Hooks.on('pf1CreateActionUse', onCreateActionUse);
+
+/**
  * Used for adding conditionals to individual parts of full attacks
  *
  * @param {(arg: object, options: { index: number}) => any} wrapped
