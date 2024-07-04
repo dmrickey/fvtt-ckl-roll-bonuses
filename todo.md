@@ -30,6 +30,7 @@
 - [Add create hooks for initializing some items (like anything based off of name/id)](#add-create-hooks-for-initializing-some-items-like-anything-based-off-of-nameid)
 - [Add inpsiration checkbox to roll dialogs](#add-inpsiration-checkbox-to-roll-dialogs)
 - [Improve Enhancement Bonuses](#improve-enhancement-bonuses)
+- [Refactor](#refactor)
 - [in pf1 V10](#in-pf1-v10)
 - [Not Possible](#not-possible)
 - [vnext](#vnext)
@@ -160,6 +161,18 @@
 # Improve Enhancement Bonuses
 - add checkbox for "applies for DR" (some spell buffs don't appy for DR (e.g. Greater Magic Weapon))
 
+# Refactor
+- `BaseTarget`'s `getSourcesFor` because every single one of them follows this pattern
+  - ```js
+    const item = doc instanceof pf1.documents.item.ItemPF
+        ? doc
+        : doc.item;
+
+    if (!item?.actor) {
+        return [];
+    }
+    ```
+
 # in pf1 V10
 - Targeting
   - descriptor-based targeting
@@ -178,18 +191,8 @@
 - Add EitR toggle that will autoconfigure weapon focus for weapon groups instead of weapon focus
 - Add settings in readme
 - distance-based targeting
+- Add a super obvious configuration button in the item sheet when there are no bonuses configured
 
 - Look into adding an inline warning if targets/bonuses detected in an item sheet when the other is configured
-- Add a super obvious configuration button in the item sheet when there are no bonuses configured
-- refactor `BaseTarget`'s `getSourcesFor` because every single one of them follows this pattern
-  - ```js
-    const item = doc instanceof pf1.documents.item.ItemPF
-        ? doc
-        : doc.item;
-
-    if (!item?.actor) {
-        return [];
-    }
-    ```
 - Improved Critical specific inputs
 - Add Fighter Weapon Training and Gunslinger Gun Training info from original readme
