@@ -11,6 +11,7 @@ import { api } from './util/api.mjs';
 import migrate from './migration/index.mjs';
 import { ifDebug } from './util/if-debug.mjs';
 import { emptyObject } from './util/empty-object.mjs';
+import { registerSetting } from './util/settings.mjs';
 
 Hooks.once('pf1PostReady', () => migrate());
 
@@ -361,6 +362,42 @@ function actorGetSkillInfo(wrapped, skillId, { rollData } = {}) {
     return skillInfo;
 }
 
+class ItemAttackFlagSettings {
+    static key = 'should-copy-flags';
+
+    /** @returns {boolean} */
+    static get shouldCopyFlags() { return /** @type {boolean} */ (game.settings.get(MODULE_NAME, this.key)); }
+
+    static {
+        registerSetting({
+            key: this.key,
+            defaultValue: false,
+            settingType: Boolean,
+            scope: 'client',
+        })
+    }
+}
+/**
+ * @param {function(ItemPF): any} wrapped
+ * @param {ItemPF} item
+ * @returns {any}
+ */
+function itemAttackFromItem(wrapped, item) {
+    const data = wrapped(item);
+
+    if (ItemAttackFlagSettings.shouldCopyFlags) {
+        const systemFlags = item.system.flags;
+        data.system.flags ||= {};
+        data.system.flags = mergeObject(data.system.flags, systemFlags);
+
+        const flags = item.flags?.[MODULE_NAME] || {};
+        data.flags ||= {}
+        data.flags[MODULE_NAME] = mergeObject(flags, data.flags[MODULE_NAME]);
+    }
+
+    return data;
+}
+
 Hooks.once('init', () => {
     // change.mjs also fires a local hook for re-calculating changes (e.g. Fate's Favored).
 
@@ -380,6 +417,7 @@ Hooks.once('init', () => {
     libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorPF.prototype.getSkillInfo', actorGetSkillInfo, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorPF.prototype.prepareSpecificDerivedData', prepareActorDerivedData, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorPF.prototype.rollSkill', actorRollSkill, libWrapper.WRAPPER);
+    libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemAttackPF.fromItem', itemAttackFromItem, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype._prepareDependentData', prepareItemData, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype.getAttackSources', itemGetAttackSources, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype.getTypeChatData', itemGetTypeChatData, libWrapper.WRAPPER);
