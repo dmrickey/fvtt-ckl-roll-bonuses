@@ -156,7 +156,7 @@
 
 # Add inpsiration checkbox to roll dialogs
 - https://gitlab.com/foundryvtt_pathfinder1e/foundryvtt-pathfinder1/-/merge_requests/2758
-- > "So actionUse.formData for actions and overriding _getFormData() for d20rolls"
+  - > "So actionUse.formData for actions and overriding _getFormData() for d20rolls"
 
 # Improve Enhancement Bonuses
 - add checkbox for "applies for DR" (some spell buffs don't appy for DR (e.g. Greater Magic Weapon))
