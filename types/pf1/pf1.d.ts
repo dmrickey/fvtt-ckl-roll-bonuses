@@ -433,6 +433,7 @@ declare global {
         rank: number;
         rt: boolean;
         subSkills?: Record<string, SkillData & { journal: string }>;
+        properties: Record<keyof WeaponProperties, boolean>;
     }
 
     declare type SpellbookKey =
@@ -1767,6 +1768,8 @@ declare global {
         prf: 'Performance';
         rch: 'Reach';
         sct: 'Scatter';
+        slf: 'Slow-firing';
+        sma: 'Semi-automatic';
         snd: 'Sunder';
         spc: 'Special';
         thr: 'Thrown';

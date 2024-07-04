@@ -390,6 +390,11 @@ function itemAttackFromItem(wrapped, item) {
         data.system.flags ||= {};
         data.system.flags = mergeObject(data.system.flags, systemFlags);
 
+        if (item instanceof pf1.documents.item.ItemWeaponPF && item.system.properties.fin) {
+            data.system.flags.boolean ||= {};
+            data.system.flags.boolean['finesse-override'] = true;
+        }
+
         const flags = item.flags?.[MODULE_NAME] || {};
         data.flags ||= {}
         data.flags[MODULE_NAME] = mergeObject(flags, data.flags[MODULE_NAME]);
