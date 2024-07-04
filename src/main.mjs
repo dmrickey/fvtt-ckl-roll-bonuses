@@ -10,6 +10,7 @@ import './auto-recognition/init.mjs';
 import { api } from './util/api.mjs';
 import migrate from './migration/index.mjs';
 import { ifDebug } from './util/if-debug.mjs';
+import { emptyObject } from './util/empty-object.mjs';
 
 Hooks.once('pf1PostReady', () => migrate());
 
@@ -78,12 +79,7 @@ function prepareItemData(wrapped, final) {
     if (!final) return;
 
     const item = this;
-    /**
-     * Initialize module data but make the individual portions initialize their own specific data so this part of the app doesn't need to know about all the properties/types
-     * @type {any}
-     */
-    const empty = {};
-    item[MODULE_NAME] = empty;
+    item[MODULE_NAME] = emptyObject();
     const rollData = item.getRollData();
     FormulaCacheHelper.cacheFormulas(item, rollData);
     LocalHookHandler.fireHookNoReturnSync(localHooks.prepareData, item, rollData);
@@ -219,9 +215,18 @@ function itemActionEnhancementBonus(wrapped) {
     const stacks = 0;
     const seed = { base, stacks };
 
+    this[MODULE_NAME] ||= emptyObject();
+
     LocalHookHandler.fireHookWithReturnSync(localHooks.itemActionEnhancementBonus, seed, this);
 
-    return seed.base + seed.stacks;
+    const total = seed.base + seed.stacks
+    this[MODULE_NAME].enhancement = {
+        base: seed.base,
+        stacks: seed.stacks,
+        total,
+    };
+
+    return total;
 }
 
 /**

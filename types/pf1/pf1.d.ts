@@ -261,6 +261,14 @@ declare global {
     }
 
     class ItemAction {
+        [MODULE_NAME]: {
+            enhancement: {
+                base: number;
+                stacks: number;
+                total: number;
+            };
+            [key: string]: number | string | object | array;
+        };
         id: string;
         actor: ActorPF;
         data: {

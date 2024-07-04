@@ -1,12 +1,7 @@
 import { textInput } from '../../handlebars-handlers/bonus-inputs/text-input.mjs';
-import { handleBonusTypeFor } from '../../target-and-bonus-join.mjs';
-import { conditionalCalculator, conditionalModToItemChangeForDamageTooltip } from '../../util/conditional-helpers.mjs';
-import { setCurrentEnhancementIncreases } from '../../util/enhancement-bonus-helper.mjs';
 import { FormulaCacheHelper } from '../../util/flag-helpers.mjs';
-import { customGlobalHooks } from '../../util/hooks.mjs';
 import { localize } from '../../util/localize.mjs';
 import { signed } from '../../util/to-signed-string.mjs';
-import { truthiness } from '../../util/truthiness.mjs';
 import { BaseBonus } from './base-bonus.mjs';
 
 export class EnhancementBonus extends BaseBonus {
