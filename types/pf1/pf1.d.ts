@@ -69,6 +69,8 @@ declare global {
         system: SystemActorData;
     }
 
+    class ActorCharacterPF extends ActorPF {}
+
     type ArmorType = 'lgt' | 'med' | 'hvy' | 'shl' | 'twr';
 
     type ConditionalPart = [number | string, TraitSelectorValuePlural, false];
@@ -136,7 +138,7 @@ declare global {
         rollMode: 'publicroll' | RollMode;
     }
 
-    class ActionUseShared {
+    class ActionUseShared<T extends SystemItemData = SystemItemData> {
         action: any;
         attackBonus: string[];
         attacks: ActionUseAttack[];
@@ -145,7 +147,7 @@ declare global {
         damageBonus: string[];
         dice: string;
         powerAttack: boolean;
-        rollData: RollData;
+        rollData: RollData<T>;
 
         templateData: {
             footnotes?: string[];
@@ -171,6 +173,7 @@ declare global {
         d20: Die;
         dice: Die[];
         effectNotes: string[];
+        effectNotesHTML: string;
         flavor: string;
         formula: string;
         isCrit: boolean;
@@ -187,6 +190,13 @@ declare global {
         simplifiedFormula: string;
         total: number;
         totalHalved: number;
+        actor: ActorCharacterPF;
+        ammo: {
+            id: string;
+            img: string;
+            misfire: boolean;
+            name: string;
+        };
     }
 
     interface CombatPF {
@@ -251,6 +261,14 @@ declare global {
     }
 
     class ItemAction {
+        [MODULE_NAME]: {
+            enhancement: {
+                base: number;
+                stacks: number;
+                total: number;
+            };
+            [key: string]: number | string | object | array;
+        };
         id: string;
         actor: ActorPF;
         data: {
@@ -270,6 +288,7 @@ declare global {
         static defaultDamageType: TraitSelectorValuePlural;
         hasAttack: boolean;
         isCombatManeuver: boolean;
+        get enhancementBonus(): number;
     }
 
     /** used for weapons and attacks */

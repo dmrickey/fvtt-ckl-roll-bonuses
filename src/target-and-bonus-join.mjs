@@ -193,7 +193,8 @@ Hooks.on(customGlobalHooks.actionUseAlterRollData, actionUseAlterRollData);
  * @param {ChatAttack} chatAttack
  * @param {string[]} notes
  */
-function addFootnotes({ action }, notes) {
+function addFootnotes(chatAttack, notes) {
+    const { action } = chatAttack;
     handleBonusesFor(
         action,
         (bonusType, sourceItem) => notes.push(...bonusType.getFootnotes(sourceItem, action))
@@ -341,6 +342,18 @@ const itemActionRollAttack = (seed, action, data) => {
     );
 }
 LocalHookHandler.registerHandler(localHooks.itemActionRollAttack, itemActionRollAttack);
+
+/**
+ * @param {{base: number, stacks: number}} seed
+ * @param {ItemAction} action
+ */
+const itemActionEnhancementBonus = (seed, action) => {
+    handleBonusesFor(
+        action,
+        (bonusType, sourceItem) => bonusType.itemActionEnhancementBonus(sourceItem, seed, action),
+    );
+}
+LocalHookHandler.registerHandler(localHooks.itemActionEnhancementBonus, itemActionEnhancementBonus);
 
 /**
  * @param {ItemActionRollAttackHookArgs} seed

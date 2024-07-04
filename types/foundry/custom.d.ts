@@ -26,4 +26,27 @@ declare global {
 
         toObject(): { [key: string]: any };
     }
+
+    class HbsTemplate {}
+    interface RenderOptions {
+        notes: string[];
+        css: string;
+        title: string;
+    }
+    function renderTemplate(
+        hbsPath: string,
+        options: RenderOptions,
+    ): Promise<string>;
+
+    interface EnrichOptions {
+        rollData?: RollData,
+        async?: boolean,
+        relativeTo?: ActorPF,
+    }
+    class TextEditor {
+        static enrichHTML(
+            context: string,
+            options?: EnrichOptions,
+        ): Promise<string>;
+    }
 }

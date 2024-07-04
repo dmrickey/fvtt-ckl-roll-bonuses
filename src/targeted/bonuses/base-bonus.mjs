@@ -64,6 +64,16 @@ export class BaseBonus extends BaseSource {
     static getItemChatCardInfo(source, rollData) { return; }
 
     /**
+     * Modify enhancement bonus
+     *
+     * @abstract
+     * @param {ItemPF} source
+     * @param {{base: number, stacks: number}} seed
+     * @param {ItemAction} action
+     */
+    static itemActionEnhancementBonus(source, seed, action) { }
+
+    /**
      * @abstract
      * @param {ItemPF} _source
      * @param {ItemActionRollAttackHookArgs} _seed

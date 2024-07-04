@@ -21,6 +21,7 @@
                 "all-spell-dc": "All Spells DC",
                 "all": "All Targets",
                 "ammo-attack": "Generic Attack Bonus",
+                "ammo-effect": "Effect Note",
                 "ammo-enhancement": "Base Enhancement Bonus",
                 "ammo-enhancement-stacks": "Stacking Enhancement Bonus",
                 "armor-focus": "Armor Focus",
@@ -95,6 +96,7 @@
                 "all": "Activate bonuses for any action that can accept the bonus.",
                 "ammo-attack": "This attack bonus will be added on top of any other attack bonuses when using this ammo.",
                 "ammo-damage": "A typed damage bonus added when using this ammo.",
+                "ammo-effect": "When attacking with this arrow, also show this effect note.",
                 "ammo-enhancement": "The ammo's base enhancement bonus.",
                 "ammo-enhancement-stacks": "For enhancement Bonuses that stack, such as Bane.",
                 "ammo-mw": "Will add a +1 masterwork bonus when using this ammo. This is correctly ignored if the ammo/weapon already has an enhancement bonus or if the weapon is already masterwork.",
@@ -364,6 +366,10 @@
             "should-auto-target-tokens": {
                 "name": "Automatically Target Tokens",
                 "hint": "When set to true and using the generic \"Token Target\", when the ability is enabled, the dialog will be skipped if you have tokens currently targeted and will automatically target those tokens. By default (false), the token target dialog opens with your currently targeted tokens pre-selected and you must verify those are the targets you actually want."
+            },
+            "should-copy-flags": {
+                "name": "Copy Item Flags on Attack Creation",
+                "hint": "When creating an Attack from a Weapon (via the \"Create Attack\" button to add an Attack to your Combat tab), the system does not copy over any flags from the Weapon. This means that by default any bonuses created on the weapon do not exist on Attacks created from that Weapon. Turning this on will copy those flags when creating an Attack. This only happens at creation, this will not sync any flags modified on either after the fact. Default is false."
             }
         }
     }

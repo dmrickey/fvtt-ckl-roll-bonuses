@@ -167,10 +167,6 @@
 - add checkbox for "applies for DR" (some spell buffs don't appy for DR (e.g. Greater Magic Weapon))
 
 # in pf1 V10
-- Ammo
-  - Attack Notes to add to individual attacks
-    - This should be doable via patching pf1.actionUse.ChatAttack.prototype. addEffectNotes (formerly setEffectNotesHTML)
-      - (assuming my PR is merged)
 - Targeting
   - descriptor-based targeting
   - sub-school target
@@ -190,12 +186,28 @@
 - distance-based targeting
 - Add FAQ about how to circumvent auto configuration
 - update mw and enhancement to modify the attack roll
-  - ```
+  - ```js
     function pf1PreActionUse(actionUse) {
         actionUse.shared.attacks[0].chatAttack.ammo: {id: string}
         actionUse.shared.attacks[0].chatAttack.attack
     }
     Hooks.on('pf1PreActionUse', pf1PreActionUse);
-   ```
+    ```
+
 - Look into adding an inline warning if targets/bonuses detected in an item sheet when the other is configured
 - Add a super obvious configuration button in the item sheet when there are no bonuses configured
+- Audit current wrappers and see which can be replaced with hooks
+  - actionUseProcess should be able to be replaced with `pf1CreateActionUse` (currently used for fortune/misfortune)
+    - try to use this for enh to see if the item's values can be modified now
+- Add all bonuses/target references directly to the actor with references back to their item so hopefully it will go faster?
+  - not sure if this is useful or not, it's already fetching items based on their boolean flags
+- refactor `BaseTarget`'s `getSourcesFor` because every single one of them follows this pattern
+  - ```js
+    const item = doc instanceof pf1.documents.item.ItemPF
+        ? doc
+        : doc.item;
+
+    if (!item?.actor) {
+        return [];
+    }
+    ```

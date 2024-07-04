@@ -4,8 +4,6 @@ export const customGlobalHooks = /** @type {const} */ ({
     getDamageTooltipSources: `${MODULE_NAME}_getDamageTooltipSources`,
     actionUseAlterRollData: `${MODULE_NAME}_actionUseAlterRollData`,
     actionUseHandleConditionals: `${MODULE_NAME}_actionUseHandleConditionals`,
-    /** Make sure to put the effect note on the specific attack effected and not all */
-    chatAttackEffectNotes: `${MODULE_NAME}_chatAttackEffectNotes`,
     actionUseFootnotes: `${MODULE_NAME}_actionUseFootnotes`,
     d20Roll: `${MODULE_NAME}_d20Roll`,
     getActorInitiativeFormula: `${MODULE_NAME}_getActorInitiativeFormula`,
@@ -19,13 +17,16 @@ export const localHooks = /** @type {const} */ ({
     actorGetSkillInfo: `${MODULE_NAME}_actorGetSkillInfo`,
     actorRollSkill: `${MODULE_NAME}_actorRollSkill`,
     chatAttackAddAttack: `${MODULE_NAME}_chatAttackAddAttack`,
+    chatAttackEffectNotes: `${MODULE_NAME}_chatAttackEffectNotes`,
     itemActionCritRangeWrapper: `${MODULE_NAME}_itemActionCritRangeWrapper`,
+    itemActionEnhancementBonus: `${MODULE_NAME}_itemActionEnhancementBonus`,
     itemActionRollAttack: `${MODULE_NAME}_itemActionRollAttack`,
     itemActionRollDamage: `${MODULE_NAME}_itemActionRollDamage`,
     patchChangeValue: `${MODULE_NAME}_patchChangeValue`,
     postPrepareActorDerivedData: `${MODULE_NAME}_postPrepareActorDerivedData`,
     prepareData: `${MODULE_NAME}_prepareData`,
     updateItemActionRollData: `${MODULE_NAME}_updateItemActionRollData`,
+    updateItemRollData: `${MODULE_NAME}_updateItemRollData`,
 });
 
 /**
@@ -36,6 +37,13 @@ export const localHooks = /** @type {const} */ ({
 const handlers = {};
 
 export class LocalHookHandler {
+
+    /**
+     * @overload
+     * @param {typeof localHooks.itemActionEnhancementBonus} hook
+     * @param {(seed: {base: number, stacks: number }, action: ItemAction) => void} func
+     * @returns {void}
+     */
 
     /**
      * @overload
@@ -67,6 +75,13 @@ export class LocalHookHandler {
 
     /**
      * @overload
+     * @param {typeof localHooks.chatAttackEffectNotes} hook
+     * @param {(chatAttack: ChatAttack) => Promise<void>} func
+     * @returns {void}
+     */
+
+    /**
+     * @overload
      * @param {typeof localHooks.postPrepareActorDerivedData} hook
      * @param {(actor: ActorPF) => void} func
      * @returns {void}
@@ -76,6 +91,13 @@ export class LocalHookHandler {
      * @overload
      * @param {typeof localHooks.updateItemActionRollData} hook
      * @param {(action: ItemAction, rollData: RollData) => void} func
+     * @returns {void}
+     */
+
+    /**
+     * @overload
+     * @param {typeof localHooks.updateItemRollData} hook
+     * @param {(action: ItemPF, rollData: RollData) => void} func
      * @returns {void}
      */
 
@@ -125,23 +147,12 @@ export class LocalHookHandler {
     }
 
     /**
-     * @param {Hook} hook
-     * @template T
-     * @param {T} seed
-     * @param {...any} args
-     * @returns {Promise<T>}
+     * @overload
+     * @param {typeof localHooks.itemActionEnhancementBonus} hook
+     * @param {{base: number, stacks: number }} seed
+     * @param {ItemAction} action
+     * @returns {void}
      */
-    static async handleHookAsync(hook, seed, ...args) {
-        const funcs = handlers[hook] || [];
-
-        let value = seed;
-
-        for (const func of funcs) {
-            value = await func(value, ...args);
-        }
-
-        return value;
-    }
 
     /**
      * @overload
@@ -177,6 +188,13 @@ export class LocalHookHandler {
 
         return value;
     }
+
+    /**
+     * @overload
+     * @param {typeof localHooks.chatAttackEffectNotes} hook
+     * @param {ChatAttack} chatAttack
+     * @returns {Promise<void>}
+     */
 
     /**
      * @overload
@@ -253,6 +271,14 @@ export class LocalHookHandler {
      * @overload
      * @param {typeof localHooks.updateItemActionRollData} hook
      * @param {ItemAction} action
+     * @param {RollData} rollData
+     * @returns {void}
+     */
+
+    /**
+     * @overload
+     * @param {typeof localHooks.updateItemRollData} hook
+     * @param {ItemPF} action
      * @param {RollData} rollData
      * @returns {void}
      */
