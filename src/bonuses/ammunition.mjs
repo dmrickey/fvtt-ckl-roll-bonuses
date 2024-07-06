@@ -167,6 +167,7 @@ Hooks.on('renderItemSheet', (
         parent: html,
     }, {
         canEdit: isEditable,
+        isFormula: false,
         isModuleFlag: true,
     });
 });
