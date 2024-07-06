@@ -15,9 +15,13 @@
     height: unset;
 }
 
-#ckl-roll-bonus-container .settings {
+#ckl-roll-bonus-container .settings-button {
     float: right;
     float: inline-end;
+}
+
+#ckl-roll-bonus-container .settings:has(+ *) {
+    display: none;
 }
 
 #ckl-roll-bonus-container .bonus-label .fas.fa-book {

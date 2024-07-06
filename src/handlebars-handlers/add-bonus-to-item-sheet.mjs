@@ -2,7 +2,8 @@ import { api } from '../util/api.mjs';
 import { showBonusPicker } from './bonus-picker.mjs';
 import { createTemplate, templates } from './templates.mjs';
 
-const containerId = 'ckl-roll-bonus-container';
+const bonusSectionSelector = '#ckl-roll-bonus-container'
+const containerSelector = '.bonuses';
 
 /**
  * @param {HTMLElement} itemSheetHtml
@@ -16,30 +17,35 @@ const addNodeToRollBonus = (itemSheetHtml, child, item, canEdit) => {
         return;
     }
 
-    let container = itemSheetHtml.querySelector(`#${containerId}`);
-    if (!container) {
-        container = createTemplate(templates.rollBonusesContainer);
+    let section = itemSheetHtml.querySelector(bonusSectionSelector);
+    if (!section) {
+        section = createTemplate(templates.rollBonusesContainer);
 
-        const settings = container.querySelector(`.settings`);
-        if (canEdit) {
-            settings?.addEventListener('click', (event) => {
-                event.preventDefault();
-                showBonusPicker({ item });
-            });
-        }
-        else if (settings) {
-            // @ts-ignore
-            settings.hidden = true;
-            // @ts-ignore
-            settings.style.display = 'none';
-        }
+        const settings = section.querySelectorAll(`.settings`);
+        settings.forEach((s) => {
+            if (canEdit) {
+                s?.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    showBonusPicker({ item });
+                });
+            }
+            else if (s) {
+                // @ts-ignore
+                s.hidden = true;
+                // @ts-ignore
+                s.style.display = 'none';
+            }
+        });
 
-        flagsContainer.after(container);
+        flagsContainer.before(section);
     }
 
     if (!child) {
         return;
     }
+
+    const container = section.querySelector(containerSelector);
+    if (!container) return;
 
     const button = child.querySelector('[data-journal]');
     button?.addEventListener(
