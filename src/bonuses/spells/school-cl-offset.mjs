@@ -49,7 +49,7 @@ registerItemHint((hintcls, actor, item, _data) => {
 
 // register hint on source
 registerItemHint((hintcls, _actor, item, _data) => {
-    const currentSchool = getDocDFlags(item, key)[0]?.toString();
+    const currentSchool = /** @type {keyof typeof pf1.config.spellSchools} */ (getDocDFlags(item, key)[0]);
     if (!currentSchool) {
         return;
     }
@@ -107,8 +107,8 @@ Hooks.on('renderItemSheet', (
 
     const current = getDocDFlags(item, key)[0];
     const formula = getDocDFlags(item, formulaKey)[0];
-    const choices = Object.keys(spellSchools)
-        .map((key) => ({ key, label: spellSchools[key] }));
+    const choices = Object.entries(spellSchools)
+        .map(([key, label]) => ({ key, label }));
 
     textInputAndKeyValueSelect({
         item,

@@ -439,7 +439,7 @@ declare global {
         rank: number;
         rt: boolean;
         subSkills?: Record<string, SkillData & { journal: string }>;
-        properties: Record<keyof WeaponProperties, boolean>;
+        // properties: Record<keyof WeaponProperties, boolean>;
     }
 
     declare type SpellbookKey =
@@ -800,7 +800,7 @@ declare global {
             value: string[];
             custom: string[];
         };
-        school: string;
+        school: keyof typeof pf1.config.spellSchools;
 
         /** @deprecated use until v10 (then use @see {descriptors} ) */
         types: string;
@@ -1634,12 +1634,22 @@ declare global {
             abilities: Abilities;
             bonusTypes: { [key in BonusTypes]: string };
             damageResistances: {
-                magic: 'Magic';
-                epic: 'Epic';
                 lawful: 'Lawful';
                 chaotic: 'Chaotic';
                 good: 'Good';
                 evil: 'Evil';
+            };
+            measureUnits: {
+                ft: 'Feet';
+                mi: 'Miles';
+                m: 'Meters';
+                km: 'Kilometers';
+            };
+            measureUnitsShort: {
+                ft: 'ft';
+                mi: 'mi';
+                m: 'm';
+                km: 'km';
             };
             savingThrows: SavingThrows;
             skillCompendiumEntries: { [key: string]: string };
@@ -1682,7 +1692,18 @@ declare global {
                 swm: 'Swim';
                 umd: 'Use Magic Device';
             };
-            spellSchools: { [key: string]: string };
+            spellSchools: {
+                abj: 'Abjuration';
+                con: 'Conjuration';
+                div: 'Divination';
+                enc: 'Enchantment';
+                evo: 'Evocation';
+                ill: 'Illusion';
+                misc: 'Miscellaneous';
+                nec: 'Necromancy';
+                trs: 'Transmutation';
+                uni: 'Universal';
+            };
             weaponGroups: WeaponGroups;
         };
         documents: {
@@ -1728,6 +1749,7 @@ declare global {
             type: SpellcastingType;
         };
         utils: {
+            getDistanceSystem(): 'metric' | 'imperial';
             createTag(name: string): string;
         };
     }

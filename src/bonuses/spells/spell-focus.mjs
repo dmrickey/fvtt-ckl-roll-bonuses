@@ -102,7 +102,7 @@ registerItemHint((hintcls, _actor, item, _data) => {
         return;
     }
 
-    const currentSchool = getDocDFlags(item, key)[0];
+    const currentSchool = /** @type {keyof typeof pf1.config.spellSchools} */ (getDocDFlags(item, key)[0]);
     if (!currentSchool) {
         return;
     }
@@ -189,9 +189,10 @@ Hooks.on('renderItemSheet', (
         key = isGreater ? greaterSpellFocusKey : mythicSpellFocusKey;
 
         if (actor) {
-            spellSchools = {};
-            const existingSpellFocuses = getDocDFlags(actor, spellFocusKey, { includeInactive: false });
+            spellSchools = /** @type {any} */ ( /** @type {unknown} */ {});
+            const existingSpellFocuses = /** @type {Array<keyof typeof pf1.config.spellSchools>} */ (getDocDFlags(actor, spellFocusKey, { includeInactive: false }));
             existingSpellFocuses.forEach((focus) => {
+                // @ts-ignore
                 spellSchools[focus] = pf1.config.spellSchools[focus];
             });
         }
@@ -206,8 +207,8 @@ Hooks.on('renderItemSheet', (
     }
 
     const current = getDocDFlags(item, key)[0];
-    const choices = Object.keys(spellSchools)
-        .map((key) => ({ key, label: spellSchools[key] }));
+    const choices = Object.entries(spellSchools)
+        .map(([key, label]) => ({ key, label }));
 
     keyValueSelect({
         choices,
