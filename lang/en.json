@@ -356,6 +356,10 @@
                 "name": "Debug Mode",
                 "hint": "Enable this to turn on extra logging which may help in tracking down certain issues. Defaults to `false`."
             },
+            "elephant-in-the-room": {
+                "name": "Elephant in the Room",
+                "hint": "Enable this (disabled by default) if using the optional homebrew rules known as Elephant in the Room. This will turn off the auto-configuration that forces some feats and abilities to use normal Pathfinder rules and allows you to customize them manually with Targets and Bonuses."
+            },
             "fortuneStacks": {
                 "name": "Fortune Stacks",
                 "hint": "If true (default), multiple fortunes/misfortunes from different sources will stack. So you could potentially end up with 4d20kh. If false, then multiple fortunes/misfortunes will only go to a max of two dice. Multiple misfortune and fortunes affecting the same roll will cancel out (e.g. 3 differnt fortunes vs 2 different misfortunes means you are \"more fortunate\" and will be rolling with a bonus. If you have an equal number of fortune vs misfortune, then you \"break even\" and roll normally.)"
