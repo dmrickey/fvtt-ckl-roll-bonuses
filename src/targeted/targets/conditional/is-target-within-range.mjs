@@ -2,9 +2,9 @@ import { textInput } from '../../../handlebars-handlers/bonus-inputs/text-input.
 import { Distance } from '../../../util/distance.mjs';
 import { FormulaCacheHelper } from '../../../util/flag-helpers.mjs';
 import { localizeBonusLabel } from '../../../util/localize.mjs';
-import { ItemTarget } from "../item-target.mjs";
+import { BaseTarget } from '../base-target.mjs';
 
-export class WhenTargetInRange extends ItemTarget {
+export class WhenTargetInRange extends BaseTarget {
 
     /**
      * @override

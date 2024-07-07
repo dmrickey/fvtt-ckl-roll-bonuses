@@ -43,6 +43,20 @@ declare global {
     }
     class ActorPF extends ActorBasePF {
         allSkills: Array<keyof typeof pf1.config.skills>;
+        itemTypes: {
+            attack: ItemAttackPF[];
+            base: ItemPF[];
+            buff: ItemBuffPF[];
+            class: ItemClassPF[];
+            consumable: ItemConsumablePF[];
+            equipment: ItemEquipmentPF[];
+            feat: ItemFeatPF[];
+            implant: ItemPF[];
+            loot: ItemLootPF[];
+            race: ItemRacePF[];
+            spell: ItemSpellPF[];
+            weapon: ItemWeaponPF[];
+        };
         getActiveTokens(): Array<TokenPF>;
         getSkillInfo(skillId: string): SkillInfo;
 
@@ -111,6 +125,37 @@ declare global {
         squeezing: 'Squeezing';
         staggered: 'Staggered';
         stunned: 'Stunned';
+    }
+
+    interface SpellDescriptors {
+        acid: 'acid';
+        air: 'air';
+        chaotic: 'chaotic';
+        cold: 'cold';
+        curse: 'curse';
+        darkness: 'darkness';
+        death: 'death';
+        disease: 'disease';
+        draconic: 'draconic';
+        earth: 'earth';
+        electricity: 'electricity';
+        emotion: 'emotion';
+        evil: 'evil';
+        fear: 'fear';
+        fire: 'fire';
+        force: 'force';
+        good: 'good';
+        languageDependent: 'language-dependent';
+        lawful: 'lawful';
+        light: 'light';
+        meditative: 'meditative';
+        mindAffecting: 'mind-affecting';
+        pain: 'pain';
+        poison: 'poison';
+        ruse: 'ruse';
+        shadow: 'shadow';
+        sonic: 'sonic';
+        water: 'water';
     }
 
     interface FlyManeuverabilities {
@@ -795,9 +840,8 @@ declare global {
         slot: 'armor' | 'shield';
     }
     class SystemItemDataSpellPF extends SystemItemData {
-        /** @deprecated not until v10 */
         descriptors: {
-            value: string[];
+            value: Array<keyof SpellDescriptors>;
             custom: string[];
         };
         school: keyof typeof pf1.config.spellSchools;
@@ -824,6 +868,7 @@ declare global {
         | 'container'
         | 'equipment'
         | 'feat'
+        | 'implant'
         | 'loot'
         | 'race'
         | 'spell'
@@ -1692,6 +1737,7 @@ declare global {
                 swm: 'Swim';
                 umd: 'Use Magic Device';
             };
+            spellDescriptors: SpellDescriptors;
             spellSchools: {
                 abj: 'Abjuration';
                 con: 'Conjuration';

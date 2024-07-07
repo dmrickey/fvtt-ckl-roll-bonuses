@@ -15,7 +15,6 @@
   - [Spirited Charge](#spirited-charge)
 - [Racial Features](#racial-features)
   - [Sylph](#sylph)
-  - [Kobold](#kobold)
 - [Misc](#misc)
   - [I am targeted](#i-am-targeted)
   - [Magic](#magic)
@@ -30,9 +29,9 @@
 - [Add create hooks for initializing some items (like anything based off of name/id)](#add-create-hooks-for-initializing-some-items-like-anything-based-off-of-nameid)
 - [Add inpsiration checkbox to roll dialogs](#add-inpsiration-checkbox-to-roll-dialogs)
 - [Improve Enhancement Bonuses](#improve-enhancement-bonuses)
+- [Won't do](#wont-do)
 - [Refactor](#refactor)
 - [in pf1 V10](#in-pf1-v10)
-- [in pf1 V11](#in-pf1-v11)
 - [Not Possible](#not-possible)
 - [vnext](#vnext)
 
@@ -100,9 +99,6 @@
 - sorcerers with the elemental (air) bloodline treat their Charisma scores as 2 points higher for the purposes of all sorcerer spells and class abilities
   - Specifically just "treat <ability score> higher/lower for <spell book>"
   - maybe also "treat <ability score> higher/lower for <class ability>" -- would need to be based off of class key and ability that has a parent as that class
-## Kobold
-### Frightener
-  - +1 DC for `fear` spells
 
 # Misc
 ## I am targeted
@@ -162,6 +158,10 @@
 # Improve Enhancement Bonuses
 - add checkbox for "applies for DR" (some spell buffs don't appy for DR (e.g. Greater Magic Weapon))
 
+# Won't do
+- Add specific inputs for Improved Crit.
+  - handling crit bonuses is already complicated enough without adding in a third option
+
 # Refactor
 - `BaseTarget`'s `getSourcesFor` because every single one of them follows this pattern
   - ```js
@@ -177,13 +177,8 @@
 # in pf1 V10
 - Targeting
   - descriptor-based targeting
-  - sub-school target
 - Update FAQ for custom target with current example (current example uses v9 custom)
 - ~~Use pf1's simplify util function instead of maintaining my own~~ PF1's automatically strips flavor text
-
-# in pf1 V11
-- Targeting
-  - sub-school target
 
 # Not Possible
 - Attempt to create a "resource offset"
@@ -193,16 +188,7 @@
   - changes are generated and applied too early and too broadly in the system prep. I can either create a change that applies to everything (pointless) or I can create a specific change that exists for the specified target, but it's created too late to both be reduced to the best bonus type and actually be added to the roll
 
 # vnext
-- Add EitR toggle that will autoconfigure weapon focus for weapon groups instead of weapon focus
 - Add settings in readme
-- distance-based targeting
-- Add a super obvious configuration button in the item sheet when there are no bonuses configured
-- Look into adding an inline warning if targets/bonuses detected in an item sheet when the other is configured
-- Improved Critical specific inputs
 - In Game Documentation
   - Add Fighter Weapon Training and Gunslinger Gun Training info from original readme
-  - is-target-within-range
-    - make sure it works with metric
-    - make sure journal link for bonus works
-- Fix classes for layout so inputs are aligned with the middle
 - 
