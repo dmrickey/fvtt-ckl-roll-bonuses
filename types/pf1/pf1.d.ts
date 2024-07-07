@@ -43,6 +43,7 @@ declare global {
     }
     class ActorPF extends ActorBasePF {
         allSkills: Array<keyof typeof pf1.config.skills>;
+        getActiveTokens(): Array<TokenPF>;
         getSkillInfo(skillId: string): SkillInfo;
 
         [MODULE_NAME]: {
@@ -335,7 +336,11 @@ declare global {
     }
 
     interface TokenPF {
+        h: number;
         isVisible: boolean;
+        w: number;
+        x: number;
+        y: number;
     }
 
     class ItemPF<
@@ -1697,6 +1702,7 @@ declare global {
                 ItemSpellPF: { new (): ItemSpellPF };
                 ItemWeaponPF: { new (): ItemWeaponPF };
             };
+            TokenDocumentPF: { new (): TokenDocumentPF };
         };
         registry: {
             damageTypes: EmbeddedCollection<DamageType> & {

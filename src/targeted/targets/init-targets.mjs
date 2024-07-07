@@ -20,6 +20,7 @@ import { Sources } from '../source-registration.mjs';
 import { WhenActiveTarget } from './conditional/when-active-target.mjs';
 import { HasBooleanFlagTarget } from './conditional/has-boolean-flag-target.mjs';
 import { WhenInCombatTarget } from './conditional/when-in-combat-target.mjs';
+import { WhenTargetInRange } from './conditional/is-target-within-range.mjs';
 
 export const registerTargets = () => [
     AlignmentTarget,
@@ -42,6 +43,7 @@ export const registerTargets = () => [
     WeaponTypeTarget,
     WhenActiveTarget,
     WhenInCombatTarget,
+    WhenTargetInRange,
 
     // todo later
     // ActionTarget,

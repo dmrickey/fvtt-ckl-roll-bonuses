@@ -32,6 +32,7 @@
 - [Improve Enhancement Bonuses](#improve-enhancement-bonuses)
 - [Refactor](#refactor)
 - [in pf1 V10](#in-pf1-v10)
+- [in pf1 V11](#in-pf1-v11)
 - [Not Possible](#not-possible)
 - [vnext](#vnext)
 
@@ -178,7 +179,11 @@
   - descriptor-based targeting
   - sub-school target
 - Update FAQ for custom target with current example (current example uses v9 custom)
-- Use pf1's simplify util function instead of maintaining my own
+- ~~Use pf1's simplify util function instead of maintaining my own~~ PF1's automatically strips flavor text
+
+# in pf1 V11
+- Targeting
+  - sub-school target
 
 # Not Possible
 - Attempt to create a "resource offset"
@@ -192,7 +197,12 @@
 - Add settings in readme
 - distance-based targeting
 - Add a super obvious configuration button in the item sheet when there are no bonuses configured
-
 - Look into adding an inline warning if targets/bonuses detected in an item sheet when the other is configured
 - Improved Critical specific inputs
-- Add Fighter Weapon Training and Gunslinger Gun Training info from original readme
+- In Game Documentation
+  - Add Fighter Weapon Training and Gunslinger Gun Training info from original readme
+  - is-target-within-range
+    - make sure it works with metric
+    - make sure journal link for bonus works
+- Fix classes for layout so inputs are aligned with the middle
+- 
