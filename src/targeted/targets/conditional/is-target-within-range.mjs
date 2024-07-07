@@ -1,6 +1,7 @@
 import { textInput } from '../../../handlebars-handlers/bonus-inputs/text-input.mjs';
 import { Distance } from '../../../util/distance.mjs';
 import { FormulaCacheHelper } from '../../../util/flag-helpers.mjs';
+import { localizeBonusLabel } from '../../../util/localize.mjs';
 import { ItemTarget } from "../item-target.mjs";
 
 export class WhenTargetInRange extends ItemTarget {
@@ -14,17 +15,29 @@ export class WhenTargetInRange extends ItemTarget {
     static get #minKey() { return `${this.key}-min`; }
     static get #maxKey() { return `${this.key}-max`; }
 
-    /** @param {ItemPF} source */
-    static #min(source) { return FormulaCacheHelper.getModuleFlagValue(source, this.#minKey); }
-    /** @param {ItemPF} source */
-    static #max(source) { return FormulaCacheHelper.getModuleFlagValue(source, this.#maxKey); }
+    static get #units() {
+        return pf1.utils.getDistanceSystem() === 'imperial'
+            ? pf1.config.measureUnitsShort.ft
+            : pf1.config.measureUnitsShort.m;
+    }
+
+    /**
+     * @param {ItemPF} source
+     * @returns {number}
+     */
+    static #min(source) { return FormulaCacheHelper.getModuleFlagValue(source, this.#minKey) || 0; }
+    /**
+     * @param {ItemPF} source
+     * @returns {number}
+     */
+    static #max(source) { return FormulaCacheHelper.getModuleFlagValue(source, this.#maxKey) || Number.POSITIVE_INFINITY; }
 
     /**
      * @override
      * @inheritdoc
      * @returns {string}
      */
-    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.IpRhJqZEX2TUarSX#is-target-within-range'; }
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.IpRhJqZEX2TUarSX#within-range'; }
 
     /**
      * @override
@@ -44,7 +57,7 @@ export class WhenTargetInRange extends ItemTarget {
     static getHints(source) {
         const min = this.#min(source);
         const max = this.#max(source);
-        const units = 'ft'
+        const units = this.#units;
         return [`${min}${units}-${max}${units}`];
     }
 
@@ -103,19 +116,23 @@ export class WhenTargetInRange extends ItemTarget {
             item,
             journal: this.journal,
             key: this.#minKey,
+            label: localizeBonusLabel(this.#minKey, { unit: this.#units }),
             parent: html,
         }, {
             canEdit: isEditable,
             isModuleFlag: true,
+            placeholder: '0',
         });
         textInput({
             item,
             journal: this.journal,
             key: this.#maxKey,
+            label: localizeBonusLabel(this.#maxKey, { unit: this.#units }),
             parent: html,
         }, {
             canEdit: isEditable,
             isModuleFlag: true,
+            placeholder: `${Number.POSITIVE_INFINITY}`
         });
     }
 }
