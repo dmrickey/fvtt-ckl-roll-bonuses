@@ -4,7 +4,7 @@ import './handlebars-handlers/init.mjs';
 import './util/item-hints.mjs';
 import './bonuses.mjs';
 import './patch/init.mjs';
-import { FormulaCacheHelper } from './util/flag-helpers.mjs';
+import { FormulaCacheHelper, hasAnyBFlag } from './util/flag-helpers.mjs';
 import { simplifyRollFormula } from './util/simplify-roll-formula.mjs';
 import './auto-recognition/init.mjs';
 import { api } from './util/api.mjs';
@@ -12,6 +12,8 @@ import migrate from './migration/index.mjs';
 import { ifDebug } from './util/if-debug.mjs';
 import { emptyObject } from './util/empty-object.mjs';
 import { registerSetting } from './util/settings.mjs';
+import { addNodeToRollBonus } from './handlebars-handlers/add-bonus-to-item-sheet.mjs';
+import { localize } from './util/localize.mjs';
 
 Hooks.once('pf1PostReady', () => migrate());
 
@@ -465,3 +467,30 @@ Hooks.once('init', () => {
     game.modules.get(MODULE_NAME).ready = true;
     Hooks.callAll(`${MODULE_NAME}.ready`)
 });
+
+// specifically at end so it's registered last
+Hooks.on('renderItemSheet', (
+    /** @type {ItemSheetPF} */ { actor, isEditable, item },
+    /** @type {[HTMLElement]} */[html],
+    /** @type {unknown} */ _data
+) => {
+    if (!(item instanceof pf1.documents.item.ItemPF)) return;
+
+    const hasBonus = hasAnyBFlag(item, ...api.allBonusTypes.map((b) => b.key));
+    const hasTarget = hasAnyBFlag(item, ...api.allTargetTypes.map((b) => b.key));
+
+    /** @param {string} text */
+    const label = (text) => {
+        const div = document.createElement('div');
+        div.innerHTML = `<div class="form-group roll-bonuses error settings"><label><a><i class="fas fa-circle-exclamation"></i> ${text} <i class="fas fa-sliders"></i></a></label></div>`;
+        return div
+    }
+
+    if (hasBonus && !hasTarget) {
+        addNodeToRollBonus(html, label(localize('hint-missing-target')), item, isEditable);
+    }
+    else if (!hasBonus && hasTarget) {
+        addNodeToRollBonus(html, label(localize('hint-missing-bonus')), item, isEditable);
+    }
+});
+// NOTHING BELOW THIS BLOCK

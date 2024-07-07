@@ -28,6 +28,10 @@
     margin-inline-start: 0.125rem;
 }
 
+#ckl-roll-bonus-container .error label {
+    color: var(--pf1-color-text-error);
+}
+
 #ckl-roll-bonus-container .error-text {
     color: darkred;
     font-weight: bold;

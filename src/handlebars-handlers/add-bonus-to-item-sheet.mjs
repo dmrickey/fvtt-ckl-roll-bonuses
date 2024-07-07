@@ -17,11 +17,9 @@ const addNodeToRollBonus = (itemSheetHtml, child, item, canEdit) => {
         return;
     }
 
-    let section = itemSheetHtml.querySelector(bonusSectionSelector);
-    if (!section) {
-        section = createTemplate(templates.rollBonusesContainer);
-
-        const settings = section.querySelectorAll(`.settings`);
+    /** @param {Element} elem */
+    const addSettingsHandler = (elem) => {
+        const settings = elem.querySelectorAll(`.settings`);
         settings.forEach((s) => {
             if (canEdit) {
                 s?.addEventListener('click', (event) => {
@@ -36,7 +34,12 @@ const addNodeToRollBonus = (itemSheetHtml, child, item, canEdit) => {
                 s.style.display = 'none';
             }
         });
+    }
 
+    let section = itemSheetHtml.querySelector(bonusSectionSelector);
+    if (!section) {
+        section = createTemplate(templates.rollBonusesContainer);
+        addSettingsHandler(section)
         flagsContainer.before(section);
     }
 
@@ -63,6 +66,7 @@ const addNodeToRollBonus = (itemSheetHtml, child, item, canEdit) => {
             }
         },
     );
+    addSettingsHandler(child);
 
     container.appendChild(child);
 }

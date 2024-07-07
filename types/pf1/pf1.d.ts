@@ -32,7 +32,16 @@ declare global {
         id: keyof typeof pf1.config.skills;
         name: string;
     };
-    class ActorPF extends BaseDocument {
+    class ActorBasePF extends BaseDocument {
+        itemFlags?: {
+            /**
+             * The tags for Items that are active with a boolean flag
+             */
+            boolean: { [key: string]: { sources: ItemPF[] } };
+            dictionary: ItemDictionaryFlags;
+        };
+    }
+    class ActorPF extends ActorBasePF {
         allSkills: Array<keyof typeof pf1.config.skills>;
         getSkillInfo(skillId: string): SkillInfo;
 
@@ -48,14 +57,6 @@ declare global {
         getRollData(args?: { refresh?: boolean }): RollData;
 
         id: string;
-
-        itemFlags?: {
-            /**
-             * The tags for Items that are active with a boolean flag
-             */
-            boolean: { [key: string]: { sources: ItemPF[] } };
-            dictionary: ItemDictionaryFlags;
-        };
 
         items: EmbeddedCollection<ItemPF>;
 
