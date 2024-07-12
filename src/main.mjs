@@ -98,7 +98,7 @@ function prepareItemData(wrapped, final) {
  */
 async function actionUseProcess(wrapped, options) {
     LocalHookHandler.fireHookNoReturnSync(localHooks.actionUseProcess, this);
-    await wrapped(options);
+    return await wrapped(options);
 }
 
 /**
