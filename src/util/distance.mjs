@@ -62,6 +62,11 @@ export class Distance {
      * @returns {boolean}
      */
     static #threatens(attacker, target, action = undefined) {
+        // todo - flat-footed does not exist
+        // if (attacker.isFlatFooted) {
+        //     return false;
+        // }
+
         let actions = [];
         if (action) {
             actions = [action];
@@ -237,6 +242,17 @@ export class Distance {
      * @returns {boolean}
      */
     static #isBelow(token, target) { return this.#top(token) >= this.#bottom(target); }
+
+    /**
+     * @param {TokenPF} target
+     * @returns {boolean}
+     */
+    static isEngagedInMeleeWithAnything(target) {
+        const potentials = game.scenes.active.tokens
+            .filter((x) => x.disposition !== target.document.disposition);
+
+        return potentials.some((p) => new Distance(target, p).isEngagedInMelee());
+    }
 }
 
 api.utils.Distance = Distance;
