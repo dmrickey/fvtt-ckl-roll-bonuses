@@ -21,6 +21,7 @@ declare global {
 
         /** @deprecated - use {@link size} */
         length: unknown;
+        contents: Array<T>;
 
         get(id: string): T;
 

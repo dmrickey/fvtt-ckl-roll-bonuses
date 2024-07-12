@@ -335,7 +335,10 @@ declare global {
         static defaultDamageType: TraitSelectorValuePlural;
         hasAttack: boolean;
         isCombatManeuver: boolean;
+        isRanged: boolean;
         get enhancementBonus(): number;
+        maxRange: number;
+        minRange: number;
     }
 
     /** used for weapons and attacks */
@@ -369,7 +372,7 @@ declare global {
 
     interface TokenDocumentPF extends ItemDocument {
         id: string;
-        actor: ActorPF;
+        actor: ActorCharacterPF;
         displayName: 0 | 10 | 20 | 30 | 40 | 50;
         disposition: DispositionLevel;
         isLinked: boolean;
@@ -381,6 +384,8 @@ declare global {
     }
 
     interface TokenPF {
+        actor: ActorCharacterPF;
+        document: TokenDocumentPF;
         h: number;
         isVisible: boolean;
         w: number;
@@ -400,7 +405,9 @@ declare global {
         get hasAction(): boolean;
         actions: EmbeddedCollection<ItemAction>;
 
+        activeState: boolean;
         actor?: ActorPF;
+        canUse: boolean;
         defaultAction: ItemAction;
         flags: {
             core?: { sourceId: string };

@@ -21,6 +21,7 @@
   - [Misc](#misc-1)
   - [UX](#ux)
   - [Bonuses](#bonuses-1)
+  - [Bonus Improvements](#bonus-improvements)
   - [Targeting](#targeting)
 - [Housekeeping](#housekeeping)
 - [Checklist for new (and existing features)](#checklist-for-new-and-existing-features)
@@ -28,11 +29,13 @@
 - [Add Quench Testings](#add-quench-testings)
 - [Add create hooks for initializing some items (like anything based off of name/id)](#add-create-hooks-for-initializing-some-items-like-anything-based-off-of-nameid)
 - [Add inpsiration checkbox to roll dialogs](#add-inpsiration-checkbox-to-roll-dialogs)
-- [Improve Enhancement Bonuses](#improve-enhancement-bonuses)
 - [Won't do](#wont-do)
 - [Refactor](#refactor)
+- [Skills](#skills)
 - [in pf1 V10](#in-pf1-v10)
 - [Not Possible](#not-possible)
+- [Range/Positional ideas](#rangepositional-ideas)
+- [Other Ideas](#other-ideas)
 - [vnext](#vnext)
 
 # TODO
@@ -65,6 +68,7 @@
 - While in Combat
   - [Scarred by War](https://www.aonprd.com/TraitDisplay.aspx?ItemName=Scarred%20by%20War) (used to grant diplomacy bonus while not in combat)
 - add a way to affect other tokens (i.e. cavalier challenge which gives them -2 attack vs other targets)
+- Condition Target (both self and/or target)
 
 # Class Features
 ## Cleric
@@ -123,6 +127,12 @@
 - "x per dice"
 - Extra Attacks
 
+## Bonus Improvements
+- Enhancement Bonus
+  - add checkbox for "applies for DR" (some spell buffs don't appy for DR (e.g. Greater Magic Weapon))
+- Change Offset
+  - add a "set" option (in addition to +/-)
+
 ## Targeting
 - show warning if target has an inappropriate bonus
 - add checkbox to toggle between union (current implementation) and intersection (item has to supply all targeting requirements)
@@ -155,9 +165,6 @@
 - https://gitlab.com/foundryvtt_pathfinder1e/foundryvtt-pathfinder1/-/merge_requests/2758
   - > "So actionUse.formData for actions and overriding _getFormData() for d20rolls"
 
-# Improve Enhancement Bonuses
-- add checkbox for "applies for DR" (some spell buffs don't appy for DR (e.g. Greater Magic Weapon))
-
 # Won't do
 - Add specific inputs for Improved Crit.
   - handling crit bonuses is already complicated enough without adding in a third option
@@ -174,6 +181,12 @@
     }
     ```
 
+# Skills
+- Condtional Bonus when taking 10
+  - Needs to be able to target individual skills
+    - (or groups of skills)
+    - example usage: https://aonprd.com/TraitDisplay.aspx?ItemName=Analytical
+
 # in pf1 V10
 - Targeting
   - descriptor-based targeting
@@ -187,8 +200,37 @@
 - Custom changes that effect only specific targets :(
   - changes are generated and applied too early and too broadly in the system prep. I can either create a change that applies to everything (pointless) or I can create a specific change that exists for the specified target, but it's created too late to both be reduced to the best bonus type and actually be added to the roll
 
+# Range/Positional ideas
+- Flank
+  - Also includes a "cannot be flanked" flag that would go on an Item to signify when an actor can't be flanked
+  - has to do with melee
+  - Needs a "Target" so that I can give out extra bonuses when flanking
+    - Dirty Fighter Trait
+    - Outflank (would need extra info about flank target) 
+- Within Range (done)
+  - e.g. Point Blank
+- Range Penalties
+  - max increment
+    - defined on the action
+    - option to ignore
+    - option to modify/set
+  - range penalty per increment
+    - option to modify/set
+  - These settings need to additive just like crit bonuses
+- IsAdjacent
+- IsSharingSquare
+- TargetEngagedInMelee
+  - (for shooting into combat penalties)
+
+# Other Ideas
+- Add Concealment
+  - This would allow me to automatically add effect notes for each roll to automatically roll for concealment
+  - And would allow automating rerolls for abilities like Weapon of the Chosen
+
 # vnext
 - Add settings in readme
 - In Game Documentation
   - Add Fighter Weapon Training and Gunslinger Gun Training info from original readme
+- Add footnote bonus
+- Add Condition Target
 - 
