@@ -97,9 +97,10 @@ Hooks.on(customGlobalHooks.getConditionalParts, getConditionalParts);
 async function addEffectNotes(chatAttack) {
     if (chatAttack.ammo) {
         const ammo = chatAttack.actor.items.get(chatAttack.ammo.id)
-        const note = ammo.getFlag(MODULE_NAME, ammoEffectKey);
+        const note = ammo[MODULE_NAME][ammoEffectKey];
         if (note) {
-            const enriched = await TextEditor.enrichHTML(`<div>${note}</div>`, { rollData: ammo.getRollData() })
+            // todo - cache this during data prep - localHooks.prepareData
+            const enriched = await TextEditor.enrichHTML(`<div>${note}</div>`);
             chatAttack.effectNotes.push(enriched);
         }
     }
@@ -179,6 +180,20 @@ LocalHookHandler.registerHandler(localHooks.prepareData, (item, rollData) => {
         const roll = RollPF.safeRollSync(damage.formula, rollData);
         item[MODULE_NAME][ammoDamageKey].push(roll.simplifiedFormula);
     });
+
+    let note = item.getFlag(MODULE_NAME, ammoEffectKey);
+    if (note) {
+        const r = /\[\[([^\[].+?)\]\]/g;
+        const matches = [...note.matchAll(r)];
+
+        // const simplified = [];
+        matches.forEach(([_, match]) => {
+            const roll = RollPF.safeRollSync(match, rollData);
+            note = note.replace(match, roll.simplifiedFormula);
+        });
+
+        item[MODULE_NAME][ammoEffectKey] = note;
+    }
 });
 
 /**
