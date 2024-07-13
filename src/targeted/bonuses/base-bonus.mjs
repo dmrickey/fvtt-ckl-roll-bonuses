@@ -122,7 +122,7 @@ export class BaseBonus extends BaseSource {
      * @abstract
      * @param {ItemPF} source The source of the bonus
      * @param {(ActionUse | ItemPF | ItemAction)?} [item] The item receiving the bonus for contextually aware hints.
-     * @returns {string[]}
+     * @returns {string[] | undefined}
      */
     static getFootnotes(source, item) { return []; }
 }

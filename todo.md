@@ -69,6 +69,7 @@
   - [Scarred by War](https://www.aonprd.com/TraitDisplay.aspx?ItemName=Scarred%20by%20War) (used to grant diplomacy bonus while not in combat)
 - add a way to affect other tokens (i.e. cavalier challenge which gives them -2 attack vs other targets)
 - Condition Target (both self and/or target)
+- When the die is (some value range)
 
 # Class Features
 ## Cleric

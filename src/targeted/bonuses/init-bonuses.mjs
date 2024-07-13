@@ -8,6 +8,7 @@ import { DCBonus } from './dc-bonus.mjs';
 import { EffectiveSizeBonus } from './effective-size.mjs';
 import { EnhancementBonus } from './enhancement-bonus.mjs';
 import { FinesseBonus as FinesseBonus } from './finesse-bonus.mjs';
+import { FootnoteBonus } from './footnote-bonus.mjs';
 import { FortuneBonus } from './fortune-bonus.mjs';
 import { MisfortuneBonus } from './misfortune-bonus.mjs';
 
@@ -21,6 +22,7 @@ export const registerBonuses = () => [
     EffectiveSizeBonus,
     EnhancementBonus,
     FinesseBonus,
+    FootnoteBonus,
     FortuneBonus,
     MisfortuneBonus,
     // ModifiersBonus, // only if I can get the function to remove duplicates working (which needs to work with conditionals)
