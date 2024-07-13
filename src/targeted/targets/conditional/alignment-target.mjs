@@ -1,7 +1,7 @@
 import { MODULE_NAME } from "../../../consts.mjs";
 import { keyValueSelect } from '../../../handlebars-handlers/bonus-inputs/key-value-select.mjs';
+import { currentTargetedActors } from '../../../util/get-current-targets.mjs';
 import { localize } from '../../../util/localize.mjs';
-import { truthiness } from '../../../util/truthiness.mjs';
 import { BaseTarget } from "../base-target.mjs";
 
 // todo doesn't exist until v10
@@ -13,7 +13,6 @@ import { BaseTarget } from "../base-target.mjs";
 //     evil: pf1.config.damageResistances.evil,
 // });
 
-/** @type {Record<string, string>} */
 const choices =  /** @type {const} */ ({
     lawful: 'alignment.lawful',
     chaotic: 'alignment.chaotic',
@@ -36,30 +35,24 @@ export class AlignmentTarget extends BaseTarget {
     static get sourceKey() { return 'alignment'; }
 
     /**
+     * @inheritdoc
      * @override
      * @returns {string}
      */
     static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.IpRhJqZEX2TUarSX#alignment'; }
 
     /**
+     * @inheritdoc
      * @override
      */
     static init() {
-
         Hooks.once('ready', () =>
+            // @ts-ignore
             Object.entries(choices).forEach(([key, value]) => choices[key] = localize(value))
         );
     }
 
-    /** @type {ActorPF[]} */
-    static get #currentTargetedActors() {
-        return [...game.user.targets]
-            .map(x => x.actor)
-            .filter(truthiness);
-    }
-
     /**
-     *
      * @param {ItemPF} item
      * @returns {Nullable<string>}
      */
@@ -95,7 +88,7 @@ export class AlignmentTarget extends BaseTarget {
      * @returns {ItemPF[]}
      */
     static getSourcesFor(doc) {
-        if (!this.#currentTargetedActors.length) {
+        if (!currentTargetedActors().length) {
             return [];
         }
 
@@ -111,7 +104,7 @@ export class AlignmentTarget extends BaseTarget {
             const bonusAlignment = this.#getFlagLetter(source);
             if (!bonusAlignment) return false;
 
-            return this.#currentTargetedActors.some((actor) => actor.system.details.alignment?.includes(bonusAlignment));
+            return currentTargetedActors().some((actor) => actor.system.details.alignment?.includes(bonusAlignment));
         });
 
         return bonusSources;

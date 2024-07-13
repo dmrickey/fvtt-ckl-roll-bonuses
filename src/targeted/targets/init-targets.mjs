@@ -22,10 +22,12 @@ import { HasBooleanFlagTarget } from './conditional/has-boolean-flag-target.mjs'
 import { WhenInCombatTarget } from './conditional/when-in-combat-target.mjs';
 import { WhenTargetInRange } from './conditional/is-target-within-range.mjs';
 import { SpellDescriptorTarget } from './spell-descriptor-target.mjs';
+import { ConditionTarget } from './conditional/condition-target.mjs';
 
 export const registerTargets = () => [
     AlignmentTarget,
     AllTarget,
+    ConditionTarget,
     DamageTypeTarget,
     FinesseTarget,
     FunctionTarget,

@@ -44,6 +44,15 @@ export class FootnoteBonus extends BaseBonus {
     }
 
     /**
+     * @override
+     * @param {ItemPF} source
+     * @returns {Nullable<string[]>}
+     */
+    static getHints(source) {
+        return this.getFootnotes(source);
+    }
+
+    /**
      * @inheritdoc
      * @override
      * @param {ItemPF} source The source of the bonus

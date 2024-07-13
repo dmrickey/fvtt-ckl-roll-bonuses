@@ -59,6 +59,7 @@ declare global {
         };
         getActiveTokens(): Array<TokenPF>;
         getSkillInfo(skillId: string): SkillInfo;
+        hasCondition(key: string): boolean;
 
         [MODULE_NAME]: {
             [key: string]: number | string | object | array;
@@ -1613,6 +1614,18 @@ declare global {
         render(show: boolean);
     }
 
+    class Condition {
+        flags: {};
+        journal: string;
+        name: string;
+        namespace: string;
+        showInAction: boolean;
+        showInDefense: boolean;
+        texture: string;
+        track: string;
+        id: string;
+    }
+
     interface pf1 {
         dice: {
             DamageRoll: typeof DamageRoll;
@@ -1779,6 +1792,10 @@ declare global {
             TokenDocumentPF: { new (): TokenDocumentPF };
         };
         registry: {
+            conditions: {
+                get(condition: string): Condition;
+                contents: Array<Condition>;
+            };
             damageTypes: EmbeddedCollection<DamageType> & {
                 getLabels(): {
                     untyped: 'Untyped';

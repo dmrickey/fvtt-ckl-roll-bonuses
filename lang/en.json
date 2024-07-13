@@ -28,6 +28,8 @@
                 "attack": "Attack Bonus",
                 "change-type-offset": "Change Offset",
                 "cl": "Caster Level",
+                "condition": "Condition",
+                "condition-target": "Target for Condition",
                 "crit-keen": "Keen",
                 "crit-mult": "Crit Multiplier",
                 "crit-offset": "Crit Offset",
@@ -109,6 +111,7 @@
                 "attack": "Formula input for increasing attack.",
                 "change-type-offset": "Modify chosen change type. Like Fate's Favored, but you choose what happens.",
                 "cl": "Modify a spell's Caster Level.",
+                "condition": "Activate bonuses when actor has condition.",
                 "crit-keen": "Double the critical threat range.",
                 "crit-mult": "Increase or Decrease the critical multiplier.",
                 "crit-offset": "Modify the critical threat range. This modification happens after Keen.",
@@ -255,8 +258,11 @@
             "inspiration": "Inspiration"
         },
         "string-select.no-choices": "No valid choices.",
+        "target-choice": {
+            "self": "Self",
+            "target": "Targeted Tokens"
+        },
         "targets": "Targets",
-        "targetSelf": "Self",
         "to-hit-mod": "{mod} to hit",
         "versatilePerformance": {
             "error": "Versatile Performance - invalid skill IDs",
