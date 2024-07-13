@@ -99,7 +99,6 @@ async function addEffectNotes(chatAttack) {
         const ammo = chatAttack.actor.items.get(chatAttack.ammo.id)
         const note = ammo[MODULE_NAME][ammoEffectKey];
         if (note) {
-            // todo - cache this during data prep - localHooks.prepareData
             const enriched = await TextEditor.enrichHTML(`<div>${note}</div>`);
             chatAttack.effectNotes.push(enriched);
         }
