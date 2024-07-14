@@ -41,13 +41,21 @@ const getEnhancementBonusForAction = ({action, ammo}) => {
     const enhData = new EnhBonusResult();
 
     if (action) {
+        if (!(action instanceof pf1.components.ItemAction)) {
+            console.error(`"action" is not an "ItemAction"`, action);
+        }
+
         let { base, stacks } = action[MODULE_NAME]?.enhancement ?? {};
         base ||= 0;
         stacks ||= 0;
         enhData.action = new EnhData({ base, stacks });
     }
 
-    if (ammo instanceof pf1.documents.item.ItemLootPF && ammo.subType === 'ammo') {
+    if (ammo) {
+        if (!(ammo instanceof pf1.documents.item.ItemLootPF && ammo.subType === 'ammo')) {
+            console.error('"ammo" is not ammunition', ammo);
+        }
+
         const base = FormulaCacheHelper.getModuleFlagValue(ammo, ammoEnhancementKey);
         const stacks = FormulaCacheHelper.getModuleFlagValue(ammo, ammoEnhancementStacksKey);
 
