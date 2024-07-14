@@ -39,7 +39,7 @@ function getConditionalParts(actionUse, result, atk, index) {
         const itemMw = item.system.masterwork;
         const itemEnh = actionUse.action.enhancementBonus;
 
-        const { base: actionBaseEnh, stacks: actionStacksEnh, total: actionTotal } = getEnhancementBonusForAction(actionUse.action);
+        const { base: actionBaseEnh, stacks: actionStacksEnh, total: actionTotal } = getEnhancementBonusForAction({action: actionUse.action});
 
         const ammoMw = !!ammo.getFlag(MODULE_NAME, ammoMasterworkKey);
         const ammoEnhBonus = FormulaCacheHelper.getModuleFlagValue(ammo, ammoEnhancementKey);
@@ -55,12 +55,12 @@ function getConditionalParts(actionUse, result, atk, index) {
             result['attack.normal'].push(`1[${localize('PF1.AmmunitionAbbr')} - ${localize('PF1.Masterwork')}]`)
         }
         else {
-            const { total: ammoTotal } = getEnhancementBonusForAction(actionUse.action, ammo);
-            const diff = ammoTotal - actionTotal;
+            const { total: totalWithAmmo } = getEnhancementBonusForAction({action: actionUse.action, ammo});
+            const diff = totalWithAmmo - actionTotal;
             if (diff > 0) {
                 const label = `${localize('PF1.AmmunitionAbbr')} ${localize('PF1.EnhancementBonus')}`;
-                result['attack.normal'].push(`${diff}[${label} (${ammoTotal})]`);
-                result['damage.normal'].push([`${diff}[${label} (${ammoTotal})]`, { values: [], custom: `${label}` }, false]);
+                result['attack.normal'].push(`${diff}[${label} (${totalWithAmmo})]`);
+                result['damage.normal'].push([`${diff}[${label} (${totalWithAmmo})]`, { values: [], custom: `${label}` }, false]);
             }
         }
 

@@ -230,5 +230,3 @@
 
 # vnext
 - Add settings in readme
-- In Game Documentation
-  - Add Fighter Weapon Training and Gunslinger Gun Training info from original readme

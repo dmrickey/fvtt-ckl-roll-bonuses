@@ -3,27 +3,58 @@ import { MODULE_NAME } from '../consts.mjs';
 import { api } from './api.mjs';
 import { FormulaCacheHelper } from './flag-helpers.mjs';
 
-/**
- * @param {ItemAction} action
- * @param {ItemLootPF} [ammo]
- * @returns {{ base: number, stacks: number, total: number }} increases
- */
-const getEnhancementBonusForAction = (action, ammo) => {
-    let { base, stacks } = action[MODULE_NAME]?.enhancement ?? {};
-    base ||= 0;
-    stacks ||= 0;
+class EnhData {
+    constructor({base = 0, stacks = 0}) {
+        this.base = base;
+        this.stacks = stacks;
+    }
+    get total() {return (this.base || 0) + (this.stacks || 0); }
+}
 
-    if (ammo instanceof pf1.documents.item.ItemLootPF && ammo.subType === 'ammo') {
-        const ammoEnhBonus = FormulaCacheHelper.getModuleFlagValue(ammo, ammoEnhancementKey);
-        const ammoEnhStacksBonus = FormulaCacheHelper.getModuleFlagValue(ammo, ammoEnhancementStacksKey);
+class EnhBonusResult {
+    /** @type {EnhData?} */
+    ammo = null;
 
-        base = Math.max(base, ammoEnhBonus);
-        stacks += ammoEnhStacksBonus;
+    /** @type {EnhData?} */
+    action = null;
+
+    get base() {
+        return Math.max(this.ammo?.base || 0, this.action?.base || 0);
     }
 
-    const total = base + stacks;
+    get stacks() {
+        return (this.ammo?.stacks || 0) + (this.action?.stacks || 0);
+    }
 
-    return { base, stacks, total };
+    get total() {
+        return this.base + this.stacks
+    }
+}
+
+/**
+ * @param {object} args
+ * @param {ItemAction} [args.action]
+ * @param {ItemLootPF} [args.ammo]
+ * @returns {EnhBonusResult}
+ */
+const getEnhancementBonusForAction = ({action, ammo}) => {
+    const enhData = new EnhBonusResult();
+
+    if (action) {
+        let { base, stacks } = action[MODULE_NAME]?.enhancement ?? {};
+        base ||= 0;
+        stacks ||= 0;
+        enhData.action = new EnhData({ base, stacks });
+    }
+
+    if (ammo instanceof pf1.documents.item.ItemLootPF && ammo.subType === 'ammo') {
+        const base = FormulaCacheHelper.getModuleFlagValue(ammo, ammoEnhancementKey);
+        const stacks = FormulaCacheHelper.getModuleFlagValue(ammo, ammoEnhancementStacksKey);
+
+        enhData.ammo = new EnhData({ base, stacks });
+    }
+
+    return enhData;
 }
 
 api.utils.getEnhancementBonusForAction = getEnhancementBonusForAction;
