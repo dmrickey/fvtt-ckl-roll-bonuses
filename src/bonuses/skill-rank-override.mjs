@@ -18,6 +18,9 @@ Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ journal, key, 
 FormulaCacheHelper.registerModuleFlag(formulaKey);
 
 registerItemHint((hintcls, actor, item, _data) => {
+    const hasOverride = item.hasItemBooleanFlag(key);
+    if (!hasOverride) return;
+
     const overrides = getDocFlags(item, selectedKey, { includeInactive: false })
         .flatMap(x => x)
         .filter(truthiness);

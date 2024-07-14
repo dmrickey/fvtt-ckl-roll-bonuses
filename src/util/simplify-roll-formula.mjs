@@ -1,6 +1,8 @@
 // @ts-nocheck
 /** copied from 5e */
 
+import { api } from './api.mjs';
+
 /**
  * A standardized helper function for simplifying the constant parts of a multipart roll formula.
  *
@@ -204,3 +206,5 @@ function _separateAnnotatedTerms(terms) {
         return obj;
     }, { annotated: [], unannotated: [] });
 }
+
+api.utils.simplifyRollFormula = simplifyRollFormula;

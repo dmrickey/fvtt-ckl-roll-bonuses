@@ -32,9 +32,34 @@ declare global {
         id: keyof typeof pf1.config.skills;
         name: string;
     };
-    class ActorPF extends BaseDocument {
+    class ActorBasePF extends BaseDocument {
+        itemFlags?: {
+            /**
+             * The tags for Items that are active with a boolean flag
+             */
+            boolean: { [key: string]: { sources: ItemPF[] } };
+            dictionary: ItemDictionaryFlags;
+        };
+    }
+    class ActorPF extends ActorBasePF {
         allSkills: Array<keyof typeof pf1.config.skills>;
+        itemTypes: {
+            attack: ItemAttackPF[];
+            base: ItemPF[];
+            buff: ItemBuffPF[];
+            class: ItemClassPF[];
+            consumable: ItemConsumablePF[];
+            equipment: ItemEquipmentPF[];
+            feat: ItemFeatPF[];
+            implant: ItemPF[];
+            loot: ItemLootPF[];
+            race: ItemRacePF[];
+            spell: ItemSpellPF[];
+            weapon: ItemWeaponPF[];
+        };
+        getActiveTokens(): Array<TokenPF>;
         getSkillInfo(skillId: string): SkillInfo;
+        hasCondition(key: string): boolean;
 
         [MODULE_NAME]: {
             [key: string]: number | string | object | array;
@@ -48,14 +73,6 @@ declare global {
         getRollData(args?: { refresh?: boolean }): RollData;
 
         id: string;
-
-        itemFlags?: {
-            /**
-             * The tags for Items that are active with a boolean flag
-             */
-            boolean: { [key: string]: { sources: ItemPF[] } };
-            dictionary: ItemDictionaryFlags;
-        };
 
         items: EmbeddedCollection<ItemPF>;
 
@@ -109,6 +126,37 @@ declare global {
         squeezing: 'Squeezing';
         staggered: 'Staggered';
         stunned: 'Stunned';
+    }
+
+    interface SpellDescriptors {
+        acid: 'acid';
+        air: 'air';
+        chaotic: 'chaotic';
+        cold: 'cold';
+        curse: 'curse';
+        darkness: 'darkness';
+        death: 'death';
+        disease: 'disease';
+        draconic: 'draconic';
+        earth: 'earth';
+        electricity: 'electricity';
+        emotion: 'emotion';
+        evil: 'evil';
+        fear: 'fear';
+        fire: 'fire';
+        force: 'force';
+        good: 'good';
+        languageDependent: 'language-dependent';
+        lawful: 'lawful';
+        light: 'light';
+        meditative: 'meditative';
+        mindAffecting: 'mind-affecting';
+        pain: 'pain';
+        poison: 'poison';
+        ruse: 'ruse';
+        shadow: 'shadow';
+        sonic: 'sonic';
+        water: 'water';
     }
 
     interface FlyManeuverabilities {
@@ -288,7 +336,10 @@ declare global {
         static defaultDamageType: TraitSelectorValuePlural;
         hasAttack: boolean;
         isCombatManeuver: boolean;
+        isRanged: boolean;
         get enhancementBonus(): number;
+        maxRange: number;
+        minRange: number;
     }
 
     /** used for weapons and attacks */
@@ -322,7 +373,7 @@ declare global {
 
     interface TokenDocumentPF extends ItemDocument {
         id: string;
-        actor: ActorPF;
+        actor: ActorCharacterPF;
         displayName: 0 | 10 | 20 | 30 | 40 | 50;
         disposition: DispositionLevel;
         isLinked: boolean;
@@ -334,7 +385,13 @@ declare global {
     }
 
     interface TokenPF {
+        actor: ActorCharacterPF;
+        document: TokenDocumentPF;
+        h: number;
         isVisible: boolean;
+        w: number;
+        x: number;
+        y: number;
     }
 
     class ItemPF<
@@ -349,7 +406,9 @@ declare global {
         get hasAction(): boolean;
         actions: EmbeddedCollection<ItemAction>;
 
+        activeState: boolean;
         actor?: ActorPF;
+        canUse: boolean;
         defaultAction: ItemAction;
         flags: {
             core?: { sourceId: string };
@@ -433,7 +492,7 @@ declare global {
         rank: number;
         rt: boolean;
         subSkills?: Record<string, SkillData & { journal: string }>;
-        properties: Record<keyof WeaponProperties, boolean>;
+        // properties: Record<keyof WeaponProperties, boolean>;
     }
 
     declare type SpellbookKey =
@@ -789,12 +848,11 @@ declare global {
         slot: 'armor' | 'shield';
     }
     class SystemItemDataSpellPF extends SystemItemData {
-        /** @deprecated not until v10 */
         descriptors: {
-            value: string[];
+            value: Array<keyof SpellDescriptors>;
             custom: string[];
         };
-        school: string;
+        school: keyof typeof pf1.config.spellSchools;
 
         /** @deprecated use until v10 (then use @see {descriptors} ) */
         types: string;
@@ -818,6 +876,7 @@ declare global {
         | 'container'
         | 'equipment'
         | 'feat'
+        | 'implant'
         | 'loot'
         | 'race'
         | 'spell'
@@ -1555,6 +1614,18 @@ declare global {
         render(show: boolean);
     }
 
+    class Condition {
+        flags: {};
+        journal: string;
+        name: string;
+        namespace: string;
+        showInAction: boolean;
+        showInDefense: boolean;
+        texture: string;
+        track: string;
+        id: string;
+    }
+
     interface pf1 {
         dice: {
             DamageRoll: typeof DamageRoll;
@@ -1628,12 +1699,22 @@ declare global {
             abilities: Abilities;
             bonusTypes: { [key in BonusTypes]: string };
             damageResistances: {
-                magic: 'Magic';
-                epic: 'Epic';
                 lawful: 'Lawful';
                 chaotic: 'Chaotic';
                 good: 'Good';
                 evil: 'Evil';
+            };
+            measureUnits: {
+                ft: 'Feet';
+                mi: 'Miles';
+                m: 'Meters';
+                km: 'Kilometers';
+            };
+            measureUnitsShort: {
+                ft: 'ft';
+                mi: 'mi';
+                m: 'm';
+                km: 'km';
             };
             savingThrows: SavingThrows;
             skillCompendiumEntries: { [key: string]: string };
@@ -1676,7 +1757,19 @@ declare global {
                 swm: 'Swim';
                 umd: 'Use Magic Device';
             };
-            spellSchools: { [key: string]: string };
+            spellDescriptors: SpellDescriptors;
+            spellSchools: {
+                abj: 'Abjuration';
+                con: 'Conjuration';
+                div: 'Divination';
+                enc: 'Enchantment';
+                evo: 'Evocation';
+                ill: 'Illusion';
+                misc: 'Miscellaneous';
+                nec: 'Necromancy';
+                trs: 'Transmutation';
+                uni: 'Universal';
+            };
             weaponGroups: WeaponGroups;
         };
         documents: {
@@ -1696,8 +1789,13 @@ declare global {
                 ItemSpellPF: { new (): ItemSpellPF };
                 ItemWeaponPF: { new (): ItemWeaponPF };
             };
+            TokenDocumentPF: { new (): TokenDocumentPF };
         };
         registry: {
+            conditions: {
+                get(condition: string): Condition;
+                contents: Array<Condition>;
+            };
             damageTypes: EmbeddedCollection<DamageType> & {
                 getLabels(): {
                     untyped: 'Untyped';
@@ -1721,6 +1819,7 @@ declare global {
             type: SpellcastingType;
         };
         utils: {
+            getDistanceSystem(): 'metric' | 'imperial';
             createTag(name: string): string;
         };
     }

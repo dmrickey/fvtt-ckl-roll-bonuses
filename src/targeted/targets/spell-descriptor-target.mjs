@@ -1,20 +1,22 @@
 import { MODULE_NAME } from '../../consts.mjs';
 import { showChecklist } from '../../handlebars-handlers/targeted/targets/checklist-input.mjs';
+import { intersects } from '../../util/array-intersects.mjs';
 import { truthiness } from '../../util/truthiness.mjs';
+import { uniqueArray } from '../../util/unique-array.mjs';
 import { BaseTarget } from './base-target.mjs';
 
-export class SpellSchoolTarget extends BaseTarget {
+export class SpellDescriptorTarget extends BaseTarget {
     /**
      * @override
      * @inheritdoc
      */
-    static get sourceKey() { return 'spell-school'; }
+    static get sourceKey() { return 'spell-descriptor'; }
 
     /**
      * @override
      * @returns {string}
      */
-    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.iurMG1TBoX3auh5z#spell-school'; }
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.iurMG1TBoX3auh5z#spell-descriptor'; }
 
     /**
      * @override
@@ -23,11 +25,11 @@ export class SpellSchoolTarget extends BaseTarget {
      * @returns {Nullable<string[]>}
     */
     static getHints(source) {
-        const groups = source.getFlag(MODULE_NAME, this.key) || [];
-        const schools = groups
+        const values = source.getFlag(MODULE_NAME, this.key) || [];
+        const descriptors = values
             .filter(truthiness)
-            .map((/** @type {keyof typeof pf1.config.spellSchools} */ school) => pf1.config.spellSchools[school] || school);
-        return schools;
+            .map((/** @type {keyof typeof pf1.config.spellDescriptors} */ descriptor) => pf1.config.spellDescriptors[descriptor] || descriptor);
+        return descriptors;
     }
 
     /**
@@ -49,21 +51,24 @@ export class SpellSchoolTarget extends BaseTarget {
             return [];
         }
 
-        const spellSchool = item.system.school;
-        if (!spellSchool) {
+        const descriptors = [
+            ...(item.system.descriptors?.value ?? []),
+            ...(item.system.descriptors?.custom ?? []),
+        ];
+        if (!descriptors.length) {
             return [];
         }
 
         const allSources = item.actor.itemFlags?.boolean[this.key]?.sources ?? [];
         const filteredSources = allSources.filter((source) => {
             /** @type {string[]} */
-            const targetedSchools = (source.getFlag(MODULE_NAME, this.key) || [])
-                .filter(truthiness);;
-            if (!targetedSchools.length) {
+            const targetedDescriptors = (source.getFlag(MODULE_NAME, this.key) || [])
+                .filter(truthiness);
+            if (!targetedDescriptors.length) {
                 return false;
             }
 
-            return targetedSchools.includes(spellSchool);
+            return intersects(targetedDescriptors, descriptors);;
         });
 
         return filteredSources;
@@ -79,7 +84,15 @@ export class SpellSchoolTarget extends BaseTarget {
      * @param {ItemPF} options.item
      */
     static showInputOnItemSheet({ html, isEditable, item }) {
-        const options = pf1.config.spellSchools;
+        /** @type {string[]} */
+        let custom = [];
+        if (item.actor) {
+            custom = uniqueArray(item.actor.itemTypes.spell.flatMap(x => x.system.descriptors.custom));
+        }
+        const options = {
+            ...pf1.config.spellDescriptors,
+            ...(custom.reduce((acc, x) => ({ ...acc, [x]: x }), {})),
+        };
 
         showChecklist({
             item,

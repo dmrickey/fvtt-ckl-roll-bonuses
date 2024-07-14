@@ -187,14 +187,15 @@ Hooks.on('renderItemSheet', (
     let elements = Object.fromEntries(damageElements.map(k => [k, pf1.registry.damageTypes.get(k)]));
 
     const name = item?.name?.toLowerCase() ?? '';
+    const isElementalFocusFeat = name.includes(Settings.elementalFocus) && item.type === 'feat';
     const sourceId = item?.flags.core?.sourceId ?? '';
-    if (name.includes(Settings.elementalFocus) || sourceId.includes(elementalFocusId)) {
+    if (isElementalFocusFeat || sourceId.includes(elementalFocusId)) {
         key = elementalFocusKey;
     }
 
-    const isGreater = (name.includes(Settings.elementalFocus) && name.includes(LanguageSettings.greater))
+    const isGreater = (isElementalFocusFeat && name.includes(LanguageSettings.greater))
         || sourceId.includes(greaterElementalFocusId);
-    const isMythic = (name.includes(Settings.elementalFocus) && name.includes(LanguageSettings.mythic))
+    const isMythic = (isElementalFocusFeat && name.includes(LanguageSettings.mythic))
         || sourceId.includes(mythicElementalFocusId);
 
     if (isGreater || isMythic) {

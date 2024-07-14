@@ -197,7 +197,7 @@ function addFootnotes(chatAttack, notes) {
     const { action } = chatAttack;
     handleBonusesFor(
         action,
-        (bonusType, sourceItem) => notes.push(...bonusType.getFootnotes(sourceItem, action))
+        (bonusType, sourceItem) => notes.push(...(bonusType.getFootnotes(sourceItem, action) ?? []))
     );
 }
 Hooks.on(customGlobalHooks.actionUseFootnotes, addFootnotes);

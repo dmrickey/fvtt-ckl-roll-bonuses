@@ -116,16 +116,50 @@ const countBFlags = (items, ...flags) => {
 }
 
 /**
- * Whether or not the actor has any of the given boolean flags
+ * Whether or not the document has any of the given boolean flags
  *
- * @param {Nullable<ActorPF>} actor
+ * @param {Nullable<ActorBasePF | ItemPF>} doc
  * @param  {...string} flags
  * @returns {boolean} True if the actor has any of the boolean flags.
  */
 const hasAnyBFlag = (
-    actor,
+    doc,
     ...flags
-) => !!actor && flags.some((flag) => !!actor?.itemFlags?.boolean?.[flag]);
+) => {
+    if (!doc) return false;
+
+    if (doc instanceof pf1.documents.actor.ActorBasePF) {
+        return flags.some((flag) => !!doc?.itemFlags?.boolean?.[flag]);
+    }
+    if (doc instanceof pf1.documents.item.ItemPF) {
+        return flags.some((flag) => doc.hasItemBooleanFlag(flag));
+    }
+
+    return false;
+}
+
+/**
+ * Whether or not the document has all of the given boolean flags
+ *
+ * @param {Nullable<ActorBasePF | ItemPF>} doc
+ * @param  {...string} flags
+ * @returns {boolean} True if the actor has any of the boolean flags.
+ */
+const hasAllBFlag = (
+    doc,
+    ...flags
+) => {
+    if (!doc) return false;
+
+    if (doc instanceof pf1.documents.actor.ActorBasePF) {
+        return flags.every((flag) => !!doc?.itemFlags?.boolean?.[flag]);
+    }
+    if (doc instanceof pf1.documents.item.ItemPF) {
+        return flags.every((flag) => doc.hasItemBooleanFlag(flag));
+    }
+
+    return false;
+}
 
 /**
  * @param {ItemPF} item

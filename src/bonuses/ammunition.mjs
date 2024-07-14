@@ -39,7 +39,7 @@ function getConditionalParts(actionUse, result, atk, index) {
         const itemMw = item.system.masterwork;
         const itemEnh = actionUse.action.enhancementBonus;
 
-        const { base: actionBaseEnh, stacks: actionStacksEnh, total: actionTotal } = getEnhancementBonusForAction(actionUse.action);
+        const { base: actionBaseEnh, stacks: actionStacksEnh, total: actionTotal } = getEnhancementBonusForAction({action: actionUse.action});
 
         const ammoMw = !!ammo.getFlag(MODULE_NAME, ammoMasterworkKey);
         const ammoEnhBonus = FormulaCacheHelper.getModuleFlagValue(ammo, ammoEnhancementKey);
@@ -55,12 +55,12 @@ function getConditionalParts(actionUse, result, atk, index) {
             result['attack.normal'].push(`1[${localize('PF1.AmmunitionAbbr')} - ${localize('PF1.Masterwork')}]`)
         }
         else {
-            const { total: ammoTotal } = getEnhancementBonusForAction(actionUse.action, ammo);
-            const diff = ammoTotal - actionTotal;
+            const { total: totalWithAmmo } = getEnhancementBonusForAction({action: actionUse.action, ammo});
+            const diff = totalWithAmmo - actionTotal;
             if (diff > 0) {
                 const label = `${localize('PF1.AmmunitionAbbr')} ${localize('PF1.EnhancementBonus')}`;
-                result['attack.normal'].push(`${diff}[${label} (${ammoTotal})]`);
-                result['damage.normal'].push([`${diff}[${label} (${ammoTotal})]`, { values: [], custom: `${label}` }, false]);
+                result['attack.normal'].push(`${diff}[${label} (${totalWithAmmo})]`);
+                result['damage.normal'].push([`${diff}[${label} (${totalWithAmmo})]`, { values: [], custom: `${label}` }, false]);
             }
         }
 
@@ -97,9 +97,9 @@ Hooks.on(customGlobalHooks.getConditionalParts, getConditionalParts);
 async function addEffectNotes(chatAttack) {
     if (chatAttack.ammo) {
         const ammo = chatAttack.actor.items.get(chatAttack.ammo.id)
-        const note = ammo.getFlag(MODULE_NAME, ammoEffectKey);
+        const note = ammo[MODULE_NAME][ammoEffectKey];
         if (note) {
-            const enriched = await TextEditor.enrichHTML(`<div>${note}</div>`, { rollData: ammo.getRollData() })
+            const enriched = await TextEditor.enrichHTML(`<div>${note}</div>`);
             chatAttack.effectNotes.push(enriched);
         }
     }
@@ -167,6 +167,7 @@ Hooks.on('renderItemSheet', (
         parent: html,
     }, {
         canEdit: isEditable,
+        isFormula: false,
         isModuleFlag: true,
     });
 });
@@ -178,6 +179,20 @@ LocalHookHandler.registerHandler(localHooks.prepareData, (item, rollData) => {
         const roll = RollPF.safeRollSync(damage.formula, rollData);
         item[MODULE_NAME][ammoDamageKey].push(roll.simplifiedFormula);
     });
+
+    let note = item.getFlag(MODULE_NAME, ammoEffectKey);
+    if (note) {
+        const r = /\[\[([^\[].+?)\]\]/g;
+        const matches = [...note.matchAll(r)];
+
+        // const simplified = [];
+        matches.forEach(([_, match]) => {
+            const roll = RollPF.safeRollSync(match, rollData);
+            note = note.replace(match, roll.simplifiedFormula);
+        });
+
+        item[MODULE_NAME][ammoEffectKey] = note;
+    }
 });
 
 /**

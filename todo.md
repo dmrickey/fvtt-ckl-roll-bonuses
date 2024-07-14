@@ -15,24 +15,27 @@
   - [Spirited Charge](#spirited-charge)
 - [Racial Features](#racial-features)
   - [Sylph](#sylph)
-  - [Kobold](#kobold)
 - [Misc](#misc)
   - [I am targeted](#i-am-targeted)
   - [Magic](#magic)
   - [Misc](#misc-1)
   - [UX](#ux)
   - [Bonuses](#bonuses-1)
+  - [Bonus Improvements](#bonus-improvements)
   - [Targeting](#targeting)
 - [Housekeeping](#housekeeping)
 - [Checklist for new (and existing features)](#checklist-for-new-and-existing-features)
 - [Deprecate](#deprecate)
-- [Add Auto Config](#add-auto-config)
 - [Add Quench Testings](#add-quench-testings)
 - [Add create hooks for initializing some items (like anything based off of name/id)](#add-create-hooks-for-initializing-some-items-like-anything-based-off-of-nameid)
 - [Add inpsiration checkbox to roll dialogs](#add-inpsiration-checkbox-to-roll-dialogs)
-- [Improve Enhancement Bonuses](#improve-enhancement-bonuses)
+- [Won't do](#wont-do)
+- [Refactor](#refactor)
+- [Skills](#skills)
 - [in pf1 V10](#in-pf1-v10)
 - [Not Possible](#not-possible)
+- [Range/Positional ideas](#rangepositional-ideas)
+- [Other Ideas](#other-ideas)
 - [vnext](#vnext)
 
 # TODO
@@ -65,6 +68,8 @@
 - While in Combat
   - [Scarred by War](https://www.aonprd.com/TraitDisplay.aspx?ItemName=Scarred%20by%20War) (used to grant diplomacy bonus while not in combat)
 - add a way to affect other tokens (i.e. cavalier challenge which gives them -2 attack vs other targets)
+- Condition Target (both self and/or target)
+- When the die is (some value range)
 
 # Class Features
 ## Cleric
@@ -99,9 +104,6 @@
 - sorcerers with the elemental (air) bloodline treat their Charisma scores as 2 points higher for the purposes of all sorcerer spells and class abilities
   - Specifically just "treat <ability score> higher/lower for <spell book>"
   - maybe also "treat <ability score> higher/lower for <class ability>" -- would need to be based off of class key and ability that has a parent as that class
-## Kobold
-### Frightener
-  - +1 DC for `fear` spells
 
 # Misc
 ## I am targeted
@@ -125,6 +127,12 @@
 ## Bonuses
 - "x per dice"
 - Extra Attacks
+
+## Bonus Improvements
+- Enhancement Bonus
+  - add checkbox for "applies for DR" (some spell buffs don't appy for DR (e.g. Greater Magic Weapon))
+- Change Offset
+  - add a "set" option (in addition to +/-)
 
 ## Targeting
 - show warning if target has an inappropriate bonus
@@ -151,57 +159,19 @@
 - all specific DC/CL bonuses (after v10 once descriptor-based targeting is available)
 - specific crit bonuses
 
-# Add Auto Config
-- Improved Critical
-
 # Add Quench Testings
 # Add create hooks for initializing some items (like anything based off of name/id)
 
 # Add inpsiration checkbox to roll dialogs
 - https://gitlab.com/foundryvtt_pathfinder1e/foundryvtt-pathfinder1/-/merge_requests/2758
-- > "So actionUse.formData for actions and overriding _getFormData() for d20rolls"
+  - > "So actionUse.formData for actions and overriding _getFormData() for d20rolls"
 
-# Improve Enhancement Bonuses
-- Add `getEnhancement` bonus to utils and api
-  - this will allow for other mods to call into this mod to see what the total enhancement bonus for a given weapon is
-- add checkbox for "applies for DR" (some spell buffs don't appy for DR (e.g. Greater Magic Weapon))
+# Won't do
+- Add specific inputs for Improved Crit.
+  - handling crit bonuses is already complicated enough without adding in a third option
 
-# in pf1 V10
-- Targeting
-  - descriptor-based targeting
-  - sub-school target
-- Update FAQ for custom target with current example (current example uses v9 custom)
-- Use pf1's simplify util function instead of maintaining my own
-
-# Not Possible
-- Attempt to create a "resource offset"
-  - includes showing anything modifying a given resource in the resource's sheet near the formula so it can see why the total is not what that sheet says it should be
-  - Sad day. Not possible for basically the same reason custom changes aren't possible
-- Custom changes that effect only specific targets :(
-  - changes are generated and applied too early and too broadly in the system prep. I can either create a change that applies to everything (pointless) or I can create a specific change that exists for the specified target, but it's created too late to both be reduced to the best bonus type and actually be added to the roll
-
-# vnext
-- Add EitR toggle that will autoconfigure weapon focus for weapon groups instead of weapon focus
-- Add FAQ for why some feats are automatically configured the way they are
-- distance-based targeting
-- Add FAQ about how to circumvent auto configuration
-- update mw and enhancement to modify the attack roll
-  - ```js
-    function pf1PreActionUse(actionUse) {
-        actionUse.shared.attacks[0].chatAttack.ammo: {id: string}
-        actionUse.shared.attacks[0].chatAttack.attack
-    }
-    Hooks.on('pf1PreActionUse', pf1PreActionUse);
-    ```
-
-- Look into adding an inline warning if targets/bonuses detected in an item sheet when the other is configured
-- Add a super obvious configuration button in the item sheet when there are no bonuses configured
-- Audit current wrappers and see which can be replaced with hooks
-  - actionUseProcess should be able to be replaced with `pf1CreateActionUse` (currently used for fortune/misfortune)
-    - try to use this for enh to see if the item's values can be modified now
-- Add all bonuses/target references directly to the actor with references back to their item so hopefully it will go faster?
-  - not sure if this is useful or not, it's already fetching items based on their boolean flags
-- refactor `BaseTarget`'s `getSourcesFor` because every single one of them follows this pattern
+# Refactor
+- `BaseTarget`'s `getSourcesFor` because every single one of them follows this pattern
   - ```js
     const item = doc instanceof pf1.documents.item.ItemPF
         ? doc
@@ -211,3 +181,52 @@
         return [];
     }
     ```
+
+# Skills
+- Condtional Bonus when taking 10
+  - Needs to be able to target individual skills
+    - (or groups of skills)
+    - example usage: https://aonprd.com/TraitDisplay.aspx?ItemName=Analytical
+
+# in pf1 V10
+- Targeting
+  - descriptor-based targeting
+- Update FAQ for custom target with current example (current example uses v9 custom)
+- ~~Use pf1's simplify util function instead of maintaining my own~~ PF1's automatically strips flavor text
+
+# Not Possible
+- Attempt to create a "resource offset"
+  - includes showing anything modifying a given resource in the resource's sheet near the formula so it can see why the total is not what that sheet says it should be
+  - Sad day. Not possible for basically the same reason custom changes aren't possible
+- Custom changes that effect only specific targets :(
+  - changes are generated and applied too early and too broadly in the system prep. I can either create a change that applies to everything (pointless) or I can create a specific change that exists for the specified target, but it's created too late to both be reduced to the best bonus type and actually be added to the roll
+
+# Range/Positional ideas
+- Flank
+  - Also includes a "cannot be flanked" flag that would go on an Item to signify when an actor can't be flanked
+  - has to do with melee
+  - Needs a "Target" so that I can give out extra bonuses when flanking
+    - Dirty Fighter Trait
+    - Outflank (would need extra info about flank target) 
+- Within Range (done)
+  - e.g. Point Blank
+- Range Penalties
+  - max increment
+    - defined on the action
+    - option to ignore
+    - option to modify/set
+  - range penalty per increment
+    - option to modify/set
+  - These settings need to additive just like crit bonuses
+- IsAdjacent
+- IsSharingSquare
+- TargetEngagedInMelee
+  - (for shooting into combat penalties)
+
+# Other Ideas
+- Add Concealment
+  - This would allow me to automatically add effect notes for each roll to automatically roll for concealment
+  - And would allow automating rerolls for abilities like Weapon of the Chosen
+
+# vnext
+- Add settings in readme

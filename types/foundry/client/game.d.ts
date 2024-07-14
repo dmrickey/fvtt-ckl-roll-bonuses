@@ -50,5 +50,13 @@ interface Game {
 }
 
 interface Scene {
+    grid: {
+        alpha: number;
+        color: string;
+        distance: number;
+        size: number;
+        type: number;
+        unites: string;
+    };
     tokens: EmbeddedCollection<TokenDocumentPF>;
 }

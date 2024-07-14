@@ -1,6 +1,6 @@
 import { showEnabledLabel } from '../../../handlebars-handlers/enabled-label.mjs';
 import { isActorInCombat } from '../../../util/is-actor-in-combat.mjs';
-import { ItemTarget } from "../item-target.mjs";
+import { ItemTarget } from "../specific-item-target/item-target.mjs";
 
 export class WhenInCombatTarget extends ItemTarget {
 

@@ -1,7 +1,7 @@
 import { showEnabledLabel } from '../handlebars-handlers/enabled-label.mjs';
 import { hasAnyBFlag } from '../util/flag-helpers.mjs';
 import { getSkillFormula } from '../util/get-skill-formula.mjs';
-import { LocalHookHandler, customGlobalHooks, localHooks } from '../util/hooks.mjs';
+import { LocalHookHandler, localHooks } from '../util/hooks.mjs';
 import { localizeBonusLabel } from '../util/localize.mjs';
 import { LanguageSettings } from '../util/settings.mjs';
 import { SpecificBonuses } from './all-specific-bonuses.mjs';

@@ -1,5 +1,5 @@
-import { showEnabledLabel } from '../../handlebars-handlers/enabled-label.mjs';
-import { BaseTarget } from './base-target.mjs';
+import { showEnabledLabel } from '../../../handlebars-handlers/enabled-label.mjs';
+import { BaseTarget } from '../base-target.mjs';
 
 /**
  * @abstract

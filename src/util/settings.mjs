@@ -37,6 +37,25 @@ export const registerSetting = ({
         : Hooks.once('ready', doIt);
 };
 
+export class GlobalSettings {
+
+    static #elephantInTheRoom = 'elephant-in-the-room';
+
+    /** @returns {boolean} */
+    static get elephantInTheRoom() { return !!game.settings.get(MODULE_NAME, this.#elephantInTheRoom); }
+
+    static {
+        // register this setting once PF1 is ready so that all translation keys have already been registered before this is run
+        Hooks.once('pf1PostReady', () => {
+            registerSetting({
+                key: this.#elephantInTheRoom,
+                defaultValue: false,
+                settingType: Boolean,
+            });
+        });
+    }
+}
+
 export class LanguageSettings {
 
     static get itemNameTranslationsKey() { return 'item-name-translations'; }

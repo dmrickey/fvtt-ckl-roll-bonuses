@@ -80,6 +80,6 @@ export const getSkillFormula = (actor, rollData, skillId) => {
     //     const token = options.token ?? actor.token;
 
     const formula = ['1d20', ...parts].join("+");
-    const roll = new CONFIG.Dice.rolls.D20RollPF(formula, rollData, { async: false });
+    const roll = new pf1.dice.D20RollPF(formula, rollData, { async: false });
     return roll.formula;
 }
