@@ -187,11 +187,9 @@
   - Needs to be able to target individual skills
     - (or groups of skills)
     - example usage: https://aonprd.com/TraitDisplay.aspx?ItemName=Analytical
+    - Have to wrap `pf1.dice.D20RollPF.prototype._onDialogSubmit` and look at `static roll` and `this.options.staticRoll === 10` and then modify the formula (and possibly also update `this._formula`)
 
 # in pf1 V10
-- Targeting
-  - descriptor-based targeting
-- Update FAQ for custom target with current example (current example uses v9 custom)
 - ~~Use pf1's simplify util function instead of maintaining my own~~ PF1's automatically strips flavor text
 
 # Not Possible
@@ -216,6 +214,7 @@
     - option to ignore
     - option to modify/set
   - range penalty per increment
+    - Add penalty to directly to rollData so I can modify it
     - option to modify/set
   - These settings need to additive just like crit bonuses
 - IsAdjacent
