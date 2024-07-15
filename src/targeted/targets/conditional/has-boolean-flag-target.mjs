@@ -35,27 +35,14 @@ export class HasBooleanFlagTarget extends BaseTarget {
     /**
      * @override
      * @inheritdoc
-     * @param {ItemPF | ActionUse | ItemAction} doc
+     * @param {ItemPF & { actor: ActorPF }} item
+     * @param {ItemPF[]} sources
      * @returns {ItemPF[]}
      */
-    static getSourcesFor(doc) {
-        const item = doc instanceof pf1.documents.item.ItemPF
-            ? doc
-            : doc.item;
-
-        if (!item?.actor) {
-            return [];
-        }
-
-        const allSources = item.actor.itemFlags?.boolean[this.key]?.sources ?? [];
-        const filteredSources = allSources.filter((source) => {
-            /** @type {string} */
+    static _getSourcesFor(item, sources) {
+        const filteredSources = sources.filter((source) => {
             const value = source.getFlag(MODULE_NAME, this.key);
-            if (!value) {
-                return false;
-            }
-
-            return hasAnyBFlag(item.actor, value);
+            return !!value && hasAnyBFlag(item.actor, value);
         });
 
         return filteredSources;

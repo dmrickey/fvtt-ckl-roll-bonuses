@@ -29,23 +29,16 @@ export class WhenInCombatTarget extends ItemTarget {
 
     /**
      * @override
-     * @param {ItemPF | ActionUse | ItemAction} doc
+     * @param {ItemPF & { actor: ActorPF }} item
+     * @param {ItemPF[]} sources
      * @returns {ItemPF[]}
      */
-    static getSourcesFor(doc) {
-        const item = doc instanceof pf1.documents.item.ItemPF
-            ? doc
-            : doc.item;
-        if (!item.actor) {
-            return [];
-        }
-
+    static _getSourcesFor(item, sources) {
         if (!isActorInCombat(item.actor)) {
             return [];
         }
 
-        const flaggedItems = item.actor.itemFlags?.boolean[this.key]?.sources ?? [];
-        return flaggedItems;
+        return sources;
     }
 
     /**

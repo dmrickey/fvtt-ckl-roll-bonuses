@@ -228,4 +228,3 @@
   - And would allow automating rerolls for abilities like Weapon of the Chosen
 
 # vnext
-- Add settings in readme

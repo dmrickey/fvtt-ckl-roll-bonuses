@@ -63,15 +63,13 @@ export class WhenTargetInRange extends BaseTarget {
 
     /**
      * @override
-     * @param {ItemPF | ActionUse | ItemAction} doc
+     * @param {ItemPF & { actor: ActorPF }} item
+     * @param {ItemPF[]} sources
      * @returns {ItemPF[]}
      */
-    static getSourcesFor(doc) {
-        const item = doc instanceof pf1.documents.item.ItemPF
-            ? doc
-            : doc.item;
+    static _getSourcesFor(item, sources) {
         const token = item.actor?.getActiveTokens()[0];
-        if (!item.actor || !token) {
+        if (!token) {
             return [];
         }
 
@@ -81,10 +79,9 @@ export class WhenTargetInRange extends BaseTarget {
             return [];
         }
 
-        const flaggedItems = item.actor.itemFlags?.boolean[this.key]?.sources ?? [];
-        const filtered = flaggedItems.filter((item) => {
-            const min = this.#min(item);
-            const max = this.#max(item);
+        const filtered = sources.filter((source) => {
+            const min = this.#min(source);
+            const max = this.#max(source);
             return targets.every((target) => new Distance(token, target).isWithinRange(min, max));
         });
         return filtered;

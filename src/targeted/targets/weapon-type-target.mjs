@@ -32,18 +32,11 @@ export class WeaponTypeTarget extends BaseTarget {
     /**
      * @override
      * @inheritdoc
-     * @param {ItemPF | ActionUse | ItemAction} doc
+     * @param {ItemPF & {actor: ActorPF}} item
+     * @param {ItemPF[]} sources
      * @returns {ItemPF[]}
      */
-    static getSourcesFor(doc) {
-        const item = doc instanceof pf1.documents.item.ItemPF
-            ? doc
-            : doc.item;
-
-        if (!item?.actor) {
-            return [];
-        }
-
+    static _getSourcesFor(item, sources) {
         if (!(item instanceof pf1.documents.item.ItemAttackPF
             || item instanceof pf1.documents.item.ItemWeaponPF)
         ) {
@@ -54,10 +47,9 @@ export class WeaponTypeTarget extends BaseTarget {
             return [];
         }
 
-        const flaggedItems = item.actor.itemFlags?.boolean[this.key]?.sources ?? [];
-        const bonusSources = flaggedItems.filter((flagged) => {
+        const bonusSources = sources.filter((sources) => {
             /** @type {string[]} */
-            const types = flagged.getFlag(MODULE_NAME, this.key);
+            const types = sources.getFlag(MODULE_NAME, this.key);
             if (!types) {
                 return false;
             }

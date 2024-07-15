@@ -35,18 +35,11 @@ export class WeaponGroupTarget extends BaseTarget {
     /**
      * @inheritdoc
      * @override
-     * @param {ItemPF | ActionUse | ItemAction} doc
+     * @param {ItemPF & {actor: ActorPF}} item
+     * @param {ItemPF[]} sources
      * @returns {ItemPF[]}
      */
-    static getSourcesFor(doc) {
-        const item = doc instanceof pf1.documents.item.ItemPF
-            ? doc
-            : doc.item;
-
-        if (!item?.actor) {
-            return [];
-        }
-
+    static _getSourcesFor(item, sources) {
         if (!(item instanceof pf1.documents.item.ItemAttackPF
             || item instanceof pf1.documents.item.ItemWeaponPF)
         ) {
@@ -60,9 +53,8 @@ export class WeaponGroupTarget extends BaseTarget {
             .map(x => x.trim())
             .filter(truthiness);
 
-        const flaggedItems = item.actor.itemFlags?.boolean[this.key]?.sources ?? [];
-        const bonusSources = flaggedItems.filter((flagged) => {
-            const targetedGroups = flagged.getFlag(MODULE_NAME, this.key) || [];
+        const bonusSources = sources.filter((source) => {
+            const targetedGroups = source.getFlag(MODULE_NAME, this.key) || [];
             return intersects(groupsOnItem, targetedGroups);
         });
 

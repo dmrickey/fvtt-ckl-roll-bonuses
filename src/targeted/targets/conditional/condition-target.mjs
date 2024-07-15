@@ -73,17 +73,12 @@ export class ConditionTarget extends BaseTarget {
     /**
      * @inheritdoc
      * @override
-     * @param {ItemPF | ActionUse | ItemAction} doc
+     * @param {ItemPF & { actor: ActorPF }} item
+     * @param {ItemPF[]} sources
      * @returns {ItemPF[]}
      */
-    static getSourcesFor(doc) {
-        const item = doc instanceof pf1.documents.item.ItemPF
-            ? doc
-            : doc.item;
+    static _getSourcesFor(item, sources) {
         const { actor } = item;
-        if (!actor) {
-            return [];
-        }
 
         const currentTargets = currentTargetedActors();
 

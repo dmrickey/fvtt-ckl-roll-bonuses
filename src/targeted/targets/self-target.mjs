@@ -55,13 +55,11 @@ export class SelfTarget extends BaseTarget {
     /**
      * @inheritdoc
      * @override
-     * @param {ItemPF | ActionUse | ItemAction} doc
+     * @param {ItemPF & {actor: ActorPF}} item
+     * @param {ItemPF[]} _sources
      * @returns {ItemPF[]}
      */
-    static getSourcesFor(doc) {
-        const item = doc instanceof pf1.documents.item.ItemPF
-            ? doc
-            : doc.item;
+    static _getSourcesFor(item, _sources) {
         return item.hasItemBooleanFlag(this.key)
             ? [item]
             : [];

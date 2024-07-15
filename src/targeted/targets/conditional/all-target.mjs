@@ -66,18 +66,11 @@ export class AllTarget extends BaseTarget {
     /**
      * @inheritdoc
      * @override
-     * @param {ItemPF | ActionUse | ItemAction} doc
+     * @param {ItemPF & { actor: ActorPF }} _item
+     * @param {ItemPF[]} sources
      * @returns {ItemPF[]}
      */
-    static getSourcesFor(doc) {
-        const item = doc instanceof pf1.documents.item.ItemPF
-            ? doc
-            : doc.item;
-        if (!item.actor) {
-            return [];
-        }
-
-        const flaggedItems = item.actor.itemFlags?.boolean[this.key]?.sources ?? [];
-        return flaggedItems;
+    static _getSourcesFor(_item, sources) {
+        return sources;
     };
 }
