@@ -38,6 +38,9 @@ export const templates =/** @type {const} */ ({
 
     /** item name translation app for auto-recognition */
     itemNameTranslationConfigApp: `modules/${MODULE_NAME}/hbs/item-name-translation-config.hbs`,
+
+    /** combat settings for automatic bonsuses */
+    automaticCombatBonusesConfigApp: `modules/${MODULE_NAME}/hbs/gm-combat-settings-config.hbs`,
 });
 
 /**

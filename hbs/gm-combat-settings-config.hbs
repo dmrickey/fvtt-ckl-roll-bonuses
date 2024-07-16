@@ -1,0 +1,24 @@
+<form class="ckl-auto-combat-settings">
+    <p style="text-align:center">{{{localize "ckl-roll-bonuses.combat-settings.application.description"}}}</p>
+    <hr>
+
+    <ul class="section-list">
+        {{#each sections}}
+        <li class="section form-group">
+            <label>
+                <input name="{{key}}" type="checkbox" {{#if value}}checked{{/if}} />
+                <span>{{label}}</span>
+            </label>
+            <span>
+                {{description}}
+            </span>
+        </li>
+        <hr>
+        {{/each}}
+    </ul>
+    <div class="form-group">
+        <button type="submit">
+            <i class="fas fa-save"></i> {{localize 'PF1.Save'}}
+        </button>
+    </div>
+</form>

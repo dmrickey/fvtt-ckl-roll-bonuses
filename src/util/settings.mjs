@@ -162,3 +162,79 @@ class ItemNameTranslationConfig extends FormApplication {
         game.settings.set(MODULE_NAME, LanguageSettings.itemNameTranslationsKey, update);
     }
 }
+
+const automaticCombatBonusesKeys =  /** @type {const} */ (['range-increments']);
+/** @typedef {typeof automaticCombatBonusesKeys[keyof typeof automaticCombatBonusesKeys]} CombatBonusKey */
+class AutomaticCombatBonusesSettings {
+    static get automaticCombatBonusesKey() { return 'automatic-combat-bonuses'; }
+
+    /** @returns {Record<CombatBonusKey, boolean>} */
+    static get automaticCombatBonuses() {
+        const current = game.settings.get(MODULE_NAME, this.automaticCombatBonusesKey) || {};
+        // @ts-ignore
+        return current;
+    }
+
+    static {
+        // register this setting once PF1 is ready so that all translation keys have already been registered before this is run
+        Hooks.once('pf1PostReady', () => {
+            registerSetting({
+                key: this.automaticCombatBonusesKey,
+                config: false,
+                defaultValue: {},
+                settingType: Object,
+            })
+
+            game.settings.registerMenu(MODULE_NAME, this.automaticCombatBonusesKey, {
+                name: localize('combat-settings.application.title'),
+                label: localize('combat-settings.application.label'),
+                hint: localize('combat-settings.application.hint'),
+                icon: "ra ra-crossed-swords",
+                type: GMCombatOptionsApplication,
+                restricted: true,
+            });
+        });
+    }
+}
+
+class GMCombatOptionsApplication extends FormApplication {
+    /** @override */
+    static get defaultOptions() {
+        const options = super.defaultOptions;
+        options.id = "ckl-automatic-combat-bonuses";
+        options.template = templates.automaticCombatBonusesConfigApp;
+        options.height = "auto";
+        options.width = 750;
+        options.title = localize('combat-settings.application.title');
+        return options;
+    }
+
+    /** @override */
+    getData(options = {}) {
+        let context = super.getData()
+        const current = AutomaticCombatBonusesSettings.automaticCombatBonuses;
+
+        const sections = automaticCombatBonusesKeys.map((key) => ({
+            description: localize(`combat-settings.application.section.${key}.description`),
+            key,
+            label: localize(`combat-settings.application.section.${key}.label`),
+            value: !!current[key],
+        }));
+
+        context.key = AutomaticCombatBonusesSettings.automaticCombatBonusesKey;
+
+        context.sections = sections;
+        return context
+    }
+
+    /**
+     * @override
+     * @inheritdoc
+     * @param {Event} _event
+     * @param {object} formData
+     */
+    async _updateObject(_event, formData) {
+        const update = expandObject(formData);
+        game.settings.set(MODULE_NAME, AutomaticCombatBonusesSettings.automaticCombatBonusesKey, update);
+    }
+}
