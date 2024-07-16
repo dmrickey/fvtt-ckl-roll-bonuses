@@ -26,7 +26,6 @@ export const localHooks = /** @type {const} */ ({
     postPrepareActorDerivedData: `${MODULE_NAME}_postPrepareActorDerivedData`,
     prepareData: `${MODULE_NAME}_prepareData`,
     updateItemActionRollData: `${MODULE_NAME}_updateItemActionRollData`,
-    updateItemRollData: `${MODULE_NAME}_updateItemRollData`,
 });
 
 /**
@@ -91,13 +90,6 @@ export class LocalHookHandler {
      * @overload
      * @param {typeof localHooks.updateItemActionRollData} hook
      * @param {(action: ItemAction, rollData: RollData) => void} func
-     * @returns {void}
-     */
-
-    /**
-     * @overload
-     * @param {typeof localHooks.updateItemRollData} hook
-     * @param {(action: ItemPF, rollData: RollData) => void} func
      * @returns {void}
      */
 
@@ -271,14 +263,6 @@ export class LocalHookHandler {
      * @overload
      * @param {typeof localHooks.updateItemActionRollData} hook
      * @param {ItemAction} action
-     * @param {RollData} rollData
-     * @returns {void}
-     */
-
-    /**
-     * @overload
-     * @param {typeof localHooks.updateItemRollData} hook
-     * @param {ItemPF} action
      * @param {RollData} rollData
      * @returns {void}
      */

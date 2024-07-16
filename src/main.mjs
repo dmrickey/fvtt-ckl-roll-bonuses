@@ -121,7 +121,6 @@ function onCreateActionUse(actionUse) {
         // for modifying actionUse.shared.rollData before attacks are rolled
     }
 }
-Hooks.on('pf1CreateActionUse', onCreateActionUse);
 
 /**
  * Used for adding conditionals to individual parts of full attacks
@@ -269,8 +268,20 @@ function prepareActorDerivedData(wrapped) {
  * @param {ActorPF | ItemPF | ItemAction} thing
  * @param {RollData} rollData
  */
-function updateItemActionRollData(thing, rollData) {
+function onItemActionRollData(thing, rollData) {
+    // this fires for actor -> item -> action. If I handle more than one then it would double up bonuses. So I handle the root-most option
     if (thing instanceof pf1.components.ItemAction) {
+
+        // set up base custom rolldata
+        if (rollData.range === undefined) {
+            rollData.range = {
+                maxIncrements: rollData.action?.range?.maxIncrements ?? 10,
+                units: rollData.action?.range?.units ?? 'ft',
+                value: rollData.action?.range?.value ?? '0',
+                rangePenalty: 2,
+            };
+        }
+
         const action = thing;
         // safety for initialization during data prep where the bonuses havent' been set up yet
         if (!action.item[MODULE_NAME]?.bonuses || !action.item[MODULE_NAME]?.targets) return;
@@ -278,16 +289,7 @@ function updateItemActionRollData(thing, rollData) {
         rollData[MODULE_NAME] ||= {};
         LocalHookHandler.fireHookNoReturnSync(localHooks.updateItemActionRollData, action, rollData);
     }
-    else if (thing instanceof pf1.documents.item.ItemPF) {
-        const item = thing;
-        // safety for initialization during data prep where the bonuses havent' been set up yet
-        if (!item[MODULE_NAME]?.bonuses || !item[MODULE_NAME]?.targets) return;
-
-        rollData[MODULE_NAME] ||= {};
-        LocalHookHandler.fireHookNoReturnSync(localHooks.updateItemRollData, item, rollData);
-    }
 }
-Hooks.on('pf1GetRollData', updateItemActionRollData);
 
 /**
  * @typedef {{data: RollData?, extraParts: unknown[], bonus:unknown, primaryAttack: boolean}} RollAttackArgs
@@ -415,6 +417,8 @@ function itemAttackFromItem(wrapped, item) {
     return data;
 }
 
+Hooks.on('pf1CreateActionUse', onCreateActionUse);
+Hooks.on('pf1GetRollData', onItemActionRollData);
 Hooks.once('init', () => {
     // change.mjs also fires a local hook for re-calculating changes (e.g. Fate's Favored).
 

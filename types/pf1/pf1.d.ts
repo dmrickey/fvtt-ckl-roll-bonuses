@@ -1194,6 +1194,12 @@ declare global {
      * Roll Data used for resolving formulas
      */
     interface RollData<T extends SystemItemData = SystemItemData> {
+        range: {
+            maxIncrements: number;
+            units: string;
+            value: string;
+            rangePenalty: number;
+        };
         [MODULE_NAME]: {
             [key: string]: number | string | object | array;
         };
@@ -1218,6 +1224,7 @@ declare global {
             melee: number;
             reach: number;
         };
+        rangePenalty: number;
         resources: Record<string, ResourceRollData>;
 
         shield: {
@@ -1260,6 +1267,13 @@ declare global {
             };
             damage: {
                 parts: { formula: string; type: TraitSelectorValuePlural }[];
+            };
+            range: {
+                maxIncrements: number;
+                minUnites: string;
+                minValue: string | null;
+                units: string;
+                value: string;
             };
         };
 
