@@ -14,6 +14,7 @@ import { emptyObject } from './util/empty-object.mjs';
 import { registerSetting } from './util/settings.mjs';
 import { addNodeToRollBonus } from './handlebars-handlers/add-bonus-to-item-sheet.mjs';
 import { localize } from './util/localize.mjs';
+import './combat-bonuses/all-combat-bonuses.mjs';
 
 Hooks.once('pf1PostReady', () => migrate());
 
@@ -273,8 +274,8 @@ function onItemActionRollData(thing, rollData) {
     if (thing instanceof pf1.components.ItemAction) {
 
         // set up base custom rolldata
-        if (rollData.range === undefined) {
-            rollData.range = {
+        if (rollData.rangePenalty === undefined) {
+            rollData.rangePenalty = {
                 maxIncrements: rollData.action?.range?.maxIncrements ?? 10,
                 units: rollData.action?.range?.units ?? 'ft',
                 value: rollData.action?.range?.value ?? '0',

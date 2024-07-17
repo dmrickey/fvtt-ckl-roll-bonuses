@@ -195,6 +195,7 @@ declare global {
         damageBonus: string[];
         dice: string;
         powerAttack: boolean;
+        reject: boolean;
         rollData: RollData<T>;
 
         templateData: {
@@ -211,6 +212,7 @@ declare global {
         item: T;
         shared: ActionUseShared;
         formData: ActionuseFormData;
+        token: TokenDocumentPF;
     }
 
     class ChatAttack {
@@ -1195,6 +1197,10 @@ declare global {
      */
     interface RollData<T extends SystemItemData = SystemItemData> {
         range: {
+            melee: string;
+            reach: number;
+        };
+        rangePenalty: {
             maxIncrements: number;
             units: string;
             value: string;

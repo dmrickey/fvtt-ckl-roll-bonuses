@@ -18,6 +18,11 @@ export class Distance {
             : second;
     }
 
+    /** @returns {number} */
+    distance() {
+        return Distance.#distance(this.token1, this.token2);
+    }
+
     /** @returns {boolean} */
     isAdjacent() {
         return Distance.#isAdjacent(this.token1, this.token2)
@@ -46,6 +51,7 @@ export class Distance {
         return Distance.#isWithin10FootDiagonal(this.token1, this.token2);
     }
 
+    // TODO need a "reach" checkbox because only reach weapons have a special exception
     /**
      * @param {number} minFeet
      * @param {number} maxFeet
@@ -158,6 +164,7 @@ export class Distance {
         return false;
     }
 
+    // TODO need a "reach" checkbox because only reach weapons have a special exception
     /**
      * @param {TokenPF} token1
      * @param {TokenPF} token2
@@ -207,6 +214,51 @@ export class Distance {
         // @ts-ignore
         const distance = canvas.grid.grid.measureDistances([{ ray }], { gridSpaces: true })[0];
         return minFeet <= distance && distance <= maxFeet;
+    }
+
+    /**
+     * @param {TokenPF} token1
+     * @param {TokenPF} token2
+     * @returns {number}
+     */
+    static #distance(token1, token2) {
+        if (this.#isSharingSquare(token1, token2)) {
+            return 0;
+        }
+
+        const scene = game.scenes.active;
+        const gridSize = scene.grid.size;
+
+        let x1 = this.#left(token1);
+        let x2 = this.#left(token2);
+        let y1 = this.#top(token1);
+        let y2 = this.#top(token2);
+
+        if (this.#isLeftOf(token1, token2)) {
+            x1 += token1.w - gridSize;
+        }
+        else if (this.#isRightOf(token1, token2)) {
+            x2 += token2.w - gridSize;
+        }
+        else {
+            x2 = x1;
+        }
+
+        if (this.#isAbove(token1, token2)) {
+            y1 += token1.h - gridSize;
+        }
+        else if (this.#isBelow(token1, token2)) {
+            y2 += token2.h - gridSize;
+        }
+        else {
+            y2 = y1;
+        }
+
+        // @ts-ignore
+        const ray = new Ray({ x: x1, y: y1 }, { x: x2, y: y2 });
+        // @ts-ignore
+        const distance = canvas.grid.grid.measureDistances([{ ray }], { gridSpaces: true })[0];
+        return distance;
     }
 
     /** @param {{x: number}} token @returns {number} */

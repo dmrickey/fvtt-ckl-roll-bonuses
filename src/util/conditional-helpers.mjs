@@ -113,6 +113,35 @@ export function conditionalModToItemChangeForDamageTooltip(conditional, modifier
  * @param {BonusTypes} [args.type]
  * @return {ItemChange}
  */
+export function createChange({
+    name,
+    type = 'untypedPerm',
+    value,
+    subTarget = 'damage',
+}) {
+    const change = new pf1.components.ItemChange({
+        flavor: name,
+        formula: value,
+        modifier: type,
+        operator: 'add',
+        priority: 0,
+        subTarget,
+    });
+
+    change.value = value;
+    change.name = name;
+
+    return change;
+}
+
+/**
+ * @param {object} args
+ * @param {string} args.name
+ * @param {number | string} args.value
+ * @param {BuffTarget} [args.subTarget]
+ * @param {BonusTypes} [args.type]
+ * @return {ItemChange}
+ */
 export function createChangeForTooltip({
     name,
     type = 'untypedPerm',
