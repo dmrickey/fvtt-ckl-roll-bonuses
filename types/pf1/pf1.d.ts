@@ -1202,9 +1202,8 @@ declare global {
         };
         rangePenalty: {
             maxIncrements: number;
-            units: string;
-            value: string;
-            rangePenalty: number;
+            range: number;
+            penalty: number;
         };
         [MODULE_NAME]: {
             [key: string]: number | string | object | array;

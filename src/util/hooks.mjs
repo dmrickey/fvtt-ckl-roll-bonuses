@@ -18,6 +18,7 @@ export const localHooks = /** @type {const} */ ({
     actorRollSkill: `${MODULE_NAME}_actorRollSkill`,
     chatAttackAddAttack: `${MODULE_NAME}_chatAttackAddAttack`,
     chatAttackEffectNotes: `${MODULE_NAME}_chatAttackEffectNotes`,
+    initItemActionRollData: `${MODULE_NAME}_initItemActionRollData`,
     itemActionCritRangeWrapper: `${MODULE_NAME}_itemActionCritRangeWrapper`,
     itemActionEnhancementBonus: `${MODULE_NAME}_itemActionEnhancementBonus`,
     itemActionRollAttack: `${MODULE_NAME}_itemActionRollAttack`,
@@ -83,6 +84,13 @@ export class LocalHookHandler {
      * @overload
      * @param {typeof localHooks.postPrepareActorDerivedData} hook
      * @param {(actor: ActorPF) => void} func
+     * @returns {void}
+     */
+
+    /**
+     * @overload
+     * @param {typeof localHooks.initItemActionRollData} hook
+     * @param {(action: ItemAction, rollData: RollData) => void} func
      * @returns {void}
      */
 
@@ -256,6 +264,14 @@ export class LocalHookHandler {
      * @overload
      * @param {typeof localHooks.postPrepareActorDerivedData} hook
      * @param {ActorPF} actor
+     * @returns {void}
+     */
+
+    /**
+     * @overload
+     * @param {typeof localHooks.initItemActionRollData} hook
+     * @param {ItemAction} action
+     * @param {RollData} rollData
      * @returns {void}
      */
 

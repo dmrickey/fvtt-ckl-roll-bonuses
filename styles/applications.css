@@ -83,9 +83,9 @@
     max-width: 96px;
 }
 
-.roll-bonuses-form.token-selector .grouped-tokens .individual-token .token-selector-contents div {
-    /* margin: 0; */
-}
+/* .roll-bonuses-form.token-selector .grouped-tokens .individual-token .token-selector-contents div {
+    margin: 0;
+} */
 
 .roll-bonuses-form.token-selector .grouped-tokens .individual-token .token-selector-contents img {
     min-height: 96px;

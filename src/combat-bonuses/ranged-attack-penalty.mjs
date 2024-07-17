@@ -1,7 +1,51 @@
+import { MODULE_NAME } from '../consts.mjs';
 import { Distance } from '../util/distance.mjs';
 import { currentTargets } from '../util/get-current-targets.mjs';
 import { customGlobalHooks } from '../util/hooks.mjs'
 import { localize } from '../util/localize.mjs';
+import { AutomaticCombatBonusSettings } from '../util/settings.mjs';
+
+const disabledActorFlag = 'disable-ranged-attack-penalty';
+
+/**
+ * @param { ItemAction} action
+ * @param {RollData} rollData
+ */
+export const initRollData = (action, rollData) => {
+    const { actor } = action;
+    if (!AutomaticCombatBonusSettings.setting('range-increments') || actor?.getFlag(MODULE_NAME, disabledActorFlag)) {
+        return;
+    }
+
+    if (rollData.rangePenalty !== undefined) {
+        return;
+    }
+
+    const isRangedAttack = ['rcman', 'rwak', 'rsak', 'twak'].includes(action.data.actionType);
+    if (!isRangedAttack) {
+        return;
+    }
+
+    if (!['ft', 'm'].includes(rollData.action?.range?.units || '')) {
+        return;
+    }
+
+    const range = RollPF.safeTotal(rollData.action?.range?.value ?? '0');
+    if (!range) {
+        return;
+    }
+
+    const maxIncrements = rollData.action?.range?.maxIncrements ?? Number.POSITIVE_INFINITY;
+    if (!maxIncrements) {
+        return;
+    }
+
+    rollData.rangePenalty = {
+        maxIncrements,
+        range,
+        penalty: 2,
+    };
+}
 
 /**
  * @param {ActionUse} actionUse
@@ -15,25 +59,12 @@ function addRangedPenalty(actionUse) {
         return;
     }
 
-    const { rollData } = shared;
-
-    if (!['ft', 'm'].includes(rollData.rangePenalty?.units || '')) {
+    if (!AutomaticCombatBonusSettings.setting('range-increments') || actor.getFlag(MODULE_NAME, disabledActorFlag)) {
         return;
     }
 
-    const isRangedAttack = ['rcman', 'rwak', 'rsak', 'twak'].includes(actionUse.action.data.actionType);
-    if (!isRangedAttack) {
-        return;
-    }
-
-    const rangeStep = RollPF.safeTotal(rollData.rangePenalty?.value ?? '0');
-    if (!rangeStep) {
-        return;
-    }
-
-    const maxIncrements = rollData.rangePenalty?.maxIncrements ?? Number.POSITIVE_INFINITY;
-    const penalty = rollData.rangePenalty?.rangePenalty;
-    if (!maxIncrements || !penalty) {
+    const { rangePenalty } = shared.rollData;
+    if (!rangePenalty) {
         return;
     }
 
@@ -44,13 +75,15 @@ function addRangedPenalty(actionUse) {
         return;
     }
 
+    const { maxIncrements, range, penalty } = rangePenalty;
+
     let distance = 0;
     targets.forEach((target) => {
         const d = new Distance(actorToken, target);
         distance = Math.max(distance, d.distance());
     });
 
-    const steps = Math.ceil(distance / rangeStep);
+    const steps = Math.ceil(distance / range);
 
     if (steps > maxIncrements) {
         shared.reject = true;

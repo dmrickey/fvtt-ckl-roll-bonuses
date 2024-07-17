@@ -164,8 +164,8 @@ class ItemNameTranslationConfig extends FormApplication {
 }
 
 const automaticCombatBonusesKeys =  /** @type {const} */ (['range-increments']);
-/** @typedef {typeof automaticCombatBonusesKeys[keyof typeof automaticCombatBonusesKeys]} CombatBonusKey */
-class AutomaticCombatBonusesSettings {
+/** @typedef {typeof automaticCombatBonusesKeys[number]} CombatBonusKey */
+export class AutomaticCombatBonusSettings {
     static get automaticCombatBonusesKey() { return 'automatic-combat-bonuses'; }
 
     /** @returns {Record<CombatBonusKey, boolean>} */
@@ -173,6 +173,14 @@ class AutomaticCombatBonusesSettings {
         const current = game.settings.get(MODULE_NAME, this.automaticCombatBonusesKey) || {};
         // @ts-ignore
         return current;
+    }
+
+    /**
+     * @param {CombatBonusKey} key
+     * @returns {boolean}
+     */
+    static setting(key) {
+        return !!this.automaticCombatBonuses[key];
     }
 
     static {
@@ -212,7 +220,7 @@ class GMCombatOptionsApplication extends FormApplication {
     /** @override */
     getData(options = {}) {
         let context = super.getData()
-        const current = AutomaticCombatBonusesSettings.automaticCombatBonuses;
+        const current = AutomaticCombatBonusSettings.automaticCombatBonuses;
 
         const sections = automaticCombatBonusesKeys.map((key) => ({
             description: localize(`combat-settings.application.section.${key}.description`),
@@ -222,7 +230,7 @@ class GMCombatOptionsApplication extends FormApplication {
             value: !!current[key],
         }));
 
-        context.key = AutomaticCombatBonusesSettings.automaticCombatBonusesKey;
+        context.key = AutomaticCombatBonusSettings.automaticCombatBonusesKey;
 
         context.sections = sections;
         return context
@@ -236,6 +244,6 @@ class GMCombatOptionsApplication extends FormApplication {
      */
     async _updateObject(_event, formData) {
         const update = expandObject(formData);
-        game.settings.set(MODULE_NAME, AutomaticCombatBonusesSettings.automaticCombatBonusesKey, update);
+        game.settings.set(MODULE_NAME, AutomaticCombatBonusSettings.automaticCombatBonusesKey, update);
     }
 }

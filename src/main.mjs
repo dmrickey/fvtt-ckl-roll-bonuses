@@ -272,18 +272,10 @@ function prepareActorDerivedData(wrapped) {
 function onItemActionRollData(thing, rollData) {
     // this fires for actor -> item -> action. If I handle more than one then it would double up bonuses. So I handle the root-most option
     if (thing instanceof pf1.components.ItemAction) {
-
-        // set up base custom rolldata
-        if (rollData.rangePenalty === undefined) {
-            rollData.rangePenalty = {
-                maxIncrements: rollData.action?.range?.maxIncrements ?? 10,
-                units: rollData.action?.range?.units ?? 'ft',
-                value: rollData.action?.range?.value ?? '0',
-                rangePenalty: 2,
-            };
-        }
-
         const action = thing;
+
+        LocalHookHandler.fireHookNoReturnSync(localHooks.initItemActionRollData, action, rollData);
+
         // safety for initialization during data prep where the bonuses havent' been set up yet
         if (!action.item[MODULE_NAME]?.bonuses || !action.item[MODULE_NAME]?.targets) return;
 
