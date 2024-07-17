@@ -45,12 +45,13 @@ export class GlobalSettings {
     static get elephantInTheRoom() { return !!game.settings.get(MODULE_NAME, this.#elephantInTheRoom); }
 
     static {
-        // register this setting once PF1 is ready so that all translation keys have already been registered before this is run
-        Hooks.once('pf1PostReady', () => {
+        Hooks.once('init', () => {
             registerSetting({
                 key: this.#elephantInTheRoom,
                 defaultValue: false,
                 settingType: Boolean,
+            }, {
+                skipReady: true,
             });
         });
     }
@@ -184,19 +185,20 @@ export class AutomaticCombatBonusSettings {
     }
 
     static {
-        // register this setting once PF1 is ready so that all translation keys have already been registered before this is run
-        Hooks.once('pf1PostReady', () => {
+        Hooks.once('init', () => {
             registerSetting({
                 key: this.automaticCombatBonusesKey,
                 config: false,
                 defaultValue: {},
                 settingType: Object,
-            })
+            }, {
+                skipReady: true,
+            });
 
             game.settings.registerMenu(MODULE_NAME, this.automaticCombatBonusesKey, {
-                name: localize('combat-settings.application.title'),
-                label: localize('combat-settings.application.label'),
-                hint: localize('combat-settings.application.hint'),
+                name: `${MODULE_NAME}.combat-settings.application.title`,
+                label: `${MODULE_NAME}.combat-settings.application.label`,
+                hint: `${MODULE_NAME}.combat-settings.application.hint`,
                 icon: "ra ra-crossed-swords",
                 type: GMCombatOptionsApplication,
                 restricted: true,

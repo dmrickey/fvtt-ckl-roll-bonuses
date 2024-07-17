@@ -87,15 +87,22 @@ function addRangedPenalty(actionUse) {
 
     if (steps > maxIncrements) {
         shared.reject = true;
-        targets.length > 1
-            ? ui.notifications.warn(localize('range-increment-error-plural'))
-            : ui.notifications.warn(localize('range-increment-error-singular'));
+        const message = targets.length > 1
+            ? 'range-increment-error-plural'
+            : 'range-increment-error-singular';
+        const args = {
+            distance,
+            max: maxIncrements * range,
+            units: actionUse.action.data.range.units
+        };
+        ui.notifications.warn(localize(message, args));
         return;
     }
 
     const total = -penalty * (steps - 1);
     if (total) {
-        shared.attackBonus.push(`${total}[${localize('ranged-attack-penalty')}]`);
+        const args = { range: distance, units: actionUse.action.data.range.units };
+        shared.attackBonus.push(`${total}[${localize('ranged-attack-penalty', args)}]`);
     }
 }
 Hooks.on(customGlobalHooks.actionUseAlterRollData, addRangedPenalty);

@@ -228,3 +228,8 @@
   - And would allow automating rerolls for abilities like Weapon of the Chosen
 
 # vnext
+- Range Penalty
+  - Make bonuses for it
+- Refactor Distance's `isWithinRange` function
+  - Make it call new `distance` method
+  - Add `reach` param so it conditionally uses the optional 10' option only for reach weapons (natural melee attacks and manufactured reach weapons)

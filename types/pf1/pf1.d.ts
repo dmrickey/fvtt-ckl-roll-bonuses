@@ -333,6 +333,12 @@ declare global {
             damage: {
                 parts: DamagePart[];
             };
+            range: {
+                maxIncrements: number;
+                minUnits: '';
+                minValue: null;
+                units: 'ft';
+            };
         };
         item: ItemPF;
         static defaultDamageType: TraitSelectorValuePlural;

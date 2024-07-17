@@ -263,9 +263,9 @@
                 "tooltip": "Targets determine exactly which abilities will be affected by Bonuses."
             }
         },
-        "range-increment-error-plural": "The farthest target is outside of your maximum range increments.",
-        "range-increment-error-singular": "The target is outside of your maximum range increments.",
-        "ranged-attack-penalty": "Ranged Penalty",
+        "range-increment-error-plural": "The farthest target ({distance}{units}) is outside of your maximum range ({max}{units}).",
+        "range-increment-error-singular": "The target ({distance}{units}) is outside of your maximum range ({max}{units}).",
+        "ranged-attack-penalty": "Ranged Penalty ({range}{units})",
         "roll-bonuses": "Roll Bonuses",
         "skill-rank-override": {
             "skill-card-name": "{skillName} - ({sourceName} ranks: {rank})",
