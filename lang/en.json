@@ -192,7 +192,8 @@
                 "title": "Automatic Combat Bonuses",
                 "section": {
                     "range-increments": {
-                        "description": "Automatically add ranged attack penalties. This should fully work in most circumstances. The only case I have found where it could add the wrong penalty is if a very large token is partially hidden by a wall. It could be that the visible part is farther away than the closest part, but I only calcuate based on the closest part regardless of walls.\n\nEnabling this also enables bonuses to modify Ranged Attack Penalties and Range Increments.",
+                        "description": "Automatically add ranged attack penalties. Enabling this also enables bonuses to modify Ranged Attack Penalties and Range Increments.",
+                        "issues": "This should fully work in most circumstances. The only case I have found where it could add the wrong penalty is if a large (or larger) token is partially hidden by a wall. It could be that the visible part is farther away than the closest part. The mod  only calcuates based on the closest part of the target regardless of walls.",
                         "label": "Ranged Attack Penalty"
                     }
                 }

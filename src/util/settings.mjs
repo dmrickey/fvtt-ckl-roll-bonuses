@@ -216,6 +216,7 @@ class GMCombatOptionsApplication extends FormApplication {
 
         const sections = automaticCombatBonusesKeys.map((key) => ({
             description: localize(`combat-settings.application.section.${key}.description`),
+            issues: localize(`combat-settings.application.section.${key}.issues`),
             key,
             label: localize(`combat-settings.application.section.${key}.label`),
             value: !!current[key],

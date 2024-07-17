@@ -93,3 +93,28 @@
     max-height: 96px;
     max-width: 96px;
 }
+
+.ckl-auto-combat-settings .main-description {
+    margin-inline: 4rem;
+    /* max-width: 500px; */
+    text-align:center;
+}
+
+.ckl-auto-combat-settings .text {
+    display: flex;
+    flex-direction: column;
+}
+
+.ckl-auto-combat-settings .text *:not(:last-child) {
+    margin-block-end: .5em;
+}
+
+.ckl-auto-combat-settings .text .issues{
+    color: var(--pf1-crimson);
+    font-size: var(--font-size-12);
+    font-style: italic;
+}
+
+.ckl-auto-combat-settings label:has(input[type=checkbox]) {
+    display: flex;
+}

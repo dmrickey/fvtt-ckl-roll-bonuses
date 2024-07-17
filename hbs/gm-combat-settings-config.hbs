@@ -1,5 +1,5 @@
 <form class="ckl-auto-combat-settings">
-    <p style="text-align:center">{{{localize "ckl-roll-bonuses.combat-settings.application.description"}}}</p>
+    <p class="main-description">{{{localize "ckl-roll-bonuses.combat-settings.application.description"}}}</p>
     <hr>
 
     <ul class="section-list">
@@ -9,9 +9,14 @@
                 <input name="{{key}}" type="checkbox" {{#if value}}checked{{/if}} />
                 <span>{{label}}</span>
             </label>
-            <span>
-                {{description}}
-            </span>
+            <div class="text">
+                <div class="description">
+                    {{description}}
+                </div>
+                <div class="issues">
+                    {{issues}}
+                </div>
+            </div>
         </li>
         <hr>
         {{/each}}
