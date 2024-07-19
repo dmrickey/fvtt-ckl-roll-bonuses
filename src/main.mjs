@@ -14,7 +14,6 @@ import { emptyObject } from './util/empty-object.mjs';
 import { registerSetting } from './util/settings.mjs';
 import { addNodeToRollBonus } from './handlebars-handlers/add-bonus-to-item-sheet.mjs';
 import { localize } from './util/localize.mjs';
-import './combat-bonuses/all-combat-bonuses.mjs';
 
 Hooks.once('pf1PostReady', () => migrate());
 
@@ -274,6 +273,7 @@ function onItemActionRollData(thing, rollData) {
     if (thing instanceof pf1.components.ItemAction) {
         const action = thing;
 
+        rollData.rb ||= {};
         LocalHookHandler.fireHookNoReturnSync(localHooks.initItemActionRollData, action, rollData);
 
         // safety for initialization during data prep where the bonuses havent' been set up yet

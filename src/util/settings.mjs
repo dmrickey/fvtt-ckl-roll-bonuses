@@ -37,7 +37,7 @@ export const registerSetting = ({
         : Hooks.once('ready', doIt);
 };
 
-export class GlobalSettings {
+export class SharedSettings {
 
     static #elephantInTheRoom = 'elephant-in-the-room';
 
@@ -164,30 +164,35 @@ class ItemNameTranslationConfig extends FormApplication {
     }
 }
 
-const automaticCombatBonusesKeys =  /** @type {const} */ (['range-increments']);
-/** @typedef {typeof automaticCombatBonusesKeys[number]} CombatBonusKey */
-export class AutomaticCombatBonusSettings {
-    static get automaticCombatBonusesKey() { return 'automatic-combat-bonuses'; }
+export class GlobalBonusSettings {
+    /** @type {Set<string>} */
+    static #keys = new Set();
+    static get keys() { return [...this.#keys]; }
 
-    /** @returns {Record<CombatBonusKey, boolean>} */
-    static get automaticCombatBonuses() {
-        const current = game.settings.get(MODULE_NAME, this.automaticCombatBonusesKey) || {};
+    /** @param {string} key */
+    static registerKey(key) { this.#keys.add(key); }
+
+    static get globalBonusSettingsKey() { return 'global-bonuses'; }
+
+    /** @returns {Record<string, boolean>} */
+    static get globalBonusSettings() {
+        const current = game.settings.get(MODULE_NAME, this.globalBonusSettingsKey) || {};
         // @ts-ignore
         return current;
     }
 
     /**
-     * @param {CombatBonusKey} key
+     * @param {string} key
      * @returns {boolean}
      */
     static setting(key) {
-        return !!this.automaticCombatBonuses[key];
+        return !!this.globalBonusSettings[key];
     }
 
     static {
         Hooks.once('init', () => {
             registerSetting({
-                key: this.automaticCombatBonusesKey,
+                key: this.globalBonusSettingsKey,
                 config: false,
                 defaultValue: {},
                 settingType: Object,
@@ -195,44 +200,44 @@ export class AutomaticCombatBonusSettings {
                 skipReady: true,
             });
 
-            game.settings.registerMenu(MODULE_NAME, this.automaticCombatBonusesKey, {
-                name: `${MODULE_NAME}.combat-settings.application.title`,
-                label: `${MODULE_NAME}.combat-settings.application.label`,
-                hint: `${MODULE_NAME}.combat-settings.application.hint`,
+            game.settings.registerMenu(MODULE_NAME, this.globalBonusSettingsKey, {
+                name: `${MODULE_NAME}.global-settings.application.title`,
+                label: `${MODULE_NAME}.global-settings.application.label`,
+                hint: `${MODULE_NAME}.global-settings.application.hint`,
                 icon: "ra ra-crossed-swords",
-                type: GMCombatOptionsApplication,
+                type: GlobalBonusSettingsApplication,
                 restricted: true,
             });
         });
     }
 }
 
-class GMCombatOptionsApplication extends FormApplication {
+class GlobalBonusSettingsApplication extends FormApplication {
     /** @override */
     static get defaultOptions() {
         const options = super.defaultOptions;
-        options.id = "ckl-automatic-combat-bonuses";
-        options.template = templates.automaticCombatBonusesConfigApp;
+        options.id = "ckl-global-bonuses";
+        options.template = templates.globalBonusesConfigApp;
         options.height = "auto";
         options.width = 750;
-        options.title = localize('combat-settings.application.title');
+        options.title = localize('global-settings.application.title');
         return options;
     }
 
     /** @override */
     getData(options = {}) {
         let context = super.getData()
-        const current = AutomaticCombatBonusSettings.automaticCombatBonuses;
+        const current = GlobalBonusSettings.globalBonusSettings;
 
-        const sections = automaticCombatBonusesKeys.map((key) => ({
-            description: localize(`combat-settings.application.section.${key}.description`),
-            issues: localize(`combat-settings.application.section.${key}.issues`),
+        const sections = GlobalBonusSettings.keys.map((key) => ({
+            description: localize(`global-settings.application.section.${key}.description`),
+            issues: localize(`global-settings.application.section.${key}.issues`),
             key,
-            label: localize(`combat-settings.application.section.${key}.label`),
+            label: localize(`global-settings.application.section.${key}.label`),
             value: !!current[key],
         }));
 
-        context.key = AutomaticCombatBonusSettings.automaticCombatBonusesKey;
+        context.key = GlobalBonusSettings.globalBonusSettingsKey;
 
         context.sections = sections;
         return context
@@ -246,6 +251,6 @@ class GMCombatOptionsApplication extends FormApplication {
      */
     async _updateObject(_event, formData) {
         const update = expandObject(formData);
-        game.settings.set(MODULE_NAME, AutomaticCombatBonusSettings.automaticCombatBonusesKey, update);
+        game.settings.set(MODULE_NAME, GlobalBonusSettings.globalBonusSettingsKey, update);
     }
 }

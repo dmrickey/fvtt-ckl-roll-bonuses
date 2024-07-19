@@ -13,6 +13,8 @@ declare global {
         ? Game
         : Game | {};
 
+    let ui: ui;
+
     let CONFIG: CONFIG;
 
     let CONST: CONST;
@@ -32,5 +34,11 @@ declare global {
              */
             isNewerVersion(v0: string, v1: string): boolean;
         };
+    };
+}
+
+interface ui {
+    notifications: {
+        warn(string): void;
     };
 }

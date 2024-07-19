@@ -20,7 +20,7 @@ export class SpecificBonuses {
     /**
      * @type {Record<string, SpecificBonus>}}
      */
-    static allBonuses = {}
+    static allBonuses = {};
 
     static get dictionaryKeys() {
         return Object.values(this.allBonuses)

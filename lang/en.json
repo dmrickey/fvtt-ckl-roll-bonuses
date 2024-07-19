@@ -184,14 +184,14 @@
         "cancel": "Cancel",
         "cl-mod": "{mod} CL",
         "cl-label-mod": "{mod} CL ({label})",
-        "combat-settings": {
+        "global-settings": {
             "application": {
-                "description": "This attempts to automate many options in combat that are tedious to do manually. Some of these are a best-effort and should work under most circumstances, but due to their nature some will have quirks that may be unavoidable.",
+                "description": "This attempts to automate global bonuses that are tedious to do manually. Some of these are a best-effort and should work under most circumstances, but due to their nature some will have quirks that may be unavoidable.",
                 "hint": "Configure specific combat bonuses that can be automated. These are global combat options that are aren't meant to be configured for specific feats or abilities, but apply to everyone.",
                 "label": "Open Combat Settings",
                 "title": "Automatic Combat Bonuses",
                 "section": {
-                    "range-increments": {
+                    "range-increment-penalty": {
                         "description": "Automatically add ranged attack penalties. Enabling this also enables bonuses to modify Ranged Attack Penalties and Range Increments.",
                         "issues": "This should fully work in most circumstances. The only case I have found where it could add the wrong penalty is if a large (or larger) token is partially hidden by a wall. It could be that the visible part is farther away than the closest part. The mod  only calcuates based on the closest part of the target regardless of walls.",
                         "label": "Ranged Attack Penalty"

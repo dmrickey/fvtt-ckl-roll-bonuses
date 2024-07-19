@@ -1202,14 +1202,16 @@ declare global {
      * Roll Data used for resolving formulas
      */
     interface RollData<T extends SystemItemData = SystemItemData> {
+        rb: {
+            rangePenalty?: {
+                maxIncrements: number;
+                range: number;
+                penalty: number;
+            };
+        };
         range: {
             melee: string;
             reach: number;
-        };
-        rangePenalty: {
-            maxIncrements: number;
-            range: number;
-            penalty: number;
         };
         [MODULE_NAME]: {
             [key: string]: number | string | object | array;
@@ -1235,7 +1237,6 @@ declare global {
             melee: number;
             reach: number;
         };
-        rangePenalty: number;
         resources: Record<string, ResourceRollData>;
 
         shield: {
@@ -1572,6 +1573,7 @@ declare global {
 
     interface ActorSheetPF {
         get actor(): ActorPF;
+        get isEditable(): boolean;
     }
 
     interface ItemSheetPF {

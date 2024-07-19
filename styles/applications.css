@@ -94,27 +94,27 @@
     max-width: 96px;
 }
 
-.ckl-auto-combat-settings .main-description {
+.ckl-auto-global-settings .main-description {
     margin-inline: 4rem;
     /* max-width: 500px; */
     text-align:center;
 }
 
-.ckl-auto-combat-settings .text {
+.ckl-auto-global-settings .text {
     display: flex;
     flex-direction: column;
 }
 
-.ckl-auto-combat-settings .text *:not(:last-child) {
+.ckl-auto-global-settings .text *:not(:last-child) {
     margin-block-end: .5em;
 }
 
-.ckl-auto-combat-settings .text .issues{
+.ckl-auto-global-settings .text .issues{
     color: var(--pf1-crimson);
     font-size: var(--font-size-12);
     font-style: italic;
 }
 
-.ckl-auto-combat-settings label:has(input[type=checkbox]) {
+.ckl-auto-global-settings label:has(input[type=checkbox]) {
     display: flex;
 }

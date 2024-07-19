@@ -234,3 +234,5 @@
   - Make it call new `distance` method
   - Add `reach` param so it conditionally uses the optional 10' option only for reach weapons (natural melee attacks and manufactured reach weapons)
 - update function target examples with `const item = doc.item ?? item;`
+- remove BaseSource.init() (plus overrides) and put that in a `static {}` method (and make sure everything still works)
+- consider token height in distance checks
