@@ -1,3 +1,5 @@
+import { MODULE_NAME } from '../consts.mjs';
+import { addGlobalBonusDisablerToActor } from '../handlebars-handlers/global-bonuses/add-global-bonus-disabler-to-actor.mjs';
 import { LocalHookHandler, localHooks } from '../util/hooks.mjs';
 import { GlobalBonusSettings } from '../util/settings.mjs';
 import { BaseGlobalBonus } from './base-global-bonus.mjs';
@@ -38,11 +40,14 @@ Hooks.on('renderActorSheet', (
     /** @type {[HTMLElement]} */[html],
     /** @type {unknown} */ _data
 ) => {
-    GlobalBonuses.allBonuses.forEach((bonus) => {
-        if (!(actor instanceof pf1.documents.actor.ActorBasePF)) return;
-        if (bonus.isDisabled()) return;
+    const bonuses = GlobalBonuses.allBonuses
+        .filter((b) => !b.isDisabled());
+    const settings = bonuses.map((b) => ({
+        checked: b.isDisabledForActor(actor),
+        journal: `journal - ${b.key}`,
+        label: `label - ${b.key}`,
+        path: `flags.${MODULE_NAME}.${b.actorDisabledFlag}`,
+    }));
 
-        console.error('rendering actor checkbox for:', bonus);
-        // todo add checkbox/label/journal link
-    });
+    addGlobalBonusDisablerToActor(html, settings, isEditable);
 });

@@ -1,16 +1,14 @@
-<div id="ckl-actor--container">
-    <h3 class="form-header">
-        <a>
-            <i class="fal fa-dice-d20"></i>
-        </a>
-        {{localize 'ckl-roll-bonuses.roll-bonuses'}}
-        <a class="settings settings-button">
-            <i class="fas fa-sliders"></i>
-        </a>
-    </h3>
-    <div class="bonuses">
-        <div class="settings form-group">
-            <label><a>Click here to configure bonuses <i class="fas fa-sliders"></i></a></label>
-        </div>
+<div id="ckl-global-bonus-actor-disabled-container">
+    <h2>{{localize 'ckl-roll-bonuses.global-bonus.actor.disable'}}</h2>
+
+    <div style="display:flex;flex-direction:column;">
+        {{#each settings }}
+        <li class="form-group">
+            <label class="checkbox">
+            <input type="checkbox" name="{{path}}" {{#if checked}}checked{{/if}}>
+                {{label}}
+            </label>
+        </li>
+        {{/each}}
     </div>
 </div>

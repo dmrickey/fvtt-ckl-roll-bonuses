@@ -20,7 +20,7 @@ export class BaseGlobalBonus {
     */
     static get key() { throw new Error('Must be overridden'); }
     /** @returns {string} */
-    static get actorDisabledKey() { return `global-disabled_${this.key}`; }
+    static get actorDisabledFlag() { return `global-disabled.${this.key}`; }
 
     /**
      * Journal UUID
@@ -49,6 +49,6 @@ export class BaseGlobalBonus {
         if (!(actor instanceof pf1.documents.actor.ActorBasePF)) {
             return true;
         }
-        return actor.getFlag(MODULE_NAME, this.actorDisabledKey);
+        return !!actor.getFlag(MODULE_NAME, this.actorDisabledFlag);
     }
 }
