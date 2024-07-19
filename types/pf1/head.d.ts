@@ -30,4 +30,23 @@ declare global {
     >(original: T, other?: U, options?: M, _d?: number): Result<T, U, M>;
 
     function expandObject(_: object, depth?: number): Record<string, unknown>;
+
+    let PIXI: {
+        Rectangle: {
+            new (x: number, y: number, width: number, height: number): Rect;
+        };
+    };
+
+    class Rect {
+        get bottom(): number;
+        get height(): number;
+        get left(): number;
+        get right(): number;
+        get top(): number;
+        get type(): number;
+        get width(): number;
+        get x(): number;
+        get y(): number;
+        intersects(other: Rect, transform?: Matrix): boolean;
+    }
 }

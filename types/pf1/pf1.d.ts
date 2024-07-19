@@ -384,6 +384,7 @@ declare global {
         actor: ActorCharacterPF;
         displayName: 0 | 10 | 20 | 30 | 40 | 50;
         disposition: DispositionLevel;
+        elevation: number;
         isLinked: boolean;
         name: string;
         permission: PermissionLevel;
@@ -400,6 +401,7 @@ declare global {
         w: number;
         x: number;
         y: number;
+        bounds: Rect;
     }
 
     class ItemPF<

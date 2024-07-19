@@ -10,22 +10,26 @@ export class Distance {
      * @param {TokenDocumentPF | TokenPF} second
      */
     constructor(first, second) {
-        this.token1 = first instanceof pf1.documents.TokenDocumentPF
-            ? first.object
-            : first;
-        this.token2 = second instanceof pf1.documents.TokenDocumentPF
-            ? second.object
-            : second;
+        /**
+         * @param {TokenDocumentPF | TokenPF} t
+         * @returns {TokenPF}
+         */
+        const toToken = (t) => (t instanceof pf1.documents.TokenDocumentPF
+            ? t.object
+            : t);
+
+        this.token1 = toToken(first);
+        this.token2 = toToken(second);
     }
 
     /** @returns {number} */
     distance() {
-        return Distance.#distance(this.token1, this.token2);
+        return Distance.#distance(this.token1.bounds, this.token2.bounds);
     }
 
     /** @returns {boolean} */
     isAdjacent() {
-        return Distance.#isAdjacent(this.token1, this.token2)
+        return Distance.#isAdjacent(this.token1.bounds, this.token2.bounds);
     }
 
     /** @returns {boolean} */
@@ -35,7 +39,7 @@ export class Distance {
 
     /** @returns {boolean} */
     isSharingSquare() {
-        return Distance.#isSharingSquare(this.token1, this.token2) || Distance.#isSharingSquare(this.token2, this.token1);
+        return Distance.#isSharingSquare(this.token1.bounds, this.token2.bounds) || Distance.#isSharingSquare(this.token2.bounds, this.token1.bounds);
     }
 
     /**
@@ -48,7 +52,7 @@ export class Distance {
 
     /** @returns {boolean} */
     isWithin10FootDiagonal() {
-        return Distance.#isWithin10FootDiagonal(this.token1, this.token2);
+        return Distance.#isWithin10FootDiagonal(this.token1.bounds, this.token2.bounds);
     }
 
     // TODO need a "reach" checkbox because only reach weapons have a special exception
@@ -58,7 +62,7 @@ export class Distance {
      * @returns {boolean}
      */
     isWithinRange(minFeet, maxFeet) {
-        return Distance.#isWithinRange(this.token1, this.token2, minFeet, maxFeet)
+        return Distance.#isWithinRange(this.token1.bounds, this.token2.bounds, minFeet, maxFeet)
     }
 
     /**
@@ -70,6 +74,9 @@ export class Distance {
     static #threatens(attacker, target, action = undefined) {
         // todo - flat-footed does not exist
         // if (attacker.isFlatFooted) {
+        //     return false;
+        // }
+        // if (attacker/target is unconconscious/immobilized) {
         //     return false;
         // }
 
@@ -88,59 +95,40 @@ export class Distance {
             actions = [...weapons, ...attacks];
         }
 
-        return actions.some((action) => this.#isWithinRange(attacker, target, action.minRange, action.maxRange));
+        return actions.some((action) => this.#isWithinRange(attacker.bounds, target.bounds, action.minRange, action.maxRange));
     }
 
     /**
-     * @param {{x: number, y: number, h: number, w: number}} left
-     * @param {{x: number, y: number, h: number, w: number}} right
+     * @param {Rect} left
+     * @param {Rect} right
      * @returns {boolean}
      */
     static #isAdjacent(left, right) {
-        // is above or below target
-        if ((this.#left(left) >= this.#left(right) && this.#right(left) <= this.#right(right))
-            || this.#right(left) >= this.#right(right) && this.#left(left) <= this.#left(right)
-        ) {
-            if (this.#top(left) == this.#bottom(right) || this.#bottom(left) == this.#top(right)) {
-                return true;
-            }
-        }
+        const enlarged = new PIXI.Rectangle(
+            left.left - 1,
+            left.top - 1,
+            left.width + 2,
+            left.height + 2,
+        )
 
-        // is left or right of target
-        if ((this.#bottom(left) >= this.#bottom(right) && this.#top(left) <= this.#top(right))
-            || this.#top(left) >= this.#top(right) && this.#bottom(left) <= this.#bottom(right)
-        ) {
-            if (this.#left(left) == this.#right(right) || this.#right(left) == this.#left(right)) {
-                return true;
-            }
-        }
-
-        // is diagonally adjacent to target
-        if (this.#left(left) == this.#right(right) || this.#right(left) == this.#left(right)) {
-            if (this.#top(left) == this.#bottom(right) || this.#bottom(left) == this.#top(right)) {
-                return true;
-            }
-        }
-
-        // if none of the above, return true if sharing the same square as adjacent is basically defined as "one square or closer"
-        return this.#isSharingSquare(left, right);
+        return enlarged.intersects(right);
     }
 
     /**
-     * @param {{x: number, y: number, h: number, w: number}} left
-     * @param {{x: number, y: number, h: number, w: number}} right
+     * @param {Rect} first
+     * @param {Rect} second
      * @returns {boolean}
      */
-    static #isSharingSquare(left, right) {
-        return this.#left(left) >= this.#left(right)
-            && this.#top(left) >= this.#top(right)
-            && this.#right(left) <= this.#right(right)
-            && this.#bottom(left) <= this.#bottom(right);
+    static #isSharingSquare(first, second) {
+        return first.left >= second.left
+            && first.top >= second.top
+            && first.right <= second.right
+            && first.bottom <= second.bottom;
     }
 
     /**
-     * @param {TokenPF} token1
-     * @param {TokenPF} token2
+     * @param {Rect} token1
+     * @param {Rect} token2
      * @returns {boolean}
      */
     static #isWithin10FootDiagonal(token1, token2) {
@@ -148,26 +136,25 @@ export class Distance {
          * @param {number} x
          * @param {number} y
          */
-        const t1 = (x, y) => ({ x, y, h: token1.h, w: token1.w });
+        const t1 = (x, y) => ({ x, y, height: token1.height, width: token1.width });
         const scene = game.scenes.active;
         const gridSize = scene.grid.size;
-        // todo - verify this method
-        // add "1 square (gridSize)" in all diagonals and see if adjacent
-        if (this.#isAdjacent(t1(this.#left(token1) - gridSize, this.#top(token1) - gridSize), token2)
-            || this.#isAdjacent(t1(this.#left(token1) - gridSize, this.#bottom(token1) + gridSize), token2)
-            || this.#isAdjacent(t1(this.#right(token1) + gridSize, this.#top(token1) - gridSize), token2)
-            || this.#isAdjacent(t1(this.#right(token1) + gridSize, this.#bottom(token1) + gridSize), token2)
-        ) {
-            return true;
-        }
 
-        return false;
+        // add "1 square (gridSize)" in all directions and see if adjacent
+        const enlarged = new PIXI.Rectangle(
+            token1.left - gridSize,
+            token1.top - gridSize,
+            token1.width + gridSize * 2,
+            token1.height + gridSize * 2,
+        );
+
+        return this.#isAdjacent(enlarged, token2);
     }
 
     // TODO need a "reach" checkbox because only reach weapons have a special exception
     /**
-     * @param {TokenPF} token1
-     * @param {TokenPF} token2
+     * @param {Rect} token1
+     * @param {Rect} token2
      * @param {number} minFeet
      * @param {number} maxFeet
      * @returns {boolean}
@@ -184,26 +171,26 @@ export class Distance {
             return true;
         }
 
-        let x1 = this.#left(token1);
-        let x2 = this.#left(token2);
-        let y1 = this.#top(token1);
-        let y2 = this.#top(token2);
+        let x1 = token1.left;
+        let x2 = token2.left;
+        let y1 = token1.top;
+        let y2 = token2.top;
 
         if (this.#isLeftOf(token1, token2)) {
-            x1 += token1.w - gridSize;
+            x1 += token1.width - gridSize;
         }
         else if (this.#isRightOf(token1, token2)) {
-            x2 += token2.w - gridSize;
+            x2 += token2.width - gridSize;
         }
         else {
             x2 = x1;
         }
 
         if (this.#isAbove(token1, token2)) {
-            y1 += token1.h - gridSize;
+            y1 += token1.height - gridSize;
         }
         else if (this.#isBelow(token1, token2)) {
-            y2 += token2.h - gridSize;
+            y2 += token2.height - gridSize;
         }
         else {
             y2 = y1;
@@ -217,8 +204,8 @@ export class Distance {
     }
 
     /**
-     * @param {TokenPF} token1
-     * @param {TokenPF} token2
+     * @param {Rect} token1
+     * @param {Rect} token2
      * @returns {number}
      */
     static #distance(token1, token2) {
@@ -229,26 +216,26 @@ export class Distance {
         const scene = game.scenes.active;
         const gridSize = scene.grid.size;
 
-        let x1 = this.#left(token1);
-        let x2 = this.#left(token2);
-        let y1 = this.#top(token1);
-        let y2 = this.#top(token2);
+        let x1 = token1.left;
+        let x2 = token2.left;
+        let y1 = token1.top;
+        let y2 = token2.top;
 
         if (this.#isLeftOf(token1, token2)) {
-            x1 += token1.w - gridSize;
+            x1 += token1.width - gridSize;
         }
         else if (this.#isRightOf(token1, token2)) {
-            x2 += token2.w - gridSize;
+            x2 += token2.width - gridSize;
         }
         else {
             x2 = x1;
         }
 
         if (this.#isAbove(token1, token2)) {
-            y1 += token1.h - gridSize;
+            y1 += token1.height - gridSize;
         }
         else if (this.#isBelow(token1, token2)) {
-            y2 += token2.h - gridSize;
+            y2 += token2.height - gridSize;
         }
         else {
             y2 = y1;
@@ -261,50 +248,83 @@ export class Distance {
         return distance;
     }
 
-    /** @param {{x: number}} token @returns {number} */
-    static #left(token) { return token.x; }
-    /** @param {{x: number, w: number}} token @returns {number} */
-    static #right(token) { return token.x + token.w; }
-    /** @param {{y: number}} token @returns {number} */
-    static #top(token) { return token.y; }
-    /** @param {{y: number, h: number}} token @returns {number} */
-    static #bottom(token) { return token.y + token.h; }
+    /**
+     * @param {Rect} token
+     * @param {Rect} target
+     * @returns {boolean}
+     */
+    static #isLeftOf(token, target) { return token.right <= target.left; }
+    /**
+     * @param {Rect} token
+     * @param {Rect} target
+     * @returns {boolean}
+     */
+    static #isRightOf(token, target) { return token.left >= target.right; }
+    /**
+     * @param {Rect} token
+     * @param {Rect} target
+     * @returns {boolean}
+     */
+    static #isAbove(token, target) { return token.bottom <= target.top; }
+    /**
+     * @param {Rect} token
+     * @param {Rect} target
+     * @returns {boolean}
+     */
+    static #isBelow(token, target) { return token.top >= target.bottom; }
 
     /**
-     * @param {{x: number, w: number}} token
-     * @param {{x: number}} target
-     * @returns {boolean}
-     */
-    static #isLeftOf(token, target) { return this.#right(token) <= this.#left(target); }
-    /**
-     * @param {{x: number}} token
-     * @param {{x: number, w: number}} target
-     * @returns {boolean}
-     */
-    static #isRightOf(token, target) { return this.#left(token) >= this.#right(target); }
-    /**
-     * @param {{y: number, h: number}} token
-     * @param {{y: number}} target
-     * @returns {boolean}
-     */
-    static #isAbove(token, target) { return this.#bottom(token) <= this.#top(target); }
-    /**
-     * @param {{y: number}} token
-     * @param {{y: number, h: number}} target
-     * @returns {boolean}
-     */
-    static #isBelow(token, target) { return this.#top(token) >= this.#bottom(target); }
-
-    /**
+     * @param {TokenPF} self
      * @param {TokenPF} target
-     * @returns {boolean}
+     * @returns {number}
      */
-    static isEngagedInMeleeWithAnything(target) {
+    static getShootingIntoMeleePenalty(self, target) {
         const potentials = game.scenes.active.tokens
-            .filter((x) => x.disposition !== target.document.disposition);
+            .filter((x) => x.disposition !== target.document.disposition && x.disposition === self.document.disposition)
+            .map((x) => new Distance(target, x));
 
-        return potentials.some((p) => new Distance(target, p).isEngagedInMelee());
+        /** @param {Distance} d @returns {boolean} */
+        const targetIsUnderThreeSizesLarger = (d) => sizes[d.token1.actor.system.traits.size] - sizes[d.token2.actor.system.traits.size] < 3;
+        /** @param {Distance} d @returns {boolean} */
+        const isExactlyTwoSizesLarger = (d) => sizes[d.token1.actor.system.traits.size] - sizes[d.token2.actor.system.traits.size] === 2;
+
+        const engaged = potentials
+            .filter((d) => d.isAdjacent())
+            .filter((d) => d.isEngagedInMelee())
+            .filter((d) => targetIsUnderThreeSizesLarger(d));
+
+        if (!engaged.length) {
+            return 0;
+        }
+
+        const penalties = engaged
+            .map((e) => {
+                // assume creature is large enough to shoot at without penalty (huge or larger, i.e. can aim at spot 10' away from friendly)
+                if (sizes[e.token1.actor.system.traits.size] >= 2) {
+                    return 0;
+                }
+                if (isExactlyTwoSizesLarger(e)) {
+                    return 2;
+                }
+
+                return 4;
+            });
+
+        return Math.max(...penalties);
     }
+}
+
+/** @type {Record<ActorSize, number>} */
+const sizes = {
+    fine: -4,
+    dim: -3,
+    tiny: -2,
+    sm: -1,
+    med: 0,
+    lg: 1,
+    huge: 2,
+    grg: 3,
+    col: 4,
 }
 
 api.utils.Distance = Distance;
