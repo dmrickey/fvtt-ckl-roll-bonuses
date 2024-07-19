@@ -24,12 +24,12 @@ export class Distance {
 
     /** @returns {number} */
     distance() {
-        return Distance.#distance(this.token1.bounds, this.token2.bounds);
+        return Distance.#distance(this.token1, this.token2);
     }
 
     /** @returns {boolean} */
     isAdjacent() {
-        return Distance.#isAdjacent(this.token1.bounds, this.token2.bounds);
+        return Distance.#isAdjacent(this.token1, this.token2);
     }
 
     /** @returns {boolean} */
@@ -39,7 +39,7 @@ export class Distance {
 
     /** @returns {boolean} */
     isSharingSquare() {
-        return Distance.#isSharingSquare(this.token1.bounds, this.token2.bounds) || Distance.#isSharingSquare(this.token2.bounds, this.token1.bounds);
+        return Distance.#isSharingSquare(this.token1, this.token2) || Distance.#isSharingSquare(this.token2, this.token1);
     }
 
     /**
@@ -52,7 +52,7 @@ export class Distance {
 
     /** @returns {boolean} */
     isWithin10FootDiagonal() {
-        return Distance.#isWithin10FootDiagonal(this.token1.bounds, this.token2.bounds);
+        return Distance.#isWithin10FootDiagonal(this.token1, this.token2);
     }
 
     // TODO need a "reach" checkbox because only reach weapons have a special exception
@@ -63,7 +63,7 @@ export class Distance {
      * @returns {boolean}
      */
     isWithinRange(minFeet, maxFeet, reach) {
-        return Distance.#isWithinRange(this.token1.bounds, this.token2.bounds, minFeet, maxFeet, reach);
+        return Distance.#isWithinRange(this.token1, this.token2, minFeet, maxFeet, reach);
     }
 
     /**
@@ -112,66 +112,68 @@ export class Distance {
             return false;
         }
 
-        return actions.some((action) => this.#isWithinRange(attacker.bounds, target.bounds, action.minRange, action.maxRange, hasReach(action)));
+        return actions.some((action) => this.#isWithinRange(attacker, target, action.minRange, action.maxRange, hasReach(action)));
     }
 
     /**
-     * @param {Rect} left
-     * @param {Rect} right
+     * @param {TokenPF} left
+     * @param {TokenPF} right
+     * @param {boolean} [diagonalReach] if the check is for "10 foot reach adjacency test"
      * @returns {boolean}
      */
-    static #isAdjacent(left, right) {
-        const enlarged = new PIXI.Rectangle(
-            left.left - 1,
-            left.top - 1,
-            left.width + 2,
-            left.height + 2,
-        )
+    static #isAdjacent(left, right, diagonalReach = false) {
+        let enlarged;
+        if (diagonalReach) {
+            const scene = game.scenes.active;
+            const gridSize = scene.grid.size;
 
-        return enlarged.intersects(right);
+            // add "1 square (gridSize)" in all directions and see if adjacent
+            enlarged = new PIXI.Rectangle(
+                left.bounds.left - gridSize - 1,
+                left.bounds.top - gridSize - 1,
+                left.bounds.width + gridSize * 2 + 2,
+                left.bounds.height + gridSize * 2 + 2,
+            );
+        }
+        else {
+            enlarged = new PIXI.Rectangle(
+                left.bounds.left - 1,
+                left.bounds.top - 1,
+                left.bounds.width + 2,
+                left.bounds.height + 2,
+            )
+        }
+
+        return enlarged.intersects(right.bounds);
     }
 
     /**
-     * @param {Rect} first
-     * @param {Rect} second
+     * @param {TokenPF} first
+     * @param {TokenPF} second
      * @returns {boolean}
      */
     static #isSharingSquare(first, second) {
-        return first.left >= second.left
-            && first.top >= second.top
-            && first.right <= second.right
-            && first.bottom <= second.bottom;
+        return first.bounds.left >= second.bounds.left
+            && first.bounds.top >= second.bounds.top
+            && first.bounds.right <= second.bounds.right
+            && first.bounds.bottom <= second.bounds.bottom;
     }
 
     /**
-     * @param {Rect} token1
-     * @param {Rect} token2
+     * @param {TokenPF} token1
+     * @param {TokenPF} token2
      * @returns {boolean}
      */
     static #isWithin10FootDiagonal(token1, token2) {
-        /**
-         * @param {number} x
-         * @param {number} y
-         */
-        const t1 = (x, y) => ({ x, y, height: token1.height, width: token1.width });
         const scene = game.scenes.active;
         const gridSize = scene.grid.size;
 
-        // add "1 square (gridSize)" in all directions and see if adjacent
-        const enlarged = new PIXI.Rectangle(
-            token1.left - gridSize,
-            token1.top - gridSize,
-            token1.width + gridSize * 2,
-            token1.height + gridSize * 2,
-        );
-
-        return this.#isAdjacent(enlarged, token2);
+        return this.#isAdjacent(token1, token2, true);
     }
 
-    // TODO need a "reach" checkbox because only reach weapons have a special exception
     /**
-     * @param {Rect} token1
-     * @param {Rect} token2
+     * @param {TokenPF} token1
+     * @param {TokenPF} token2
      * @param {number} minFeet
      * @param {number} maxFeet
      * @param {boolean} [reach]
@@ -187,8 +189,8 @@ export class Distance {
     }
 
     /**
-     * @param {Rect} token1
-     * @param {Rect} token2
+     * @param {TokenPF} token1
+     * @param {TokenPF} token2
      * @returns {number}
      */
     static #distance(token1, token2) {
@@ -199,26 +201,26 @@ export class Distance {
         const scene = game.scenes.active;
         const gridSize = scene.grid.size;
 
-        let x1 = token1.left;
-        let x2 = token2.left;
-        let y1 = token1.top;
-        let y2 = token2.top;
+        let x1 = token1.bounds.left;
+        let x2 = token2.bounds.left;
+        let y1 = token1.bounds.top;
+        let y2 = token2.bounds.top;
 
-        if (this.#isLeftOf(token1, token2)) {
-            x1 += token1.width - gridSize;
+        if (this.#isLeftOf(token1.bounds, token2.bounds)) {
+            x1 += token1.bounds.width - gridSize;
         }
-        else if (this.#isRightOf(token1, token2)) {
-            x2 += token2.width - gridSize;
+        else if (this.#isRightOf(token1.bounds, token2.bounds)) {
+            x2 += token2.bounds.width - gridSize;
         }
         else {
             x2 = x1;
         }
 
-        if (this.#isAbove(token1, token2)) {
-            y1 += token1.height - gridSize;
+        if (this.#isAbove(token1.bounds, token2.bounds)) {
+            y1 += token1.bounds.height - gridSize;
         }
-        else if (this.#isBelow(token1, token2)) {
-            y2 += token2.height - gridSize;
+        else if (this.#isBelow(token1.bounds, token2.bounds)) {
+            y2 += token2.bounds.height - gridSize;
         }
         else {
             y2 = y1;
@@ -255,6 +257,17 @@ export class Distance {
      * @returns {boolean}
      */
     static #isBelow(token, target) { return token.top >= target.bottom; }
+
+    /**
+     * @param {TokenPF} token
+     * @returns {number}
+     */
+    static #ceiling(token) { return token.document.elevation + (token.bounds.width + token.bounds.height) / 2; }
+    /**
+     * @param {TokenPF} token
+     * @returns {number}
+     */
+    static #floor(token) { return token.document.elevation; }
 
     /**
      * @param {TokenPF} self
