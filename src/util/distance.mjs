@@ -178,46 +178,11 @@ export class Distance {
      * @returns {boolean}
      */
     static #isWithinRange(token1, token2, minFeet, maxFeet, reach = false) {
-        if (minFeet === 0 && this.#isSharingSquare(token1, token2)) {
-            return true;
-        }
-
-        const scene = game.scenes.active;
-        const gridSize = scene.grid.size;
-
         if (reach && maxFeet === 10 && this.#isWithin10FootDiagonal(token1, token2)) {
             return true;
         }
 
-        let x1 = token1.left;
-        let x2 = token2.left;
-        let y1 = token1.top;
-        let y2 = token2.top;
-
-        if (this.#isLeftOf(token1, token2)) {
-            x1 += token1.width - gridSize;
-        }
-        else if (this.#isRightOf(token1, token2)) {
-            x2 += token2.width - gridSize;
-        }
-        else {
-            x2 = x1;
-        }
-
-        if (this.#isAbove(token1, token2)) {
-            y1 += token1.height - gridSize;
-        }
-        else if (this.#isBelow(token1, token2)) {
-            y2 += token2.height - gridSize;
-        }
-        else {
-            y2 = y1;
-        }
-
-        // @ts-ignore
-        const ray = new Ray({ x: x1, y: y1 }, { x: x2, y: y2 });
-        // @ts-ignore
-        const distance = canvas.grid.grid.measureDistances([{ ray }], { gridSpaces: true })[0];
+        const distance = this.#distance(token1, token2);
         return minFeet <= distance && distance <= maxFeet;
     }
 
