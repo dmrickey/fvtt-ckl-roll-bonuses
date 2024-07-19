@@ -175,7 +175,7 @@ export class GlobalBonusSettings {
     static get globalBonusSettingsKey() { return 'global-bonuses'; }
 
     /** @returns {Record<string, boolean>} */
-    static get globalBonusSettings() {
+    static get #globalBonusSettings() {
         const current = game.settings.get(MODULE_NAME, this.globalBonusSettingsKey) || {};
         // @ts-ignore
         return current;
@@ -186,7 +186,7 @@ export class GlobalBonusSettings {
      * @returns {boolean}
      */
     static setting(key) {
-        return !!this.globalBonusSettings[key];
+        return !Object.hasOwn(this.#globalBonusSettings, key) || !!this.#globalBonusSettings[key];
     }
 
     static {
@@ -227,14 +227,12 @@ class GlobalBonusSettingsApplication extends FormApplication {
     /** @override */
     getData(options = {}) {
         let context = super.getData()
-        const current = GlobalBonusSettings.globalBonusSettings;
-
         const sections = GlobalBonusSettings.bonusTypes.map((bonus) => ({
             description: localize(`global-settings.application.section.${bonus.key}.description`),
             issues: localize(`global-settings.application.section.${bonus.key}.issues`),
             key: bonus.key,
             label: bonus.label,
-            value: !!current[bonus.key],
+            value: GlobalBonusSettings.setting(bonus.key),
         }));
 
         context.key = GlobalBonusSettings.globalBonusSettingsKey;

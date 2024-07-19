@@ -236,3 +236,4 @@
 - update function target examples with `const item = doc.item ?? item;`
 - remove BaseSource.init() (plus overrides) and put that in a `static {}` method (and make sure everything still works)
 - consider token height in distance checks
+- make journal entry for global bonuses
