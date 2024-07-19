@@ -103,7 +103,7 @@ export class RangedIncrementPenalty extends BaseGlobalBonus {
             }
 
             const total = -penalty * (steps - 1);
-            if (total) {
+            if (total < 0) {
                 const args = { range: distance, units: actionUse.action.data.range.units };
                 shared.attackBonus.push(`${total}[${localize('ranged-attack-penalty', args)}]`);
             }
