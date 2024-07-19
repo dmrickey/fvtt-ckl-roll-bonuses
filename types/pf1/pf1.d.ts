@@ -337,7 +337,8 @@ declare global {
                 maxIncrements: number;
                 minUnits: '';
                 minValue: null;
-                units: 'ft';
+                units: 'ft' | 'reach';
+                value: string;
             };
         };
         item: ItemPF;

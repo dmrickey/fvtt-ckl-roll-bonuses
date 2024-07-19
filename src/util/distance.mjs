@@ -59,10 +59,11 @@ export class Distance {
     /**
      * @param {number} minFeet
      * @param {number} maxFeet
+     * @param {boolean} [reach]
      * @returns {boolean}
      */
-    isWithinRange(minFeet, maxFeet) {
-        return Distance.#isWithinRange(this.token1.bounds, this.token2.bounds, minFeet, maxFeet)
+    isWithinRange(minFeet, maxFeet, reach) {
+        return Distance.#isWithinRange(this.token1.bounds, this.token2.bounds, minFeet, maxFeet, reach);
     }
 
     /**
@@ -95,7 +96,23 @@ export class Distance {
             actions = [...weapons, ...attacks];
         }
 
-        return actions.some((action) => this.#isWithinRange(attacker.bounds, target.bounds, action.minRange, action.maxRange));
+        /**
+         * @param {ItemAction} action
+         */
+        const hasReach = (action) => {
+            const { item } = action;
+            if (item instanceof pf1.documents.item.ItemWeaponPF || item instanceof pf1.documents.item.ItemAttackPF) {
+                if (item.system.weaponGroups?.value.includes("natural")) {
+                    return true;
+                }
+                if (action.data.range.units === 'reach') {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        return actions.some((action) => this.#isWithinRange(attacker.bounds, target.bounds, action.minRange, action.maxRange, hasReach(action)));
     }
 
     /**
@@ -157,9 +174,10 @@ export class Distance {
      * @param {Rect} token2
      * @param {number} minFeet
      * @param {number} maxFeet
+     * @param {boolean} [reach]
      * @returns {boolean}
      */
-    static #isWithinRange(token1, token2, minFeet, maxFeet) {
+    static #isWithinRange(token1, token2, minFeet, maxFeet, reach = false) {
         if (minFeet === 0 && this.#isSharingSquare(token1, token2)) {
             return true;
         }
@@ -167,7 +185,7 @@ export class Distance {
         const scene = game.scenes.active;
         const gridSize = scene.grid.size;
 
-        if (maxFeet === 10 && this.#isWithin10FootDiagonal(token1, token2)) {
+        if (reach && maxFeet === 10 && this.#isWithin10FootDiagonal(token1, token2)) {
             return true;
         }
 
