@@ -5,7 +5,7 @@
  */
 class SettingsConfig<
     Options extends FormApplicationOptions = FormApplicationOptions
-    > extends FormApplication<Options> {
+> extends FormApplication<Options> {
     /**
      * @defaultValue
      * ```typescript
@@ -21,7 +21,7 @@ class SettingsConfig<
      * })
      * ```
      */
-    static override get defaultOptions(): typeof FormApplication["defaultOptions"];
+    static override get defaultOptions(): (typeof FormApplication)['defaultOptions'];
 
     override getData(options?: Partial<Options>): MaybePromise<object>;
 
@@ -48,26 +48,36 @@ class SettingsConfig<
      */
     protected _previewFontScaling(event: JQuery.ChangeEvent): void;
 
-    override close(options?: Application.CloseOptions | undefined): Promise<void>;
+    override close(
+        options?: Application.CloseOptions | undefined
+    ): Promise<void>;
 
-    protected override _updateObject(event: Event, formData: SettingsConfig.FormData): Promise<unknown>;
+    protected override _updateObject(
+        event: Event,
+        formData: SettingsConfig.FormData
+    ): Promise<unknown>;
 }
 
 namespace SettingsConfig {
     interface FormData {
-        "core.animateRollTable": boolean;
-        "core.chatBubbles": boolean;
-        "core.chatBubblesPan": boolean;
-        "core.coneTemplateType": "round" | "flat";
-        "core.language": string;
-        "core.leftClickRelease": boolean;
-        "core.lightAnimation": boolean;
-        "core.maxFPS": number;
-        "core.mipmap": boolean;
-        "core.noCanvas": boolean;
-        "core.softShadows": boolean;
-        "core.tokenDragPreview": boolean;
-        "core.visionAnimation": boolean;
+        'core.animateRollTable': boolean;
+        'core.chatBubbles': boolean;
+        'core.chatBubblesPan': boolean;
+        'core.coneTemplateType': 'round' | 'flat';
+        'core.language': string;
+        'core.leftClickRelease': boolean;
+        'core.lightAnimation': boolean;
+        'core.maxFPS': number;
+        'core.mipmap': boolean;
+        'core.noCanvas': boolean;
+        'core.softShadows': boolean;
+        'core.tokenDragPreview': boolean;
+        'core.visionAnimation': boolean;
         [key: string]: unknown;
     }
+
+    /**
+     * Prompts a client reload
+     */
+    function reloadConfirm({ world: boolean }): void;
 }

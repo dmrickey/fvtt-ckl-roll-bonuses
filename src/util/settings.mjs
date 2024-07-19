@@ -250,5 +250,6 @@ class GlobalBonusSettingsApplication extends FormApplication {
     async _updateObject(_event, formData) {
         const update = expandObject(formData);
         game.settings.set(MODULE_NAME, GlobalBonusSettings.globalBonusSettingsKey, update);
+        SettingsConfig.reloadConfirm({ world: true })
     }
 }
