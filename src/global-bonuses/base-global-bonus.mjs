@@ -1,4 +1,5 @@
 import { MODULE_NAME } from '../consts.mjs';
+import { localize } from '../util/localize.mjs';
 import { GlobalBonusSettings } from '../util/settings.mjs';
 
 /** @abstract */
@@ -11,6 +12,13 @@ export class BaseGlobalBonus {
      * @param {RollData} rollData
      */
     static initRollData(action, rollData) { }
+
+    /**
+     * Label for this bonus.
+     *
+     * @returns {string}
+     */
+    static get label() { return localize(`global-bonus.${this.key}`); }
 
     /**
      * Key for this global bonus

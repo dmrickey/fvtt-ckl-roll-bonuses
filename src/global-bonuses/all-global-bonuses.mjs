@@ -10,7 +10,7 @@ export class GlobalBonuses {
      */
     static registerBonus(bonus) {
         GlobalBonuses.allBonuses.push(bonus);
-        GlobalBonusSettings.registerKey(bonus.key);
+        GlobalBonusSettings.registerKey(bonus);
     }
 
     /**
@@ -44,8 +44,8 @@ Hooks.on('renderActorSheet', (
         .filter((b) => !b.isDisabled());
     const settings = bonuses.map((b) => ({
         checked: b.isDisabledForActor(actor),
-        journal: `journal - ${b.key}`,
-        label: `label - ${b.key}`,
+        journal: `journal - ${b.key}`, // TODO
+        label: b.label,
         path: `flags.${MODULE_NAME}.${b.actorDisabledFlag}`,
     }));
 

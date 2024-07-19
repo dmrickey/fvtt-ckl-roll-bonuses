@@ -165,12 +165,12 @@ class ItemNameTranslationConfig extends FormApplication {
 }
 
 export class GlobalBonusSettings {
-    /** @type {Set<string>} */
-    static #keys = new Set();
-    static get keys() { return [...this.#keys]; }
+    /** @type {Set<RollBonusesAPI["BaseGlobalBonus"]>} */
+    static #bonuses = new Set();
+    static get bonusTypes() { return [...this.#bonuses]; }
 
-    /** @param {string} key */
-    static registerKey(key) { this.#keys.add(key); }
+    /** @param {RollBonusesAPI["BaseGlobalBonus"]} bonus */
+    static registerKey(bonus) { this.#bonuses.add(bonus); }
 
     static get globalBonusSettingsKey() { return 'global-bonuses'; }
 
@@ -229,12 +229,12 @@ class GlobalBonusSettingsApplication extends FormApplication {
         let context = super.getData()
         const current = GlobalBonusSettings.globalBonusSettings;
 
-        const sections = GlobalBonusSettings.keys.map((key) => ({
-            description: localize(`global-settings.application.section.${key}.description`),
-            issues: localize(`global-settings.application.section.${key}.issues`),
-            key,
-            label: localize(`global-settings.application.section.${key}.label`),
-            value: !!current[key],
+        const sections = GlobalBonusSettings.bonusTypes.map((bonus) => ({
+            description: localize(`global-settings.application.section.${bonus.key}.description`),
+            issues: localize(`global-settings.application.section.${bonus.key}.issues`),
+            key: bonus.key,
+            label: bonus.label,
+            value: !!current[bonus.key],
         }));
 
         context.key = GlobalBonusSettings.globalBonusSettingsKey;

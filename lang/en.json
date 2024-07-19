@@ -184,6 +184,13 @@
         "cancel": "Cancel",
         "cl-mod": "{mod} CL",
         "cl-label-mod": "{mod} CL ({label})",
+        "global-bonus": {
+            "actor": {
+                "description": "The global bonuses that the GM has enabled for this world. Each setting can be individually disabled here if it is not suitable for this particular actor.",
+                "disable": "Disable Global Bonuses for this Actor"
+            },
+            "range-increment-penalty": "Ranged Increment Penalty"
+        },
         "global-settings": {
             "application": {
                 "description": "This attempts to automate global bonuses that are tedious to do manually. Some of these are a best-effort and should work under most circumstances, but due to their nature some will have quirks that may be unavoidable.",
@@ -192,9 +199,8 @@
                 "title": "Automatic Combat Bonuses",
                 "section": {
                     "range-increment-penalty": {
-                        "description": "Automatically add ranged attack penalties. Enabling this also enables bonuses to modify Ranged Attack Penalties and Range Increments.",
-                        "issues": "This should fully work in most circumstances. The only case I have found where it could add the wrong penalty is if a large (or larger) token is partially hidden by a wall. It could be that the visible part is farther away than the closest part. The mod  only calcuates based on the closest part of the target regardless of walls.",
-                        "label": "Ranged Attack Penalty"
+                        "description": "Automatically add ranged incremental attack penalties. Enabling this also enables bonuses to modify Ranged Attack Penalties and Range Increments.",
+                        "issues": "This should fully work in most circumstances. The only case I have found where it could add the wrong penalty is if a large (or larger) token is partially hidden by a wall. It could be that the visible part is farther away than the closest part. The mod  only calcuates based on the closest part of the target regardless of walls."
                     }
                 }
             }
