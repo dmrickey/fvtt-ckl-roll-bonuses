@@ -39,7 +39,7 @@ export class Distance {
 
     /** @returns {boolean} */
     isSharingSquare() {
-        return Distance.#isSharingSquare(this.token1, this.token2) || Distance.#isSharingSquare(this.token2, this.token1);
+        return Distance.#isSharingSquare(this.token1, this.token2);
     }
 
     /**
@@ -48,11 +48,6 @@ export class Distance {
      */
     threatens(action = undefined) {
         return Distance.#threatens(this.token1, this.token2, action);
-    }
-
-    /** @returns {boolean} */
-    isWithin10FootDiagonal() {
-        return Distance.#isWithin10FootDiagonal(this.token1, this.token2);
     }
 
     // TODO need a "reach" checkbox because only reach weapons have a special exception
@@ -122,11 +117,14 @@ export class Distance {
      * @returns {boolean}
      */
     static #isAdjacent(left, right, diagonalReach = false) {
+        const scene = game.scenes.active;
+        const gridSize = scene.grid.size;
+
+        let floor = this.#floor(left);
+        let ceiling = this.#ceiling(left);
+
         let enlarged;
         if (diagonalReach) {
-            const scene = game.scenes.active;
-            const gridSize = scene.grid.size;
-
             // add "1 square (gridSize)" in all directions and see if adjacent
             enlarged = new PIXI.Rectangle(
                 left.bounds.left - gridSize - 1,
@@ -141,10 +139,17 @@ export class Distance {
                 left.bounds.top - 1,
                 left.bounds.width + 2,
                 left.bounds.height + 2,
-            )
+            );
+            floor -= gridSize;
+            ceiling += gridSize;
         }
 
-        return enlarged.intersects(right.bounds);
+        return enlarged.intersects(right.bounds)
+            && (
+                (this.#floor(right) <= ceiling && ceiling <= this.#ceiling(right))
+                || (this.#floor(right) <= floor && floor <= this.#ceiling(right))
+                || (ceiling >= this.#ceiling(right) && this.#ceiling(right) >= floor)
+            );
     }
 
     /**
@@ -153,22 +158,11 @@ export class Distance {
      * @returns {boolean}
      */
     static #isSharingSquare(first, second) {
-        return first.bounds.left >= second.bounds.left
-            && first.bounds.top >= second.bounds.top
-            && first.bounds.right <= second.bounds.right
-            && first.bounds.bottom <= second.bounds.bottom;
-    }
-
-    /**
-     * @param {TokenPF} token1
-     * @param {TokenPF} token2
-     * @returns {boolean}
-     */
-    static #isWithin10FootDiagonal(token1, token2) {
-        const scene = game.scenes.active;
-        const gridSize = scene.grid.size;
-
-        return this.#isAdjacent(token1, token2, true);
+        /** @param {TokenPF} f @param {TokenPF} s @returns {boolean} */
+        const isSharing = (f, s) => f.bounds.intersects(s.bounds)
+            && !this.#isAboveCeiling(f, s)
+            && !this.#isBelowFloor(f, s);
+        return isSharing(first, second) || isSharing(second, first);
     }
 
     /**
@@ -180,7 +174,7 @@ export class Distance {
      * @returns {boolean}
      */
     static #isWithinRange(token1, token2, minFeet, maxFeet, reach = false) {
-        if (reach && maxFeet === 10 && this.#isWithin10FootDiagonal(token1, token2)) {
+        if (reach && maxFeet === 10 && this.#isAdjacent(token1, token2, true)) {
             return true;
         }
 
@@ -203,71 +197,107 @@ export class Distance {
 
         let x1 = token1.bounds.left;
         let x2 = token2.bounds.left;
-        let y1 = token1.bounds.top;
-        let y2 = token2.bounds.top;
-
-        if (this.#isLeftOf(token1.bounds, token2.bounds)) {
+        if (this.#isLeftOf(token1, token2)) {
             x1 += token1.bounds.width - gridSize;
         }
-        else if (this.#isRightOf(token1.bounds, token2.bounds)) {
+        else if (this.#isRightOf(token1, token2)) {
             x2 += token2.bounds.width - gridSize;
         }
         else {
             x2 = x1;
         }
 
-        if (this.#isAbove(token1.bounds, token2.bounds)) {
+        let y1 = token1.bounds.top;
+        let y2 = token2.bounds.top;
+        if (this.#isAbove(token1, token2)) {
             y1 += token1.bounds.height - gridSize;
         }
-        else if (this.#isBelow(token1.bounds, token2.bounds)) {
+        else if (this.#isBelow(token1, token2)) {
             y2 += token2.bounds.height - gridSize;
         }
         else {
             y2 = y1;
         }
 
+        let z1 = this.#floor(token1);
+        let z2 = this.#floor(token2);
+        if (this.#isAboveCeiling(token1, token2)) {
+            z2 = this.#ceiling(token2);
+        }
+        else if (this.#isBelowFloor(token1, token2)) {
+            z1 = this.#ceiling(token1);
+        }
+        else {
+            z2 = z1;
+        }
+
         // @ts-ignore
         const ray = new Ray({ x: x1, y: y1 }, { x: x2, y: y2 });
         // @ts-ignore
         const distance = canvas.grid.grid.measureDistances([{ ray }], { gridSpaces: true })[0];
-        return distance;
+        if (z1 === z2) {
+            return distance;
+        }
+
+        // @ts-ignore
+        const zRay = new Ray({ x: 0, y: z1 }, { x: 0, y: z2 });
+        // @ts-ignore
+        const zDistance = canvas.grid.grid.measureDistances([{ ray: zRay }], { gridSpaces: true })[0];
+        const d = Math.round(Math.sqrt(distance * distance + zDistance * zDistance) * 10) / 10;
+        return d;
     }
 
     /**
-     * @param {Rect} token
-     * @param {Rect} target
+     * @param {TokenPF} token
+     * @param {TokenPF} target
      * @returns {boolean}
      */
-    static #isLeftOf(token, target) { return token.right <= target.left; }
+    static #isLeftOf(token, target) { return token.bounds.right <= target.bounds.left; }
     /**
-     * @param {Rect} token
-     * @param {Rect} target
+     * @param {TokenPF} token
+     * @param {TokenPF} target
      * @returns {boolean}
      */
-    static #isRightOf(token, target) { return token.left >= target.right; }
+    static #isRightOf(token, target) { return token.bounds.left >= target.bounds.right; }
     /**
-     * @param {Rect} token
-     * @param {Rect} target
+     * @param {TokenPF} token
+     * @param {TokenPF} target
      * @returns {boolean}
      */
-    static #isAbove(token, target) { return token.bottom <= target.top; }
+    static #isAbove(token, target) { return token.bounds.bottom <= target.bounds.top; }
     /**
-     * @param {Rect} token
-     * @param {Rect} target
+     * @param {TokenPF} token
+     * @param {TokenPF} target
      * @returns {boolean}
      */
-    static #isBelow(token, target) { return token.top >= target.bottom; }
+    static #isBelow(token, target) { return token.bounds.top >= target.bounds.bottom; }
+    /**
+     * @param {TokenPF} token
+     * @param {TokenPF} target
+     * @returns {boolean}
+     */
+    static #isAboveCeiling(token, target) { return this.#floor(token) >= this.#ceiling(target); }
+    /**
+     * @param {TokenPF} token
+     * @param {TokenPF} target
+     * @returns {boolean}
+     */
+    static #isBelowFloor(token, target) { return this.#ceiling(token) <= this.#floor(target); }
 
     /**
      * @param {TokenPF} token
      * @returns {number}
      */
-    static #ceiling(token) { return token.document.elevation + (token.bounds.width + token.bounds.height) / 2; }
+    static #ceiling(token) { return this.#floor(token) + (token.bounds.width + token.bounds.height) / 2; }
     /**
      * @param {TokenPF} token
      * @returns {number}
      */
-    static #floor(token) { return token.document.elevation; }
+    static #floor(token) {
+        const { distance, size } = game.scenes.active.grid;
+        const units = size / distance;
+        return token.document.elevation * units;
+    }
 
     /**
      * @param {TokenPF} self
