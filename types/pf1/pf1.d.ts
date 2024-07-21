@@ -1208,8 +1208,9 @@ declare global {
         rb: {
             rangePenalty?: {
                 maxIncrements: number;
-                range: number;
                 penalty: number;
+                penaltyOffset: number;
+                range: number;
             };
         };
         range: {

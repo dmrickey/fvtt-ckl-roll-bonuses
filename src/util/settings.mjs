@@ -172,6 +172,9 @@ export class GlobalBonusSettings {
     /** @param {RollBonusesAPI["BaseGlobalBonus"]} bonus */
     static registerKey(bonus) { this.#bonuses.add(bonus); }
 
+    /** @abstract */
+    static registerBonuses() { }
+
     static get globalBonusSettingsKey() { return 'global-bonuses'; }
 
     /** @returns {Record<string, boolean>} */

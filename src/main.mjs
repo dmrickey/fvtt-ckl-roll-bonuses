@@ -268,7 +268,7 @@ function prepareActorDerivedData(wrapped) {
  * @param {ActorPF | ItemPF | ItemAction} thing
  * @param {RollData} rollData
  */
-function onItemActionRollData(thing, rollData) {
+function onGetRollData(thing, rollData) {
     // this fires for actor -> item -> action. If I handle more than one then it would double up bonuses. So I handle the root-most option
     if (thing instanceof pf1.components.ItemAction) {
         const action = thing;
@@ -411,7 +411,7 @@ function itemAttackFromItem(wrapped, item) {
 }
 
 Hooks.on('pf1CreateActionUse', onCreateActionUse);
-Hooks.on('pf1GetRollData', onItemActionRollData);
+Hooks.on('pf1GetRollData', onGetRollData);
 Hooks.once('init', () => {
     // change.mjs also fires a local hook for re-calculating changes (e.g. Fate's Favored).
 

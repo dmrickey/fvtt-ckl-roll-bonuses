@@ -1,11 +1,13 @@
+import { Sources } from '../targeted/source-registration.mjs';
 import { Distance } from '../util/distance.mjs';
 import { currentTargets } from '../util/get-current-targets.mjs';
 import { customGlobalHooks } from '../util/hooks.mjs'
 import { localize } from '../util/localize.mjs';
 import { BaseGlobalBonus } from './base-global-bonus.mjs';
+import { RangedPenaltyBonus } from './targeted/bonuses/ranged-penalty-bonus.mjs';
 
 /** @extends {BaseGlobalBonus} */
-export class RangedIncrementPenalty extends BaseGlobalBonus {
+export class RangedIncrementPenaltyGlobalBonus extends BaseGlobalBonus {
     /**
      * @inheritdoc
      * @override
@@ -45,9 +47,19 @@ export class RangedIncrementPenalty extends BaseGlobalBonus {
 
         rollData.rb.rangePenalty = {
             maxIncrements,
-            range,
             penalty: 2,
+            penaltyOffset: 0,
+            range,
         };
+    }
+
+    /**
+     * @inheritdoc
+     * @override
+     */
+    static registerBonuses() {
+        Sources.registerSource(RangedPenaltyBonus);
+        RangedPenaltyBonus.init();
     }
 
     static {
@@ -56,7 +68,7 @@ export class RangedIncrementPenalty extends BaseGlobalBonus {
          */
         function addRangedPenalty(actionUse) {
             const { actor, item, shared } = actionUse;
-            if (RangedIncrementPenalty.isDisabled() || RangedIncrementPenalty.isDisabledForActor(actor)) {
+            if (RangedIncrementPenaltyGlobalBonus.isDisabled() || RangedIncrementPenaltyGlobalBonus.isDisabledForActor(actor)) {
                 return;
             }
             if (!(item instanceof pf1.documents.item.ItemWeaponPF || item instanceof pf1.documents.item.ItemAttackPF)) {
@@ -78,7 +90,7 @@ export class RangedIncrementPenalty extends BaseGlobalBonus {
                 return;
             }
 
-            const { maxIncrements, range, penalty } = rangePenalty;
+            const { maxIncrements, penalty, penaltyOffset, range } = rangePenalty;
 
             let distance = 0;
             targets.forEach((target) => {
@@ -102,7 +114,7 @@ export class RangedIncrementPenalty extends BaseGlobalBonus {
                 return;
             }
 
-            const total = -penalty * (steps - 1);
+            const total = -(penalty * (steps - 1) + penaltyOffset);
             if (total < 0) {
                 const args = { range: distance, units: actionUse.action.data.range.units };
                 shared.attackBonus.push(`${total}[${localize('ranged-attack-penalty', args)}]`);

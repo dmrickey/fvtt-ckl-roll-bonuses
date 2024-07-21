@@ -31,6 +31,13 @@ export class BaseGlobalBonus {
     static get actorDisabledFlag() { return `global-disabled.${this.key}`; }
 
     /**
+     * Register any specific or targeted bonuses that are associated with this global bonus
+     *
+     * @abstract
+     */
+    static registerBonuses() { }
+
+    /**
      * Journal UUID
      *
      * @abstract

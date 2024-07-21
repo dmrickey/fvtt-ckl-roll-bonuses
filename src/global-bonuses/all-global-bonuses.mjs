@@ -11,6 +11,11 @@ export class GlobalBonuses {
     static registerBonus(bonus) {
         GlobalBonuses.allBonuses.push(bonus);
         GlobalBonusSettings.registerKey(bonus);
+        Hooks.once('init', () => {
+            if (GlobalBonusSettings.setting(bonus.key)) {
+                bonus.registerBonuses();
+            }
+        });
     }
 
     /**
