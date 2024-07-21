@@ -71,6 +71,55 @@ function d20RollWrapper(wrapped, options = {}) {
     return wrapped.call(this, options);
 }
 
+// function preAttackRoll(action, config, rollData, rollOptions, parts, changes) {
+//     changes.push(...[
+//         createChangeForTooltip({
+//             name: 'test 50',
+//             type: 'alchemical',
+//             value: 50,
+//             subTarget: 'attack',
+//         }),
+//         createChangeForTooltip({
+//             name: 'test 60',
+//             type: 'alchemical',
+//             value: 60,
+//             subTarget: 'attack',
+//         }),
+//         createChangeForTooltip({
+//             name: 'test 40',
+//             type: 'alchemical',
+//             value: 40,
+//             subTarget: 'attack',
+//         }),
+//     ]);
+//     debugger;
+// }
+// Hooks.on("pf1PreAttackRoll", preAttackRoll);
+// function preDamageRoll(action, rollData, parts, changes) {
+//     changes.push(...[
+//         createChangeForTooltip({
+//             name: 'test 55',
+//             type: 'alchemical',
+//             value: 55,
+//             subTarget: 'damage',
+//         }),
+//         createChangeForTooltip({
+//             name: 'test 65',
+//             type: 'alchemical',
+//             value: 65,
+//             subTarget: 'damage',
+//         }),
+//         createChangeForTooltip({
+//             name: 'test 45',
+//             type: 'alchemical',
+//             value: 45,
+//             subTarget: 'damage',
+//         }),
+//     ]);
+//     debugger;
+// }
+// Hooks.on('pf1PreDamageRoll', preDamageRoll);
+
 /**
  * @this {ItemPF}
  * @param {*} wrapped

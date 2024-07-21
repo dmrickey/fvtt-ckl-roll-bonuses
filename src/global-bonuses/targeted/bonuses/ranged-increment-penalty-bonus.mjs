@@ -1,6 +1,7 @@
 import { textInput } from '../../../handlebars-handlers/bonus-inputs/text-input.mjs';
 import { BaseBonus } from '../../../targeted/bonuses/base-bonus.mjs';
 import { FormulaCacheHelper } from '../../../util/flag-helpers.mjs';
+import { localizeBonusTooltip } from '../../../util/localize.mjs';
 import { signed } from '../../../util/to-signed-string.mjs';
 
 /**
@@ -22,22 +23,17 @@ export class RangedIncrementPenaltyBonus extends BaseBonus {
      * @override
      * @returns {string}
      */
-    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.TODO'; }
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.4A4bCh8VsQVbTsAY#ranged-increment-penalty'; }
 
-    /**
-     * @override
-     * @inheritdoc
-     * @param {ItemPF} source
-     * @returns {Nullable<string[]>}
-     */
-    static getHints(source) {
-        const formula = FormulaCacheHelper.getModuleFlagFormula(source, this.key)[this.key];
-        const roll = RollPF.safeRollSync(formula);
-
-        return roll.isNumber && roll.total
-            ? [`${signed(roll.total)}`]
-            : [`${formula}`];
-    }
+    // TODO not sure what to do here
+    // /**
+    //  * @override
+    //  * @inheritdoc
+    //  * @param {ItemPF} source
+    //  * @returns {Nullable<string[]>}
+    //  */
+    // static getHints(source) {
+    // }
 
     /**
      * @override
@@ -82,9 +78,9 @@ export class RangedIncrementPenaltyBonus extends BaseBonus {
         textInput({
             item,
             journal: this.journal,
-            key: this.#maxIncrementOffsetKey,
+            key: this.#incrementPenaltyOffsetKey,
             parent: html,
-            tooltip: this.tooltip,
+            tooltip: localizeBonusTooltip(this.#incrementPenaltyOffsetKey),
         }, {
             canEdit: isEditable,
             isModuleFlag: true,
@@ -92,9 +88,9 @@ export class RangedIncrementPenaltyBonus extends BaseBonus {
         textInput({
             item,
             journal: this.journal,
-            key: this.#incrementPenaltyOffsetKey,
+            key: this.#maxIncrementOffsetKey,
             parent: html,
-            tooltip: this.tooltip,
+            tooltip: localizeBonusTooltip(this.#maxIncrementOffsetKey),
         }, {
             canEdit: isEditable,
             isModuleFlag: true,
@@ -104,7 +100,7 @@ export class RangedIncrementPenaltyBonus extends BaseBonus {
             journal: this.journal,
             key: this.#penaltyOffsetKey,
             parent: html,
-            tooltip: this.tooltip,
+            tooltip: localizeBonusTooltip(this.#penaltyOffsetKey),
         }, {
             canEdit: isEditable,
             isModuleFlag: true,
