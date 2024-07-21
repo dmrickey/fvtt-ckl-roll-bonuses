@@ -1,6 +1,6 @@
 import { GlobalBonuses } from './all-global-bonuses.mjs';
-import { RangedIncrementPenaltyGlobalBonus } from './ranged-attack-penalty.mjs';
+import { RangedIncrementPenaltyGlobalBonus } from './ranged-increment-penalty.mjs';
 
 export const registerGlobalBonuses = () => [
-  RangedIncrementPenaltyGlobalBonus,
+    RangedIncrementPenaltyGlobalBonus,
 ].forEach(GlobalBonuses.registerBonus);

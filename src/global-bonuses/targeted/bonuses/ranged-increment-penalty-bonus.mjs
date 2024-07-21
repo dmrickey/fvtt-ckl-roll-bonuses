@@ -6,12 +6,12 @@ import { signed } from '../../../util/to-signed-string.mjs';
 /**
  * @extends BaseBonus
  */
-export class RangedPenaltyBonus extends BaseBonus {
+export class RangedIncrementPenaltyBonus extends BaseBonus {
     /**
      * @override
      * @inheritdoc
      */
-    static get sourceKey() { return 'ranged-penalty'; }
+    static get sourceKey() { return 'ranged-increment-penalty'; }
 
     static get #incrementPenaltyOffsetKey() { return `${this.key}-increment-penalty-offset`; }
     static get #maxIncrementOffsetKey() { return `${this.key}-max-increment-offset`; }

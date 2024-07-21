@@ -224,11 +224,3 @@
   - And would allow automating rerolls for abilities like Weapon of the Chosen
 
 # vnext
-- Range Penalty
-  - Make bonuses for it
-- update function target examples with `const item = doc.item ?? item;`
-- remove BaseSource.init() (plus overrides) and put that in a `static {}` method (and make sure everything still works)
-- Distance
-  - height in distance checks
-- make journal entry for global bonuses
-  - including bonus for increment penalty bonus

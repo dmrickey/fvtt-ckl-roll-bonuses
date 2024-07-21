@@ -4,7 +4,7 @@ import { currentTargets } from '../util/get-current-targets.mjs';
 import { customGlobalHooks } from '../util/hooks.mjs'
 import { localize } from '../util/localize.mjs';
 import { BaseGlobalBonus } from './base-global-bonus.mjs';
-import { RangedPenaltyBonus } from './targeted/bonuses/ranged-penalty-bonus.mjs';
+import { RangedIncrementPenaltyBonus } from './targeted/bonuses/ranged-increment-penalty-bonus.mjs';
 
 /** @extends {BaseGlobalBonus} */
 export class RangedIncrementPenaltyGlobalBonus extends BaseGlobalBonus {
@@ -58,8 +58,8 @@ export class RangedIncrementPenaltyGlobalBonus extends BaseGlobalBonus {
      * @override
      */
     static registerBonuses() {
-        Sources.registerSource(RangedPenaltyBonus);
-        RangedPenaltyBonus.init();
+        Sources.registerSource(RangedIncrementPenaltyBonus);
+        RangedIncrementPenaltyBonus.init();
     }
 
     static {
