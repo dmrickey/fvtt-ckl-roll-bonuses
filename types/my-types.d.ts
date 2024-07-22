@@ -2,7 +2,7 @@ import { BaseSource } from '../src/targeted/base-source.mjs';
 import { BaseBonus } from '../src/targeted/bonuses/base-bonus.mjs';
 import { BaseTarget } from '../src/targeted/targets/base-target.mjs';
 import { SpecificBonuses } from '../src/bonuses/all-specific-bonuses.mjs';
-import { BaseGlobalBonus } from '../src/global-bonuses/base-global-bonus.mjs';
+import { BaseGlobalBonus } from '../src/global-bonuses/.base-global-bonus.mjs';
 
 export {};
 

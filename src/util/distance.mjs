@@ -37,6 +37,10 @@ export class Distance {
         return Distance.#threatens(this.token1, this.token2) || Distance.#threatens(this.token2, this.token1);
     }
 
+    isOnHigherGround() {
+        return Distance.#floor(this.token1) > Distance.#floor(this.token2);
+    }
+
     /** @returns {boolean} */
     isSharingSquare() {
         return Distance.#isSharingSquare(this.token1, this.token2);

@@ -2,7 +2,6 @@ import { textInput } from '../../../handlebars-handlers/bonus-inputs/text-input.
 import { BaseBonus } from '../../../targeted/bonuses/base-bonus.mjs';
 import { FormulaCacheHelper } from '../../../util/flag-helpers.mjs';
 import { localizeBonusTooltip } from '../../../util/localize.mjs';
-import { signed } from '../../../util/to-signed-string.mjs';
 
 /**
  * @extends BaseBonus

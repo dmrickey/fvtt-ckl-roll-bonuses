@@ -26,7 +26,14 @@ declare global {
         cha: 'Charisma';
     }
 
-    type ActionType = 'msak' | 'mwak' | 'rsak' | 'rwak' | 'mcman' | 'rcman';
+    type ActionType =
+        | 'msak'
+        | 'mwak'
+        | 'rsak'
+        | 'rwak'
+        | 'mcman'
+        | 'rcman'
+        | 'twak';
 
     declare type SkillInfo = SkillRollData & {
         id: keyof typeof pf1.config.skills;

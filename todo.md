@@ -224,3 +224,8 @@
   - And would allow automating rerolls for abilities like Weapon of the Chosen
 
 # vnext
+- add global bonuses to API
+- document
+  - higher ground global bonus
+  - shooting into melee global bonus
+- Rename `Distance` to `PositionHelper` or something like that

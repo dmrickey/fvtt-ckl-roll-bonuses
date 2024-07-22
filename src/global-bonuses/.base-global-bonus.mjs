@@ -20,13 +20,16 @@ export class BaseGlobalBonus {
      */
     static get label() { return localize(`global-bonus.${this.key}`); }
 
+    /** @returns { string } */
+    static get key() { return `$global-bonus_${this.bonusKey}`; }
+
     /**
      * Key for this global bonus
      *
      * @abstract
      * @returns {string}
     */
-    static get key() { throw new Error('Must be overridden'); }
+    static get bonusKey() { throw new Error('Must be overridden'); }
     /** @returns {string} */
     static get actorDisabledFlag() { return `global-disabled.${this.key}`; }
 

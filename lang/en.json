@@ -353,6 +353,10 @@
                 "name": "Martial Focus",
                 "default": "Martial Focus"
             },
+            "precise-shot": {
+                "name": "Precise Shot",
+                "default": "Precise Shot"
+            },
             "racial-weapon-focus": {
                 "name": "Racial Weapon Focus",
                 "default": "Gnome Weapon Focus"
