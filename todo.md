@@ -228,4 +228,3 @@
 - document
   - higher ground global bonus
   - shooting into melee global bonus
-- Rename `Distance` to `PositionHelper` or something like that

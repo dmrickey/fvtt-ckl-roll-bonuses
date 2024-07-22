@@ -1,5 +1,5 @@
 import { textInput } from '../../../handlebars-handlers/bonus-inputs/text-input.mjs';
-import { Distance } from '../../../util/distance.mjs';
+import { PositionalHelper } from '../../../util/positional-helper.mjs';
 import { FormulaCacheHelper } from '../../../util/flag-helpers.mjs';
 import { localizeBonusLabel } from '../../../util/localize.mjs';
 import { BaseTarget } from '../base-target.mjs';
@@ -82,7 +82,7 @@ export class WhenTargetInRange extends BaseTarget {
         const filtered = sources.filter((source) => {
             const min = this.#min(source);
             const max = this.#max(source);
-            return targets.every((target) => new Distance(token, target).isWithinRange(min, max));
+            return targets.every((target) => new PositionalHelper(token, target).isWithinRange(min, max));
         });
         return filtered;
     }

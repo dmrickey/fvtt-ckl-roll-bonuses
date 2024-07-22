@@ -1,6 +1,6 @@
 import { api } from './api.mjs';
 
-export class Distance {
+export class PositionalHelper {
 
     /** @type {TokenPF} */ token1;
     /** @type {TokenPF} */ token2;
@@ -24,26 +24,26 @@ export class Distance {
 
     /** @returns {number} */
     distance() {
-        return Distance.#distance(this.token1, this.token2);
+        return PositionalHelper.#distance(this.token1, this.token2);
     }
 
     /** @returns {boolean} */
     isAdjacent() {
-        return Distance.#isAdjacent(this.token1, this.token2);
+        return PositionalHelper.#isAdjacent(this.token1, this.token2);
     }
 
     /** @returns {boolean} */
     isEngagedInMelee() {
-        return Distance.#threatens(this.token1, this.token2) || Distance.#threatens(this.token2, this.token1);
+        return PositionalHelper.#threatens(this.token1, this.token2) || PositionalHelper.#threatens(this.token2, this.token1);
     }
 
     isOnHigherGround() {
-        return Distance.#floor(this.token1) > Distance.#floor(this.token2);
+        return PositionalHelper.#floor(this.token1) > PositionalHelper.#floor(this.token2);
     }
 
     /** @returns {boolean} */
     isSharingSquare() {
-        return Distance.#isSharingSquare(this.token1, this.token2);
+        return PositionalHelper.#isSharingSquare(this.token1, this.token2);
     }
 
     /**
@@ -51,7 +51,7 @@ export class Distance {
      * @returns {boolean}
      */
     threatens(action = undefined) {
-        return Distance.#threatens(this.token1, this.token2, action);
+        return PositionalHelper.#threatens(this.token1, this.token2, action);
     }
 
     // TODO need a "reach" checkbox because only reach weapons have a special exception
@@ -62,7 +62,7 @@ export class Distance {
      * @returns {boolean}
      */
     isWithinRange(minFeet, maxFeet, reach) {
-        return Distance.#isWithinRange(this.token1, this.token2, minFeet, maxFeet, reach);
+        return PositionalHelper.#isWithinRange(this.token1, this.token2, minFeet, maxFeet, reach);
     }
 
     /**
@@ -311,11 +311,11 @@ export class Distance {
     static getShootingIntoMeleePenalty(self, target) {
         const potentials = game.scenes.active.tokens
             .filter((x) => x.disposition !== target.document.disposition && x.disposition === self.document.disposition)
-            .map((x) => new Distance(target, x));
+            .map((x) => new PositionalHelper(target, x));
 
-        /** @param {Distance} d @returns {boolean} */
+        /** @param {PositionalHelper} d @returns {boolean} */
         const targetIsUnderThreeSizesLarger = (d) => sizes[d.token1.actor.system.traits.size] - sizes[d.token2.actor.system.traits.size] < 3;
-        /** @param {Distance} d @returns {boolean} */
+        /** @param {PositionalHelper} d @returns {boolean} */
         const isExactlyTwoSizesLarger = (d) => sizes[d.token1.actor.system.traits.size] - sizes[d.token2.actor.system.traits.size] === 2;
 
         const engaged = potentials
@@ -357,4 +357,4 @@ const sizes = {
     col: 4,
 }
 
-api.utils.Distance = Distance;
+api.utils.PositionalHelper = PositionalHelper;

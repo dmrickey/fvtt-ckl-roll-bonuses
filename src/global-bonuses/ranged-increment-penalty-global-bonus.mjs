@@ -1,5 +1,5 @@
 import { Sources } from '../targeted/source-registration.mjs';
-import { Distance } from '../util/distance.mjs';
+import { PositionalHelper } from '../util/positional-helper.mjs';
 import { currentTargets } from '../util/get-current-targets.mjs';
 import { customGlobalHooks } from '../util/hooks.mjs'
 import { localize } from '../util/localize.mjs';
@@ -93,7 +93,7 @@ export class RangedIncrementPenaltyGlobalBonus extends BaseGlobalBonus {
 
         let distance = 0;
         targets.forEach((target) => {
-            const d = new Distance(actorToken, target);
+            const d = new PositionalHelper(actorToken, target);
             distance = Math.max(distance, d.distance());
         });
 

@@ -1,4 +1,4 @@
-import { Distance } from '../util/distance.mjs';
+import { PositionalHelper } from '../util/positional-helper.mjs';
 import { currentTargets } from '../util/get-current-targets.mjs';
 import { customGlobalHooks } from '../util/hooks.mjs'
 import { BaseGlobalBonus } from './.base-global-bonus.mjs';
@@ -40,7 +40,7 @@ export class HigherGroundGlobalBonus extends BaseGlobalBonus {
         }
 
         const isHigher = targets.every((target) => {
-            const d = new Distance(actorToken, target);
+            const d = new PositionalHelper(actorToken, target);
             return d.isOnHigherGround();
         });
 
