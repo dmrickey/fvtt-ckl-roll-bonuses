@@ -3,7 +3,7 @@ import { PositionalHelper } from '../util/positional-helper.mjs';
 import { currentTargets } from '../util/get-current-targets.mjs';
 import { customGlobalHooks } from '../util/hooks.mjs'
 import { localize } from '../util/localize.mjs';
-import { BaseGlobalBonus } from './.base-global-bonus.mjs';
+import { BaseGlobalBonus } from './base-global-bonus.mjs';
 import { RangedIncrementPenaltyBonus } from './targeted/bonuses/ranged-increment-penalty-bonus.mjs';
 
 /** @extends {BaseGlobalBonus} */
@@ -67,7 +67,7 @@ export class RangedIncrementPenaltyGlobalBonus extends BaseGlobalBonus {
      */
     static addRangedPenalty(actionUse) {
         const { actor, item, shared } = actionUse;
-        if (this.isDisabled() || this.isDisabledForActor(actor)) {
+        if (RangedIncrementPenaltyGlobalBonus.isDisabled() || RangedIncrementPenaltyGlobalBonus.isDisabledForActor(actor)) {
             return;
         }
         if (!(item instanceof pf1.documents.item.ItemWeaponPF || item instanceof pf1.documents.item.ItemAttackPF)) {

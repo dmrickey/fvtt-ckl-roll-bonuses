@@ -1,7 +1,7 @@
 import { PositionalHelper } from '../util/positional-helper.mjs';
 import { currentTargets } from '../util/get-current-targets.mjs';
 import { customGlobalHooks } from '../util/hooks.mjs'
-import { BaseGlobalBonus } from './.base-global-bonus.mjs';
+import { BaseGlobalBonus } from './base-global-bonus.mjs';
 
 /** @extends {BaseGlobalBonus} */
 export class HigherGroundGlobalBonus extends BaseGlobalBonus {
@@ -17,7 +17,7 @@ export class HigherGroundGlobalBonus extends BaseGlobalBonus {
      */
     static addHigherGroundBonus(actionUse) {
         const { action, actor, item, shared } = actionUse;
-        if (this.isDisabled() || this.isDisabledForActor(actor)) {
+        if (HigherGroundGlobalBonus.isDisabled() || HigherGroundGlobalBonus.isDisabledForActor(actor)) {
             return;
         }
         if (!(item instanceof pf1.documents.item.ItemWeaponPF || item instanceof pf1.documents.item.ItemAttackPF)) {
@@ -41,11 +41,11 @@ export class HigherGroundGlobalBonus extends BaseGlobalBonus {
 
         const isHigher = targets.every((target) => {
             const d = new PositionalHelper(actorToken, target);
-            return d.isOnHigherGround();
+            return d.threatens(actionUse.action) && d.isOnHigherGround();
         });
 
         if (isHigher) {
-            shared.attackBonus.push(`1[${this.label}]`);
+            shared.attackBonus.push(`1[${HigherGroundGlobalBonus.label}]`);
         }
     }
 

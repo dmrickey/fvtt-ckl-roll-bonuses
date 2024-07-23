@@ -402,6 +402,7 @@ declare global {
     }
 
     interface TokenPF {
+        id: string;
         actor: ActorCharacterPF;
         document: TokenDocumentPF;
         h: number;

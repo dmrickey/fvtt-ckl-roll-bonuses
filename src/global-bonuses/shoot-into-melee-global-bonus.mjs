@@ -2,7 +2,7 @@ import { PositionalHelper } from '../util/positional-helper.mjs';
 import { hasAnyBFlag } from '../util/flag-helpers.mjs';
 import { currentTargets } from '../util/get-current-targets.mjs';
 import { customGlobalHooks } from '../util/hooks.mjs'
-import { BaseGlobalBonus } from './.base-global-bonus.mjs';
+import { BaseGlobalBonus } from './base-global-bonus.mjs';
 import * as PreciseShot from './targeted/bonuses/precise-shot-bonus.mjs';
 
 /** @type {ActionType[]} */
@@ -15,7 +15,7 @@ export class ShootIntoMeleeGlobalBonus extends BaseGlobalBonus {
      * @override
      * @returns {string}
      */
-    static get bonusKey() { return 'higher-ground'; }
+    static get bonusKey() { return 'range-into-melee'; }
 
     /**
      * @inheritdoc
@@ -30,7 +30,7 @@ export class ShootIntoMeleeGlobalBonus extends BaseGlobalBonus {
      */
     static addPenalty(actionUse) {
         const { action, actor, item, shared } = actionUse;
-        if (this.isDisabled() || this.isDisabledForActor(actor)) {
+        if (ShootIntoMeleeGlobalBonus.isDisabled() || ShootIntoMeleeGlobalBonus.isDisabledForActor(actor)) {
             return;
         }
         if (!(
@@ -56,13 +56,14 @@ export class ShootIntoMeleeGlobalBonus extends BaseGlobalBonus {
             return;
         }
 
-        const isEngagedInMelee = targets.every((target) => {
-            const d = new PositionalHelper(actorToken, target);
-            return d.isEngagedInMelee();
+        const penalties = targets.map((target) => {
+            const penalty = new PositionalHelper(actorToken, target);
+            return penalty.getShootingIntoMeleePenalty();
         });
 
-        if (isEngagedInMelee) {
-            shared.attackBonus.push(`-4[${this.label}]`);
+        const penalty = Math.max(...penalties);
+        if (penalty) {
+            shared.attackBonus.push(`-${penalty}[${ShootIntoMeleeGlobalBonus.label}]`);
         }
     }
 

@@ -18,10 +18,10 @@ export class BaseGlobalBonus {
      *
      * @returns {string}
      */
-    static get label() { return localize(`global-bonus.${this.key}`); }
+    static get label() { return localize(`global-bonus.${this.bonusKey}`); }
 
     /** @returns { string } */
-    static get key() { return `$global-bonus_${this.bonusKey}`; }
+    static get key() { return `global-bonus_${this.bonusKey}`; }
 
     /**
      * Key for this global bonus

@@ -231,8 +231,8 @@ class GlobalBonusSettingsApplication extends FormApplication {
     getData(options = {}) {
         let context = super.getData()
         const sections = GlobalBonusSettings.bonusTypes.map((bonus) => ({
-            description: localize(`global-settings.application.section.${bonus.key}.description`),
-            issues: localize(`global-settings.application.section.${bonus.key}.issues`),
+            description: localize(`global-settings.application.section.${bonus.bonusKey}.description`),
+            issues: localize(`global-settings.application.section.${bonus.bonusKey}.issues`),
             key: bonus.key,
             label: bonus.label,
             value: GlobalBonusSettings.setting(bonus.key),

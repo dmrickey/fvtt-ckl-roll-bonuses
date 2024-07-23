@@ -27,6 +27,45 @@ export class PositionalHelper {
         return PositionalHelper.#distance(this.token1, this.token2);
     }
 
+    /**
+     * @returns {number}
+     */
+    getShootingIntoMeleePenalty() {
+        const potentials = game.scenes.active.tokens
+            .filter((x) => x.id !== this.token1.id)
+            .filter((x) => x.disposition !== this.token2.document.disposition && x.disposition === this.token1.document.disposition)
+            .map((x) => new PositionalHelper(this.token2, x));
+
+        /** @param {PositionalHelper} d @returns {boolean} */
+        const targetIsUnderThreeSizesLarger = (d) => sizes[d.token1.actor.system.traits.size] - sizes[d.token2.actor.system.traits.size] < 3;
+        /** @param {PositionalHelper} d @returns {boolean} */
+        const isExactlyTwoSizesLarger = (d) => sizes[d.token1.actor.system.traits.size] - sizes[d.token2.actor.system.traits.size] === 2;
+
+        const engaged = potentials
+            .filter((d) => d.isAdjacent())
+            .filter((d) => d.isEngagedInMelee())
+            .filter((d) => targetIsUnderThreeSizesLarger(d));
+
+        if (!engaged.length) {
+            return 0;
+        }
+
+        const penalties = engaged
+            .map((e) => {
+                // assume creature is large enough to shoot at without penalty (huge or larger, i.e. can aim at spot 10' away from friendly)
+                if (sizes[e.token1.actor.system.traits.size] >= 2) {
+                    return 0;
+                }
+                if (isExactlyTwoSizesLarger(e)) {
+                    return 2;
+                }
+
+                return 4;
+            });
+
+        return Math.max(...penalties);
+    }
+
     /** @returns {boolean} */
     isAdjacent() {
         return PositionalHelper.#isAdjacent(this.token1, this.token2);
@@ -54,7 +93,6 @@ export class PositionalHelper {
         return PositionalHelper.#threatens(this.token1, this.token2, action);
     }
 
-    // TODO need a "reach" checkbox because only reach weapons have a special exception
     /**
      * @param {number} minFeet
      * @param {number} maxFeet
@@ -183,7 +221,10 @@ export class PositionalHelper {
         }
 
         const distance = this.#distance(token1, token2);
-        return minFeet <= distance && distance <= maxFeet;
+
+        return reach
+            ? minFeet < distance && distance <= maxFeet
+            : minFeet <= distance && distance <= maxFeet;
     }
 
     /**
@@ -303,45 +344,6 @@ export class PositionalHelper {
         return token.document.elevation * units;
     }
 
-    /**
-     * @param {TokenPF} self
-     * @param {TokenPF} target
-     * @returns {number}
-     */
-    static getShootingIntoMeleePenalty(self, target) {
-        const potentials = game.scenes.active.tokens
-            .filter((x) => x.disposition !== target.document.disposition && x.disposition === self.document.disposition)
-            .map((x) => new PositionalHelper(target, x));
-
-        /** @param {PositionalHelper} d @returns {boolean} */
-        const targetIsUnderThreeSizesLarger = (d) => sizes[d.token1.actor.system.traits.size] - sizes[d.token2.actor.system.traits.size] < 3;
-        /** @param {PositionalHelper} d @returns {boolean} */
-        const isExactlyTwoSizesLarger = (d) => sizes[d.token1.actor.system.traits.size] - sizes[d.token2.actor.system.traits.size] === 2;
-
-        const engaged = potentials
-            .filter((d) => d.isAdjacent())
-            .filter((d) => d.isEngagedInMelee())
-            .filter((d) => targetIsUnderThreeSizesLarger(d));
-
-        if (!engaged.length) {
-            return 0;
-        }
-
-        const penalties = engaged
-            .map((e) => {
-                // assume creature is large enough to shoot at without penalty (huge or larger, i.e. can aim at spot 10' away from friendly)
-                if (sizes[e.token1.actor.system.traits.size] >= 2) {
-                    return 0;
-                }
-                if (isExactlyTwoSizesLarger(e)) {
-                    return 2;
-                }
-
-                return 4;
-            });
-
-        return Math.max(...penalties);
-    }
 }
 
 /** @type {Record<ActorSize, number>} */
