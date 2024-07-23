@@ -221,10 +221,8 @@ export class PositionalHelper {
         }
 
         const distance = this.#distance(token1, token2);
-
-        return reach
-            ? minFeet < distance && distance <= maxFeet
-            : minFeet <= distance && distance <= maxFeet;
+        return (minFeet === 0 && distance === 0)
+            || (minFeet < distance && distance <= maxFeet);
     }
 
     /**
