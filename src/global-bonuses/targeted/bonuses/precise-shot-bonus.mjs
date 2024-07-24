@@ -1,11 +1,10 @@
 import { SpecificBonuses } from '../../../bonuses/all-specific-bonuses.mjs';
 import { showEnabledLabel } from '../../../handlebars-handlers/enabled-label.mjs';
+import { hasAnyBFlag } from '../../../util/flag-helpers.mjs';
 import { LanguageSettings } from '../../../util/settings.mjs';
 
-// TODO
-const compendiumId = '';
+const compendiumId = '53urYIbYYpQuoSLd';
 export const key = 'precise-shot';
-// TODO
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.';
 
 export const init = () => {
@@ -30,7 +29,7 @@ Hooks.on('renderItemSheet', (
 
     const name = item?.name?.toLowerCase() ?? '';
     const sourceId = item?.flags.core?.sourceId ?? '';
-    const hasBonus = item.system.flags.dictionary?.hasOwnProperty(key);
+    const hasBonus = hasAnyBFlag(item, key);
 
     if ((name === Settings.name || sourceId.includes(compendiumId)) && !hasBonus) {
         item.update({
@@ -38,12 +37,14 @@ Hooks.on('renderItemSheet', (
         });
     }
 
-    showEnabledLabel({
-        item,
-        journal,
-        key,
-        parent: html,
-    }, {
-        canEdit: isEditable,
-    });
+    if (hasBonus) {
+        showEnabledLabel({
+            item,
+            journal,
+            key,
+            parent: html,
+        }, {
+            canEdit: isEditable,
+        });
+    }
 });

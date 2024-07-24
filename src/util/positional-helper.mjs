@@ -122,15 +122,11 @@ export class PositionalHelper {
         if (action) {
             actions = [action];
         } else {
-            const weapons = attacker.actor.itemTypes.weapon
-                .filter((weapon) => weapon.canUse && weapon.activeState)
-                .flatMap((weapon) => weapon.actions.contents)
-                .filter((action) => !action.isRanged);
-            const attacks = attacker.actor.itemTypes.attack
-                .filter((weapon) => weapon.canUse && weapon.activeState)
-                .flatMap((weapon) => weapon.actions.contents)
-                .filter((action) => !action.isRanged);
-            actions = [...weapons, ...attacks];
+            const meleeAttacks = attacker.actor.items
+                .filter((item) => item.canUse && item.activeState)
+                .flatMap((item) => item.actions.contents)
+                .filter((action) => action.hasAttack && !action.isRanged);
+            actions = [...meleeAttacks];
         }
 
         /**
@@ -142,9 +138,9 @@ export class PositionalHelper {
                 if (item.system.weaponGroups?.value.includes("natural")) {
                     return true;
                 }
-                if (action.data.range.units === 'reach') {
-                    return true;
-                }
+            }
+            if (action.data.range.units === 'reach') {
+                return true;
             }
             return false;
         }
@@ -216,6 +212,12 @@ export class PositionalHelper {
      * @returns {boolean}
      */
     static #isWithinRange(token1, token2, minFeet, maxFeet, reach = false) {
+        if (!minFeet) {
+            minFeet = 0;
+        }
+        if (!maxFeet && maxFeet !== 0) {
+            maxFeet = Number.POSITIVE_INFINITY;
+        }
         if (reach && maxFeet === 10 && this.#isAdjacent(token1, token2, true)) {
             return true;
         }

@@ -42,11 +42,7 @@ export function showBonusPicker({
         .filter((source) => !source.skipPicker && source.isConditionalTarget)
         .sort((a, b) => a.label.localeCompare(b.label));
     const specifics = Object.values(SpecificBonuses.allBonuses)
-        .sort((a, b) =>
-            !!a.parent || !!b.parent
-                ? 0
-                : a.label.localeCompare(b.label)
-        );
+        .sort((a, b) => a.label.localeCompare(b.label));
 
     const currentBonusSources = intersection(
         allBonuses.map((source) => source.key),

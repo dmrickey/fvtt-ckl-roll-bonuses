@@ -199,9 +199,23 @@
                 "description": "The global bonuses that the GM has enabled for this world. Each setting can be individually disabled here if it is not suitable for this particular actor.",
                 "disable": "Disable Global Bonuses for this Actor"
             },
-            "higher-ground": "Higher Ground Melee Bonus",
-            "range-increment-penalty": "Ranged Increment Penalty",
-            "range-into-melee": "Shooting into Melee"
+            "attack-label": {
+                "higher-ground": "Higher Ground",
+                "range-increment-penalty": "Ranged Penalty ({range}{units})",
+                "shoot-into-melee": "Into Melee"
+            },
+            "label": {
+                "higher-ground": "Higher Ground Melee Bonus",
+                "range-increment-penalty": "Ranged Increment Penalty",
+                "shoot-into-melee": "Shooting into Melee",
+                "require-melee-threaten": "Enforce Melee Range"
+            },
+            "warning": {
+                "range-increment-error-plural": "The farthest target ({distance}{units}) is outside of your maximum range ({max}{units}).",
+                "range-increment-error-singular": "The target ({distance}{units}) is outside of your maximum range ({max}{units}).",
+                "require-melee-threaten-plural": "You do not threaten at least one of the targets.",
+                "require-melee-threaten-singular": "You do not threaten the target."
+            }
         },
         "global-settings": {
             "application": {
@@ -211,16 +225,20 @@
                 "title": "Global Bonuses",
                 "section": {
                     "higher-ground": {
-                        "description": "Add +1 to attacks when made from a higher elevation.",
+                        "description": "Add +1 to melee attacks when made from a higher elevation.",
                         "issues": ""
                     },
                     "range-increment-penalty": {
                         "description": "Add ranged incremental attack penalties. Enabling this also enables bonuses to modify Ranged Attack Penalties and Range Increments.",
                         "issues": "This should fully work in most circumstances. The only case I have found where it could add the wrong penalty is if a large (or larger) token is partially hidden by a wall. It could be that the visible part is farther away than the closest part. The mod  only calcuates based on the closest part of the target regardless of walls."
                     },
-                    "range-into-melee": {
+                    "shoot-into-melee": {
                         "description": "Adds penalties for shooting into melee. This requires that you have an ally adjacent to your target, that your target has a different disposition than you and your ally, and that at least your target or your ally threatens the other (threaten requires an equipped melee weapon or nautral attack). This also adds a Specific Bonus for Precise Shot. Make sure to open the Precise Shot feat so that it's configured. This correctly takes into account size differences.",
                         "issues": "You can normally ignore this penalty (disregarding Precise Shot) if you're shooting at a creature that's engaged in melee which is large enough for you target a spot on it at least 10 feet away from your allies. I cannot take into account if those \"ok-to-shoot-at-spots\" are somehow not in range or not visible--if the creature is large enough, the penalty is automatically negated."
+                    },
+                    "require-melee-threaten": {
+                        "description": "Reject a melee attack if the attacker does not threaten the target. When using a melee action, this will reject the action if the target is out of range.",
+                        "issues": "There may be circumstances where the GM is allowing a melee attack against a target even though it isn't in range. To work around this, simply don't target the desired token. If you have suggestions on a different way around this, let me know."
                     }
                 }
             }
@@ -289,9 +307,6 @@
                 "tooltip": "Targets determine exactly which abilities will be affected by Bonuses."
             }
         },
-        "range-increment-error-plural": "The farthest target ({distance}{units}) is outside of your maximum range ({max}{units}).",
-        "range-increment-error-singular": "The target ({distance}{units}) is outside of your maximum range ({max}{units}).",
-        "ranged-attack-penalty": "Ranged Penalty ({range}{units})",
         "roll-bonuses": "Roll Bonuses",
         "skill-rank-override": {
             "skill-card-name": "{skillName} - ({sourceName} ranks: {rank})",

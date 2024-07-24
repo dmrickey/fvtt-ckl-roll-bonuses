@@ -4,20 +4,20 @@ import { customGlobalHooks } from '../util/hooks.mjs'
 import { BaseGlobalBonus } from './base-global-bonus.mjs';
 
 /** @extends {BaseGlobalBonus} */
-export class HigherGroundGlobalBonus extends BaseGlobalBonus {
+export class RequireMeleeThreatenGlobalBonus extends BaseGlobalBonus {
     /**
      * @inheritdoc
      * @override
      * @returns {string}
      */
-    static get bonusKey() { return 'higher-ground'; }
+    static get bonusKey() { return 'require-melee-threaten'; }
 
     /**
      * @param {ActionUse} actionUse
      */
     static addHigherGroundBonus(actionUse) {
-        const { action, actor, item, shared } = actionUse;
-        if (HigherGroundGlobalBonus.isDisabled() || HigherGroundGlobalBonus.isDisabledForActor(actor)) {
+        const { action, actor, shared } = actionUse;
+        if (RequireMeleeThreatenGlobalBonus.isDisabled() || RequireMeleeThreatenGlobalBonus.isDisabledForActor(actor)) {
             return;
         }
         if (!actor) {
@@ -36,17 +36,22 @@ export class HigherGroundGlobalBonus extends BaseGlobalBonus {
             return;
         }
 
-        const isHigher = targets.every((target) => {
+        const isInRange = targets.every((target) => {
             const d = new PositionalHelper(actorToken, target);
-            return d.threatens(actionUse.action) && d.isOnHigherGround();
+            return d.threatens(actionUse.action);
         });
 
-        if (isHigher) {
-            shared.attackBonus.push(`1[${HigherGroundGlobalBonus.attackLabel}]`);
+        if (!isInRange) {
+            const key = targets.length > 1
+                ? RequireMeleeThreatenGlobalBonus.bonusKey + '-plural'
+                : RequireMeleeThreatenGlobalBonus.bonusKey + '-singular';
+            const message = RequireMeleeThreatenGlobalBonus._warning(key);
+            ui.notifications.warn(message);
+            shared.reject = true;
         }
     }
 
     static {
-        Hooks.on(customGlobalHooks.actionUseAlterRollData, HigherGroundGlobalBonus.addHigherGroundBonus);
+        Hooks.on(customGlobalHooks.actionUseAlterRollData, RequireMeleeThreatenGlobalBonus.addHigherGroundBonus);
     }
 }

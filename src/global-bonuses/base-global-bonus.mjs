@@ -18,7 +18,27 @@ export class BaseGlobalBonus {
      *
      * @returns {string}
      */
-    static get label() { return localize(`global-bonus.${this.bonusKey}`); }
+    static get label() { return localize(`global-bonus.label.${this.bonusKey}`); }
+
+    static get attackLabel() { return this._attackLabel(this.bonusKey) }
+    /**
+     * Fetches chat attack label for thie given key
+     *
+     * @param {string} key
+     * @param {Record<string, unknown>} [opts]
+     * @returns {string}
+     */
+    static _attackLabel(key, opts = {}) { return localize(`global-bonus.attack-label.${key}`, opts); }
+
+    static get warning() { return this._warning(this.bonusKey) }
+    /**
+     * Fetches UI warning for thie given key
+     *
+     * @param {string} key
+     * @param {Record<string, unknown>} [opts]
+     * @returns {string}
+     */
+    static _warning(key, opts = {}) { return localize(`global-bonus.warning.${key}`, opts); }
 
     /** @returns { string } */
     static get key() { return `global-bonus_${this.bonusKey}`; }

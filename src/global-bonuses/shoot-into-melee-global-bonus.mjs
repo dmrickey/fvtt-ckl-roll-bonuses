@@ -15,7 +15,7 @@ export class ShootIntoMeleeGlobalBonus extends BaseGlobalBonus {
      * @override
      * @returns {string}
      */
-    static get bonusKey() { return 'range-into-melee'; }
+    static get bonusKey() { return 'shoot-into-melee'; }
 
     /**
      * @inheritdoc
@@ -29,15 +29,8 @@ export class ShootIntoMeleeGlobalBonus extends BaseGlobalBonus {
      * @param {ActionUse} actionUse
      */
     static addPenalty(actionUse) {
-        const { action, actor, item, shared } = actionUse;
+        const { action, actor, shared } = actionUse;
         if (ShootIntoMeleeGlobalBonus.isDisabled() || ShootIntoMeleeGlobalBonus.isDisabledForActor(actor)) {
-            return;
-        }
-        if (!(
-            item instanceof pf1.documents.item.ItemWeaponPF
-            || item instanceof pf1.documents.item.ItemAttackPF
-            || item instanceof pf1.documents.item.ItemSpellPF
-        )) {
             return;
         }
         if (!actor || hasAnyBFlag(actor, PreciseShot.key)) {
@@ -63,7 +56,7 @@ export class ShootIntoMeleeGlobalBonus extends BaseGlobalBonus {
 
         const penalty = Math.max(...penalties);
         if (penalty) {
-            shared.attackBonus.push(`-${penalty}[${ShootIntoMeleeGlobalBonus.label}]`);
+            shared.attackBonus.push(`-${penalty}[${ShootIntoMeleeGlobalBonus.attackLabel}]`);
         }
     }
 

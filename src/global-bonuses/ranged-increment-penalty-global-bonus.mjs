@@ -2,7 +2,6 @@ import { Sources } from '../targeted/source-registration.mjs';
 import { PositionalHelper } from '../util/positional-helper.mjs';
 import { currentTargets } from '../util/get-current-targets.mjs';
 import { customGlobalHooks } from '../util/hooks.mjs'
-import { localize } from '../util/localize.mjs';
 import { BaseGlobalBonus } from './base-global-bonus.mjs';
 import { RangedIncrementPenaltyBonus } from './targeted/bonuses/ranged-increment-penalty-bonus.mjs';
 
@@ -66,11 +65,8 @@ export class RangedIncrementPenaltyGlobalBonus extends BaseGlobalBonus {
      * @param {ActionUse} actionUse
      */
     static addRangedPenalty(actionUse) {
-        const { actor, item, shared } = actionUse;
+        const { actor, shared } = actionUse;
         if (RangedIncrementPenaltyGlobalBonus.isDisabled() || RangedIncrementPenaltyGlobalBonus.isDisabledForActor(actor)) {
-            return;
-        }
-        if (!(item instanceof pf1.documents.item.ItemWeaponPF || item instanceof pf1.documents.item.ItemAttackPF)) {
             return;
         }
         if (!actor || !shared?.rollData?.rb) {
@@ -109,14 +105,14 @@ export class RangedIncrementPenaltyGlobalBonus extends BaseGlobalBonus {
                 max: maxIncrements * range,
                 units: actionUse.action.data.range.units
             };
-            ui.notifications.warn(localize(message, args));
+            ui.notifications.warn(RangedIncrementPenaltyGlobalBonus._warning(message, args));
             return;
         }
 
         const total = -(penalty * (steps - 1) + penaltyOffset);
         if (total < 0) {
             const args = { range: distance, units: actionUse.action.data.range.units };
-            shared.attackBonus.push(`${total}[${localize('ranged-attack-penalty', args)}]`);
+            shared.attackBonus.push(`${total}[${RangedIncrementPenaltyGlobalBonus._attackLabel(RangedIncrementPenaltyGlobalBonus.bonusKey, args)}]`);
         }
     }
 

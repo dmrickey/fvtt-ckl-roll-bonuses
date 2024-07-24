@@ -228,3 +228,4 @@
 - document
   - higher ground global bonus
   - shooting into melee global bonus
+    - precise shot (add journal link into bonus)
