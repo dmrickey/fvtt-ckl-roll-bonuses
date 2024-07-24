@@ -12,13 +12,35 @@ export class BaseTarget extends BaseSource {
     static get sourceBaseType() { return 'target'; }
 
     /**
-     * If the arg is targeted by this
+     * If the doc is targeted by this
      *
-     * @abstract
-     * @param {ItemPF | ActionUse | ItemAction} arg
+     * @virtual
+     * @param {ItemPF | ActionUse | ItemAction} doc
      * @returns {ItemPF[]}
      */
-    static getSourcesFor(arg) { throw new Error('must be overridden'); };
+    static getSourcesFor(doc) {
+        const item = doc instanceof pf1.documents.item.ItemPF
+            ? doc
+            : doc.item;
+        if (!item?.actor) {
+            return [];
+        }
+
+        const sources = item.actor.itemFlags?.boolean[this.key]?.sources ?? [];
+        // @ts-ignore checked above to make sure actor is defined
+        return this._getSourcesFor(item, sources, doc) || [];
+    };
+
+    /**
+     * If the doc is targeted by this
+     *
+     * @abstract
+     * @param {ItemPF & {actor: ActorPF}} item
+     * @param {ItemPF[]} sources
+     * @param {ItemPF | ActionUse | ItemAction} [doc] - originating doc event in case a specific action is needed
+     * @returns {Nullable<ItemPF[]>}
+     */
+    static _getSourcesFor(item, sources, doc) { throw new Error('must be overridden'); };
 
     /**
      * If this is a target based off of a condition rather then effecting a specific (sub)set of items.

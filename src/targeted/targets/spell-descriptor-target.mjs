@@ -35,18 +35,11 @@ export class SpellDescriptorTarget extends BaseTarget {
     /**
      * @override
      * @inheritdoc
-     * @param {ItemPF | ActionUse | ItemAction} doc
+     * @param {ItemPF & {actor: ActorPF}} item
+     * @param {ItemPF[]} sources
      * @returns {ItemPF[]}
      */
-    static getSourcesFor(doc) {
-        const item = doc instanceof pf1.documents.item.ItemPF
-            ? doc
-            : doc.item;
-
-        if (!item?.actor) {
-            return [];
-        }
-
+    static _getSourcesFor(item, sources) {
         if (!(item instanceof pf1.documents.item.ItemSpellPF)) {
             return [];
         }
@@ -59,8 +52,7 @@ export class SpellDescriptorTarget extends BaseTarget {
             return [];
         }
 
-        const allSources = item.actor.itemFlags?.boolean[this.key]?.sources ?? [];
-        const filteredSources = allSources.filter((source) => {
+        const filteredSources = sources.filter((source) => {
             /** @type {string[]} */
             const targetedDescriptors = (source.getFlag(MODULE_NAME, this.key) || [])
                 .filter(truthiness);

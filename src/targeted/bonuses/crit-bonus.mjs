@@ -204,7 +204,8 @@ export class CritBonus extends BaseBonus {
 
             let hasKeen = false;
             let offset = 0;
-            let mult = +action.data.ability.critMult || 2;
+            const originalMult = +action.data.ability.critMult || 2;
+            let mult = originalMult;
 
             handleBonusTypeFor(
                 action,
@@ -218,17 +219,19 @@ export class CritBonus extends BaseBonus {
 
             mult = isBroken ? 2 : mult;
 
-            const current = action.data.ability.critRange || 20;
+            const originalRange = action.data.ability.critRange || 20;
             let range = hasKeen
-                ? current * 2 - 21
-                : current;
+                ? originalRange * 2 - 21
+                : originalRange;
             range -= offset;
             range = Math.clamped(range, 2, 20);
             range = isBroken ? 20 : range;
 
-            const rangeFormat = range === 20 ? '20' : `${range}-20`;
-            const hint = `${rangeFormat}/x${mult}`;
-            notes.push(hint);
+            if (mult !== originalMult || range !== originalRange) {
+                const rangeFormat = range === 20 ? '20' : `${range}-20`;
+                const hint = `${rangeFormat}/x${mult}`;
+                notes.push(hint);
+            }
         }
         Hooks.on(customGlobalHooks.actionUseFootnotes, addFootnotes);
     }

@@ -57,18 +57,11 @@ export class FinesseTarget extends BaseTarget {
     /**
      * @inheritdoc
      * @override
-     * @param {ItemPF | ActionUse | ItemAction} doc
-     * @returns {ItemPF[]}
+     * @param {ItemPF & {actor: ActorPF}} item
+     * @param {ItemPF[]} sources
+     * @returns {Nullable<ItemPF[]>}
      */
-    static getSourcesFor(doc) {
-        const item = doc instanceof pf1.documents.item.ItemPF
-            ? doc
-            : doc.item;
-
-        if (!item?.actor) {
-            return [];
-        }
-
+    static _getSourcesFor(item, sources) {
         const isWeapon = item instanceof pf1.documents.item.ItemWeaponPF;
         const isAttack = item instanceof pf1.documents.item.ItemAttackPF;
 
@@ -76,23 +69,11 @@ export class FinesseTarget extends BaseTarget {
             return [];
         }
 
-        if (isWeapon
-            && !(item.system.properties.fin
-                || item.system.weaponGroups.value.includes('natural')
-            )
+        if (item.system.weaponGroups?.value.includes('natural')
+            || item.system.flags.boolean[this.finesseTargetOverride]
+            || (isWeapon && item.system.properties.fin)
         ) {
-            return [];
+            return sources;
         }
-
-        if (isAttack
-            && !(!!item.system.flags.boolean[this.finesseTargetOverride]
-                || item.system.weaponGroups?.value.includes('natural')
-            )
-        ) {
-            return [];
-        }
-
-        const flaggedItems = item.actor.itemFlags?.boolean[this.key]?.sources ?? [];
-        return flaggedItems;
     };
 }

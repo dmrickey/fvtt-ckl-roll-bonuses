@@ -70,7 +70,12 @@
                 "mythic-weapon-focus": "Mythic Weapon Focus",
                 "mythicElementalFocus": "Mythic Elemental Focus",
                 "mythicSpellFocus": "Mythic Spell Focus",
+                "precise-shot": "Precise Shot",
                 "racial-weapon-focus": "Racial Weapon Focus",
+                "ranged-increment-penalty": "Ranged Increment Penalty Bonuses",
+                "ranged-increment-penalty-increment-penalty-offset": "Increment Penalty Reduction",
+                "ranged-increment-penalty-max-increment-offset": "Maximum Increment Offset",
+                "ranged-increment-penalty-penalty-offset": "Overall Penalty Reduction",
                 "school-dc": "Spell School DC",
                 "schoolClOffset": "Spell School CL",
                 "self": "Targets Self",
@@ -154,7 +159,12 @@
                 "mythic-weapon-focus": "Double Weapon Focus attack bonuses.",
                 "mythicElementalFocus": "Double Elemental Focus bonuses.",
                 "mythicSpellFocus": "Double Spell Focus bonuses.",
+                "precise-shot": "Negate penalty for shooting into melee.",
                 "racial-weapon-focus": "+1 bonus on attack rolls for chosen racial weapons. The weapon must be tagged with the race to be able to apply the bonus.",
+                "ranged-increment-penalty": "Modify the penalties associated with ranged weapon increments.",
+                "ranged-increment-penalty-increment-penalty-offset": "Modify the number of maximum range increments.",
+                "ranged-increment-penalty-max-increment-offset": "Reduce the penalty per increment.",
+                "ranged-increment-penalty-penalty-offset": "Reduce the total penalty.",
                 "school-dc": "Modify DC for spells with the chosen school.",
                 "schoolClOffset": "Modify CL for spells with the chosen school.",
                 "self": "Apply bonuses to all actions on this same Item.",
@@ -184,6 +194,55 @@
         "cancel": "Cancel",
         "cl-mod": "{mod} CL",
         "cl-label-mod": "{mod} CL ({label})",
+        "global-bonus": {
+            "actor": {
+                "description": "The global bonuses that the GM has enabled for this world. Each setting can be individually disabled here if it is not suitable for this particular actor.",
+                "disable": "Disable Global Bonuses for this Actor"
+            },
+            "attack-label": {
+                "higher-ground": "Higher Ground",
+                "range-increment-penalty": "Ranged Penalty ({range}{units})",
+                "shoot-into-melee": "Into Melee"
+            },
+            "label": {
+                "higher-ground": "Higher Ground Melee Bonus",
+                "range-increment-penalty": "Ranged Increment Penalty",
+                "shoot-into-melee": "Shooting into Melee",
+                "require-melee-threaten": "Require Melee Threatens"
+            },
+            "warning": {
+                "range-increment-error-plural": "The farthest target ({distance}{units}) is outside of your maximum range ({max}{units}).",
+                "range-increment-error-singular": "The target ({distance}{units}) is outside of your maximum range ({max}{units}).",
+                "require-melee-threaten-plural": "You do not threaten at least one of the targets.",
+                "require-melee-threaten-singular": "You do not threaten the target."
+            }
+        },
+        "global-settings": {
+            "application": {
+                "description": "This attempts to automate global bonuses that are tedious to do manually. Some of these are a best-effort and should work under most circumstances, but due to their nature some will have quirks that may be unavoidable.",
+                "hint": "Configure specific combat bonuses that can be automated. These are global combat options that are aren't meant to be configured for specific feats or abilities, but apply to everyone.",
+                "label": "Configure Global Bonuses",
+                "title": "Global Bonuses",
+                "section": {
+                    "higher-ground": {
+                        "description": "Add +1 to melee attacks when made from a higher elevation.",
+                        "issues": ""
+                    },
+                    "range-increment-penalty": {
+                        "description": "Add ranged incremental attack penalties. Enabling this also enables bonuses to modify Ranged Attack Penalties and Range Increments.",
+                        "issues": "This should fully work in most circumstances. The only case I have found where it could add the wrong penalty is if a large (or larger) token is partially hidden by a wall. It could be that the visible part is farther away than the closest part. The mod  only calcuates based on the closest part of the target regardless of walls."
+                    },
+                    "shoot-into-melee": {
+                        "description": "Adds penalties for shooting into melee. This requires that you have an ally adjacent to your target, that your target has a different disposition than you and your ally, and that at least your target or your ally threatens the other (threaten requires an equipped melee weapon or nautral attack). This also adds a Specific Bonus for Precise Shot. Make sure to open the Precise Shot feat so that it's configured. This correctly takes into account size differences.",
+                        "issues": "You can normally ignore this penalty (disregarding Precise Shot) if you're shooting at a creature that's engaged in melee which is large enough for you target a spot on it at least 10 feet away from your allies. I cannot take into account if those \"ok-to-shoot-at-spots\" are somehow not in range or not visible--if the creature is large enough, the penalty is automatically negated."
+                    },
+                    "require-melee-threaten": {
+                        "description": "Reject a melee attack if the attacker does not threaten the target. When using a melee action, this will reject the action if the target is out of range.",
+                        "issues": "There may be circumstances where the GM is allowing a melee attack against a target even though it isn't in range. To work around this, simply don't target the desired token. If you have suggestions on a different way around this, let me know."
+                    }
+                }
+            }
+        },
         "crit-damage-label": {
             "crit": " (Crit Only)",
             "nonCrit": " (Non-crit Only)",
@@ -320,6 +379,10 @@
             "martial-focus": {
                 "name": "Martial Focus",
                 "default": "Martial Focus"
+            },
+            "precise-shot": {
+                "name": "Precise Shot",
+                "default": "Precise Shot"
             },
             "racial-weapon-focus": {
                 "name": "Racial Weapon Focus",

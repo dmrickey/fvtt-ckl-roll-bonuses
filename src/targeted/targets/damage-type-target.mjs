@@ -33,21 +33,13 @@ export class DamageTypeTarget extends BaseTarget {
     /**
      * @override
      * @inheritdoc
+     * @param {ItemPF & {actor: ActorPF}} _item
+     * @param {ItemPF[]} sources
      * @param {ItemPF | ActionUse | ItemAction} doc
      * @returns {ItemPF[]}
      */
-    static getSourcesFor(doc) {
-        const item = doc instanceof pf1.documents.item.ItemPF
-            ? doc
-            : doc.item;
-
-        if (!item?.actor) {
-            return [];
-        }
-
-        const bonusSources = item.actor.itemFlags?.boolean[this.key]?.sources ?? [];
-
-        const filteredSources = bonusSources.filter((source) => {
+    static _getSourcesFor(_item, sources, doc) {
+        const filteredSources = sources.filter((source) => {
             const targetedTypes = source.getFlag(MODULE_NAME, this.key);
 
             const action = doc instanceof pf1.components.ItemAction

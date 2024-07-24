@@ -10,7 +10,7 @@ declare global {
         getRollData(): RollData;
         getFlag(moduleName: string, key: string): any;
         async setFlag<T>(moduleName: string, key: string, value: T);
-        updateSource(changes: Partial<this>, options?: object);
+        updateSource(changes: Record<string, any>, options?: object);
         uuid: string;
         update(data: Record<string, any>);
     }
@@ -26,7 +26,14 @@ declare global {
         cha: 'Charisma';
     }
 
-    type ActionType = 'msak' | 'mwak' | 'rsak' | 'rwak' | 'mcman' | 'rcman';
+    type ActionType =
+        | 'msak'
+        | 'mwak'
+        | 'rsak'
+        | 'rwak'
+        | 'mcman'
+        | 'rcman'
+        | 'twak';
 
     declare type SkillInfo = SkillRollData & {
         id: keyof typeof pf1.config.skills;
@@ -195,6 +202,7 @@ declare global {
         damageBonus: string[];
         dice: string;
         powerAttack: boolean;
+        reject: boolean;
         rollData: RollData<T>;
 
         templateData: {
@@ -211,6 +219,7 @@ declare global {
         item: T;
         shared: ActionUseShared;
         formData: ActionuseFormData;
+        token: TokenDocumentPF;
     }
 
     class ChatAttack {
@@ -331,6 +340,13 @@ declare global {
             damage: {
                 parts: DamagePart[];
             };
+            range: {
+                maxIncrements: number;
+                minUnits: '';
+                minValue: null;
+                units: 'ft' | 'reach';
+                value: string;
+            };
         };
         item: ItemPF;
         static defaultDamageType: TraitSelectorValuePlural;
@@ -376,6 +392,7 @@ declare global {
         actor: ActorCharacterPF;
         displayName: 0 | 10 | 20 | 30 | 40 | 50;
         disposition: DispositionLevel;
+        elevation: number;
         isLinked: boolean;
         name: string;
         permission: PermissionLevel;
@@ -385,6 +402,7 @@ declare global {
     }
 
     interface TokenPF {
+        id: string;
         actor: ActorCharacterPF;
         document: TokenDocumentPF;
         h: number;
@@ -392,6 +410,7 @@ declare global {
         w: number;
         x: number;
         y: number;
+        bounds: Rect;
     }
 
     class ItemPF<
@@ -1194,6 +1213,18 @@ declare global {
      * Roll Data used for resolving formulas
      */
     interface RollData<T extends SystemItemData = SystemItemData> {
+        rb: {
+            rangePenalty?: {
+                maxIncrements: number;
+                penalty: number;
+                penaltyOffset: number;
+                range: number;
+            };
+        };
+        range: {
+            melee: string;
+            reach: number;
+        };
         [MODULE_NAME]: {
             [key: string]: number | string | object | array;
         };
@@ -1260,6 +1291,13 @@ declare global {
             };
             damage: {
                 parts: { formula: string; type: TraitSelectorValuePlural }[];
+            };
+            range: {
+                maxIncrements: number;
+                minUnites: string;
+                minValue: string | null;
+                units: string;
+                value: string;
             };
         };
 
@@ -1547,6 +1585,7 @@ declare global {
 
     interface ActorSheetPF {
         get actor(): ActorPF;
+        get isEditable(): boolean;
     }
 
     interface ItemSheetPF {

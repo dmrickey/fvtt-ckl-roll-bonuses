@@ -2,7 +2,10 @@ import { MODULE_NAME } from "../consts.mjs";
 
 export const templates =/** @type {const} */ ({
     /** bonus container for item sheets */
-    rollBonusesContainer: `modules/${MODULE_NAME}/hbs/roll-bonuses-header.hbs`,
+    rollBonusesContainer: `modules/${MODULE_NAME}/hbs/roll-bonuses-container.hbs`,
+
+    /** container for turning off global bonuses on actors */
+    globalBonusActorDisabledContainer: `modules/${MODULE_NAME}/hbs/global-bonus-actor-disabled-container.hbs`,
 
     // generic shortcuts
     checkboxInput: `modules/${MODULE_NAME}/hbs/checkbox-input.hbs`,
@@ -38,6 +41,9 @@ export const templates =/** @type {const} */ ({
 
     /** item name translation app for auto-recognition */
     itemNameTranslationConfigApp: `modules/${MODULE_NAME}/hbs/item-name-translation-config.hbs`,
+
+    /** combat settings for automatic bonsuses */
+    globalBonusesConfigApp: `modules/${MODULE_NAME}/hbs/gm-global-settings-config.hbs`,
 });
 
 /**

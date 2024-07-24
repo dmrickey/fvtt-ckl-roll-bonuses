@@ -6,9 +6,7 @@ import { BaseTarget } from './base-target.mjs';
 /**
  *
    (doc) => {
-       const item = doc instanceof pf1.documents.item.ItemPF
-           ? doc
-           : doc.item;
+       const item = doc.item ?? doc;
        if (item instanceof pf1.documents.item.ItemSpellPF) {
            return !!(item.system?.types || '').includes('fear');
        }

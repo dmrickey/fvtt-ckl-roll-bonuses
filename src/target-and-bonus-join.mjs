@@ -7,8 +7,10 @@ import { localize } from "./util/localize.mjs";
 import { truthiness } from "./util/truthiness.mjs";
 import { initSources } from './targeted/init-sources.mjs';
 import { api } from './util/api.mjs';
+import { registerGlobalBonuses } from './global-bonuses/init-global-bonuses.mjs';
 
 initSources();
+registerGlobalBonuses();
 
 registerItemHint((hintcls, actor, item, _data) => {
     if (!actor || item?.actor !== actor) {

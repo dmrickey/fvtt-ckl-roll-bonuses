@@ -1,5 +1,5 @@
 import { textInput } from '../../../handlebars-handlers/bonus-inputs/text-input.mjs';
-import { Distance } from '../../../util/distance.mjs';
+import { PositionalHelper } from '../../../util/positional-helper.mjs';
 import { FormulaCacheHelper } from '../../../util/flag-helpers.mjs';
 import { localizeBonusLabel } from '../../../util/localize.mjs';
 import { BaseTarget } from '../base-target.mjs';
@@ -63,15 +63,13 @@ export class WhenTargetInRange extends BaseTarget {
 
     /**
      * @override
-     * @param {ItemPF | ActionUse | ItemAction} doc
+     * @param {ItemPF & { actor: ActorPF }} item
+     * @param {ItemPF[]} sources
      * @returns {ItemPF[]}
      */
-    static getSourcesFor(doc) {
-        const item = doc instanceof pf1.documents.item.ItemPF
-            ? doc
-            : doc.item;
+    static _getSourcesFor(item, sources) {
         const token = item.actor?.getActiveTokens()[0];
-        if (!item.actor || !token) {
+        if (!token) {
             return [];
         }
 
@@ -81,11 +79,12 @@ export class WhenTargetInRange extends BaseTarget {
             return [];
         }
 
-        const flaggedItems = item.actor.itemFlags?.boolean[this.key]?.sources ?? [];
-        const filtered = flaggedItems.filter((item) => {
-            const min = this.#min(item);
-            const max = this.#max(item);
-            return targets.every((target) => new Distance(token, target).isWithinRange(min, max));
+        const filtered = sources.filter((source) => {
+            // pf1 system believe "minRange" is not inclusive, so it reports "minRange" as "squares one closer".
+            // The distance logic is now set up for that so reducing this by infintessimly small amount accounts for their error
+            const min = (this.#min(source) || 0) - .0001;
+            const max = this.#max(source);
+            return targets.every((target) => new PositionalHelper(token, target).isWithinRange(min, max));
         });
         return filtered;
     }

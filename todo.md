@@ -209,18 +209,14 @@
 - Within Range (done)
   - e.g. Point Blank
 - Range Penalties
-  - max increment
-    - defined on the action
-    - option to ignore
-    - option to modify/set
-  - range penalty per increment
-    - Add penalty to directly to rollData so I can modify it
-    - option to modify/set
-  - These settings need to additive just like crit bonuses
+  - Attack Dialog
+    - checkbox to ignore range penalties
 - IsAdjacent
 - IsSharingSquare
 - TargetEngagedInMelee
   - (for shooting into combat penalties)
+- Higher Ground with melee bonus
+- Make sure melee weapon can reach
 
 # Other Ideas
 - Add Concealment
@@ -228,4 +224,3 @@
   - And would allow automating rerolls for abilities like Weapon of the Chosen
 
 # vnext
-- Add settings in readme

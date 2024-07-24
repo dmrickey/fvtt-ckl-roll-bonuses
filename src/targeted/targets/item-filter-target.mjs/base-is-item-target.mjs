@@ -65,17 +65,12 @@ export class BaseIsItemTarget extends BaseTarget {
     /**
      * @inheritdoc
      * @override
+     * @param {ItemPF & { actor: ActorPF }} item
+     * @param {ItemPF[]} sources
      * @param {ItemPF | ActionUse | ItemAction} doc
      * @returns {ItemPF[]}
      */
-    static getSourcesFor(doc) {
-        const item = doc instanceof pf1.documents.item.ItemPF
-            ? doc
-            : doc.item;
-        if (!item.actor) {
-            return [];
-        }
-
+    static _getSourcesFor(item, sources, doc) {
         const action = doc instanceof pf1.components.ItemAction
             ? doc
             : doc instanceof pf1.actionUse.ActionUse
@@ -85,7 +80,6 @@ export class BaseIsItemTarget extends BaseTarget {
             return [];
         }
 
-        const flaggedItems = item.actor.itemFlags?.boolean[this.key]?.sources ?? [];
-        return flaggedItems;
+        return sources;
     };
 }

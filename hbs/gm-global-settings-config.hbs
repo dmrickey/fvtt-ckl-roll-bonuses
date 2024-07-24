@@ -1,0 +1,31 @@
+<form class="ckl-auto-global-settings">
+    <p class="main-description">{{{localize "ckl-roll-bonuses.global-settings.application.description"}}}</p>
+    <hr>
+
+    <ul class="section-list">
+        {{#each sections}}
+        <li class="section form-group">
+            <label>
+                <input name="{{key}}" type="checkbox" {{#if value}}checked{{/if}} />
+                <span>{{label}}</span>
+            </label>
+            <div class="text">
+                <div class="description">
+                    {{description}}
+                </div>
+                {{#if issues}}
+                <div class="issues">
+                    {{issues}}
+                </div>
+                {{/if}}
+            </div>
+        </li>
+        <hr>
+        {{/each}}
+    </ul>
+    <div class="form-group">
+        <button type="submit">
+            <i class="fas fa-save"></i> {{localize 'PF1.Save'}}
+        </button>
+    </div>
+</form>

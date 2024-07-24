@@ -2,7 +2,9 @@
 class Api {
     get allBonusTypes() { return Object.values(this.bonusTypeMap); }
     get allTargetTypes() { return Object.values(this.targetTypeMap); }
+    get allGlobalTypes() { return Object.values(this.globalTypeMap); }
     bonusTypeMap = {};
+    globalTypeMap = {};
     sources = {};
     targetTypeMap = {};
     migrate = {

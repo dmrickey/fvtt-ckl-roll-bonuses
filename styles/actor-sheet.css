@@ -16,3 +16,9 @@
 .ckl-skill-icon-slash-2 {
     margin-inline-start: 1px;
 }
+
+#ckl-global-bonus-actor-disabled-container .ckl-description {
+    margin-inline: auto;
+    text-align: center;
+    width: 60%;
+}

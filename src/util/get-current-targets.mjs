@@ -8,4 +8,11 @@ export const currentTargetedActors = () => {
         .filter(truthiness);
 }
 
+/** @return {TokenPF[]} */
+export const currentTargets = () => {
+    return [...game.user.targets]
+        .filter(truthiness);
+}
+
 api.utils.currentTargetedActors = currentTargetedActors;
+api.utils.currentTargets = currentTargets;

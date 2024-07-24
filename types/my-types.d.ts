@@ -2,6 +2,7 @@ import { BaseSource } from '../src/targeted/base-source.mjs';
 import { BaseBonus } from '../src/targeted/bonuses/base-bonus.mjs';
 import { BaseTarget } from '../src/targeted/targets/base-target.mjs';
 import { SpecificBonuses } from '../src/bonuses/all-specific-bonuses.mjs';
+import { BaseGlobalBonus } from '../src/global-bonuses/base-global-bonus.mjs';
 
 export {};
 
@@ -22,13 +23,19 @@ declare global {
         };
 
         /** Array of all targeted bonuses */
-        allBonusTypes: (typeof BaseBonus)[];
+        get allBonusTypes(): (typeof BaseBonus)[];
+
+        /** Array of all global bonuses */
+        get allGlobalTypes(): (typeof BaseGlobalBonus)[];
 
         /** Array of all targeted targets */
-        allTargetTypes: (typeof BaseTarget)[];
+        get allTargetTypes(): (typeof BaseTarget)[];
 
         /** map of every targeted bonus from its key to its type */
         bonusTypeMap: Record<string, typeof BaseBonus>;
+
+        /** map of every targeted bonus from its key to its type */
+        globalTypeMap: Record<string, typeof BaseGlobalBonus>;
 
         /** all the input helpers for adding various inputs for bonusees */
         inputs: Record<string, (...args) => void>;
@@ -45,6 +52,7 @@ declare global {
             BaseSource: typeof BaseSource;
             BaseTarget: typeof BaseTarget;
         };
+        BaseGlobalBonus: typeof BaseGlobalBonus;
 
         /** Helper class for registering non-targeted bonuses. Used mostly for the bonus picker application */
         SpecificBonuses: typeof SpecificBonuses;

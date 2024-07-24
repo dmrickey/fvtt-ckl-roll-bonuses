@@ -37,7 +37,7 @@ export const registerSetting = ({
         : Hooks.once('ready', doIt);
 };
 
-export class GlobalSettings {
+export class SharedSettings {
 
     static #elephantInTheRoom = 'elephant-in-the-room';
 
@@ -45,12 +45,13 @@ export class GlobalSettings {
     static get elephantInTheRoom() { return !!game.settings.get(MODULE_NAME, this.#elephantInTheRoom); }
 
     static {
-        // register this setting once PF1 is ready so that all translation keys have already been registered before this is run
-        Hooks.once('pf1PostReady', () => {
+        Hooks.once('init', () => {
             registerSetting({
                 key: this.#elephantInTheRoom,
                 defaultValue: false,
                 settingType: Boolean,
+            }, {
+                skipReady: true,
             });
         });
     }
@@ -160,5 +161,98 @@ class ItemNameTranslationConfig extends FormApplication {
     async _updateObject(_event, formData) {
         const update = expandObject(formData);
         game.settings.set(MODULE_NAME, LanguageSettings.itemNameTranslationsKey, update);
+    }
+}
+
+export class GlobalBonusSettings {
+    /** @type {Set<RollBonusesAPI["BaseGlobalBonus"]>} */
+    static #bonuses = new Set();
+    static get bonusTypes() { return [...this.#bonuses]; }
+
+    /** @param {RollBonusesAPI["BaseGlobalBonus"]} bonus */
+    static registerKey(bonus) { this.#bonuses.add(bonus); }
+
+    /** @abstract */
+    static registerBonuses() { }
+
+    static get globalBonusSettingsKey() { return 'global-bonuses'; }
+
+    /** @returns {Record<string, boolean>} */
+    static get #globalBonusSettings() {
+        const current = game.settings.get(MODULE_NAME, this.globalBonusSettingsKey) || {};
+        // @ts-ignore
+        return current;
+    }
+
+    /**
+     * @param {string} key
+     * @returns {boolean}
+     */
+    static setting(key) {
+        return !Object.hasOwn(this.#globalBonusSettings, key) || !!this.#globalBonusSettings[key];
+    }
+
+    static {
+        Hooks.once('init', () => {
+            registerSetting({
+                key: this.globalBonusSettingsKey,
+                config: false,
+                defaultValue: {},
+                settingType: Object,
+            }, {
+                skipReady: true,
+            });
+
+            game.settings.registerMenu(MODULE_NAME, this.globalBonusSettingsKey, {
+                name: `${MODULE_NAME}.global-settings.application.title`,
+                label: `${MODULE_NAME}.global-settings.application.label`,
+                hint: `${MODULE_NAME}.global-settings.application.hint`,
+                icon: "ra ra-crossed-swords",
+                type: GlobalBonusSettingsApplication,
+                restricted: true,
+            });
+        });
+    }
+}
+
+class GlobalBonusSettingsApplication extends FormApplication {
+    /** @override */
+    static get defaultOptions() {
+        const options = super.defaultOptions;
+        options.id = "ckl-global-bonuses";
+        options.template = templates.globalBonusesConfigApp;
+        options.height = "auto";
+        options.width = 750;
+        options.title = localize('global-settings.application.title');
+        return options;
+    }
+
+    /** @override */
+    getData(options = {}) {
+        let context = super.getData()
+        const sections = GlobalBonusSettings.bonusTypes.map((bonus) => ({
+            description: localize(`global-settings.application.section.${bonus.bonusKey}.description`),
+            issues: localize(`global-settings.application.section.${bonus.bonusKey}.issues`),
+            key: bonus.key,
+            label: bonus.label,
+            value: GlobalBonusSettings.setting(bonus.key),
+        }));
+
+        context.key = GlobalBonusSettings.globalBonusSettingsKey;
+
+        context.sections = sections;
+        return context
+    }
+
+    /**
+     * @override
+     * @inheritdoc
+     * @param {Event} _event
+     * @param {object} formData
+     */
+    async _updateObject(_event, formData) {
+        const update = expandObject(formData);
+        game.settings.set(MODULE_NAME, GlobalBonusSettings.globalBonusSettingsKey, update);
+        SettingsConfig.reloadConfirm({ world: true });
     }
 }

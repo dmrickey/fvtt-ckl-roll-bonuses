@@ -84,23 +84,16 @@ export class AlignmentTarget extends BaseTarget {
     /**
      * @inheritdoc
      * @override
-     * @param {ItemPF | ActionUse | ItemAction} doc
+     * @param {ItemPF & { actor: ActorPF }} _item
+     * @param {ItemPF[]} sources
      * @returns {ItemPF[]}
      */
-    static getSourcesFor(doc) {
+    static _getSourcesFor(_item, sources) {
         if (!currentTargetedActors().length) {
             return [];
         }
 
-        const item = doc instanceof pf1.documents.item.ItemPF
-            ? doc
-            : doc.item;
-        if (!item.uuid || !item.actor) {
-            return [];
-        }
-
-        const flaggedSources = item.actor.itemFlags?.boolean[this.key]?.sources ?? [];
-        const bonusSources = flaggedSources.filter((source) => {
+        const bonusSources = sources.filter((source) => {
             const bonusAlignment = this.#getFlagLetter(source);
             if (!bonusAlignment) return false;
 

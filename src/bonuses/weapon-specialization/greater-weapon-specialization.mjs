@@ -8,7 +8,7 @@ import { KeyedDFlagHelper, getDocDFlags } from "../../util/flag-helpers.mjs";
 import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize, localizeBonusLabel } from "../../util/localize.mjs";
-import { GlobalSettings, LanguageSettings } from '../../util/settings.mjs';
+import { SharedSettings, LanguageSettings } from '../../util/settings.mjs';
 import { SpecificBonuses } from '../all-specific-bonuses.mjs';
 import { greaterWeaponFocusKey } from "../weapon-focus/ids.mjs";
 import { WeaponSpecializationSettings, weaponSpecializationKey } from "./weapon-specialization.mjs";
@@ -95,7 +95,7 @@ Hooks.on('renderItemSheet', (
     /** @type {[HTMLElement]} */[html],
     /** @type {unknown} */ _data
 ) => {
-    if (GlobalSettings.elephantInTheRoom) return;
+    if (SharedSettings.elephantInTheRoom) return;
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
     const name = item?.name?.toLowerCase() ?? '';

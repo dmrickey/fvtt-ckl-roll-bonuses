@@ -70,24 +70,16 @@ export class TokenTarget extends BaseTarget {
     /**
      * @override
      * @inheritdoc
-     * @param {ItemPF | ActionUse | ItemAction} doc
+     * @param {ItemPF & { actor: ActorPF }} _item
+     * @param {ItemPF[]} sources
      * @returns {ItemPF[]}
      */
-    static getSourcesFor(doc) {
+    static _getSourcesFor(_item, sources) {
         if (!this.#currentTargetUuids.length) {
             return [];
         }
 
-        const item = doc instanceof pf1.documents.item.ItemPF
-            ? doc
-            : doc.item;
-        if (!item.uuid || !item.actor) {
-            return [];
-        }
-
-        // fromUuidSync
-        const flaggedItems = item.actor.itemFlags?.boolean[this.key]?.sources ?? [];
-        const bonusSources = flaggedItems.filter((source) => {
+        const bonusSources = sources.filter((source) => {
             /** @type {string[]} */
             const savedTargets = source.getFlag(MODULE_NAME, this.key) ?? [];
             const isInverted = !!source.getFlag(MODULE_NAME, this.#inversionKey);

@@ -34,20 +34,16 @@ export class ItemTarget extends BaseTarget {
 
     /**
      * @override
-     * @param {ItemPF | ActionUse | ItemAction} doc
+     * @param {ItemPF & {actor: ActorPF}} item
+     * @param {ItemPF[]} sources
      * @returns {ItemPF[]}
      */
-    static getSourcesFor(doc) {
-        const item = doc instanceof pf1.documents.item.ItemPF
-            ? doc
-            : doc.item;
-        if (!item.uuid || !item.actor) {
+    static _getSourcesFor(item, sources) {
+        if (!item.uuid) {
             return [];
         }
 
-        // fromUuidSync
-        const flaggedItems = item.actor.itemFlags?.boolean[this.key]?.sources ?? [];
-        const bonusSources = flaggedItems.filter((flagged) => {
+        const bonusSources = sources.filter((flagged) => {
             /** @type {string[]} */
             const targetedItemUuids = flagged.getFlag(MODULE_NAME, this.key) || [];
             // todo in v10 stop here when I can lookup the parent link instead of having to look up the parent and see if this is a child

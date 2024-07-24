@@ -71,6 +71,55 @@ function d20RollWrapper(wrapped, options = {}) {
     return wrapped.call(this, options);
 }
 
+// function preAttackRoll(action, config, rollData, rollOptions, parts, changes) {
+//     changes.push(...[
+//         createChangeForTooltip({
+//             name: 'test 50',
+//             type: 'alchemical',
+//             value: 50,
+//             subTarget: 'attack',
+//         }),
+//         createChangeForTooltip({
+//             name: 'test 60',
+//             type: 'alchemical',
+//             value: 60,
+//             subTarget: 'attack',
+//         }),
+//         createChangeForTooltip({
+//             name: 'test 40',
+//             type: 'alchemical',
+//             value: 40,
+//             subTarget: 'attack',
+//         }),
+//     ]);
+//     debugger;
+// }
+// Hooks.on("pf1PreAttackRoll", preAttackRoll);
+// function preDamageRoll(action, rollData, parts, changes) {
+//     changes.push(...[
+//         createChangeForTooltip({
+//             name: 'test 55',
+//             type: 'alchemical',
+//             value: 55,
+//             subTarget: 'damage',
+//         }),
+//         createChangeForTooltip({
+//             name: 'test 65',
+//             type: 'alchemical',
+//             value: 65,
+//             subTarget: 'damage',
+//         }),
+//         createChangeForTooltip({
+//             name: 'test 45',
+//             type: 'alchemical',
+//             value: 45,
+//             subTarget: 'damage',
+//         }),
+//     ]);
+//     debugger;
+// }
+// Hooks.on('pf1PreDamageRoll', preDamageRoll);
+
 /**
  * @this {ItemPF}
  * @param {*} wrapped
@@ -121,7 +170,6 @@ function onCreateActionUse(actionUse) {
         // for modifying actionUse.shared.rollData before attacks are rolled
     }
 }
-Hooks.on('pf1CreateActionUse', onCreateActionUse);
 
 /**
  * Used for adding conditionals to individual parts of full attacks
@@ -269,25 +317,21 @@ function prepareActorDerivedData(wrapped) {
  * @param {ActorPF | ItemPF | ItemAction} thing
  * @param {RollData} rollData
  */
-function updateItemActionRollData(thing, rollData) {
+function onGetRollData(thing, rollData) {
+    // this fires for actor -> item -> action. If I handle more than one then it would double up bonuses. So I handle the root-most option
     if (thing instanceof pf1.components.ItemAction) {
         const action = thing;
+
+        rollData.rb ||= {};
+        LocalHookHandler.fireHookNoReturnSync(localHooks.initItemActionRollData, action, rollData);
+
         // safety for initialization during data prep where the bonuses havent' been set up yet
         if (!action.item[MODULE_NAME]?.bonuses || !action.item[MODULE_NAME]?.targets) return;
 
         rollData[MODULE_NAME] ||= {};
         LocalHookHandler.fireHookNoReturnSync(localHooks.updateItemActionRollData, action, rollData);
     }
-    else if (thing instanceof pf1.documents.item.ItemPF) {
-        const item = thing;
-        // safety for initialization during data prep where the bonuses havent' been set up yet
-        if (!item[MODULE_NAME]?.bonuses || !item[MODULE_NAME]?.targets) return;
-
-        rollData[MODULE_NAME] ||= {};
-        LocalHookHandler.fireHookNoReturnSync(localHooks.updateItemRollData, item, rollData);
-    }
 }
-Hooks.on('pf1GetRollData', updateItemActionRollData);
 
 /**
  * @typedef {{data: RollData?, extraParts: unknown[], bonus:unknown, primaryAttack: boolean}} RollAttackArgs
@@ -415,6 +459,8 @@ function itemAttackFromItem(wrapped, item) {
     return data;
 }
 
+Hooks.on('pf1CreateActionUse', onCreateActionUse);
+Hooks.on('pf1GetRollData', onGetRollData);
 Hooks.once('init', () => {
     // change.mjs also fires a local hook for re-calculating changes (e.g. Fate's Favored).
 

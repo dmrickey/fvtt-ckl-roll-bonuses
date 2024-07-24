@@ -83,13 +83,38 @@
     max-width: 96px;
 }
 
-.roll-bonuses-form.token-selector .grouped-tokens .individual-token .token-selector-contents div {
-    /* margin: 0; */
-}
+/* .roll-bonuses-form.token-selector .grouped-tokens .individual-token .token-selector-contents div {
+    margin: 0;
+} */
 
 .roll-bonuses-form.token-selector .grouped-tokens .individual-token .token-selector-contents img {
     min-height: 96px;
     min-width: 96px;
     max-height: 96px;
     max-width: 96px;
+}
+
+.ckl-auto-global-settings .main-description {
+    margin-inline: 4rem;
+    /* max-width: 500px; */
+    text-align:center;
+}
+
+.ckl-auto-global-settings .text {
+    display: flex;
+    flex-direction: column;
+}
+
+.ckl-auto-global-settings .text *:not(:last-child) {
+    margin-block-end: .5em;
+}
+
+.ckl-auto-global-settings .text .issues{
+    color: var(--pf1-crimson);
+    font-size: var(--font-size-12);
+    font-style: italic;
+}
+
+.ckl-auto-global-settings label:has(input[type=checkbox]) {
+    display: flex;
 }
