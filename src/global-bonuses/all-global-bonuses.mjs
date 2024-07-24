@@ -1,5 +1,6 @@
 import { MODULE_NAME } from '../consts.mjs';
 import { addGlobalBonusDisablerToActor } from '../handlebars-handlers/global-bonuses/add-global-bonus-disabler-to-actor.mjs';
+import { api } from '../util/api.mjs';
 import { LocalHookHandler, localHooks } from '../util/hooks.mjs';
 import { GlobalBonusSettings } from '../util/settings.mjs';
 import { BaseGlobalBonus } from './base-global-bonus.mjs';
@@ -16,6 +17,8 @@ export class GlobalBonuses {
                 bonus.registerBonuses();
             }
         });
+
+        api.globalTypeMap[bonus.key] = bonus;
     }
 
     /**

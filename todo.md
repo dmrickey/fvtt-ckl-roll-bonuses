@@ -224,8 +224,3 @@
   - And would allow automating rerolls for abilities like Weapon of the Chosen
 
 # vnext
-- add global bonuses to API
-- document
-  - higher ground global bonus
-  - shooting into melee global bonus
-    - precise shot (add journal link into bonus)

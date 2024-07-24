@@ -23,13 +23,19 @@ declare global {
         };
 
         /** Array of all targeted bonuses */
-        allBonusTypes: (typeof BaseBonus)[];
+        get allBonusTypes(): (typeof BaseBonus)[];
+
+        /** Array of all global bonuses */
+        get allGlobalTypes(): (typeof BaseGlobalBonus)[];
 
         /** Array of all targeted targets */
-        allTargetTypes: (typeof BaseTarget)[];
+        get allTargetTypes(): (typeof BaseTarget)[];
 
         /** map of every targeted bonus from its key to its type */
         bonusTypeMap: Record<string, typeof BaseBonus>;
+
+        /** map of every targeted bonus from its key to its type */
+        globalTypeMap: Record<string, typeof BaseGlobalBonus>;
 
         /** all the input helpers for adding various inputs for bonusees */
         inputs: Record<string, (...args) => void>;
