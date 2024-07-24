@@ -80,7 +80,9 @@ export class WhenTargetInRange extends BaseTarget {
         }
 
         const filtered = sources.filter((source) => {
-            const min = this.#min(source);
+            // pf1 system believe "minRange" is not inclusive, so it reports "minRange" as "squares one closer".
+            // The distance logic is now set up for that so reducing this by infintessimly small amount accounts for their error
+            const min = (this.#min(source) || 0) - .0001;
             const max = this.#max(source);
             return targets.every((target) => new PositionalHelper(token, target).isWithinRange(min, max));
         });

@@ -1,7 +1,8 @@
 import { textInput } from '../../../handlebars-handlers/bonus-inputs/text-input.mjs';
 import { BaseBonus } from '../../../targeted/bonuses/base-bonus.mjs';
 import { FormulaCacheHelper } from '../../../util/flag-helpers.mjs';
-import { localizeBonusTooltip } from '../../../util/localize.mjs';
+import { registerItemHint } from '../../../util/item-hints.mjs';
+import { localizeBonusLabel, localizeBonusTooltip } from '../../../util/localize.mjs';
 
 /**
  * @extends BaseBonus
@@ -23,16 +24,6 @@ export class RangedIncrementPenaltyBonus extends BaseBonus {
      * @returns {string}
      */
     static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.4A4bCh8VsQVbTsAY#ranged-increment-penalty-bonus'; }
-
-    // TODO not sure what to do here
-    // /**
-    //  * @override
-    //  * @inheritdoc
-    //  * @param {ItemPF} source
-    //  * @returns {Nullable<string[]>}
-    //  */
-    // static getHints(source) {
-    // }
 
     /**
      * @override
@@ -107,10 +98,24 @@ export class RangedIncrementPenaltyBonus extends BaseBonus {
     }
 
     /**
+     *
+     * @param {ItemHintsAPI["HintClass"]} hintCls
+     * @param {ActorPF} _actor
+     * @param {ItemPF} item
+     * @param {object} _data
+     * @return {Hint | undefined}
+     */
+    static handleHint(hintCls, _actor, item, _data) {
+        if (!item.hasItemBooleanFlag(RangedIncrementPenaltyBonus.key)) return;
+        return hintCls.create('', [], { icon: 'ra ra-archery-target', hint: RangedIncrementPenaltyBonus.label });
+    }
+
+    /**
      * @override
      * @inheritdoc
      */
     static init() {
         FormulaCacheHelper.registerModuleFlag(this.#incrementPenaltyOffsetKey, this.#maxIncrementOffsetKey, this.#penaltyOffsetKey);
+        registerItemHint(this.handleHint);
     }
 }

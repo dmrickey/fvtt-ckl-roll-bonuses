@@ -5,6 +5,8 @@ import { truthiness } from "./truthiness.mjs";
  */
 let itemHintsAPI;
 
+/** @typedef {(hintCls: ItemHintsAPI["HintClass"], actor: ActorPF, item: ItemPF, data: object) => Hint | undefined} hintFunc */
+
 /**
  * @type {hintFunc[]}
  */
