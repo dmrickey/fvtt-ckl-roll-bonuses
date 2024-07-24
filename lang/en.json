@@ -208,7 +208,7 @@
                 "higher-ground": "Higher Ground Melee Bonus",
                 "range-increment-penalty": "Ranged Increment Penalty",
                 "shoot-into-melee": "Shooting into Melee",
-                "require-melee-threaten": "Enforce Melee Range"
+                "require-melee-threaten": "Require Melee Threatens"
             },
             "warning": {
                 "range-increment-error-plural": "The farthest target ({distance}{units}) is outside of your maximum range ({max}{units}).",
@@ -221,7 +221,7 @@
             "application": {
                 "description": "This attempts to automate global bonuses that are tedious to do manually. Some of these are a best-effort and should work under most circumstances, but due to their nature some will have quirks that may be unavoidable.",
                 "hint": "Configure specific combat bonuses that can be automated. These are global combat options that are aren't meant to be configured for specific feats or abilities, but apply to everyone.",
-                "label": "Configure Global Settings",
+                "label": "Configure Global Bonuses",
                 "title": "Global Bonuses",
                 "section": {
                     "higher-ground": {

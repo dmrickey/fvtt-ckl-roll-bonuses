@@ -5,7 +5,7 @@ import { LanguageSettings } from '../../../util/settings.mjs';
 
 const compendiumId = '53urYIbYYpQuoSLd';
 export const key = 'precise-shot';
-const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.';
+const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.4A4bCh8VsQVbTsAY#precise-shot-bonus';
 
 export const init = () => {
     SpecificBonuses.registerSpecificBonus({ journal, key, type: 'boolean' });
@@ -48,3 +48,25 @@ Hooks.on('renderItemSheet', (
         });
     }
 });
+
+/**
+ * @param {ItemPF} item
+ * @param {object} data
+ * @param {{temporary: boolean}} param2
+ * @param {string} id
+ */
+const onCreate = (item, data, { temporary }, id) => {
+    if (!(item instanceof pf1.documents.item.ItemPF)) return;
+    if (temporary) return;
+
+    const name = item?.name?.toLowerCase() ?? '';
+    const sourceId = item?.flags.core?.sourceId ?? '';
+    const hasBonus = hasAnyBFlag(item, key);
+
+    if ((name === Settings.name || sourceId.includes(compendiumId)) && !hasBonus) {
+        item.updateSource({
+            [`system.flags.boolean.${key}`]: true,
+        });
+    }
+};
+Hooks.on('preCreateItem', onCreate);

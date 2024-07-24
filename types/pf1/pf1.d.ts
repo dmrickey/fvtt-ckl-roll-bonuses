@@ -10,7 +10,7 @@ declare global {
         getRollData(): RollData;
         getFlag(moduleName: string, key: string): any;
         async setFlag<T>(moduleName: string, key: string, value: T);
-        updateSource(changes: Partial<this>, options?: object);
+        updateSource(changes: Record<string, any>, options?: object);
         uuid: string;
         update(data: Record<string, any>);
     }

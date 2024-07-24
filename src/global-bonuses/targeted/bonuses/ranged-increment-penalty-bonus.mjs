@@ -22,7 +22,7 @@ export class RangedIncrementPenaltyBonus extends BaseBonus {
      * @override
      * @returns {string}
      */
-    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.4A4bCh8VsQVbTsAY#ranged-increment-penalty'; }
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.4A4bCh8VsQVbTsAY#ranged-increment-penalty-bonus'; }
 
     // TODO not sure what to do here
     // /**

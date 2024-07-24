@@ -1,4 +1,3 @@
-import { customGlobalHooks } from "../../util/hooks.mjs";
 import { BaseSource } from '../base-source.mjs';
 
 /**
