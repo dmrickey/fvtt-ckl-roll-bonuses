@@ -15,6 +15,7 @@ export class RangedIncrementPenaltyBonus extends BaseBonus {
     static get sourceKey() { return 'ranged-increment-penalty'; }
 
     static get #incrementPenaltyOffsetKey() { return `${this.key}-increment-penalty-offset`; }
+    static get #incrementRangeOffsetKey() { return `${this.key}-increment-range-offset`; }
     static get #maxIncrementOffsetKey() { return `${this.key}-max-increment-offset`; }
     static get #penaltyOffsetKey() { return `${this.key}-penalty-offset`; }
 
@@ -41,6 +42,11 @@ export class RangedIncrementPenaltyBonus extends BaseBonus {
         if (incrementPenaltyOffset) {
             const offset = Math.max(0, rollData.rb.rangePenalty.penalty - Math.abs(incrementPenaltyOffset));
             rollData.rb.rangePenalty.penalty = offset;
+        }
+
+        const incrementRangeOffset = FormulaCacheHelper.getModuleFlagValue(source, this.#incrementRangeOffsetKey);
+        if (incrementRangeOffset) {
+            rollData.rb.rangePenalty.range += incrementRangeOffset;
         }
 
         const maxIncrementOffset = FormulaCacheHelper.getModuleFlagValue(source, this.#maxIncrementOffsetKey);
@@ -78,9 +84,9 @@ export class RangedIncrementPenaltyBonus extends BaseBonus {
         textInput({
             item,
             journal: this.journal,
-            key: this.#maxIncrementOffsetKey,
+            key: this.#penaltyOffsetKey,
             parent: html,
-            tooltip: localizeBonusTooltip(this.#maxIncrementOffsetKey),
+            tooltip: localizeBonusTooltip(this.#penaltyOffsetKey),
         }, {
             canEdit: isEditable,
             isModuleFlag: true,
@@ -88,9 +94,19 @@ export class RangedIncrementPenaltyBonus extends BaseBonus {
         textInput({
             item,
             journal: this.journal,
-            key: this.#penaltyOffsetKey,
+            key: this.#incrementRangeOffsetKey,
             parent: html,
-            tooltip: localizeBonusTooltip(this.#penaltyOffsetKey),
+            tooltip: localizeBonusTooltip(this.#incrementRangeOffsetKey),
+        }, {
+            canEdit: isEditable,
+            isModuleFlag: true,
+        });
+        textInput({
+            item,
+            journal: this.journal,
+            key: this.#maxIncrementOffsetKey,
+            parent: html,
+            tooltip: localizeBonusTooltip(this.#maxIncrementOffsetKey),
         }, {
             canEdit: isEditable,
             isModuleFlag: true,
@@ -115,7 +131,12 @@ export class RangedIncrementPenaltyBonus extends BaseBonus {
      * @inheritdoc
      */
     static init() {
-        FormulaCacheHelper.registerModuleFlag(this.#incrementPenaltyOffsetKey, this.#maxIncrementOffsetKey, this.#penaltyOffsetKey);
+        FormulaCacheHelper.registerModuleFlag(
+            this.#incrementPenaltyOffsetKey,
+            this.#incrementRangeOffsetKey,
+            this.#maxIncrementOffsetKey,
+            this.#penaltyOffsetKey,
+        );
         registerItemHint(this.handleHint);
     }
 }
