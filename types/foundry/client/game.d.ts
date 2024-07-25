@@ -34,6 +34,7 @@ interface Game {
     system: { version: string };
 
     scenes: EmbeddedCollection<Scene> & {
+        /** @deprecated Do not use, base everything on the token or user's scene */
         active: Scene;
     };
 
