@@ -187,7 +187,7 @@ Hooks.on('renderItemSheet', (
     let elements = Object.fromEntries(damageElements.map(k => [k, pf1.registry.damageTypes.get(k)]));
 
     const name = item?.name?.toLowerCase() ?? '';
-    const isElementalFocusFeat = name.includes(Settings.elementalFocus) && item.type === 'feat';
+    const isElementalFocusFeat = name.includes(Settings.elementalFocus) && item.type === 'feat' && item.subType !== 'classFeat';
     const sourceId = item?.flags.core?.sourceId ?? '';
     if (isElementalFocusFeat || sourceId.includes(elementalFocusId)) {
         key = elementalFocusKey;
