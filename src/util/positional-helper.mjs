@@ -18,8 +18,15 @@ export class PositionalHelper {
             ? t.object
             : t);
 
-        this.token1 = toToken(first);
-        this.token2 = toToken(second);
+        const token1 = toToken(first);
+        const token2 = toToken(second);
+
+        if (token1.scene !== token2.scene) {
+            throw new Error('tokens must be in teh same scene');
+        }
+
+        this.token1 = token1;
+        this.token2 = token2;
     }
 
     /** @returns {number} */
@@ -31,8 +38,8 @@ export class PositionalHelper {
      * @returns {number}
      */
     getShootingIntoMeleePenalty() {
-        const potentials = game.scenes.active.tokens
-            .filter((x) => x.id !== this.token1.id)
+        const potentials = this.token1.scene.tokens
+            .filter((x) => ![this.token1.id, this.token2.id].includes(x.id))
             .filter((x) => x.disposition !== this.token2.document.disposition && x.disposition === this.token1.document.disposition)
             .map((x) => new PositionalHelper(this.token2, x));
 
@@ -155,7 +162,7 @@ export class PositionalHelper {
      * @returns {boolean}
      */
     static #isAdjacent(left, right, diagonalReach = false) {
-        const scene = game.scenes.active;
+        const scene = left.scene;
         const gridSize = scene.grid.size;
 
         let floor = this.#floor(left);
@@ -237,7 +244,7 @@ export class PositionalHelper {
             return 0;
         }
 
-        const scene = game.scenes.active;
+        const scene = token1.scene;
         const gridSize = scene.grid.size;
 
         let x1 = token1.bounds.left;
@@ -339,11 +346,10 @@ export class PositionalHelper {
      * @returns {number}
      */
     static #floor(token) {
-        const { distance, size } = game.scenes.active.grid;
+        const { distance, size } = token.scene.grid;
         const units = size / distance;
         return token.document.elevation * units;
     }
-
 }
 
 /** @type {Record<ActorSize, number>} */

@@ -411,6 +411,7 @@ declare global {
         x: number;
         y: number;
         bounds: Rect;
+        scene: Scene;
     }
 
     class ItemPF<
@@ -446,6 +447,7 @@ declare global {
          * @deprecated use @see actor
          */
         parentActor: ActorPF;
+        subType: string;
         system: SystemData;
         type: ItemType;
 
