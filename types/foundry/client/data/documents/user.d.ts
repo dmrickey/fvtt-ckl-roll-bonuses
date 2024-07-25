@@ -11,6 +11,6 @@ declare global {
          */
         targets: UserTargets;
         isGM: boolean;
-        viewedScene: Scene;
+        viewedScene: string;
     }
 }
