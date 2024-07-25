@@ -101,7 +101,7 @@ export class RangedIncrementPenaltyGlobalBonus extends BaseGlobalBonus {
                 ? 'range-increment-error-plural'
                 : 'range-increment-error-singular';
             const args = {
-                distance,
+                distance: distance.toFixed(1),
                 max: maxIncrements * range,
                 units: actionUse.action.data.range.units
             };
@@ -111,7 +111,10 @@ export class RangedIncrementPenaltyGlobalBonus extends BaseGlobalBonus {
 
         const total = -(penalty * (steps - 1) + penaltyOffset);
         if (total < 0) {
-            const args = { range: distance, units: actionUse.action.data.range.units };
+            const args = {
+                range: distance.toFixed(1),
+                units: actionUse.action.data.range.units,
+            };
             shared.attackBonus.push(`${total}[${RangedIncrementPenaltyGlobalBonus._attackLabel(RangedIncrementPenaltyGlobalBonus.bonusKey, args)}]`);
         }
     }

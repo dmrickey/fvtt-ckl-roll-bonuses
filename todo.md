@@ -224,3 +224,4 @@
   - And would allow automating rerolls for abilities like Weapon of the Chosen
 
 # vnext
+- apply auto-config on create to all auto-config stuff (see Precise Shot)
