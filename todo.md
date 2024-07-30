@@ -251,6 +251,8 @@
   - Try to come up with a more generic framework for this
 - Add more text to Token Target app
   - Have a "gm only" text that says something like "you can see all tokens because you're the GM, players can only select tokens that are visible to them.
+    - Add this in a "gm only" box visible at the top of the dialog
   - Add more text at the bottom that says "any tokens that are targeted when this is open will be pre-selected, you can enable a setting to skip this dialog in those cases"
+  - Highlight tokens in the scene based off of which token in the app is hovered
 - Thrown Target
   - Add line in "is type" to journal
