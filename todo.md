@@ -26,7 +26,6 @@
     - [Favored Enemy](#favored-enemy)
     - [Favored Terrain](#favored-terrain)
 - [Feats](#feats)
-  - [Bomber's eye](#bombers-eye)
   - [Shared Remembrance](#shared-remembrance)
   - [Spell Perfection](#spell-perfection)
   - [Spirited Charge](#spirited-charge)
@@ -118,9 +117,6 @@
   - Add a button to chat cards to increase the skill/initiative/whatever roll when applicable
 
 # Feats
-## Bomber's eye
-- Increase throwing range
-- Need "Thrown" target
 ## [Shared Remembrance](https://aonprd.com/FeatDisplay.aspx?ItemName=Shared%20Remembrance)
 ## [Spell Perfection](https://www.d20pfsrd.com/feats/general-feats/spell-perfection/)
 ## Spirited Charge
@@ -256,3 +252,5 @@
 - Add more text to Token Target app
   - Have a "gm only" text that says something like "you can see all tokens because you're the GM, players can only select tokens that are visible to them.
   - Add more text at the bottom that says "any tokens that are targeted when this is open will be pre-selected, you can enable a setting to skip this dialog in those cases"
+- Thrown Target
+  - Add line in "is type" to journal

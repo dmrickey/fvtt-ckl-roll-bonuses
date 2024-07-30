@@ -23,6 +23,7 @@ import { WhenInCombatTarget } from './conditional/when-in-combat-target.mjs';
 import { WhenTargetInRange } from './conditional/is-target-within-range.mjs';
 import { SpellDescriptorTarget } from './spell-descriptor-target.mjs';
 import { ConditionTarget } from './conditional/condition-target.mjs';
+import { IsThrownTarget } from './item-filter-target.mjs/is-thrown-target.mjs';
 
 export const registerTargets = () => [
     AlignmentTarget,
@@ -35,6 +36,7 @@ export const registerTargets = () => [
     IsMeleeTarget,
     IsRangedTarget,
     IsSpellTarget,
+    IsThrownTarget,
     IsWeaponTarget,
     ItemTarget,
     SelfTarget,

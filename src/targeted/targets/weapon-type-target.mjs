@@ -25,8 +25,8 @@ export class WeaponTypeTarget extends BaseTarget {
      * @returns {Nullable<string[]>}
      */
     static getHints(source) {
-        const groups = source.getFlag(MODULE_NAME, this.key) ?? [];
-        return groups.filter(truthiness);
+        const types = source.getFlag(MODULE_NAME, this.key) ?? [];
+        return types.filter(truthiness);
     }
 
     /**
@@ -42,8 +42,8 @@ export class WeaponTypeTarget extends BaseTarget {
         ) {
             return [];
         }
-        const groupsOnItem = item.system.baseTypes;
-        if (!groupsOnItem?.length) {
+        const typesOnItem = item.system.baseTypes;
+        if (!typesOnItem?.length) {
             return [];
         }
 
@@ -54,8 +54,8 @@ export class WeaponTypeTarget extends BaseTarget {
                 return false;
             }
 
-            const targetedGroups = types.filter(truthiness);
-            return intersects(groupsOnItem, targetedGroups);
+            const targetedTypes = types.filter(truthiness);
+            return intersects(typesOnItem, targetedTypes);
         });
 
         return bonusSources;
