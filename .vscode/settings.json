@@ -1,5 +1,5 @@
 {
-    "markdown.extension.toc.levels": "1..2",
+    "markdown.extension.toc.levels": "1..3",
     "markdown.extension.toc.omittedFromToc": {
         "README.md": [
             "# Roll Bonuses",

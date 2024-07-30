@@ -1,20 +1,39 @@
 - [TODO](#todo)
 - [UI](#ui)
+    - [Add text filter to item input target](#add-text-filter-to-item-input-target)
 - [Bonus Targets](#bonus-targets)
   - [Bonuses](#bonuses)
+    - [Swap Ability for Damage Rolls](#swap-ability-for-damage-rolls)
+    - [Swap Ability for Attack Rolls](#swap-ability-for-attack-rolls)
+    - [Crit Only Attack Bonus](#crit-only-attack-bonus)
+  - [AC bonus](#ac-bonus)
   - [Targets](#targets)
+    - [Creature type/subtype](#creature-typesubtype)
+    - [By Disposition](#by-disposition)
+    - [All healing](#all-healing)
+    - [Armor Target (useful for something like Magic Vestment)](#armor-target-useful-for-something-like-magic-vestment)
+    - [Spellbook target](#spellbook-target)
+    - [Spell preparation Qty](#spell-preparation-qty)
+    - [Skill Target](#skill-target)
+    - [Die Result](#die-result)
+- [Affect other tokens](#affect-other-tokens)
 - [Class Features](#class-features)
   - [Cleric](#cleric)
+    - [Healing Domain - Healer's Blessing](#healing-domain---healers-blessing)
   - [Psychic](#psychic)
+    - [Phrenic Amplification](#phrenic-amplification)
   - [Ranger](#ranger)
+    - [Favored Enemy](#favored-enemy)
+    - [Favored Terrain](#favored-terrain)
 - [Feats](#feats)
   - [Bomber's eye](#bombers-eye)
-  - [Longshot](#longshot)
   - [Shared Remembrance](#shared-remembrance)
   - [Spell Perfection](#spell-perfection)
   - [Spirited Charge](#spirited-charge)
+  - [Scarred by War](#scarred-by-war)
 - [Racial Features](#racial-features)
   - [Sylph](#sylph)
+    - [Air Affinity](#air-affinity)
 - [Misc](#misc)
   - [I am targeted](#i-am-targeted)
   - [Magic](#magic)
@@ -47,29 +66,42 @@
 
 # Bonus Targets
 ## Bonuses
+### Swap Ability for Damage Rolls
 - add <ability> to damage for other ability scores (like agile but can be customized)
+  - waiting on 10.5
+### Swap Ability for Attack Rolls
 - add <ability> to attack for other ability scores (like finesse but can be customized)
+  - waiting on 10.5
+### Crit Only Attack Bonus
 - Attack bonus needs to give optional "crit only" attack bonuses
-- AC bonus
+## AC bonus
+- See armor focus for how I first implemented it
 
 ## Targets
-- Have creature type/subtype based targeting - would support [Ranger](#ranger)'s Favored Enemy
+### Creature type/subtype
+- would support [Ranger](#ranger)'s Favored Enemy
+### By Disposition
 - Ally/Hostile/Neutral multiselect
-- All healing
-- Armor Target (useful for something like Magic Vestment)
-- Distance-based targeting (point-blank shot)
-  - same logic for range penalties
-- Spellbook target
-- Spell preparation Qty
-- Skill Target
-  - Include "smart groups" that will give options e.g.
-    - specific ability skills (e.g. all int skills)
-    - The default layout will group subskills under the base skill and checking the base skill will automatically check all subskills
-- While in Combat
-  - [Scarred by War](https://www.aonprd.com/TraitDisplay.aspx?ItemName=Scarred%20by%20War) (used to grant diplomacy bonus while not in combat)
-- add a way to affect other tokens (i.e. cavalier challenge which gives them -2 attack vs other targets)
-- Condition Target (both self and/or target)
+  - multi select
+  - "ally" means same disposition
+  - "hostile" means `*-1`
+  - "neutral" still means 0
+### All healing
+### Armor Target (useful for something like Magic Vestment)
+- see Armor Focus for similar
+### Spellbook target
+### Spell preparation Qty
+- Don't see how it's possible with my framework
+### Skill Target
+- Include "smart groups" that will give options e.g.
+  - specific ability skills (e.g. all int skills)
+  - The default layout will group subskills under the base skill and checking the base skill will automatically check all subskills
+### Die Result
 - When the die is (some value range)
+  - Would allow for "1s turn to 2s" (e.g. target die = 1; bonus + 1)
+
+# Affect other tokens
+- add a way to affect other tokens (e.g. cavalier challenge which gives them -2 attack vs other targets) - this might just be a buff assi
 
 # Class Features
 ## Cleric
@@ -88,15 +120,13 @@
 # Feats
 ## Bomber's eye
 - Increase throwing range
-## Longshot
-- Increase bow range
-## Shared Remembrance
-- https://aonprd.com/FeatDisplay.aspx?ItemName=Shared%20Remembrance
-## Spell Perfection
-- https://www.d20pfsrd.com/feats/general-feats/spell-perfection/
+- Need "Thrown" target
+## [Shared Remembrance](https://aonprd.com/FeatDisplay.aspx?ItemName=Shared%20Remembrance)
+## [Spell Perfection](https://www.d20pfsrd.com/feats/general-feats/spell-perfection/)
 ## Spirited Charge
 - Double Damage without critting
-
+## [Scarred by War](https://www.aonprd.com/TraitDisplay.aspx?ItemName=Scarred%20by%20War)
+ - (used to grant diplomacy bonus while not in combat)
 
 # Racial Features
 ## Sylph
@@ -206,10 +236,7 @@
   - Needs a "Target" so that I can give out extra bonuses when flanking
     - Dirty Fighter Trait
     - Outflank (would need extra info about flank target) 
-- Within Range (done)
-  - e.g. Point Blank
 - Range Penalties
-  - Attack Dialog
     - checkbox to ignore range penalties
 - IsAdjacent
 - IsSharingSquare
@@ -225,3 +252,7 @@
 
 # vnext
 - apply auto-config on create to all auto-config stuff (see Precise Shot)
+  - Try to come up with a more generic framework for this
+- Add more text to Token Target app
+  - Have a "gm only" text that says something like "you can see all tokens because you're the GM, players can only select tokens that are visible to them.
+  - Add more text at the bottom that says "any tokens that are targeted when this is open will be pre-selected, you can enable a setting to skip this dialog in those cases"
