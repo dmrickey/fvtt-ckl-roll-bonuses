@@ -1,4 +1,5 @@
 import { api } from './api.mjs';
+import { ifDebug } from './if-debug.mjs';
 
 export class PositionalHelper {
 
@@ -113,10 +114,10 @@ export class PositionalHelper {
     /**
      * @param {TokenPF} attacker
      * @param {TokenPF} target
-     * @param {ItemAction} [action]
+     * @param {ItemAction} [specificAction]
      * @returns {boolean}
      */
-    static #threatens(attacker, target, action = undefined) {
+    static #threatens(attacker, target, specificAction = undefined) {
         // todo - flat-footed does not exist
         // if (attacker.isFlatFooted) {
         //     return false;
@@ -126,8 +127,8 @@ export class PositionalHelper {
         // }
 
         let actions = [];
-        if (action) {
-            actions = [action];
+        if (specificAction) {
+            actions = [specificAction];
         } else {
             const meleeAttacks = attacker.actor.items
                 .filter((item) => item.canUse && item.activeState)
@@ -152,7 +153,14 @@ export class PositionalHelper {
             return false;
         }
 
-        return actions.some((action) => this.#isWithinRange(attacker, target, action.minRange, action.maxRange, hasReach(action)));
+        return actions.some((action) => {
+            ifDebug(() => {
+                if (action.getRange() && !action.maxRange) {
+                    ui.notifications.error(`Action (${action.id}) on Item '${action.item.name}' (${action.item.uuid}) has invalid range. Verify the max increments and range has been set up correctly.`);
+                }
+            });
+            return this.#isWithinRange(attacker, target, action.minRange, action.maxRange, hasReach(action));
+        });
     }
 
     /**

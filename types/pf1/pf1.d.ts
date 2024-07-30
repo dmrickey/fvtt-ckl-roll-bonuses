@@ -318,6 +318,10 @@ declare global {
     }
 
     class ItemAction {
+        getRange({
+            type: string = 'single' | 'min' | 'max',
+            rollData: RollData = null,
+        } = {}): number;
         [MODULE_NAME]: {
             enhancement: {
                 base: number;

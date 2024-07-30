@@ -39,6 +39,7 @@ declare global {
 
 interface ui {
     notifications: {
+        error(string): void;
         warn(string): void;
     };
 }
