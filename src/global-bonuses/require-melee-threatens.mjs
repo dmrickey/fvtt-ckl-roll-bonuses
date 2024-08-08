@@ -15,7 +15,7 @@ export class RequireMeleeThreatenGlobalBonus extends BaseGlobalBonus {
     /**
      * @param {ActionUse} actionUse
      */
-    static addHigherGroundBonus(actionUse) {
+    static requireMelee(actionUse) {
         const { action, actor, shared } = actionUse;
         if (RequireMeleeThreatenGlobalBonus.isDisabled() || RequireMeleeThreatenGlobalBonus.isDisabledForActor(actor)) {
             return;
@@ -52,6 +52,6 @@ export class RequireMeleeThreatenGlobalBonus extends BaseGlobalBonus {
     }
 
     static {
-        Hooks.on(customGlobalHooks.actionUseAlterRollData, RequireMeleeThreatenGlobalBonus.addHigherGroundBonus);
+        Hooks.on(customGlobalHooks.actionUseAlterRollData, RequireMeleeThreatenGlobalBonus.requireMelee);
     }
 }
