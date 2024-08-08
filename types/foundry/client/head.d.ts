@@ -22,6 +22,11 @@ declare global {
     let Hooks: Hooks;
 
     let foundry: {
+        CONST: {
+            GRID_TYPES: {
+                GRIDLESS: number;
+            };
+        };
         utils: {
             objectsEqual<T>(a: T, b: T): boolean;
             expandObject(_: object, depth?: number): Record<string, unknown>;

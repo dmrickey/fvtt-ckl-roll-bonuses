@@ -39,7 +39,7 @@ function getConditionalParts(actionUse, result, atk, index) {
         const itemMw = item.system.masterwork;
         const itemEnh = actionUse.action.enhancementBonus;
 
-        const { base: actionBaseEnh, stacks: actionStacksEnh, total: actionTotal } = getEnhancementBonusForAction({action: actionUse.action});
+        const { base: actionBaseEnh, stacks: actionStacksEnh, total: actionTotal } = getEnhancementBonusForAction({ action: actionUse.action });
 
         const ammoMw = !!ammo.getFlag(MODULE_NAME, ammoMasterworkKey);
         const ammoEnhBonus = FormulaCacheHelper.getModuleFlagValue(ammo, ammoEnhancementKey);
@@ -55,7 +55,7 @@ function getConditionalParts(actionUse, result, atk, index) {
             result['attack.normal'].push(`1[${localize('PF1.AmmunitionAbbr')} - ${localize('PF1.Masterwork')}]`)
         }
         else {
-            const { total: totalWithAmmo } = getEnhancementBonusForAction({action: actionUse.action, ammo});
+            const { total: totalWithAmmo } = getEnhancementBonusForAction({ action: actionUse.action, ammo });
             const diff = totalWithAmmo - actionTotal;
             if (diff > 0) {
                 const label = `${localize('PF1.AmmunitionAbbr')} ${localize('PF1.EnhancementBonus')}`;
@@ -99,7 +99,7 @@ async function addEffectNotes(chatAttack) {
         const ammo = chatAttack.actor.items.get(chatAttack.ammo.id)
         const note = ammo[MODULE_NAME][ammoEffectKey];
         if (note) {
-            const enriched = await TextEditor.enrichHTML(`<div>${note}</div>`);
+            const enriched = await TextEditor.enrichHTML(`<div>${note}</div>`, { async: true });
             chatAttack.effectNotes.push(enriched);
         }
     }

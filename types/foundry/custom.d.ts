@@ -41,13 +41,13 @@ declare global {
 
     interface EnrichOptions {
         rollData?: RollData,
-        async?: boolean,
+        async: true,
         relativeTo?: ActorPF,
     }
     class TextEditor {
         static enrichHTML(
             context: string,
-            options?: EnrichOptions,
+            options: EnrichOptions,
         ): Promise<string>;
     }
 }
