@@ -255,5 +255,6 @@
   - Add more text at the bottom that says "any tokens that are targeted when this is open will be pre-selected, you can enable a setting to skip this dialog in those cases"
   - Highlight tokens in the scene based off of which token in the app is hovered
 - Audit other apps and add explanation as necessary
-- Thrown Target
-  - Add line in "is type" to journal
+- Add weapon type override for features (e.g. Bombs) and spells (e.g. Rays)
+- Look into Versatile Performance multi select
+- Look into migrating all legacy things into module flags

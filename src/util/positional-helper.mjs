@@ -185,6 +185,8 @@ export class PositionalHelper {
                 left.bounds.width + gridSize * 2 + 2,
                 left.bounds.height + gridSize * 2 + 2,
             );
+            floor -= gridSize;
+            ceiling += gridSize;
         }
         else {
             enlarged = new PIXI.Rectangle(
@@ -193,8 +195,6 @@ export class PositionalHelper {
                 left.bounds.width + 2,
                 left.bounds.height + 2,
             );
-            floor -= gridSize;
-            ceiling += gridSize;
         }
 
         return enlarged.intersects(right.bounds)
@@ -227,13 +227,18 @@ export class PositionalHelper {
      * @returns {boolean}
      */
     static #isWithinRange(token1, token2, minFeet, maxFeet, reach = false) {
-        if (!minFeet) {
-            minFeet = 0;
-        }
+        minFeet ||= 0;
         if (!maxFeet && maxFeet !== 0) {
             maxFeet = Number.POSITIVE_INFINITY;
         }
-        if (reach && maxFeet === 10 && this.#isAdjacent(token1, token2, true)) {
+
+        // special case for 10' diagonal
+        if (
+            reach
+            && maxFeet === 10
+            && this.#isAdjacent(token1, token2, true)
+            && (!minFeet || !this.#isAdjacent(token1, token2))
+        ) {
             return true;
         }
 
@@ -252,8 +257,8 @@ export class PositionalHelper {
             return 0;
         }
 
-        const scene = token1.scene;
-        const gridSize = scene.grid.size;
+        const grid = token1.scene.grid;
+        const gridSize = grid.size;
 
         let x1 = token1.bounds.left;
         let x2 = token2.bounds.left;
@@ -282,10 +287,10 @@ export class PositionalHelper {
         let z1 = this.#floor(token1);
         let z2 = this.#floor(token2);
         if (this.#isAboveCeiling(token1, token2)) {
-            z2 = this.#ceiling(token2);
+            z2 = this.#ceiling(token2) - gridSize;
         }
         else if (this.#isBelowFloor(token1, token2)) {
-            z1 = this.#ceiling(token1);
+            z1 = this.#ceiling(token1) - gridSize;
         }
         else {
             z2 = z1;
@@ -304,7 +309,9 @@ export class PositionalHelper {
         // @ts-ignore
         const zDistance = canvas.grid.grid.measureDistances([{ ray: zRay }], { gridSpaces: true })[0];
         const d = Math.round(Math.sqrt(distance * distance + zDistance * zDistance) * 10) / 10;
-        return d;
+        return grid.type === foundry.CONST.GRID_TYPES.GRIDLESS
+            ? d
+            : Math.floor(d / grid.distance) * grid.distance;
     }
 
     /**
