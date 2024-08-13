@@ -227,9 +227,7 @@ declare global {
     }
     class ActionUseData {
         action: ItemAction;
-        actor: ActorPF;
         item: ItemPF;
-        shared: ActionUseShared;
     }
 
     class ChatAttack {
@@ -1669,6 +1667,37 @@ declare global {
     interface WeaponProficiencies {
         mar: 'Martial Weapons';
         sim: 'Simple Weapons';
+    }
+
+    interface AttackDialog {
+        actionUse: ActionUse;
+        ammoUsage: Record<string, { quantity: number; used: number }>;
+        appId: number;
+        attacks: Array<ActionUseAttack>;
+        attributes: {
+            [attack - bonus]: '';
+            [cl - offset]: '0';
+            [d20]: '';
+            [damage - ability - multiplier]: 1;
+            [damage - bonus]: '';
+            [held]: 'normal';
+            [rollMode]: 'publicroll';
+            [sl - offset]: '0';
+        };
+        base: { cl: 0; sl: 0 };
+        conditionals: {};
+        flags: ActionUseFormData;
+        object: ItemAction;
+        options: {};
+        position: {};
+        resolve: () => {};
+        rollData: RollData;
+        setPosition(): void;
+        shared: {};
+        useOptions: {};
+
+        get action(): ItemAction;
+        get title(): string;
     }
 
     interface ActorTraitSelector {

@@ -83,7 +83,7 @@ export class BaseGlobalBonus {
     /**
      * Whether or not this bonus is disabled. Includes actor for cases when checking if it's disabled for a particular actor.
      *
-     * @param {ActorBasePF} actor
+     * @param {Nullable<ActorBasePF>} actor
      * @returns {boolean}
      */
     static isDisabledForActor(actor) {

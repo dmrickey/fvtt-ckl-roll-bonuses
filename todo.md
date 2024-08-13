@@ -269,3 +269,5 @@
     - "can skip via dialog"
   - Global Bonus require melee threaten
     - "can skip via dialog"
+- Create new "Roll Bonuses" section for attack dialog inputs
+- 

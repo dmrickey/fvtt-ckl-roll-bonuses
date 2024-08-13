@@ -15,7 +15,7 @@ export class RequireMeleeThreatenGlobalBonus extends BaseGlobalBonus {
 
     /**
      * @this {ActionUse}
-     * @param {*} dialog
+     * @param {AttackDialog} dialog
      * @param {[HTMLElement]} html
      * @param {ActionUseData} data
      */
@@ -23,12 +23,9 @@ export class RequireMeleeThreatenGlobalBonus extends BaseGlobalBonus {
         if (!(dialog instanceof pf1.applications.AttackDialog)) {
             return;
         }
-        if (RequireMeleeThreatenGlobalBonus.isDisabled() || RequireMeleeThreatenGlobalBonus.isDisabledForActor(data.actor)) {
+        if (RequireMeleeThreatenGlobalBonus.isDisabled() || RequireMeleeThreatenGlobalBonus.isDisabledForActor(data.item?.actor)) {
             return;
         }
-
-        // todo verify that data.action.data.actionType exists
-        debugger;
 
         const isMelee = ['mcman', 'mwak', 'msak'].includes(data.action.data.actionType);
         if (!isMelee) {
@@ -39,6 +36,7 @@ export class RequireMeleeThreatenGlobalBonus extends BaseGlobalBonus {
             html,
             RequireMeleeThreatenGlobalBonus.dialogDisableKey,
         );
+        dialog.setPosition();
     }
 
     /**

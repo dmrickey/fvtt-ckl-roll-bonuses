@@ -63,7 +63,7 @@ export class RangedIncrementPenaltyGlobalBonus extends BaseGlobalBonus {
     }
 
     /**
-     * @param {*} dialog
+     * @param {AttackDialog} dialog
      * @param {[HTMLElement]} html
      * @param {ActionUseData} data
      */
@@ -71,14 +71,11 @@ export class RangedIncrementPenaltyGlobalBonus extends BaseGlobalBonus {
         if (!(dialog instanceof pf1.applications.AttackDialog)) {
             return;
         }
-        if (RangedIncrementPenaltyGlobalBonus.isDisabled() || RangedIncrementPenaltyGlobalBonus.isDisabledForActor(data.actor)) {
+        if (RangedIncrementPenaltyGlobalBonus.isDisabled() || RangedIncrementPenaltyGlobalBonus.isDisabledForActor(data.item?.actor)) {
             return;
         }
 
-        // todo verify that data.shared.rollData.rb exists
-        debugger;
-
-        const { rangePenalty } = data.shared.rollData.rb;
+        const { rangePenalty } = dialog.rollData.rb;
         if (!rangePenalty) {
             return;
         }
@@ -87,6 +84,7 @@ export class RangedIncrementPenaltyGlobalBonus extends BaseGlobalBonus {
             html,
             RangedIncrementPenaltyGlobalBonus.dialogDisableKey,
         );
+        dialog.setPosition();
     }
 
     /**
