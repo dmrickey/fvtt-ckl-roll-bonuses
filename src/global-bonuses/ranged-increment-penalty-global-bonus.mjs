@@ -4,6 +4,7 @@ import { currentTargets } from '../util/get-current-targets.mjs';
 import { customGlobalHooks } from '../util/hooks.mjs'
 import { BaseGlobalBonus } from './base-global-bonus.mjs';
 import { RangedIncrementPenaltyBonus } from './targeted/bonuses/ranged-increment-penalty-bonus.mjs';
+import { addCheckToAttackDialog, hasFormData } from '../util/attack-dialog-helper.mjs';
 
 /** @extends {BaseGlobalBonus} */
 export class RangedIncrementPenaltyGlobalBonus extends BaseGlobalBonus {
@@ -62,11 +63,41 @@ export class RangedIncrementPenaltyGlobalBonus extends BaseGlobalBonus {
     }
 
     /**
+     * @param {*} dialog
+     * @param {[HTMLElement]} html
+     * @param {ActionUseData} data
+     */
+    static addSkipRangeToDialog(dialog, [html], data) {
+        if (!(dialog instanceof pf1.applications.AttackDialog)) {
+            return;
+        }
+        if (RangedIncrementPenaltyGlobalBonus.isDisabled() || RangedIncrementPenaltyGlobalBonus.isDisabledForActor(data.actor)) {
+            return;
+        }
+
+        // todo verify that data.shared.rollData.rb exists
+        debugger;
+
+        const { rangePenalty } = data.shared.rollData.rb;
+        if (!rangePenalty) {
+            return;
+        }
+
+        addCheckToAttackDialog(
+            html,
+            RangedIncrementPenaltyGlobalBonus.dialogDisableKey,
+        );
+    }
+
+    /**
      * @param {ActionUse} actionUse
      */
     static addRangedPenalty(actionUse) {
         const { actor, shared } = actionUse;
         if (RangedIncrementPenaltyGlobalBonus.isDisabled() || RangedIncrementPenaltyGlobalBonus.isDisabledForActor(actor)) {
+            return;
+        }
+        if (hasFormData(actionUse, RangedIncrementPenaltyGlobalBonus.dialogDisableKey)) {
             return;
         }
         if (!actor || !shared?.rollData?.rb) {
@@ -120,6 +151,7 @@ export class RangedIncrementPenaltyGlobalBonus extends BaseGlobalBonus {
     }
 
     static {
+        Hooks.on('renderApplication', RangedIncrementPenaltyGlobalBonus.addSkipRangeToDialog);
         Hooks.on(customGlobalHooks.actionUseAlterRollData, RangedIncrementPenaltyGlobalBonus.addRangedPenalty);
     }
 }

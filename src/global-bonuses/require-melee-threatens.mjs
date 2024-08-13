@@ -2,6 +2,7 @@ import { PositionalHelper } from '../util/positional-helper.mjs';
 import { currentTargets } from '../util/get-current-targets.mjs';
 import { customGlobalHooks } from '../util/hooks.mjs'
 import { BaseGlobalBonus } from './base-global-bonus.mjs';
+import { addCheckToAttackDialog, hasFormData } from '../util/attack-dialog-helper.mjs';
 
 /** @extends {BaseGlobalBonus} */
 export class RequireMeleeThreatenGlobalBonus extends BaseGlobalBonus {
@@ -13,11 +14,42 @@ export class RequireMeleeThreatenGlobalBonus extends BaseGlobalBonus {
     static get bonusKey() { return 'require-melee-threaten'; }
 
     /**
+     * @this {ActionUse}
+     * @param {*} dialog
+     * @param {[HTMLElement]} html
+     * @param {ActionUseData} data
+     */
+    static addSkipMeleeThreatenToDialog(dialog, [html], data) {
+        if (!(dialog instanceof pf1.applications.AttackDialog)) {
+            return;
+        }
+        if (RequireMeleeThreatenGlobalBonus.isDisabled() || RequireMeleeThreatenGlobalBonus.isDisabledForActor(data.actor)) {
+            return;
+        }
+
+        // todo verify that data.action.data.actionType exists
+        debugger;
+
+        const isMelee = ['mcman', 'mwak', 'msak'].includes(data.action.data.actionType);
+        if (!isMelee) {
+            return;
+        }
+
+        addCheckToAttackDialog(
+            html,
+            RequireMeleeThreatenGlobalBonus.dialogDisableKey,
+        );
+    }
+
+    /**
      * @param {ActionUse} actionUse
      */
     static requireMelee(actionUse) {
         const { action, actor, shared } = actionUse;
         if (RequireMeleeThreatenGlobalBonus.isDisabled() || RequireMeleeThreatenGlobalBonus.isDisabledForActor(actor)) {
+            return;
+        }
+        if (hasFormData(actionUse, RequireMeleeThreatenGlobalBonus.dialogDisableKey)) {
             return;
         }
         if (!actor) {
@@ -52,6 +84,7 @@ export class RequireMeleeThreatenGlobalBonus extends BaseGlobalBonus {
     }
 
     static {
+        Hooks.on('renderApplication', RequireMeleeThreatenGlobalBonus.addSkipMeleeThreatenToDialog);
         Hooks.on(customGlobalHooks.actionUseAlterRollData, RequireMeleeThreatenGlobalBonus.requireMelee);
     }
 }

@@ -264,3 +264,8 @@
   - all spell dc
   - school spell cl
   - school spell dc
+- Update documentation
+  - Global Bonus incrmeent range penalty
+    - "can skip via dialog"
+  - Global Bonus require melee threaten
+    - "can skip via dialog"

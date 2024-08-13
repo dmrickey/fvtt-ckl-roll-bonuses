@@ -1,4 +1,5 @@
 import { MODULE_NAME } from '../../src/consts.mjs';
+import { RangedIncrementPenaltyGlobalBonus } from '../../src/global-bonuses/attack-dialog-helper.mjs';
 import { BaseBonus } from '../../src/targeted/bonuses/base-bonus.mjs';
 import { BaseTarget } from '../../src/targeted/targets/base-target.mjs';
 import Document from '../foundry/common/abstract/document.mjs';
@@ -179,7 +180,7 @@ declare global {
         ammo?: { document: ItemLootPF };
     }
 
-    interface ActionuseFormData {
+    interface ActionUseFormData {
         'attack-bonus': string;
         'cl-check': undefined;
         d20: string;
@@ -192,6 +193,8 @@ declare global {
         'primary-attack': undefined | boolean;
         'rapid-shot': undefined | boolean;
         rollMode: 'publicroll' | RollMode;
+
+        [key: string]: undefined | boolean;
     }
 
     class ActionUseShared<T extends SystemItemData = SystemItemData> {
@@ -219,8 +222,14 @@ declare global {
         actor: ActorPF;
         item: T;
         shared: ActionUseShared;
-        formData: ActionuseFormData;
+        formData: ActionUseFormData;
         token: TokenDocumentPF;
+    }
+    class ActionUseData {
+        action: ItemAction;
+        actor: ActorPF;
+        item: ItemPF;
+        shared: ActionUseShared;
     }
 
     class ChatAttack {
@@ -1692,6 +1701,7 @@ declare global {
         actorSizes: Record<ActorSize, string>;
         actorStatures: Record<ActorStature, string>;
         applications: {
+            AttackDialog: { new (): AttackDialog };
             ActorTraitSelector: {
                 new (doc: BaseDocument, options: object): ActorTraitSelector;
             };

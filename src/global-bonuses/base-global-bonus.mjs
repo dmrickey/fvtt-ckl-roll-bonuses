@@ -43,6 +43,9 @@ export class BaseGlobalBonus {
     /** @returns { string } */
     static get key() { return `global-bonus_${this.bonusKey}`; }
 
+    /** @returns { string } */
+    static get dialogDisableKey() { return `global-bonus.dialog-disable.${this.bonusKey}`; }
+
     /**
      * Key for this global bonus
      *
