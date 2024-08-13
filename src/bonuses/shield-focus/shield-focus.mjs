@@ -82,9 +82,9 @@ function handleShieldFocusChange(actor, tempChanges) {
             new pf1.components.ItemChange({
                 flavor: 'Shield Focus',
                 formula: 1,
-                modifier: "untypedPerm",
-                subTarget: "sac",
-            })
+                type: "untypedPerm",
+                target: "sac",
+            }),
         );
     }
 
@@ -95,9 +95,9 @@ function handleShieldFocusChange(actor, tempChanges) {
                 new pf1.components.ItemChange({
                     flavor: 'Improved Shield Focus',
                     formula: -1,
-                    modifier: "untypedPerm",
-                    subTarget: "acpS",
-                })
+                    type: "untypedPerm",
+                    target: "acpS",
+                }),
             );
         }
     }
@@ -107,9 +107,9 @@ function handleShieldFocusChange(actor, tempChanges) {
             new pf1.components.ItemChange({
                 flavor: 'Greater Shield Focus',
                 formula: 1,
-                modifier: "untypedPerm",
-                subTarget: "sac",
-            })
+                type: "untypedPerm",
+                target: "sac",
+            }),
         );
     }
 }

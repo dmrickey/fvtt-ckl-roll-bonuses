@@ -46,10 +46,10 @@ export class AgileBonus extends BaseBonus {
                 const change = new pf1.components.ItemChange({
                     flavor: source.name,
                     formula: dex,
-                    modifier: 'untypedPerm',
+                    type: 'untypedPerm',
                     operator: 'add',
                     priority: 0,
-                    subTarget: 'damage',
+                    target: 'damage',
                     value: dex,
                 });
                 sources.push(change);
@@ -58,10 +58,10 @@ export class AgileBonus extends BaseBonus {
                 const change = new pf1.components.ItemChange({
                     flavor: source.name,
                     formula: -str,
-                    modifier: 'untypedPerm',
+                    type: 'untypedPerm',
                     operator: 'add',
                     priority: 0,
-                    subTarget: 'damage',
+                    target: 'damage',
                     value: -str,
                 });
                 sources.push(change);

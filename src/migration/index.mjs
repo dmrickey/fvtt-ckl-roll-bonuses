@@ -1,5 +1,6 @@
 import { log } from './migration-log.mjs';
 import * as v1 from './migrate-v1.mjs';
+import * as v2 from './migrate-v2.mjs';
 import { MODULE_NAME } from '../consts.mjs';
 import { api } from '../util/api.mjs';
 import { registerSetting } from '../util/settings.mjs';
@@ -41,14 +42,17 @@ export default async () => {
 
     if (current !== currentMigrationVersion) {
         log('Starting overall migration');
-    }
 
-    if (current < 1) {
-        log('Starting first migration');
-        await v1.migrateV1();
-    }
+        if (current < 1) {
+            log('Migrating aboleths');
+            await v1.migrateV1();
+        }
 
-    if (current !== currentMigrationVersion) {
+        if (current < 2) {
+            log('Migrating bugbears')
+            await v2.migrateV2();
+        }
+
         log('Finalized migration');
     }
 
@@ -58,8 +62,8 @@ export default async () => {
 api.migrate = {
     migrate: async () => {
         await v1.migrateV1();
+        await v2.migrateV2();
     },
-    v1: {
-        migrateAmmoForActor: v1.migrateActor,
-    },
+    v1,
+    v2,
 };

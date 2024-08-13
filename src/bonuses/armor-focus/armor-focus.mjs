@@ -105,8 +105,8 @@ function handleArmorFocusChange(actor, tempChanges) {
         new pf1.components.ItemChange({
             flavor: localizeBonusLabel(key),
             formula: 1,
-            modifier: "untypedPerm",
-            subTarget: "aac",
+            type: "untypedPerm",
+            target: "aac",
         })
     );
 }

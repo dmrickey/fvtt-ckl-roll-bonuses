@@ -258,3 +258,9 @@
 - Add weapon type override for features (e.g. Bombs) and spells (e.g. Rays)
 - Look into Versatile Performance multi select
 - Look into migrating all legacy things into module flags
+- Add checkbox overrides for global settings (see Advanced Templates update)
+- Remove legacy documentation for
+  - all spell cl
+  - all spell dc
+  - school spell cl
+  - school spell dc

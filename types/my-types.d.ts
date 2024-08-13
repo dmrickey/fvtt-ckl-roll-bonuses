@@ -44,6 +44,7 @@ declare global {
         migrate: {
             migrate(): Promise;
             v1: {};
+            v2: {};
         };
 
         /** Base source classes for extending */

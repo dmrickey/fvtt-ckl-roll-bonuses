@@ -13,6 +13,7 @@ declare global {
         updateSource(changes: Record<string, any>, options?: object);
         uuid: string;
         update(data: Record<string, any>);
+        toObject(): any;
     }
 
     abstract class ItemDocument extends BaseDocument {}
@@ -851,6 +852,7 @@ declare global {
         };
         tag: string;
         tags: string[];
+        changes: ItemChange[];
     }
     class SystemItemDataAttackPF extends SystemItemData {
         baseTypes: string[];
@@ -1422,6 +1424,7 @@ declare global {
         | 'conSkills'
         | 'critConfirm'
         | 'damage'
+        | 'dc'
         | 'dex'
         | 'dexChecks'
         | 'dexMod'
@@ -1489,26 +1492,30 @@ declare global {
             | 'nonlethal';
     }
 
-    interface ItemChange {
-        constructor(
-            args: {
-                flavor: string;
-                formula: string | number;
-                modifier: BonusTypes;
-                operator?: 'add' | 'function' | 'set';
-                priority?: number;
-                subTarget: BuffTarget;
-                value?: string | number;
-            },
-            parent = null
-        );
+    interface ItemChangeArgs {
+        flavor: string | undefined;
+        formula: string | number;
+        operator?: 'add' | 'function' | 'set';
+        priority?: number;
+        target: BuffTarget;
+        type: BonusTypes | string;
+        value?: string | number;
+    }
+    interface ItemChangeOptions {
+        parent?: ItemPF | ActorPF;
+    }
+    class ItemChange {
+        constructor(args: ItemChangeArgs, options: ItemChangeOptions = {});
 
-        static create();
+        static create(args: ItemChangeArgs, options: ItemChangeOptions = {});
 
         /** hardcoded bonus type to use instead of modifier */
+        formula: string;
         flavor?: string;
         name?: string;
         parent?: undefined | ItemPF;
+        priority: number;
+        target: string;
         type?: Nullable<BonusTypes | string>;
         value: number | string;
 
@@ -1522,6 +1529,8 @@ declare global {
             target: BuffTarget = 'skillzz';
             value: number;
         };
+
+        toObject(): object;
     }
 
     class ItemConditional {
@@ -1699,21 +1708,7 @@ declare global {
             ItemConditional: typeof ItemConditional;
             ItemConditionalModifier: typeof ItemConditionalModifier;
             ItemAction: typeof ItemAction;
-            ItemChange: {
-                new (
-                    args: {
-                        flavor: string;
-                        formula: string | number;
-                        modifier?: BonusTypes | string;
-                        operator?: 'add' | 'function' | 'set';
-                        priority?: number;
-                        subTarget: BuffTarget;
-                        /** The evaluation of the formula */
-                        value?: string | number;
-                    },
-                    parent = null
-                ): ItemChange;
-            };
+            ItemChange: typeof ItemChange;
         };
         config: {
             backgroundOnlySkills: (keyof typeof pf1.config.skills)[];
