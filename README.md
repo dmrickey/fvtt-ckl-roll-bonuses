@@ -9,6 +9,7 @@ Supports PF1 v9+
 ### Table of contents
 
 - [This documentation is no longer kept up to date. All documentation can be found in the in-game compendium included with this mod.](#this-documentation-is-no-longer-kept-up-to-date-all-documentation-can-be-found-in-the-in-game-compendium-included-with-this-mod)
+    - [Table of contents](#table-of-contents)
 - [Class Features](#class-features)
   - [Versatile Performance](#versatile-performance)
 - [Generic Targets](#generic-targets)
@@ -32,25 +33,57 @@ Supports PF1 v9+
   - [Finesse](#finesse-1)
   - [Fortune/Misfortune](#fortunemisfortune)
 - [Targeted Bonus Examples](#targeted-bonus-examples)
+    - [Fighter Weapon Training](#fighter-weapon-training)
+    - [Gunslinginer Gun Training](#gunslinginer-gun-training)
+    - [Lead Blades, Gravity Bow, Strong Jaw, and Impact Weapon](#lead-blades-gravity-bow-strong-jaw-and-impact-weapon)
+    - [Magus Arcane Weapon Enhcancement](#magus-arcane-weapon-enhcancement)
+    - [Paladin Smite](#paladin-smite)
+    - [Slayer's Studied Target](#slayers-studied-target)
+    - [Unchained Rogue's Finesse Training](#unchained-rogues-finesse-training)
 - [Feats](#feats)
   - [Armor Focus](#armor-focus)
+    - [Armor Focus](#armor-focus-1)
+    - [Improved Armor Focus](#improved-armor-focus)
   - [Elemental Focus](#elemental-focus)
   - [Furious Focus](#furious-focus)
   - [Martial Focus](#martial-focus)
   - [Spell Focus](#spell-focus)
   - [Spell Specialization](#spell-specialization)
   - [Weapon Focus](#weapon-focus)
+    - [Weapon Focus](#weapon-focus-1)
+    - [Greater Weapon Focus](#greater-weapon-focus)
+    - [Mythic Weapon Focus](#mythic-weapon-focus)
+    - [Racial Weapon Focus](#racial-weapon-focus)
   - [Weapon Specialization](#weapon-specialization)
+    - [Weapon Specialization](#weapon-specialization-1)
+    - [Greater Weapon Specialization](#greater-weapon-specialization)
 - [Misc](#misc)
   - [Ammunition](#ammunition)
   - [Change Offset](#change-offset)
   - [Critical Helpers](#critical-helpers)
+    - [Keen - boolean flag](#keen---boolean-flag)
+    - [Crit target modifications (dictionary flag)](#crit-target-modifications-dictionary-flag)
+    - [Crit multipliers (dictionary flag)](#crit-multipliers-dictionary-flag)
   - [Fate's Favored](#fates-favored)
   - [Fortune and Misfortune](#fortune-and-misfortune)
+    - [Everything](#everything)
+    - [Only for the Item that has the flag](#only-for-the-item-that-has-the-flag)
+    - [Ability Checks](#ability-checks)
+    - [Attacks](#attacks)
+    - [Base Attack Bonus](#base-attack-bonus)
+    - [Caster Level Checks](#caster-level-checks)
+    - [Combat Maneuver Checks](#combat-maneuver-checks)
+    - [Concentration Checks](#concentration-checks)
+    - [Initiative Checks](#initiative-checks)
+    - [Saving Throws](#saving-throws)
+    - [Skill Checks](#skill-checks)
   - [Skill Bonuses (Almost entirely uneccesary because of v9 updates. May be removed at some point)](#skill-bonuses-almost-entirely-uneccesary-because-of-v9-updates-may-be-removed-at-some-point)
 - [Spells](#spells)
   - [Modify Spell Caster Level (all spells, specific school, or specific element)](#modify-spell-caster-level-all-spells-specific-school-or-specific-element)
+    - [For Specific Element](#for-specific-element)
   - [Modify Spell DC (all spells, specific school, or specific element)](#modify-spell-dc-all-spells-specific-school-or-specific-element)
+    - [For All Spells](#for-all-spells)
+    - [For Specific Element](#for-specific-element-1)
 
 ---
 
@@ -628,21 +661,11 @@ Various bonuses to skills. You can add Inspiration, change the base die, or add 
 <details>
   <summary>How to configure spell Caster Level modifications (click to expand)</summary>
 
-  ### ~~For All Spells~~ Deprecated
-  - ~~Add dictionary flag `all-spell-cl` to your buff/feature/etc.~~
-    - ~~Text input will appear for your formula~~
-  - The system now has its own CL change target
-
   ### For Specific Element
   Useful for specific abilities such as [Gnome's Pyromaniac alternate racial trait](https://www.aonprd.com/RacesDisplay.aspx?ItemName=Gnome#:~:text=and%20illusion%20resistance.-,Pyromaniac,-Source%20Advanced%20Race).
   - Add dictionary flag `elemental-cl` to your buff/feature/etc.
     - Text input will appear for your formula
     - Dropdown selector will show up with options for `acid`, `cold`, `electric`, or `fire`
-
-  ### For Specific School
-  - Add dictionary flag `schoolClOffset` to your buff/feature/etc.
-    - Text input will appear for your formula
-    - Dropdown selector will show up with options for your chosen school
 
 </details>
 
@@ -655,18 +678,10 @@ Various bonuses to skills. You can add Inspiration, change the base die, or add 
   <summary>How to configure spell DC modifications (click to expand)</summary>
 
   ### For All Spells
-  - Add dictionary flag `genericSpellDC` to your buff/feature/etc.
-    - Text input will appear for your formula
-
   ### For Specific Element
   - Add dictionary flag `elemental-dc` to your buff/feature/etc.
     - Text input will appear for your formula
     - Dropdown selector will show up with options for `acid`, `cold`, `electric`, or `fire`
-
-  ### For Specific School
-  - Add dictionary flag `school-dc` to your buff/feature/etc.
-    - Text input will appear for your formula
-    - Dropdown selector will show up with options for your chosen school
   
 </details>
 
