@@ -225,9 +225,56 @@ declare global {
         formData: ActionUseFormData;
         token: TokenDocumentPF;
     }
-    class ActionUseData {
+    class AttackDialogData {
         action: ItemAction;
         item: ItemPF;
+        ammo: AmmoData[];
+        attacks: [ActionUseAttack];
+        attributes: {
+            ['attack-bonus']: '';
+            ['cl-offset']: '0';
+            ['d20']: '';
+            ['damage-ability-multiplier']: 1;
+            ['damage-bonus']: '';
+            ['held']: 'normal';
+            ['rollMode']: 'publicroll';
+            ['sl-offset']: '0';
+        };
+        canConfigureHeld: false;
+        conditionals: {};
+        config: pf1['config'];
+        data: RollData;
+        flags: {
+            ['cl-check']: boolean;
+            ['haste-attack']: boolean | undefined;
+            ['manyshot']: boolean | undefined;
+            ['measure-template']: boolean;
+            ['power-attack']: boolean;
+            ['primary-attack']: boolean;
+            ['rapid-shot']: boolean | undefined;
+        };
+        hasAttack: false;
+        hasDamage: true;
+        hasDamageAbility: '';
+        hasTemplate: true;
+        isAttack: false;
+        isFeat: false;
+        isHealing: false;
+        isMeleeWeaponAttackAction: false;
+        isNaturalAttack: false;
+        isRanged: false;
+        isRangedWeaponAttackAction: false;
+        isSpell: true;
+        isWeapon: false;
+        isWeaponAttack: false;
+        rollMode: 'publicroll';
+        rollModes: {
+            publicroll: 'CHAT.RollPublic';
+            gmroll: 'CHAT.RollPrivate';
+            blindroll: 'CHAT.RollBlind';
+            selfroll: 'CHAT.RollSelf';
+        };
+        usesAmmo: false;
     }
 
     class ChatAttack {

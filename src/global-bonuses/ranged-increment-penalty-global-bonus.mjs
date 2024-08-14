@@ -65,7 +65,7 @@ export class RangedIncrementPenaltyGlobalBonus extends BaseGlobalBonus {
     /**
      * @param {AttackDialog} dialog
      * @param {[HTMLElement]} html
-     * @param {ActionUseData} data
+     * @param {AttackDialogData} data
      */
     static addSkipRangeToDialog(dialog, [html], data) {
         if (!(dialog instanceof pf1.applications.AttackDialog)) {

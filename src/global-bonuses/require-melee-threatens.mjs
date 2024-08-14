@@ -17,7 +17,7 @@ export class RequireMeleeThreatenGlobalBonus extends BaseGlobalBonus {
      * @this {ActionUse}
      * @param {AttackDialog} dialog
      * @param {[HTMLElement]} html
-     * @param {ActionUseData} data
+     * @param {AttackDialogData} data
      */
     static addSkipMeleeThreatenToDialog(dialog, [html], data) {
         if (!(dialog instanceof pf1.applications.AttackDialog)) {
