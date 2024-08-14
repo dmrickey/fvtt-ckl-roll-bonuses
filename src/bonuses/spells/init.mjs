@@ -1,6 +1,10 @@
+import './cl-bonus.mjs';
+import './dc-bonus.mjs';
 import './elemental-cl.mjs';
 import './elemental-dc.mjs';
 import './elemental-focus.mjs';
+import './school-dc-offset.mjs';
+import './school-cl-offset.mjs';
 import './spell-focus.mjs';
 import './spell-specialization.mjs';
 
