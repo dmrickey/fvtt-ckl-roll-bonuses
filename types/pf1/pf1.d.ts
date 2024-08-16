@@ -1,3 +1,9 @@
+import {
+    greaterWeaponFocusKey,
+    mythicWeaponFocusKey,
+    racialWeaponFocusKey,
+    weaponFocusKey,
+} from '../../src/bonuses/weapon-focus/ids.mjs';
 import { MODULE_NAME } from '../../src/consts.mjs';
 import { RangedIncrementPenaltyGlobalBonus } from '../../src/global-bonuses/attack-dialog-helper.mjs';
 import { BaseBonus } from '../../src/targeted/bonuses/base-bonus.mjs';
@@ -51,6 +57,7 @@ declare global {
             dictionary: ItemDictionaryFlags;
         };
     }
+
     class ActorPF extends ActorBasePF {
         allSkills: Array<keyof typeof pf1.config.skills>;
         itemTypes: {
@@ -75,6 +82,10 @@ declare global {
             ['spell-focus']?: ItemPF[];
             ['greater-spell-focus']?: ItemPF[];
             ['mythic-spell-focus']?: ItemPF[];
+            [weaponFocusKey]?: ItemPF[];
+            [greaterWeaponFocusKey]?: ItemPF[];
+            [mythicWeaponFocusKey]?: ItemPF[];
+            [racialWeaponFocusKey]?: ItemPF[];
             [key: string]: number | string | object | array;
         };
 

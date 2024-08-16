@@ -274,3 +274,10 @@
   - Spell Focus
     - update keys for spellFocus to spell-focus
     - make sure it doesn't still say dictionary flag
+- Verify
+  - Spell Focus
+    - that it works as module flags
+    - migration
+  - Weapon Focus
+    - that it works as module flags
+    - migration

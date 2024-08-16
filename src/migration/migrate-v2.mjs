@@ -17,6 +17,10 @@ const toDictionary = [
     ['spellFocus', 'spell-focus'],
     ['greaterSpellFocus', 'greater-spell-focus'],
     ['mythicSpellFocus', 'mythic-spell-focus'],
+    ['weapon-focus-key'],
+    ['greater-weapon-focus-key'],
+    ['mythic-weapon-focus-key'],
+    ['racial-weapon-focus'],
 ];
 
 // TODO don't forget this
@@ -108,10 +112,13 @@ export const migrateItem = async (item) => {
     toDictionary.forEach(([key, newKey]) => migrateDflag(key, newKey));
 
     if (isNotEmptyObject(dictionary)) {
+        /** @type {Partial<ItemPF>} */
         const update = {
             system: {
                 changes,
                 flags: {
+                    boolean,
+                    // @ts-ignore it doesn't like the de-assign (setting to null)
                     dictionary,
                 }
             },
