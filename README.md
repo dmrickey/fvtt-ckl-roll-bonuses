@@ -79,10 +79,9 @@ Supports PF1 v9+
     - [Skill Checks](#skill-checks)
   - [Skill Bonuses (Almost entirely uneccesary because of v9 updates. May be removed at some point)](#skill-bonuses-almost-entirely-uneccesary-because-of-v9-updates-may-be-removed-at-some-point)
 - [Spells](#spells)
-  - [Modify Spell Caster Level (all spells, specific school, or specific element)](#modify-spell-caster-level-all-spells-specific-school-or-specific-element)
+  - [Modify Spell Caster Level for specific element](#modify-spell-caster-level-for-specific-element)
     - [For Specific Element](#for-specific-element)
-  - [Modify Spell DC (all spells, specific school, or specific element)](#modify-spell-dc-all-spells-specific-school-or-specific-element)
-    - [For All Spells](#for-all-spells)
+  - [Modify Spell DC for specific element](#modify-spell-dc-for-specific-element)
     - [For Specific Element](#for-specific-element-1)
 
 ---
@@ -655,7 +654,7 @@ Various bonuses to skills. You can add Inspiration, change the base die, or add 
 
 # Spells
 
-## Modify Spell Caster Level (all spells, specific school, or specific element)
+## Modify Spell Caster Level for specific element
   For buffs, abilities, or banes (or anything else) that modify spell Caster Levels.
 
 <details>
@@ -671,13 +670,12 @@ Various bonuses to skills. You can add Inspiration, change the base die, or add 
 
 ---
 
-## Modify Spell DC (all spells, specific school, or specific element)
+## Modify Spell DC for specific element
   For buffs, abilities, or banes (or anything else) that modify spell DCs.
 
 <details>
   <summary>How to configure spell DC modifications (click to expand)</summary>
 
-  ### For All Spells
   ### For Specific Element
   - Add dictionary flag `elemental-dc` to your buff/feature/etc.
     - Text input will appear for your formula

@@ -270,4 +270,7 @@
   - Global Bonus require melee threaten
     - "can skip via dialog"
 - Create new "Roll Bonuses" section for attack dialog inputs
-- 
+- Documentation
+  - Spell Focus
+    - update keys for spellFocus to spell-focus
+    - make sure it doesn't still say dictionary flag

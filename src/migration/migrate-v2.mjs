@@ -1,5 +1,7 @@
 import { createChange } from '../util/conditional-helpers.mjs';
 import { log } from './migration-log.mjs';
+import { MODULE_NAME } from '../consts.mjs';
+import { isNotEmptyObject } from '../util/is-empty-object.mjs';
 
 const clAllKey = 'all-spell-cl';
 
@@ -11,16 +13,33 @@ const dcAllKey = 'genericSpellDC';
 const dcSchoolKey = 'school-dc';
 const dcSchoolFormulaKey = 'school-dc-formula';
 
-/** @param {ItemPF} item */
-const migrateItem = async (item) => {
+const toDictionary = [
+    ['spellFocus', 'spell-focus'],
+    ['greaterSpellFocus', 'greater-spell-focus'],
+    ['mythicSpellFocus', 'mythic-spell-focus'],
+];
 
+// TODO don't forget this
+const languageKeyMigration = [
+    ['spellFocus', 'spell-focus'],
+]
+
+export const migrateLanguageSetting = async () => {
+
+};
+
+/** @param {ItemPF} item */
+export const migrateItem = async (item) => {
+
+    /** @type {Record<string, true>} */
+    const boolean = {};
+    const changes = item.toObject().system.changes || [];
     /** @type {Record<string, null>} */
     const dictionary = {};
-    const changes = item.toObject().system.changes || [];
-    let requiresUpdate = false;
+    /** @type {Record<string, any>} */
+    const moduleFlags = {};
 
     if (item.getItemDictionaryFlag(clAllKey)) {
-        requiresUpdate = true;
         dictionary[`-=${clAllKey}`] = null;
 
         const value = item.getItemDictionaryFlag(clAllKey);
@@ -33,7 +52,6 @@ const migrateItem = async (item) => {
     }
 
     if (item.getItemDictionaryFlag(dcAllKey)) {
-        requiresUpdate = true;
         dictionary[`-=${dcAllKey}`] = null;
 
         const value = item.getItemDictionaryFlag(dcAllKey);
@@ -46,7 +64,6 @@ const migrateItem = async (item) => {
     }
 
     if (item.getItemDictionaryFlag(clSchoolKey)) {
-        requiresUpdate = true;
         dictionary[`-=${clSchoolKey}`] = null;
         dictionary[`-=${clSchoolFormulaKey}`] = null;
 
@@ -62,7 +79,6 @@ const migrateItem = async (item) => {
     }
 
     if (item.getItemDictionaryFlag(dcSchoolKey)) {
-        requiresUpdate = true;
         dictionary[`-=${dcSchoolKey}`] = null;
         dictionary[`-=${dcSchoolFormulaKey}`] = null;
 
@@ -77,14 +93,31 @@ const migrateItem = async (item) => {
         changes.push(change);
     }
 
-    if (requiresUpdate) {
+    /**
+     * @param {string} key
+     * @param {string} [newKey]
+     */
+    const migrateDflag = (key, newKey = '') => {
+        newKey ||= key;
+        dictionary[`-=${key}`] = null;
+        const value = item.getItemDictionaryFlag(key);
+        moduleFlags[newKey] = value;
+        boolean[newKey] = true;
+    }
+
+    toDictionary.forEach(([key, newKey]) => migrateDflag(key, newKey));
+
+    if (isNotEmptyObject(dictionary)) {
         const update = {
             system: {
                 changes,
                 flags: {
                     dictionary,
                 }
-            }
+            },
+            flags: {
+                [MODULE_NAME]: moduleFlags,
+            },
         };
         await item.update(update);
     }
@@ -99,7 +132,7 @@ export const migrateActor = async (actor) => {
         }
     }
     log('...finished migrating items');
-}
+};
 
 const migrateGameItems = async () => {
     log('migrating game items');
@@ -153,8 +186,9 @@ const migrateSyntheticActors = async () => {
 };
 
 export const migrateV2 = async () => {
+    await migrateLanguageSetting();
     await migrateGameItems();
     await migratePacks();
     await migrateWorldActors();
     await migrateSyntheticActors();
-}
+};

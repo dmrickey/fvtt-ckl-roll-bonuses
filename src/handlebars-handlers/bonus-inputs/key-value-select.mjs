@@ -42,10 +42,17 @@ export function keyValueSelect({
     }
 
     if (canEdit) {
-        if ((choices.length && (!current || !choices.some((c) => c.key === current))) || (choices.length === 1 && current !== choices[0].key)) {
+        if ((choices.length && (!current || !choices.some((c) => c.key === current)))
+            || (choices.length === 1 && current !== choices[0].key)
+        ) {
             isModuleFlag
                 ? item.setFlag(MODULE_NAME, key, choices[0].key)
                 : item.setItemDictionaryFlag(key, choices[0].key);
+        }
+        else if (!choices.length && current) {
+            isModuleFlag
+                ? item.setFlag(MODULE_NAME, key, '')
+                : item.setItemDictionaryFlag(key, '');
         }
     }
 

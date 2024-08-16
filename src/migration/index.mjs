@@ -26,7 +26,7 @@ class Settings {
             defaultValue: 0,
             key: this.#migrationVersionKey,
             scope: 'world',
-            settingType: Boolean,
+            settingType: Number,
         })
     }
 }

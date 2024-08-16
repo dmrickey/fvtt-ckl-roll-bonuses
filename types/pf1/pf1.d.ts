@@ -11,6 +11,7 @@ declare global {
         getRollData(): RollData;
         getFlag(moduleName: string, key: string): any;
         async setFlag<T>(moduleName: string, key: string, value: T);
+        async unsetFlag(moduleName: string, key: string): Promise<Document>;
         updateSource(changes: Record<string, any>, options?: object);
         uuid: string;
         update(data: Record<string, any>);
@@ -71,6 +72,9 @@ declare global {
         hasCondition(key: string): boolean;
 
         [MODULE_NAME]: {
+            ['spell-focus']?: ItemPF[];
+            ['greater-spell-focus']?: ItemPF[];
+            ['mythic-spell-focus']?: ItemPF[];
             [key: string]: number | string | object | array;
         };
 
@@ -509,6 +513,30 @@ declare global {
         subType: string;
         system: SystemData;
         type: ItemType;
+
+        /**
+         * Sets a boolean flag on this item.
+         *
+         * @param {string} flagName - The name/key of the flag to set.
+         * @param {object} context Update context
+         * @returns {Promise<boolean>} Whether something was changed.
+         */
+        async addItemBooleanFlag(
+            flagName: string,
+            context: object = {}
+        ): Promise<boolean>;
+
+        /**
+         * Removes a boolean flag from this item.
+         *
+         * @param {string} flagName - The name/key of the flag to remove.
+         * @param {object} context Update context
+         * @returns {Promise<boolean>} Whether something was changed.
+         */
+        async removeItemBooleanFlag(
+            flagName: string,
+            context: object = {}
+        ): Promise<boolean>;
 
         /**
          * Gets value for the given dictionary flag key

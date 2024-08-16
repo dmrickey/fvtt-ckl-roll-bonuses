@@ -309,7 +309,7 @@ function safeTotal(
  */
 function prepareActorDerivedData(wrapped) {
     wrapped();
-    this[MODULE_NAME] ||= {};
+    this[MODULE_NAME] = {};
     LocalHookHandler.fireHookNoReturnSync(localHooks.postPrepareActorDerivedData, this);
 }
 
