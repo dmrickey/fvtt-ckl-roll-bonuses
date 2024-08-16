@@ -9,7 +9,7 @@ import { signed } from "../../util/to-signed-string.mjs";
 import { uniqueArray } from '../../util/unique-array.mjs';
 import { SpecificBonuses } from '../all-specific-bonuses.mjs';
 
-export const spellFocusKey = 'spell-focus';
+const spellFocusKey = 'spell-focus';
 const greaterSpellFocusKey = 'greater-spell-focus';
 const mythicSpellFocusKey = 'mythic-spell-focus';
 
@@ -37,10 +37,10 @@ class Settings {
 
 /**
  * @param { ActorPF } actor
- * @param { spellFocusKey | greaterSpellFocusKey | mythicSpellFocusKey } key
+ * @param { spellFocusKey | greaterSpellFocusKey | mythicSpellFocusKey } [key]
  * @returns {string[]}
  */
-const getFocusedSchools = (actor, key) =>
+export const getFocusedSchools = (actor, key = spellFocusKey) =>
     uniqueArray(actor[MODULE_NAME][key]?.
         filter(x => x.hasItemBooleanFlag(key))
         .flatMap(x => x.getFlag(MODULE_NAME, key))

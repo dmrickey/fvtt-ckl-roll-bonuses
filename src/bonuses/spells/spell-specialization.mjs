@@ -1,23 +1,24 @@
 // +2 CL to chosen spell from school with Spell Focus
 // https://www.d20pfsrd.com/feats/general-feats/spell-specialization/
 
+import { MODULE_NAME } from '../../consts.mjs';
 import { stringSelect } from "../../handlebars-handlers/bonus-inputs/string-select.mjs";
-import { getDocDFlags, KeyedDFlagHelper } from "../../util/flag-helpers.mjs";
-import { customGlobalHooks } from "../../util/hooks.mjs";
+import { getDocDFlags } from "../../util/flag-helpers.mjs";
+import { customGlobalHooks, LocalHookHandler, localHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize, localizeBonusLabel } from "../../util/localize.mjs";
 import { LanguageSettings } from "../../util/settings.mjs";
 import { truthiness } from "../../util/truthiness.mjs";
 import { uniqueArray } from "../../util/unique-array.mjs";
 import { SpecificBonuses } from '../all-specific-bonuses.mjs';
-import { spellFocusKey } from "./spell-focus.mjs";
+import { getFocusedSchools } from "./spell-focus.mjs";
 
 const key = 'spell-specialization';
 const exclusionKey = 'spell-specialization-exclusions';
 const compendiumId = 'CO2Qmj0aj76zJsew';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#spell-specialization';
 
-Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ journal, key }));
+Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ journal, key, type: 'boolean' }));
 
 class Settings {
     static get spellSpecialization() { return LanguageSettings.getTranslation(key); }
@@ -28,33 +29,49 @@ class Settings {
 }
 
 /**
+ * @param {ItemPF} item
+ * @param {RollData} _rollData
+ */
+function prepareSpellSpecData(item, _rollData) {
+    if (!item?.actor || !item.isActive) return;
+
+    if (item.hasItemBooleanFlag(key)) {
+        item.actor[MODULE_NAME][key] ||= [];
+        item.actor[MODULE_NAME][key].push(item);
+    }
+}
+LocalHookHandler.registerHandler(localHooks.prepareData, prepareSpellSpecData);
+
+/**
  * @param {Nullable<ActorPF>} actor
- * @param {ItemSpellPF} item
+ * @param {ItemSpellPF} spell
  * @returns {boolean}
  */
-function isSpecializedSpell(actor, item) {
+function isSpecializedSpell(actor, spell) {
     if (!actor) return false;
 
-    const name = item.name?.toLowerCase() ?? '';
-    const helper = new KeyedDFlagHelper(
-        actor,
-        {
-            mustHave: {
-                [key]: (spec) => name.includes(`${spec || ''}`.toLowerCase()),
-                [exclusionKey]: (exclusions) => {
-                    const exceptions = `${exclusions || ''}`.toLowerCase()
-                        .split(';')
-                        .filter(truthiness)
-                        .map((x) => x.trim());
-                    return !exceptions.find((except) => name.includes(except));
-                }
-            }
-        },
-        key,
-        exclusionKey
-    );
+    const spellName = spell.name?.toLowerCase() ?? '';
+    const sources = actor[MODULE_NAME][key] || [];
 
-    return !!helper.hasAnyFlags();
+    /** @param { string } value */
+    const matches = (value) => {
+        const match = actor.items.get(value) || fromUuidSync(value);
+        return match
+            ? spell.id === match.id
+            : spellName.includes(`${value || ''}`.toLowerCase());
+    }
+
+    const isSpecialized = sources.some((source) => {
+        const value = source.getFlag(MODULE_NAME, key);
+        const exceptions = (/** @type {string } */(getDocDFlags(source, exclusionKey)[0]) || '')
+            .split(';')
+            .filter(truthiness)
+            .map((x) => x.trim());
+        const result = matches(value) && !exceptions.some(matches);
+        return result;
+    });
+
+    return isSpecialized;
 }
 
 // add info to spell card
@@ -88,7 +105,7 @@ registerItemHint((hintcls, actor, item, _data) => {
 
 // register hint on Spell Specialization
 registerItemHint((hintcls, _actor, item, _data) => {
-    const current = getDocDFlags(item, key)[0]?.toString();
+    const current = item.getFlag(MODULE_NAME, key);
     if (!current) {
         return;
     }
@@ -131,7 +148,8 @@ Hooks.on('renderItemSheet', (
 ) => {
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
-    const hasKey = item.system.flags.dictionary[key] !== undefined;
+    // const hasKey = item.system.flags.dictionary[key] !== undefined;
+    const hasKey = item.hasItemBooleanFlag(key);
     const hasName = item.name?.toLowerCase() === Settings.spellSpecialization;
     const hasId = !!item?.flags?.core?.sourceId?.includes(compendiumId);
     if (!(hasKey || hasName || hasId)) {
@@ -141,8 +159,7 @@ Hooks.on('renderItemSheet', (
     /** @type {string[]} */
     let choices = [];
     if (actor && isEditable) {
-        const helper = new KeyedDFlagHelper(actor, {}, spellFocusKey);
-        const focuses = helper.stringValuesForFlag(spellFocusKey);
+        const focuses = getFocusedSchools(actor);
 
         const spellChoices = actor?.items
             .filter(

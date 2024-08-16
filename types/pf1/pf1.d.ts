@@ -86,6 +86,7 @@ declare global {
             [greaterWeaponFocusKey]?: ItemPF[];
             [mythicWeaponFocusKey]?: ItemPF[];
             [racialWeaponFocusKey]?: ItemPF[];
+            ['spell-specialization']?: ItemPF[];
             [key: string]: number | string | object | array;
         };
 

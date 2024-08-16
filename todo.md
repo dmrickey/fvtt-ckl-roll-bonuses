@@ -274,10 +274,15 @@
   - Spell Focus
     - update keys for spellFocus to spell-focus
     - make sure it doesn't still say dictionary flag
+  - Spell Specialization
+    - update to say it includes id/uuid in addtion to Spell Name
 - Verify
   - Spell Focus
     - that it works as module flags
     - migration
   - Weapon Focus
+    - that it works as module flags
+    - migration
+  - Spell Specialization
     - that it works as module flags
     - migration

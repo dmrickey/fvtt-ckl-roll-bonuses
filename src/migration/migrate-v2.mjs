@@ -17,10 +17,13 @@ const toDictionary = [
     ['spellFocus', 'spell-focus'],
     ['greaterSpellFocus', 'greater-spell-focus'],
     ['mythicSpellFocus', 'mythic-spell-focus'],
+
     ['weapon-focus-key'],
     ['greater-weapon-focus-key'],
     ['mythic-weapon-focus-key'],
     ['racial-weapon-focus'],
+
+    ['spell-specialization'],
 ];
 
 // TODO don't forget this
