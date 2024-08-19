@@ -62,6 +62,41 @@ const getDocFlags = (doc, key, { includeInactive = false } = {}) => {
  *
  * @param {BaseDocument} doc
  * @param {...string} keyStarts
+ * @returns {string[]}
+ */
+const getDocBFlagsStartsWith = (doc, ...keyStarts) => {
+    /** @type {string[]} */
+    const found = [];
+
+    if (doc instanceof pf1.documents.actor.ActorPF) {
+        Object.entries(doc.itemFlags?.boolean ?? {}).forEach(([_itemTag, flags]) => {
+            Object.entries(flags).forEach(([flag]) => {
+                keyStarts.forEach((keyStart) => {
+                    if (flag.startsWith(keyStart)) {
+                        found.push(flag);
+                    }
+                });
+            });
+        });
+    }
+    else if (doc instanceof pf1.documents.item.ItemPF) {
+        Object.entries(doc.getItemDictionaryFlags()).forEach(([flag, value]) => {
+            keyStarts.forEach((keyStart) => {
+                if (flag.startsWith(keyStart)) {
+                    found.push(flag);
+                }
+            });
+        });
+    }
+
+    return found;
+}
+
+/**
+ * Return any dictionary flags on the document that start with the given partial string
+ *
+ * @param {BaseDocument} doc
+ * @param {...string} keyStarts
  * @returns {{[key: string]: (number | string)[]}}
  */
 const getDocDFlagsStartsWith = (doc, ...keyStarts) => {
@@ -170,6 +205,7 @@ const hasDFlag = (item, flag) => item.system.flags.dictionary?.hasOwnProperty(fl
 
 export {
     countBFlags,
+    getDocBFlagsStartsWith,
     getDocDFlags,
     getDocDFlagsStartsWith,
     getDocFlags,
@@ -178,6 +214,7 @@ export {
 }
 
 api.utils.countBFlags = countBFlags;
+api.utils.getDocBFlagsStartsWith = getDocBFlagsStartsWith;
 api.utils.getDocDFlags = getDocDFlags;
 api.utils.getDocDFlagsStartsWith = getDocDFlagsStartsWith;
 api.utils.getDocFlags = getDocFlags;

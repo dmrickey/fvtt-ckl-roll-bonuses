@@ -1,21 +1,22 @@
 import { textInput } from "../handlebars-handlers/bonus-inputs/text-input.mjs";
-import { hasAnyBFlag, getDocDFlagsStartsWith, KeyedDFlagHelper, FormulaCacheHelper } from "../util/flag-helpers.mjs";
+import { showEnabledLabel } from '../handlebars-handlers/enabled-label.mjs';
+import { hasAnyBFlag, getDocDFlagsStartsWith, KeyedDFlagHelper, FormulaCacheHelper, getDocBFlagsStartsWith } from "../util/flag-helpers.mjs";
 import { LocalHookHandler, customGlobalHooks, localHooks } from "../util/hooks.mjs";
 import { registerItemHint } from "../util/item-hints.mjs";
 import { localize } from "../util/localize.mjs";
 import { signed } from "../util/to-signed-string.mjs";
 import { truthiness } from '../util/truthiness.mjs';
 
-const selfKeen = 'keen-self';
 const keenAll = 'keen-all';
+const keenSelf = 'keen-self';
 const keenId = (/** @type {IdObject} */ { id }) => `keen_${id}`;
 
-const critOffsetSelf = 'crit-offset-self';
 const critOffsetAll = 'crit-offset-all';
+const critOffsetSelf = 'crit-offset-self';
 const critOffsetId = (/** @type {IdObject} */ { id }) => `crit-offset_${id}`;
 
-const critMultOffsetSelf = 'crit-mult-offset-self';
 const critMultOffsetAll = 'crit-mult-offset-all';
+const critMultOffsetSelf = 'crit-mult-offset-self';
 const critMultOffsetId = (/** @type {IdObject} */ { id }) => `crit-mult-offset_${id}`;
 
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#critical-helpers';
@@ -128,7 +129,7 @@ registerItemHint((hintcls, actor, item, _data) => {
 
         const current = action.data.ability.critRange;
 
-        const hasKeen = item.hasItemBooleanFlag(selfKeen)
+        const hasKeen = item.hasItemBooleanFlag(keenSelf)
             || hasAnyBFlag(actor, keenAll, keenId(item), keenId(action));
 
         let range = hasKeen
@@ -196,7 +197,7 @@ Hooks.on('pf1GetRollData', (
             return 20;
         }
 
-        const hasKeen = item.hasItemBooleanFlag(selfKeen)
+        const hasKeen = item.hasItemBooleanFlag(keenSelf)
             || hasAnyBFlag(actor, keenAll, keenId(item), keenId(action));
 
         let range = hasKeen
@@ -229,7 +230,7 @@ function handleItemActionCritRangeWrapper(current, action) {
         return 20;
     }
 
-    const hasKeen = item.hasItemBooleanFlag(selfKeen)
+    const hasKeen = item.hasItemBooleanFlag(keenSelf)
         || hasAnyBFlag(actor, keenAll, keenId(item), keenId(action));
 
     const offsetFlags = [critOffsetAll, critOffsetId(item), critOffsetId(action)];
@@ -253,7 +254,7 @@ Hooks.on(customGlobalHooks.actionUseFootnotes, (
     /** @type {ChatAttack} */ { action },
     /** @type {string[]}  */ notes,
 ) => {
-    const hasKeen = action.item.hasItemBooleanFlag(selfKeen)
+    const hasKeen = action.item.hasItemBooleanFlag(keenSelf)
         || hasAnyBFlag(action.item.actor, keenAll, keenId(action.item), keenId(action));
     if (hasKeen) {
         notes.push(localize('keen'));
@@ -271,6 +272,8 @@ const labelLookup = (key) => {
         case critOffsetAll: return localize(critOffsetAll);
         case critMultOffsetSelf: return localize(critMultOffsetSelf);
         case critMultOffsetAll: return localize(critMultOffsetAll);
+        case keenAll: return localize(keenAll);
+        case keenSelf: return localize(keenSelf);
     }
 
     if (key.includes('crit-offset_')) {
@@ -283,7 +286,12 @@ const labelLookup = (key) => {
         return localize('crit-mult-offset-targeted', { id });
     }
 
-    return "Crit";
+    if (key.includes('keen_')) {
+        const id = key.split('_')[1];
+        return localize('keen-id', { id });
+    }
+
+    throw new Error(`shouldn't be here`);
 }
 
 Hooks.on('renderItemSheet', (
@@ -293,10 +301,45 @@ Hooks.on('renderItemSheet', (
 ) => {
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
-    const has = getDocDFlagsStartsWith(item, 'crit-');
+    if (item.hasItemBooleanFlag(keenAll)) {
+        showEnabledLabel({
+            item,
+            journal,
+            key: keenAll,
+            label: labelLookup(keenAll),
+            parent: html,
+        }, {
+            canEdit: isEditable,
+        });
+    }
+    if (item.hasItemBooleanFlag(keenSelf)) {
+        showEnabledLabel({
+            item,
+            journal,
+            key: keenSelf,
+            label: labelLookup(keenSelf),
+            parent: html,
+        }, {
+            canEdit: isEditable,
+        });
+    }
+    const booleanFlags = getDocBFlagsStartsWith(item, 'keen_')
+    booleanFlags.forEach((keen) => {
+        showEnabledLabel({
+            item,
+            journal,
+            key: keen,
+            label: labelLookup(keen),
+            parent: html,
+        }, {
+            canEdit: isEditable,
+        });
+    });
+
+    const dictionaryFlags = getDocDFlagsStartsWith(item, 'crit-');
 
     // the current array only can have a single element since this is from an item and not an actor
-    Object.entries(has).forEach(([key, [current]]) => {
+    Object.entries(dictionaryFlags).forEach(([key, [current]]) => {
         textInput({
             current,
             item,
