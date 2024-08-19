@@ -279,12 +279,13 @@
 - Create new "Roll Bonuses" section for attack dialog inputs
 - Documentation
   - Spell Focus
-    - update keys for spellFocus to spell-focus
+    - update keys for spellFocus to spell-focus-etc
     - make sure it doesn't still say dictionary flag
   - Elemental Focus
-    - update keys for spellFocus to spell-focus
+    - update keys for spellFocus to elemental-focus-etc
     - make sure it doesn't still say dictionary flag
   - Weapon Focus
+    - update keys for spellFocus to weapon-focus-etc
     - make sure it doesn't still say dictionary flag
   - Martial Focus
     - make sure it doesn't still say dictionary flag
@@ -309,3 +310,5 @@
     - migration
 - Update Auto-recognition stuff in "renderItemSheet" to use the same logic as martial-focus.mjs
 - register for "actor.rollCL" hook and add bonuses based on action in the message from the hook's messageId
+- Roll Bonuses d20 icon on sheet in RB header doesn't open journal
+- Add "Fortune configuration app" to help with configuring specific fortune abilities

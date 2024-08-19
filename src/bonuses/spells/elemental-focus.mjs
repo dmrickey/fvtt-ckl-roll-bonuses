@@ -10,9 +10,9 @@ import { truthiness } from "../../util/truthiness.mjs";
 import { uniqueArray } from '../../util/unique-array.mjs';
 import { SpecificBonuses } from '../all-specific-bonuses.mjs';
 
-const elementalFocusKey = 'elemental-focus';
-const greaterElementalFocusKey = 'greater-elemental-focus';
-const mythicElementalFocusKey = 'mythic-elemental-focus';
+export const elementalFocusKey = 'elemental-focus';
+export const greaterElementalFocusKey = 'elemental-focus-greater';
+export const mythicElementalFocusKey = 'elemental-focus-mythic';
 
 const allKeys = [elementalFocusKey, greaterElementalFocusKey, mythicElementalFocusKey];
 

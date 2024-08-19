@@ -10,9 +10,9 @@ import { truthiness } from '../../util/truthiness.mjs';
 import { uniqueArray } from '../../util/unique-array.mjs';
 import { SpecificBonuses } from '../all-specific-bonuses.mjs';
 
-const spellFocusKey = 'spell-focus';
-const greaterSpellFocusKey = 'greater-spell-focus';
-const mythicSpellFocusKey = 'mythic-spell-focus';
+export const spellFocusKey = 'spell-focus';
+export const greaterSpellFocusKey = 'spell-focus-greater';
+export const mythicSpellFocusKey = 'spell-focus-mythic';
 
 const allKeys = [spellFocusKey, greaterSpellFocusKey, mythicSpellFocusKey];
 

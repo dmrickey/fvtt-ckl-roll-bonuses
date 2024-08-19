@@ -17,17 +17,17 @@ const dcSchoolFormulaKey = 'school-dc-formula';
 
 const dictionaryToModuleFlag = [
     ['spellFocus', 'spell-focus'],
-    ['greaterSpellFocus', 'greater-spell-focus'],
-    ['mythicSpellFocus', 'mythic-spell-focus'],
+    ['greaterSpellFocus', 'spell-focus-greater'],
+    ['mythicSpellFocus', 'spell-focus-mythic'],
 
     ['elementalFocus', 'elemental-focus'],
-    ['greaterElementalFocus', 'greater-elemental-focus'],
-    ['mythicElementalFocus', 'mythic-elemental-focus'],
+    ['greaterElementalFocus', 'elemental-focus-greater'],
+    ['mythicElementalFocus', 'elemental-focus-mythic'],
 
-    ['weapon-focus-key'],
-    ['greater-weapon-focus-key'],
-    ['mythic-weapon-focus-key'],
-    ['racial-weapon-focus'],
+    ['weapon-focus'],
+    ['greater-weapon-focus', 'weapon-focus-greater'],
+    ['mythic-weapon-focus', 'weapon-focus-mythic'],
+    ['racial-weapon-focus', 'weapon-focus-racial'],
 
     ['spell-specialization'],
 
@@ -36,6 +36,7 @@ const dictionaryToModuleFlag = [
 
 // TODO don't forget this
 const languageKeyMigration = [
+    ['elementalFocus', 'elemental-focus'],
     ['spellFocus', 'spell-focus'],
 ]
 

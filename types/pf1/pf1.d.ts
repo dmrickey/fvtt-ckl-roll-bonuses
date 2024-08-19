@@ -1,4 +1,14 @@
 import {
+    elementalFocusKey,
+    greaterElementalFocusKey,
+    mythicElementalFocusKey,
+} from '../../src/bonuses/spells/elemental-focus.mjs';
+import {
+    greaterSpellFocusKey,
+    mythicSpellFocusKey,
+    spellFocusKey,
+} from '../../src/bonuses/spells/spell-focus.mjs';
+import {
     greaterWeaponFocusKey,
     mythicWeaponFocusKey,
     racialWeaponFocusKey,
@@ -83,18 +93,18 @@ declare global {
         hasCondition(key: string): boolean;
 
         [MODULE_NAME]: {
-            ['spell-focus']?: ItemPF[];
-            ['greater-spell-focus']?: ItemPF[];
-            ['mythic-spell-focus']?: ItemPF[];
+            [spellFocusKey]?: ItemPF[];
+            [greaterSpellFocusKey]?: ItemPF[];
+            [mythicSpellFocusKey]?: ItemPF[];
             [weaponFocusKey]?: ItemPF[];
             [greaterWeaponFocusKey]?: ItemPF[];
             [mythicWeaponFocusKey]?: ItemPF[];
             [racialWeaponFocusKey]?: ItemPF[];
             ['spell-specialization']?: ItemPF[];
             ['martial-focus']?: ItemPF[];
-            ['elemental-focus']?: ItemPF[];
-            ['greater-elemental-focus']?: ItemPF[];
-            ['mythic-elemental-focus']?: ItemPF[];
+            [elementalFocusKey]?: ItemPF[];
+            [greaterElementalFocusKey]?: ItemPF[];
+            [mythicElementalFocusKey]?: ItemPF[];
             [key: string]: number | string | object | array;
         };
 
