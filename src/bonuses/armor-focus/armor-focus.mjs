@@ -15,7 +15,7 @@ import { LocalHookHandler, localHooks } from '../../util/hooks.mjs';
 const compendiumId = 'zBrrZynIB0EXagds';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#armor-focus';
 
-Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ key, journal }));
+Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ key, journal, type: 'boolean' }));
 
 class Settings {
     static get armorFocus() { return LanguageSettings.getTranslation(key); }

@@ -20,7 +20,7 @@ export { key as greaterWeaponSpecializationKey };
 const compendiumId = 'asmQDyDYTtuXg8b4';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#weapon-specialization';
 
-Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ journal, key, parent: weaponSpecializationKey }));
+Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ journal, key, type: 'boolean', parent: weaponSpecializationKey }));
 
 /**
  * @param {ItemPF} item
