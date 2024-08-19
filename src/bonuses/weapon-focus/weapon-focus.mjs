@@ -60,10 +60,10 @@ LocalHookHandler.registerHandler(localHooks.prepareData, prepareWeaponFocusData)
 
 /**
  * @param { ActorPF } actor
- * @param { weaponFocusKey | greaterWeaponFocusKey | mythicWeaponFocusKey } key
+ * @param { weaponFocusKey | greaterWeaponFocusKey | mythicWeaponFocusKey } [key]
  * @returns {string[]}
  */
-const getFocusedWeapons = (actor, key) =>
+export const getFocusedWeapons = (actor, key = weaponFocusKey) =>
     uniqueArray(actor[MODULE_NAME][key]?.
         filter(x => x.hasItemBooleanFlag(key))
         .flatMap(x => x.getFlag(MODULE_NAME, key))
@@ -242,7 +242,10 @@ Hooks.on('renderItemSheet', (
             .flatMap((item) => item.system.baseTypes ?? []));
     }
 
-    if (!key) {
+    if (key && !item.hasItemBooleanFlag(key)) {
+        item.addItemBooleanFlag(key);
+    }
+    else if (!key) {
         return;
     }
 

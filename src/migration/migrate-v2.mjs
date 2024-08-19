@@ -32,6 +32,9 @@ const dictionaryToModuleFlag = [
     ['spell-specialization'],
 
     ['martial-focus'],
+
+    ['weapon-specialization'],
+    ['greater-weapon-specialization', 'weapon-specialization-greater']
 ];
 
 // TODO don't forget this

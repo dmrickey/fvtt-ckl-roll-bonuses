@@ -14,6 +14,8 @@ import {
     racialWeaponFocusKey,
     weaponFocusKey,
 } from '../../src/bonuses/weapon-focus/ids.mjs';
+import { greaterWeaponSpecializationKey } from '../../src/bonuses/weapon-specialization/greater-weapon-specialization.mjs';
+import { weaponSpecializationKey } from '../../src/bonuses/weapon-specialization/weapon-specialization.mjs';
 import { MODULE_NAME } from '../../src/consts.mjs';
 import { RangedIncrementPenaltyGlobalBonus } from '../../src/global-bonuses/attack-dialog-helper.mjs';
 import { BaseBonus } from '../../src/targeted/bonuses/base-bonus.mjs';
@@ -105,6 +107,8 @@ declare global {
             [elementalFocusKey]?: ItemPF[];
             [greaterElementalFocusKey]?: ItemPF[];
             [mythicElementalFocusKey]?: ItemPF[];
+            [weaponSpecializationKey]?: ItemPF[];
+            [greaterWeaponSpecializationKey]?: ItemPF[];
             [key: string]: number | string | object | array;
         };
 
