@@ -15,8 +15,7 @@ import { createTemplate, templates } from "../templates.mjs";
  * @param {string} [args.tooltip]
  * @param {object} options
  * @param {boolean} options.canEdit
- * @param {boolean} [options.isModuleFlag] - false (default) if this is a dictionary flag, true if this is a data flag
- */
+*/
 export function checkboxInput({
     current = false,
     item,
@@ -27,12 +26,9 @@ export function checkboxInput({
     tooltip = '',
 }, {
     canEdit,
-    isModuleFlag = false,
 }
 ) {
-    current ||= isModuleFlag
-        ? item.getFlag(MODULE_NAME, key)
-        : item.getItemDictionaryFlag(key);
+    current ||= item.getFlag(MODULE_NAME, key);
     label ||= localizeBonusLabel(key);
     tooltip ||= localizeBonusTooltip(key);
 
@@ -61,9 +57,7 @@ export function checkboxInput({
             // @ts-ignore
             const value = event.currentTarget.checked;
 
-            isModuleFlag
-                ? await item.setFlag(MODULE_NAME, key, value)
-                : await item.setItemDictionaryFlag(key, value);
+            await item.setFlag(MODULE_NAME, key, value);
         },
     );
 

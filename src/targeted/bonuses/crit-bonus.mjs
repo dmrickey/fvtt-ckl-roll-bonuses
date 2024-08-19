@@ -323,7 +323,6 @@ export class CritBonus extends BaseBonus {
             parent: html,
         }, {
             canEdit: isEditable,
-            isModuleFlag: true,
         });
         textInput({
             item,
