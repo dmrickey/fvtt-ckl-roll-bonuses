@@ -15,29 +15,45 @@ const dcSchoolKey = 'school-dc';
 const dcSchoolFormulaKey = 'school-dc-formula';
 /** END to system changes */
 
+class DictionaryMigration {
+    /**
+     * @param {string} key
+     * @param {string} [newKey]
+     * @param {boolean} [skipBFlag]
+     */
+    constructor(key, newKey, skipBFlag) {
+        this.key = key;
+        this.newKey = newKey || key;
+        this.skipBFlag = skipBFlag || false;
+    }
+}
+/** @type {DictionaryMigration[]} */
 const dictionaryToModuleFlag = [
-    ['spellFocus', 'spell-focus'],
-    ['greaterSpellFocus', 'spell-focus-greater'],
-    ['mythicSpellFocus', 'spell-focus-mythic'],
+    new DictionaryMigration('spellFocus', 'spell-focus'),
+    new DictionaryMigration('greaterSpellFocus', 'spell-focus-greater'),
+    new DictionaryMigration('mythicSpellFocus', 'spell-focus-mythic'),
 
-    ['elementalFocus', 'elemental-focus'],
-    ['greaterElementalFocus', 'elemental-focus-greater'],
-    ['mythicElementalFocus', 'elemental-focus-mythic'],
+    new DictionaryMigration('elementalFocus', 'elemental-focus'),
+    new DictionaryMigration('greaterElementalFocus', 'elemental-focus-greater'),
+    new DictionaryMigration('mythicElementalFocus', 'elemental-focus-mythic'),
 
-    ['weapon-focus'],
-    ['greater-weapon-focus', 'weapon-focus-greater'],
-    ['mythic-weapon-focus', 'weapon-focus-mythic'],
-    ['racial-weapon-focus', 'weapon-focus-racial'],
+    new DictionaryMigration('weapon-focus'),
+    new DictionaryMigration('greater-weapon-focus', 'weapon-focus-greater'),
+    new DictionaryMigration('mythic-weapon-focus', 'weapon-focus-mythic'),
+    new DictionaryMigration('racial-weapon-focus', 'weapon-focus-racial'),
 
-    ['spell-specialization'],
+    new DictionaryMigration('spell-specialization'),
 
-    ['martial-focus'],
+    new DictionaryMigration('martial-focus'),
 
-    ['armor-focus'],
-    ['improved-armor-focus', 'armor-focus-improved'],
+    new DictionaryMigration('armor-focus'),
+    new DictionaryMigration('improved-armor-focus', 'armor-focus-improved'),
 
-    ['weapon-specialization'],
-    ['greater-weapon-specialization', 'weapon-specialization-greater'],
+    new DictionaryMigration('weapon-specialization'),
+    new DictionaryMigration('greater-weapon-specialization', 'weapon-specialization-greater'),
+
+    new DictionaryMigration('change-type-offset'),
+    new DictionaryMigration('change-type-offset-formula', 'change-type-offset-formula', true),
 ];
 
 // TODO don't forget this
@@ -118,16 +134,20 @@ export const migrateItem = async (item) => {
     /**
      * @param {string} key
      * @param {string} [newKey]
+     * @param {boolean} [skipBFlag]
      */
-    const migrateDflag = (key, newKey = '') => {
+    const migrateDflag = (key, newKey, skipBFlag) => {
         newKey ||= key;
         dictionary[`-=${key}`] = null;
         const value = item.getItemDictionaryFlag(key);
         moduleFlags[newKey] = value;
-        boolean[newKey] = true;
+
+        if (!skipBFlag) {
+            boolean[newKey] = true;
+        }
     }
 
-    dictionaryToModuleFlag.forEach(([key, newKey]) => migrateDflag(key, newKey));
+    dictionaryToModuleFlag.forEach(({ key, newKey, skipBFlag }) => migrateDflag(key, newKey, skipBFlag));
 
     if (isNotEmptyObject(dictionary)) {
         /** @type {Partial<ItemPF>} */

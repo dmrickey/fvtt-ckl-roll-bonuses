@@ -2,6 +2,7 @@ import {
     armorFocusKey,
     improvedArmorFocusKey,
 } from '../../src/bonuses/armor-focus/shared.mjs';
+import { changeTypeOffsetKey } from '../../src/bonuses/change-type-offset.mjs';
 import {
     elementalFocusKey,
     greaterElementalFocusKey,
@@ -115,6 +116,7 @@ declare global {
             [greaterWeaponSpecializationKey]?: ItemPF[];
             [armorFocusKey]?: ItemPF[];
             [improvedArmorFocusKey]?: ItemPF[];
+            [changeTypeOffsetKey]?: ItemPF[];
             [key: string]: number | string | object | array;
         };
 

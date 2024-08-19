@@ -302,3 +302,10 @@
 - Roll Bonuses d20 icon on sheet in RB header doesn't open journal
 - Add "Fortune configuration app" to help with configuring specific fortune abilities
 - Add obsoletion message for `src\bonuses\critical.mjs` if its flags are detected
+
+- Remove Obsolete Code
+  - Get rid of "KeyedDFlagHelper"
+  - delete FormulaCacheHelper.registerUncacheableDictionaryFlag
+  - delete FormulaCacheHelper.isUncacheableDictionaryFlag
+
+TODO - Add elemental CL/DC to the above list

@@ -1,20 +1,34 @@
+import { MODULE_NAME } from '../consts.mjs';
 import { textInputAndKeyValueSelect } from "../handlebars-handlers/bonus-inputs/text-input-and-key-value-select.mjs";
-import { KeyedDFlagHelper, getDocDFlags, FormulaCacheHelper } from "../util/flag-helpers.mjs";
+import { FormulaCacheHelper } from "../util/flag-helpers.mjs";
 import { LocalHookHandler, localHooks } from "../util/hooks.mjs";
 import { SpecificBonuses } from './all-specific-bonuses.mjs';
 
-export const bonusKey = 'change-type-offset';
-export const formulaKey = 'change-type-offset-formula';
+const key = 'change-type-offset';
+const formulaKey = 'change-type-offset-formula';
+export {
+    key as changeTypeOffsetKey,
+    formulaKey as changeTypeOffsetFormulaKey,
+}
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#change-offset';
 
-FormulaCacheHelper.registerUncacheableDictionaryFlag(bonusKey);
-FormulaCacheHelper.registerDictionaryFlag(formulaKey);
+FormulaCacheHelper.registerModuleFlag(formulaKey);
 
-Hooks.once('ready', () =>
-    SpecificBonuses.registerSpecificBonus(
-        { journal, key: bonusKey },
-        formulaKey,
-    ));
+Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ journal, key: key, type: 'boolean' }));
+
+/**
+ * @param {ItemPF} item
+ * @param {RollData} _rollData
+ */
+function prepareData(item, _rollData) {
+    if (!item?.actor || !item.isActive) return;
+
+    if (item.hasItemBooleanFlag(key)) {
+        item.actor[MODULE_NAME][key] ||= [];
+        item.actor[MODULE_NAME][key].push(item);
+    }
+}
+LocalHookHandler.registerHandler(localHooks.prepareData, prepareData);
 
 /**
  * @param {number | string} value
@@ -27,19 +41,9 @@ function patchChangeValue(value, itemChange) {
         return value;
     }
 
-    const helper = new KeyedDFlagHelper(
-        actor,
-        {
-            onlyIncludeAllFlags: true,
-            mustHave: {
-                [bonusKey]: (value) => value === itemChange.type,
-            }
-        },
-        bonusKey,
-        formulaKey,
-    );
-
-    const offset = helper.sumOfFlags(formulaKey);
+    const offset = (actor[MODULE_NAME]?.[key] ?? [])
+        .filter((x) => x.getFlag(MODULE_NAME, key) === itemChange.type)
+        .reduce((acc, item) => FormulaCacheHelper.getModuleFlagValue(item, formulaKey), 0);
     if (offset) {
         value = isNaN(+value) ? `${value} + ${offset}` : (+value + offset);
     }
@@ -60,14 +64,13 @@ Hooks.on('renderItemSheet', (
 
     const { bonusTypes } = pf1.config;
 
-    const hasKey = item.system.flags.dictionary[bonusKey] !== undefined
-        || item.system.flags.dictionary[formulaKey] !== undefined;
+    const hasKey = item.hasItemBooleanFlag(key);
     if (!hasKey) {
         return;
     }
 
-    const current = getDocDFlags(item, bonusKey)[0];
-    const formula = getDocDFlags(item, formulaKey)[0];
+    const current = item.getFlag(MODULE_NAME, key);
+    const formula = item.getFlag(MODULE_NAME, formulaKey);
 
     const choices = Object.entries(bonusTypes)
         .map(([key, label]) => ({ key, label }));
@@ -76,9 +79,10 @@ Hooks.on('renderItemSheet', (
         item,
         journal,
         parent: html,
-        select: { current, choices, key: bonusKey },
+        select: { current, choices, key: key },
         text: { current: formula, key: formulaKey },
     }, {
         canEdit: isEditable,
+        isModuleFlag: true,
     });
 });
