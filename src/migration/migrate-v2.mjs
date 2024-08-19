@@ -20,6 +20,10 @@ const dictionaryToModuleFlag = [
     ['greaterSpellFocus', 'greater-spell-focus'],
     ['mythicSpellFocus', 'mythic-spell-focus'],
 
+    ['elementalFocus', 'elemental-focus'],
+    ['greaterElementalFocus', 'greater-elemental-focus'],
+    ['mythicElementalFocus', 'mythic-elemental-focus'],
+
     ['weapon-focus-key'],
     ['greater-weapon-focus-key'],
     ['mythic-weapon-focus-key'],

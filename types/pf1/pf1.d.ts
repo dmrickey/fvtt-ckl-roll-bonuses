@@ -92,6 +92,9 @@ declare global {
             [racialWeaponFocusKey]?: ItemPF[];
             ['spell-specialization']?: ItemPF[];
             ['martial-focus']?: ItemPF[];
+            ['elemental-focus']?: ItemPF[];
+            ['greater-elemental-focus']?: ItemPF[];
+            ['mythic-elemental-focus']?: ItemPF[];
             [key: string]: number | string | object | array;
         };
 

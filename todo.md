@@ -281,10 +281,21 @@
   - Spell Focus
     - update keys for spellFocus to spell-focus
     - make sure it doesn't still say dictionary flag
+  - Elemental Focus
+    - update keys for spellFocus to spell-focus
+    - make sure it doesn't still say dictionary flag
+  - Weapon Focus
+    - make sure it doesn't still say dictionary flag
+  - Martial Focus
+    - make sure it doesn't still say dictionary flag
   - Spell Specialization
+    - make sure it doesn't still say dictionary flag
     - update to say it includes id/uuid in addtion to Spell Name
 - Verify
   - Spell Focus (base, greater, mythic)
+    - that it works as module flags
+    - migration
+  - Elemental Focus (base, greater, mythic)
     - that it works as module flags
     - migration
   - Weapon Focus (base, greater, mythic, racial)
@@ -297,3 +308,4 @@
     - that it works as module flags
     - migration
 - Update Auto-recognition stuff in "renderItemSheet" to use the same logic as martial-focus.mjs
+- register for "actor.rollCL" hook and add bonuses based on action in the message from the hook's messageId
