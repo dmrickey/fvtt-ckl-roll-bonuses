@@ -124,16 +124,15 @@ Hooks.on('renderItemSheet', (
 ) => {
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
-    const name = item?.name?.toLowerCase() ?? '';
-    const sourceId = item?.flags.core?.sourceId ?? '';
     const hasKey = item.hasItemBooleanFlag(key);
-    const isRacial = hasKey
-        || sourceId.includes(gnomeWeaponFocusId)
-        || name.includes(Settings.defaultRace);
-    if (!isRacial) return;
-
     if (!hasKey) {
-        item.addItemBooleanFlag(key);
+        const name = item?.name?.toLowerCase() ?? '';
+        const sourceId = item?.flags.core?.sourceId ?? '';
+        const isRacial = sourceId.includes(gnomeWeaponFocusId) || name.includes(Settings.defaultRace);
+        if (isRacial) {
+            item.addItemBooleanFlag(key);
+        }
+        return;
     }
 
     const current = item.getFlag(MODULE_NAME, key);

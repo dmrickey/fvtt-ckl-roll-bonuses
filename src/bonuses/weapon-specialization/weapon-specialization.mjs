@@ -128,10 +128,13 @@ Hooks.on('renderItemSheet', (
     if (SharedSettings.elephantInTheRoom) return;
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
-    const name = item?.name?.toLowerCase() ?? '';
-    const sourceId = item?.flags.core?.sourceId ?? '';
-    if (
-        !(name === Settings.weaponSpecialization || item.system.flags.dictionary[key] !== undefined || sourceId.includes(compendiumId))) {
+    const hasKey = item.hasItemBooleanFlag(key);
+    if (!hasKey) {
+        const name = item?.name?.toLowerCase() ?? '';
+        const sourceId = item?.flags.core?.sourceId ?? '';
+        if (name === Settings.weaponSpecialization || sourceId.includes(compendiumId)) {
+            item.addItemBooleanFlag(key);
+        }
         return;
     }
 

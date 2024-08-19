@@ -148,11 +148,13 @@ Hooks.on('renderItemSheet', (
 ) => {
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
-    // const hasKey = item.system.flags.dictionary[key] !== undefined;
     const hasKey = item.hasItemBooleanFlag(key);
-    const hasName = item.name?.toLowerCase() === Settings.spellSpecialization;
-    const hasId = !!item?.flags?.core?.sourceId?.includes(compendiumId);
-    if (!(hasKey || hasName || hasId)) {
+    if (!hasKey) {
+        const hasName = item.name?.toLowerCase() === Settings.spellSpecialization;
+        const hasId = !!item?.flags?.core?.sourceId?.includes(compendiumId);
+        if (hasName || hasId) {
+            item.addItemBooleanFlag(key);
+        }
         return;
     }
 

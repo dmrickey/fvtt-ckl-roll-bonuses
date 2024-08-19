@@ -167,9 +167,12 @@ Hooks.on('renderItemSheet', (
 ) => {
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
-    const name = item?.name?.toLowerCase() ?? '';
-
-    if (!(name === Settings.versatileTraining || item.system.flags.boolean[key] !== undefined)) {
+    const hasKey = item.hasItemBooleanFlag(key);
+    if (!hasKey) {
+        const name = item?.name?.toLowerCase() ?? '';
+        if (name === Settings.versatileTraining) {
+            item.addItemBooleanFlag(key);
+        }
         return;
     }
 

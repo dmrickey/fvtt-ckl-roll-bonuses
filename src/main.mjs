@@ -121,6 +121,16 @@ function d20RollWrapper(wrapped, options = {}) {
 // Hooks.on('pf1PreDamageRoll', preDamageRoll);
 
 /**
+ * @this {ActorPF}
+ * @param {() => any} wrapped
+ */
+function prepareActorDerivedData(wrapped) {
+    wrapped();
+    this[MODULE_NAME] = {};
+    LocalHookHandler.fireHookNoReturnSync(localHooks.postPrepareActorDerivedData, this);
+}
+
+/**
  * @this {ItemPF}
  * @param {*} wrapped
  * @param {boolean} final
@@ -301,16 +311,6 @@ function safeTotal(
     data,
 ) {
     return (isNaN(+formula) ? RollPF.safeRollSync(formula, data).total : +formula) || 0;
-}
-
-/**
- * @param {() => any} wrapped
- * @this {ActorPF}
- */
-function prepareActorDerivedData(wrapped) {
-    wrapped();
-    this[MODULE_NAME] = {};
-    LocalHookHandler.fireHookNoReturnSync(localHooks.postPrepareActorDerivedData, this);
 }
 
 /**

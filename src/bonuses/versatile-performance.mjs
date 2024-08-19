@@ -267,9 +267,11 @@ Hooks.on('renderItemSheet', (
 
     const name = item?.name?.toLowerCase() ?? '';
     const hasFlag = item.system.flags.dictionary?.hasOwnProperty(key);
-
-    if (!(name === Settings.versatilePerformance || hasFlag)) {
-        return;
+    if (!hasFlag) {
+        if (name === Settings.versatilePerformance) {
+            item.setItemDictionaryFlag(key, '');
+            return;
+        }
     }
 
     const currentVP = item.system.flags.dictionary[key];

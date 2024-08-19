@@ -132,18 +132,14 @@ Hooks.on('renderItemSheet', (
 ) => {
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
-    const name = item?.name?.toLowerCase() ?? '';
-    const sourceId = item?.flags.core?.sourceId ?? '';
-    if (!(
-        item.hasItemBooleanFlag(key)
-        || name === Settings.armorFocus
-        || sourceId.includes(compendiumId)
-    )) {
+    const hasKey = item.hasItemBooleanFlag(key);
+    if (!hasKey) {
+        const name = item?.name?.toLowerCase() ?? '';
+        const sourceId = item?.flags.core?.sourceId ?? '';
+        if (name === Settings.armorFocus || sourceId.includes(compendiumId)) {
+            item.addItemBooleanFlag(key);
+        }
         return;
-    }
-
-    if (!item.hasItemBooleanFlag(key)) {
-        item.addItemBooleanFlag(key);
     }
 
     const choices = isEditable && actor
