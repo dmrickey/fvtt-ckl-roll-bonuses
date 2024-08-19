@@ -131,7 +131,6 @@ Hooks.on('renderItemSheet', (
         parent: html,
     }, {
         canEdit: isEditable,
-        isModuleFlag: true,
     });
     textInput({
         item,
@@ -140,7 +139,6 @@ Hooks.on('renderItemSheet', (
         parent: html,
     }, {
         canEdit: isEditable,
-        isModuleFlag: true,
     });
     textInput({
         item,
@@ -149,7 +147,6 @@ Hooks.on('renderItemSheet', (
         parent: html,
     }, {
         canEdit: isEditable,
-        isModuleFlag: true,
     });
     damageInput({
         item,
@@ -167,7 +164,6 @@ Hooks.on('renderItemSheet', (
     }, {
         canEdit: isEditable,
         isFormula: false,
-        isModuleFlag: true,
     });
 });
 

@@ -17,8 +17,8 @@ import { createTemplate, templates } from "../templates.mjs";
  * @param {boolean} options.canEdit
  * @param {string} [options.placeholder]
  * @param {boolean} [options.isFormula]
- * @param {boolean} [options.isModuleFlag] - false (default) if this is a dictionary flag, true if this is a data flag
- */
+ * @param {true} [options.isModuleFlag] - true (default) if this is a data flag, false if this is a dictionary flag
+*/
 export function textInput({
     current = '',
     item,

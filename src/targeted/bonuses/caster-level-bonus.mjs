@@ -73,7 +73,6 @@ export class CasterLevelBonus extends BaseBonus {
             tooltip: this.tooltip,
         }, {
             canEdit: isEditable,
-            isModuleFlag: true,
         });
     }
 

@@ -150,6 +150,5 @@ Hooks.on('renderItemSheet', (
     }, {
         canEdit: isEditable,
         isFormula: false,
-        isModuleFlag: true,
     });
 });

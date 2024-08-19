@@ -119,7 +119,6 @@ export class WhenTargetInRange extends BaseTarget {
             parent: html,
         }, {
             canEdit: isEditable,
-            isModuleFlag: true,
             placeholder: '0',
         });
         textInput({
@@ -130,7 +129,6 @@ export class WhenTargetInRange extends BaseTarget {
             parent: html,
         }, {
             canEdit: isEditable,
-            isModuleFlag: true,
             placeholder: `${Number.POSITIVE_INFINITY}`
         });
     }

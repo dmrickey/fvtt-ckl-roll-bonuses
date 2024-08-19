@@ -349,6 +349,7 @@ Hooks.on('renderItemSheet', (
             parent: html,
         }, {
             canEdit: isEditable,
+            // @ts-ignore No better way to do this for now
             isModuleFlag: false,
         });
     });

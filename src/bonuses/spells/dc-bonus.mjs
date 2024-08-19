@@ -83,6 +83,7 @@ Hooks.on('renderItemSheet', (
         parent: html,
     }, {
         canEdit: isEditable,
+        // @ts-ignore Ignoring because this file will be deleted soon
         isModuleFlag: false,
     });
 });

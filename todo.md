@@ -301,3 +301,4 @@
 - register for "actor.rollCL" hook and add bonuses based on action in the message from the hook's messageId
 - Roll Bonuses d20 icon on sheet in RB header doesn't open journal
 - Add "Fortune configuration app" to help with configuring specific fortune abilities
+- Add obsoletion message for `src\bonuses\critical.mjs` if its flags are detected

@@ -17,7 +17,6 @@ import { createTemplate, templates } from "../templates.mjs";
  * @param {object} options
  * @param {boolean} options.canEdit
 */
-// * @param {boolean} [options.isModuleFlag] - false (default) if this is a dictionary flag, true if this is a data flag
 export function stringSelect({
     choices,
     current,

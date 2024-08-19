@@ -12,7 +12,8 @@ export class SpecificBonuses {
      * @param {keyof SystemItemData['flags']} [bonus.type]
      * @param {Nullable<string>?} [bonus.parent]
      * @param  {...string} extraKeys
-     */
+    */
+    // * @param {'boolean'} bonus.type
     static registerSpecificBonus({ journal, label = null, key, type = 'dictionary', tooltip = undefined, parent }, ...extraKeys) {
         this.allBonuses[key] = new SpecificBonus(extraKeys, journal, key, label, parent, tooltip, type);
     }

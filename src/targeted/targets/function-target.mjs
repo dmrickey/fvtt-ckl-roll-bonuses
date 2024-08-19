@@ -85,7 +85,6 @@ export class FunctionTarget extends BaseTarget {
             }, {
                 canEdit: isEditable,
                 isFormula: false,
-                isModuleFlag: true,
             });
             textInput({
                 item,
@@ -96,7 +95,6 @@ export class FunctionTarget extends BaseTarget {
             }, {
                 canEdit: isEditable,
                 isFormula: false,
-                isModuleFlag: true,
             });
         }
         else {

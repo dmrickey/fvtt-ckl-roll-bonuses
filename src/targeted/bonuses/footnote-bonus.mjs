@@ -86,7 +86,6 @@ export class FootnoteBonus extends BaseBonus {
         }, {
             canEdit: isEditable,
             isFormula: false,
-            isModuleFlag: true,
         });
     }
 }
