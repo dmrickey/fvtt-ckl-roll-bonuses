@@ -13,7 +13,7 @@ const dcAllKey = 'genericSpellDC';
 const dcSchoolKey = 'school-dc';
 const dcSchoolFormulaKey = 'school-dc-formula';
 
-const toDictionary = [
+const dictionaryToModuleFlag = [
     ['spellFocus', 'spell-focus'],
     ['greaterSpellFocus', 'greater-spell-focus'],
     ['mythicSpellFocus', 'mythic-spell-focus'],
@@ -24,6 +24,8 @@ const toDictionary = [
     ['racial-weapon-focus'],
 
     ['spell-specialization'],
+
+    ['martial-focus'],
 ];
 
 // TODO don't forget this
@@ -112,7 +114,7 @@ export const migrateItem = async (item) => {
         boolean[newKey] = true;
     }
 
-    toDictionary.forEach(([key, newKey]) => migrateDflag(key, newKey));
+    dictionaryToModuleFlag.forEach(([key, newKey]) => migrateDflag(key, newKey));
 
     if (isNotEmptyObject(dictionary)) {
         /** @type {Partial<ItemPF>} */

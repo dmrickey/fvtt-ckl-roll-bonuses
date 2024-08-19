@@ -259,6 +259,13 @@
 - Look into Versatile Performance multi select
 - Look into migrating all legacy things into module flags
 - Add checkbox overrides for global settings (see Advanced Templates update)
+- Specific bonuses
+  - See if I actually need to register those in "Ready"
+  - look into setting up the `prepareData` -> push me onto the cached list in there instead of in every individual bonus
+- Add "target-able overrides" section to the configuration popup for Items that can have actions but don't have the necessary data
+  - Weapon Group
+  - Weapon Base Type
+  - Finesse
 - Remove legacy documentation for
   - all spell cl
   - all spell dc
@@ -277,12 +284,16 @@
   - Spell Specialization
     - update to say it includes id/uuid in addtion to Spell Name
 - Verify
-  - Spell Focus
+  - Spell Focus (base, greater, mythic)
     - that it works as module flags
     - migration
-  - Weapon Focus
+  - Weapon Focus (base, greater, mythic, racial)
     - that it works as module flags
     - migration
   - Spell Specialization
     - that it works as module flags
     - migration
+  - Martial Focus
+    - that it works as module flags
+    - migration
+- Update Auto-recognition stuff in "renderItemSheet" to use the same logic as martial-focus.mjs

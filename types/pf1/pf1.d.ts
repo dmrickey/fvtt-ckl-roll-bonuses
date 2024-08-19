@@ -59,6 +59,10 @@ declare global {
     }
 
     class ActorPF extends ActorBasePF {
+        hasWeaponProficiency(
+            item: ItemWeaponPF | ItemAttackPF,
+            { override = true } = {}
+        ): boolean;
         allSkills: Array<keyof typeof pf1.config.skills>;
         itemTypes: {
             attack: ItemAttackPF[];
@@ -87,6 +91,7 @@ declare global {
             [mythicWeaponFocusKey]?: ItemPF[];
             [racialWeaponFocusKey]?: ItemPF[];
             ['spell-specialization']?: ItemPF[];
+            ['martial-focus']?: ItemPF[];
             [key: string]: number | string | object | array;
         };
 
@@ -953,7 +958,7 @@ declare global {
         enh: number;
         // links: { children: { name: string; id: string }[] };
         masterwork: boolean;
-        weaponGroups: TraitSelector<keyof WeaponGroups>?;
+        weaponGroups: TraitSelector<keyof WeaponGroups>;
     }
     class SystemIteMDataBuffPF extends SystemItemData {}
     class SystemItemDataEquipmentPF extends SystemItemData {

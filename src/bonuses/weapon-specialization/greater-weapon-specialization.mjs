@@ -32,8 +32,7 @@ registerItemHint((hintcls, actor, item, _data) => {
     if (!(item instanceof pf1.documents.item.ItemWeaponPF || item instanceof pf1.documents.item.ItemAttackPF)) {
         return;
     }
-
-    if (item instanceof pf1.documents.item.ItemWeaponPF && !item.system.proficient) {
+    if (!actor?.hasWeaponProficiency(item)) {
         return;
     }
 

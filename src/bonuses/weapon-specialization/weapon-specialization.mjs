@@ -43,7 +43,7 @@ registerItemHint((hintcls, actor, item, _data) => {
         return;
     }
 
-    if (item instanceof pf1.documents.item.ItemWeaponPF && !item.system.proficient) {
+    if (!actor?.hasWeaponProficiency(item)) {
         return;
     }
 

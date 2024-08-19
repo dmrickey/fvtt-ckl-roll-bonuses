@@ -32,20 +32,6 @@ class Settings {
 }
 
 /**
- * @param {ActorPF} actor
- * @param {ItemPF} item
- * @returns {boolean}
- */
-const isItemFocused = (actor, item) => {
-    const tags = (item.system.tags || []).map((tag) => tag.toLocaleLowerCase());
-    const values = (actor[MODULE_NAME][key] || [])
-        .map(x => x.getFlag(MODULE_NAME, key))
-        .filter(truthiness)
-        .map(x => x.toLocaleLowerCase());
-    return intersects(tags, values);
-}
-
-/**
  * @param {ItemPF} item
  * @param {RollData} _rollData
  */
@@ -58,6 +44,20 @@ function prepareData(item, _rollData) {
     }
 }
 LocalHookHandler.registerHandler(localHooks.prepareData, prepareData);
+
+/**
+ * @param {ActorPF} actor
+ * @param {ItemPF} item
+ * @returns {boolean}
+ */
+const isItemFocused = (actor, item) => {
+    const tags = (item.system.tags || []).map((tag) => tag.toLocaleLowerCase());
+    const values = (actor[MODULE_NAME][key] || [])
+        .map(x => x.getFlag(MODULE_NAME, key))
+        .filter(truthiness)
+        .map(x => x.toLocaleLowerCase());
+    return intersects(tags, values);
+}
 
 // register hint on source
 registerItemHint((hintcls, _actor, item, _data) => {
@@ -126,10 +126,15 @@ Hooks.on('renderItemSheet', (
 
     const name = item?.name?.toLowerCase() ?? '';
     const sourceId = item?.flags.core?.sourceId ?? '';
-    const isRacial = item.hasItemBooleanFlag(key)
+    const hasKey = item.hasItemBooleanFlag(key);
+    const isRacial = hasKey
         || sourceId.includes(gnomeWeaponFocusId)
         || name.includes(Settings.defaultRace);
     if (!isRacial) return;
+
+    if (!hasKey) {
+        item.addItemBooleanFlag(key);
+    }
 
     const current = item.getFlag(MODULE_NAME, key);
     if (!current) {
