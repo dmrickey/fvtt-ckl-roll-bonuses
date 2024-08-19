@@ -1,16 +1,16 @@
 // armor focus - https://www.d20pfsrd.com/feats/combat-feats/armor-focus-combat/
 // - AC for chosen armor type is increased by one.
 
-import { armorFocusKey as key } from "./ids.mjs";
+import { getFocusedArmor, getImprovedFocusedArmor, improvedArmorFocusKey, armorFocusKey as key } from "./shared.mjs";
 import { intersects } from "../../util/array-intersects.mjs";
-import { KeyedDFlagHelper } from "../../util/flag-helpers.mjs";
 import { localize, localizeBonusLabel } from "../../util/localize.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { LanguageSettings } from "../../util/settings.mjs";
 import { uniqueArray } from "../../util/unique-array.mjs";
 import { stringSelect } from "../../handlebars-handlers/bonus-inputs/string-select.mjs";
-import { improvedArmorFocusKey } from './improved-armor-focus.mjs';
 import { SpecificBonuses } from '../all-specific-bonuses.mjs';
+import { MODULE_NAME } from '../../consts.mjs';
+import { LocalHookHandler, localHooks } from '../../util/hooks.mjs';
 
 const compendiumId = 'zBrrZynIB0EXagds';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#armor-focus';
@@ -24,6 +24,20 @@ class Settings {
         LanguageSettings.registerItemNameTranslation(key);
     }
 }
+
+/**
+ * @param {ItemPF} item
+ * @param {RollData} _rollData
+ */
+function prepareData(item, _rollData) {
+    if (!item?.actor || !item.isActive) return;
+
+    if (item.hasItemBooleanFlag(key)) {
+        item.actor[MODULE_NAME][key] ||= [];
+        item.actor[MODULE_NAME][key].push(item);
+    }
+}
+LocalHookHandler.registerHandler(localHooks.prepareData, prepareData);
 
 // register hint on source feat
 registerItemHint((hintcls, _actor, item, _data) => {
@@ -41,9 +55,8 @@ registerItemHint((hintcls, actor, item, _data) => {
     const baseTypes = item.system.baseTypes;
     if (!baseTypes?.length) return;
 
-    const helper = new KeyedDFlagHelper(actor, {}, key, improvedArmorFocusKey);
-    const armorFocuses = helper.valuesForFlag(key);
-    const improvedFocuses = helper.valuesForFlag(improvedArmorFocusKey);
+    const armorFocuses = getFocusedArmor(actor);
+    const improvedFocuses = getImprovedFocusedArmor(actor);
     const isFocused = intersects(armorFocuses, baseTypes);
     const isImprovedFocus = intersects(improvedFocuses, baseTypes);
 
@@ -74,9 +87,8 @@ function handleArmorFocusRollData(doc, rollData) {
     const baseTypes = armor.system.baseTypes;
     if (!baseTypes?.length) return;
 
-    const armorFocuses = new KeyedDFlagHelper(actor, {}, key).valuesForFlag(key);
+    const armorFocuses = getFocusedArmor(actor);
     const isFocused = intersects(armorFocuses, baseTypes);
-
     if (isFocused) {
         rollData.item.armor.value += 1;
     }
@@ -88,12 +100,13 @@ Hooks.on('pf1AddDefaultChanges', handleArmorFocusChange);
  * @param {ItemChange[]} tempChanges
  */
 function handleArmorFocusChange(actor, tempChanges) {
-    const armorFocuses = new KeyedDFlagHelper(actor, {}, key).valuesForFlag(key);
+    const armorFocuses = getFocusedArmor(actor);
     if (!armorFocuses.length) return;
 
     const armor = actor.items.find(
         /** @returns {item is ItemEquipmentPF} */
-        (item) => item instanceof pf1.documents.item.ItemEquipmentPF && item.isActive && item.system.slot === 'armor');
+        (item) => item instanceof pf1.documents.item.ItemEquipmentPF && item.isActive && item.system.slot === 'armor'
+    );
     if (!armor) return;
     const baseTypes = armor.system.baseTypes;
     if (!baseTypes?.length) return;
@@ -121,8 +134,16 @@ Hooks.on('renderItemSheet', (
 
     const name = item?.name?.toLowerCase() ?? '';
     const sourceId = item?.flags.core?.sourceId ?? '';
-    if (!(name === Settings.armorFocus || item.system.flags.dictionary[key] !== undefined || sourceId.includes(compendiumId))) {
+    if (!(
+        item.hasItemBooleanFlag(key)
+        || name === Settings.armorFocus
+        || sourceId.includes(compendiumId)
+    )) {
         return;
+    }
+
+    if (!item.hasItemBooleanFlag(key)) {
+        item.addItemBooleanFlag(key);
     }
 
     const choices = isEditable && actor
@@ -143,5 +164,6 @@ Hooks.on('renderItemSheet', (
         parent: html
     }, {
         canEdit: isEditable,
+        isModuleFlag: true,
     });
 });

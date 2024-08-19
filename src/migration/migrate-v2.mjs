@@ -33,6 +33,9 @@ const dictionaryToModuleFlag = [
 
     ['martial-focus'],
 
+    ['armor-focus'],
+    ['improved-armor-focus', 'armor-focus-improved'],
+
     ['weapon-specialization'],
     ['greater-weapon-specialization', 'weapon-specialization-greater']
 ];

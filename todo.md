@@ -266,49 +266,38 @@
   - Weapon Group
   - Weapon Base Type
   - Finesse
-- Remove legacy documentation for
-  - all spell cl
-  - all spell dc
-  - school spell cl
-  - school spell dc
 - Update documentation
   - Global Bonus incrmeent range penalty
     - "can skip via dialog"
   - Global Bonus require melee threaten
     - "can skip via dialog"
 - Create new "Roll Bonuses" section for attack dialog inputs
-- Documentation
-  - Spell Focus
-    - update keys for spellFocus to spell-focus-etc
-    - make sure it doesn't still say dictionary flag
-  - Elemental Focus
-    - update keys for spellFocus to elemental-focus-etc
-    - make sure it doesn't still say dictionary flag
-  - Weapon Focus
-    - update keys for spellFocus to weapon-focus-etc
-    - make sure it doesn't still say dictionary flag
-  - Martial Focus
-    - make sure it doesn't still say dictionary flag
-  - Spell Specialization
-    - make sure it doesn't still say dictionary flag
-    - update to say it includes id/uuid in addtion to Spell Name
-- Verify
-  - Spell Focus (base, greater, mythic)
-    - that it works as module flags
-    - migration
-  - Elemental Focus (base, greater, mythic)
-    - that it works as module flags
-    - migration
-  - Weapon Focus (base, greater, mythic, racial)
-    - that it works as module flags
-    - migration
-  - Spell Specialization
-    - that it works as module flags
-    - migration
-  - Martial Focus
-    - that it works as module flags
-    - migration
-- Update Auto-recognition stuff in "renderItemSheet" to use the same logic as martial-focus.mjs
+- Handle Migration
+  - Documentation
+    - make sure keys match
+      - greater/improved/mythic/racial on end
+      - all are now kebab case
+    - make sure it doesn't say "dictionary flag"
+    - make sure that it works as a module flag
+    - that migration works
+      - Module flags are appropriately set
+      - dictionary flags are removed
+      - System change migration is migrating properly
+      - Verify language strings are properly updated
+  - For Each
+    - Armor Focus
+    - Elemental Focus
+    - Martial Focus
+    - Spell Focus
+    - Spell Specialization
+    - Weapon Focus
+    - Weapon Specialization
+- Remove legacy documentation for
+  - all spell cl
+  - all spell dc
+  - school spell cl
+  - school spell dc
+- Update Auto-recognition stuff in "renderItemSheet" to use the same logic as martial-focus.mjs for specific bonuses
 - register for "actor.rollCL" hook and add bonuses based on action in the message from the hook's messageId
 - Roll Bonuses d20 icon on sheet in RB header doesn't open journal
 - Add "Fortune configuration app" to help with configuring specific fortune abilities

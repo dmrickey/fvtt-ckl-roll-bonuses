@@ -1,27 +1,38 @@
 // improved armor focus - https://www.d20pfsrd.com/feats/combat-feats/improved-armor-focus-combat/
 // - ACP for chosen armor is decreased by one.
 
+import { MODULE_NAME } from '../../consts.mjs';
 import { stringSelect } from "../../handlebars-handlers/bonus-inputs/string-select.mjs";
 import { intersects } from "../../util/array-intersects.mjs";
-import { KeyedDFlagHelper, getDocDFlags } from "../../util/flag-helpers.mjs";
+import { LocalHookHandler, localHooks } from '../../util/hooks.mjs';
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localizeBonusLabel } from "../../util/localize.mjs";
 import { LanguageSettings } from '../../util/settings.mjs';
-import { uniqueArray } from '../../util/unique-array.mjs';
 import { SpecificBonuses } from '../all-specific-bonuses.mjs';
-import { armorFocusKey } from "./ids.mjs";
+import { armorFocusKey, getFocusedArmor, getImprovedFocusedArmor, improvedArmorFocusKey as key } from './shared.mjs';
 
-const key = 'improved-armor-focus';
 const compendiumId = 'WmEE6BOuP5Uh7pEE';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#armor-focus';
 
-export { key as improvedArmorFocusKey };
-
 Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ journal, key, parent: armorFocusKey }));
+
+/**
+ * @param {ItemPF} item
+ * @param {RollData} _rollData
+ */
+function prepareData(item, _rollData) {
+    if (!item?.actor || !item.isActive) return;
+
+    if (item.hasItemBooleanFlag(key)) {
+        item.actor[MODULE_NAME][key] ||= [];
+        item.actor[MODULE_NAME][key].push(item);
+    }
+}
+LocalHookHandler.registerHandler(localHooks.prepareData, prepareData);
 
 // register hint on source feat
 registerItemHint((hintcls, _actor, item, _data) => {
-    const current = item.getItemDictionaryFlag(key);
+    const current = item.getFlag(MODULE_NAME, key);
     if (current) {
         return hintcls.create(`${current}`, [], {});
     }
@@ -39,14 +50,14 @@ function handleArmorFocusRollData(doc, rollData) {
 
     const armor = actor.items.find(
         /** @returns {item is ItemEquipmentPF} */
-        (item) => item instanceof pf1.documents.item.ItemEquipmentPF && item.isActive && item.system.slot === 'armor');
+        (item) => item instanceof pf1.documents.item.ItemEquipmentPF && item.isActive && item.system.slot === 'armor'
+    );
     if (!armor) return;
     const baseTypes = armor.system.baseTypes;
     if (!baseTypes?.length) return;
 
-    const armorFocuses = new KeyedDFlagHelper(actor, {}, key).valuesForFlag(key);
+    const armorFocuses = getImprovedFocusedArmor(actor);
     const isFocused = intersects(armorFocuses, baseTypes);
-
     if (isFocused) {
         const current = rollData.item.armor.acp || 0;
         rollData.item.armor.acp = Math.max(current - 1, 0);
@@ -59,7 +70,7 @@ Hooks.on('pf1GetRollData', handleArmorFocusRollData);
  * @param {ItemChange[]} tempChanges
  */
 function handleArmorFocusChange(actor, tempChanges) {
-    const armorFocuses = new KeyedDFlagHelper(actor, {}, key).valuesForFlag(key);
+    const armorFocuses = getImprovedFocusedArmor(actor);
     if (!armorFocuses.length) return;
 
     const armor =
@@ -96,15 +107,19 @@ Hooks.on('renderItemSheet', (
 
     const name = item?.name?.toLowerCase() ?? '';
     const sourceId = item?.flags.core?.sourceId ?? '';
-    if (!((name.includes(LanguageSettings.getTranslation(armorFocusKey)) && name.includes(LanguageSettings.improved))
-        || item.system.flags.dictionary[key] !== undefined
-        || sourceId.includes(compendiumId))
-    ) {
+    if (!(item.hasItemBooleanFlag(key)
+        || (name.includes(LanguageSettings.getTranslation(armorFocusKey)) && name.includes(LanguageSettings.improved))
+        || sourceId.includes(compendiumId)
+    )) {
         return;
     }
 
-    const choices = isEditable
-        ? uniqueArray(getDocDFlags(actor, armorFocusKey).map(x => `${x}`))
+    if (!item.hasItemBooleanFlag(key)) {
+        item.addItemBooleanFlag(key);
+    }
+
+    const choices = (isEditable && actor)
+        ? getFocusedArmor(actor)
         : [];
 
     stringSelect({
@@ -114,6 +129,7 @@ Hooks.on('renderItemSheet', (
         key,
         parent: html
     }, {
-        canEdit: isEditable
+        canEdit: isEditable,
+        isModuleFlag: true,
     });
 });

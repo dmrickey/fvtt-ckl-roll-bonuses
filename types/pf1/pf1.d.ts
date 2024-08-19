@@ -1,4 +1,8 @@
 import {
+    armorFocusKey,
+    improvedArmorFocusKey,
+} from '../../src/bonuses/armor-focus/shared.mjs';
+import {
     elementalFocusKey,
     greaterElementalFocusKey,
     mythicElementalFocusKey,
@@ -109,6 +113,8 @@ declare global {
             [mythicElementalFocusKey]?: ItemPF[];
             [weaponSpecializationKey]?: ItemPF[];
             [greaterWeaponSpecializationKey]?: ItemPF[];
+            [armorFocusKey]?: ItemPF[];
+            [improvedArmorFocusKey]?: ItemPF[];
             [key: string]: number | string | object | array;
         };
 
