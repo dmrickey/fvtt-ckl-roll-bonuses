@@ -214,7 +214,6 @@ Hooks.on('renderItemSheet', (
         parent: html
     }, {
         canEdit: isEditable,
-        isModuleFlag: true,
     });
     showChecklist({
         description: localize('versatile-training.description'),

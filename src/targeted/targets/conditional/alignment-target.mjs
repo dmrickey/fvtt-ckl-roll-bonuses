@@ -134,7 +134,6 @@ export class AlignmentTarget extends BaseTarget {
             tooltip: this.tooltip,
         }, {
             canEdit: isEditable,
-            isModuleFlag: true
         });
     }
 }

@@ -122,7 +122,6 @@ export class ConditionTarget extends BaseTarget {
             tooltip: this.tooltip,
         }, {
             canEdit: isEditable,
-            isModuleFlag: true
         });
 
         keyValueSelect({
@@ -134,7 +133,6 @@ export class ConditionTarget extends BaseTarget {
             tooltip: this.tooltip,
         }, {
             canEdit: isEditable,
-            isModuleFlag: true
         });
     }
 }

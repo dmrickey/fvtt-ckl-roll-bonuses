@@ -3,6 +3,7 @@ import { log } from './migration-log.mjs';
 import { MODULE_NAME } from '../consts.mjs';
 import { isNotEmptyObject } from '../util/is-empty-object.mjs';
 
+/** BEGIN to system changes */
 const clAllKey = 'all-spell-cl';
 
 const clSchoolKey = 'schoolClOffset';
@@ -12,6 +13,7 @@ const dcAllKey = 'genericSpellDC';
 
 const dcSchoolKey = 'school-dc';
 const dcSchoolFormulaKey = 'school-dc-formula';
+/** END to system changes */
 
 const dictionaryToModuleFlag = [
     ['spellFocus', 'spell-focus'],
@@ -34,7 +36,7 @@ const languageKeyMigration = [
 ]
 
 export const migrateLanguageSetting = async () => {
-
+    // TODO don't forget to fill this in
 };
 
 /** @param {ItemPF} item */

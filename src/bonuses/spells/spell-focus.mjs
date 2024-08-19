@@ -6,6 +6,7 @@ import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize, localizeBonusLabel } from "../../util/localize.mjs";
 import { LanguageSettings } from "../../util/settings.mjs";
 import { signed } from "../../util/to-signed-string.mjs";
+import { truthiness } from '../../util/truthiness.mjs';
 import { uniqueArray } from '../../util/unique-array.mjs';
 import { SpecificBonuses } from '../all-specific-bonuses.mjs';
 
@@ -44,6 +45,7 @@ export const getFocusedSchools = (actor, key = spellFocusKey) =>
     uniqueArray(actor[MODULE_NAME][key]?.
         filter(x => x.hasItemBooleanFlag(key))
         .flatMap(x => x.getFlag(MODULE_NAME, key))
+        .filter(truthiness)
         ?? []
     );
 
@@ -211,11 +213,11 @@ Hooks.on('renderItemSheet', (
         key = spellFocusKey;
     }
 
-    const isGreater = (item.hasItemBooleanFlag(greaterSpellFocusKey)
-        || name.includes(Settings.spellFocus) && name.includes(LanguageSettings.greater))
+    const isGreater = item.hasItemBooleanFlag(greaterSpellFocusKey) ||
+        (name.includes(Settings.spellFocus) && name.includes(LanguageSettings.greater))
         || sourceId.includes(greaterSpellFocusId);
-    const isMythic = (item.hasItemBooleanFlag(mythicSpellFocusKey)
-        || name.includes(Settings.spellFocus) && name.includes(LanguageSettings.mythic))
+    const isMythic = item.hasItemBooleanFlag(mythicSpellFocusKey)
+        || (name.includes(Settings.spellFocus) && name.includes(LanguageSettings.mythic))
         || sourceId.includes(mythicSpellFocusId);
 
     if (isGreater || isMythic) {
@@ -252,6 +254,5 @@ Hooks.on('renderItemSheet', (
         parent: html
     }, {
         canEdit: isEditable,
-        isModuleFlag: true,
     });
 });
