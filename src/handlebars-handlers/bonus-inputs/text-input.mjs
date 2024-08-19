@@ -30,7 +30,7 @@ export function textInput({
 }, {
     canEdit,
     isFormula = true,
-    isModuleFlag = false,
+    isModuleFlag = true,
     placeholder = '',
 }) {
     current ||= isModuleFlag

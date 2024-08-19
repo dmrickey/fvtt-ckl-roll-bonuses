@@ -5,6 +5,8 @@ import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize, localizeBonusLabel } from "../../util/localize.mjs";
 import { signed } from "../../util/to-signed-string.mjs";
 
+// TODO delete me
+
 // todo refactor 'all-spell-dc'
 const key = 'genericSpellDC'
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#*modify-spell-dc-(all-spells,-specific-school,-or-specific-eleme';
@@ -81,5 +83,6 @@ Hooks.on('renderItemSheet', (
         parent: html,
     }, {
         canEdit: isEditable,
+        isModuleFlag: false,
     });
 });

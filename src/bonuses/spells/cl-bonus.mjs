@@ -5,6 +5,8 @@ import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize } from "../../util/localize.mjs";
 import { signed } from "../../util/to-signed-string.mjs";
 
+// TODO delete me
+
 const key = 'all-spell-cl'
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#*modify-spell-caster-level-(all-spells,-specific-school,-or-spec';
 
@@ -79,5 +81,6 @@ Hooks.on('renderItemSheet', (
         parent: html,
     }, {
         canEdit: isEditable,
+        isModuleFlag: false,
     });
 });
