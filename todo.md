@@ -286,6 +286,7 @@
       - Verify language strings are properly updated
   - For Each
     - Armor Focus
+    - Elemental CL/DC
     - Elemental Focus
     - Martial Focus
     - Spell Focus
