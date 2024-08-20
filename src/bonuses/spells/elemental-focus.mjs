@@ -225,7 +225,7 @@ Hooks.on('renderItemSheet', (
         if (actor) {
             elements = {};
             // @ts-ignore
-            const /** @type {string[]}*/ existingElementalFocuses = getDocDFlags(actor, elementalFocusKey, { includeInactive: false });
+            const existingElementalFocuses = getFocusedElements(actor, elementalFocusKey);
             existingElementalFocuses.forEach((focus) => {
                 elements[focus] = pf1.registry.damageTypes.get(focus);
             });
