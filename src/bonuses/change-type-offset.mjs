@@ -43,7 +43,7 @@ function patchChangeValue(value, itemChange) {
 
     const offset = (actor[MODULE_NAME]?.[key] ?? [])
         .filter((x) => x.getFlag(MODULE_NAME, key) === itemChange.type)
-        .reduce((acc, item) => FormulaCacheHelper.getModuleFlagValue(item, formulaKey), 0);
+        .reduce((acc, item) => acc + FormulaCacheHelper.getModuleFlagValue(item, formulaKey), 0);
     if (offset) {
         value = isNaN(+value) ? `${value} + ${offset}` : (+value + offset);
     }

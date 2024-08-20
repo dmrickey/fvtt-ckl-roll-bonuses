@@ -2,6 +2,7 @@ import { addNodeToRollBonus } from "../add-bonus-to-item-sheet.mjs";
 import { api } from '../../util/api.mjs';
 import { createTemplate, templates } from "../templates.mjs";
 import { localize, localizeBonusLabel, localizeBonusTooltip } from "../../util/localize.mjs";
+import { MODULE_NAME } from '../../consts.mjs';
 
 /**
  * @param {object} args
@@ -14,6 +15,7 @@ import { localize, localizeBonusLabel, localizeBonusTooltip } from "../../util/l
  * @param {string} [args.tooltip]
  * @param {object} options
  * @param {boolean} options.canEdit
+ * @param {boolean} [options.isModuleFlag]
  */
 export function textInputAndKeyValueSelect({
     item,
@@ -25,13 +27,16 @@ export function textInputAndKeyValueSelect({
     tooltip = '',
 }, {
     canEdit,
+    isModuleFlag = false,
 }) {
     label ||= localizeBonusLabel(select.key);
     tooltip ||= localizeBonusTooltip(select.key);
 
     if (canEdit) {
         if ((!select.current && select.choices.length) || (select.choices.length === 1 && select.current !== select.choices[0].key)) {
-            item.setItemDictionaryFlag(select.key, select.choices[0].key);
+            isModuleFlag
+                ? item.setFlag(MODULE_NAME, select.key, select.choices[0].key)
+                : item.setItemDictionaryFlag(select.key, select.choices[0].key);
         }
     }
 
@@ -57,7 +62,9 @@ export function textInputAndKeyValueSelect({
         async (event) => {
             // @ts-ignore - event.target is HTMLTextAreaElement
             const /** @type {HTMLTextAreaElement} */ target = event.target;
-            await item.setItemDictionaryFlag(text.key, target?.value);
+            isModuleFlag
+                ? await item.setFlag(MODULE_NAME, text.key, target?.value)
+                : await item.setItemDictionaryFlag(text.key, target?.value);
         },
     );
 
@@ -67,7 +74,9 @@ export function textInputAndKeyValueSelect({
         async (event) => {
             // @ts-ignore - event.target is HTMLTextAreaElement
             const /** @type {HTMLTextAreaElement} */ target = event.target;
-            await item.setItemDictionaryFlag(select.key, target?.value);
+            isModuleFlag
+                ? await item.setFlag(MODULE_NAME, select.key, target?.value)
+                : await item.setItemDictionaryFlag(select.key, target?.value);
         },
     );
 

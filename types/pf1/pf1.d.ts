@@ -33,7 +33,11 @@ declare global {
     abstract class BaseDocument extends Document {
         getRollData(): RollData;
         getFlag(moduleName: string, key: string): any;
-        async setFlag<T>(moduleName: string, key: string, value: T);
+        async setFlag<T>(
+            moduleName: string,
+            key: string,
+            value: T
+        ): Promise<void>;
         async unsetFlag(moduleName: string, key: string): Promise<Document>;
         updateSource(changes: Record<string, any>, options?: object);
         uuid: string;
@@ -117,6 +121,8 @@ declare global {
             [armorFocusKey]?: ItemPF[];
             [improvedArmorFocusKey]?: ItemPF[];
             [changeTypeOffsetKey]?: ItemPF[];
+            ['elemental-cl']?: ItemPF[];
+            ['elemental-dc']?: ItemPF[];
             [key: string]: number | string | object | array;
         };
 
@@ -605,7 +611,7 @@ declare global {
          * @param key
          * @param value
          */
-        setItemDictionaryFlag(key: string, value: FlagValue);
+        setItemDictionaryFlag(key: string, value: FlagValue): Promise<void>;
 
         /**
          * @param key - THe key for the boolean flag
@@ -1002,6 +1008,7 @@ declare global {
         descriptors: {
             value: Array<keyof SpellDescriptors>;
             custom: string[];
+            total: string[];
         };
         school: keyof typeof pf1.config.spellSchools;
 
