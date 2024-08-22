@@ -9,7 +9,7 @@ export const improvedArmorFocusKey = 'armor-focus-improved';
  * @returns {string[]}
  */
 export const getFocusedArmor = (actor) =>
-    uniqueArray(actor?.[MODULE_NAME][armorFocusKey]?.
+    uniqueArray(actor[MODULE_NAME][armorFocusKey]?.
         filter(x => x.hasItemBooleanFlag(armorFocusKey))
         .flatMap(x => x.getFlag(MODULE_NAME, armorFocusKey))
         ?? []
@@ -20,7 +20,7 @@ export const getFocusedArmor = (actor) =>
  * @returns {string[]}
  */
 export const getImprovedFocusedArmor = (actor) =>
-    uniqueArray(actor?.[MODULE_NAME][improvedArmorFocusKey]?.
+    uniqueArray(actor[MODULE_NAME][improvedArmorFocusKey]?.
         filter(x => x.hasItemBooleanFlag(improvedArmorFocusKey))
         .flatMap(x => x.getFlag(MODULE_NAME, improvedArmorFocusKey))
         ?? []

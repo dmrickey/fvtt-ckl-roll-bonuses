@@ -16,6 +16,7 @@ export const localHooks = /** @type {const} */ ({
     actionUseProcess: `${MODULE_NAME}_actionUseProcess`,
     actorGetSkillInfo: `${MODULE_NAME}_actorGetSkillInfo`,
     actorRollSkill: `${MODULE_NAME}_actorRollSkill`,
+    cacheBonusTypeOnActor: `${MODULE_NAME}_cacheBonusTypeOnActor`,
     chatAttackAddAttack: `${MODULE_NAME}_chatAttackAddAttack`,
     chatAttackEffectNotes: `${MODULE_NAME}_chatAttackEffectNotes`,
     initItemActionRollData: `${MODULE_NAME}_initItemActionRollData`,
@@ -112,6 +113,13 @@ export class LocalHookHandler {
      * @overload
      * @param {typeof localHooks.patchChangeValue} hook
      * @param {(value: number | string, itemChange: ItemChange) => number | string} func
+     * @returns {void}
+     */
+
+    /**
+     * @overload
+     * @param {typeof localHooks.cacheBonusTypeOnActor} hook
+     * @param {(item: ItemPF) => void} func
      * @returns {void}
      */
 
@@ -280,6 +288,13 @@ export class LocalHookHandler {
      * @param {typeof localHooks.updateItemActionRollData} hook
      * @param {ItemAction} action
      * @param {RollData} rollData
+     * @returns {void}
+     */
+
+    /**
+     * @overload
+     * @param {typeof localHooks.cacheBonusTypeOnActor} hook
+     * @param {ItemPF} item
      * @returns {void}
      */
 

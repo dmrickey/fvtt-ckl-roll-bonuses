@@ -37,22 +37,20 @@ const getDocDFlags = (doc, key, { includeInactive = true } = {}) => {
  *
  * @param {BaseDocument | undefined | null} doc - Item or Actor
  * @param {string} key
- * @param {object} [options]
- * @param {boolean} [options.includeInactive]
  * @returns {any[]}
  */
-const getDocFlags = (doc, key, { includeInactive = false } = {}) => {
+const getDocFlags = (doc, key) => {
     // if doc is an actor
     if (doc instanceof pf1.documents.actor.ActorPF) {
         const flags = doc.items
-            .filter((item) => item.isActive || includeInactive)
+            .filter((item) => item.isActive)
             .map(i => i.getFlag(MODULE_NAME, key))
             .filter(truthiness);
         return flags;
     }
 
     // else read the flag off the item
-    if (doc instanceof pf1.documents.item.ItemPF && (doc.isActive || includeInactive)) {
+    if (doc instanceof pf1.documents.item.ItemPF && doc.isActive) {
         return [doc.getFlag(MODULE_NAME, key)].filter(truthiness);
     }
 

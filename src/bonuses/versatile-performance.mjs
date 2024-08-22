@@ -33,10 +33,8 @@ const expandedChoices = [
     'umd',
 ];
 
-Hooks.once('ready', () => {
-    SpecificBonuses.registerSpecificBonus({ journal, key });
-    SpecificBonuses.registerSpecificBonus({ journal, key: keyExpanded, parent: key });
-});
+SpecificBonuses.registerSpecificBonus({ journal, key });
+SpecificBonuses.registerSpecificBonus({ journal, key: keyExpanded, parent: key });
 
 class Settings {
     static get versatilePerformance() { return LanguageSettings.getTranslation(key); }
@@ -45,20 +43,6 @@ class Settings {
         LanguageSettings.registerItemNameTranslation(key);
     }
 }
-
-/**
- * @param {ItemPF} item
- * @param {RollData} _rollData
- */
-function prepareData(item, _rollData) {
-    if (!item?.actor || !item.isActive) return;
-
-    if (item.hasItemBooleanFlag(key)) {
-        item.actor[MODULE_NAME][key] ||= [];
-        item.actor[MODULE_NAME][key].push(item);
-    }
-}
-LocalHookHandler.registerHandler(localHooks.prepareData, prepareData);
 
 class VPData {
     /**
@@ -116,18 +100,14 @@ const disabledKey = (
 
 registerItemHint((hintcls, actor, item, _data) => {
     if (!(item instanceof pf1.documents.item.ItemFeatPF)) return;
-    const has = item.hasItemBooleanFlag(key);
-    if (!has) return;
 
+    const data = getVPDataFromItem(item);
+    if (!data) return;
 
-    const base = item.getFlag(MODULE_NAME, keyBase);
-    const substitutes = [
-        item.getFlag(MODULE_NAME, keyChoice1),
-        item.getFlag(MODULE_NAME, keyChoice2),
-        item.getFlag(MODULE_NAME, keyExpanded),
-    ].filter(truthiness);
+    const substitutes = [data.skill1Id, data.skill2Id, data.expandedId]
+        .filter(truthiness);
 
-    const baseName = getSkillName(actor, base);
+    const baseName = getSkillName(actor, data.baseId);
     const skills = substitutes.map((id) => getSkillName(actor, id)).join(', ');
     const hint = hintcls.create(localize('versatilePerformance.hint', { base: baseName, skills }), [], {});
     const hints = [hint];
@@ -366,7 +346,7 @@ Hooks.on('renderItemSheet', (
         }
 
         if (performs.length && !base) {
-            item.setItemDictionaryFlag(key, `${performs[0].id}`);
+            item.setFlag(MODULE_NAME, key, `${performs[0].id}`);
         }
     }
 
@@ -384,15 +364,6 @@ Hooks.on('renderItemSheet', (
 
     const div = createTemplate(templates.versatilePerformance, templateData);
 
-    const updateVP = async () => {
-        // @ts-ignore
-        const b = document.querySelector('#vp-base-selector')?.value;
-        // @ts-ignore
-        const s1 = document.querySelector('#vp-skill1-selector')?.value;
-        // @ts-ignore
-        const s2 = document.querySelector('#vp-skill2-selector')?.value;
-        await item.setItemDictionaryFlag(key, `${b};${s1};${s2}`);
-    };
     const updateBase = async () => {
         // @ts-ignore
         const value = document.querySelector('#vp-base-selector')?.value;

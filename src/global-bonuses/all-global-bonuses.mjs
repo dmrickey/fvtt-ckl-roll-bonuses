@@ -12,6 +12,8 @@ export class GlobalBonuses {
     static registerBonus(bonus) {
         GlobalBonuses.allBonuses.push(bonus);
         GlobalBonusSettings.registerKey(bonus);
+
+        // settings are ready after `i18nInit` hook
         Hooks.once('i18nInit', () => {
             if (GlobalBonusSettings.setting(bonus.key)) {
                 bonus.registerBonuses();

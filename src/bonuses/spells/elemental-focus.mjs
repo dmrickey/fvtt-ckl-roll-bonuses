@@ -22,11 +22,9 @@ const mythicElementalFocusId = 'yelJyBhjWtiIMgci';
 
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#elemental-focus';
 
-Hooks.once('ready', () => {
-    SpecificBonuses.registerSpecificBonus({ journal, key: elementalFocusKey });
-    SpecificBonuses.registerSpecificBonus({ journal, key: greaterElementalFocusKey, parent: elementalFocusKey });
-    SpecificBonuses.registerSpecificBonus({ journal, key: mythicElementalFocusKey, parent: elementalFocusKey });
-});
+SpecificBonuses.registerSpecificBonus({ journal, key: elementalFocusKey });
+SpecificBonuses.registerSpecificBonus({ journal, key: greaterElementalFocusKey, parent: elementalFocusKey });
+SpecificBonuses.registerSpecificBonus({ journal, key: mythicElementalFocusKey, parent: elementalFocusKey });
 
 const icons = {
     acid: { icon: 'ra ra-droplet', css: 'ckl-acid-green' },

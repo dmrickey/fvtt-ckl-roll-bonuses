@@ -22,11 +22,9 @@ const mythicSpellFocusId = 'TOMEhAeZsgGHrSH6';
 
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#spell-focus';
 
-Hooks.once('ready', () => {
-    SpecificBonuses.registerSpecificBonus({ journal, key: spellFocusKey });
-    SpecificBonuses.registerSpecificBonus({ journal, key: greaterSpellFocusKey, parent: spellFocusKey });
-    SpecificBonuses.registerSpecificBonus({ journal, key: mythicSpellFocusKey, parent: spellFocusKey });
-});
+SpecificBonuses.registerSpecificBonus({ journal, key: spellFocusKey });
+SpecificBonuses.registerSpecificBonus({ journal, key: greaterSpellFocusKey, parent: spellFocusKey });
+SpecificBonuses.registerSpecificBonus({ journal, key: mythicSpellFocusKey, parent: spellFocusKey });
 
 class Settings {
     static get spellFocus() { return LanguageSettings.getTranslation(spellFocusKey); }
@@ -48,28 +46,6 @@ export const getFocusedSchools = (actor, key = spellFocusKey) =>
         .filter(truthiness)
         ?? []
     );
-
-/**
- * @param {ItemPF} item
- * @param {RollData} _rollData
- */
-function prepareSpellFocusData(item, _rollData) {
-    if (!item?.actor || !item.isActive) return;
-
-    if (item.hasItemBooleanFlag(spellFocusKey)) {
-        item.actor[MODULE_NAME][spellFocusKey] ||= [];
-        item.actor[MODULE_NAME][spellFocusKey].push(item);
-    }
-    if (item.hasItemBooleanFlag(greaterSpellFocusKey)) {
-        item.actor[MODULE_NAME][greaterSpellFocusKey] ||= [];
-        item.actor[MODULE_NAME][greaterSpellFocusKey].push(item);
-    }
-    if (item.hasItemBooleanFlag(mythicSpellFocusKey)) {
-        item.actor[MODULE_NAME][mythicSpellFocusKey] ||= [];
-        item.actor[MODULE_NAME][mythicSpellFocusKey].push(item);
-    }
-}
-LocalHookHandler.registerHandler(localHooks.prepareData, prepareSpellFocusData);
 
 // add Info to chat card
 Hooks.on(customGlobalHooks.itemGetTypeChatData, (

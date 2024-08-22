@@ -8,9 +8,7 @@ import { SpecificBonuses } from './all-specific-bonuses.mjs';
 const fatesFavored = 'fates-favored';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#fates-favored';
 
-Hooks.once('ready', () =>
-    SpecificBonuses.registerSpecificBonus({ journal, key: fatesFavored })
-);
+SpecificBonuses.registerSpecificBonus({ journal, key: fatesFavored });
 
 class Settings {
     static get fatesFavored() { return LanguageSettings.getTranslation(fatesFavored); }

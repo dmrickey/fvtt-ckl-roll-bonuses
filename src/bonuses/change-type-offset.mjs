@@ -14,21 +14,7 @@ const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalE
 
 FormulaCacheHelper.registerModuleFlag(formulaKey);
 
-Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ journal, key: key }));
-
-/**
- * @param {ItemPF} item
- * @param {RollData} _rollData
- */
-function prepareData(item, _rollData) {
-    if (!item?.actor || !item.isActive) return;
-
-    if (item.hasItemBooleanFlag(key)) {
-        item.actor[MODULE_NAME][key] ||= [];
-        item.actor[MODULE_NAME][key].push(item);
-    }
-}
-LocalHookHandler.registerHandler(localHooks.prepareData, prepareData);
+SpecificBonuses.registerSpecificBonus({ journal, key: key });
 
 /**
  * @param {number | string} value
@@ -41,7 +27,7 @@ function patchChangeValue(value, itemChange) {
         return value;
     }
 
-    const offset = (actor[MODULE_NAME]?.[key] ?? [])
+    const offset = (actor[MODULE_NAME][key] ?? [])
         .filter((x) => x.getFlag(MODULE_NAME, key) === itemChange.type)
         .reduce((acc, item) => acc + FormulaCacheHelper.getModuleFlagValue(item, formulaKey), 0);
     if (offset) {

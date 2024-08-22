@@ -5,7 +5,7 @@ import { MODULE_NAME } from '../consts.mjs';
 import { keyValueSelect } from "../handlebars-handlers/bonus-inputs/key-value-select.mjs";
 import { intersects } from "../util/array-intersects.mjs";
 import { createChangeForTooltip } from '../util/conditional-helpers.mjs';
-import { LocalHookHandler, customGlobalHooks, localHooks } from "../util/hooks.mjs";
+import { customGlobalHooks } from "../util/hooks.mjs";
 import { registerItemHint } from "../util/item-hints.mjs";
 import { localizeBonusLabel } from "../util/localize.mjs";
 import { LanguageSettings } from "../util/settings.mjs";
@@ -17,7 +17,7 @@ const key = 'martial-focus';
 const compendiumId = 'W1eDSqiwljxDe0zl';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#martial-focus';
 
-Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ journal, key }));
+SpecificBonuses.registerSpecificBonus({ journal, key });
 
 class Settings {
     static get martialFocus() { return LanguageSettings.getTranslation(key); }
@@ -26,20 +26,6 @@ class Settings {
         LanguageSettings.registerItemNameTranslation(key);
     }
 }
-
-/**
- * @param {ItemPF} item
- * @param {RollData} _rollData
- */
-function prepareData(item, _rollData) {
-    if (!item?.actor || !item.isActive) return;
-
-    if (item.hasItemBooleanFlag(key)) {
-        item.actor[MODULE_NAME][key] ||= [];
-        item.actor[MODULE_NAME][key].push(item);
-    }
-}
-LocalHookHandler.registerHandler(localHooks.prepareData, prepareData);
 
 /**
  * @param {ActorPF} actor

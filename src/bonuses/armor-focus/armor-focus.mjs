@@ -9,13 +9,11 @@ import { LanguageSettings } from "../../util/settings.mjs";
 import { uniqueArray } from "../../util/unique-array.mjs";
 import { stringSelect } from "../../handlebars-handlers/bonus-inputs/string-select.mjs";
 import { SpecificBonuses } from '../all-specific-bonuses.mjs';
-import { MODULE_NAME } from '../../consts.mjs';
-import { LocalHookHandler, localHooks } from '../../util/hooks.mjs';
 
 const compendiumId = 'zBrrZynIB0EXagds';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#armor-focus';
 
-Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ key, journal }));
+SpecificBonuses.registerSpecificBonus({ key, journal });
 
 class Settings {
     static get armorFocus() { return LanguageSettings.getTranslation(key); }
@@ -24,20 +22,6 @@ class Settings {
         LanguageSettings.registerItemNameTranslation(key);
     }
 }
-
-/**
- * @param {ItemPF} item
- * @param {RollData} _rollData
- */
-function prepareData(item, _rollData) {
-    if (!item?.actor || !item.isActive) return;
-
-    if (item.hasItemBooleanFlag(key)) {
-        item.actor[MODULE_NAME][key] ||= [];
-        item.actor[MODULE_NAME][key].push(item);
-    }
-}
-LocalHookHandler.registerHandler(localHooks.prepareData, prepareData);
 
 // register hint on source feat
 registerItemHint((hintcls, _actor, item, _data) => {

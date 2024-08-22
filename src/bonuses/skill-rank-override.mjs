@@ -1,5 +1,5 @@
 import { registerItemHint } from "../util/item-hints.mjs";
-import { localize, localizeBonusLabel, localizeBonusTooltip, localizeItemHint } from "../util/localize.mjs";
+import { localize, localizeItemHint } from "../util/localize.mjs";
 import { truthiness } from "../util/truthiness.mjs";
 import { SpecificBonuses } from './all-specific-bonuses.mjs';
 import { showChecklist } from '../handlebars-handlers/targeted/targets/checklist-input.mjs';
@@ -14,14 +14,14 @@ const formulaKey = 'skill-rank-override-formula';
 const selectedKey = 'skill-rank-override-selected';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#skill-rank-override';
 
-Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ journal, key }));
+SpecificBonuses.registerSpecificBonus({ journal, key });
 FormulaCacheHelper.registerModuleFlag(formulaKey);
 
 registerItemHint((hintcls, actor, item, _data) => {
     const hasOverride = item.hasItemBooleanFlag(key);
     if (!hasOverride) return;
 
-    const overrides = getDocFlags(item, selectedKey, { includeInactive: false })
+    const overrides = getDocFlags(item, selectedKey)
         .flatMap(x => x)
         .filter(truthiness);
 

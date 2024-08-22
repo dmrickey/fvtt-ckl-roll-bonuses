@@ -53,7 +53,7 @@ class Settings {
 })();
 
 registerItemHint((hintcls, actor, item, _data) => {
-    const selectedSkills = getDocFlags(item, selectedKey, { includeInactive: false })
+    const selectedSkills = getDocFlags(item, selectedKey)
         .flatMap(x => x)
         .filter(truthiness);
 
@@ -87,7 +87,7 @@ Hooks.on('renderActorSheetPF', (
     /** @type {{ find: (arg0: string) => { (): any; new (): any; each: { (arg0: { (_: any, element: HTMLElement): void; }): void; new (): any; }; }; }} */ html,
     /** @type {{ actor: ActorPF; }} */ { actor }
 ) => {
-    const selectedSkills = getDocFlags(actor, selectedKey, { includeInactive: false })
+    const selectedSkills = getDocFlags(actor, selectedKey)
         .flatMap(x => x)
         .filter(truthiness);
 
@@ -118,7 +118,7 @@ Hooks.on('renderActorSheetPF', (
  * @returns {void}
  */
 function versatileRollSkill(seed, actor) {
-    const selectedSkills = getDocFlags(actor, selectedKey, { includeInactive: false })
+    const selectedSkills = getDocFlags(actor, selectedKey)
         .flatMap(x => x)
         .filter(truthiness);
 
@@ -144,7 +144,7 @@ function versatileRollSkill(seed, actor) {
  * @param {RollData} rollData
  */
 function getSkillInfo(skillInfo, actor, rollData) {
-    const selectedSkills = getDocFlags(actor, selectedKey, { includeInactive: false })
+    const selectedSkills = getDocFlags(actor, selectedKey)
         .flatMap(x => x)
         .filter(truthiness);
     if (selectedSkills.includes(skillInfo.id)) {

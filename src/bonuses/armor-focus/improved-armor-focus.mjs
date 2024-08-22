@@ -4,7 +4,6 @@
 import { MODULE_NAME } from '../../consts.mjs';
 import { stringSelect } from "../../handlebars-handlers/bonus-inputs/string-select.mjs";
 import { intersects } from "../../util/array-intersects.mjs";
-import { LocalHookHandler, localHooks } from '../../util/hooks.mjs';
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localizeBonusLabel } from "../../util/localize.mjs";
 import { LanguageSettings } from '../../util/settings.mjs';
@@ -14,21 +13,7 @@ import { armorFocusKey, getFocusedArmor, getImprovedFocusedArmor, improvedArmorF
 const compendiumId = 'WmEE6BOuP5Uh7pEE';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#armor-focus';
 
-Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ journal, key, parent: armorFocusKey }));
-
-/**
- * @param {ItemPF} item
- * @param {RollData} _rollData
- */
-function prepareData(item, _rollData) {
-    if (!item?.actor || !item.isActive) return;
-
-    if (item.hasItemBooleanFlag(key)) {
-        item.actor[MODULE_NAME][key] ||= [];
-        item.actor[MODULE_NAME][key].push(item);
-    }
-}
-LocalHookHandler.registerHandler(localHooks.prepareData, prepareData);
+SpecificBonuses.registerSpecificBonus({ journal, key, parent: armorFocusKey });
 
 // register hint on source feat
 registerItemHint((hintcls, _actor, item, _data) => {

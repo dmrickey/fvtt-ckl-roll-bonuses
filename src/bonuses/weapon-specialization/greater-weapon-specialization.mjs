@@ -5,7 +5,7 @@ import { MODULE_NAME } from '../../consts.mjs';
 import { stringSelect } from "../../handlebars-handlers/bonus-inputs/string-select.mjs";
 import { intersection, intersects } from "../../util/array-intersects.mjs";
 import { createChangeForTooltip } from '../../util/conditional-helpers.mjs';
-import { LocalHookHandler, customGlobalHooks, localHooks } from "../../util/hooks.mjs";
+import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize, localizeBonusLabel } from "../../util/localize.mjs";
 import { SharedSettings, LanguageSettings } from '../../util/settings.mjs';
@@ -20,21 +20,7 @@ export { key as greaterWeaponSpecializationKey };
 const compendiumId = 'asmQDyDYTtuXg8b4';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#weapon-specialization';
 
-Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ journal, key, parent: weaponSpecializationKey }));
-
-/**
- * @param {ItemPF} item
- * @param {RollData} _rollData
- */
-function prepareData(item, _rollData) {
-    if (!item?.actor || !item.isActive) return;
-
-    if (item.hasItemBooleanFlag(key)) {
-        item.actor[MODULE_NAME][key] ||= [];
-        item.actor[MODULE_NAME][key].push(item);
-    }
-}
-LocalHookHandler.registerHandler(localHooks.prepareData, prepareData);
+SpecificBonuses.registerSpecificBonus({ journal, key, parent: weaponSpecializationKey });
 
 /**
  * @param { ActorPF } actor

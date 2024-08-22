@@ -1,7 +1,7 @@
 import { MODULE_NAME } from "../../consts.mjs";
 import { textInput } from "../../handlebars-handlers/bonus-inputs/text-input.mjs";
 import { intersects } from '../../util/array-intersects.mjs';
-import { LocalHookHandler, customGlobalHooks, localHooks } from "../../util/hooks.mjs";
+import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize, localizeBonusLabel } from "../../util/localize.mjs";
 import { registerSetting } from "../../util/settings.mjs";
@@ -12,12 +12,10 @@ import { gnomeWeaponFocusId, racialWeaponFocusKey, weaponFocusKey } from "./ids.
 const key = racialWeaponFocusKey;
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#weapon-focus';
 
-Hooks.once('ready', () =>
-    SpecificBonuses.registerSpecificBonus({ journal, key: racialWeaponFocusKey, parent: weaponFocusKey })
-);
+SpecificBonuses.registerSpecificBonus({ journal, key: racialWeaponFocusKey, parent: weaponFocusKey });
 
 class Settings {
-    static defaultRaceKey = 'racial-weapon-focus-default-race';
+    static defaultRaceKey = 'weapon-focus-racial-default-race';
 
     static get racialWeaponFocus() { return Settings.#getSetting(key); }
     static get defaultRace() { return Settings.#getSetting(this.defaultRaceKey); }
@@ -30,20 +28,6 @@ class Settings {
         registerSetting({ key: this.defaultRaceKey, scope: 'client' });
     }
 }
-
-/**
- * @param {ItemPF} item
- * @param {RollData} _rollData
- */
-function prepareData(item, _rollData) {
-    if (!item?.actor || !item.isActive) return;
-
-    if (item.hasItemBooleanFlag(key)) {
-        item.actor[MODULE_NAME][key] ||= [];
-        item.actor[MODULE_NAME][key].push(item);
-    }
-}
-LocalHookHandler.registerHandler(localHooks.prepareData, prepareData);
 
 /**
  * @param {ActorPF} actor

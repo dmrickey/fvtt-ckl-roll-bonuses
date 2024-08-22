@@ -1,7 +1,7 @@
 import { MODULE_NAME } from '../../consts.mjs';
 import { stringSelect } from "../../handlebars-handlers/bonus-inputs/string-select.mjs";
 import { intersects } from "../../util/array-intersects.mjs";
-import { LocalHookHandler, customGlobalHooks, localHooks } from "../../util/hooks.mjs";
+import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize, localizeBonusLabel } from "../../util/localize.mjs";
 import { SharedSettings, LanguageSettings } from "../../util/settings.mjs";
@@ -22,11 +22,9 @@ import {
 const allKeys = [weaponFocusKey, greaterWeaponFocusKey, mythicWeaponFocusKey];
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#weapon-focus';
 
-Hooks.once('ready', () => {
-    SpecificBonuses.registerSpecificBonus({ journal, key: weaponFocusKey });
-    SpecificBonuses.registerSpecificBonus({ journal, key: greaterWeaponFocusKey, parent: weaponFocusKey });
-    SpecificBonuses.registerSpecificBonus({ journal, key: mythicWeaponFocusKey, parent: weaponFocusKey });
-});
+SpecificBonuses.registerSpecificBonus({ journal, key: weaponFocusKey });
+SpecificBonuses.registerSpecificBonus({ journal, key: greaterWeaponFocusKey, parent: weaponFocusKey });
+SpecificBonuses.registerSpecificBonus({ journal, key: mythicWeaponFocusKey, parent: weaponFocusKey });
 
 class Settings {
     static get weaponFocus() { return LanguageSettings.getTranslation(weaponFocusKey); }
@@ -35,28 +33,6 @@ class Settings {
         LanguageSettings.registerItemNameTranslation(weaponFocusKey);
     }
 }
-
-/**
- * @param {ItemPF} item
- * @param {RollData} _rollData
- */
-function prepareWeaponFocusData(item, _rollData) {
-    if (!item?.actor || !item.isActive) return;
-
-    if (item.hasItemBooleanFlag(weaponFocusKey)) {
-        item.actor[MODULE_NAME][weaponFocusKey] ||= [];
-        item.actor[MODULE_NAME][weaponFocusKey].push(item);
-    }
-    if (item.hasItemBooleanFlag(greaterWeaponFocusKey)) {
-        item.actor[MODULE_NAME][greaterWeaponFocusKey] ||= [];
-        item.actor[MODULE_NAME][greaterWeaponFocusKey].push(item);
-    }
-    if (item.hasItemBooleanFlag(mythicWeaponFocusKey)) {
-        item.actor[MODULE_NAME][mythicWeaponFocusKey] ||= [];
-        item.actor[MODULE_NAME][mythicWeaponFocusKey].push(item);
-    }
-}
-LocalHookHandler.registerHandler(localHooks.prepareData, prepareWeaponFocusData);
 
 /**
  * @param { ActorPF } actor

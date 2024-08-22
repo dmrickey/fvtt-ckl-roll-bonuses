@@ -110,14 +110,28 @@ export const migrateVersatilePerformance = async (item) => {
 }
 
 // TODO don't forget this
-const languageKeyMigration = [
+const languageKeyMigrationKeys = [
     ['elementalFocus', 'elemental-focus'],
     ['spellFocus', 'spell-focus'],
-]
+    ['racial-weapon-focus', 'weapon-focus-racial'],
+    ['racial-weapon-focus-default-race', 'weapon-focus-racial-default-race'],
+];
+
+// TODO don't forget this
+const settingsMigrationKeys = [
+    ['elementalFocus', 'elemental-focus'],
+    ['spellFocus', 'spell-focus'],
+    ['racial-weapon-focus', 'weapon-focus-racial'],
+    ['racial-weapon-focus-default-race', 'weapon-focus-racial-default-race'],
+];
 
 export const migrateLanguageSetting = async () => {
     // TODO don't forget to fill this in
 };
+
+export const migrateSettings = async () => {
+    // TODO don't forget to fill this in
+}
 
 /** @param {ItemPF} item */
 export const migrateItem = async (item) => {
@@ -309,4 +323,5 @@ export const migrateV2 = async () => {
     await migratePacks();
     await migrateWorldActors();
     await migrateSyntheticActors();
+    await migrateSettings();
 };

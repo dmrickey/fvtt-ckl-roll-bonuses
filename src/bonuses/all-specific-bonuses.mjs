@@ -1,4 +1,6 @@
+import { MODULE_NAME } from '../consts.mjs';
 import { api } from '../util/api.mjs';
+import { LocalHookHandler, localHooks } from '../util/hooks.mjs';
 import { localizeBonusLabel, localizeBonusTooltip } from '../util/localize.mjs';
 
 export class SpecificBonuses {
@@ -24,6 +26,24 @@ export class SpecificBonuses {
         return Object.values(this.allBonuses)
             .map((bonus) => bonus.key);
     }
+
+    static {
+
+        /** * @param {ItemPF} item */
+        function cacheBonusTypeOnActor(item) {
+            if (!item?.actor?.[MODULE_NAME] || !item.isActive) return;
+
+            SpecificBonuses.allBonusKeys.forEach((key) => {
+                if (item.hasItemBooleanFlag(key)) {
+                    // @ts-ignore
+                    item.actor[MODULE_NAME][key] ||= [];
+                    // @ts-ignore
+                    item.actor[MODULE_NAME][key].push(item);
+                }
+            })
+        }
+        LocalHookHandler.registerHandler(localHooks.cacheBonusTypeOnActor, cacheBonusTypeOnActor);
+    }
 }
 
 api.SpecificBonuses = SpecificBonuses;
@@ -45,8 +65,15 @@ class SpecificBonus {
     ) {
         this.journal = journal;
         this.key = key;
-        this.label = label || localizeBonusLabel(key);
+        this._label = label;
         this.parent = parent;
-        this.tooltip = tooltip || localizeBonusTooltip(key);
+        this._tooltip = tooltip;
+    }
+
+    get label() {
+        return this._label || localizeBonusLabel(this.key);
+    }
+    get tooltip() {
+        return this._tooltip || localizeBonusTooltip(this.key);
     }
 }

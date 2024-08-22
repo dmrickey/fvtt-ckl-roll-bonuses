@@ -43,7 +43,6 @@
                 "elemental-focus-mythic": "Mythic Elemental Focus",
                 "enh": "Enhancement Bonus",
                 "enh-stacks": "Enhancement Bonus (Stacking)",
-                "expanded-versatile-performance": "Expanded Versatile Performance",
                 "fates-favored": "Fate's Favored",
                 "finesse-bonus": "Finesse (Bonus)",
                 "finesse-target": "Finesse (Target)",
@@ -85,6 +84,7 @@
                 "token": "Token Targets",
                 "token-invert": "Invert Token Targets",
                 "versatile-performance": "Versatile Performance",
+                "versatile-performance-expanded": "Expanded Versatile Performance",
                 "versatile-training": "Versatile Training - Weapon Group",
                 "versatile-training-selected": "Versatile Training - Selected Skills",
                 "weapon-focus": "Weapon Focus",
@@ -130,7 +130,6 @@
                 "elemental-focus-mythic": "Double Elemental Focus bonuses.",
                 "enh": "Modify an attack's or weapon's enhancement bonus.",
                 "enh-stacks": "Modify an attack or weapon's enhancement bonus.",
-                "expanded-versatile-performance": "Select a third skill to associate with the selected Perform skill.",
                 "fates-favored": "Incrase all luck bonuses by 1.",
                 "finesse-bonus": "Use dex for attack rolls instead of strength.",
                 "finesse-target": "Activate bonuses for all finesse-able targets. This requires the weapon/attack to have the Finesse weapon property, be in the Natural Attack weapon group, or have the `finesse-override` boolean flag.",
@@ -172,6 +171,7 @@
                 "token": "Apply bonuses for actions while specific tokens are targeted. When this buff is activated, a dialog will show up that allows you to choose from tokens in the scene.",
                 "token-invert": "Invert the selection, meaning bonuses will apply when any token is targeted that is not the chosen token.",
                 "versatile-performance": "Replace two skills with a chosen perform skill.",
+                "versatile-performance-expanded": "Select a third skill to associate with the selected Perform skill.",
                 "versatile-training": "Use BAB instead of ranks for two skills associated with a weapon group.",
                 "versatile-training-selected": "These skills will use your BAB for their ranks.",
                 "weapon-focus": "+1 bonus on attack rolls for chosen weapon type. Attacks and Weapons must be properly configured with Equipment Base Types.",
@@ -389,14 +389,6 @@
                 "name": "Precise Shot",
                 "default": "Precise Shot"
             },
-            "racial-weapon-focus": {
-                "name": "Racial Weapon Focus",
-                "default": "Gnome Weapon Focus"
-            },
-            "racial-weapon-focus-default-race": {
-                "name": "Racial Weapon Focus (default race)",
-                "default": "Gnomish"
-            },
             "snake-sidewind": {
                 "name": "Snake Sidewind",
                 "default": "Snake Sidewind"
@@ -413,21 +405,29 @@
                 "name": "Versatile Performance",
                 "default": "Versatile Performance"
             },
-            "weapon-focus": {
-                "name": "Weapon Focus",
-                "default": "Weapon Focus"
+            "versatile-training": {
+                "name": "Versatile Training",
+                "default": "Versatile Training"
             },
             "weapon-finesse": {
                 "name": "Weapon Finesse",
                 "default": "Weapon Finesse"
             },
+            "weapon-focus": {
+                "name": "Weapon Focus",
+                "default": "Weapon Focus"
+            },
+            "weapon-focus-racial": {
+                "name": "Racial Weapon Focus",
+                "default": "Gnome Weapon Focus"
+            },
+            "weapon-focus-racial-default-race": {
+                "name": "Racial Weapon Focus (default race)",
+                "default": "Gnomish"
+            },
             "weapon-specialization": {
                 "name": "Weapon Specialization",
                 "default": "Weapon Specialization"
-            },
-            "versatile-training": {
-                "name": "Versatile Training",
-                "default": "Versatile Training"
             }
         },
         "settings": {
@@ -443,12 +443,12 @@
                 "name": "Fortune Stacks",
                 "hint": "If true (default), multiple fortunes/misfortunes from different sources will stack. So you could potentially end up with 4d20kh. If false, then multiple fortunes/misfortunes will only go to a max of two dice. Multiple misfortune and fortunes affecting the same roll will cancel out (e.g. 3 differnt fortunes vs 2 different misfortunes means you are \"more fortunate\" and will be rolling with a bonus. If you have an equal number of fortune vs misfortune, then you \"break even\" and roll normally.)"
             },
-            "racial-weapon-focus": {
+            "weapon-focus-racial": {
                 "name": "Racial Weapon Focus",
                 "hint": "The name of your 'Racial Spell Focus' feat. Only 'Gnome Weapon Focus' officially exists, but this allows for other racial variations. This is to support translations without having to translate the mod.",
                 "default": "Gnome Weapon Focus"
             },
-            "racial-weapon-focus-default-race": {
+            "weapon-focus-racial-default-race": {
                 "name": "Racial Weapon Focus (default race)",
                 "hint": "The default race to look for. This is to support translations without having to translate the mod.",
                 "default": "Gnomish"

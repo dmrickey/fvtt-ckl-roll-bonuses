@@ -124,10 +124,32 @@ function d20RollWrapper(wrapped, options = {}) {
  * @this {ActorPF}
  * @param {() => any} wrapped
  */
-function prepareActorDerivedData(wrapped) {
+function prepareActorBasedData(wrapped) {
     wrapped();
     this[MODULE_NAME] = {};
+}
+
+/**
+ * @this {ActorPF}
+ * @param {() => any} wrapped
+ */
+function prepareActorDerivedData(wrapped) {
+    wrapped();
     LocalHookHandler.fireHookNoReturnSync(localHooks.postPrepareActorDerivedData, this);
+}
+
+/**
+ * @this {ActorPF}
+ */
+function actor_prepareEmbeddedDocuments() {
+    // my only override
+    this.items.forEach((item) => LocalHookHandler.fireHookNoReturnSync(localHooks.cacheBonusTypeOnActor, item));
+
+    // super.prepareEmbeddedDocuments();
+    Object.getPrototypeOf(pf1.documents.actor.ActorBasePF).prototype.prepareEmbeddedDocuments.apply(this);
+
+    // @ts-ignore
+    this.applyActiveEffects();
 }
 
 /**
@@ -478,7 +500,9 @@ Hooks.once('init', () => {
     libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.rollDamage', itemActionRollDamage, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.dice.d20Roll', d20RollWrapper, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorPF.prototype.getSkillInfo', actorGetSkillInfo, libWrapper.WRAPPER);
+    libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorPF.prototype.prepareBaseData', prepareActorBasedData, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorPF.prototype.prepareSpecificDerivedData', prepareActorDerivedData, libWrapper.WRAPPER);
+    libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorPF.prototype.prepareEmbeddedDocuments', actor_prepareEmbeddedDocuments, libWrapper.OVERRIDE);
     libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorPF.prototype.rollSkill', actorRollSkill, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemAttackPF.fromItem', itemAttackFromItem, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype._prepareDependentData', prepareItemData, libWrapper.WRAPPER);

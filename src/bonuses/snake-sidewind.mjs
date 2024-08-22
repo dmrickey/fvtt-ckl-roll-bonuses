@@ -9,9 +9,7 @@ import { SpecificBonuses } from './all-specific-bonuses.mjs';
 const key = 'snake-sidewind';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#snake-sidewind';
 
-Hooks.once('ready', () =>
-    SpecificBonuses.registerSpecificBonus({ journal, key })
-);
+SpecificBonuses.registerSpecificBonus({ journal, key });
 
 class Settings {
     static get snakeSidewind() { return LanguageSettings.getTranslation(key); }

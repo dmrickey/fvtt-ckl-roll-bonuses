@@ -60,12 +60,9 @@ export function createElementalClOrDc(t) {
 
     FormulaCacheHelper.registerModuleFlag(formulaKey);
 
-    /**
-     * @param {ItemPF} item
-     * @param {RollData} _rollData
-     */
-    function prepareData(item, _rollData) {
-        if (!item?.actor || !item.isActive) return;
+    /** @param {ItemPF} item */
+    function cacheBonusTypeOnActor(item) {
+        if (!item?.actor?.[MODULE_NAME] || !item.isActive) return;
 
         if (item.hasItemBooleanFlag(key)) {
             item.actor[MODULE_NAME][key] ||= [];
@@ -73,7 +70,7 @@ export function createElementalClOrDc(t) {
             item.actor[MODULE_NAME][key].push(item);
         }
     }
-    LocalHookHandler.registerHandler(localHooks.prepareData, prepareData);
+    LocalHookHandler.registerHandler(localHooks.cacheBonusTypeOnActor, cacheBonusTypeOnActor);
 
     /**
      *
