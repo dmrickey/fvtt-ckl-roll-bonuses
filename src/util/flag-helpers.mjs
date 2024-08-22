@@ -37,6 +37,8 @@ const getDocDFlags = (doc, key, { includeInactive = true } = {}) => {
  *
  * @param {BaseDocument | undefined | null} doc - Item or Actor
  * @param {string} key
+ * @param {object} [options]
+ * @param {boolean} [options.includeInactive]
  * @returns {any[]}
  */
 const getDocFlags = (doc, key, { includeInactive = false } = {}) => {
@@ -95,6 +97,9 @@ const getDocBFlagsStartsWith = (doc, ...keyStarts) => {
 /**
  * Return any dictionary flags on the document that start with the given partial string
  *
+ * nothing should really be using dFlags any more. This is just here because the Critical helper needs it and I'm too lazy to refactor it
+ *
+ * @deprecated
  * @param {BaseDocument} doc
  * @param {...string} keyStarts
  * @returns {{[key: string]: (number | string)[]}}
@@ -221,6 +226,9 @@ api.utils.getDocFlags = getDocFlags;
 api.utils.hasAnyBFlag = hasAnyBFlag;
 api.utils.hasDFlag = hasDFlag;
 
+/**
+ * @deprecated
+ */
 export class KeyedDFlagHelper {
 
     static {

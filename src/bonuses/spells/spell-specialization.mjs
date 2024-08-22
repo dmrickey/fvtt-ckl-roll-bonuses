@@ -3,7 +3,6 @@
 
 import { MODULE_NAME } from '../../consts.mjs';
 import { stringSelect } from "../../handlebars-handlers/bonus-inputs/string-select.mjs";
-import { getDocDFlags } from "../../util/flag-helpers.mjs";
 import { customGlobalHooks, LocalHookHandler, localHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize, localizeBonusLabel } from "../../util/localize.mjs";
@@ -63,7 +62,7 @@ function isSpecializedSpell(actor, spell) {
 
     const isSpecialized = sources.some((source) => {
         const value = source.getFlag(MODULE_NAME, key);
-        const exceptions = (/** @type {string } */(getDocDFlags(source, exclusionKey)[0]) || '')
+        const exceptions = (/** @type {string } */(source.getFlag(MODULE_NAME, exclusionKey)[0]) || '')
             .split(';')
             .filter(truthiness)
             .map((x) => x.trim());

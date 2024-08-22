@@ -56,6 +56,59 @@ const dictionaryToModuleFlag = [
     new DictionaryMigration('change-type-offset-formula', 'change-type-offset-formula', true),
 ];
 
+const migrateModuleFlagKeys = [
+    ['expanded-versatile-performance', 'versatile-performance-expanded'],
+];
+
+/**
+ * @param {ItemPF} item
+ */
+export const migrateVersatilePerformance = async (item) => {
+    const key = 'versatile-performance';
+    const keyBase = `${key}-base`;
+    const keyChoice1 = `${key}-choice-1`;
+    const keyChoice2 = `${key}-choice-2`;
+    const keyExpanded = `${key}-expanded`;
+
+    const legacyExpandedKey = `expanded-${key}`;
+
+    const vp = item.getItemDictionaryFlag(key);
+    if (vp) {
+        const [baseId, ...substitutes] = `${vp}`.split(';').map(x => x.trim());
+
+        /** @type{Record<string, boolean>} */
+        const boolean = {
+            [key]: true,
+        };
+        if (item.hasItemBooleanFlag(legacyExpandedKey)) {
+            boolean[keyExpanded] = true;
+        }
+
+        /** @type {Partial<ItemPF>} */
+        const update = {
+            system: {
+                flags: {
+                    boolean,
+                    dictionary: {
+                        // @ts-ignore it doesn't like the de-assign (setting to null)
+                        [`-=${key}`]: null,
+                    },
+                }
+            },
+            flags: {
+                [MODULE_NAME]: {
+                    [keyBase]: baseId,
+                    [keyChoice1]: substitutes[0],
+                    [keyChoice2]: substitutes[1],
+                    [keyExpanded]: item.getFlag(MODULE_NAME, legacyExpandedKey),
+                    [`-=${legacyExpandedKey}`]: null,
+                },
+            },
+        };
+        await item.update(update);
+    }
+}
+
 // TODO don't forget this
 const languageKeyMigration = [
     ['elementalFocus', 'elemental-focus'],
@@ -137,9 +190,11 @@ export const migrateItem = async (item) => {
      * @param {boolean} [skipBFlag]
      */
     const migrateDflag = (key, newKey, skipBFlag) => {
+        const value = item.getItemDictionaryFlag(key);
+        if (!value) return;
+
         newKey ||= key;
         dictionary[`-=${key}`] = null;
-        const value = item.getItemDictionaryFlag(key);
         moduleFlags[newKey] = value;
 
         if (!skipBFlag) {
@@ -147,9 +202,26 @@ export const migrateItem = async (item) => {
         }
     }
 
-    dictionaryToModuleFlag.forEach(({ key, newKey, skipBFlag }) => migrateDflag(key, newKey, skipBFlag));
+    /**
+     * @param {string} key
+     * @param {string} newKey
+     */
+    const migrateModuleFlag = (key, newKey) => {
+        const value = item.getFlag(MODULE_NAME, key);
+        if (!value) return;
 
-    if (isNotEmptyObject(dictionary)) {
+        moduleFlags[`-=${key}`] = null;
+        moduleFlags[newKey] = value;
+    }
+
+    dictionaryToModuleFlag.forEach(({ key, newKey, skipBFlag }) => migrateDflag(key, newKey, skipBFlag));
+    migrateModuleFlagKeys.forEach(([key, newKey]) => migrateModuleFlag(key, newKey));
+
+    if (isNotEmptyObject(dictionary)
+        || isNotEmptyObject(moduleFlags)
+        || isNotEmptyObject(boolean)
+        || isNotEmptyObject(changes)
+    ) {
         /** @type {Partial<ItemPF>} */
         const update = {
             system: {
@@ -157,7 +229,7 @@ export const migrateItem = async (item) => {
                 flags: {
                     boolean,
                     // @ts-ignore it doesn't like the de-assign (setting to null)
-                    dictionary,
+                    dictionary: dictionary,
                 }
             },
             flags: {
@@ -166,6 +238,7 @@ export const migrateItem = async (item) => {
         };
         await item.update(update);
     }
+    await migrateVersatilePerformance(item);
 };
 
 /** @param {ActorPF} actor */

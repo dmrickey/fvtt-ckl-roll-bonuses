@@ -23,7 +23,7 @@ class Settings {
     static {
         registerSetting({
             config: false,
-            defaultValue: 0,
+            defaultValue: -1,
             key: this.#migrationVersionKey,
             scope: 'world',
             settingType: Number,
@@ -40,7 +40,7 @@ export default async () => {
 
     const current = Settings.migrationVersion || 0;
 
-    if (current !== currentMigrationVersion) {
+    if (current !== currentMigrationVersion && current !== -1) {
         log('Starting overall migration');
 
         if (current < 1) {

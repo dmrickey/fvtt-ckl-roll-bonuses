@@ -13,6 +13,7 @@ import {
     mythicSpellFocusKey,
     spellFocusKey,
 } from '../../src/bonuses/spells/spell-focus.mjs';
+import { versatilePerformanceKey } from '../../src/bonuses/versatile-performance.mjs';
 import {
     greaterWeaponFocusKey,
     mythicWeaponFocusKey,
@@ -123,6 +124,7 @@ declare global {
             [changeTypeOffsetKey]?: ItemPF[];
             ['elemental-cl']?: ItemPF[];
             ['elemental-dc']?: ItemPF[];
+            [versatilePerformanceKey]?: ItemPF[];
             [key: string]: number | string | object | array;
         };
 

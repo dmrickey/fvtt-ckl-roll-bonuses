@@ -255,6 +255,7 @@
   - Add more text at the bottom that says "any tokens that are targeted when this is open will be pre-selected, you can enable a setting to skip this dialog in those cases"
   - Highlight tokens in the scene based off of which token in the app is hovered
 - Audit other apps and add explanation as necessary
+  -  Bonus Picker app - add target hint like "Select multiple targets to further narrow targets"
 - Add weapon type override for features (e.g. Bombs) and spells (e.g. Rays)
 - Look into Versatile Performance multi select
 - Look into migrating all legacy things into module flags
@@ -303,10 +304,16 @@
 - Roll Bonuses d20 icon on sheet in RB header doesn't open journal
 - Add "Fortune configuration app" to help with configuring specific fortune abilities
 - Add obsoletion message for `src\bonuses\critical.mjs` if its flags are detected
+- Add "Versatile Performance choices" to api
+- Add "elemental choices" to api
+- Right click - roll CL. Check message source - use that to look up what action is being requested. Then Add CL bonuses as appropriate.
 
 - Remove Obsolete Code
-  - Get rid of "KeyedDFlagHelper"
+  - Flag Helpers
+    - `KeyedDFlagHelper`
+    - `getDocDFlags`
   - delete FormulaCacheHelper.registerUncacheableDictionaryFlag
   - delete FormulaCacheHelper.isUncacheableDictionaryFlag
 
-TODO - Add elemental CL/DC to the above list
+Fix
+item targets on unlinked actors [here](https://discord.com/channels/852297995907366922/1134212644392423515/1275933237130166395)
