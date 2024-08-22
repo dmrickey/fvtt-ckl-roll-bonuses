@@ -8,7 +8,7 @@ export const key = 'precise-shot';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.4A4bCh8VsQVbTsAY#precise-shot-bonus';
 
 export const init = () => {
-    SpecificBonuses.registerSpecificBonus({ journal, key, type: 'boolean' });
+    SpecificBonuses.registerSpecificBonus({ journal, key });
 };
 
 class Settings {

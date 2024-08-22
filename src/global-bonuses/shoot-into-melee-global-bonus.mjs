@@ -3,7 +3,7 @@ import { hasAnyBFlag } from '../util/flag-helpers.mjs';
 import { currentTargets } from '../util/get-current-targets.mjs';
 import { customGlobalHooks } from '../util/hooks.mjs'
 import { BaseGlobalBonus } from './base-global-bonus.mjs';
-import * as PreciseShot from './targeted/bonuses/precise-shot-bonus.mjs';
+import * as PreciseShot from './specific/bonuses/precise-shot-bonus.mjs';
 
 /** @type {ActionType[]} */
 const rangedTypes = ['rwak', 'rcman', 'rsak', 'twak'];

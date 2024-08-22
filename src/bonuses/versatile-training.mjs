@@ -1,6 +1,6 @@
 import { MODULE_NAME } from "../consts.mjs";
 import { registerItemHint } from "../util/item-hints.mjs";
-import { localize, localizeBonusTooltip } from "../util/localize.mjs";
+import { localize } from "../util/localize.mjs";
 import { LanguageSettings } from "../util/settings.mjs";
 import { truthiness } from "../util/truthiness.mjs";
 import { SpecificBonuses } from './all-specific-bonuses.mjs';
@@ -16,7 +16,7 @@ const key = 'versatile-training';
 const selectedKey = 'versatile-training-selected';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#versatile-training';
 
-Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ journal, key, type: 'boolean' }));
+Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ journal, key }));
 
 class Settings {
     static get versatileTraining() { return LanguageSettings.getTranslation(key); }

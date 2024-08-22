@@ -18,7 +18,7 @@ export { key as weaponSpecializationKey };
 const compendiumId = 'YLCvMNeAF9V31m1h';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#weapon-specialization';
 
-Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ journal, key, type: 'boolean' }));
+Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ journal, key }));
 
 class Settings {
     static get weaponSpecialization() { return LanguageSettings.getTranslation(key); }

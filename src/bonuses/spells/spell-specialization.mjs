@@ -17,7 +17,7 @@ const exclusionKey = 'spell-specialization-exclusions';
 const compendiumId = 'CO2Qmj0aj76zJsew';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#spell-specialization';
 
-Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ journal, key, type: 'boolean' }));
+Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ journal, key }));
 
 class Settings {
     static get spellSpecialization() { return LanguageSettings.getTranslation(key); }

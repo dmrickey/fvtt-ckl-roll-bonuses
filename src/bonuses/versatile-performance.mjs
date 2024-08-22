@@ -34,8 +34,8 @@ const expandedChoices = [
 ];
 
 Hooks.once('ready', () => {
-    SpecificBonuses.registerSpecificBonus({ journal, key, type: 'boolean' });
-    SpecificBonuses.registerSpecificBonus({ journal, key: keyExpanded, parent: key, type: 'boolean' });
+    SpecificBonuses.registerSpecificBonus({ journal, key });
+    SpecificBonuses.registerSpecificBonus({ journal, key: keyExpanded, parent: key });
 });
 
 class Settings {

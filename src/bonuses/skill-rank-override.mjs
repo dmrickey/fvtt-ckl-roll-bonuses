@@ -14,7 +14,7 @@ const formulaKey = 'skill-rank-override-formula';
 const selectedKey = 'skill-rank-override-selected';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#skill-rank-override';
 
-Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ journal, key, type: 'boolean' }));
+Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ journal, key }));
 FormulaCacheHelper.registerModuleFlag(formulaKey);
 
 registerItemHint((hintcls, actor, item, _data) => {

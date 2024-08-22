@@ -23,9 +23,9 @@ const mythicSpellFocusId = 'TOMEhAeZsgGHrSH6';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#spell-focus';
 
 Hooks.once('ready', () => {
-    SpecificBonuses.registerSpecificBonus({ journal, key: spellFocusKey, type: 'boolean' });
-    SpecificBonuses.registerSpecificBonus({ journal, key: greaterSpellFocusKey, parent: spellFocusKey, type: 'boolean' });
-    SpecificBonuses.registerSpecificBonus({ journal, key: mythicSpellFocusKey, parent: spellFocusKey, type: 'boolean' });
+    SpecificBonuses.registerSpecificBonus({ journal, key: spellFocusKey });
+    SpecificBonuses.registerSpecificBonus({ journal, key: greaterSpellFocusKey, parent: spellFocusKey });
+    SpecificBonuses.registerSpecificBonus({ journal, key: mythicSpellFocusKey, parent: spellFocusKey });
 });
 
 class Settings {

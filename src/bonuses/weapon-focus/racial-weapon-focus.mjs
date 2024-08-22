@@ -13,7 +13,7 @@ const key = racialWeaponFocusKey;
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#weapon-focus';
 
 Hooks.once('ready', () =>
-    SpecificBonuses.registerSpecificBonus({ journal, key: racialWeaponFocusKey, parent: weaponFocusKey, type: 'boolean' })
+    SpecificBonuses.registerSpecificBonus({ journal, key: racialWeaponFocusKey, parent: weaponFocusKey })
 );
 
 class Settings {

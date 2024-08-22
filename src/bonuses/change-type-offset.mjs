@@ -14,7 +14,7 @@ const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalE
 
 FormulaCacheHelper.registerModuleFlag(formulaKey);
 
-Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ journal, key: key, type: 'boolean' }));
+Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ journal, key: key }));
 
 /**
  * @param {ItemPF} item

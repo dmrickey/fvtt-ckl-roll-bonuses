@@ -11,7 +11,6 @@ import { templates } from './templates.mjs';
  * @property {string} label
  * @property {string} tooltip
  * @property {boolean} value
- * @property {string[]} [extraKeys]
  */
 
 /**
@@ -56,10 +55,7 @@ export function showBonusPicker({
         allTargets.map((source) => source.key),
         currentBooleanKeys,
     );
-    const currentSpecificBonuses = [
-        ...intersection(currentBooleanKeys, SpecificBonuses.booleanKeys),
-        ...intersection(currentDictionaryKeys, SpecificBonuses.dictionaryKeys),
-    ];
+    const currentSpecificBonuses = intersection(currentBooleanKeys, SpecificBonuses.allBonusKeys);
 
     /** @type {BonusPickerData} */
     const data = {
@@ -90,7 +86,6 @@ export function showBonusPicker({
         specifics: specifics
             .filter((bonus) => !bonus.parent)
             .map((bonus, i) => ({
-                extraKeys: bonus.extraKeys,
                 journal: bonus.journal,
                 key: bonus.key,
                 label: bonus.label,
@@ -100,7 +95,6 @@ export function showBonusPicker({
                 children: specifics
                     .filter((child) => child.parent === bonus.key)
                     .map((child, ii) => ({
-                        extraKeys: child.extraKeys,
                         journal: child.journal,
                         key: child.key,
                         label: child.label,
@@ -201,26 +195,15 @@ class BonusPickerApp extends DocumentSheet {
                 };
 
                 if (this.sources.includes(prop)
-                    || (prop === 'specifics' && SpecificBonuses.booleanKeys.includes(bonusData.key))
+                    || (prop === 'specifics' && SpecificBonuses.allBonusKeys.includes(bonusData.key))
                 ) {
                     // set to true if value is true, delete if value is false
                     // @ts-ignore
                     updateObj.system.flags.boolean[`${(value ? '' : '-=')}${bonusData.key}`] = true;
                 }
-                else if (prop === 'specifics'
-                    && SpecificBonuses.dictionaryKeys.includes(bonusData.key)
-                ) {
-                    // @ts-ignore
-                    updateObj.system.flags.dictionary[`${(value ? '' : '-=')}${bonusData.key}`] = '';
-                }
                 else {
                     throw new Error("should never happen");
                 }
-
-                (bonusData.extraKeys ?? []).forEach((key) =>
-                    // @ts-ignore
-                    updateObj.system.flags.dictionary[`${(value ? '' : '-=')}${key}`] = ''
-                );
             }
         });
 

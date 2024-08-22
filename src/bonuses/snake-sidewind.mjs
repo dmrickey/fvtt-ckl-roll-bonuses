@@ -10,7 +10,7 @@ const key = 'snake-sidewind';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#snake-sidewind';
 
 Hooks.once('ready', () =>
-    SpecificBonuses.registerSpecificBonus({ journal, key, type: 'boolean' })
+    SpecificBonuses.registerSpecificBonus({ journal, key })
 );
 
 class Settings {

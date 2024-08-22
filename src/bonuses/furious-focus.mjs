@@ -12,13 +12,7 @@ const furiousFocusTimestamp = 'furious-focus-timestamp';
 const compendiumId = 'UcEIgufLJlIfhHmu';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#furious-focus';
 
-Hooks.once('ready', () =>
-    SpecificBonuses.registerSpecificBonus({
-        journal,
-        key: furiousFocus,
-        type: 'boolean',
-    })
-);
+Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ journal, key: furiousFocus, }));
 
 class Settings {
     static get furiousFocus() { return LanguageSettings.getTranslation(furiousFocus); }

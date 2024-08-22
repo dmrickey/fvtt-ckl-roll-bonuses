@@ -14,7 +14,7 @@ import { armorFocusKey, getFocusedArmor, getImprovedFocusedArmor, improvedArmorF
 const compendiumId = 'WmEE6BOuP5Uh7pEE';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#armor-focus';
 
-Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ journal, key, type: 'boolean', parent: armorFocusKey }));
+Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ journal, key, parent: armorFocusKey }));
 
 /**
  * @param {ItemPF} item
