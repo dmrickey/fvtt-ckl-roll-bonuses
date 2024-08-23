@@ -60,55 +60,6 @@ const migrateModuleFlagKeys = [
     ['expanded-versatile-performance', 'versatile-performance-expanded'],
 ];
 
-/**
- * @param {ItemPF} item
- */
-export const migrateVersatilePerformance = async (item) => {
-    const key = 'versatile-performance';
-    const keyBase = `${key}-base`;
-    const keyChoice1 = `${key}-choice-1`;
-    const keyChoice2 = `${key}-choice-2`;
-    const keyExpanded = `${key}-expanded`;
-
-    const legacyExpandedKey = `expanded-${key}`;
-
-    const vp = item.getItemDictionaryFlag(key);
-    if (vp) {
-        const [baseId, ...substitutes] = `${vp}`.split(';').map(x => x.trim());
-
-        /** @type{Record<string, boolean>} */
-        const boolean = {
-            [key]: true,
-        };
-        if (item.hasItemBooleanFlag(legacyExpandedKey)) {
-            boolean[keyExpanded] = true;
-        }
-
-        /** @type {Partial<ItemPF>} */
-        const update = {
-            system: {
-                flags: {
-                    boolean,
-                    dictionary: {
-                        // @ts-ignore it doesn't like the de-assign (setting to null)
-                        [`-=${key}`]: null,
-                    },
-                }
-            },
-            flags: {
-                [MODULE_NAME]: {
-                    [keyBase]: baseId,
-                    [keyChoice1]: substitutes[0],
-                    [keyChoice2]: substitutes[1],
-                    [keyExpanded]: item.getFlag(MODULE_NAME, legacyExpandedKey),
-                    [`-=${legacyExpandedKey}`]: null,
-                },
-            },
-        };
-        await item.update(update);
-    }
-}
-
 // TODO don't forget this
 const languageKeyMigrationKeys = [
     ['elementalFocus', 'elemental-focus'],
@@ -231,6 +182,32 @@ export const migrateItem = async (item) => {
     dictionaryToModuleFlag.forEach(({ key, newKey, skipBFlag }) => migrateDflag(key, newKey, skipBFlag));
     migrateModuleFlagKeys.forEach(([key, newKey]) => migrateModuleFlag(key, newKey));
 
+    const vpKey = 'versatile-performance';
+    const vpKeyBase = `${vpKey}-base`;
+    const vpKeyChoice1 = `${vpKey}-choice-1`;
+    const vpKeyChoice2 = `${vpKey}-choice-2`;
+    const vpKeyExpanded = `${vpKey}-expanded`;
+
+    const legacyExpandedKey = `expanded-${vpKey}`;
+
+    const vp = item.getItemDictionaryFlag(vpKey);
+    if (vp) {
+        const [baseId, ...substitutes] = `${vp}`.split(';').map(x => x.trim());
+
+        /** @type{Record<string, boolean>} */
+        boolean[vpKey] = true;
+        if (item.hasItemBooleanFlag(legacyExpandedKey)) {
+            boolean[vpKeyExpanded] = true;
+        }
+
+        dictionary[`-=${vpKey}`] = null;
+        moduleFlags[vpKeyBase] = baseId;
+        moduleFlags[vpKeyChoice1] = substitutes[0];
+        moduleFlags[vpKeyChoice2] = substitutes[1];
+        moduleFlags[vpKeyExpanded] = item.getFlag(MODULE_NAME, legacyExpandedKey);
+        moduleFlags[`-=${legacyExpandedKey}`] = null;
+    }
+
     if (isNotEmptyObject(dictionary)
         || isNotEmptyObject(moduleFlags)
         || isNotEmptyObject(boolean)
@@ -252,7 +229,6 @@ export const migrateItem = async (item) => {
         };
         await item.update(update);
     }
-    await migrateVersatilePerformance(item);
 };
 
 /** @param {ActorPF} actor */
@@ -263,7 +239,7 @@ export const migrateActor = async (actor) => {
             await migrateItem(item);
         }
     }
-    log('...finished migrating items');
+    log('...finished migrating actor');
 };
 
 const migrateGameItems = async () => {

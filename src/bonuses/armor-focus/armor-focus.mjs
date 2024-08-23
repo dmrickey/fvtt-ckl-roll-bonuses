@@ -9,6 +9,7 @@ import { LanguageSettings } from "../../util/settings.mjs";
 import { uniqueArray } from "../../util/unique-array.mjs";
 import { stringSelect } from "../../handlebars-handlers/bonus-inputs/string-select.mjs";
 import { SpecificBonuses } from '../all-specific-bonuses.mjs';
+import { MODULE_NAME } from '../../consts.mjs';
 
 const compendiumId = 'zBrrZynIB0EXagds';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#armor-focus';
@@ -25,7 +26,7 @@ class Settings {
 
 // register hint on source feat
 registerItemHint((hintcls, _actor, item, _data) => {
-    const current = item.getItemDictionaryFlag(key);
+    const current = item.getFlag(MODULE_NAME, key);
     if (current) {
         return hintcls.create(`${current}`, [], {});
     }

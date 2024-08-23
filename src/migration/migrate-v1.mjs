@@ -39,7 +39,7 @@ export const migrateActor = async (actor) => {
             await migrateItem(item);
         }
     }
-    log('...finished migrating items');
+    log('...finished migrating actor');
 }
 
 const migrateGameItems = async () => {

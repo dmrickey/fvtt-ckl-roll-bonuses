@@ -282,8 +282,8 @@ Hooks.on('renderItemSheet', (
     if (!hasFlag) {
         if (name === Settings.versatilePerformance) {
             item.addItemBooleanFlag(key);
-            return;
         }
+        return;
     }
 
     const currentVP = getVPDataFromItem(item);

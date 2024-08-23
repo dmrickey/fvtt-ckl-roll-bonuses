@@ -126,9 +126,9 @@ registerItemHint((hintcls, actor, item, _data) => {
     return hints;
 });
 
-// register on ability
+// register on granting ability
 registerItemHint((hintcls, _actor, item, _data) => {
-    const key = allKeys.find((k) => item.system.flags.dictionary[k] !== undefined);
+    const key = allKeys.find((k) => item.getFlag(MODULE_NAME, k));
     if (!key) {
         return;
     }
@@ -154,7 +154,7 @@ registerItemHint((hintcls, _actor, item, _data) => {
  */
 function getDcBonus(action) {
     const { item, actor } = action;
-    if (item?.type !== 'spell') {
+    if (item?.type !== 'spell' || !actor) {
         return 0;
     }
 

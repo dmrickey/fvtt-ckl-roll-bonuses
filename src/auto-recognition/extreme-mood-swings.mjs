@@ -26,7 +26,7 @@ Hooks.on('renderItemSheet', (
     if (!hasBonus) {
         const name = item?.name?.toLowerCase() ?? '';
         const sourceId = item?.flags.core?.sourceId ?? '';
-        if (!(name === Settings.name || sourceId.includes(compendiumId))) {
+        if (name === Settings.name || sourceId.includes(compendiumId)) {
             item.update({
                 [`system.flags.boolean.${changeTypeOffsetKey}`]: true,
                 [`flags.${MODULE_NAME}.${changeTypeOffsetKey}`]: 'morale',

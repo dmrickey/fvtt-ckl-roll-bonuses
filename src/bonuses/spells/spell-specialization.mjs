@@ -48,7 +48,7 @@ function isSpecializedSpell(actor, spell) {
 
     const isSpecialized = sources.some((source) => {
         const value = source.getFlag(MODULE_NAME, key);
-        const exceptions = (/** @type {string } */(source.getFlag(MODULE_NAME, exclusionKey)[0]) || '')
+        const exceptions = (/** @type {string } */ (source.getFlag(MODULE_NAME, exclusionKey)) || '')
             .split(';')
             .filter(truthiness)
             .map((x) => x.trim());

@@ -29,7 +29,6 @@ export function showBonusPicker({
     item
 }) {
     const currentBooleanKeys = Object.keys(item.system.flags.boolean);
-    const currentDictionaryKeys = Object.keys(item.system.flags.dictionary);
 
     const allBonuses = api.allBonusTypes
         .filter((source) => !source.skipPicker)

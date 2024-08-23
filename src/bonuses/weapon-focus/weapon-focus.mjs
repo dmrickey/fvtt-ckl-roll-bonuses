@@ -185,15 +185,12 @@ Hooks.on('renderItemSheet', (
     const sourceId = item?.flags.core?.sourceId ?? '';
     const isGreater = item.hasItemBooleanFlag(greaterWeaponFocusId)
         || (name.includes(Settings.weaponFocus) && name.includes(LanguageSettings.greater))
-        || sourceId.includes(greaterWeaponFocusId)
-        || item.system.flags.dictionary[greaterWeaponFocusKey] !== undefined;
+        || sourceId.includes(greaterWeaponFocusId);
     const isMythic = item.hasItemBooleanFlag(mythicWeaponFocusKey)
         || (name.includes(Settings.weaponFocus) && name.includes(LanguageSettings.mythic))
-        || sourceId.includes(mythicWeaponFocusId)
-        || item.system.flags.dictionary[mythicWeaponFocusKey] !== undefined;
+        || sourceId.includes(mythicWeaponFocusId);
     const isRacial = item.hasItemBooleanFlag(racialWeaponFocusKey)
-        || sourceId.includes(gnomeWeaponFocusId)
-        || item.system.flags.dictionary[racialWeaponFocusKey] !== undefined;
+        || sourceId.includes(gnomeWeaponFocusId);
 
     if (isGreater || isMythic) {
         key = isGreater ? greaterWeaponFocusKey : mythicWeaponFocusKey;
