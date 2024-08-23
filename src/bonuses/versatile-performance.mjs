@@ -72,14 +72,17 @@ class VPData {
  * @returns { null | VPData }
  */
 const getVPDataFromItem = (item) => {
-    if (!item.hasItemBooleanFlag(key)) {
+    const base = item.getFlag(MODULE_NAME, keyBase);
+    const choice1 = item.getFlag(MODULE_NAME, keyChoice1);
+    const choice2 = item.getFlag(MODULE_NAME, keyChoice2);
+    if (!item.hasItemBooleanFlag(key) || !base || !choice1 || !choice2) {
         return null;
     }
 
     return new VPData(
-        item.getFlag(MODULE_NAME, keyBase),
-        item.getFlag(MODULE_NAME, keyChoice1),
-        item.getFlag(MODULE_NAME, keyChoice2),
+        base,
+        choice1,
+        choice2,
         item.getFlag(MODULE_NAME, keyExpanded),
     );
 }
@@ -346,7 +349,7 @@ Hooks.on('renderItemSheet', (
         }
 
         if (performs.length && !base) {
-            item.setFlag(MODULE_NAME, key, `${performs[0].id}`);
+            item.setFlag(MODULE_NAME, keyBase, `${performs[0].id}`);
         }
     }
 
