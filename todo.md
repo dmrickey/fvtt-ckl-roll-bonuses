@@ -309,6 +309,16 @@
 - Right click on chat card- roll CL. Check message source - use that to look up what action is being requested. Then Add CL bonuses as appropriate.
 - Negate Bonus type
   - e.g. Android not being affected by Morale Bonuses
+- Targeting
+  - Add a configuration error if "this target is not configured"
+    - e.g. Any Item Target that is not configured.
+- Select Input
+  - Add an override for error text
+  - e.g. Greater Weapon Specialization needs both Greater Weapon Focus and Weapon Specialization
+- Add "Function Target" to picker app if user is GM.
+  - Make sure "picker app" doesn't remove function target if the user isn't allowed to configure it
+- Todo - revisit natural attacks for "is weapon"
+- Change all "is type" into a single target with checkboxes for various types it should allow
 
 - Remove Obsolete Code
   - Flag Helpers
