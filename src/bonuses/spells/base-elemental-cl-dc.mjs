@@ -7,6 +7,7 @@ import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize, localizeBonusLabel } from "../../util/localize.mjs";
 import { signed } from "../../util/to-signed-string.mjs";
 import { truthiness } from "../../util/truthiness.mjs";
+import { SpecificBonuses } from '../all-specific-bonuses.mjs';
 
 /**
  * @type {{cl: keyof(RollData), dc: keyof(RollData)}}
@@ -55,8 +56,13 @@ export function createElementalClOrDc(t) {
     const key = `elemental-${t}`;
     const formulaKey = `elemental-${t}-formula`;
     const journal = t === 'cl'
-        ? 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#*modify-spell-caster-level-(all-spells,-specific-school,-or-spec'
-        : 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#*modify-spell-dc-(all-spells,-specific-school,-or-specific-eleme';
+        ? 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#modify-elemental-spell-caster-level'
+        : 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#modify-elemental-spell-dc';
+
+    SpecificBonuses.registerSpecificBonus({
+        journal,
+        key,
+    });
 
     FormulaCacheHelper.registerModuleFlag(formulaKey);
 
