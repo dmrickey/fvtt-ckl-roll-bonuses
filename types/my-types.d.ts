@@ -3,6 +3,10 @@ import { BaseBonus } from '../src/targeted/bonuses/base-bonus.mjs';
 import { BaseTarget } from '../src/targeted/targets/base-target.mjs';
 import { SpecificBonuses } from '../src/bonuses/all-specific-bonuses.mjs';
 import { BaseGlobalBonus } from '../src/global-bonuses/base-global-bonus.mjs';
+import {
+    handleBonusesFor,
+    handleBonusTypeFor,
+} from '../src/target-and-bonus-join.mjs';
 
 export {};
 
@@ -62,10 +66,12 @@ declare global {
         targetTypeMap: Record<string, typeof BaseTarget>;
 
         /** various utility helper methods and classes used throughout the mod */
-        utils:
-            | { array: Record<string, (...args) => any> }
-            | Record<string, (...args) => any>
-            | any;
+        utils: {
+            handleBonusesFor: typeof handleBonusesFor;
+            handleBonusTypeFor: typeof handleBonusTypeFor;
+            array: Record<string, (...args) => any>;
+            [key: string]: any;
+        };
     }
 
     interface IdObject {

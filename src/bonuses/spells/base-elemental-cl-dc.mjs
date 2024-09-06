@@ -199,6 +199,28 @@ export function createElementalClOrDc(t) {
         }
     });
 
+    if (t === 'cl') {
+        /**
+         * @param {ActorPF} actor
+         * @param {{messageId?: string, parts?: string[]}} rollOptions
+         * @param {string} bookId
+         */
+        const onActorRollCL = (actor, rollOptions, bookId) => {
+            if (!rollOptions.messageId || !rollOptions.parts?.length) return;
+
+            const action = game.messages.get(rollOptions.messageId)?.actionSource;
+            if (!action) return;
+
+            const found = getBonusesForItem(action.item, action);
+
+            if (found?.offset) {
+                const label = localize(`${t}-label`, { label: found.elements.join(', ') });
+                rollOptions.parts?.push(`${found.offset}[${label}]`);
+            }
+        };
+        Hooks.on('pf1PreActorRollCl', onActorRollCL);
+    }
+
     Hooks.on('renderItemSheet', (
     /** @type {ItemSheetPF} */ { isEditable, item },
     /** @type {[HTMLElement]} */[html],

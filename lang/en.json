@@ -189,6 +189,7 @@
         },
         "cancel": "Cancel",
         "cl-mod": "{mod} CL",
+        "cl-label": "CL ({label})",
         "cl-label-mod": "{mod} CL ({label})",
         "global-bonus": {
             "actor": {

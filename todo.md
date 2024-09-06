@@ -306,7 +306,6 @@
 - Add obsoletion message for `src\bonuses\critical.mjs` if its flags are detected
 - Add "Versatile Performance choices" to api
 - Add "elemental choices" to api
-- Right click on chat card- roll CL. Check message source - use that to look up what action is being requested. Then Add CL bonuses as appropriate.
 - Negate Bonus type
   - e.g. Android not being affected by Morale Bonuses
 - Targeting
@@ -326,6 +325,8 @@
     - `getDocDFlags`
   - delete FormulaCacheHelper.registerUncacheableDictionaryFlag
   - delete FormulaCacheHelper.isUncacheableDictionaryFlag
+
+- Add misfortune hex buff
 
 Fix
 - item targets on unlinked actors [here](https://discord.com/channels/852297995907366922/1134212644392423515/1275933237130166395)

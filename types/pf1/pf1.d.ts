@@ -399,6 +399,8 @@ declare global {
             };
         };
         roll: D20RollPF;
+        get actionSource(): ItemAction;
+        get itemSource(): ItemPF;
     }
 
     class CombatantPF {
