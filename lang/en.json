@@ -462,6 +462,17 @@
                 "name": "Copy Item Flags on Attack Creation",
                 "hint": "When creating an Attack from a Weapon (via the \"Create Attack\" button to add an Attack to your Combat tab), the system does not copy over any flags from the Weapon. This means that by default any bonuses created on the weapon do not exist on Attacks created from that Weapon. Turning this on will copy those flags when creating an Attack. This only happens at creation, this will not sync any flags modified on either after the fact. Default is false."
             }
+        },
+        "applications": {
+            "token": {
+                "gm-hint": "You can see all tokens because you're the GM. Players will only be able to select tokens that are visible to them.",
+                "player-hint": "Any currently targeted tokens in the scene are pre-selected. You can enable a setting to skip this window and automatically use those targets."
+            }
+        },
+        "inputs": {
+            "icon-input": {
+                "no-selection": "No current targets"
+            }
         }
     }
 }

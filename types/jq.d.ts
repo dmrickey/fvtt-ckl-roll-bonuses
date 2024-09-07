@@ -18,4 +18,8 @@ interface JQuery {
     ): unknown;
     find(selector: string): JQuery;
     hide(): JQuery;
+    each(
+        /** @this {HTMLElement} */
+        func: () => void
+    );
 }

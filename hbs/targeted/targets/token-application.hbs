@@ -1,5 +1,6 @@
 {{!--
 const templateData = {
+    isGm: {boolean}
     item: {ItemPF},
     path: {string},
     groupedTokens: {}[],
@@ -7,6 +8,12 @@ const templateData = {
 --}}
 <form class="roll-bonuses roll-bonuses-form token-selector">
     <div class="form-body">
+        {{#if isGm}}
+        <div class="hint-text">
+            {{localize "ckl-roll-bonuses.applications.token.gm-hint"}}
+        </div>
+        <hr>
+        {{/if}}
         {{#each groupedTokens}}
         <h4>{{@key}}</h4>
         <div class="grouped-tokens">
@@ -14,6 +21,7 @@ const templateData = {
             <div
                 class="individual-token"
                 data-tooltip="{{this.name}}"
+                data-token-uuid="{{this.uuid}}"
             >
                 <input
                     type="checkbox"
@@ -31,8 +39,12 @@ const templateData = {
             </div>
             {{/each}}
         </div>
-        <br>
         {{/each}}
+        <hr>
+        <div class="hint-text">
+            {{localize "ckl-roll-bonuses.applications.token.player-hint"}}
+        </div>
+        <hr>
     </div>
     <div class="control-group">
         <button type="reset">

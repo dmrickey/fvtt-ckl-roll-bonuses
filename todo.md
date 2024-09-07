@@ -5,6 +5,7 @@
   - [Bonuses](#bonuses)
     - [Swap Ability for Damage Rolls](#swap-ability-for-damage-rolls)
     - [Swap Ability for Attack Rolls](#swap-ability-for-attack-rolls)
+    - [Add/Swap Damage Types](#addswap-damage-types)
     - [Crit Only Attack Bonus](#crit-only-attack-bonus)
   - [AC bonus](#ac-bonus)
   - [Targets](#targets)
@@ -71,6 +72,8 @@
 ### Swap Ability for Attack Rolls
 - add <ability> to attack for other ability scores (like finesse but can be customized)
   - waiting on 10.5
+### Add/Swap Damage Types
+- e.g. swap fire to acid
 ### Crit Only Attack Bonus
 - Attack bonus needs to give optional "crit only" attack bonuses
 ## AC bonus
@@ -249,17 +252,12 @@
 # vnext
 - apply auto-config on create to all auto-config stuff (see Precise Shot)
   - Try to come up with a more generic framework for this
-- Add more text to Token Target app
-  - Have a "gm only" text that says something like "you can see all tokens because you're the GM, players can only select tokens that are visible to them.
-    - Add this in a "gm only" box visible at the top of the dialog
-  - Add more text at the bottom that says "any tokens that are targeted when this is open will be pre-selected, you can enable a setting to skip this dialog in those cases"
-  - Highlight tokens in the scene based off of which token in the app is hovered
 - Audit other apps and add explanation as necessary
   -  Bonus Picker app - add target hint like "Select multiple targets to further narrow targets"
 - Add weapon type override for features (e.g. Bombs) and spells (e.g. Rays)
 - Look into Versatile Performance multi select
 - Look into migrating all legacy things into module flags
-- Add checkbox overrides for global settings (see Advanced Templates update)
+- Add checkbox overrides for global settings [see Advanced Templates update](https://github.com/dmrickey/ckl-advanced-templates-pf1/compare/610008c57455991cce1e0919c8567641578e8912..991cb979415d47737b95694bb4a9b21672c0ec7b)
 - Specific bonuses
   - See if I actually need to register those in "Ready"
   - look into setting up the `prepareData` -> push me onto the cached list in there instead of in every individual bonus

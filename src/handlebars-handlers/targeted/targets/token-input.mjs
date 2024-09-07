@@ -51,13 +51,15 @@ export function showTokenInput({
     };
     const div = createTemplate(templates.editableIcons, templateData);
 
-    div.querySelectorAll('li,a.trait-selector').forEach((element) => {
-        element.addEventListener('click', (event) => {
-            event.preventDefault();
-            const options = { key };
-            new TokenSelectorApp(item, options).render(true);
+    if (canEdit) {
+        div.querySelectorAll('li,a.trait-selector,.error-text').forEach((element) => {
+            element.addEventListener('click', (event) => {
+                event.preventDefault();
+                const options = { key };
+                new TokenSelectorApp(item, options).render(true);
+            });
         });
-    });
+    }
 
     addNodeToRollBonus(parent, div, item, canEdit);
 }

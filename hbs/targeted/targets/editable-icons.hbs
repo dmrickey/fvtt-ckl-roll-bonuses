@@ -6,6 +6,8 @@
             <img src="{{this.img}}">
             <span class="icon-label">{{this.name}}</span>
         </li>
+        {{else}}
+        <div class="error-text">{{localize "ckl-roll-bonuses.inputs.icon-input.no-selection"}}</div>
         {{/each}}
     </div>
     {{#unless readonly}}

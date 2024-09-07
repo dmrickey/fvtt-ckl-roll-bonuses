@@ -59,7 +59,7 @@ export function showItemInput({
     const div = createTemplate(templates.editableIcons, templateData);
 
     if (canEdit) {
-        div.querySelectorAll('li,a').forEach((element) => {
+        div.querySelectorAll('li,a,.error-text').forEach((element) => {
             element.addEventListener('click', (event) => {
                 event.preventDefault();
                 const options = {

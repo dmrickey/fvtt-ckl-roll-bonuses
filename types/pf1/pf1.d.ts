@@ -86,6 +86,7 @@ declare global {
             { override = true } = {}
         ): boolean;
         allSkills: Array<keyof typeof pf1.config.skills>;
+        get isOwner(): boolean;
         itemTypes: {
             attack: ItemAttackPF[];
             base: ItemPF[];

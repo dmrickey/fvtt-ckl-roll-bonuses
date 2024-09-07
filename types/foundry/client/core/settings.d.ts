@@ -13,8 +13,10 @@ declare global {
      * @see {@link SettingsConfig}
      */
     interface ClientSettings {
-        /** not really a set, but it has `has` and that's all I need */
-        settings: Set<string>;
+        settings: {
+            has(id: string): boolean;
+            get(id: string): any;
+        };
 
         /**
          * Return a singleton instance of the Game Settings Configuration app

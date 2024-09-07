@@ -49,9 +49,16 @@
     margin-inline-end: .2rem;
 }
 
+.roll-bonuses-form.token-selector div.hint-text {
+    max-width: 400px;
+    text-align: center;
+    text-wrap: balance;
+}
+
 .roll-bonuses-form.token-selector .grouped-tokens {
     display: flex;
     flex-wrap: wrap;
+    min-width: 300px;
     max-width: 424px;
 }
 
@@ -60,7 +67,6 @@
 }
 
 .roll-bonuses-form.token-selector .grouped-tokens .individual-token {
-    /* align-items: center; */
     position: relative;
 }
 

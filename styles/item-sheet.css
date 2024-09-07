@@ -37,6 +37,9 @@
     font-weight: bold;
     text-align: right;
 }
+#ckl-roll-bonus-container .editable-icon-input .error-text {
+    margin-inline-end: 0.5rem;
+}
 
 #ckl-roll-bonus-container .traits-list.tag-list {
     justify-content: flex-end;
