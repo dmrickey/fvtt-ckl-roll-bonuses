@@ -1,6 +1,7 @@
 import { textInput } from "../handlebars-handlers/bonus-inputs/text-input.mjs";
 import { showEnabledLabel } from '../handlebars-handlers/enabled-label.mjs';
-import { hasAnyBFlag, getDocDFlagsStartsWith, KeyedDFlagHelper, FormulaCacheHelper, getDocBFlagsStartsWith } from "../util/flag-helpers.mjs";
+import { intersection } from '../util/array-intersects.mjs';
+import { hasAnyBFlag, getDocDFlagsStartsWith, FormulaCacheHelper } from "../util/flag-helpers.mjs";
 import { LocalHookHandler, customGlobalHooks, localHooks } from "../util/hooks.mjs";
 import { registerItemHint } from "../util/item-hints.mjs";
 import { localize } from "../util/localize.mjs";
@@ -354,3 +355,207 @@ Hooks.on('renderItemSheet', (
         });
     });
 });
+
+/**
+* Return any dictionary flags on the document that start with the given partial string
+*
+* @param {BaseDocument} doc
+* @param {...string} keyStarts
+* @returns {string[]}
+*/
+const getDocBFlagsStartsWith = (doc, ...keyStarts) => {
+    /** @type {string[]} */
+    const found = [];
+
+    if (doc instanceof pf1.documents.actor.ActorPF) {
+        Object.entries(doc.itemFlags?.boolean ?? {}).forEach(([_itemTag, flags]) => {
+            Object.entries(flags).forEach(([flag]) => {
+                keyStarts.forEach((keyStart) => {
+                    if (flag.startsWith(keyStart)) {
+                        found.push(flag);
+                    }
+                });
+            });
+        });
+    }
+    else if (doc instanceof pf1.documents.item.ItemPF) {
+        Object.entries(doc.getItemDictionaryFlags()).forEach(([flag, value]) => {
+            keyStarts.forEach((keyStart) => {
+                if (flag.startsWith(keyStart)) {
+                    found.push(flag);
+                }
+            });
+        });
+    }
+
+    return found;
+}
+
+class KeyedDFlagHelper {
+
+    /** @type {{[key: string]: FlagValue[]}} */
+    #byFlag = {};
+
+    /** @type {{[key: string]: number}?} - Sums for each individual flag */
+    #sumByFlag = null;
+
+    /** @type {ItemDictionaryFlags} - Keyed by item tag, and contains at least one flag/value */
+    #byItem = {};
+
+    /** @type {string[]} - The flags*/
+    #flags = [];
+
+    /** @type {{[key: FlagValue]: string[]}} Keyed by flag value, list of flags containing  */
+    #byValue = {};
+
+    /** @type {{[key: string]: ItemPF}} */
+    #items = {};
+
+    /**
+     * @param {ActorPF} actor
+     * @param {object} options
+     * @param {boolean} [options.includeInactive]
+     * @param {boolean} [options.onlyIncludeAllFlags]
+     * @param {{[key: string]: FlagValue | ((arg: FlagValue) => boolean)}} [options.mustHave]
+     * @param {...string} flags
+     */
+    constructor(actor, { includeInactive = false, onlyIncludeAllFlags = false, mustHave = {} }, ...flags) {
+        this.#flags = flags;
+
+        actor.items.forEach(item => {
+            if (includeInactive || item.isActive) {
+                let hasFlag = false;
+                if ((!onlyIncludeAllFlags || intersection(this.#flags, Object.keys(item.system.flags.dictionary)).length === this.#flags.length)
+                    && Object.entries(mustHave).every(([key, value]) =>
+                        typeof value === 'function'
+                            ? value(item.system.flags.dictionary[key])
+                            : item.system.flags.dictionary[key] === value
+                    )
+                ) {
+                    flags.forEach((flag) => {
+                        this.#byFlag[flag] ||= [];
+                        if (item.system.flags.dictionary[flag]) {
+                            const value = item.system.flags.dictionary[flag];
+                            this.#byFlag[flag].push(value);
+
+                            this.#byItem[item.system.tag] ||= {};
+                            this.#byItem[item.system.tag][flag] = value;
+
+                            this.#byValue[value] ||= [];
+                            this.#byValue[value].push(flag);
+                            hasFlag = true;
+                        }
+                    });
+                }
+
+                if (hasFlag) {
+                    this.#items[item.system.tag] = item;
+                }
+            }
+        });
+    }
+
+    /**
+     * @returns {boolean} - whether or not any flags were found
+     */
+    hasAnyFlags() {
+        return !!Object.values(this.#byFlag).find(x => x.length);
+    }
+
+    /**
+     * @param {string} flag
+     * @returns {ItemPF[]}
+     */
+    itemsForFlag(flag) {
+        return Object.values(this.#items)
+            .filter((item) => this.#hasDFlag(item, flag));
+    }
+
+    /**
+     * @param {string} flag
+     * @returns {FlagValue[]}
+     */
+    valuesForFlag(flag) {
+        return this.#byFlag[flag]?.filter(truthiness) ?? [];
+    }
+
+    /**
+     * Returns an array of {@link FlagValue}s as {@link String}s.
+     *
+     * @param {string} flag
+     * @returns {string[]}
+     */
+    stringValuesForFlag(flag) {
+        return this.valuesForFlag(flag).map((x) => `${x}`);
+    }
+
+    /**
+     *
+     * @param {FlagValue} value
+     * @returns {string[]}
+     */
+    keysForValue(value) {
+        return this.#byValue[value] ?? [];
+    }
+
+    /**
+     * @returns {{[key: string]: number}}
+     */
+    #calculateSums() {
+        if (this.#sumByFlag) return this.#sumByFlag;
+
+        this.#sumByFlag = {};
+
+        Object.entries(this.#byItem).forEach(([tag, dFlags]) => {
+            const item = this.#items[tag];
+            Object.keys(dFlags).forEach((flag) => {
+                // @ts-ignore
+                this.#sumByFlag[flag] ||= 0;
+
+                var total = flag.includes('_')
+                    ? FormulaCacheHelper.getExactPartialDictionaryFlagValue(item, flag)
+                    : FormulaCacheHelper.getDictionaryFlagValue(item, flag);
+                // @ts-ignore
+                this.#sumByFlag[flag] += total;
+            });
+        })
+
+        return this.#sumByFlag;
+    }
+
+    /**
+     * Gets the keyed sums for each flag
+     * @returns {{[key: string]: number}} Totals, keyed by flag
+     */
+    sumEntries() {
+        this.#sumByFlag ??= this.#calculateSums();
+        return { ...this.#sumByFlag };
+    }
+
+    /**
+     * Gets the sum of all values for the given flag.
+     * @param {...string} flags - The flags to fetch the totals for
+     * @returns {number} - The total for the given flags
+     */
+    sumOfFlags(...flags) {
+        return flags.reduce((sum, flag) => sum + (this.sumEntries()[flag] || 0), 0);
+    }
+
+    /**
+     * Gets the sum of all values.
+     * @returns {number} - The combined total for all flags
+     */
+    sumAll() {
+        return Object.values(this.sumEntries()).reduce((sum, current) => sum + current, 0);
+    }
+
+
+    /**
+     * @param {ItemPF} item
+     * @param {string} flag
+     * @returns {boolean} True if the item has the dictionary flag.
+     */
+    #hasDFlag(item, flag) {
+        return item.system.flags.dictionary?.hasOwnProperty(flag);
+    }
+}

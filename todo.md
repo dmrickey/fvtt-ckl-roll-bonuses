@@ -314,7 +314,6 @@
 
 - Remove Obsolete Code
   - Flag Helpers
-    - `KeyedDFlagHelper`
     - `getDocDFlags`
   - delete FormulaCacheHelper.registerUncacheableDictionaryFlag
   - delete FormulaCacheHelper.isUncacheableDictionaryFlag
