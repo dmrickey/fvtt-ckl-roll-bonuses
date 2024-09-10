@@ -148,6 +148,11 @@ declare global {
         ): Promise<ChatMessagePF>;
 
         system: SystemActorData;
+
+        updateEmbeddedDocuments(
+            type: 'Item',
+            updates: Partial<ItemPF<SystemItemData>>[]
+        );
     }
 
     class ActorCharacterPF extends ActorPF {}

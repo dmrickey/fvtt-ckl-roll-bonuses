@@ -2,6 +2,7 @@ import { createChange } from '../util/conditional-helpers.mjs';
 import { log } from './migration-log.mjs';
 import { MODULE_NAME } from '../consts.mjs';
 import { isNotEmptyObject } from '../util/is-empty-object.mjs';
+import { truthiness } from '../util/truthiness.mjs';
 
 /** BEGIN to system changes */
 const clAllKey = 'all-spell-cl';
@@ -84,8 +85,11 @@ export const migrateSettings = async () => {
     // TODO don't forget to fill this in
 }
 
-/** @param {ItemPF} item */
-export const migrateItem = async (item) => {
+/**
+ * @param {ItemPF} item
+ * @returns {Partial<ItemPF> | undefined}
+ */
+const getItemUpdateData = (item) => {
 
     /** @type {Record<string, true>} */
     const boolean = {};
@@ -215,19 +219,28 @@ export const migrateItem = async (item) => {
     ) {
         /** @type {Partial<ItemPF>} */
         const update = {
+            _id: item.id,
             system: {
                 changes,
                 flags: {
                     boolean,
                     // @ts-ignore it doesn't like the de-assign (setting to null)
-                    dictionary: dictionary,
+                    dictionary,
                 }
             },
             flags: {
                 [MODULE_NAME]: moduleFlags,
             },
         };
-        await item.update(update);
+        return update;
+    }
+};
+
+/** @param {ItemPF} item */
+export const migrateItem = async (item) => {
+    const data = getItemUpdateData(item);
+    if (data) {
+        await item.update(data);
     }
 };
 
@@ -235,14 +248,16 @@ export const migrateItem = async (item) => {
 export const migrateActor = async (actor) => {
     log(`migrating items for actor '${actor?.name}'`);
     if (actor?.items?.size) {
-        for (const item of actor.items) {
-            await migrateItem(item);
+        const updates = actor.items.map(getItemUpdateData)
+            .filter(truthiness);
+        if (updates.length) {
+            await actor.updateEmbeddedDocuments("Item", updates);
         }
     }
     log('...finished migrating actor');
 };
 
-const migrateGameItems = async () => {
+const migrateWorldItems = async () => {
     log('migrating game items');
 
     for (const item of game.items ?? []) {
@@ -256,9 +271,18 @@ const migratePacks = async () => {
     log('migrating unlocked packs');
 
     for (const pack of game.packs.filter(x => x.documentName === "Item" && !x.locked)) {
-        const docs = await pack.getDocuments();
-        for (const item of docs) {
-            await migrateItem(item);
+        // @ts-ignore don't care about defining Pack
+        await pack.updateAll((item) => getItemUpdateData(item) || {});
+    }
+
+    for (const pack of game.packs.filter(x => x.documentName === "Actor" && !x.locked)) {
+        const actors = await pack.getDocuments();
+        for (const actor of actors) {
+            const updates = actor.items.map(getItemUpdateData)
+                .filter(truthiness);
+            if (updates.length) {
+                await actor.updateEmbeddedDocuments("Item", updates);
+            }
         }
     }
 
@@ -269,10 +293,10 @@ const migrateWorldActors = async () => {
     log('migrating world actors');
 
     for (const actor of game.actors) {
-        if (actor.items?.size) {
-            for (const item of actor.items) {
-                await migrateItem(item);
-            }
+        const updates = actor.items.map(getItemUpdateData)
+            .filter(truthiness);
+        if (updates.length) {
+            await actor.updateEmbeddedDocuments("Item", updates);
         }
     }
 
@@ -282,11 +306,12 @@ const migrateWorldActors = async () => {
 const migrateSyntheticActors = async () => {
     log('migrating synthetic actors');
 
-    game.scenes;
     const synthetics = [...game.scenes].flatMap(s => [...s.tokens].filter(t => !t.isLinked && t.actor?.items?.size));
     for (const synthetic of synthetics) {
-        for (const item of synthetic.actor.items) {
-            await migrateItem(item);
+        const updates = synthetic.actor.items.map(getItemUpdateData)
+            .filter(truthiness);
+        if (updates.length) {
+            await synthetic.actor.updateEmbeddedDocuments("Item", updates);
         }
     }
 
@@ -295,7 +320,7 @@ const migrateSyntheticActors = async () => {
 
 export const migrateV2 = async () => {
     await migrateLanguageSetting();
-    await migrateGameItems();
+    await migrateWorldItems();
     await migratePacks();
     await migrateWorldActors();
     await migrateSyntheticActors();
