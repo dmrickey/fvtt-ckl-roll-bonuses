@@ -314,6 +314,11 @@
 - Todo - revisit natural attacks for "is weapon"
 - Change all "is type" into a single target with checkboxes for various types it should allow
 
+Verify 
+- Specific Item Targets
+  - When Active target
+- When Active Target (was incorrectly inheriting from Specific Item Target)
+
 - Remove Obsolete Code
   - Flag Helpers
     - `getDocDFlags`
