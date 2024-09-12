@@ -262,9 +262,9 @@
   - See if I actually need to register those in "Ready"
   - look into setting up the `prepareData` -> push me onto the cached list in there instead of in every individual bonus
 - Add "target-able overrides" section to the configuration popup for Items that can have actions but don't have the necessary data
-  - Weapon Group
-  - Weapon Base Type
-  - Finesse
+  - Weapon Group (will be a new override)
+  - Weapon Base Type (will be a new override)
+  - Finesse (already exists)
 - Update documentation
   - Global Bonus incrmeent range penalty
     - "can skip via dialog"
@@ -272,6 +272,7 @@
     - "can skip via dialog"
 - Create new "Roll Bonuses" section for attack dialog inputs
 - Handle Migration
+  - migrate crit to Item/Action targets
   - Documentation
     - make sure keys match
       - greater/improved/mythic/racial on end

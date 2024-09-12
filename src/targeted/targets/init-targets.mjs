@@ -1,4 +1,4 @@
-import { ActionTarget } from "./have-to-do/action-target.mjs";
+import { ActionTarget } from "./action-target.mjs";
 import { AlignmentTarget } from './conditional/alignment-target.mjs';
 import { DamageTypeTarget } from "./damage-type-target.mjs";
 import { IsMeleeTarget } from './item-filter-target.mjs/is-melee-target.mjs';
@@ -26,6 +26,7 @@ import { ConditionTarget } from './conditional/condition-target.mjs';
 import { IsThrownTarget } from './item-filter-target.mjs/is-thrown-target.mjs';
 
 export const registerTargets = () => [
+    ActionTarget,
     AlignmentTarget,
     AllTarget,
     ConditionTarget,
@@ -50,7 +51,4 @@ export const registerTargets = () => [
     WhenActiveTarget,
     WhenInCombatTarget,
     WhenTargetInRange,
-
-    // todo later
-    // ActionTarget,
 ].forEach(Sources.registerSource);
