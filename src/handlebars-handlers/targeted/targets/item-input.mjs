@@ -34,19 +34,20 @@ export function showItemInput({
     label ||= localizeBonusLabel(key);
     tooltip ||= localizeBonusTooltip(key);
 
-    /** @type {string[]} */
-    const currentUuids = item.getFlag(MODULE_NAME, key) || [];
+    const currentIds = (/** @type {string[]} */ (item.getFlag(MODULE_NAME, key) || []))
+        .map((x) => x.split('.').at(-1))
+        .filter(truthiness);
     const items = item.actor.items
         .filter(filter)
-        .map(({ uuid, id, name, img, type }) => {
+        .map(({ id, name, img, type }) => {
             const typeLabel = localize(CONFIG.Item.typeLabels[type]);
-            return { uuid, id, name, img, type, typeLabel };
+            return { id, name, img, type, typeLabel };
         });
-    const current = item.actor.items.filter((i) => currentUuids.includes(i.uuid));
+    const current = item.actor.items.filter((i) => currentIds.includes(i.id));
 
-    const allItemUuids = items.map((i) => i.uuid);
-    const badCurrentUuids = currentUuids.filter((c) => !allItemUuids.includes(c));
-    const badCurrent = badCurrentUuids.map(fromUuidSync);
+    const allItemIds = items.map((i) => i.id);
+    const badCurrentIs = currentIds.filter((c) => !allItemIds.includes(c));
+    const badCurrent = badCurrentIs.map((id) => item.actor?.items.get(id)).filter(truthiness);
 
     const templateData = {
         badCurrent,
@@ -62,8 +63,9 @@ export function showItemInput({
         div.querySelectorAll('li,a,.error-text').forEach((element) => {
             element.addEventListener('click', (event) => {
                 event.preventDefault();
+                /** @type {ItemSelectorOptions} */
                 const options = {
-                    currentUuids,
+                    currentIds,
                     items,
                     path: `flags.${MODULE_NAME}.${key}`,
                 };
@@ -109,7 +111,7 @@ class ItemSelector extends DocumentSheet {
 
         const items = this.options.items;
         items.forEach((item) => {
-            item.checked = this.options.currentUuids.includes(item.uuid);
+            item.checked = this.options.currentIds.includes(item.id);
         });
 
         items.sort((a, b) => {

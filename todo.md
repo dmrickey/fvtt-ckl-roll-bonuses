@@ -292,6 +292,7 @@
     - Spell Specialization
     - Weapon Focus
     - Weapon Specialization
+  - Verify item targets work without migration
 - Update Auto-recognition stuff in "renderItemSheet" to use the same logic as martial-focus.mjs for specific bonuses
 - register for "actor.rollCL" hook and add bonuses based on action in the message from the hook's messageId
 - Roll Bonuses d20 icon on sheet in RB header doesn't open journal
@@ -301,6 +302,7 @@
 - Add "elemental choices" to api
 - Negate Bonus type
   - e.g. Android not being affected by Morale Bonuses
+  - Can add a "offset/set" toggle to current typed bonus
 - Targeting
   - Add a configuration error if "this target is not configured"
     - e.g. Any Item Target that is not configured.

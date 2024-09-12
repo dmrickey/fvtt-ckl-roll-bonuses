@@ -95,10 +95,9 @@ declare global {
     type Nullable<T> = T | null | undefined;
 
     class ItemSelectorOptions extends DocumentSheetOptions<ItemPF> {
-        currentUuids: string[];
+        currentIds: string[];
         items: {
             checked?: boolean;
-            uuid: string;
             type: string;
             name: string;
             typeLabel: string;

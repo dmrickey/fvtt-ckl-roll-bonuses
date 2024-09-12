@@ -477,6 +477,7 @@ declare global {
         get enhancementBonus(): number;
         maxRange: number;
         minRange: number;
+        name: string;
     }
 
     /** used for weapons and attacks */
