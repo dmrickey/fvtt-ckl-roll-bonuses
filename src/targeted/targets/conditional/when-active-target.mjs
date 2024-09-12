@@ -1,17 +1,25 @@
 import { MODULE_NAME } from '../../../consts.mjs';
-import { ItemTarget } from "../specific-item-target/item-target.mjs";
+import { truthiness } from '../../../util/truthiness.mjs';
+import { SpecificItemTarget } from "../specific-item-target/specific-item-target.mjs";
 
-export class WhenActiveTarget extends ItemTarget {
-
-    /** @type {ItemType[]} */
-    static itemTypes = ['buff', 'equipment', 'weapon', 'feat'];
+/**
+ * When Specific item is equipped / enabled / active
+ */
+export class WhenActiveTarget extends SpecificItemTarget {
 
     /**
      * @override
-     * @inheritdoc
-     * @returns {(item: ItemPF) => boolean}
+     * @param {ActorPF} actor
+     * @returns {ItemPF[]}
      */
-    static get itemFilter() { return (/** @type {ItemPF} */ item) => this.itemTypes.includes(item.type); }
+    static getItemsFromActor(actor) {
+        return [
+            ...actor.itemTypes.buff,
+            ...actor.itemTypes.equipment,
+            ...actor.itemTypes.weapon,
+            ...actor.itemTypes.feat,
+        ];
+    }
 
     /**
      * @override
@@ -32,18 +40,29 @@ export class WhenActiveTarget extends ItemTarget {
     static get isGenericTarget() { return true; }
 
     /**
+     * @param {ItemPF} item
+     * @returns {string[]}
+     */
+    static #getIdsFromItem(item) {
+        const ids = (/** @type {string[]} */(item.getFlag(MODULE_NAME, this.key) ?? []))
+            .map((id) => id.split('.').at(-1))
+            .filter(truthiness);
+        return ids;
+    }
+
+    /**
      * @override
-       * @param {ItemPF & { actor: ActorPF }} _item
-       * @param {ItemPF[]} sources
+     * @param {ItemPF & { actor: ActorPF }} _item
+     * @param {ItemPF[]} sources
      * @returns {ItemPF[]}
      */
     static _getSourcesFor(_item, sources) {
         const filtered = sources.filter((flagged) => {
             /** @type {string[]} */
-            const targetedItemUuids = flagged.getFlag(MODULE_NAME, this.key) || [];
-            return targetedItemUuids.every((uuid) => {
-                const found = /** @type {ItemPF} */ ( /** @type {unknown} */ fromUuidSync(uuid));
-                return found.isActive;
+            const targetedItemIds = this.#getIdsFromItem(flagged);
+            return targetedItemIds.every((id) => {
+                const item = flagged.actor?.items.get(id);
+                return !!item?.isActive || !!item?.links.parent?.isActive;
             });
         });
 

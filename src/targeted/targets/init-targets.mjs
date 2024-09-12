@@ -5,7 +5,7 @@ import { IsMeleeTarget } from './item-filter-target.mjs/is-melee-target.mjs';
 import { IsRangedTarget } from './item-filter-target.mjs/is-ranged-target.mjs';
 import { IsSpellTarget } from "./item-filter-target.mjs/is-spell-target.mjs";
 import { IsWeaponTarget } from './item-filter-target.mjs/is-weapon-target.mjs';
-import { ItemTarget } from "./specific-item-target/item-target.mjs";
+import { SpecificItemTarget } from "./specific-item-target/specific-item-target.mjs";
 import { SelfTarget } from './self-target.mjs';
 import { SpellTarget } from "./specific-item-target/spell-target.mjs";
 import { TokenTarget } from "./conditional/token-target.mjs";
@@ -38,8 +38,8 @@ export const registerTargets = () => [
     IsSpellTarget,
     IsThrownTarget,
     IsWeaponTarget,
-    ItemTarget,
     SelfTarget,
+    SpecificItemTarget,
     SpellDescriptorTarget,
     SpellSchoolTarget,
     SpellTarget,

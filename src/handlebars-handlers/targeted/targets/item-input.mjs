@@ -8,7 +8,7 @@ import { createTemplate, templates } from "../../templates.mjs";
 
 /**
  * @param {object} args
- * @param {(item: ItemPF) => boolean} args.filter,
+ * @param {(actor: ActorPF) => ItemPF[]} args.itemsFromActorFunc,
  * @param {ItemPF} args.item,
  * @param {string} args.journal,
  * @param {string} args.key,
@@ -19,7 +19,7 @@ import { createTemplate, templates } from "../../templates.mjs";
  * @param {boolean} options.canEdit
  */
 export function showItemInput({
-    filter,
+    itemsFromActorFunc,
     item,
     journal,
     key,
@@ -37,8 +37,7 @@ export function showItemInput({
     const currentIds = (/** @type {string[]} */ (item.getFlag(MODULE_NAME, key) || []))
         .map((x) => x.split('.').at(-1))
         .filter(truthiness);
-    const items = item.actor.items
-        .filter(filter)
+    const items = itemsFromActorFunc(item.actor)
         .map(({ id, name, img, type }) => {
             const typeLabel = localize(CONFIG.Item.typeLabels[type]);
             return { id, name, img, type, typeLabel };

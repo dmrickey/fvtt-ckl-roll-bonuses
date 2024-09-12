@@ -3,12 +3,7 @@ import { showItemInput } from "../../../handlebars-handlers/targeted/targets/ite
 import { truthiness } from "../../../util/truthiness.mjs";
 import { BaseTarget } from "../base-target.mjs";
 
-export class ItemTarget extends BaseTarget {
-
-    /**
-     * @returns {(item: ItemPF) => boolean}
-     */
-    static get itemFilter() { return (/** @type {ItemPF} */ item) => item.hasAction; }
+export class SpecificItemTarget extends BaseTarget {
 
     /**
      * @override
@@ -33,6 +28,14 @@ export class ItemTarget extends BaseTarget {
     }
 
     /**
+     * @param {ActorPF} actor
+     * @returns {ItemPF[]}
+     */
+    static getItemsFromActor(actor) {
+        return actor.items.filter(x => x.hasAction);
+    }
+
+    /**
      * @override
      * @param {ItemPF} source
      * @returns {Nullable<string[]>}
@@ -41,7 +44,7 @@ export class ItemTarget extends BaseTarget {
         /** @type {string[]} */
         if (!source?.actor) return;
 
-        const ids = ItemTarget.#getIdsFromItem(source);
+        const ids = SpecificItemTarget.#getIdsFromItem(source);
         return ids.map((id) => source.actor?.items.get(id)?.name).filter(truthiness);
     }
 
@@ -57,7 +60,7 @@ export class ItemTarget extends BaseTarget {
         }
 
         const bonusSources = sources.filter((source) => {
-            const ids = ItemTarget.#getIdsFromItem(source);
+            const ids = SpecificItemTarget.#getIdsFromItem(source);
             return ids.includes(item.id) || !!item.links.parent && ids.includes(item.links.parent.id);
         });
         return bonusSources;
@@ -73,7 +76,7 @@ export class ItemTarget extends BaseTarget {
      */
     static showInputOnItemSheet({ html, isEditable, item }) {
         showItemInput({
-            filter: this.itemFilter,
+            itemsFromActorFunc: this.getItemsFromActor,
             item,
             journal: this.journal,
             key: this.key,
