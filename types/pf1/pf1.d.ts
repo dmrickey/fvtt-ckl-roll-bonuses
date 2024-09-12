@@ -560,6 +560,9 @@ declare global {
         img: string;
         get isActive(): boolean;
         isOwner: boolean;
+        links: {
+            parent?: ItemPF;
+        };
         name: string;
         pack: string;
 
@@ -983,7 +986,7 @@ declare global {
 
     class SystemItemData {
         links: {
-            children: { name: string; id: string }[];
+            children: { name: string; uuid: string }[];
             charges?: unknown[];
         };
         broken: boolean;
