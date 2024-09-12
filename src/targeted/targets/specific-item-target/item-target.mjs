@@ -55,20 +55,11 @@ export class ItemTarget extends BaseTarget {
         if (!item?.id || !item.actor?.items?.size) {
             return [];
         }
+
         const bonusSources = sources.filter((source) => {
             const ids = ItemTarget.#getIdsFromItem(source);
-            // todo in v10 stop here when I can lookup the parent link instead of having to look up the parent and see if this is a child
-            if (ids.includes(item.id)) {
-                return true;
-            }
-
-            /** @type {ItemPF[]} */
-            const targetedItems = ids
-                .map((id) => item.actor.items.get(id))
-                .filter(truthiness);
-            return !!targetedItems.find((ti) => ti.system.links.children.find(({ id }) => id === item.id));
+            return ids.includes(item.id) || !!item.links.parent && ids.includes(item.links.parent.id);
         });
-
         return bonusSources;
     }
 
