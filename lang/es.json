@@ -1,1 +1,24 @@
-{}
+{
+    "ckl-roll-bonuses": {
+        "alignment": {
+            "evil": "Maligno",
+            "lawful": "Legal",
+            "chaotic": "Caótico",
+            "good": "Bueno"
+        },
+        "bonuses": {
+            "label": {
+                "all-spell-cl": "NL de todos los conjuros",
+                "agile": "Ágil",
+                "alignment": "Objetivos de alineamiento"
+            }
+        },
+        "all-spells": "Todos los conjuros",
+        "any-target-except": "Cualquier objetivo excepto:",
+        "base-dice": "Dado base",
+        "ac-mod": "{mod} a la CA",
+        "acp-mod": "{mod} al PdA",
+        "add-damage-formula": "Añadir fórmula de daño",
+        "add-healing-formula": "Añadir fórmula de curación"
+    }
+}
