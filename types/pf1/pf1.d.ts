@@ -470,6 +470,7 @@ declare global {
             };
         };
         item: ItemPF;
+        img: string;
         static defaultDamageType: TraitSelectorValuePlural;
         hasAttack: boolean;
         isCombatManeuver: boolean;

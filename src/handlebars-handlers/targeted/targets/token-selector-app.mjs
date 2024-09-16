@@ -5,6 +5,12 @@ import { truthiness } from "../../../util/truthiness.mjs";
 import { uniqueArray } from "../../../util/unique-array.mjs";
 import { templates } from "../../templates.mjs";
 
+/**
+ * @typedef {object} TokenActorSelectorOptions
+ * @property {string} key
+*/
+
+// @ts-ignore
 /** @extends {DocumentSheet<TokenActorSelectorOptions, ItemPF>} */
 export class TokenSelectorApp extends DocumentSheet {
     /** @override */

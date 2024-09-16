@@ -7,7 +7,9 @@
     - [Swap Ability for Attack Rolls](#swap-ability-for-attack-rolls)
     - [Add/Swap Damage Types](#addswap-damage-types)
     - [Crit Only Attack Bonus](#crit-only-attack-bonus)
-  - [AC bonus](#ac-bonus)
+    - [Script Call bonus](#script-call-bonus)
+    - [AC bonus](#ac-bonus)
+    - [Alignment](#alignment)
   - [Targets](#targets)
     - [Creature type/subtype](#creature-typesubtype)
     - [By Disposition](#by-disposition)
@@ -76,8 +78,12 @@
 - e.g. swap fire to acid
 ### Crit Only Attack Bonus
 - Attack bonus needs to give optional "crit only" attack bonuses
-## AC bonus
+### Script Call bonus
+- Use <this script> for anything that matches the criteria
+### AC bonus
 - See armor focus for how I first implemented it
+### Alignment
+- Actually align the weapon/attack instead of just adding typed damage
 
 ## Targets
 ### Creature type/subtype
@@ -314,6 +320,7 @@
   - Make sure "picker app" doesn't remove function target if the user isn't allowed to configure it
 - Todo - revisit natural attacks for "is weapon"
 - Change all "is type" into a single target with checkboxes for various types it should allow
+- Look into [Alignment](#alignment)
 
 Verify 
 - Specific Item Targets

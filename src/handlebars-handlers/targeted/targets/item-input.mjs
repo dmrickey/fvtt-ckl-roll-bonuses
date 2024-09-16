@@ -7,6 +7,21 @@ import { addNodeToRollBonus } from "../../add-bonus-to-item-sheet.mjs";
 import { createTemplate, templates } from "../../templates.mjs";
 
 /**
+ * @typedef {object} ItemSelectorOptions
+ * @property {ItemTemplateData[]} items
+ * @property {string} path
+ */
+
+/**
+ * @typedef {object} ItemTemplateData
+ * @property {boolean} checked
+ * @property {string} id
+ * @property {string} img
+ * @property {string} name
+ * @property {string} typeLabel
+ */
+
+/**
  * @param {object} args
  * @param {(actor: ActorPF) => ItemPF[]} args.itemsFromActorFunc,
  * @param {ItemPF} args.item,
@@ -37,19 +52,21 @@ export function showItemInput({
     const currentIds = (/** @type {string[]} */ (item.getFlag(MODULE_NAME, key) || []))
         .map((x) => x.split('.').at(-1))
         .filter(truthiness);
+
+    /** @type {ItemTemplateData[]} */
+    const current = [];
     const items = itemsFromActorFunc(item.actor)
         .map(({ id, name, img, type }) => {
             const typeLabel = localize(CONFIG.Item.typeLabels[type]);
-            return { id, name, img, type, typeLabel };
+            const checked = currentIds.includes(id);
+            const value = { checked, id, name, img, typeLabel };
+            if (checked) {
+                current.push(value);
+            }
+            return value;
         });
-    const current = item.actor.items.filter((i) => currentIds.includes(i.id));
-
-    const allItemIds = items.map((i) => i.id);
-    const badCurrentIs = currentIds.filter((c) => !allItemIds.includes(c));
-    const badCurrent = badCurrentIs.map((id) => item.actor?.items.get(id)).filter(truthiness);
 
     const templateData = {
-        badCurrent,
         current,
         journal,
         label,
@@ -64,7 +81,6 @@ export function showItemInput({
                 event.preventDefault();
                 /** @type {ItemSelectorOptions} */
                 const options = {
-                    currentIds,
                     items,
                     path: `flags.${MODULE_NAME}.${key}`,
                 };
@@ -109,12 +125,9 @@ class ItemSelector extends DocumentSheet {
         };
 
         const items = this.options.items;
-        items.forEach((item) => {
-            item.checked = this.options.currentIds.includes(item.id);
-        });
 
         items.sort((a, b) => {
-            const first = a.type.localeCompare(b.type);
+            const first = a.typeLabel.localeCompare(b.typeLabel);
             return first
                 ? first
                 : a.name.localeCompare(b.name);

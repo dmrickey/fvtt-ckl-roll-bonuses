@@ -94,23 +94,6 @@ declare global {
 
     type Nullable<T> = T | null | undefined;
 
-    class ItemSelectorOptions extends DocumentSheetOptions<ItemPF> {
-        currentIds: string[];
-        items: {
-            checked?: boolean;
-            type: string;
-            name: string;
-            typeLabel: string;
-            img: string;
-            id: string;
-        }[];
-        path: string;
-    }
-
-    interface TokenActorSelectorOptions extends DocumentSheetOptions<ItemPF> {
-        key: string;
-    }
-
     declare type DamageInputModel = DamagePart & {
         crit: Nullable<'crit' | 'nonCrit' | 'normal'>;
     };
