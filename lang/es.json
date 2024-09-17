@@ -10,7 +10,12 @@
             "label": {
                 "all-spell-cl": "NL de todos los conjuros",
                 "agile": "Ágil",
-                "alignment": "Objetivos de alineamiento"
+                "alignment": "Objetivos de alineamiento",
+                "all-spell-dc": "CD a todos los conjuros",
+                "all": "Todos los objetivos",
+                "ammo-attack": "Bonificador genérico al ataque",
+                "ammo-effect": "Nota de efecto",
+                "ammo-enhancement": "Bonificador por mejora base"
             }
         },
         "all-spells": "Todos los conjuros",
