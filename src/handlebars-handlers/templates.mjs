@@ -25,6 +25,7 @@ export const templates =/** @type {const} */ ({
     conditionals: 'systems/pf1/templates/apps/item-action/conditionals.hbs', // (targeted but belongs to pf1) belongs to pf1
 
     // targeted - targets
+    actionsApp: `modules/${MODULE_NAME}/hbs/targeted/targets/actions-input-application.hbs`,
     checklist: `modules/${MODULE_NAME}/hbs/targeted/targets/checklist.hbs`,
     editableIcons: `modules/${MODULE_NAME}/hbs/targeted/targets/editable-icons.hbs`,
     itemsApp: `modules/${MODULE_NAME}/hbs/targeted/targets/items-input-application.hbs`,

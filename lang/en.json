@@ -15,7 +15,7 @@
         "base-dice": "Base Dice",
         "bonuses": {
             "label": {
-                "action": "Specific Action",
+                "action": "Action",
                 "agile": "Agile",
                 "alignment": "Alignment Targets",
                 "all": "All Targets",

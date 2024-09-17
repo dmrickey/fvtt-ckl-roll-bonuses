@@ -1,4 +1,5 @@
 import { MODULE_NAME } from '../../consts.mjs';
+import { showActionInput } from '../../handlebars-handlers/targeted/targets/action-input.mjs';
 import { truthiness } from '../../util/truthiness.mjs';
 import { BaseTarget } from "./base-target.mjs";
 
@@ -59,7 +60,7 @@ export class ActionTarget extends BaseTarget {
             const item = source.actor?.items.get(itemId);
             const action = item?.actions.get(actionId);
             if (!item || !action) return;
-            return `${item.name} ${action.name}`;
+            return `${item.name} - ${action.name}`;
         }).filter(truthiness);
     }
 
@@ -72,14 +73,14 @@ export class ActionTarget extends BaseTarget {
      * @param {ItemPF} options.item
      */
     static showInputOnItemSheet({ html, isEditable, item }) {
-        // showActionInput({
-        //     item,
-        //     journal: this.journal,
-        //     key: this.key,
-        //     parent: html,
-        //     tooltip: this.tooltip,
-        // }, {
-        //     canEdit: isEditable,
-        // });
+        showActionInput({
+            item,
+            journal: this.journal,
+            key: this.key,
+            parent: html,
+            tooltip: this.tooltip,
+        }, {
+            canEdit: isEditable,
+        });
     }
 }
