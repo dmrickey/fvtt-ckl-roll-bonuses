@@ -24,6 +24,7 @@ import { WhenTargetInRange } from './conditional/is-target-within-range.mjs';
 import { SpellDescriptorTarget } from './spell-descriptor-target.mjs';
 import { ConditionTarget } from './conditional/condition-target.mjs';
 import { IsThrownTarget } from './item-filter-target.mjs/is-thrown-target.mjs';
+import { IsNaturalTarget } from './item-filter-target.mjs/is-natural-target.mjs';
 
 export const registerTargets = () => [
     ActionTarget,
@@ -35,6 +36,7 @@ export const registerTargets = () => [
     FunctionTarget,
     HasBooleanFlagTarget,
     IsMeleeTarget,
+    IsNaturalTarget,
     IsRangedTarget,
     IsSpellTarget,
     IsThrownTarget,

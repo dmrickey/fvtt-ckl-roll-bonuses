@@ -276,6 +276,8 @@
     - "can skip via dialog"
   - Global Bonus require melee threaten
     - "can skip via dialog"
+  - Add action target documentation
+  - Add natural item target documentation
 - Create new "Roll Bonuses" section for attack dialog inputs
 - Handle Migration
   - migrate crit to Item/Action targets
