@@ -1,25 +1,35 @@
-.roll-bonuses-form.bonus-picker {
-    .sources {
-        display: grid;
-        gap: 1rem;
-        grid-template-columns: 1fr 1fr;
-    }
+.roll-bonuses-form.bonus-picker .tab-headers {
+    display: flex;
+    flex: 1;
+    justify-content: space-evenly;
+    /* todo add border and update color for negated tabs */
+}
+.roll-bonuses-form.bonus-picker .picker-tab {
+    display: none;
+}
+.roll-bonuses-form.bonus-picker .picker-tab.show-tab {
+    display: unset;
+}
 
-    .specific-bonuses {
-        -webkit-column-count: 2;
-        -moz-column-count: 2;
-        column-count: 2;
+.roll-bonuses-form.bonus-picker .sources {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 1fr 1fr;
+}
 
-        & .child {
-            margin-inline-start: 1rem;
-        }
-    }
+.roll-bonuses-form.bonus-picker .specific-bonuses {
+    -webkit-column-count: 2;
+    -moz-column-count: 2;
+    column-count: 2;
+}
+.roll-bonuses-form.bonus-picker .specific-bonuses .child {
+    margin-inline-start: 1rem;
+}
 
-    & h2 {
-        text-align: center;
-    }
+.roll-bonuses-form.bonus-picker h2 {
+    text-align: center;
+}
 
-    & .fas.fa-book {
-        margin-inline-start: 0.25rem;
-    }
+.roll-bonuses-form.bonus-picker .fas.fa-book {
+    margin-inline-start: 0.25rem;
 }

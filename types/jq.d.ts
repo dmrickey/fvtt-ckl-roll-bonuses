@@ -9,7 +9,7 @@ interface JQuery {
                 HTMLElement,
                 HTMLElement
             >
-        ) => Promise<void>
+        ) => Promise<void> | void
     ): unknown;
     click(
         arg0: (

@@ -15,6 +15,7 @@
         "base-dice": "Base Dice",
         "bonuses": {
             "label": {
+                "action": "Specific Action",
                 "agile": "Agile",
                 "alignment": "Alignment Targets",
                 "all": "All Targets",
@@ -100,6 +101,7 @@
                 "when-in-combat": "When in Combat"
             },
             "tooltip": {
+                "action": "Grant bonuses to specific actions.",
                 "agile": "Grant dex to damage for attacks.",
                 "alignment": "Activates bonuses when targeting tokens with the chosen alignment.",
                 "all": "Activate bonuses for any action that can accept the bonus.",
@@ -296,6 +298,12 @@
         "modifiers": "Modifiers",
         "ok": "OK",
         "picker": {
+            "tabs": {
+                "specific": "Specific Bonuses",
+                "specific-description": "These are for bonuses that are either too specific or too broad to be a targeted bonus. Most of these are for unique abilities or feats, or are very broard and affect something more globally that doesn't fit into the \"Targeted\" system.",
+                "targeted": "Targeted Bonuses",
+                "targeted-description": "Targeted Bonuses require at least one bonus and at least one target. If you select multiple targets, then the bonus will only be active while all targeting criteria is matched."
+            },
             "bonuses": {
                 "label": "Bonuses",
                 "tooltip": "These are the various Bonuses that can be applied to your abilities."

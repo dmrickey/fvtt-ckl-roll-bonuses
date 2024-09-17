@@ -168,6 +168,34 @@ class BonusPickerApp extends DocumentSheet {
                 }
             },
         );
+
+        const targetedTab = html.find('#targeted-tab-button');
+        targetedTab?.on(
+            'click',
+            (event) => {
+                event.preventDefault();
+                /** @type {HTMLElement} */
+                const specificBody = event.target.parentElement.parentElement.querySelector('.specific-body');
+                specificBody.classList.remove('show-tab');
+                /** @type {HTMLElement} */
+                const targetedBody = event.target.parentElement.parentElement.querySelector('.targeted-body');
+                targetedBody.classList.add('show-tab');
+            }
+        )
+
+        const specificTab = html.find('#specific-tab-button');
+        specificTab?.on(
+            'click',
+            (event) => {
+                event.preventDefault();
+                /** @type {HTMLElement} */
+                const specificBody = event.target.parentElement.parentElement.querySelector('.specific-body');
+                specificBody.classList.add('show-tab');
+                /** @type {HTMLElement} */
+                const targetedBody = event.target.parentElement.parentElement.querySelector('.targeted-body');
+                targetedBody.classList.remove('show-tab');
+            }
+        )
     }
 
     /**
