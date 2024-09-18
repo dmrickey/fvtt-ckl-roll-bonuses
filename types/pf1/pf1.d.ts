@@ -2,7 +2,7 @@ import {
     armorFocusKey,
     improvedArmorFocusKey,
 } from '../../src/bonuses/armor-focus/shared.mjs';
-import { changeTypeOffsetKey } from '../../src/bonuses/change-type-offset.mjs';
+import { changeTypeOffsetKey } from '../../src/bonuses/change-type-modification.mjs';
 import {
     elementalFocusKey,
     greaterElementalFocusKey,

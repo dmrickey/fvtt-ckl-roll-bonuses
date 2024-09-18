@@ -1,4 +1,4 @@
-import { changeTypeOffsetFormulaKey, changeTypeOffsetKey } from '../bonuses/change-type-offset.mjs';
+import { changeTypeOffsetFormulaKey, changeTypeOffsetKey } from '../bonuses/change-type-modification.mjs';
 import { MODULE_NAME } from '../consts.mjs';
 import { LanguageSettings } from '../util/settings.mjs';
 

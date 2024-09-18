@@ -13,10 +13,11 @@ import { createTemplate, templates } from "../templates.mjs";
  * @param {string} [args.label]
  * @param {HTMLElement} args.parent,
  * @param {string} [args.tooltip]
+ * @param {{id: string, label: string}[]} args.values
  * @param {object} options
  * @param {boolean} options.canEdit
 */
-export function checkboxInput({
+export function radioInput({
     current = undefined,
     item,
     journal,
@@ -24,46 +25,32 @@ export function checkboxInput({
     label = '',
     parent,
     tooltip = '',
+    values,
 }, {
     canEdit,
 }
 ) {
     if (current === undefined) {
-        current = !!item.getFlag(MODULE_NAME, key);
+        current = item.getFlag(MODULE_NAME, key) || values[0].id;
     }
     label ||= localizeBonusLabel(key);
     tooltip ||= localizeBonusTooltip(key);
 
     const div = createTemplate(
-        templates.checkboxInput,
+        templates.radioInput,
         {
             current,
             journal,
             key,
             label,
+            name: `flags.${MODULE_NAME}.${key}`,
             readonly: !canEdit,
             tooltip,
-        },
-    );
-    /** @type {HTMLInputElement | null} */
-    const checkbox = div.querySelector(`#checkbox-input-${key}`);
-    if (!checkbox) {
-        return;
-    }
-
-    checkbox.checked = current;
-    checkbox.addEventListener(
-        'change',
-        async (event) => {
-            if (!key) return;
-            // @ts-ignore
-            const value = event.currentTarget.checked;
-
-            await item.setFlag(MODULE_NAME, key, value);
+            values,
         },
     );
 
     addNodeToRollBonus(parent, div, item, canEdit);
 }
 
-api.inputs.checkboxInput = checkboxInput;
+api.inputs.radioInput = radioInput;

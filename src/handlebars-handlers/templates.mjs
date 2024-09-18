@@ -1,6 +1,6 @@
 import { MODULE_NAME } from "../consts.mjs";
 
-export const templates =/** @type {const} */ ({
+export const templates = /** @type {const} */ ({
     /** bonus container for item sheets */
     rollBonusesContainer: `modules/${MODULE_NAME}/hbs/roll-bonuses-container.hbs`,
 
@@ -11,6 +11,7 @@ export const templates =/** @type {const} */ ({
     checkboxInput: `modules/${MODULE_NAME}/hbs/checkbox-input.hbs`,
     enabledLabel: `modules/${MODULE_NAME}/hbs/enabled-label.hbs`,
     keyValueSelect: `modules/${MODULE_NAME}/hbs/labeled-key-value-dropdown-select.hbs`,
+    radioInput: `modules/${MODULE_NAME}/hbs/radio-input.hbs`,
     stringSelect: `modules/${MODULE_NAME}/hbs/labeled-string-dropdown-select.hbs`,
     textInput: `modules/${MODULE_NAME}/hbs/text-input.hbs`,
     textInputAndKeyValueSelect: `modules/${MODULE_NAME}/hbs/text-input-and-key-value-select.hbs`,

@@ -278,6 +278,7 @@
     - "can skip via dialog"
   - Add action target documentation
   - Add natural item target documentation
+  - Offset Bonus - add documentation for `set`
 - Create new "Roll Bonuses" section for attack dialog inputs
 - Handle Migration
   - migrate crit to Item/Action targets
@@ -292,7 +293,9 @@
       - dictionary flags are removed
       - System change migration is migrating properly
       - Verify language strings are properly updated
-  - For Each
+    - Change Offset -> Change Modification
+      - Make sure it includes add/set
+  - For Each (verify these all work after migration)
     - Armor Focus
     - Elemental CL/DC
     - Elemental Focus
@@ -301,6 +304,7 @@
     - Spell Specialization
     - Weapon Focus
     - Weapon Specialization
+    - Change Offset (-> Change Modification)
   - Verify item targets work without migration
 - Update Auto-recognition stuff in "renderItemSheet" to use the same logic as martial-focus.mjs for specific bonuses
 - register for "actor.rollCL" hook and add bonuses based on action in the message from the hook's messageId

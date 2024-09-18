@@ -21,11 +21,13 @@ class DictionaryMigration {
      * @param {string} key
      * @param {string} [newKey]
      * @param {boolean} [skipBFlag]
+     * @param {string} [extraBFlag]
      */
-    constructor(key, newKey, skipBFlag) {
+    constructor(key, newKey, skipBFlag, extraBFlag) {
         this.key = key;
         this.newKey = newKey || key;
         this.skipBFlag = skipBFlag || false;
+        this.extraBFlag = extraBFlag;
     }
 }
 /** @type {DictionaryMigration[]} */
@@ -53,8 +55,8 @@ const dictionaryToModuleFlag = [
     new DictionaryMigration('weapon-specialization'),
     new DictionaryMigration('greater-weapon-specialization', 'weapon-specialization-greater'),
 
-    new DictionaryMigration('change-type-offset'),
-    new DictionaryMigration('change-type-offset-formula', 'change-type-offset-formula', true),
+    new DictionaryMigration('change-type-offset', 'change-modification-type', false, 'change-modification'),
+    new DictionaryMigration('change-type-offset-formula', 'change-modification-formula', true),
 ];
 
 const migrateModuleFlagKeys = [
@@ -153,21 +155,20 @@ const getItemUpdateData = (item) => {
         changes.push(change);
     }
 
-    /**
-     * @param {string} key
-     * @param {string} [newKey]
-     * @param {boolean} [skipBFlag]
-     */
-    const migrateDflag = (key, newKey, skipBFlag) => {
-        const value = item.getItemDictionaryFlag(key);
+    /** @param {DictionaryMigration} d */
+    const migrateDflag = (d) => {
+        const value = item.getItemDictionaryFlag(d.key);
         if (!value) return;
 
-        newKey ||= key;
-        dictionary[`-=${key}`] = null;
+        const newKey = d.newKey || d.key;
+        dictionary[`-=${d.key}`] = null;
         moduleFlags[newKey] = value;
 
-        if (!skipBFlag) {
+        if (!d.skipBFlag) {
             boolean[newKey] = true;
+        }
+        if (d.extraBFlag) {
+            boolean[d.extraBFlag] = true;
         }
     }
 
@@ -183,7 +184,7 @@ const getItemUpdateData = (item) => {
         moduleFlags[newKey] = value;
     }
 
-    dictionaryToModuleFlag.forEach(({ key, newKey, skipBFlag }) => migrateDflag(key, newKey, skipBFlag));
+    dictionaryToModuleFlag.forEach(migrateDflag);
     migrateModuleFlagKeys.forEach(([key, newKey]) => migrateModuleFlag(key, newKey));
 
     const vpKey = 'versatile-performance';
