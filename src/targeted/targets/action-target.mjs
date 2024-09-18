@@ -17,7 +17,7 @@ export class ActionTarget extends BaseTarget {
                 : doc instanceof pf1.documents.item.ItemPF
                     ? doc.defaultAction
                     : doc;
-        if (!action?.actor || !action.id) {
+        if (!action?.actor || !action.id || !action.item) {
             return [];
         }
 
@@ -26,7 +26,7 @@ export class ActionTarget extends BaseTarget {
         const bonusSources = sources.filter((flagged) => {
             /** @type {string[]} */
             const targetActionIds = flagged.getFlag(MODULE_NAME, this.key) || [];
-            return targetActionIds.includes(action.id);
+            return targetActionIds.includes(`${action.item.id}.${action.id}`);
         });
 
         return bonusSources;
