@@ -7,6 +7,7 @@ import {
     handleBonusesFor,
     handleBonusTypeFor,
 } from '../src/target-and-bonus-join.mjs';
+import { showBonusPicker } from '../src/handlebars-handlers/bonus-picker.mjs';
 
 export {};
 
@@ -14,6 +15,9 @@ declare global {
     interface RollBonusesAPI {
         /** Applications that the app uses that are used by various inputs */
         applications: Record<string, DocumentSheet>;
+        showApplication: {
+            showBonusPicker: typeof showBonusPicker;
+        };
 
         /** config for specific inputs that can be modified by a script or mod */
         config: {

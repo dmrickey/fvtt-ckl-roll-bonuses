@@ -108,6 +108,8 @@ export function showBonusPicker({
     app.render(true);
 }
 
+api.showApplication.showBonusPicker = showBonusPicker;
+
 /** @ts-ignore */
 /** @extends {DocumentSheet<BonusPickerData, ItemPF>} */
 class BonusPickerApp extends DocumentSheet {
@@ -127,6 +129,7 @@ class BonusPickerApp extends DocumentSheet {
         options.width = 800;
         options.template = templates.bonusPicker;
         options.title = localize('roll-bonuses');
+        options.classes = ['bonus-picker-app'];
 
         return options;
     }
@@ -136,7 +139,7 @@ class BonusPickerApp extends DocumentSheet {
 
     /** @override */
     async getData() {
-        return this.options;
+        return { ...this.options, item: this.document };
     }
 
     /** @type {(keyof BonusPickerData)[]} */
@@ -169,31 +172,43 @@ class BonusPickerApp extends DocumentSheet {
             },
         );
 
-        const targetedTab = html.find('#targeted-tab-button');
-        targetedTab?.on(
+        const specificTab = html.find(`#specific-tab-button-${this.document.id}`);
+        const targetedTab = html.find(`#targeted-tab-button-${this.document.id}`);
+        if (!specificTab || !targetedTab) {
+            return;
+        }
+
+        const refreshApp = () => this.setPosition();
+
+        targetedTab.on(
             'click',
             (event) => {
+                targetedTab[0].classList.add('active');
+                specificTab[0].classList.remove('active');
                 event.preventDefault();
                 /** @type {HTMLElement} */
                 const specificBody = event.target.parentElement.parentElement.querySelector('.specific-body');
-                specificBody.classList.remove('show-tab');
+                specificBody.classList.remove('active');
                 /** @type {HTMLElement} */
                 const targetedBody = event.target.parentElement.parentElement.querySelector('.targeted-body');
-                targetedBody.classList.add('show-tab');
+                targetedBody.classList.add('active');
+                refreshApp();
             }
         )
 
-        const specificTab = html.find('#specific-tab-button');
-        specificTab?.on(
+        specificTab.on(
             'click',
             (event) => {
+                specificTab[0].classList.add('active');
+                targetedTab[0].classList.remove('active');
                 event.preventDefault();
                 /** @type {HTMLElement} */
                 const specificBody = event.target.parentElement.parentElement.querySelector('.specific-body');
-                specificBody.classList.add('show-tab');
+                specificBody.classList.add('active');
                 /** @type {HTMLElement} */
                 const targetedBody = event.target.parentElement.parentElement.querySelector('.targeted-body');
-                targetedBody.classList.remove('show-tab');
+                targetedBody.classList.remove('active');
+                refreshApp();
             }
         )
     }
@@ -237,3 +252,4 @@ class BonusPickerApp extends DocumentSheet {
         return updateObj || {};
     }
 }
+api.applications.BonusPickerApp = BonusPickerApp;

@@ -185,3 +185,4 @@ class ActionSelector extends DocumentSheet {
 }
 
 api.inputs.showActionInput = showActionInput;
+api.applications.ActionSelector = ActionSelector;

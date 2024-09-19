@@ -1,35 +1,75 @@
-.roll-bonuses-form.bonus-picker .tab-headers {
+.bonus-picker-app .window-content {
+    padding: 0;
+}
+.bonus-picker-app .form-body {
+    padding-block-start: 0.5rem;
+    padding-inline: 0.5rem;
+}
+.bonus-picker-app .control-group {
+    padding-block-end: 0.5rem;
+    padding-inline: 0.5rem;
+}
+
+.bonus-picker-app .roll-bonuses-form .tab-headers {
     display: flex;
     flex: 1;
     justify-content: space-evenly;
     /* todo add border and update color for negated tabs */
 }
-.roll-bonuses-form.bonus-picker .picker-tab {
+
+.bonus-picker-app .roll-bonuses-form .tab-headers .tab-button {
+    border-bottom: 0;
+    padding-block: 1rem;
+    text-align: center;
+    transition: background-color 200ms ease-out;
+    width: 100%;
+}
+.bonus-picker-app .roll-bonuses-form .tab-headers .tab-button.active {
+    font-weight: bold;
+    text-decoration: underline;
+}
+.bonus-picker-app .roll-bonuses-form .tab-headers .tab-button:not(.active) {
+    font-style: italic;
+    color: var(--pf1-bg-dark-5);
+    background-color: var(--pf1-bg-dark-1);
+}
+.bonus-picker-app .roll-bonuses-form .tab-headers .tab-button:hover {
+    cursor: pointer;
+}
+
+.bonus-picker-app .roll-bonuses-form .picker-tab {
     display: none;
 }
-.roll-bonuses-form.bonus-picker .picker-tab.show-tab {
+.bonus-picker-app .roll-bonuses-form .picker-tab.active {
     display: unset;
 }
 
-.roll-bonuses-form.bonus-picker .sources {
+.bonus-picker-app .roll-bonuses-form .picker-tab .tab-hint {
+    margin-block-end: 0.5rem;
+    margin-inline: auto;
+    max-width: 80%;
+    text-align: center;
+}
+
+.bonus-picker-app .roll-bonuses-form .sources {
     display: grid;
     gap: 1rem;
     grid-template-columns: 1fr 1fr;
 }
 
-.roll-bonuses-form.bonus-picker .specific-bonuses {
+.bonus-picker-app .roll-bonuses-form .specific-bonuses {
     -webkit-column-count: 2;
     -moz-column-count: 2;
     column-count: 2;
 }
-.roll-bonuses-form.bonus-picker .specific-bonuses .child {
+.bonus-picker-app .roll-bonuses-form .specific-bonuses .child {
     margin-inline-start: 1rem;
 }
 
-.roll-bonuses-form.bonus-picker h2 {
+.bonus-picker-app .roll-bonuses-form h2 {
     text-align: center;
 }
 
-.roll-bonuses-form.bonus-picker .fas.fa-book {
+.bonus-picker-app .roll-bonuses-form .fas.fa-book {
     margin-inline-start: 0.25rem;
 }

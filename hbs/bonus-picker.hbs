@@ -1,11 +1,14 @@
-<form class="roll-bonuses roll-bonuses-form bonus-picker">
+<form class="roll-bonuses roll-bonuses-form pf1">
+    <div class="tab-headers">
+        <h3 id="targeted-tab-button-{{item.id}}" class="tab-button active">{{localize 'ckl-roll-bonuses.picker.tabs.targeted'}}</h3>
+        <h3 id="specific-tab-button-{{item.id}}" class="tab-button">{{localize 'ckl-roll-bonuses.picker.tabs.specific'}}</h3>
+    </div>
     <div class="form-body">
-        <div class="tab-headers">
-            <div id="targeted-tab-button">{{localize 'ckl-roll-bonuses.picker.tabs.targeted'}}</div>
-            <div id="specific-tab-button">{{localize 'ckl-roll-bonuses.picker.tabs.specific'}}</div>
-        </div>
-        <div class="targeted-body picker-tab show-tab">
-            <div>{{localize 'ckl-roll-bonuses.picker.tabs.targeted-description'}}</div>
+        <div class="targeted-body picker-tab active">
+            <div class="tab-hint help-text">
+                <i class="help-icon fas fa-info-circle"></i>
+                {{localize 'ckl-roll-bonuses.picker.tabs.targeted-description'}}
+            </div>
             <div class="sources">
                 <div>
                     <h2>
@@ -53,7 +56,10 @@
         </div>
 
         <div class="specific-body picker-tab">
-            <div>{{localize 'ckl-roll-bonuses.picker.tabs.specific-description'}}</div>
+            <div class="tab-hint help-text">
+                <i class="help-icon fas fa-info-circle"></i>
+                {{localize 'ckl-roll-bonuses.picker.tabs.specific-description'}}
+            </div>
             {{#if specifics.length}}
             <h2>
                 {{ localize 'ckl-roll-bonuses.picker.specific-bonuses.label' }}

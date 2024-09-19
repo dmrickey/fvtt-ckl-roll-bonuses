@@ -161,3 +161,4 @@ class ItemSelector extends DocumentSheet {
 }
 
 api.inputs.showItemInput = showItemInput;
+api.applications.ItemSelector = ItemSelector;

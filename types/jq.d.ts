@@ -22,4 +22,5 @@ interface JQuery {
         /** @this {HTMLElement} */
         func: () => void
     );
+    0: HTMLElement;
 }
