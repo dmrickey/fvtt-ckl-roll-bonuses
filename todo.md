@@ -85,6 +85,7 @@
 - See armor focus for how I first implemented it
 ### Alignment
 - Actually align the weapon/attack instead of just adding typed damage
+  - I can make it work but it won't do anything (the system doesn't show it in the attack, it's kinda pointless without extra functionality)
 
 ## Targets
 ### Creature type/subtype
@@ -316,18 +317,10 @@
 - Roll Bonuses d20 icon on sheet in RB header doesn't open journal
 - Add "Fortune configuration app" to help with configuring specific fortune abilities
 - Add obsoletion message for `src\bonuses\critical.mjs` if its flags are detected
-- Add "elemental choices" to api
 - Targeting
   - Add a configuration error if "this target is not configured"
     - e.g. Any Item Target that is not configured.
-- Select Input
-  - Add an override for error text
-  - e.g. Greater Weapon Specialization needs both Greater Weapon Focus and Weapon Specialization
-- Add "Function Target" to picker app if user is GM.
-  - Make sure "picker app" doesn't remove function target if the user isn't allowed to configure it
-- Todo - revisit natural attacks for "is weapon"
 - Change all "is type" into a single target with checkboxes for various types it should allow
-- Look into [Alignment](#alignment)
 
 Verify 
 - Specific Item Targets

@@ -31,13 +31,13 @@ export function showBonusPicker({
     const currentBooleanKeys = Object.keys(item.system.flags.boolean);
 
     const allBonuses = api.allBonusTypes
-        .filter((source) => !source.skipPicker)
+        .filter((source) => !source.gmOnlyForPicker || game.user.isGM)
         .sort((a, b) => a.label.localeCompare(b.label));
     const allTargets = api.allTargetTypes
-        .filter((source) => !source.skipPicker && !source.isConditionalTarget)
+        .filter((source) => (!source.gmOnlyForPicker || game.user.isGM) && !source.isConditionalTarget)
         .sort((a, b) => a.label.localeCompare(b.label));
     const allConditionalTargets = api.allTargetTypes
-        .filter((source) => !source.skipPicker && source.isConditionalTarget)
+        .filter((source) => (!source.gmOnlyForPicker || game.user.isGM) && source.isConditionalTarget)
         .sort((a, b) => a.label.localeCompare(b.label));
     const specifics = Object.values(SpecificBonuses.allBonuses)
         .sort((a, b) => a.label.localeCompare(b.label));

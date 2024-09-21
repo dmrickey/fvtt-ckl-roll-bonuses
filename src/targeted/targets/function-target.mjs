@@ -112,5 +112,5 @@ export class FunctionTarget extends BaseTarget {
     }
 
     /** @override @returns { boolean } */
-    static get skipPicker() { return true; }
+    static get gmOnlyForPicker() { return true; }
 }

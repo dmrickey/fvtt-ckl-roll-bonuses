@@ -76,7 +76,7 @@ export class BaseSource {
      * @abstract
      * @returns { boolean }
      */
-    static get skipPicker() { return false; }
+    static get gmOnlyForPicker() { return false; }
 
     /** @abstract @returns { string } */
     static get sourceKey() { throw new Error('must be overridden'); }
