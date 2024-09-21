@@ -20,7 +20,7 @@ export class SpecificItemTarget extends BaseTarget {
      * @param {ItemPF} item
      * @returns {string[]}
      */
-    static #getIdsFromItem(item) {
+    static _getIdsFromItem(item) {
         const ids = (/** @type {string[]} */(item.getFlag(MODULE_NAME, this.key) ?? []))
             .map((id) => id.split('.').at(-1))
             .filter(truthiness);
@@ -44,7 +44,7 @@ export class SpecificItemTarget extends BaseTarget {
         /** @type {string[]} */
         if (!source?.actor) return;
 
-        const ids = SpecificItemTarget.#getIdsFromItem(source);
+        const ids = this._getIdsFromItem(source);
         return ids.map((id) => source.actor?.items.get(id)?.name).filter(truthiness);
     }
 
@@ -60,7 +60,7 @@ export class SpecificItemTarget extends BaseTarget {
         }
 
         const bonusSources = sources.filter((source) => {
-            const ids = SpecificItemTarget.#getIdsFromItem(source);
+            const ids = this._getIdsFromItem(source);
             return ids.includes(item.id) || !!item.links.parent && ids.includes(item.links.parent.id);
         });
         return bonusSources;
