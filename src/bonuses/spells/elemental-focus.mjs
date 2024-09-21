@@ -1,5 +1,6 @@
 import { MODULE_NAME } from '../../consts.mjs';
 import { keyValueSelect } from "../../handlebars-handlers/bonus-inputs/key-value-select.mjs";
+import { api } from '../../util/api.mjs';
 import { intersects } from "../../util/array-intersects.mjs";
 import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
@@ -26,19 +27,27 @@ SpecificBonuses.registerSpecificBonus({ journal, key: elementalFocusKey });
 SpecificBonuses.registerSpecificBonus({ journal, key: greaterElementalFocusKey, parent: elementalFocusKey });
 SpecificBonuses.registerSpecificBonus({ journal, key: mythicElementalFocusKey, parent: elementalFocusKey });
 
-const icons = {
-    acid: { icon: 'ra ra-droplet', css: 'ckl-acid-green' },
-    cold: { icon: 'far fa-snowflake', css: 'ckl-cold-blue' },
-    electric: { icon: 'fas fa-bolt-lightning', css: 'ckl-electric-yellow' },
-    fire: { icon: 'fas fa-fire-flame-curved', css: 'ckl-fire-red' },
-};
+{
+    const icons = {
+        acid: { icon: 'ra ra-droplet', css: 'ckl-acid-green' },
+        cold: { icon: 'far fa-snowflake', css: 'ckl-cold-blue' },
+        electric: { icon: 'fas fa-bolt-lightning', css: 'ckl-electric-yellow' },
+        fire: { icon: 'fas fa-fire-flame-curved', css: 'ckl-fire-red' },
+    };
 
-const damageElements = /** @type {const} */ ([
-    'acid',
-    'cold',
-    'electric',
-    'fire'
-]);
+    const damageElements = /** @type {const} */ ([
+        'acid',
+        'cold',
+        'electric',
+        'fire'
+    ]);
+
+    api.config.elementalFocus.damageElements = damageElements;
+    api.config.elementalFocus.icons = icons;
+}
+
+const damageElements = api.config.elementalFocus.damageElements;
+const icons = api.config.elementalFocus.icons;
 
 class Settings {
     static get elementalFocus() { return LanguageSettings.getTranslation(elementalFocusKey); }

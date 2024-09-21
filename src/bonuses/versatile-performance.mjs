@@ -12,6 +12,7 @@ import { difference } from '../util/array-intersects.mjs';
 import { getSkillName } from '../util/get-skill-name.mjs';
 import { keyValueSelect } from '../handlebars-handlers/bonus-inputs/key-value-select.mjs';
 import { truthiness } from '../util/truthiness.mjs';
+import { api } from '../util/api.mjs';
 
 const key = 'versatile-performance';
 export { key as versatilePerformanceKey };
@@ -21,17 +22,21 @@ const keyChoice2 = `${key}-choice-2`;
 const keyExpanded = `${key}-expanded`;
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#versatile-performance';
 
-/** @type {Array<keyof typeof pf1.config.skills>} */
-const expandedChoices = [
-    'blf',
-    'dip',
-    'dis',
-    'esc',
-    'han',
-    'int',
-    'sen',
-    'umd',
-];
+{
+    /** @type {Array<keyof typeof pf1.config.skills>} */
+    const expandedChoices = [
+        'blf',
+        'dip',
+        'dis',
+        'esc',
+        'han',
+        'int',
+        'sen',
+        'umd',
+    ];
+    api.config.versatilePerformance.expandedChoices = expandedChoices;
+}
+const expandedChoices = api.config.versatilePerformance.expandedChoices;
 
 SpecificBonuses.registerSpecificBonus({ journal, key });
 SpecificBonuses.registerSpecificBonus({ journal, key: keyExpanded, parent: key });
@@ -273,6 +278,28 @@ Hooks.once('init', () => {
     LocalHookHandler.registerHandler(localHooks.actorRollSkill, versatileRollSkill);
 });
 
+{
+    /**
+     *
+     * @param {ActorPF} actor
+     * @returns {{ id: keyof typeof pf1.config.skills, name: string }[]}
+     */
+    const getPerformanceSkills = (actor) => {
+        const skills = [];
+        const perform = actor.getSkillInfo('prf');
+        for (const [subId, subS] of Object.entries(perform.subSkills ?? {})) {
+            const subSkill = deepClone(subS);
+            subSkill.id = `prf.${subId}`;
+            skills.push(subSkill);
+        }
+        return skills
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .map(({ id, name }) => ({ id, name }));
+    }
+    api.config.versatilePerformance.getPerformanceSkills = getPerformanceSkills;
+}
+const getPerformanceSkills = api.config.versatilePerformance.getPerformanceSkills;
+
 Hooks.on('renderItemSheet', (
     /** @type {ItemSheetPF} */ { actor, isEditable, item },
     /** @type {[HTMLElement]} */[html],
@@ -321,18 +348,7 @@ Hooks.on('renderItemSheet', (
                 .filter((id) => game.settings.get('pf1', 'allowBackgroundSkills') || !pf1.config.backgroundOnlySkills.includes(id))
                 .map((id) => ({ id, name: getSkillName(actor, id) }));
 
-            performs = (() => {
-                const skills = [];
-                const perform = actor.getSkillInfo('prf');
-                for (const [subId, subS] of Object.entries(perform.subSkills ?? {})) {
-                    const subSkill = deepClone(subS);
-                    subSkill.id = `prf.${subId}`;
-                    skills.push(subSkill);
-                }
-                return skills
-                    .sort((a, b) => a.name.localeCompare(b.name))
-                    .map(({ id, name }) => ({ id, name }));
-            })();
+            performs = getPerformanceSkills(actor);
         }
         else {
             allSkills = Object.entries(pf1.config.skills)

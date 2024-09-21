@@ -26,7 +26,7 @@ class Settings {
     }
 }
 
-(() => {
+{
     /** @type {(keyof typeof pf1.config.skills)[]} */
     const allChoices = ['blf', 'int'];
     api.config.versatileTraining.default = allChoices;
@@ -50,7 +50,7 @@ class Settings {
         'thrown': sort([...allChoices, 'acr', 'per']),
         'tribal': sort([...allChoices, 'clm', 'sur']),
     };
-})();
+}
 
 registerItemHint((hintcls, actor, item, _data) => {
     const selectedSkills = getDocFlags(item, selectedKey)

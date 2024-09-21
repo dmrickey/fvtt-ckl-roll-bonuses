@@ -21,6 +21,21 @@ declare global {
 
         /** config for specific inputs that can be modified by a script or mod */
         config: {
+            elementalFocus: {
+                icons: {
+                    acid: { icon: string; css: string };
+                    cold: { icon: string; css: string };
+                    electric: { icon: string; css: string };
+                    fire: { icon: string; css: string };
+                };
+                damageElements: readonly ['acid', 'cold', 'electric', 'fire'];
+            };
+            versatilePerformance: {
+                getPerformanceSkills: (
+                    actor: ActorPF
+                ) => { id: keyof typeof pf1.config.skills; name: string }[];
+                expandedChoices: Array<keyof typeof pf1.config.skills>;
+            };
             versatileTraining: {
                 default: Array<keyof typeof pf1.config.skills>;
                 mapping: Record<

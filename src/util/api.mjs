@@ -17,6 +17,8 @@ class Api {
     applications = {};
     showApplication = {};
     config = {
+        elementalFocus: {},
+        versatilePerformance: {},
         versatileTraining: {},
     }
 

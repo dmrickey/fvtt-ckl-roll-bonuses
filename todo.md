@@ -57,6 +57,7 @@
 - [Not Possible](#not-possible)
 - [Range/Positional ideas](#rangepositional-ideas)
 - [Other Ideas](#other-ideas)
+- [vnext.next](#vnextnext)
 - [vnext](#vnext)
 
 # TODO
@@ -255,22 +256,25 @@
   - This would allow me to automatically add effect notes for each roll to automatically roll for concealment
   - And would allow automating rerolls for abilities like Weapon of the Chosen
 
-# vnext
+# vnext.next
 - apply auto-config on create to all auto-config stuff (see Precise Shot)
   - Try to come up with a more generic framework for this
+- Add "target-able overrides" section to the configuration popup for Items that can have actions but don't have the necessary data
+  - Weapon Group (will be a new override)
+  - Weapon Base Type (will be a new override)
+    - features (e.g. Bombs) and spells (e.g. Rays)
+  - Finesse (already exists)
+- 
+
+# vnext
 - Audit other apps and add explanation as necessary
   -  Bonus Picker app - add target hint like "Select multiple targets to further narrow targets"
-- Add weapon type override for features (e.g. Bombs) and spells (e.g. Rays)
 - Look into Versatile Performance multi select
 - Look into migrating all legacy things into module flags
 - Add checkbox overrides for global settings [see Advanced Templates update](https://github.com/dmrickey/ckl-advanced-templates-pf1/compare/610008c57455991cce1e0919c8567641578e8912..991cb979415d47737b95694bb4a9b21672c0ec7b)
 - Specific bonuses
   - See if I actually need to register those in "Ready"
   - look into setting up the `prepareData` -> push me onto the cached list in there instead of in every individual bonus
-- Add "target-able overrides" section to the configuration popup for Items that can have actions but don't have the necessary data
-  - Weapon Group (will be a new override)
-  - Weapon Base Type (will be a new override)
-  - Finesse (already exists)
 - Update documentation
   - Global Bonus incrmeent range penalty
     - "can skip via dialog"
@@ -302,6 +306,7 @@
     - Martial Focus
     - Spell Focus
     - Spell Specialization
+    - Versatile Performance
     - Weapon Focus
     - Weapon Specialization
     - Change Offset (-> Change Modification)
@@ -311,11 +316,7 @@
 - Roll Bonuses d20 icon on sheet in RB header doesn't open journal
 - Add "Fortune configuration app" to help with configuring specific fortune abilities
 - Add obsoletion message for `src\bonuses\critical.mjs` if its flags are detected
-- Add "Versatile Performance choices" to api
 - Add "elemental choices" to api
-- Negate Bonus type
-  - e.g. Android not being affected by Morale Bonuses
-  - Can add a "offset/set" toggle to current typed bonus
 - Targeting
   - Add a configuration error if "this target is not configured"
     - e.g. Any Item Target that is not configured.
