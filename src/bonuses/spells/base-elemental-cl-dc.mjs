@@ -7,6 +7,7 @@ import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize, localizeBonusLabel } from "../../util/localize.mjs";
 import { signed } from "../../util/to-signed-string.mjs";
 import { truthiness } from "../../util/truthiness.mjs";
+import { uniqueArray } from '../../util/unique-array.mjs';
 import { SpecificBonuses } from '../all-specific-bonuses.mjs';
 
 /**
@@ -31,7 +32,7 @@ const regex = /([A-Za-z\- ])+/g;
  * @returns {string[]}
  */
 const getSpellDescriptors = (item) => {
-    return [
+    return uniqueArray([
         ...(item?.system?.descriptors.value || []),
         ...(item?.system?.descriptors.custom || [])
             .flatMap((c) =>
@@ -45,7 +46,7 @@ const getSpellDescriptors = (item) => {
                 })
             )
             .filter(truthiness)
-    ];
+    ]);
 }
 
 /**
@@ -155,6 +156,11 @@ export function createElementalClOrDc(t) {
 
     // register hint on source
     registerItemHint((hintcls, _actor, item, _data) => {
+        const has = item.hasItemBooleanFlag(key);
+        if (!has) {
+            return;
+        }
+
         const currentElement = item.getFlag(MODULE_NAME, key);
         if (!currentElement) {
             return;

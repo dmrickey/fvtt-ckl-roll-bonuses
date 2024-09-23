@@ -75,10 +75,10 @@ const getFocusedElements = (actor, key) =>
  * @param {ItemAction} action
  * @returns {string[]}
  */
-const getActionDamageTypes = (action) => action.data.damage.parts
+const getActionDamageTypes = (action) => uniqueArray(action.data.damage.parts
     .map(({ type }) => type)
     .flatMap(({ custom, values }) => ([...custom.split(';').map(x => x.trim()), ...values]))
-    .filter(truthiness);
+    .filter(truthiness));
 
 // add Info to chat card
 Hooks.on(customGlobalHooks.itemGetTypeChatData, (
