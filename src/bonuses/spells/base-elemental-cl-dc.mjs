@@ -2,7 +2,7 @@ import { MODULE_NAME } from '../../consts.mjs';
 import { textInputAndKeyValueSelect } from "../../handlebars-handlers/bonus-inputs/text-input-and-key-value-select.mjs";
 import { intersection } from "../../util/array-intersects.mjs";
 import { FormulaCacheHelper } from "../../util/flag-helpers.mjs";
-import { LocalHookHandler, customGlobalHooks, localHooks } from "../../util/hooks.mjs";
+import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize, localizeBonusLabel } from "../../util/localize.mjs";
 import { signed } from "../../util/to-signed-string.mjs";
@@ -65,18 +65,6 @@ export function createElementalClOrDc(t) {
     });
 
     FormulaCacheHelper.registerModuleFlag(formulaKey);
-
-    /** @param {ItemPF} item */
-    function cacheBonusTypeOnActor(item) {
-        if (!item?.actor?.[MODULE_NAME] || !item.isActive) return;
-
-        if (item.hasItemBooleanFlag(key)) {
-            item.actor[MODULE_NAME][key] ||= [];
-            // @ts-ignore false negative
-            item.actor[MODULE_NAME][key].push(item);
-        }
-    }
-    LocalHookHandler.registerHandler(localHooks.cacheBonusTypeOnActor, cacheBonusTypeOnActor);
 
     /**
      *

@@ -127,7 +127,7 @@ registerItemHint((hintcls, actor, item, _data) => {
         if (isMythic) focuses.push(mythicElementalFocusKey);
 
         // @ts-ignore
-        const match = icons[element];
+        const match = icons[damageType];
         const tooltip = focuses.map((f) => localizeBonusLabel(f)).join('\n') + `\n${localize('dc-mod', { mod: signed(bonus) })}`;
         const hint = hintcls.create('', [match.css], { icon: match.icon, hint: tooltip });
         hints.push(hint);

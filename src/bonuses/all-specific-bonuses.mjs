@@ -28,11 +28,8 @@ export class SpecificBonuses {
     }
 
     static {
-
-        /** * @param {ItemPF} item */
+        /** @param {ItemPF} item */
         function cacheBonusTypeOnActor(item) {
-            if (!item?.actor?.[MODULE_NAME] || !item.isActive) return;
-
             SpecificBonuses.allBonusKeys.forEach((key) => {
                 if (item.hasItemBooleanFlag(key)) {
                     // @ts-ignore

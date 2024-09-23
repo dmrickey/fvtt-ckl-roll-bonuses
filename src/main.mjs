@@ -143,7 +143,10 @@ function prepareActorDerivedData(wrapped) {
  */
 function actor_prepareEmbeddedDocuments() {
     // my only override
-    this.items.forEach((item) => LocalHookHandler.fireHookNoReturnSync(localHooks.cacheBonusTypeOnActor, item));
+    this.items.forEach((item) => {
+        if (!item?.actor?.[MODULE_NAME] || !item.isActive) return;
+        LocalHookHandler.fireHookNoReturnSync(localHooks.cacheBonusTypeOnActor, item);
+    });
 
     // super.prepareEmbeddedDocuments();
     Object.getPrototypeOf(pf1.documents.actor.ActorBasePF).prototype.prepareEmbeddedDocuments.apply(this);
