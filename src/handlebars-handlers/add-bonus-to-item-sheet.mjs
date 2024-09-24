@@ -5,6 +5,12 @@ import { createTemplate, templates } from './templates.mjs';
 const bonusSectionSelector = '#ckl-roll-bonus-container'
 const containerSelector = '.bonuses';
 
+const openDocumenation = async () => {
+    const uuid = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC';
+    const doc = await fromUuid(uuid);
+    doc.sheet.render(true);
+}
+
 /**
  * @param {HTMLElement} itemSheetHtml
  * @param {Element?} child
@@ -34,12 +40,18 @@ const addNodeToRollBonus = (itemSheetHtml, child, item, canEdit) => {
                 s.style.display = 'none';
             }
         });
+
+        const diceIcon = elem.querySelector('.form-header a:has(i.fas.fa-dice-d20');
+        diceIcon?.addEventListener('click', (event) => {
+            event.preventDefault();
+            openDocumenation();
+        });
     }
 
     let section = itemSheetHtml.querySelector(bonusSectionSelector);
     if (!section) {
         section = createTemplate(templates.rollBonusesContainer);
-        addSettingsHandler(section)
+        addSettingsHandler(section);
         flagsContainer.before(section);
     }
 
