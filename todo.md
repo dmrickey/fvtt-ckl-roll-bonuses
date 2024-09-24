@@ -269,7 +269,6 @@
 
 # vnext
 - Audit other apps and add explanation as necessary
-  -  Bonus Picker app - add target hint like "Select multiple targets to further narrow targets"
 - Look into Versatile Performance multi select
 - Look into migrating all legacy things into module flags
 - Add checkbox overrides for global settings [see Advanced Templates update](https://github.com/dmrickey/ckl-advanced-templates-pf1/compare/610008c57455991cce1e0919c8567641578e8912..991cb979415d47737b95694bb4a9b21672c0ec7b)
@@ -319,7 +318,6 @@
 - Add obsoletion message for `src\bonuses\critical.mjs` if its flags are detected
 - Targeting
   - Add a configuration error if "this target is not configured"
-    - e.g. Any Item Target that is not configured.
 - Change all "is type" into a single target with checkboxes for various types it should allow
 
 Verify 

@@ -29,7 +29,7 @@ export {
     key as changeTypeOffsetKey,
     formulaKey as changeTypeOffsetFormulaKey,
 }
-const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#change-offset';
+const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#change-modifier';
 
 FormulaCacheHelper.registerModuleFlag(formulaKey);
 
