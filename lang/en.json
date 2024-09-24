@@ -119,7 +119,7 @@
                 "attack": "Formula input for increasing attack.",
                 "change-modification": "Modify chosen change type. Like Fate's Favored, but you choose what happens.",
                 "change-modification-formula": "Formula and type to modify the specified change type.",
-                "change-modification-set-type": "Determines the change will be set to or modified by the formula.",
+                "change-modification-set-type": "Determines if the change modification will be set to or modified by the formula.",
                 "cl": "Modify a spell's Caster Level.",
                 "condition": "Activate bonuses when actor has condition.",
                 "crit-keen": "Double the critical threat range.",
