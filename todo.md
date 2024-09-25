@@ -266,15 +266,15 @@
     - features (e.g. Bombs) and spells (e.g. Rays)
   - Finesse (already exists)
 - Create new "Roll Bonuses" section for attack dialog inputs
+- Change all "is type" into a single target with checkboxes for various types it should allow
 
 # vnext
 - Audit other apps and add explanation as necessary
 - Look into migrating all legacy things into module flags
 - Specific bonuses
-  - See if I actually need to register those in "Ready"
-  - look into setting up the `prepareData` -> push me onto the cached list in there instead of in every individual bonus
 - Handle Migration
   - migrate crit to Item/Action targets
+    - migrate to items. But just add a deprecation warning in the crit helper itself for actions since I don't want to iterate over every item and every action 
   - Documentation
     - make sure keys match
       - greater/improved/mythic/racial on end
@@ -305,8 +305,6 @@
 - Add obsoletion message for `src\bonuses\critical.mjs` if its flags are detected
 - Targeting
   - Add a configuration error if "this target is not configured"
-- Change all "is type" into a single target with checkboxes for various types it should allow
-- migrate crit stuff to Targeted Bonuses
 
 - Remove Obsolete Code
   - Flag Helpers

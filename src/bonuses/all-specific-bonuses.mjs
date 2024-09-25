@@ -30,12 +30,11 @@ export class SpecificBonuses {
     static {
         /** @param {ItemPF} item */
         function cacheBonusTypeOnActor(item) {
+            const _item = /** @type {ItemPF & { actor: ActorPF}} */(/** @type {any} */ item);
             SpecificBonuses.allBonusKeys.forEach((key) => {
                 if (item.hasItemBooleanFlag(key)) {
-                    // @ts-ignore
-                    item.actor[MODULE_NAME][key] ||= [];
-                    // @ts-ignore
-                    item.actor[MODULE_NAME][key].push(item);
+                    _item.actor[MODULE_NAME][key] ||= [];
+                    _item.actor[MODULE_NAME][key].push(item);
                 }
             })
         }
