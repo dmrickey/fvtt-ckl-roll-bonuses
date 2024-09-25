@@ -25,8 +25,8 @@ Hooks.on('renderItemSheet', (
 
     const name = item?.name?.toLowerCase() ?? '';
     const sourceId = item?.flags.core?.sourceId ?? '';
-    const hasBonus = item.system.flags.boolean?.hasOwnProperty(bonusKey);
-    const hasBonusFormula = item.system.flags.boolean?.hasOwnProperty(targetKey);
+    const hasBonus = item.hasItemBooleanFlag(bonusKey);
+    const hasBonusFormula = item.hasItemBooleanFlag(targetKey);
 
     if ((name === Settings.name || sourceId.includes(compendiumId)) && !hasBonus && !hasBonusFormula) {
         item.update({

@@ -142,7 +142,7 @@ Hooks.on('renderItemSheet', (
 ) => {
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
-    const hasFlag = item.system.flags.boolean?.hasOwnProperty(key);
+    const hasFlag = item.hasItemBooleanFlag(key);
     if (!hasFlag) {
         return;
     }

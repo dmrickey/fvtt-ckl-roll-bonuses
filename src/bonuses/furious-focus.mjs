@@ -65,12 +65,12 @@ Hooks.on('renderItemSheet', (
 ) => {
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
-    const hasFlag = item.system.flags.boolean?.hasOwnProperty(furiousFocus);
+    const hasFlag = item.hasItemBooleanFlag(furiousFocus);
     if (!hasFlag) {
         const name = item?.name?.toLowerCase() ?? '';
         const sourceId = item?.flags.core?.sourceId ?? '';
         if (name === Settings.furiousFocus || sourceId.includes(compendiumId)) {
-            item.update({ [`system.flags.boolean.${furiousFocus}`]: true });
+            item.addItemBooleanFlag(furiousFocus);
         }
         return;
     }

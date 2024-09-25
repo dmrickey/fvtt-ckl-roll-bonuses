@@ -32,9 +32,7 @@ Hooks.on('renderItemSheet', (
     const hasBonus = hasAnyBFlag(item, key);
 
     if ((name === Settings.name || sourceId.includes(compendiumId)) && !hasBonus) {
-        item.update({
-            [`system.flags.boolean.${key}`]: true,
-        });
+        item.addItemBooleanFlag(key);
     }
 
     if (hasBonus) {

@@ -105,10 +105,10 @@ Hooks.on('renderItemSheet', (
 
     const name = item?.name?.toLowerCase() ?? '';
 
-    const hasFlag = item.system.flags.boolean?.hasOwnProperty(key);
+    const hasFlag = item.hasItemBooleanFlag(key);
     if (!hasFlag) {
         if (name === Settings.snakeSidewind) {
-            item.update({ [`system.flags.boolean.${key}`]: true });
+            item.addItemBooleanFlag(key);
         }
         return;
     }

@@ -74,10 +74,10 @@ Hooks.on('renderItemSheet', (
 
     const name = item?.name?.toLowerCase() ?? '';
 
-    const hasFlag = item.system.flags.boolean?.hasOwnProperty(fatesFavored);
+    const hasFlag = item.hasItemBooleanFlag(fatesFavored);
     if (!hasFlag) {
         if (name === Settings.fatesFavored) {
-            item.update({ [`system.flags.boolean.${fatesFavored}`]: true });
+            item.addItemBooleanFlag(fatesFavored);
         }
         return;
     }
