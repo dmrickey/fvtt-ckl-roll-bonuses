@@ -3,11 +3,11 @@ import { localize } from './localize.mjs'
 /**
  * @param {HTMLElement} html
  * @param {string} key
- * @param {number} appId
+ * @param {AttackDialog} dialog
  * @param {object} [options]
  * @param {string} [options.label]
  */
-export const addCheckToAttackDialog = (html, key, appId, { label = '' } = {}) => {
+export const addCheckToAttackDialog = (html, key, dialog, { label = '' } = {}) => {
     label ||= localize(key);
     const flags = html.querySelector('div.form-group.stacked.flags');
     if (flags) {
@@ -18,18 +18,19 @@ export const addCheckToAttackDialog = (html, key, appId, { label = '' } = {}) =>
         input.setAttribute('type', 'checkbox');
         input.setAttribute('name', key);
 
-        input.checked = !!trackedApps.get(appId);
+        input.checked = !!trackedApps.get(dialog.appId);
         input.addEventListener('change', function () {
             if (this.checked) {
-                track(appId);
+                track(dialog.appId);
             } else {
-                untrack(appId);
+                untrack(dialog.appId);
             }
         });
 
         labelElement.textContent = ` ${label} `;
         labelElement.insertBefore(input, labelElement.firstChild);
         flags.appendChild(labelElement);
+        dialog.setPosition();
     }
 }
 
