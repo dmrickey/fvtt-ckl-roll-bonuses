@@ -16,7 +16,7 @@ const key = 'versatile-training';
 const selectedKey = 'versatile-training-selected';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#versatile-training';
 
-Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ journal, key }));
+SpecificBonuses.registerSpecificBonus({ journal, key });
 
 class Settings {
     static get versatileTraining() { return LanguageSettings.getTranslation(key); }

@@ -35,6 +35,7 @@ export class RequireMeleeThreatenGlobalBonus extends BaseGlobalBonus {
         addCheckToAttackDialog(
             html,
             RequireMeleeThreatenGlobalBonus.dialogDisableKey,
+            dialog.appId
         );
         dialog.setPosition();
     }

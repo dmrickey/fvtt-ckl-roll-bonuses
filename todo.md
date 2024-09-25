@@ -265,25 +265,14 @@
   - Weapon Base Type (will be a new override)
     - features (e.g. Bombs) and spells (e.g. Rays)
   - Finesse (already exists)
-- 
+- Create new "Roll Bonuses" section for attack dialog inputs
 
 # vnext
 - Audit other apps and add explanation as necessary
-- Look into Versatile Performance multi select
 - Look into migrating all legacy things into module flags
-- Add checkbox overrides for global settings [see Advanced Templates update](https://github.com/dmrickey/ckl-advanced-templates-pf1/compare/610008c57455991cce1e0919c8567641578e8912..991cb979415d47737b95694bb4a9b21672c0ec7b)
 - Specific bonuses
   - See if I actually need to register those in "Ready"
   - look into setting up the `prepareData` -> push me onto the cached list in there instead of in every individual bonus
-- Update documentation
-  - Global Bonus incrmeent range penalty
-    - "can skip via dialog"
-  - Global Bonus require melee threaten
-    - "can skip via dialog"
-  - Add action target documentation
-  - Add natural item target documentation
-  - Offset Bonus - add documentation for `set`
-- Create new "Roll Bonuses" section for attack dialog inputs
 - Handle Migration
   - migrate crit to Item/Action targets
   - Documentation
@@ -312,18 +301,12 @@
     - Change Offset (-> Change Modification)
   - Verify item targets work without migration
 - Update Auto-recognition stuff in "renderItemSheet" to use the same logic as martial-focus.mjs for specific bonuses
-- register for "actor.rollCL" hook and add bonuses based on action in the message from the hook's messageId
-- Roll Bonuses d20 icon on sheet in RB header doesn't open journal
 - Add "Fortune configuration app" to help with configuring specific fortune abilities
 - Add obsoletion message for `src\bonuses\critical.mjs` if its flags are detected
 - Targeting
   - Add a configuration error if "this target is not configured"
 - Change all "is type" into a single target with checkboxes for various types it should allow
-
-Verify 
-- Specific Item Targets
-  - When Active target
-- When Active Target (was incorrectly inheriting from Specific Item Target)
+- migrate crit stuff to Targeted Bonuses
 
 - Remove Obsolete Code
   - Flag Helpers
@@ -334,9 +317,7 @@ Verify
 - Add misfortune hex buff
 
 Fix
-- item targets on unlinked actors [here](https://discord.com/channels/852297995907366922/1134212644392423515/1275933237130166395)
 - async warning
-- versatile performance does not work
 
 - Read from actor module flags
   - Fate's favored 

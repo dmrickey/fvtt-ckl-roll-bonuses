@@ -15,7 +15,7 @@
         "base-dice": "Base Dice",
         "bonuses": {
             "label": {
-                "action": "Action",
+                "action": "Action Target",
                 "agile": "Agile",
                 "alignment": "Alignment Targets",
                 "all": "All Targets",
@@ -213,7 +213,7 @@
                 "higher-ground": "not used",
                 "range-increment-penalty": "Skip Ranged Increment Checks",
                 "shoot-into-melee": "not used",
-                "require-melee-threaten": "Ignore Melee Threatens"
+                "require-melee-threaten": "Ignore Melee Range"
             },
             "label": {
                 "higher-ground": "Higher Ground Melee Bonus",

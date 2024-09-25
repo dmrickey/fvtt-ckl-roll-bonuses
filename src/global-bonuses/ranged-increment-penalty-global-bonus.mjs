@@ -83,6 +83,7 @@ export class RangedIncrementPenaltyGlobalBonus extends BaseGlobalBonus {
         addCheckToAttackDialog(
             html,
             RangedIncrementPenaltyGlobalBonus.dialogDisableKey,
+            dialog.appId,
         );
         dialog.setPosition();
     }
