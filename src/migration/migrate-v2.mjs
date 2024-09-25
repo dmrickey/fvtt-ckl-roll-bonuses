@@ -92,7 +92,7 @@ export const migrateSettings = async () => {
  */
 const getItemUpdateData = (item) => {
 
-    /** @type {Record<string, true>} */
+    /** @type {Record<string, boolean>} */
     const boolean = {};
     const changes = item.toObject().system.changes || [];
     /** @type {Record<string, null>} */
@@ -188,6 +188,7 @@ const getItemUpdateData = (item) => {
 
     const vpKey = 'versatile-performance';
     const legacyExpandedKey = `expanded-${vpKey}`;
+    const expandedKey = `${vpKey}-expanded`;
 
     const vp = item.getItemDictionaryFlag(vpKey);
     if (vp) {
@@ -196,6 +197,8 @@ const getItemUpdateData = (item) => {
         boolean[vpKey] = true;
         if (item.hasItemBooleanFlag(legacyExpandedKey)) {
             moduleFlags[`-=${legacyExpandedKey}`] = null;
+            boolean[legacyExpandedKey] = false;
+            boolean[expandedKey] = true;
         }
 
         dictionary[`-=${vpKey}`] = null;

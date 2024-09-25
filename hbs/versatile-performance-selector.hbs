@@ -7,7 +7,7 @@
                     <th>{{localize 'ckl-roll-bonuses.versatile-performance.label.perform'}}</th>
                     <th>{{localize 'ckl-roll-bonuses.versatile-performance.label.skill1'}}</th>
                     <th>{{localize 'ckl-roll-bonuses.versatile-performance.label.skill2'}}</th>
-                    <th>{{localize 'ckl-roll-bonuses.versatile-performance.label.expanded'}}</th>
+                    {{#if hasExpanded}}<th>{{localize 'ckl-roll-bonuses.versatile-performance.label.expanded'}}</th>{{/if}}
                 </tr>
             </thead>
             <tbody>
@@ -17,7 +17,7 @@
                     <td><input type="text" readonly value="{{lookup ../performs base}}" /></td>
                     <td><input type="text" readonly value="{{lookup ../allSkills choice1}}" /></td>
                     <td><input type="text" readonly value="{{lookup ../allSkills choice2}}" /></td>
-                    <td><input type="text" readonly value="{{lookup ../expandedSkills expanded}}" /></td>
+                    {{#if ../hasExpanded}}<td><input type="text" readonly value="{{lookup ../expandedSkills expanded}}" /></td>{{/if}}
                     {{else}}
                     <td data-tooltip="{{lookup ../allSkills base}}">
                         <select data-path="{{i}}.base">
@@ -34,11 +34,13 @@
                             {{selectOptions ../allSkills selected=choice2}}
                         </select>
                     </td>
+                    {{#if ../hasExpanded}}
                     <td data-tooltip="{{lookup ../allSkills expanded}}">
                         <select data-path="{{i}}.expanded">
                             {{selectOptions ../expandedSkills selected=expanded blank=""}}
                         </select>
                     </td>
+                    {{/if}}
                     {{/if}}
                 </tr>
                 {{/each}}

@@ -15,11 +15,7 @@ import { isNotEmptyObject } from '../util/is-empty-object.mjs';
 
 const key = 'versatile-performance';
 export { key as versatilePerformanceKey };
-
-const keyBase = 'base';
-const keyChoice1 = 'choice1';
-const keyChoice2 = 'choice2';
-const keyExpanded = 'expanded';
+const expandedKey = `${key}-expanded`;
 
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#versatile-performance';
 
@@ -40,7 +36,7 @@ const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalE
 const expandedChoices = api.config.versatilePerformance.expandedChoices;
 
 SpecificBonuses.registerSpecificBonus({ journal, key });
-SpecificBonuses.registerSpecificBonus({ journal, key: keyExpanded, parent: key });
+SpecificBonuses.registerSpecificBonus({ journal, key: expandedKey, parent: key });
 
 class Settings {
     static get versatilePerformance() { return LanguageSettings.getTranslation(key); }
@@ -52,16 +48,19 @@ class Settings {
 
 class VPData {
     /**
-     * @param {keyof typeof pf1.config.skills} base
-     * @param {keyof typeof pf1.config.skills} choice1
-     * @param {keyof typeof pf1.config.skills} choice2
-     * @param {keyof typeof pf1.config.skills} expanded
+     * @param {object} arg
+     * @param {keyof typeof pf1.config.skills} arg.base
+     * @param {keyof typeof pf1.config.skills} arg.choice1
+     * @param {keyof typeof pf1.config.skills} arg.choice2
+     * @param {keyof typeof pf1.config.skills} arg.expanded
+     * @param {object} options
+     * @param {boolean} [options.hasExpanded]
      */
-    constructor(base, choice1, choice2, expanded) {
+    constructor({ base, choice1, choice2, expanded }, { hasExpanded = false } = {}) {
         this.base = base;
         this.choice1 = choice1;
         this.choice2 = choice2;
-        this.expanded = expanded;
+        this.expanded = hasExpanded ? expanded : '';
     }
 
     /**
@@ -85,9 +84,8 @@ const getVPsFromItem = (item) => {
     const vps = item.getFlag(MODULE_NAME, key) || [];
 
     return vps.map(( /** @type {any} */ x) => {
-        const data = x || {};
-        if (!data[keyBase]) return;
-        return new VPData(data[keyBase], data[keyChoice1], data[keyChoice2], data[keyExpanded]);
+        const data = new VPData(x || {}, { hasExpanded: item.hasItemBooleanFlag(expandedKey) });
+        return data.base ? data : null;
     })
         .filter(truthiness);
 }
@@ -349,20 +347,25 @@ Hooks.on('renderItemSheet', (
         }
 
         if (isEditable && isNotEmptyObject(performs) && !currentVPs.length) {
-            item.setFlag(MODULE_NAME, key, [{
-                [keyBase]: Object.keys(performs)[0],
-                [keyChoice1]: Object.keys(allSkills)[0],
-                [keyChoice2]: Object.keys(allSkills)[1],
-            }]);
+            item.setFlag(MODULE_NAME, key, [new VPData({
+                // @ts-ignore
+                base: Object.keys(performs)[0],
+                // @ts-ignore
+                choice1: Object.keys(allSkills)[0],
+                // @ts-ignore
+                choice2: Object.keys(allSkills)[1],
+            })]);
         }
     }
 
+    const hasExpanded = item.hasItemBooleanFlag(expandedKey);
     const expandedSkills = expandedChoices.reduce((acc, id) => ({ ...acc, [id]: getSkillName(actor, id) }), {});
 
     const templateData = {
         allSkills,
         currentVPs,
         expandedSkills,
+        hasExpanded,
         journal,
         label: localize('versatile-performance.header'),
         performs,
@@ -394,14 +397,14 @@ Hooks.on('renderItemSheet', (
                 if (!a) return;
 
                 if (a.classList.contains('add')) {
-                    currentVPs.push({
+                    currentVPs.push(new VPData({
                         // @ts-ignore
-                        [keyBase]: Object.keys(performs)[0],
+                        base: Object.keys(performs)[0],
                         // @ts-ignore
-                        [keyChoice1]: Object.keys(allSkills)[0],
+                        choice1: Object.keys(allSkills)[0],
                         // @ts-ignore
-                        [keyChoice2]: Object.keys(allSkills)[1],
-                    });
+                        choice2: Object.keys(allSkills)[1],
+                    }));
                     await item.setFlag(MODULE_NAME, key, currentVPs);
                 }
                 else if (a.classList.contains('delete')) {
