@@ -60,6 +60,7 @@ class VPData {
         this.base = base;
         this.choice1 = choice1;
         this.choice2 = choice2;
+        /** @type {keyof typeof pf1.config.skills | ''} */
         this.expanded = hasExpanded ? expanded : '';
     }
 

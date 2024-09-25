@@ -13,11 +13,11 @@
             <tbody>
                 {{#each currentVPs as |vp i| }}
                 <tr>
-                    {{#if readonly}}
-                    <td><input type="text" readonly value="{{lookup ../performs base}}" /></td>
-                    <td><input type="text" readonly value="{{lookup ../allSkills choice1}}" /></td>
-                    <td><input type="text" readonly value="{{lookup ../allSkills choice2}}" /></td>
-                    {{#if ../hasExpanded}}<td><input type="text" readonly value="{{lookup ../expandedSkills expanded}}" /></td>{{/if}}
+                    {{#if ../readonly}}
+                    <td data-tooltip="{{lookup ../allSkills base}}"><input type="text" readonly value="{{lookup ../performs base}}" /></td>
+                    <td data-tooltip="{{lookup ../allSkills choice1}}"><input type="text" readonly value="{{lookup ../allSkills choice1}}" /></td>
+                    <td data-tooltip="{{lookup ../allSkills choice2}}"><input type="text" readonly value="{{lookup ../allSkills choice2}}" /></td>
+                    {{#if ../hasExpanded}}<td data-tooltip="{{lookup ../allSkills expanded}}"><input type="text" readonly value="{{lookup ../expandedSkills expanded}}" /></td>{{/if}}
                     {{else}}
                     <td data-tooltip="{{lookup ../allSkills base}}">
                         <select data-path="{{i}}.base">
