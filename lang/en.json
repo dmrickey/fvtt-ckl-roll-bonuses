@@ -343,24 +343,27 @@
         },
         "targets": "Targets",
         "to-hit-mod": "{mod} to hit",
-        "versatilePerformance": {
+        "versatile-performance": {
+            "add": "Add Versatile Performance",
+            "delete": "Delete Versatile Performance",
             "error": "Versatile Performance - invalid skill IDs",
             "header": "Versatile Performance",
             "hint": "{base} -> {skills}",
-            "skillTip": "Can be used with Versatile Performance - {base} ({enabled})",
-            "title": "{skill} - Versatile Performance",
             "label": {
+                "expanded": "Expanded",
                 "perform": "Perform",
                 "skill1": "Skill 1",
                 "skill2": "Skill 2"
             },
-            "replace-label": "{skill} (Replaced by {base})"
+            "replace-label": "{skill} (Replaced by {base})",
+            "skill-tip": "Can be used with Versatile Performance - {base} ({enabled})",
+            "title": "{skill} - Versatile Performance"
         },
         "versatile-training": {
             "description": "Choose two skills to use BAB instead of their ranks.",
             "header": "Versatile Training",
             "hint": "{skills}",
-            "skillTip": "Versatile Training - uses BAB ({bab}) instead of ranks",
+            "skill-tip": "Versatile Training - uses BAB ({bab}) instead of ranks",
             "title": "{skill} - Versatile Training"
         },
         "item-name-translations": {

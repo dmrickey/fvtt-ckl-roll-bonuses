@@ -31,9 +31,9 @@ declare global {
                 damageElements: readonly ['acid', 'cold', 'electric', 'fire'];
             };
             versatilePerformance: {
-                getPerformanceSkills: (
-                    actor: ActorPF
-                ) => { id: keyof typeof pf1.config.skills; name: string }[];
+                getPerformanceSkills: (actor: ActorPF) => {
+                    [key: keyof typeof pf1.config.skills]: string;
+                };
                 expandedChoices: Array<keyof typeof pf1.config.skills>;
             };
             versatileTraining: {

@@ -75,7 +75,7 @@ function createVTIcon(actor) {
     icon.classList.add('ra', 'ra-crossed-swords', 'ckl-skill-icon');
 
     const rollData = actor.getRollData();
-    const tip = localize('versatile-training.skillTip', { bab: rollData.attributes.bab.total });
+    const tip = localize('versatile-training.skill-tip', { bab: rollData.attributes.bab.total });
     icon.setAttribute('data-tooltip', tip);
     icon.setAttribute('data-tooltip-direction', 'UP');
 

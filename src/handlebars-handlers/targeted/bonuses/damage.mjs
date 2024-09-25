@@ -63,10 +63,7 @@ export function damageInput({
             const a = event.currentTarget;
             if (!a) return;
 
-            /**
-             *
-             * @param {DamageInputModel[]} arg
-             */
+            /** @param {DamageInputModel[]} arg */
             async function update(arg) {
                 await item.setFlag(MODULE_NAME, key, arg);
             };

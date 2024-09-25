@@ -59,9 +59,8 @@ const dictionaryToModuleFlag = [
     new DictionaryMigration('change-type-offset-formula', 'change-modification-formula', true),
 ];
 
-const migrateModuleFlagKeys = [
-    ['expanded-versatile-performance', 'versatile-performance-expanded'],
-];
+/** @type {[string, string][]} */
+const migrateModuleFlagKeys = [];
 
 // TODO don't forget this
 const languageKeyMigrationKeys = [
@@ -188,29 +187,24 @@ const getItemUpdateData = (item) => {
     migrateModuleFlagKeys.forEach(([key, newKey]) => migrateModuleFlag(key, newKey));
 
     const vpKey = 'versatile-performance';
-    const vpKeyBase = `${vpKey}-base`;
-    const vpKeyChoice1 = `${vpKey}-choice-1`;
-    const vpKeyChoice2 = `${vpKey}-choice-2`;
-    const vpKeyExpanded = `${vpKey}-expanded`;
-
     const legacyExpandedKey = `expanded-${vpKey}`;
 
     const vp = item.getItemDictionaryFlag(vpKey);
     if (vp) {
         const [baseId, ...substitutes] = `${vp}`.split(';').map(x => x.trim());
 
-        /** @type{Record<string, boolean>} */
         boolean[vpKey] = true;
         if (item.hasItemBooleanFlag(legacyExpandedKey)) {
-            boolean[vpKeyExpanded] = true;
+            moduleFlags[`-=${legacyExpandedKey}`] = null;
         }
 
         dictionary[`-=${vpKey}`] = null;
-        moduleFlags[vpKeyBase] = baseId;
-        moduleFlags[vpKeyChoice1] = substitutes[0];
-        moduleFlags[vpKeyChoice2] = substitutes[1];
-        moduleFlags[vpKeyExpanded] = item.getFlag(MODULE_NAME, legacyExpandedKey);
-        moduleFlags[`-=${legacyExpandedKey}`] = null;
+        moduleFlags[vpKey] = [{
+            base: baseId,
+            choice1: substitutes[0],
+            choice2: substitutes[1],
+            expanded: item.getFlag(MODULE_NAME, legacyExpandedKey),
+        }];
     }
 
     if (isNotEmptyObject(dictionary)

@@ -91,6 +91,14 @@
     text-align: end;
 }
 
+form .versatile-performance-selector .form-fields {
+    flex-direction: column;
+}
+
+.versatile-performance-selector .vp-actions {
+    align-self: flex-end;
+}
+
 .versatile-performance-selector td {
     padding-inline: 2px;
 }
