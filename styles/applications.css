@@ -17,44 +17,72 @@
     flex: 3;
 }
 
-.roll-bonuses-form.action-selector div.action-selector-row,
-.roll-bonuses-form.item-selector div.item-selector-row {
+.action-selector.window-app .window-content,
+.item-selector.window-app .window-content {
+    padding: 0;
+}
+
+.action-selector .roll-bonuses-form div.action-selector-row,
+.item-selector .roll-bonuses-form div.item-selector-row {
     align-items: center;
     display: flex;
 }
 
-.roll-bonuses-form.action-selector
-    div.action-selector-row:hover:not(.only-name),
-.roll-bonuses-form.item-selector div.item-selector-row:hover {
+.action-selector
+    .roll-bonuses-form
+    div.action-selector-row
+    > *:hover:not(.only-name),
+.item-selector .roll-bonuses-form div.item-selector-row > *:hover {
     color: var(--pf1-item-hover-text);
     text-shadow: var(--pf1-item-hover-shadow);
     cursor: pointer;
 }
 
 .roll-bonuses-form .checkbox-label,
-.roll-bonuses-form.action-selector div.action-selector-contents,
-.roll-bonuses-form.item-selector div.item-selector-contents {
+.action-selector .roll-bonuses-form div.action-selector-contents,
+.item-selector .roll-bonuses-form div.item-selector-contents {
     align-items: center;
     display: flex;
 }
 
-.roll-bonuses-form.action-selector div.action-selector-contents div,
-.roll-bonuses-form.item-selector div.item-selector-contents div {
+.action-selector .roll-bonuses-form .type-header,
+.item-selector .roll-bonuses-form .type-header {
+    align-content: center;
+    position: sticky;
+    height: 24px;
+    top: 0;
+    z-index: 1;
+    background-color: rgb(178, 178, 178);
+    padding-inline-start: 8px;
+}
+
+.action-selector .roll-bonuses-form .items,
+.item-selector .roll-bonuses-form .items {
+    padding-inline: 8px;
+    padding-block-end: 8px;
+}
+
+.action-selector .roll-bonuses-form div.action-selector-contents div,
+.item-selector .roll-bonuses-form div.item-selector-contents div {
     margin: 0;
 }
 
-.roll-bonuses-form.action-selector div.action-selector-contents img,
-.roll-bonuses-form.item-selector div.item-selector-contents img {
+.action-selector .roll-bonuses-form div.action-selector-contents img,
+.item-selector .roll-bonuses-form div.item-selector-contents img {
     min-height: 24px;
     min-width: 24px;
     max-height: 24px;
     max-width: 24px;
 }
 
-.roll-bonuses-form.action-selector
+.action-selector
+    .roll-bonuses-form
     div.action-selector-contents
     *:not(:last-child),
-.roll-bonuses-form.item-selector div.item-selector-contents *:not(:last-child) {
+.item-selector
+    .roll-bonuses-form
+    div.item-selector-contents
+    *:not(:last-child) {
     margin-inline-end: 0.2rem;
 }
 

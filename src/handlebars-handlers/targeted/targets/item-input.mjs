@@ -102,6 +102,7 @@ class ItemSelector extends DocumentSheet {
         options.height = 'auto';
         options.template = templates.itemsApp;
         options.title = localize('item-app.title');
+        options.classes = ['item-selector'];
 
         return options;
     }

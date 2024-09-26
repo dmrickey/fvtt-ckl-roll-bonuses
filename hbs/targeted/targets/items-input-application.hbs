@@ -1,29 +1,32 @@
-<form class="roll-bonuses roll-bonuses-form item-selector">
+<form class="roll-bonuses roll-bonuses-form">
     <div class="form-body">
 
         {{#each groupedItems}}
-        <h4>{{@key}}</h4>
-        {{#each this}}
-        <div
-            class="item-selector-row"
-            data-tooltip="{{this.name}}<br>{{this.typeLabel}}"
-        >
-            <input
-                type="checkbox"
-                name="{{../../path}}"
-                {{#if this.checked}}checked{{/if}}
-                value="{{this.id}}"
-                id="item_{{../../item.id}}_{{this.id}}"
-            >
-            <label for="item_{{../../item.id}}_{{this.id}}">
-                <div class="item-selector-contents">
-                    <img src="{{this.img}}">
-                    <div>{{this.name}}</div>
+        <section>
+            <h4 class="type-header">{{@key}}</h4>
+            <div class="items">
+                {{#each this}}
+                <div
+                    class="item-selector-row"
+                    data-tooltip="{{this.name}}<br>{{this.typeLabel}}"
+                >
+                    <input
+                        type="checkbox"
+                        name="{{../../path}}"
+                        {{#if this.checked}}checked{{/if}}
+                        value="{{this.id}}"
+                        id="item_{{../../item.id}}_{{this.id}}"
+                    >
+                    <label for="item_{{../../item.id}}_{{this.id}}">
+                        <div class="item-selector-contents">
+                            <img src="{{this.img}}">
+                            <div>{{this.name}}</div>
+                        </div>
+                    </label>
                 </div>
-            </label>
-        </div>
-        {{/each}}
-        <br>
+                {{/each}}
+            </div>
+        </section>
         {{/each}}
     </div>
     <div class="control-group">

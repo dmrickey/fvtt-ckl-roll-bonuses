@@ -122,6 +122,7 @@ class ActionSelector extends DocumentSheet {
         options.height = 'auto';
         options.template = templates.actionsApp;
         options.title = localize('item-app.title');
+        options.classes = ['action-selector'];
 
         return options;
     }

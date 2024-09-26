@@ -269,7 +269,14 @@
 - Change all "is type" into a single target with checkboxes for various types it should allow
 
 # vnext
+- Update bonus picker tabs to have the same style as actor sheet tabs
 - Audit other apps and add explanation as necessary
+- Action/Item Target Picker
+  - accordions for item and action selector apps with sticky headers
+  - text filter for item and action selector apps
+  - Right click to open specific item for verification
+  - Fix hover pointer when off of label/checkbox
+  - make them use the same base styles so I don't have to have two selectors for basically everything
 - Look into migrating all legacy things into module flags
 - Specific bonuses
 - Handle Migration
