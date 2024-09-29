@@ -13,6 +13,10 @@ declare global {
         let partials: { [key: string]: function(object, { allowProtoMethodsByDefault: true, allowProtoPropertiesByDefault: true }) };
     }
 
+    namespace SearchFilter {
+        function cleanQuery(string): string;
+    }
+
     class EmbeddedCollection<T> extends Array<T> {
         /**
          * Same as array.length

@@ -1,33 +1,42 @@
-<form class="roll-bonuses roll-bonuses-form">
+<form class="roll-bonuses roll-bonuses-form pf1">
+    <div class="help-text">
+        <i class="help-icon fas fa-info-circle"></i>
+        {{localize 'ckl-roll-bonuses.item-app.description'}}
+    </div>
+    <div class="search-container">
+        <input name="filter" type="search" />
+    </div>
     <div class="form-body">
-
-        {{#each groupedItems}}
-        <section>
-            <h4 class="type-header">{{@key}}</h4>
-            <div class="items">
-                {{#each this}}
-                <div
-                    class="item-selector-row"
-                    data-tooltip="{{this.name}}<br>{{this.typeLabel}}"
-                >
-                    <input
-                        type="checkbox"
-                        name="{{../../path}}"
-                        {{#if this.checked}}checked{{/if}}
-                        value="{{this.id}}"
-                        id="item_{{../../item.id}}_{{this.id}}"
+        <div class="all-entities">
+            {{#each groupedItems}}
+            <section class="type-section">
+                <h4 class="type-header" data-type="{{@key}}">{{@key}}</h4>
+                <div class="entities">
+                    {{#each this}}
+                    <div
+                        class="entity-selector-row"
+                        data-name="{{this.name}}"
+                        data-tooltip="{{this.typeLabel}}<hr>{{this.name}}"
                     >
-                    <label for="item_{{../../item.id}}_{{this.id}}">
-                        <div class="item-selector-contents">
-                            <img src="{{this.img}}">
-                            <div>{{this.name}}</div>
-                        </div>
-                    </label>
+                        <input
+                            type="checkbox"
+                            name="{{../../path}}"
+                            {{#if this.checked}}checked{{/if}}
+                            value="{{this.id}}"
+                            id="item_{{../../item.id}}_{{this.id}}"
+                        >
+                        <label for="item_{{../../item.id}}_{{this.id}}">
+                            <div class="entity-selector-contents">
+                                <img src="{{this.img}}">
+                                <div>{{this.name}}</div>
+                            </div>
+                        </label>
+                    </div>
+                    {{/each}}
                 </div>
-                {{/each}}
-            </div>
-        </section>
-        {{/each}}
+            </section>
+            {{/each}}
+        </div>
     </div>
     <div class="control-group">
         <button type="reset">

@@ -122,9 +122,55 @@ class ActionSelector extends DocumentSheet {
         options.height = 'auto';
         options.template = templates.actionsApp;
         options.title = localize('item-app.title');
-        options.classes = ['action-selector'];
+        options.classes = ['item-based-list', 'action-selector'];
+        options.filters = [
+            {
+                inputSelector: 'input[name=filter]',
+                contentSelector: ".all-entities",
+            },
+        ];
 
         return options;
+    }
+
+    /**
+     * Handle changes to search filtering controllers which are bound to the Application
+     * @param {KeyboardEvent} _event   The key-up event from keyboard input
+     * @param {string} query          The raw string input to the search field
+     * @param {RegExp} rgx            The regular expression to test against
+     * @param {HTMLElement} html      The HTML element which should be filtered
+     * @override
+     */
+    _onSearchFilter(_event, query, rgx, html) {
+        if (!query?.trim()) {
+            /** @type {NodeListOf<HTMLElement>} */
+            const currentHidden = html.querySelectorAll('.filtered-out');
+            currentHidden.forEach((h) => h.classList.remove('filtered-out'));
+            return;
+        }
+
+        /** @type {NodeListOf<HTMLElement>} */
+        const typeGroups = html.querySelectorAll('.type-section');
+        typeGroups.forEach((typeGroup) => {
+            /** @type {NodeListOf<HTMLElement>} */
+            const actions = typeGroup.querySelectorAll('.entity-selector-row[data-name]');
+
+            actions.forEach((action) => {
+                const name = action.dataset.name;
+                const match = name && rgx.test(SearchFilter.cleanQuery(name));
+                action.classList.toggle("filtered-out", !match);
+                // if (match) {
+                const forItem = html.querySelectorAll(`[data-item-id="${action.dataset.itemId}"]:not(.only-name)`);
+                const forItemHidden = html.querySelectorAll(`[data-item-id="${action.dataset.itemId}"].filtered-out:not(.only-name)`);
+                // if (forItem.length === forItemHidden.length) {
+                const item = html.querySelector(`[data-item-id="${action.dataset.itemId}"].only-name`);
+                item?.classList.toggle("filtered-out", forItem.length === forItemHidden.length);
+                // }
+                // }
+
+            });
+
+        });
     }
 
     /**

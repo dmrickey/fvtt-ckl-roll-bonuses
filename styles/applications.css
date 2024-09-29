@@ -11,79 +11,100 @@
     display: flex;
     flex-wrap: wrap;
     margin: 3px 0;
+    margin-block-start: auto;
+    margin-block-end: 3px;
 }
 
 .roll-bonuses-form .control-group > * {
     flex: 3;
 }
 
-.action-selector.window-app .window-content,
-.item-selector.window-app .window-content {
+.item-based-list.window-app .window-content {
     padding: 0;
 }
 
-.action-selector .roll-bonuses-form div.action-selector-row,
-.item-selector .roll-bonuses-form div.item-selector-row {
+.item-based-list .roll-bonuses-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.item-based-list .roll-bonuses-form div.entity-selector-row {
     align-items: center;
     display: flex;
 }
 
-.action-selector
+.item-based-list
     .roll-bonuses-form
-    div.action-selector-row
-    > *:hover:not(.only-name),
-.item-selector .roll-bonuses-form div.item-selector-row > *:hover {
+    div.entity-selector-row
+    > *:hover:not(.only-name) {
     color: var(--pf1-item-hover-text);
     text-shadow: var(--pf1-item-hover-shadow);
     cursor: pointer;
 }
 
 .roll-bonuses-form .checkbox-label,
-.action-selector .roll-bonuses-form div.action-selector-contents,
-.item-selector .roll-bonuses-form div.item-selector-contents {
+.item-based-list .roll-bonuses-form div.entity-selector-contents {
     align-items: center;
     display: flex;
 }
 
-.action-selector .roll-bonuses-form .type-header,
-.item-selector .roll-bonuses-form .type-header {
+.item-based-list .roll-bonuses-form .type-header {
     align-content: center;
     position: sticky;
     height: 24px;
     top: 0;
     z-index: 1;
     background-color: rgb(178, 178, 178);
-    padding-inline-start: 8px;
+    padding-inline-start: 0.5rem;
 }
 
-.action-selector .roll-bonuses-form .items,
-.item-selector .roll-bonuses-form .items {
-    padding-inline: 8px;
-    padding-block-end: 8px;
+.item-based-list .roll-bonuses-form .entities {
+    padding-inline: 0.5rem;
 }
 
-.action-selector .roll-bonuses-form div.action-selector-contents div,
-.item-selector .roll-bonuses-form div.item-selector-contents div {
+.item-based-list .roll-bonuses-form .help-text {
+    margin: 0.5rem;
+}
+
+.item-based-list .roll-bonuses-form .search-container {
+    margin: 0 0.5rem 0.5rem 0.5rem;
+}
+
+.item-based-list
+    .roll-bonuses-form
+    .entities
+    > *:nth-last-child(1 of :not(.filtered-out)) {
+    padding-block-end: 0.5rem;
+}
+
+.item-based-list .roll-bonuses-form div.entity-selector-contents div {
     margin: 0;
 }
 
-.action-selector .roll-bonuses-form div.action-selector-contents img,
-.item-selector .roll-bonuses-form div.item-selector-contents img {
-    min-height: 24px;
-    min-width: 24px;
-    max-height: 24px;
-    max-width: 24px;
+.item-based-list .roll-bonuses-form div.entity-selector-contents img {
+    min-height: 1.5rem;
+    min-width: 1.5rem;
+    max-height: 1.5rem;
+    max-width: 1.5rem;
 }
 
-.action-selector
+.item-based-list
     .roll-bonuses-form
-    div.action-selector-contents
-    *:not(:last-child),
-.item-selector
-    .roll-bonuses-form
-    div.item-selector-contents
+    div.entity-selector-contents
     *:not(:last-child) {
     margin-inline-end: 0.2rem;
+}
+
+.item-based-list .action-selector-row.only-name,
+.item-based-list .entity-selector-row[data-name] {
+    overflow: hidden;
+    max-height: 2rem;
+    transition: max-height 0.15s ease-out;
+}
+.item-based-list .action-selector-row.only-name.filtered-out,
+.item-based-list .entity-selector-row[data-name].filtered-out {
+    max-height: 0;
+    transition: max-height 0.25s ease-in;
 }
 
 .roll-bonuses-form.token-selector div.hint-text {
