@@ -1,5 +1,6 @@
 import { api } from './api.mjs';
 import { ifDebug } from './if-debug.mjs';
+import { truthiness } from './truthiness.mjs';
 
 export class PositionalHelper {
 
@@ -118,13 +119,42 @@ export class PositionalHelper {
      * @returns {boolean}
      */
     static #threatens(attacker, target, specificAction = undefined) {
-        // todo - flat-footed does not exist
-        // if (attacker.isFlatFooted) {
-        //     return false;
-        // }
-        // if (attacker/target is unconconscious/immobilized) {
-        //     return false;
-        // }
+        if (attacker.actor) {
+            const { actor } = attacker;
+
+            /** @type {Array<keyof Conditions>} */
+            const conditions = [
+                'cowering',
+                'dazed',
+                'dead',
+                'dying',
+                'fascinated',
+                'flatFooted',
+                'helpless',
+                'nauseated',
+                'panicked',
+                'paralyzed',
+                'petrified',
+                'pinned',
+                'stunned',
+                'unconscious',
+            ];
+            if (conditions.some((c) => actor.hasCondition(c))) {
+                return false;
+            }
+
+            const senses = actor.system.traits.senses;
+            if (actor.hasCondition('blind') && !(senses.bs || senses.ts)) {
+                return false;
+            }
+
+            if (attacker.actor instanceof pf1.documents.actor.ActorPF
+                && attacker.actor.hasCondition('invisible')
+                && !(senses.si || senses.ts)
+            ) {
+                return false;
+            }
+        }
 
         let actions = [];
         if (specificAction) {
