@@ -122,8 +122,8 @@
     text-wrap: balance;
 }
 
-.roll-bonuses-form.token-selector div.hint-text {
-    max-width: 400px;
+.roll-bonuses-form.token-selector div.help-text {
+    max-width: 424px;
     text-align: center;
     text-wrap: balance;
 }

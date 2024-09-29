@@ -267,6 +267,7 @@
   - Finesse (already exists)
 - Create new "Roll Bonuses" section for attack dialog inputs
 - Change all "is type" into a single target with checkboxes for various types it should allow
+- Replace "checklist-input" with a proper Item application instead of a warpgate menu
 
 # vnext
 - Update bonus picker tabs to have the same style as actor sheet tabs

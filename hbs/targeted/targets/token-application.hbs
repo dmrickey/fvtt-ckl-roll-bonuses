@@ -6,14 +6,17 @@ const templateData = {
     groupedTokens: {}[],
 };
 --}}
-<form class="roll-bonuses roll-bonuses-form token-selector">
+<form class="roll-bonuses roll-bonuses-form token-selector pf1">
     <div class="form-body">
-        {{#if isGm}}
-        <div class="hint-text">
+        <div class="help-text">
+            {{#if isGm}}
+            <i class="help-icon fas fa-info-circle"></i>
             {{localize "ckl-roll-bonuses.applications.token.gm-hint"}}
+            <hr>
+            {{/if}}
+            {{#unless isGm}}<i class="help-icon fas fa-info-circle"></i>{{/unless}}
+            {{localize "ckl-roll-bonuses.applications.token.player-hint"}}
         </div>
-        <hr>
-        {{/if}}
         {{#each groupedTokens}}
         <h4>{{@key}}</h4>
         <div class="grouped-tokens">
@@ -40,11 +43,6 @@ const templateData = {
             {{/each}}
         </div>
         {{/each}}
-        <hr>
-        <div class="hint-text">
-            {{localize "ckl-roll-bonuses.applications.token.player-hint"}}
-        </div>
-        <hr>
     </div>
     <div class="control-group">
         <button type="reset">
