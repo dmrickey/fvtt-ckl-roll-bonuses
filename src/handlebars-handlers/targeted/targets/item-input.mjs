@@ -144,12 +144,37 @@ class ItemSelector extends DocumentSheet {
     }
 
     /**
-     * @override
-     * @param {JQuery} html
+     * @param {MouseEvent} event
      */
-    activateListeners(html) {
-        super.activateListeners(html);
-        html.find('button[type=reset]')?.click(this.close.bind(this));
+    rightClick(event) {
+        event.preventDefault();
+        // @ts-ignore
+        const  /** @type {HTMLElement?} */ target = event.target;
+        let parent = target;
+        while (parent && !parent.dataset.itemId) { parent = parent.parentElement }
+        const id = parent?.dataset.itemId;
+        if (id) {
+            this.object.actor?.items.get(id)?.sheet.render(true, { focus: true });
+        }
+        return false;
+    }
+
+    /**
+     * @override
+     * @param {JQuery} jq
+     */
+    activateListeners(jq) {
+        super.activateListeners(jq);
+        jq.find('button[type=reset]')?.click(this.close.bind(this));
+
+        // @ts-ignore
+        const [html] = jq;
+        /** @type {NodeListOf<HTMLElement>} */
+        const items = html.querySelectorAll('.entity-selector-row')
+        items.forEach((item) => {
+            item.addEventListener('contextmenu', this.rightClick.bind(this));
+        });
+
     }
 
     /** @override */

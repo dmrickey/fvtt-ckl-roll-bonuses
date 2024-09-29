@@ -643,6 +643,8 @@ declare global {
          * @returns True if the item has the boolean flag
          */
         hasItemBooleanFlag(key: string): boolean;
+
+        sheet: ItemSheetPF;
     }
 
     class ItemAttackPF extends ItemPF<SystemItemDataAttackPF> {}
@@ -1784,6 +1786,9 @@ declare global {
         rendered: boolean;
         template: string;
         title: string;
+
+        render(force: boolean, { focus: boolean } = {});
+        _render(): Promise;
     }
 
     declare type ActorSize =
