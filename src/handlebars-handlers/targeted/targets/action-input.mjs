@@ -174,12 +174,43 @@ class ActionSelector extends DocumentSheet {
     }
 
     /**
-     * @override
-     * @param {JQuery} html
+     * @param {MouseEvent} event
      */
-    activateListeners(html) {
-        super.activateListeners(html);
-        html.find('button[type=reset]')?.click(this.close.bind(this));
+    rightClick(event) {
+        event.preventDefault();
+        // @ts-ignore
+        const  /** @type {HTMLElement?} */ target = event.target;
+        let parent = target;
+        while (parent && !parent.dataset.itemId) { parent = parent.parentElement }
+        const itemId = parent?.dataset.itemId;
+        if (itemId) {
+            const actionId = parent?.dataset.actionId
+            const action = actionId && this.object.actor?.items.get(itemId).actions.get(actionId);
+            if (action) {
+                action.sheet.render(true, { focus: true });
+            }
+            else {
+                this.object.actor?.items.get(itemId)?.sheet.render(true, { focus: true });
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @override
+     * @param {JQuery} jq
+     */
+    activateListeners(jq) {
+        super.activateListeners(jq);
+        jq.find('button[type=reset]')?.click(this.close.bind(this));
+
+        // @ts-ignore
+        const [html] = jq;
+        /** @type {NodeListOf<HTMLElement>} */
+        const items = html.querySelectorAll('.entity-selector-row, .action-selector-row.only-name')
+        items.forEach((item) => {
+            item.addEventListener('contextmenu', this.rightClick.bind(this));
+        });
     }
 
     /** @override */

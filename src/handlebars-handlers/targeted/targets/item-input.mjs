@@ -174,7 +174,6 @@ class ItemSelector extends DocumentSheet {
         items.forEach((item) => {
             item.addEventListener('contextmenu', this.rightClick.bind(this));
         });
-
     }
 
     /** @override */

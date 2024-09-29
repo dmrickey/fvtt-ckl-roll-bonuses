@@ -489,6 +489,7 @@ declare global {
         maxRange: number;
         minRange: number;
         name: string;
+        sheet: ItemActionSheet;
     }
 
     /** used for weapons and attacks */
@@ -1759,6 +1760,10 @@ declare global {
     interface ActorSheetPF {
         get actor(): ActorPF;
         get isEditable(): boolean;
+    }
+
+    interface ItemActionSheet {
+        render(force: boolean, { focus: boolean } = {});
     }
 
     interface ItemSheetPF {
