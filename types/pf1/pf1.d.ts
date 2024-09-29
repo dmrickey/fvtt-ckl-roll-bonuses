@@ -103,7 +103,7 @@ declare global {
         };
         getActiveTokens(): Array<TokenPF>;
         getSkillInfo(skillId: string): SkillInfo;
-        hasCondition(key: string): boolean;
+        hasCondition(key: keyof Conditions): boolean;
 
         [MODULE_NAME]: {
             [spellFocusKey]?: ItemPF[];
@@ -170,13 +170,19 @@ declare global {
 
     interface Conditions {
         bleed: 'Bleed';
+        blind: 'Blind';
         confused: 'Confused';
         cowering: 'Cowering';
         dazed: 'Dazed';
         dazzled: 'Dazzled';
+        dead: 'Dead';
+        deaf: 'Deaf';
+        disabled: 'Disabled';
+        dying: 'Dying';
         entangled: 'Entangled';
         exhausted: 'Exhausted';
         fatigued: 'Fatigued';
+        flatFooted: 'Flat-Footed';
         frightened: 'Frightened';
         grappled: 'Grappled';
         helpless: 'Helpless';
@@ -185,16 +191,20 @@ declare global {
         nauseated: 'Nauseated';
         panicked: 'Panicked';
         paralyzed: 'Paralyzed';
-        pf1_blind: 'Blind';
-        pf1_deaf: 'Deaf';
-        pf1_prone: 'Prone';
-        pf1_sleep: 'Sleep';
+        petrified: 'Petrified';
         pinned: 'Pinned';
+        prone: 'Prone';
         shaken: 'Shaken';
         sickened: 'Sickened';
+        sleep: 'Sleep';
         squeezing: 'Squeezing';
+        stable: 'Stable';
         staggered: 'Staggered';
         stunned: 'Stunned';
+        unconscious: 'Unconscious';
+
+        // Nevela's PF1 Improved Conditions
+        fascinated: 'Fascintated';
     }
 
     interface SpellDescriptors {
