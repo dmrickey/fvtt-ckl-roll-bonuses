@@ -107,6 +107,21 @@
     transition: max-height 0.25s ease-in;
 }
 
+.item-based-list label {
+    overflow-x: hidden;
+}
+.item-based-list .action-selector-row.only-name,
+.item-based-list .entity-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-wrap: nowrap;
+}
+
+.item-based-list .help-text {
+    text-align: center;
+    text-wrap: balance;
+}
+
 .roll-bonuses-form.token-selector div.hint-text {
     max-width: 400px;
     text-align: center;

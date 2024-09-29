@@ -119,9 +119,6 @@ class ActionSelector extends DocumentSheet {
     static get defaultOptions() {
         const options = super.defaultOptions;
 
-        options.height = 'auto';
-        options.template = templates.actionsApp;
-        options.title = localize('item-app.title');
         options.classes = ['item-based-list', 'action-selector'];
         options.filters = [
             {
@@ -129,6 +126,10 @@ class ActionSelector extends DocumentSheet {
                 contentSelector: ".all-entities",
             },
         ];
+        options.height = 'auto';
+        options.template = templates.actionsApp;
+        options.title = localize('item-app.title');
+        options.width = 300;
 
         return options;
     }

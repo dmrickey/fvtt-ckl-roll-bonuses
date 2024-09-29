@@ -99,9 +99,6 @@ class ItemSelector extends DocumentSheet {
     static get defaultOptions() {
         const options = super.defaultOptions;
 
-        options.height = 'auto';
-        options.template = templates.itemsApp;
-        options.title = localize('item-app.title');
         options.classes = ['item-based-list', 'item-selector'];
         options.filters = [
             {
@@ -109,6 +106,10 @@ class ItemSelector extends DocumentSheet {
                 contentSelector: ".all-entities",
             },
         ];
+        options.height = 'auto';
+        options.template = templates.itemsApp;
+        options.title = localize('item-app.title');
+        options.width = 300;
 
         return options;
     }
