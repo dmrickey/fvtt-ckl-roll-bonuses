@@ -171,7 +171,7 @@ LocalHookHandler.registerHandler(localHooks.prepareData, (item, rollData) => {
     const damages = item.getFlag(MODULE_NAME, ammoDamageKey) || [];
     damages.forEach((/** @type {DamageInputModel}*/ damage) => {
         item[MODULE_NAME][ammoDamageKey] ||= [];
-        const roll = RollPF.safeRollSync(damage.formula, rollData);
+        const roll = RollPF.create(damage.formula, rollData);
         item[MODULE_NAME][ammoDamageKey].push(roll.simplifiedFormula);
     });
 
@@ -182,7 +182,7 @@ LocalHookHandler.registerHandler(localHooks.prepareData, (item, rollData) => {
 
         // const simplified = [];
         matches.forEach(([_, match]) => {
-            const roll = RollPF.safeRollSync(match, rollData);
+            const roll = RollPF.create(match, rollData);
             note = note.replace(match, roll.simplifiedFormula);
         });
 

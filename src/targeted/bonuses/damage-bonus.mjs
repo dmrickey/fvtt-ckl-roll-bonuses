@@ -37,7 +37,7 @@ export class DamageBonus extends BaseBonus {
             const damages = item.getFlag(MODULE_NAME, this.key) || [];
             damages.forEach((/** @type {DamageInputModel}*/ damage) => {
                 item[MODULE_NAME][this.key] ||= [];
-                const roll = RollPF.safeRollSync(damage.formula, rollData);
+                const roll = RollPF.create(damage.formula, rollData);
                 item[MODULE_NAME][this.key].push(roll.simplifiedFormula);
             });
         });
@@ -77,9 +77,9 @@ export class DamageBonus extends BaseBonus {
                 type,
                 crit,
                 formula: (() => {
-                    const roll = RollPF.safeRollSync(formula);
-                    return roll.isNumber && roll.total
-                        ? signed(roll.total)
+                    const roll = RollPF.create(formula);
+                    return roll.isDeterministic
+                        ? signed(roll.evaluate({ async: false }).total)
                         : formula;
                 })(),
             }))

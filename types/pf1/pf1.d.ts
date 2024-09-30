@@ -1504,6 +1504,12 @@ declare global {
         isNumber: boolean;
         simplifiedFormula: string;
 
+        static create(
+            formula: string,
+            data?: D,
+            options?: InexactPartial<Options>
+        ): RollPF;
+
         prototype: typeof RollPF;
 
         /**

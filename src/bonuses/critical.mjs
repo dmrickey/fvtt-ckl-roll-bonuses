@@ -55,10 +55,16 @@ registerItemHint((hintcls, _actor, item, _data,) => {
         ...Object.values(FormulaCacheHelper.getPartialDictionaryFlagFormula(item, 'crit-offset_')),
     ]
         .filter(truthiness)
-        .join(' + ');
+        .join(' + ')
+        .trim();
 
-    const roll = RollPF.safeRollSync(formula);
-    if (roll.isNumber) {
+    if (!formula) {
+        return;
+    }
+
+    const roll = RollPF.create(formula);
+    if (roll.isDeterministic) {
+        roll.evaluate({ async: false });
         const mod = roll.total;
         if (!mod) {
             return;
@@ -84,10 +90,16 @@ registerItemHint((hintcls, _actor, item, _data,) => {
         ...Object.values(FormulaCacheHelper.getPartialDictionaryFlagFormula(item, 'crit-mult-offset_')),
     ]
         .filter(truthiness)
-        .join(' + ');
+        .join(' + ')
+        .trim();
 
-    const roll = RollPF.safeRollSync(formula);
-    if (roll.isNumber) {
+    if (!formula) {
+        return;
+    }
+
+    const roll = RollPF.create(formula);
+    if (roll.isDeterministic) {
+        roll.evaluate({ async: false });
         const mod = roll.total;
         if (!mod) {
             return;

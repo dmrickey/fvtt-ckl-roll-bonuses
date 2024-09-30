@@ -121,7 +121,7 @@ export const handleFortune = (options) => {
     options.fortuneCount ||= 0;
     options.misfortuneCount ||= 0;
 
-    const roll = RollPF.safeRollSync(options.dice);
+    const roll = RollPF.create(options.dice);
     const dice = roll.dice[0];
     if (!dice) {
         // no actual roll, a static number was probably given

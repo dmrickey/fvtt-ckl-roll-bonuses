@@ -42,8 +42,9 @@ const isItemFocused = (actor, item) => {
 
 // register hint on source feat
 registerItemHint((hintcls, _actor, item, _data) => {
+    const has = item.hasItemBooleanFlag(key);
     const current = /** @type {keyof WeaponGroups} */ (item.getFlag(MODULE_NAME, key));
-    if (current) {
+    if (has && current) {
         return hintcls.create(pf1.config.weaponGroups[current] ?? current, [], {});
     }
 });
