@@ -17,8 +17,9 @@ SpecificBonuses.registerSpecificBonus({ journal, key, parent: armorFocusKey });
 
 // register hint on source feat
 registerItemHint((hintcls, _actor, item, _data) => {
+    const has = item.hasItemBooleanFlag(key);
     const current = item.getFlag(MODULE_NAME, key);
-    if (current) {
+    if (has && current) {
         return hintcls.create(`${current}`, [], {});
     }
 });
@@ -33,6 +34,9 @@ function handleArmorFocusRollData(doc, rollData) {
     const actor = doc.actor;
     if (!actor) return;
 
+    const armorFocuses = getImprovedFocusedArmor(actor);
+    if (!armorFocuses.length) return;
+
     const armor = actor.items.find(
         /** @returns {item is ItemEquipmentPF} */
         (item) => item instanceof pf1.documents.item.ItemEquipmentPF && item.isActive && item.system.slot === 'armor'
@@ -41,7 +45,6 @@ function handleArmorFocusRollData(doc, rollData) {
     const baseTypes = armor.system.baseTypes;
     if (!baseTypes?.length) return;
 
-    const armorFocuses = getImprovedFocusedArmor(actor);
     const isFocused = intersects(armorFocuses, baseTypes);
     if (isFocused) {
         const current = rollData.item.armor.acp || 0;

@@ -42,8 +42,9 @@ export const getSpecializedWeapons = (actor) =>
 
 // register hint on source feat
 registerItemHint((hintcls, _actor, item, _data) => {
+    const has = item.hasItemBooleanFlag(key);
     const current = item.getFlag(MODULE_NAME, key);
-    if (current) {
+    if (has && current) {
         return hintcls.create(`${current}`, [], {});
     }
 });

@@ -45,8 +45,9 @@ const isItemFocused = (actor, item) => {
 
 // register hint on source
 registerItemHint((hintcls, _actor, item, _data) => {
+    const has = item.hasItemBooleanFlag(key);
     const current = item.getFlag(MODULE_NAME, key);
-    if (!current) {
+    if (!has || !current) {
         return;
     }
 

@@ -268,12 +268,13 @@
 - Create new "Roll Bonuses" section for attack dialog inputs
 - Change all "is type" into a single target with checkboxes for various types it should allow
 - Replace "checklist-input" with a proper Item application instead of a warpgate menu
+- Update Auto-recognition stuff in "renderItemSheet" to use the same logic as martial-focus.mjs for specific bonuses
+- Add "Fortune configuration app" to help with configuring specific fortune abilities
 
 # vnext
 - Update bonus picker tabs to have the same style as actor sheet tabs
 - Audit other apps and add explanation as necessary
 - Look into migrating all legacy things into module flags
-- Specific bonuses
 - Handle Migration
   - migrate crit to Item/Action targets
     - migrate to items. But just add a deprecation warning in the crit helper itself for actions since I don't want to iterate over every item and every action 
@@ -302,8 +303,6 @@
     - Weapon Specialization
     - Change Offset (-> Change Modification)
   - Verify item targets work without migration
-- Update Auto-recognition stuff in "renderItemSheet" to use the same logic as martial-focus.mjs for specific bonuses
-- Add "Fortune configuration app" to help with configuring specific fortune abilities
 - Add obsoletion message for `src\bonuses\critical.mjs` if its flags are detected
 - Targeting
   - Add a configuration error if "this target is not configured"
@@ -314,10 +313,12 @@
   - delete FormulaCacheHelper.registerUncacheableDictionaryFlag
   - delete FormulaCacheHelper.isUncacheableDictionaryFlag
 
-- Add misfortune hex buff
-
 Fix
 - async warning
+- Spell Focus - Item hint doesn't go away after removing bonus
+  - Double check that the bonus itself isn't given after the Specific Bonus is removed
+- Weapon Focus - Item hint doesn't go away after removing bonus
+  - Double check that the bonus itself isn't given after the Specific Bonus is removed
 
 - Read from actor module flags
   - Fate's favored 

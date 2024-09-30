@@ -48,7 +48,7 @@ export const getFocusedWeapons = (actor, key = weaponFocusKey) =>
 
 // register hint on source
 registerItemHint((hintcls, _actor, item, _data) => {
-    const key = allKeys.find((k) => !!item.getFlag(MODULE_NAME, k));
+    const key = allKeys.find((k) => !!item.hasItemBooleanFlag(k));
     if (!key) {
         return;
     }
