@@ -205,6 +205,22 @@ function addFootnotes(chatAttack, notes) {
 Hooks.on(customGlobalHooks.actionUseFootnotes, addFootnotes);
 
 /**
+ * @param {ItemAction} action
+ * @param {{proficient: boolean, secondaryPenalty: boolean}} config
+ * @param {RollData} rollData
+ * @param {D20RollConstructorOptions} rollOptions
+ * @param {string[]} parts
+ * @param {ItemChange[]} changes
+ */
+function onPreRollAttack(action, config, rollData, rollOptions, parts, changes) {
+    handleBonusesFor(
+        action,
+        (bonusType, sourceItem) => bonusType.modifyPreRollAttack(sourceItem, action, config, rollData, rollOptions, parts, changes)
+    );
+}
+Hooks.on('pf1PreAttackRoll', onPreRollAttack);
+
+/**
  * Add attack bonus to actor's Combat attacks column tooltip
  *
  * @param {ItemPF} item

@@ -1,14 +1,3 @@
-2024/09/26-13:28:44.301 90b8 Recovering log #600
-2024/09/26-13:28:44.304 90b8 Delete type=0 #600
-2024/09/26-13:28:44.304 90b8 Delete type=3 #598
-2024/09/29-16:58:14.301 aaa0 Level-0 table #605: started
-2024/09/29-16:58:14.303 aaa0 Level-0 table #605: 10489 bytes OK
-2024/09/29-16:58:14.303 aaa0 Delete type=0 #603
-2024/09/29-16:58:14.308 aaa0 Manual compaction at level-0 from '!items!3p2PtsJOLjsF390z' @ 72057594037927935 : 1 .. '!items!bExfitM1TiM3jNPv' @ 0 : 0; will stop at '!items!bExfitM1TiM3jNPv' @ 51 : 1
-2024/09/29-16:58:14.308 aaa0 Compacting 1@0 + 1@1 files
-2024/09/29-16:58:14.309 aaa0 Generated table #606@0: 5 keys, 6074 bytes
-2024/09/29-16:58:14.309 aaa0 Compacted 1@0 + 1@1 files => 6074 bytes
-2024/09/29-16:58:14.310 aaa0 compacted to: files[ 0 1 0 0 0 0 0 ]
-2024/09/29-16:58:14.310 aaa0 Delete type=2 #567
-2024/09/29-16:58:14.310 aaa0 Delete type=2 #605
-2024/09/29-16:58:14.310 aaa0 Manual compaction at level-0 from '!items!bExfitM1TiM3jNPv' @ 51 : 1 .. '!items!bExfitM1TiM3jNPv' @ 0 : 0; will stop at (end)
+2024/09/30-19:08:42.693 4f28 Recovering log #621
+2024/09/30-19:08:42.696 4f28 Delete type=0 #621
+2024/09/30-19:08:42.696 4f28 Delete type=3 #619

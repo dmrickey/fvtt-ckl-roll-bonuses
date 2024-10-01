@@ -10,6 +10,7 @@ import { EnhancementBonus } from './enhancement-bonus.mjs';
 import { FinesseBonus as FinesseBonus } from './finesse-bonus.mjs';
 import { FootnoteBonus } from './footnote-bonus.mjs';
 import { FortuneBonus } from './fortune-bonus.mjs';
+import { MaximizeDamageBonus } from './maximize-damage-bonus.mjs';
 import { MisfortuneBonus } from './misfortune-bonus.mjs';
 
 export const registerBonuses = () => [
@@ -26,4 +27,7 @@ export const registerBonuses = () => [
     FortuneBonus,
     MisfortuneBonus,
     // ModifiersBonus, // only if I can get the function to remove duplicates working (which needs to work with conditionals)
+
+    // Specifically last so it'll include other damage bonuses in its tooltip
+    MaximizeDamageBonus,
 ].forEach(Sources.registerSource);

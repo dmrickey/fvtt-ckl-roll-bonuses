@@ -400,13 +400,14 @@ async function itemActionRollDamage(wrapped, ...args) {
     let i = 0;
     for (const roll of rolls) {
         const formula = roll.formula;
-        const options = roll.options;
+        const options = { ...roll.options };
         const rollData = roll.data;
         const seed = { formula, options };
         LocalHookHandler.fireHookNoReturnSync(localHooks.itemActionRollDamage, seed, this, rollData, i);
 
-        if (formula !== seed.formula || !foundry.utils.objectsEqual(options, seed.options)) {
-            const replaced = await new pf1.dice.DamageRoll(seed.formula, rollData, seed.options).evaluate({ async: false });
+        if (formula !== seed.formula || !foundry.utils.objectsEqual(roll.options, seed.options)) {
+            const replaced = await new pf1.dice.DamageRoll(seed.formula, rollData, seed.options)
+                .evaluate({ async: true, maximize: !!seed.options.maximize, minimize: !!seed.options.minimize });
             rolls[i] = replaced;
         }
         i++;

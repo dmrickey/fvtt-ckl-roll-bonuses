@@ -445,6 +445,7 @@ declare global {
     }
 
     class ItemAction {
+        getRollData(): RollData;
         getRange({
             type: string = 'single' | 'min' | 'max',
             rollData: RollData = null,
@@ -469,6 +470,8 @@ declare global {
             };
             actionType: ActionType;
             damage: {
+                critParts: DamagePart[];
+                nonCritParts: DamagePart[];
                 parts: DamagePart[];
             };
             range: {
@@ -1457,7 +1460,9 @@ declare global {
                 damageMult: number;
             };
             damage: {
-                parts: { formula: string; type: TraitSelectorValuePlural }[];
+                critParts: DamagePart[];
+                nonCritParts: DamagePart[];
+                parts: DamagePart[];
             };
             range: {
                 maxIncrements: number;
@@ -1487,6 +1492,10 @@ declare global {
         flavor: string;
         fumble: number;
         staticRoll?: string?;
+
+        // used in evaluate (and only by me in rolling damage (currently), the system doesn't do this)
+        maximize?: boolean;
+        minimize?: boolean;
     }
 
     export class DamageRoll<
