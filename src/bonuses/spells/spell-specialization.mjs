@@ -48,7 +48,7 @@ function isSpecializedSpell(actor, spell) {
 
     const isSpecialized = sources.some((source) => {
         const value = source.getFlag(MODULE_NAME, key);
-        const exceptions = (/** @type {string } */ (source.getFlag(MODULE_NAME, exclusionKey)) || '')
+        const exceptions = (/** @type {string } */ (source.system.flags.dictionary[exclusionKey]) || '')
             .split(';')
             .filter(truthiness)
             .map((x) => x.trim());
@@ -90,8 +90,9 @@ registerItemHint((hintcls, actor, item, _data) => {
 
 // register hint on Spell Specialization
 registerItemHint((hintcls, _actor, item, _data) => {
+    const has = item.hasItemBooleanFlag(key);
     const current = item.getFlag(MODULE_NAME, key);
-    if (!current) {
+    if (!has || !current) {
         return;
     }
 

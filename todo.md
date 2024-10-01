@@ -273,24 +273,9 @@
 
 # vnext
 - Update bonus picker tabs to have the same style as actor sheet tabs
-- Audit other apps and add explanation as necessary
-- Look into migrating all legacy things into module flags
 - Handle Migration
   - migrate crit to Item/Action targets
     - migrate to items. But just add a deprecation warning in the crit helper itself for actions since I don't want to iterate over every item and every action 
-  - Documentation
-    - make sure keys match
-      - greater/improved/mythic/racial on end
-      - all are now kebab case
-    - make sure it doesn't say "dictionary flag"
-    - make sure that it works as a module flag
-    - that migration works
-      - Module flags are appropriately set
-      - dictionary flags are removed
-      - System change migration is migrating properly
-      - Verify language strings are properly updated
-    - Change Offset -> Change Modification
-      - Make sure it includes add/set
   - For Each (verify these all work after migration)
     - Armor Focus
     - Elemental CL/DC
@@ -303,6 +288,11 @@
     - Weapon Specialization
     - Change Offset (-> Change Modification)
   - Verify item targets work without migration
+  - Verify language strings are properly updated
+  - that migration works
+    - Module flags are appropriately set
+    - dictionary flags are removed
+    - System change migration is migrating properly
 - Add obsoletion message for `src\bonuses\critical.mjs` if its flags are detected
 - Targeting
   - Add a configuration error if "this target is not configured"
@@ -312,16 +302,3 @@
     - `getDocDFlags`
   - delete FormulaCacheHelper.registerUncacheableDictionaryFlag
   - delete FormulaCacheHelper.isUncacheableDictionaryFlag
-
-Fix
-- async warning
-- Spell Focus - Item hint doesn't go away after removing bonus
-  - Double check that the bonus itself isn't given after the Specific Bonus is removed
-- Weapon Focus - Item hint doesn't go away after removing bonus
-  - Double check that the bonus itself isn't given after the Specific Bonus is removed
-
-- Read from actor module flags
-  - Fate's favored 
-  - Furious Focus 
-  - Skill rank override
-  - snake sidewind
