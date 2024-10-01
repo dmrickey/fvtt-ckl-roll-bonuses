@@ -1,7 +1,8 @@
-import { createChange } from '../util/conditional-helpers.mjs';
 import { log } from './migration-log.mjs';
 import { MODULE_NAME } from '../consts.mjs';
+import { createChange } from '../util/conditional-helpers.mjs';
 import { isNotEmptyObject } from '../util/is-empty-object.mjs';
+import { LanguageSettings } from '../util/settings.mjs';
 import { truthiness } from '../util/truthiness.mjs';
 
 /** BEGIN to system changes */
@@ -62,28 +63,37 @@ const dictionaryToModuleFlag = [
 /** @type {[string, string][]} */
 const migrateModuleFlagKeys = [];
 
-// TODO don't forget this
 const languageKeyMigrationKeys = [
     ['elementalFocus', 'elemental-focus'],
     ['spellFocus', 'spell-focus'],
-    ['racial-weapon-focus', 'weapon-focus-racial'],
-    ['racial-weapon-focus-default-race', 'weapon-focus-racial-default-race'],
 ];
+export const migrateLanguageSettings = async () => {
+    const current = /** @type {Record<string, any>} */ (game.settings.get(MODULE_NAME, LanguageSettings.itemNameTranslationsKey));
+    let hasUpdate = false;
+    languageKeyMigrationKeys.forEach(([old, updated]) => {
+        const existing = current[old];
+        if (existing) {
+            current[`-=${old}`] = null;
+            current[updated] = existing;
+        }
+        hasUpdate ||= !!existing;
+    })
+    if (hasUpdate) {
+        await game.settings.set(MODULE_NAME, LanguageSettings.itemNameTranslationsKey, current);
+    }
+}
 
-// TODO don't forget this
 const settingsMigrationKeys = [
-    ['elementalFocus', 'elemental-focus'],
-    ['spellFocus', 'spell-focus'],
     ['racial-weapon-focus', 'weapon-focus-racial'],
     ['racial-weapon-focus-default-race', 'weapon-focus-racial-default-race'],
 ];
-
-export const migrateLanguageSetting = async () => {
-    // TODO don't forget to fill this in
-};
-
 export const migrateSettings = async () => {
-    // TODO don't forget to fill this in
+    for (const [old, updated] of settingsMigrationKeys) {
+        const existing = game.settings.get(MODULE_NAME, old);
+        if (existing) {
+            await game.settings.set(MODULE_NAME, updated, existing);
+        }
+    }
 }
 
 /**
@@ -317,7 +327,7 @@ const migrateSyntheticActors = async () => {
 };
 
 export const migrateV2 = async () => {
-    await migrateLanguageSetting();
+    await migrateLanguageSettings();
     await migrateWorldItems();
     await migratePacks();
     await migrateWorldActors();
