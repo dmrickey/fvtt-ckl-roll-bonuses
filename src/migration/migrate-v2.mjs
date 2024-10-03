@@ -87,9 +87,9 @@ const settingsMigrationKeys = [
     ['racial-weapon-focus', 'weapon-focus-racial'],
     ['racial-weapon-focus-default-race', 'weapon-focus-racial-default-race'],
 ];
-export const migrateSettings = async () => {
+export const migrateClientSettings = async () => {
     for (const [old, updated] of settingsMigrationKeys) {
-        const existing = game.settings.get(MODULE_NAME, old);
+        const existing = JSON.parse(game.settings.storage.get('client')?.[`${MODULE_NAME}.${old}`] ?? '');
         if (existing) {
             await game.settings.set(MODULE_NAME, updated, existing);
         }
@@ -326,11 +326,23 @@ const migrateSyntheticActors = async () => {
     log('...finished migrating synthetic actors');
 };
 
-export const migrateV2 = async () => {
+export const migrateWorldV2 = async () => {
     await migrateLanguageSettings();
     await migrateWorldItems();
     await migratePacks();
     await migrateWorldActors();
     await migrateSyntheticActors();
-    await migrateSettings();
 };
+
+export const migrateClientV2 = async () => {
+    const doIt = async () => await migrateClientSettings();
+
+    if (game.ready) {
+        await doIt();
+    }
+    else {
+        Hooks.on('ready', async () => {
+            await doIt();
+        });
+    }
+}

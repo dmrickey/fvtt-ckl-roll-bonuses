@@ -94,7 +94,7 @@ Hooks.on('renderItemSheet', (
         return;
     }
 
-    const current = item.getFlag(MODULE_NAME, key);
+    const current = item.getFlag(MODULE_NAME, changeTypeKey);
     const formula = item.getFlag(MODULE_NAME, formulaKey);
 
     const choices = Object.entries(bonusTypes)

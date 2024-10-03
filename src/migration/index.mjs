@@ -8,12 +8,21 @@ import { registerSetting } from '../util/settings.mjs';
 class Settings {
     static get #migrationVersionKey() { return 'migration-version'; }
 
-    static get migrationVersion() {
+    static get worldMigrationVersion() {
         const version = /** @type {number} */ (/** @type {unknown} */ Settings.#getSetting(this.#migrationVersionKey));
         return version;
     }
 
-    static set migrationVersion(version) {
+    static set worldMigrationVersion(version) {
+        game.settings.set(MODULE_NAME, this.#migrationVersionKey, version);
+    }
+
+    static get clientMigrationVersion() {
+        const version = /** @type {number} */ (/** @type {unknown} */ Settings.#getSetting(this.#migrationVersionKey));
+        return version;
+    }
+
+    static set clientMigrationVersion(version) {
         game.settings.set(MODULE_NAME, this.#migrationVersionKey, version);
     }
 
@@ -27,21 +36,24 @@ class Settings {
             key: this.#migrationVersionKey,
             scope: 'world',
             settingType: Number,
-        })
+        });
+        registerSetting({
+            config: false,
+            defaultValue: -1,
+            key: this.#migrationVersionKey,
+            scope: 'client',
+            settingType: Number,
+        });
     }
 }
 
 const currentMigrationVersion = 3;
 
-export default async () => {
-    if (game.users.activeGM !== game.user) {
-        return;
-    }
-
-    const current = Settings.migrationVersion || 0;
+const migrateWorld = async () => {
+    const current = Settings.worldMigrationVersion || 0;
 
     if (current !== currentMigrationVersion && current !== -1) {
-        log('Starting overall migration');
+        log('Starting world migration');
 
         if (current <= 1) {
             log('Migrating aboleths');
@@ -49,20 +61,45 @@ export default async () => {
         }
 
         if (current <= 2) {
-            log('Migrating bugbears')
-            await v2.migrateV2();
+            log('Migrating bugbears');
+            await v2.migrateWorldV2();
         }
 
-        log('Finalized migration');
+        log('Finalized world migration');
     }
 
-    Settings.migrationVersion = currentMigrationVersion;
+    Settings.worldMigrationVersion = currentMigrationVersion;
+};
+
+const migrateClient = async () => {
+    const current = Settings.clientMigrationVersion || 0;
+
+    if (current !== currentMigrationVersion && current !== -1) {
+        log('Starting client migration');
+
+        if (current <= 2) {
+            log('Migrating bugbears');
+            await v2.migrateClientV2();
+        }
+
+        log('Finalized client migration');
+    }
+
+    Settings.clientMigrationVersion = currentMigrationVersion;
+};
+
+export default async () => {
+    if (game.users.activeGM === game.user) {
+        await migrateWorld();
+    }
+
+    await migrateClient();
 }
 
 api.migrate = {
     migrate: async () => {
         await v1.migrateV1();
-        await v2.migrateV2();
+        await v2.migrateWorldV2();
     },
     v1,
     v2,

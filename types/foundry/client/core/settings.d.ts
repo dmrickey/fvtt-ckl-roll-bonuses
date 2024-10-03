@@ -13,6 +13,7 @@ declare global {
      * @see {@link SettingsConfig}
      */
     interface ClientSettings {
+        storage: Map<'client' | 'world', Record<string, string>>;
         settings: {
             has(id: string): boolean;
             get(id: string): any;
