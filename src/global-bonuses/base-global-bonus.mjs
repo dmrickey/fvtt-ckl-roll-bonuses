@@ -46,6 +46,9 @@ export class BaseGlobalBonus {
     /** @returns { string } */
     static get dialogDisableKey() { return `global-bonus.dialog-disable.${this.bonusKey}`; }
 
+    /** @returns { string } */
+    static get disabledFootnote() { return localize(`global-bonus.disabled-footnote.${this.bonusKey}`); }
+
     /**
      * Key for this global bonus
      *

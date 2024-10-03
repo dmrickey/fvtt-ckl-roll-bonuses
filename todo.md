@@ -270,6 +270,8 @@
 - Replace "checklist-input" with a proper Item application instead of a warpgate menu
 - Update Auto-recognition stuff in "renderItemSheet" to use the same logic as martial-focus.mjs for specific bonuses
 - Add "Fortune configuration app" to help with configuring specific fortune abilities
+- Targeting
+  - Add a configuration error if "this target is not configured"
 
 # vnext
 - Update bonus picker tabs to have the same style as actor sheet tabs
@@ -287,18 +289,13 @@
     - Weapon Focus
     - Weapon Specialization
     - Change Offset (-> Change Modification)
-  - Verify item targets work without migration
   - Verify language strings are properly updated
   - that migration works
     - Module flags are appropriately set
     - dictionary flags are removed
     - System change migration is migrating properly
 - Add obsoletion message for `src\bonuses\critical.mjs` if its flags are detected
-- Targeting
-  - Add a configuration error if "this target is not configured"
 
 - Remove Obsolete Code
   - Flag Helpers
     - `getDocDFlags`
-  - delete FormulaCacheHelper.registerUncacheableDictionaryFlag
-  - delete FormulaCacheHelper.isUncacheableDictionaryFlag

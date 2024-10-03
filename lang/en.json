@@ -212,10 +212,12 @@
                 "shoot-into-melee": "Into Melee"
             },
             "dialog-disable": {
-                "higher-ground": "not used",
                 "range-increment-penalty": "Skip Ranged Increment Checks",
-                "shoot-into-melee": "not used",
                 "require-melee-threaten": "Ignore Melee Range"
+            },
+            "disabled-footnote": {
+                "range-increment-penalty": "Skipped Increment Checks",
+                "require-melee-threaten": "Skipped Melee Requiremnt"
             },
             "label": {
                 "higher-ground": "Higher Ground Melee Bonus",

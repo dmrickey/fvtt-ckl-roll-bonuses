@@ -81,8 +81,19 @@ export class RequireMeleeThreatenGlobalBonus extends BaseGlobalBonus {
         }
     }
 
+    /**
+     * @param {ActionUse} actionUse
+     * @param {string[]} notes
+     */
+    static addSkipFootnote(actionUse, notes) {
+        if (hasFormData(actionUse, RequireMeleeThreatenGlobalBonus.dialogDisableKey)) {
+            notes.push(RequireMeleeThreatenGlobalBonus.disabledFootnote);
+        }
+    }
+
     static {
         Hooks.on('renderApplication', RequireMeleeThreatenGlobalBonus.addSkipMeleeThreatenToDialog);
         Hooks.on(customGlobalHooks.actionUseAlterRollData, RequireMeleeThreatenGlobalBonus.requireMelee);
+        Hooks.on(customGlobalHooks.actionUseFootnotes, RequireMeleeThreatenGlobalBonus.addSkipFootnote)
     }
 }

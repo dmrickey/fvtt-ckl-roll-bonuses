@@ -148,8 +148,19 @@ export class RangedIncrementPenaltyGlobalBonus extends BaseGlobalBonus {
         }
     }
 
+    /**
+     * @param {ActionUse} actionUse
+     * @param {string[]} notes
+     */
+    static addSkipFootnote(actionUse, notes) {
+        if (hasFormData(actionUse, RangedIncrementPenaltyGlobalBonus.dialogDisableKey)) {
+            notes.push(RangedIncrementPenaltyGlobalBonus.disabledFootnote);
+        }
+    }
+
     static {
         Hooks.on('renderApplication', RangedIncrementPenaltyGlobalBonus.addSkipRangeToDialog);
         Hooks.on(customGlobalHooks.actionUseAlterRollData, RangedIncrementPenaltyGlobalBonus.addRangedPenalty);
+        Hooks.on(customGlobalHooks.actionUseFootnotes, RangedIncrementPenaltyGlobalBonus.addSkipFootnote)
     }
 }
