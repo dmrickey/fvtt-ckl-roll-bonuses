@@ -514,6 +514,10 @@ Hooks.once('init', () => {
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype.getTypeChatData', itemGetTypeChatData, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemSpellPF.prototype.getTypeChatData', itemGetTypeChatData, libWrapper.WRAPPER);
 
+    libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorHauntPF.prototype.prepareBaseData', prepareActorBasedData, libWrapper.WRAPPER);
+    libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorTrapPF.prototype.prepareBaseData', prepareActorBasedData, libWrapper.WRAPPER);
+    libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorVehiclePF.prototype.prepareBaseData', prepareActorBasedData, libWrapper.WRAPPER);
+
     // for patching resources - both
     // libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype._updateMaxUses', updateMaxUses, libWrapper.WRAPPER);
     // pf1.documents.actor.ActorPF.prototype.updateItemResources
