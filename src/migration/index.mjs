@@ -31,7 +31,7 @@ class Settings {
     }
 }
 
-const currentMigrationVersion = 2;
+const currentMigrationVersion = 3;
 
 export default async () => {
     if (game.users.activeGM !== game.user) {
@@ -43,12 +43,12 @@ export default async () => {
     if (current !== currentMigrationVersion && current !== -1) {
         log('Starting overall migration');
 
-        if (current < 1) {
+        if (current <= 1) {
             log('Migrating aboleths');
             await v1.migrateV1();
         }
 
-        if (current < 2) {
+        if (current <= 2) {
             log('Migrating bugbears')
             await v2.migrateV2();
         }
