@@ -273,29 +273,14 @@
 - Targeting
   - Add a configuration error if "this target is not configured"
 
+When legacy crit is removed
+- Remove Obsolete Code
+  - Flag Helpers
+    - `getDocDFlags`
+
 # vnext
 - Update bonus picker tabs to have the same style as actor sheet tabs
 - Handle Migration
   - migrate crit to Item/Action targets
     - migrate to items. But just add a deprecation warning in the crit helper itself for actions since I don't want to iterate over every item and every action 
-  - For Each (verify these all work after migration)
-    - Armor Focus
-    - Elemental CL/DC
-    - Elemental Focus
-    - Martial Focus
-    - Spell Focus
-    - Spell Specialization
-    - Versatile Performance
-    - Weapon Focus
-    - Weapon Specialization
-    - Change Offset (-> Change Modification)
-  - Verify language strings are properly updated
-  - that migration works
-    - Module flags are appropriately set
-    - dictionary flags are removed
-    - System change migration is migrating properly
 - Add obsoletion message for `src\bonuses\critical.mjs` if its flags are detected
-
-- Remove Obsolete Code
-  - Flag Helpers
-    - `getDocDFlags`
