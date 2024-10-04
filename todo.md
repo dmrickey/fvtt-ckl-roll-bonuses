@@ -273,19 +273,5 @@
 - Targeting
   - Add a configuration error if "this target is not configured"
 
-When legacy crit is removed
-- Remove Obsolete Code
-  - Flag Helpers
-    - `getDocDFlags`
-
-Add right click to edit on icon input
-
-Add FAQ for migrating locked packs
-  Verify expanded boolean key is removed
-
 # vnext
 - Update bonus picker tabs to have the same style as actor sheet tabs
-- Handle Migration
-  - migrate crit to Item/Action targets
-    - migrate to items. But just add a deprecation warning in the crit helper itself for actions since I don't want to iterate over every item and every action 
-- Add obsoletion message for `src\bonuses\critical.mjs` if its flags are detected

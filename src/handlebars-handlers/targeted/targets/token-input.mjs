@@ -31,15 +31,23 @@ export function showTokenInput({
     label ||= localizeBonusLabel(key);
     tooltip ||= localizeBonusTooltip(key);
 
+    /**
+     *
+     * @param {string} uuid
+     * @returns {TokenDocumentPF}
+     */
+    const getToken = (uuid) => fromUuidSync(uuid);
+
     /** @type {string[]} */
     const savedTargets = item.getFlag(MODULE_NAME, key) || [];
     const current = savedTargets
-        .map((uuid) => fromUuidSync(uuid))
+        .map((uuid) => getToken(uuid))
         .filter(truthiness)
         .map((token) => ({
             img: token.texture.src,
             name: getTokenDisplayName(token),
             id: token.id,
+            uuid: token.uuid,
         }));
 
     const templateData = {
@@ -60,6 +68,25 @@ export function showTokenInput({
             });
         });
     }
+    div.querySelectorAll('li').forEach((element) => {
+        element.addEventListener('contextmenu', (event) => {
+            event.preventDefault();
+            // @ts-ignore
+            const /** @type {HTMLElement?} */ target = event.target;
+
+            let parent = target;
+            while (parent && !parent.dataset.uuid) { parent = parent.parentElement }
+
+            const uuid = parent?.dataset.uuid;
+            if (uuid) {
+                /** @type {TokenDocumentPF} */
+                const doc = fromUuidSync(uuid);
+                if (doc?.actor?.testUserPermission(game.user, CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER)) {
+                    doc.actor.sheet.render(true);
+                }
+            }
+        });
+    });
 
     addNodeToRollBonus(parent, div, item, canEdit);
 }

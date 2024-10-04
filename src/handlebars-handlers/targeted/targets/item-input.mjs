@@ -56,10 +56,10 @@ export function showItemInput({
     /** @type {ItemTemplateData[]} */
     const current = [];
     const items = itemsFromActorFunc(item.actor)
-        .map(({ id, name, img, type }) => {
+        .map(({ id, name, img, type, uuid }) => {
             const typeLabel = localize(CONFIG.Item.typeLabels[type]);
             const checked = currentIds.includes(id);
-            const value = { checked, id, name, img, typeLabel };
+            const value = { checked, id, name, img, typeLabel, uuid };
             if (checked) {
                 current.push(value);
             }
@@ -88,6 +88,25 @@ export function showItemInput({
             });
         });
     }
+    div.querySelectorAll('li').forEach((element) => {
+        element.addEventListener('contextmenu', (event) => {
+            event.preventDefault();
+            // @ts-ignore
+            const /** @type {HTMLElement?} */ target = event.target;
+
+            let parent = target;
+            while (parent && !parent.dataset.uuid) { parent = parent.parentElement }
+
+            const uuid = parent?.dataset.uuid;
+            if (uuid) {
+                /** @type {ItemPF} */
+                const doc = fromUuidSync(uuid);
+                if (doc?.testUserPermission(game.user, CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER)) {
+                    doc.sheet.render(true);
+                }
+            }
+        });
+    });
 
     addNodeToRollBonus(parent, div, item, canEdit);
 }

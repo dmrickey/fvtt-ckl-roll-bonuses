@@ -43,6 +43,7 @@ declare global {
         updateSource(changes: Record<string, any>, options?: object);
         uuid: string;
         update(data: Record<string, any>);
+        testUserPermission(user: User, OBSERVER: any): boolean;
         toObject(): any;
     }
 
@@ -77,6 +78,9 @@ declare global {
              */
             boolean: { [key: string]: { sources: ItemPF[] } };
             dictionary: ItemDictionaryFlags;
+        };
+        sheet: {
+            render(force: boolean, { focus: boolean } = {});
         };
     }
 
@@ -537,6 +541,11 @@ declare global {
         texture: { src: string };
         visible: boolean;
         object: TokenPF;
+
+        sheet: {
+            _canUserView(user: User): boolean;
+            render(force: boolean, { focus: boolean } = {});
+        };
     }
 
     interface TokenPF {
@@ -1783,6 +1792,7 @@ declare global {
     }
 
     interface ItemSheetPF {
+        _canUserView(user: User): boolean;
         actor: ActorPF | null;
         appId: number;
         closing: boolean;
