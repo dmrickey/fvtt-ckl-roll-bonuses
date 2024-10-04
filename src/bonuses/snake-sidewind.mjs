@@ -1,5 +1,4 @@
 import { showEnabledLabel } from '../handlebars-handlers/enabled-label.mjs';
-import { hasAnyBFlag } from '../util/flag-helpers.mjs';
 import { getSkillFormula } from '../util/get-skill-formula.mjs';
 import { LocalHookHandler, localHooks } from '../util/hooks.mjs';
 import { localizeBonusLabel } from '../util/localize.mjs';
@@ -37,7 +36,7 @@ const getFormulaMax = (formula, rollData) => {
  * @returns {string | undefined}
  */
 const isSnakeSideWindCrit = (chatAttack) => {
-    const hasFlag = hasAnyBFlag(chatAttack.action?.actor, key);
+    const hasFlag = chatAttack.action?.actor.hasItemBooleanFlag(key);
     if (!hasFlag) {
         return;
     }

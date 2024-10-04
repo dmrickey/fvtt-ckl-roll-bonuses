@@ -1,5 +1,4 @@
 import { showEnabledLabel } from '../handlebars-handlers/enabled-label.mjs';
-import { hasAnyBFlag } from '../util/flag-helpers.mjs';
 import { LocalHookHandler, customGlobalHooks, localHooks } from '../util/hooks.mjs';
 import { localizeBonusLabel } from '../util/localize.mjs';
 import { LanguageSettings } from '../util/settings.mjs';
@@ -25,7 +24,7 @@ class Settings {
  */
 function patchChangeValue(value, itemChange) {
     const actor = itemChange.parent?.actor;
-    value = itemChange.type === 'luck' && hasAnyBFlag(actor, fatesFavored)
+    value = itemChange.type === 'luck' && actor?.hasItemBooleanFlag(fatesFavored)
         ? isNaN(+value) ? `${value} + 1` : (+value + 1)
         : value;
     return value;

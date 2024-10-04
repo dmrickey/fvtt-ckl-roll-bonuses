@@ -81,6 +81,7 @@ declare global {
     }
 
     class ActorPF extends ActorBasePF {
+        hasItemBooleanFlag(key: string): boolean;
         hasWeaponProficiency(
             item: ItemWeaponPF | ItemAttackPF,
             { override = true } = {}

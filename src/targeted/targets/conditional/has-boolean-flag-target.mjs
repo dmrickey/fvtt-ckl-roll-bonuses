@@ -1,6 +1,5 @@
 import { MODULE_NAME } from '../../../consts.mjs';
 import { textInput } from '../../../handlebars-handlers/bonus-inputs/text-input.mjs';
-import { hasAnyBFlag } from '../../../util/flag-helpers.mjs';
 import { BaseTarget } from '../base-target.mjs';
 
 /**
@@ -42,7 +41,7 @@ export class HasBooleanFlagTarget extends BaseTarget {
     static _getSourcesFor(item, sources) {
         const filteredSources = sources.filter((source) => {
             const value = source.getFlag(MODULE_NAME, this.key);
-            return !!value && hasAnyBFlag(item.actor, value);
+            return !!value && item.actor.hasItemBooleanFlag(value);
         });
 
         return filteredSources;

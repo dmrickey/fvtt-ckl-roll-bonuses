@@ -4,6 +4,7 @@ import { createChange } from '../util/conditional-helpers.mjs';
 import { isNotEmptyObject } from '../util/is-empty-object.mjs';
 import { LanguageSettings } from '../util/settings.mjs';
 import { truthiness } from '../util/truthiness.mjs';
+import { difference } from '../util/array-intersects.mjs';
 
 /** BEGIN to system changes */
 const clAllKey = 'all-spell-cl';
@@ -96,6 +97,31 @@ export const migrateClientSettings = async () => {
     }
 }
 
+class CritMappings {
+    /**
+     * @param {'dictionary' | 'boolean'} type
+     * @param {string} legacy
+     * @param {string} newTarget
+     * @param {string} newBonus
+     * @param {string} moduleFlag
+     */
+    constructor(type, legacy, newTarget, newBonus, moduleFlag) {
+        this.type = type;
+        this.legacy = legacy;
+        this.newTarget = newTarget;
+        this.newBonus = newBonus;
+        this.moduleFlag = moduleFlag;
+    }
+}
+const specificCritMappings = [
+    new CritMappings('boolean', 'keen-self', 'target_self', 'bonus_crit', 'bonus_crit-keen'),
+    new CritMappings('boolean', 'keen-all', 'target_all', 'bonus_crit', 'bonus_crit-keen'),
+    new CritMappings('dictionary', 'crit-offset-self', 'target_self', 'bonus_crit', 'bonus_crit-offset'),
+    new CritMappings('dictionary', 'crit-offset-all', 'target_all', 'bonus_crit', 'bonus_crit-offset'),
+    new CritMappings('dictionary', 'crit-mult-offset-self', 'target_self', 'bonus_crit', 'bonus_crit-mult'),
+    new CritMappings('dictionary', 'crit-mult-offset-all', 'target_all', 'bonus_crit', 'bonus_crit-mult'),
+];
+
 /**
  * @param {ItemPF} item
  * @returns {Partial<ItemPF> | undefined}
@@ -121,6 +147,131 @@ const getItemUpdateData = (item) => {
         }).toObject();
         changes.push(change);
     }
+
+    const migrateCrit = () => {
+        specificCritMappings.forEach((x) => {
+            switch (x.type) {
+                case 'boolean':
+                    if (item.hasItemBooleanFlag(x.legacy)) {
+                        boolean[`-=${x.legacy}`] = false;
+                        boolean[x.newBonus] = true;
+                        boolean[x.newTarget] = true;
+                        moduleFlags[x.moduleFlag] = true;
+                    }
+                    break;
+                case 'dictionary':
+                    const value = item.getItemDictionaryFlag(x.legacy)
+                    if (value) {
+                        dictionary[`-=${x.legacy}`] = null;
+                        boolean[x.newBonus] = true;
+                        boolean[x.newTarget] = true;
+                        moduleFlags[x.moduleFlag] = value;
+                    }
+                    break;
+            }
+        });
+
+        const { actor } = item;
+        if (!actor) return;
+
+        const handleKeenTargetIds = () => {
+            const legacy = Object.keys(item.system.flags.boolean)
+                .filter((x) => x.startsWith('keen_'));
+            if (!legacy.length) return;
+
+            const ids = legacy.map((x) => x.split('_')[1]);
+
+            const itemIds = ids.filter((id) => !!actor.items.get(id));
+
+            /** @type {ItemAction[]} */
+            let actions = [];
+            const potentialActionIds = difference(ids, itemIds);
+            if (potentialActionIds.length) {
+                const allActions = actor.items
+                    .filter((x) => x.hasAction)
+                    .flatMap((x) => [...x.actions]);
+                actions = potentialActionIds
+                    .map(id => allActions.find((action) => action.id === id))
+                    .filter(truthiness);
+            }
+
+            boolean['bonus_crit'] = true;
+            moduleFlags['bonus_crit-keen'] = true;
+            legacy.forEach((id) => boolean[`-=${id}`] = false);
+            if (itemIds.length) {
+                const current = item.getFlag(MODULE_NAME, 'target_item') || [];
+                current.push(...itemIds);
+
+                boolean['target_item'] = true;
+                moduleFlags['target_item'] = current;
+            }
+            if (actions.length) {
+                const current = item.getFlag(MODULE_NAME, 'target_action') || [];
+                current.push(...actions.map((a) => `${a.item.id}.${a.id}`));
+
+                boolean['target_action'] = true;
+                moduleFlags['target_action'] = current;
+            }
+        }
+
+        /**
+         * @param {string} start
+         * @param {string} formulaKey
+         */
+        const handleOffsetTargetIds = (start, formulaKey) => {
+            const legacy = Object.keys(item.system.flags.dictionary)
+                .filter((x) => x.startsWith(start));
+            if (!legacy.length) return;
+
+            /** @type { { id: string, formula: string }[] } */
+            const itemFormulas = [];
+            /** @type { { id: string, formula: string }[] } */
+            const actionIdFormulas = [];
+            legacy.forEach((str) => {
+                const id = str.split('_')[1];
+                if (!!actor.items.get(id)) {
+                    itemFormulas.push({ id, formula: `${item.getItemDictionaryFlag(str)}` });
+                }
+                else {
+                    actionIdFormulas.push({ id, formula: `${item.getItemDictionaryFlag(str)}` });
+                }
+            });
+
+            /** @type { { action: ItemAction, formula: string }[] } */
+            let actionFormulas = [];
+            if (actionIdFormulas.length) {
+                const allActions = actor.items
+                    .filter((x) => x.hasAction)
+                    .flatMap((x) => [...x.actions]);
+                // @ts-ignore
+                actionFormulas = actionIdFormulas
+                    .map(({ id, formula }) => ({ action: allActions.find((action) => action.id === id), formula }))
+                    .filter((x) => !!x.action);
+            }
+
+            boolean['bonus_crit'] = true;
+            legacy.forEach((id) => dictionary[`-=${id}`] = null);
+            if (itemFormulas.length) {
+                const current = item.getFlag(MODULE_NAME, 'target_item') || [];
+                current.push(...itemFormulas.map(({ id }) => id));
+                moduleFlags[formulaKey] = itemFormulas[0].formula;
+                boolean['target_item'] = true;
+                moduleFlags['target_item'] = current;
+            }
+            if (actionFormulas.length) {
+                const current = item.getFlag(MODULE_NAME, 'target_action') || [];
+                current.push(...actionFormulas.map(({ action: a }) => `${a.item.id}.${a.id}`));
+                moduleFlags[formulaKey] = actionFormulas[0].formula;
+                boolean['target_action'] = true;
+                moduleFlags['target_action'] = current;
+            }
+        }
+
+        handleKeenTargetIds();
+        handleOffsetTargetIds('crit-offset_', 'bonus_crit-offset');
+        handleOffsetTargetIds('crit-mult-offset_', 'bonus_crit-mult');
+    }
+    migrateCrit();
 
     if (item.getItemDictionaryFlag(dcAllKey)) {
         dictionary[`-=${dcAllKey}`] = null;
@@ -207,7 +358,7 @@ const getItemUpdateData = (item) => {
         boolean[vpKey] = true;
         if (item.hasItemBooleanFlag(legacyExpandedKey)) {
             moduleFlags[`-=${legacyExpandedKey}`] = null;
-            boolean[legacyExpandedKey] = false;
+            boolean[`-=${legacyExpandedKey}`] = false;
             boolean[expandedKey] = true;
         }
 

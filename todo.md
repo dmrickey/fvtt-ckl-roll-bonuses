@@ -278,6 +278,11 @@ When legacy crit is removed
   - Flag Helpers
     - `getDocDFlags`
 
+Add right click to edit on icon input
+
+Add FAQ for migrating locked packs
+  Verify expanded boolean key is removed
+
 # vnext
 - Update bonus picker tabs to have the same style as actor sheet tabs
 - Handle Migration

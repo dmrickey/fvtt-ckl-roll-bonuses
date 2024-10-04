@@ -4,7 +4,7 @@ import './handlebars-handlers/init.mjs';
 import './util/item-hints.mjs';
 import './bonuses.mjs';
 import './patch/init.mjs';
-import { FormulaCacheHelper, hasAnyBFlag } from './util/flag-helpers.mjs';
+import { FormulaCacheHelper } from './util/flag-helpers.mjs';
 import { simplifyRollFormula } from './util/simplify-roll-formula.mjs';
 import './auto-recognition/init.mjs';
 import { api } from './util/api.mjs';
@@ -545,6 +545,26 @@ Hooks.once('init', () => {
     game.modules.get(MODULE_NAME).ready = true;
     Hooks.callAll(`${MODULE_NAME}.ready`)
 });
+
+/**
+ * Whether or not the document has any of the given boolean flags
+ *
+ * @param {Nullable<ItemPF>} doc
+ * @param  {...string} flags
+ * @returns {boolean} True if the actor has any of the boolean flags.
+ */
+const hasAnyBFlag = (
+    doc,
+    ...flags
+) => {
+    if (!doc) return false;
+
+    if (doc instanceof pf1.documents.item.ItemPF) {
+        return flags.some((flag) => doc.hasItemBooleanFlag(flag));
+    }
+
+    return false;
+}
 
 // specifically at end so it's registered last
 Hooks.on('renderItemSheet', (

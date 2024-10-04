@@ -1,6 +1,5 @@
 import { MODULE_NAME } from '../consts.mjs';
 import { showEnabledLabel } from '../handlebars-handlers/enabled-label.mjs';
-import { hasAnyBFlag } from '../util/flag-helpers.mjs';
 import { LocalHookHandler, customGlobalHooks, localHooks } from '../util/hooks.mjs';
 import { isActorInCombat } from '../util/is-actor-in-combat.mjs';
 import { localizeBonusLabel } from '../util/localize.mjs';
@@ -37,10 +36,10 @@ function getConditionalParts(actionUse, result, atk, index) {
         return;
     }
 
-    const hasFocus = () => hasAnyBFlag(actor, furiousFocus);
+    const hasFocus = actor.hasItemBooleanFlag(furiousFocus);
     const penalty = shared.rollData.powerAttackPenalty || 0;
     const hasUsed = hasUsedFF(actor);
-    if (shared.powerAttack && hasFocus() && penalty && !hasUsed) {
+    if (shared.powerAttack && hasFocus && penalty && !hasUsed) {
         result['attack.normal'].push(`${penalty * -1}[${label()}]`);
         setUsedFF(actor);
     }

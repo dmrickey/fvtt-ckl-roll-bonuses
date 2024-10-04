@@ -1,6 +1,5 @@
 import { SpecificBonuses } from '../../../bonuses/all-specific-bonuses.mjs';
 import { showEnabledLabel } from '../../../handlebars-handlers/enabled-label.mjs';
-import { hasAnyBFlag } from '../../../util/flag-helpers.mjs';
 import { LanguageSettings } from '../../../util/settings.mjs';
 
 const compendiumId = '53urYIbYYpQuoSLd';
@@ -29,7 +28,7 @@ Hooks.on('renderItemSheet', (
 
     const name = item?.name?.toLowerCase() ?? '';
     const sourceId = item?.flags.core?.sourceId ?? '';
-    const hasBonus = hasAnyBFlag(item, key);
+    const hasBonus = item.hasItemBooleanFlag(key);
 
     if ((name === Settings.name || sourceId.includes(compendiumId)) && !hasBonus) {
         item.addItemBooleanFlag(key);
@@ -59,7 +58,7 @@ const onCreate = (item, data, { temporary }, id) => {
 
     const name = item?.name?.toLowerCase() ?? '';
     const sourceId = item?.flags.core?.sourceId ?? '';
-    const hasBonus = hasAnyBFlag(item, key);
+    const hasBonus = item.hasItemBooleanFlag(key);
 
     if ((name === Settings.name || sourceId.includes(compendiumId)) && !hasBonus) {
         item.updateSource({

@@ -1,5 +1,4 @@
 import { PositionalHelper } from '../util/positional-helper.mjs';
-import { hasAnyBFlag } from '../util/flag-helpers.mjs';
 import { currentTargets } from '../util/get-current-targets.mjs';
 import { customGlobalHooks } from '../util/hooks.mjs'
 import { BaseGlobalBonus } from './base-global-bonus.mjs';
@@ -33,7 +32,7 @@ export class ShootIntoMeleeGlobalBonus extends BaseGlobalBonus {
         if (ShootIntoMeleeGlobalBonus.isDisabled() || ShootIntoMeleeGlobalBonus.isDisabledForActor(actor)) {
             return;
         }
-        if (!actor || hasAnyBFlag(actor, PreciseShot.key)) {
+        if (!actor || actor.hasItemBooleanFlag(PreciseShot.key)) {
             return;
         }
 
