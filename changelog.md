@@ -47,7 +47,7 @@ _**Lots of data changed internally. Anything necessary should automatically migr
 - Fixed Trap Actors (and other non-character actors) breaking during data prep
 - The D20 icon in the Roll Bonuses header on items now correctly opens the in-game documentation
 - Fixed Permanent skill bonus that broke with v10
-- Fixed Versatile Performance targ
+- Fixed Versatile Performance targeting subskills
 
 ### Removed
 - Some Specific Bonuses were removed as the system now directly supports them.
