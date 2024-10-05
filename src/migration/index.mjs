@@ -7,6 +7,7 @@ import { registerSetting } from '../util/settings.mjs';
 
 class Settings {
     static get #migrationVersionKey() { return 'migration-version'; }
+    static get #clientMigrationVersionKey() { return 'migration-version'; }
 
     static get worldMigrationVersion() {
         const version = /** @type {number} */ (/** @type {unknown} */ Settings.#getSetting(this.#migrationVersionKey));
@@ -18,12 +19,12 @@ class Settings {
     }
 
     static get clientMigrationVersion() {
-        const version = /** @type {number} */ (/** @type {unknown} */ Settings.#getSetting(this.#migrationVersionKey));
+        const version = /** @type {number} */ (/** @type {unknown} */ Settings.#getSetting(this.#clientMigrationVersionKey));
         return version;
     }
 
     static set clientMigrationVersion(version) {
-        game.settings.set(MODULE_NAME, this.#migrationVersionKey, version);
+        game.settings.set(MODULE_NAME, this.#clientMigrationVersionKey, version);
     }
 
     // @ts-ignore
@@ -40,7 +41,7 @@ class Settings {
         registerSetting({
             config: false,
             defaultValue: -1,
-            key: this.#migrationVersionKey,
+            key: this.#clientMigrationVersionKey,
             scope: 'client',
             settingType: Number,
         });
