@@ -60,10 +60,6 @@ Supports PF1 v9+
 - [Misc](#misc)
   - [Ammunition](#ammunition)
   - [Change Offset](#change-offset)
-  - [Critical Helpers](#critical-helpers)
-    - [Keen - boolean flag](#keen---boolean-flag)
-    - [Crit target modifications (dictionary flag)](#crit-target-modifications-dictionary-flag)
-    - [Crit multipliers (dictionary flag)](#crit-multipliers-dictionary-flag)
   - [Fate's Favored](#fates-favored)
   - [Fortune and Misfortune](#fortune-and-misfortune)
     - [Everything](#everything)
@@ -471,6 +467,8 @@ Automatically add +2 damage to chosen weapons types for `Weapon Specialization` 
 ## Ammunition
 Ammunition now has inputs for masterwork, enhancement, attack, and damage bonuses. You can find these on the item's advanced tab.
 
+---
+
 ## Change Offset
 Modify the results of any `change` type. This is essentially a very generic form of [Fate's Favored](#fates-favored) -- but this will allow you to increase or decrease any `change` type instead of only modifying luck bonuses by +1.
 
@@ -480,44 +478,6 @@ Modify the results of any `change` type. This is essentially a very generic form
   - Add dictionary flag `change-type-offset` to your buff/feature/etc.
     - Text input will appear for your formula
     - Dropdown selector will show up with options for your chosen change type
-
-</details>
-
-## Critical Helpers
-Attack's critical variables can now be dynamically adjusted. Crit can be modified with keen. It can also be modified by a static amount to account for certain 3.5 classes or other homebrew. The critical multipler can also be adjusted--this is useful for a Swashbuckler's capstone ability (and any homebrew that needs it).
-
-<details>
-  <summary>How to customize crit range or multiplier (click to expand)</summary>
-
-  ### Keen - boolean flag
-  * `keen-self`
-    * place this flag on an attack/weapon/item/spell/etc. Any action for this Item will have its crit range doubled.
-  * `keen-all`
-    * place this flag on anything in your character to double the crit range of any action
-  * `keen_<id>`
-    * e.g. `keen_7hAXCo6sYfpIqeli`
-    * Place this flag on anything, then when you use either the Item or Action associated with the id, it will be keen
-      * You can find the id for a specific thing by opening its sheet, then clicking the dictionary icon in the header next to its name
-    * This is useful for when you have a temporary buff (e.g. Magus, Warpriest, Occultist,...) that grants a specific weapon Keen
-
-  ### Crit target modifications (dictionary flag)
-  Positive numbers are good, so having a `3` will mean your "crits only on a 20" weapon will now crit on "17 or higher". Adding any of these will give you a formula input.
-  * `crit-offset-self`
-  * `crit-offset-all`
-  * `crit-offset_<id>`
-    * e.g. `crit-offset_7hAXCo6sYfpIqeli`
-    * Place this flag on anything, then when you use either the Item or Action associated with the id, it will be modified by the value
-      * You can find the id for a specific thing by opening its sheet, then clicking the dictionary icon in the header next to its name
-    * individual descriptions same as keen described above
-    * The value of the dictionary flags can be either a number or a formula
-    * if something is effect by both crit-offset and keen, then keen is applied first before an extra crit-offset is applied
-
-  ### Crit multipliers (dictionary flag)
-  * `crit-mult-offset-self`
-  * `crit-mult-offset-all`
-  * `crit-mult-offset_<id>`
-    * e.g. `crit-mult-offset_7hAXCo6sYfpIqeli`
-    * Excact same as above but has a formula for variable crit mult modifications
 
 </details>
 
