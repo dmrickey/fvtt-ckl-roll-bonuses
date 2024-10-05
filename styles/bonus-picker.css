@@ -13,15 +13,17 @@
 .bonus-picker-app .roll-bonuses-form .tab-headers {
     display: flex;
     flex: 1;
+    height: 3.125rem;
     justify-content: space-evenly;
-    /* todo add border and update color for negated tabs */
+    max-height: 3.125rem;
 }
 
 .bonus-picker-app .roll-bonuses-form .tab-headers .tab-button {
     border-bottom: 0;
+    margin-block-end: 0;
     padding-block: 1rem;
     text-align: center;
-    transition: background-color 200ms ease-out;
+    transition: background-color 200ms ease-out, font-size 0.25s;
     width: 100%;
 }
 .bonus-picker-app .roll-bonuses-form .tab-headers .tab-button.active {
@@ -29,12 +31,13 @@
     text-decoration: underline;
 }
 .bonus-picker-app .roll-bonuses-form .tab-headers .tab-button:not(.active) {
-    font-style: italic;
-    color: var(--pf1-bg-dark-5);
     background-color: var(--pf1-bg-dark-1);
+    color: var(--pf1-bg-dark-5);
+    font-style: italic;
 }
 .bonus-picker-app .roll-bonuses-form .tab-headers .tab-button:hover {
     cursor: pointer;
+    font-size: 1.125rem;
 }
 
 .bonus-picker-app .roll-bonuses-form .picker-tab {
