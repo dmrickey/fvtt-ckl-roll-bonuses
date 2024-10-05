@@ -2,6 +2,7 @@
 import { SpecificBonuses } from '../bonuses/all-specific-bonuses.mjs';
 import { api } from '../util/api.mjs';
 import { intersection } from '../util/array-intersects.mjs';
+import { handleJournalClick } from '../util/handle-journal-click.mjs';
 import { localize } from '../util/localize.mjs';
 import { templates } from './templates.mjs';
 
@@ -158,17 +159,7 @@ class BonusPickerApp extends DocumentSheet {
             'click',
             async (event) => {
                 event.preventDefault();
-                const journal = event.currentTarget.dataset.journal;
-                // @ts-ignore // TODO
-                const [uuid, header] = journal.split('#');
-                const doc = await fromUuid(uuid);
-
-                // @ts-ignore // TODO
-                if (doc instanceof JournalEntryPage) {
-                    doc.parent.sheet.render(true, { pageId: doc.id, anchor: header });
-                } else {
-                    doc.sheet.render(true);
-                }
+                await handleJournalClick(event.currentTarget);
             },
         );
 

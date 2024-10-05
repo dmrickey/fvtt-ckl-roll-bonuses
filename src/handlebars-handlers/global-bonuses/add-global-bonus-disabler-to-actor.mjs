@@ -1,3 +1,4 @@
+import { handleJournalClick } from '../../util/handle-journal-click.mjs';
 import { createTemplate, templates } from '../templates.mjs';
 
 /**
@@ -28,18 +29,7 @@ export const addGlobalBonusDisablerToActor = (actorSheetHtml, settings, canEdit)
             'click',
             async (event) => {
                 event.preventDefault();
-                const journalLink = journal.dataset.journal;
-                if (journalLink) {
-                    const [uuid, header] = journalLink.split('#');
-                    const doc = await fromUuid(uuid);
-
-                    // @ts-ignore
-                    if (doc instanceof JournalEntryPage) {
-                        doc.parent.sheet.render(true, { pageId: doc.id, anchor: header });
-                    } else {
-                        doc.sheet.render(true);
-                    }
-                }
+                await handleJournalClick(journal);
             },
         );
     });

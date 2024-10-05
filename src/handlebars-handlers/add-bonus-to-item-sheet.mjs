@@ -1,4 +1,5 @@
 import { api } from '../util/api.mjs';
+import { handleJournalClick } from '../util/handle-journal-click.mjs';
 import { showBonusPicker } from './bonus-picker.mjs';
 import { createTemplate, templates } from './templates.mjs';
 
@@ -62,20 +63,12 @@ const addNodeToRollBonus = (itemSheetHtml, child, item, canEdit) => {
     const container = section.querySelector(containerSelector);
     if (!container) return;
 
-    const button = child.querySelector('[data-journal]');
+    const button = /** @type {HTMLElement} */ (child.querySelector('[data-journal]'));
     button?.addEventListener(
         'click',
-        async () => {
-            // @ts-ignore // TODO
-            const [uuid, header] = button.dataset.journal.split('#');
-            const doc = await fromUuid(uuid);
-
-            // @ts-ignore // TODO
-            if (doc instanceof JournalEntryPage) {
-                doc.parent.sheet.render(true, { pageId: doc.id, anchor: header });
-            } else {
-                doc.sheet.render(true);
-            }
+        async (event) => {
+            event.preventDefault();
+            await handleJournalClick(button);
         },
     );
     addSettingsHandler(child);
