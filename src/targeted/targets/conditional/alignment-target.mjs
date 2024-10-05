@@ -4,15 +4,6 @@ import { currentTargetedActors } from '../../../util/get-current-targets.mjs';
 import { localize } from '../../../util/localize.mjs';
 import { BaseTarget } from "../base-target.mjs";
 
-// todo doesn't exist until v10
-// /** @type {Record<string, string>} */
-// const choices =  /** @type {const} */ ({
-//     lawful: pf1.config.damageResistances.lawful,
-//     chaotic: pf1.config.damageResistances.chaotic,
-//     good: pf1.config.damageResistances.good,
-//     evil: pf1.config.damageResistances.evil,
-// });
-
 const choices =  /** @type {const} */ ({
     lawful: 'alignment.lawful',
     chaotic: 'alignment.chaotic',
