@@ -1,10 +1,10 @@
-.pf1.sheet .roll-bonuses input[type=text] {
-    background-color: rgba(0, 0, 0, .05);
+.pf1.sheet .roll-bonuses input[type="text"] {
+    background-color: rgba(0, 0, 0, 0.05);
     border: 1px solid #7a7971;
 }
 
 #ckl-roll-bonus-container .conditional.flexcolumn::marker {
-    content: '';
+    content: "";
 }
 
 #ckl-roll-bonus-container .conditionals.form-group {
@@ -37,6 +37,9 @@
     font-weight: bold;
     text-align: right;
 }
+#ckl-roll-bonus-container .editable-icon-input .error-text {
+    margin-inline-end: 0.5rem;
+}
 
 #ckl-roll-bonus-container .traits-list.tag-list {
     justify-content: flex-end;
@@ -52,7 +55,7 @@
 }
 
 .pf1.sheet .roll-bonuses .damage-type i.icon {
-    margin-inline-end: .25rem;
+    margin-inline-end: 0.25rem;
 }
 
 .pf1.sheet .roll-bonuses.editable-icon-input .header {
@@ -80,11 +83,20 @@
 }
 
 .pf1.sheet .roll-bonuses.editable-icon-input .form-fields span {
+    height: 48px;
     visibility: hidden;
 }
 
 .pf1.sheet .roll-bonuses .form-fields .label {
     text-align: end;
+}
+
+form .versatile-performance-selector .form-fields {
+    flex-direction: column;
+}
+
+.versatile-performance-selector .vp-actions {
+    align-self: flex-end;
 }
 
 .versatile-performance-selector td {

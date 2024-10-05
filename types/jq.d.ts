@@ -9,7 +9,7 @@ interface JQuery {
                 HTMLElement,
                 HTMLElement
             >
-        ) => Promise<void>
+        ) => Promise<void> | void
     ): unknown;
     click(
         arg0: (
@@ -18,4 +18,9 @@ interface JQuery {
     ): unknown;
     find(selector: string): JQuery;
     hide(): JQuery;
+    each(
+        /** @this {HTMLElement} */
+        func: () => void
+    );
+    0: HTMLElement;
 }

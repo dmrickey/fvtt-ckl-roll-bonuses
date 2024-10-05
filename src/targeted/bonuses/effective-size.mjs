@@ -27,8 +27,8 @@ export class EffectiveSizeBonus extends BaseBonus {
         if (!size) return;
 
         const formula = FormulaCacheHelper.getModuleFlagFormula(source, this.key)[this.key];
-        const roll = RollPF.safeRollSync(formula);
-        const mod = roll.isNumber
+        const roll = RollPF.create(formula + '');
+        const mod = roll.isDeterministic
             ? signed(size)
             : formula;
 
@@ -65,7 +65,6 @@ export class EffectiveSizeBonus extends BaseBonus {
             tooltip: this.tooltip,
         }, {
             canEdit: isEditable,
-            isModuleFlag: true,
         });
     }
 

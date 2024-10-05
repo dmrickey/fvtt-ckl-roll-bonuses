@@ -85,7 +85,6 @@ export class FunctionTarget extends BaseTarget {
             }, {
                 canEdit: isEditable,
                 isFormula: false,
-                isModuleFlag: true,
             });
             textInput({
                 item,
@@ -96,7 +95,6 @@ export class FunctionTarget extends BaseTarget {
             }, {
                 canEdit: isEditable,
                 isFormula: false,
-                isModuleFlag: true,
             });
         }
         else {
@@ -114,5 +112,5 @@ export class FunctionTarget extends BaseTarget {
     }
 
     /** @override @returns { boolean } */
-    static get skipPicker() { return true; }
+    static get gmOnlyForPicker() { return true; }
 }

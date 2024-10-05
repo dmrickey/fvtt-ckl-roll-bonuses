@@ -1,17 +1,19 @@
+import { MODULE_NAME } from '../../consts.mjs';
 import { keyValueSelect } from "../../handlebars-handlers/bonus-inputs/key-value-select.mjs";
+import { api } from '../../util/api.mjs';
 import { intersects } from "../../util/array-intersects.mjs";
-import { KeyedDFlagHelper, getDocDFlags } from "../../util/flag-helpers.mjs";
 import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize, localizeBonusLabel } from "../../util/localize.mjs";
 import { LanguageSettings } from "../../util/settings.mjs";
 import { signed } from "../../util/to-signed-string.mjs";
 import { truthiness } from "../../util/truthiness.mjs";
+import { uniqueArray } from '../../util/unique-array.mjs';
 import { SpecificBonuses } from '../all-specific-bonuses.mjs';
 
-const elementalFocusKey = 'elementalFocus';
-const greaterElementalFocusKey = 'greaterElementalFocus';
-const mythicElementalFocusKey = 'mythicElementalFocus';
+export const elementalFocusKey = 'elemental-focus';
+export const greaterElementalFocusKey = 'elemental-focus-greater';
+export const mythicElementalFocusKey = 'elemental-focus-mythic';
 
 const allKeys = [elementalFocusKey, greaterElementalFocusKey, mythicElementalFocusKey];
 
@@ -21,25 +23,31 @@ const mythicElementalFocusId = 'yelJyBhjWtiIMgci';
 
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#elemental-focus';
 
-Hooks.once('ready', () => {
-    SpecificBonuses.registerSpecificBonus({ journal, key: elementalFocusKey });
-    SpecificBonuses.registerSpecificBonus({ journal, key: greaterElementalFocusKey, parent: elementalFocusKey });
-    SpecificBonuses.registerSpecificBonus({ journal, key: mythicElementalFocusKey, parent: elementalFocusKey });
-});
+SpecificBonuses.registerSpecificBonus({ journal, key: elementalFocusKey });
+SpecificBonuses.registerSpecificBonus({ journal, key: greaterElementalFocusKey, parent: elementalFocusKey });
+SpecificBonuses.registerSpecificBonus({ journal, key: mythicElementalFocusKey, parent: elementalFocusKey });
 
-const icons = {
-    acid: { icon: 'ra ra-droplet', css: 'ckl-acid-green' },
-    cold: { icon: 'far fa-snowflake', css: 'ckl-cold-blue' },
-    electric: { icon: 'fas fa-bolt-lightning', css: 'ckl-electric-yellow' },
-    fire: { icon: 'fas fa-fire-flame-curved', css: 'ckl-fire-red' },
-};
+{
+    const icons = {
+        acid: { icon: 'ra ra-droplet', css: 'ckl-acid-green' },
+        cold: { icon: 'far fa-snowflake', css: 'ckl-cold-blue' },
+        electric: { icon: 'fas fa-bolt-lightning', css: 'ckl-electric-yellow' },
+        fire: { icon: 'fas fa-fire-flame-curved', css: 'ckl-fire-red' },
+    };
 
-const damageElements = [
-    'acid',
-    'cold',
-    'electric',
-    'fire'
-];
+    const damageElements = /** @type {const} */ ([
+        'acid',
+        'cold',
+        'electric',
+        'fire'
+    ]);
+
+    api.config.elementalFocus.damageElements = damageElements;
+    api.config.elementalFocus.icons = icons;
+}
+
+const damageElements = api.config.elementalFocus.damageElements;
+const icons = api.config.elementalFocus.icons;
 
 class Settings {
     static get elementalFocus() { return LanguageSettings.getTranslation(elementalFocusKey); }
@@ -48,6 +56,29 @@ class Settings {
         LanguageSettings.registerItemNameTranslation(elementalFocusKey);
     }
 }
+
+/**
+ * @param { ActorPF } actor
+ * @param { elementalFocusKey | greaterElementalFocusKey | mythicElementalFocusKey } key
+ * @returns {damageElements[number][]}
+ */
+const getFocusedElements = (actor, key) =>
+    uniqueArray(actor[MODULE_NAME][key]?.
+        filter(x => x.hasItemBooleanFlag(key))
+        .flatMap(x => x.getFlag(MODULE_NAME, key))
+        .filter(truthiness)
+        ?? []
+    );
+
+/**
+ *
+ * @param {ItemAction} action
+ * @returns {string[]}
+ */
+const getActionDamageTypes = (action) => uniqueArray(action.data.damage.parts
+    .map(({ type }) => type)
+    .flatMap(({ custom, values }) => ([...custom.split(';').map(x => x.trim()), ...values]))
+    .filter(truthiness));
 
 // add Info to chat card
 Hooks.on(customGlobalHooks.itemGetTypeChatData, (
@@ -80,45 +111,43 @@ registerItemHint((hintcls, actor, item, _data) => {
         return;
     }
 
-    const helper = new KeyedDFlagHelper(actor, {}, elementalFocusKey, greaterElementalFocusKey, mythicElementalFocusKey);
-
-    const damageTypes = action.data.damage.parts
-        .map(({ type }) => type)
-        .flatMap(({ custom, values }) => ([...custom.split(';').map(x => x.trim()), ...values]))
-        .filter(truthiness);
+    const damageTypes = getActionDamageTypes(action);
 
     const  /** @type {Hint[]} */ hints = [];
-    damageElements.forEach((element) => {
-        if (!damageTypes.includes(element)) {
-            return;
-        }
+    damageTypes.forEach((damageType) => {
+        const isFocused = intersects(damageType, getFocusedElements(actor, elementalFocusKey));
+        if (!isFocused) { return; }
 
-        const focuses = helper.keysForValue(element);
-        if (focuses.length) {
-            // @ts-ignore
-            const match = icons[element];
-            const bonus = getDcBonus(action);
-            const tooltip = focuses.map((f) => localizeBonusLabel(f)).join('\n') + `\n${localize('dc-mod', { mod: signed(bonus) })}`;
-            const hint = hintcls.create('', [match.css], { icon: match.icon, hint: tooltip });
-            hints.push(hint);
-        }
+        const isGreater = intersects(damageType, getFocusedElements(actor, greaterElementalFocusKey));
+        const isMythic = intersects(damageType, getFocusedElements(actor, mythicElementalFocusKey));
+        const bonus = (1 + Number(isGreater)) * (Number(isMythic) + 1);
+
+        const focuses = [elementalFocusKey];
+        if (isGreater) focuses.push(greaterElementalFocusKey);
+        if (isMythic) focuses.push(mythicElementalFocusKey);
+
+        // @ts-ignore
+        const match = icons[damageType];
+        const tooltip = focuses.map((f) => localizeBonusLabel(f)).join('\n') + `\n${localize('dc-mod', { mod: signed(bonus) })}`;
+        const hint = hintcls.create('', [match.css], { icon: match.icon, hint: tooltip });
+        hints.push(hint);
     });
     return hints;
 });
 
-// register on ability
+// register on granting ability
 registerItemHint((hintcls, _actor, item, _data) => {
-    const key = allKeys.find((k) => item.system.flags.dictionary[k] !== undefined);
+    const key = allKeys.find((k) => !!item.hasItemBooleanFlag(k));
     if (!key) {
         return;
     }
 
-    const currentElement = getDocDFlags(item, key)[0];
+    /** @type {damageElements[number]} */
+    const currentElement = item.getFlag(MODULE_NAME, key);
     if (!currentElement) {
         return;
     }
 
-    // @ts-ignore
     const match = icons[currentElement];
     const label = pf1.registry.damageTypes.get(`${currentElement}`) ?? currentElement;
 
@@ -134,21 +163,18 @@ registerItemHint((hintcls, _actor, item, _data) => {
  */
 function getDcBonus(action) {
     const { item, actor } = action;
-    if (item?.type !== 'spell') {
+    if (item?.type !== 'spell' || !actor) {
         return 0;
     }
 
-    const damageTypes = action.data.damage.parts
-        .map(({ type }) => type)
-        .flatMap(({ custom, values }) => ([...custom.split(';').map(x => x.trim()), ...values]))
-        .filter(truthiness);
+    const damageTypes = getActionDamageTypes(action);
 
-    const mythicFocuses = getDocDFlags(actor, mythicElementalFocusKey, { includeInactive: false });
+    const mythicFocuses = getFocusedElements(actor, mythicElementalFocusKey);
     const hasMythicFocus = intersects(damageTypes, mythicFocuses);
 
     let bonus = 0;
-    const handleFocus = (/** @type {string} */key) => {
-        const focuses = getDocDFlags(actor, key, { includeInactive: false });
+    const handleFocus = (/** @type { elementalFocusKey | greaterElementalFocusKey } */ key) => {
+        const focuses = getFocusedElements(actor, key);
         const hasFocus = intersects(damageTypes, focuses);
         if (hasFocus) {
             bonus += 1;
@@ -187,15 +213,17 @@ Hooks.on('renderItemSheet', (
     let elements = Object.fromEntries(damageElements.map(k => [k, pf1.registry.damageTypes.get(k)]));
 
     const name = item?.name?.toLowerCase() ?? '';
-    const isElementalFocusFeat = name.includes(Settings.elementalFocus) && item.type === 'feat' && item.subType !== 'classFeat';
+    const isElementalFocusFeat = item.hasItemBooleanFlag(elementalFocusKey) || (name.includes(Settings.elementalFocus) && item.type === 'feat' && item.subType !== 'classFeat');
     const sourceId = item?.flags.core?.sourceId ?? '';
     if (isElementalFocusFeat || sourceId.includes(elementalFocusId)) {
         key = elementalFocusKey;
     }
 
-    const isGreater = (isElementalFocusFeat && name.includes(LanguageSettings.greater))
+    const isGreater = item.hasItemBooleanFlag(greaterElementalFocusKey)
+        || (isElementalFocusFeat && name.includes(LanguageSettings.greater))
         || sourceId.includes(greaterElementalFocusId);
-    const isMythic = (isElementalFocusFeat && name.includes(LanguageSettings.mythic))
+    const isMythic = item.hasItemBooleanFlag(mythicElementalFocusKey)
+        || (isElementalFocusFeat && name.includes(LanguageSettings.mythic))
         || sourceId.includes(mythicElementalFocusId);
 
     if (isGreater || isMythic) {
@@ -204,19 +232,19 @@ Hooks.on('renderItemSheet', (
         if (actor) {
             elements = {};
             // @ts-ignore
-            const /** @type {string[]}*/ existingElementalFocuses = getDocDFlags(actor, elementalFocusKey, { includeInactive: false });
+            const existingElementalFocuses = getFocusedElements(actor, elementalFocusKey);
             existingElementalFocuses.forEach((focus) => {
                 elements[focus] = pf1.registry.damageTypes.get(focus);
             });
         }
     }
 
+    if (key && !item.hasItemBooleanFlag(key)) {
+        item.addItemBooleanFlag(key);
+    }
+
     if (!key) {
-        // check if it has a manual key
-        key = allKeys.find((k) => item.system.flags.dictionary[k] !== undefined);
-        if (!key) {
-            return;
-        }
+        return;
     }
 
     const choices = Object.keys(elements).map((key) => ({ key, label: elements[key].name }));
@@ -228,6 +256,6 @@ Hooks.on('renderItemSheet', (
         key,
         parent: html
     }, {
-        canEdit: isEditable
+        canEdit: isEditable,
     });
 });

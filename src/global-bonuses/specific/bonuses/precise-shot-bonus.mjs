@@ -1,6 +1,5 @@
 import { SpecificBonuses } from '../../../bonuses/all-specific-bonuses.mjs';
 import { showEnabledLabel } from '../../../handlebars-handlers/enabled-label.mjs';
-import { hasAnyBFlag } from '../../../util/flag-helpers.mjs';
 import { LanguageSettings } from '../../../util/settings.mjs';
 
 const compendiumId = '53urYIbYYpQuoSLd';
@@ -8,7 +7,7 @@ export const key = 'precise-shot';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.4A4bCh8VsQVbTsAY#precise-shot-bonus';
 
 export const init = () => {
-    SpecificBonuses.registerSpecificBonus({ journal, key, type: 'boolean' });
+    SpecificBonuses.registerSpecificBonus({ journal, key });
 };
 
 class Settings {
@@ -29,12 +28,10 @@ Hooks.on('renderItemSheet', (
 
     const name = item?.name?.toLowerCase() ?? '';
     const sourceId = item?.flags.core?.sourceId ?? '';
-    const hasBonus = hasAnyBFlag(item, key);
+    const hasBonus = item.hasItemBooleanFlag(key);
 
     if ((name === Settings.name || sourceId.includes(compendiumId)) && !hasBonus) {
-        item.update({
-            [`system.flags.boolean.${key}`]: true,
-        });
+        item.addItemBooleanFlag(key);
     }
 
     if (hasBonus) {
@@ -61,7 +58,7 @@ const onCreate = (item, data, { temporary }, id) => {
 
     const name = item?.name?.toLowerCase() ?? '';
     const sourceId = item?.flags.core?.sourceId ?? '';
-    const hasBonus = hasAnyBFlag(item, key);
+    const hasBonus = item.hasItemBooleanFlag(key);
 
     if ((name === Settings.name || sourceId.includes(compendiumId)) && !hasBonus) {
         item.updateSource({

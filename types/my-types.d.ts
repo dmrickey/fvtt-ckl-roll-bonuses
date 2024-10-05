@@ -3,6 +3,11 @@ import { BaseBonus } from '../src/targeted/bonuses/base-bonus.mjs';
 import { BaseTarget } from '../src/targeted/targets/base-target.mjs';
 import { SpecificBonuses } from '../src/bonuses/all-specific-bonuses.mjs';
 import { BaseGlobalBonus } from '../src/global-bonuses/base-global-bonus.mjs';
+import {
+    handleBonusesFor,
+    handleBonusTypeFor,
+} from '../src/target-and-bonus-join.mjs';
+import { showBonusPicker } from '../src/handlebars-handlers/bonus-picker.mjs';
 
 export {};
 
@@ -10,9 +15,27 @@ declare global {
     interface RollBonusesAPI {
         /** Applications that the app uses that are used by various inputs */
         applications: Record<string, DocumentSheet>;
+        showApplication: {
+            showBonusPicker: typeof showBonusPicker;
+        };
 
         /** config for specific inputs that can be modified by a script or mod */
         config: {
+            elementalFocus: {
+                icons: {
+                    acid: { icon: string; css: string };
+                    cold: { icon: string; css: string };
+                    electric: { icon: string; css: string };
+                    fire: { icon: string; css: string };
+                };
+                damageElements: readonly ['acid', 'cold', 'electric', 'fire'];
+            };
+            versatilePerformance: {
+                getPerformanceSkills: (actor: ActorPF) => {
+                    [key: keyof typeof pf1.config.skills]: string;
+                };
+                expandedChoices: Array<keyof typeof pf1.config.skills>;
+            };
             versatileTraining: {
                 default: Array<keyof typeof pf1.config.skills>;
                 mapping: Record<
@@ -44,6 +67,7 @@ declare global {
         migrate: {
             migrate(): Promise;
             v1: {};
+            v2: {};
         };
 
         /** Base source classes for extending */
@@ -61,10 +85,12 @@ declare global {
         targetTypeMap: Record<string, typeof BaseTarget>;
 
         /** various utility helper methods and classes used throughout the mod */
-        utils:
-            | { array: Record<string, (...args) => any> }
-            | Record<string, (...args) => any>
-            | any;
+        utils: {
+            handleBonusesFor: typeof handleBonusesFor;
+            handleBonusTypeFor: typeof handleBonusTypeFor;
+            array: Record<string, (...args) => any>;
+            [key: string]: any;
+        };
     }
 
     interface IdObject {
@@ -86,24 +112,6 @@ declare global {
     }
 
     type Nullable<T> = T | null | undefined;
-
-    class ItemSelectorOptions extends DocumentSheetOptions<ItemPF> {
-        currentUuids: string[];
-        items: {
-            checked?: boolean;
-            uuid: string;
-            type: string;
-            name: string;
-            typeLabel: string;
-            img: string;
-            id: string;
-        }[];
-        path: string;
-    }
-
-    interface TokenActorSelectorOptions extends DocumentSheetOptions<ItemPF> {
-        key: string;
-    }
 
     declare type DamageInputModel = DamagePart & {
         crit: Nullable<'crit' | 'nonCrit' | 'normal'>;

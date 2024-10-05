@@ -2,10 +2,12 @@
     <div class="form-group">{{> "modules/ckl-roll-bonuses/hbs/label.hbs"}}</div>
     <div class="form-fields">
         {{#each current}}
-        <li data-index="{{@index}}" data-tooltip="{{this.name}}">
+        <li data-index="{{@index}}" data-tooltip="{{this.name}}" data-uuid="{{this.uuid}}">
             <img src="{{this.img}}">
             <span class="icon-label">{{this.name}}</span>
         </li>
+        {{else}}
+        <div class="error-text">{{localize "ckl-roll-bonuses.inputs.icon-input.no-selection"}}</div>
         {{/each}}
     </div>
     {{#unless readonly}}

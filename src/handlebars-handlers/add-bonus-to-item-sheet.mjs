@@ -1,9 +1,16 @@
 import { api } from '../util/api.mjs';
+import { handleJournalClick } from '../util/handle-journal-click.mjs';
 import { showBonusPicker } from './bonus-picker.mjs';
 import { createTemplate, templates } from './templates.mjs';
 
 const bonusSectionSelector = '#ckl-roll-bonus-container'
 const containerSelector = '.bonuses';
+
+const openDocumenation = async () => {
+    const uuid = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC';
+    const doc = await fromUuid(uuid);
+    doc.sheet.render(true);
+}
 
 /**
  * @param {HTMLElement} itemSheetHtml
@@ -34,12 +41,18 @@ const addNodeToRollBonus = (itemSheetHtml, child, item, canEdit) => {
                 s.style.display = 'none';
             }
         });
+
+        const diceIcon = elem.querySelector('.form-header a:has(i.fas.fa-dice-d20');
+        diceIcon?.addEventListener('click', (event) => {
+            event.preventDefault();
+            openDocumenation();
+        });
     }
 
     let section = itemSheetHtml.querySelector(bonusSectionSelector);
     if (!section) {
         section = createTemplate(templates.rollBonusesContainer);
-        addSettingsHandler(section)
+        addSettingsHandler(section);
         flagsContainer.before(section);
     }
 
@@ -50,20 +63,12 @@ const addNodeToRollBonus = (itemSheetHtml, child, item, canEdit) => {
     const container = section.querySelector(containerSelector);
     if (!container) return;
 
-    const button = child.querySelector('[data-journal]');
+    const button = /** @type {HTMLElement} */ (child.querySelector('[data-journal]'));
     button?.addEventListener(
         'click',
-        async () => {
-            // @ts-ignore // TODO
-            const [uuid, header] = button.dataset.journal.split('#');
-            const doc = await fromUuid(uuid);
-
-            // @ts-ignore // TODO
-            if (doc instanceof JournalEntryPage) {
-                doc.parent.sheet.render(true, { pageId: doc.id, anchor: header });
-            } else {
-                doc.sheet.render(true);
-            }
+        async (event) => {
+            event.preventDefault();
+            await handleJournalClick(button);
         },
     );
     addSettingsHandler(child);

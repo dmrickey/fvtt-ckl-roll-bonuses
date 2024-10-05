@@ -1,11 +1,11 @@
-import { ActionTarget } from "./have-to-do/action-target.mjs";
+import { ActionTarget } from "./action-target.mjs";
 import { AlignmentTarget } from './conditional/alignment-target.mjs';
 import { DamageTypeTarget } from "./damage-type-target.mjs";
 import { IsMeleeTarget } from './item-filter-target.mjs/is-melee-target.mjs';
 import { IsRangedTarget } from './item-filter-target.mjs/is-ranged-target.mjs';
 import { IsSpellTarget } from "./item-filter-target.mjs/is-spell-target.mjs";
 import { IsWeaponTarget } from './item-filter-target.mjs/is-weapon-target.mjs';
-import { ItemTarget } from "./specific-item-target/item-target.mjs";
+import { SpecificItemTarget } from "./specific-item-target/specific-item-target.mjs";
 import { SelfTarget } from './self-target.mjs';
 import { SpellTarget } from "./specific-item-target/spell-target.mjs";
 import { TokenTarget } from "./conditional/token-target.mjs";
@@ -23,8 +23,11 @@ import { WhenInCombatTarget } from './conditional/when-in-combat-target.mjs';
 import { WhenTargetInRange } from './conditional/is-target-within-range.mjs';
 import { SpellDescriptorTarget } from './spell-descriptor-target.mjs';
 import { ConditionTarget } from './conditional/condition-target.mjs';
+import { IsThrownTarget } from './item-filter-target.mjs/is-thrown-target.mjs';
+import { IsNaturalTarget } from './item-filter-target.mjs/is-natural-target.mjs';
 
 export const registerTargets = () => [
+    ActionTarget,
     AlignmentTarget,
     AllTarget,
     ConditionTarget,
@@ -33,11 +36,13 @@ export const registerTargets = () => [
     FunctionTarget,
     HasBooleanFlagTarget,
     IsMeleeTarget,
+    IsNaturalTarget,
     IsRangedTarget,
     IsSpellTarget,
+    IsThrownTarget,
     IsWeaponTarget,
-    ItemTarget,
     SelfTarget,
+    SpecificItemTarget,
     SpellDescriptorTarget,
     SpellSchoolTarget,
     SpellTarget,
@@ -48,7 +53,4 @@ export const registerTargets = () => [
     WhenActiveTarget,
     WhenInCombatTarget,
     WhenTargetInRange,
-
-    // todo later
-    // ActionTarget,
 ].forEach(Sources.registerSource);

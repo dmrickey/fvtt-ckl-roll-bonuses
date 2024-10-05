@@ -1,4 +1,5 @@
 interface Game {
+    messages: EmbeddedCollection<ChatMessagePF>;
     actors: EmbeddedCollection<ActorPF>;
 
     combats: {

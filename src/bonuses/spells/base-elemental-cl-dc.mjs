@@ -1,11 +1,14 @@
+import { MODULE_NAME } from '../../consts.mjs';
 import { textInputAndKeyValueSelect } from "../../handlebars-handlers/bonus-inputs/text-input-and-key-value-select.mjs";
 import { intersection } from "../../util/array-intersects.mjs";
-import { FormulaCacheHelper, KeyedDFlagHelper, getDocDFlags } from "../../util/flag-helpers.mjs";
+import { FormulaCacheHelper } from "../../util/flag-helpers.mjs";
 import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize, localizeBonusLabel } from "../../util/localize.mjs";
 import { signed } from "../../util/to-signed-string.mjs";
 import { truthiness } from "../../util/truthiness.mjs";
+import { uniqueArray } from '../../util/unique-array.mjs';
+import { SpecificBonuses } from '../all-specific-bonuses.mjs';
 
 /**
  * @type {{cl: keyof(RollData), dc: keyof(RollData)}}
@@ -29,23 +32,40 @@ const regex = /([A-Za-z\- ])+/g;
  * @returns {string[]}
  */
 const getSpellDescriptors = (item) => {
-    return [...(item?.system?.types || '').matchAll(regex)]
-        .flatMap(([a]) => a.split('or'))
-        .map((a) => a.trim().toLowerCase());
+    return uniqueArray([
+        ...(item?.system?.descriptors.value || []),
+        ...(item?.system?.descriptors.custom || [])
+            .flatMap((c) =>
+                c?.split(/,|\bor\b/).map((type) => {
+                    /** @type {string} */
+                    let typeString = type.trim();
+                    if (typeString.includes("see text")) return "see text";
+                    // @ts-ignore
+                    if (typeString.startsWith("or")) typeString = typeString.replace("or").trim();
+                    return typeString;
+                })
+            )
+            .filter(truthiness)
+    ]);
 }
 
 /**
  * @param {'cl' | 'dc'} t
  */
 export function createElementalClOrDc(t) {
+    /** @type { 'elemental-cl' | 'elemental-dc' } */
     const key = `elemental-${t}`;
     const formulaKey = `elemental-${t}-formula`;
     const journal = t === 'cl'
-        ? 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#*modify-spell-caster-level-(all-spells,-specific-school,-or-spec'
-        : 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#*modify-spell-dc-(all-spells,-specific-school,-or-specific-eleme';
+        ? 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#modify-elemental-spell-caster-level'
+        : 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#modify-elemental-spell-dc';
 
-    FormulaCacheHelper.registerUncacheableDictionaryFlag(key);
-    FormulaCacheHelper.registerDictionaryFlag(formulaKey);
+    SpecificBonuses.registerSpecificBonus({
+        journal,
+        key,
+    });
+
+    FormulaCacheHelper.registerModuleFlag(formulaKey);
 
     /**
      *
@@ -66,8 +86,9 @@ export function createElementalClOrDc(t) {
             return;
         }
 
+        action ||= item?.defaultAction;
         if (!action) {
-            action = item?.defaultAction;
+            return;
         }
 
         const damageTypes = action.data.damage.parts
@@ -81,20 +102,13 @@ export function createElementalClOrDc(t) {
         const comparators = damageElements.flatMap((element) => [element, pf1.registry.damageTypes.get(element)?.name?.toLowerCase() || element]);
         const toFind = intersection([...damageTypes, ...types, ...domains], comparators);
 
-        const helper = new KeyedDFlagHelper(
-            actor,
-            {
-                onlyIncludeAllFlags: true,
-                mustHave: { [key]: (value) => toFind.includes(`${value}`) }
-            },
-            key,
-            formulaKey
-        );
-
-        const offset = helper.sumOfFlags(formulaKey);
-
+        const matches = (actor[MODULE_NAME]?.[key] ?? [])
+            .filter((x) => toFind.includes(x.getFlag(MODULE_NAME, key)));
+        const offset = matches
+            .reduce((acc, item) => acc + FormulaCacheHelper.getModuleFlagValue(item, formulaKey), 0);
         if (offset) {
-            const elements = helper.valuesForFlag(key)
+            const elements = matches
+                .map((item) => item.getFlag(MODULE_NAME, key))
                 .map((value) => pf1.registry.damageTypes.get(`${value}`)?.name ?? value);
             return { offset, elements };
         }
@@ -107,11 +121,9 @@ export function createElementalClOrDc(t) {
     /** @type {RollData} */ rollData,
     ) => {
         const actionId = rollData.action?._id;
-        if (!actionId) {
-            return;
-        }
-
-        if (!(item instanceof pf1.documents.item.ItemSpellPF)) {
+        if (!actionId
+            || !(item instanceof pf1.documents.item.ItemSpellPF)
+        ) {
             return;
         }
 
@@ -144,12 +156,17 @@ export function createElementalClOrDc(t) {
 
     // register hint on source
     registerItemHint((hintcls, _actor, item, _data) => {
-        const currentElement = getDocDFlags(item, key)[0];
+        const has = item.hasItemBooleanFlag(key);
+        if (!has) {
+            return;
+        }
+
+        const currentElement = item.getFlag(MODULE_NAME, key);
         if (!currentElement) {
             return;
         }
 
-        const total = FormulaCacheHelper.getDictionaryFlagValue(item, formulaKey);
+        const total = FormulaCacheHelper.getModuleFlagValue(item, formulaKey);
         if (!total) {
             return;
         }
@@ -174,12 +191,35 @@ export function createElementalClOrDc(t) {
         if (!(item instanceof pf1.documents.item.ItemSpellPF) || item?.type !== 'spell' || !rollData) {
             return;
         }
+
         const found = getBonusesForItem(item, action);
         if (found?.offset) {
             rollData[prop[t]] ||= 0;
             rollData[prop[t]] += found.offset;
         }
     });
+
+    if (t === 'cl') {
+        /**
+         * @param {ActorPF} actor
+         * @param {{messageId?: string, parts?: string[]}} rollOptions
+         * @param {string} bookId
+         */
+        const onActorRollCL = (actor, rollOptions, bookId) => {
+            if (!rollOptions.messageId || !rollOptions.parts?.length) return;
+
+            const action = game.messages.get(rollOptions.messageId)?.actionSource;
+            if (!action) return;
+
+            const found = getBonusesForItem(action.item, action);
+
+            if (found?.offset) {
+                const label = localize(`${t}-label`, { label: found.elements.join(', ') });
+                rollOptions.parts?.push(`${found.offset}[${label}]`);
+            }
+        };
+        Hooks.on('pf1PreActorRollCl', onActorRollCL);
+    }
 
     Hooks.on('renderItemSheet', (
     /** @type {ItemSheetPF} */ { isEditable, item },
@@ -188,20 +228,21 @@ export function createElementalClOrDc(t) {
     ) => {
         if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
-        if (item.system.flags.dictionary[key] === undefined) {
+        if (!item.hasItemBooleanFlag(key)) {
             return;
         }
 
-        const current = getDocDFlags(item, key)[0];
+        const current = item.getFlag(MODULE_NAME, key);
         const choices = damageElements
             .map(element => ({ key: element, label: pf1.registry.damageTypes.get(element)?.name || element }));
+        const currentText = item.getFlag(MODULE_NAME, formulaKey) || '';
 
         textInputAndKeyValueSelect({
             item,
             journal,
             parent: html,
             select: { current, choices, key },
-            text: { current: getDocDFlags(item, formulaKey)[0] || '', key: formulaKey },
+            text: { current: currentText, key: formulaKey },
         }, {
             canEdit: isEditable,
         });

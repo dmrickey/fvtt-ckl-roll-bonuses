@@ -92,6 +92,20 @@ export class BaseBonus extends BaseSource {
     static itemActionRollDamage(_source, _seed, _action, _data, _index) { }
 
     /**
+     * Only use this when modifying Roll Data isn't sufficient as that covers a lot more cases.
+     *
+     * @abstract
+     * @param {ItemPF} _sourceItem
+     * @param {ItemAction} _action
+     * @param {{proficient: boolean, secondaryPenalty: boolean}} _config
+     * @param {RollData} _rollData
+     * @param {object} _rollOptions
+     * @param {string[]} _parts
+     * @param {ItemChange[]} _changes
+     */
+    static modifyPreRollAttack(_sourceItem, _action, _config, _rollData, _rollOptions, _parts, _changes) { }
+
+    /**
      * Returns true the targeting is too generic to show a hint on a specific item
      * - used for something like `crit` that needs to combine all hints in a single registration
      *

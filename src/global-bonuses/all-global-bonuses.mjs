@@ -12,6 +12,8 @@ export class GlobalBonuses {
     static registerBonus(bonus) {
         GlobalBonuses.allBonuses.push(bonus);
         GlobalBonusSettings.registerKey(bonus);
+
+        // settings are ready after `i18nInit` hook
         Hooks.once('i18nInit', () => {
             if (GlobalBonusSettings.setting(bonus.key)) {
                 bonus.registerBonuses();
@@ -52,7 +54,7 @@ Hooks.on('renderActorSheet', (
         .filter((b) => !b.isDisabled());
     const settings = bonuses.map((b) => ({
         checked: b.isDisabledForActor(actor),
-        journal: `journal - ${b.key}`, // TODO
+        journal: b.journal,
         label: b.label,
         path: `flags.${MODULE_NAME}.${b.actorDisabledFlag}`,
     }));

@@ -16,8 +16,7 @@ import { createTemplate, templates } from "../templates.mjs";
  * @param {HTMLElement} args.parent
  * @param {object} options
  * @param {boolean} options.canEdit
- * @param {boolean} [options.isModuleFlag] - false (default) if this is a dictionary flag, true if this is a data flag
- */
+*/
 export function stringSelect({
     choices,
     current,
@@ -29,20 +28,15 @@ export function stringSelect({
     tooltip = '',
 }, {
     canEdit,
-    isModuleFlag = false,
 }) {
-    current ||= isModuleFlag
-        ? item.getFlag(MODULE_NAME, key)
-        : item.getItemDictionaryFlag(key);
+    current ||= item.getFlag(MODULE_NAME, key);
     label ||= localizeBonusLabel(key);
     tooltip ||= localizeBonusTooltip(key);
 
     choices.sort();
     if (canEdit) {
         if ((!current && choices.length) || (choices.length === 1 && current !== choices[0])) {
-            isModuleFlag
-                ? item.setFlag(MODULE_NAME, key, choices[0])
-                : item.setItemDictionaryFlag(key, choices[0]);
+            item.setFlag(MODULE_NAME, key, choices[0]);
         }
     }
 
@@ -72,9 +66,7 @@ export function stringSelect({
 
             // @ts-ignore - event.target is HTMLTextAreaElement
             const /** @type {HTMLTextAreaElement} */ target = event.target;
-            isModuleFlag
-                ? await item.setFlag(MODULE_NAME, key, target?.value)
-                : await item.setItemDictionaryFlag(key, target?.value);
+            await item.setFlag(MODULE_NAME, key, target?.value);
         },
     );
 

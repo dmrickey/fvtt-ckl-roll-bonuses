@@ -5,8 +5,11 @@
   - [Bonuses](#bonuses)
     - [Swap Ability for Damage Rolls](#swap-ability-for-damage-rolls)
     - [Swap Ability for Attack Rolls](#swap-ability-for-attack-rolls)
+    - [Add/Swap Damage Types](#addswap-damage-types)
     - [Crit Only Attack Bonus](#crit-only-attack-bonus)
-  - [AC bonus](#ac-bonus)
+    - [Script Call bonus](#script-call-bonus)
+    - [AC bonus](#ac-bonus)
+    - [Alignment](#alignment)
   - [Targets](#targets)
     - [Creature type/subtype](#creature-typesubtype)
     - [By Disposition](#by-disposition)
@@ -26,7 +29,6 @@
     - [Favored Enemy](#favored-enemy)
     - [Favored Terrain](#favored-terrain)
 - [Feats](#feats)
-  - [Bomber's eye](#bombers-eye)
   - [Shared Remembrance](#shared-remembrance)
   - [Spell Perfection](#spell-perfection)
   - [Spirited Charge](#spirited-charge)
@@ -55,6 +57,7 @@
 - [Not Possible](#not-possible)
 - [Range/Positional ideas](#rangepositional-ideas)
 - [Other Ideas](#other-ideas)
+- [vnext.next](#vnextnext)
 - [vnext](#vnext)
 
 # TODO
@@ -72,10 +75,17 @@
 ### Swap Ability for Attack Rolls
 - add <ability> to attack for other ability scores (like finesse but can be customized)
   - waiting on 10.5
+### Add/Swap Damage Types
+- e.g. swap fire to acid
 ### Crit Only Attack Bonus
 - Attack bonus needs to give optional "crit only" attack bonuses
-## AC bonus
+### Script Call bonus
+- Use <this script> for anything that matches the criteria
+### AC bonus
 - See armor focus for how I first implemented it
+### Alignment
+- Actually align the weapon/attack instead of just adding typed damage
+  - I can make it work but it won't do anything (the system doesn't show it in the attack, it's kinda pointless without extra functionality)
 
 ## Targets
 ### Creature type/subtype
@@ -118,9 +128,6 @@
   - Add a button to chat cards to increase the skill/initiative/whatever roll when applicable
 
 # Feats
-## Bomber's eye
-- Increase throwing range
-- Need "Thrown" target
 ## [Shared Remembrance](https://aonprd.com/FeatDisplay.aspx?ItemName=Shared%20Remembrance)
 ## [Spell Perfection](https://www.d20pfsrd.com/feats/general-feats/spell-perfection/)
 ## Spirited Charge
@@ -250,9 +257,21 @@
   - This would allow me to automatically add effect notes for each roll to automatically roll for concealment
   - And would allow automating rerolls for abilities like Weapon of the Chosen
 
-# vnext
+# vnext.next
 - apply auto-config on create to all auto-config stuff (see Precise Shot)
   - Try to come up with a more generic framework for this
-- Add more text to Token Target app
-  - Have a "gm only" text that says something like "you can see all tokens because you're the GM, players can only select tokens that are visible to them.
-  - Add more text at the bottom that says "any tokens that are targeted when this is open will be pre-selected, you can enable a setting to skip this dialog in those cases"
+- Add "target-able overrides" section to the configuration popup for Items that can have actions but don't have the necessary data
+  - Weapon Group (will be a new override)
+  - Weapon Base Type (will be a new override)
+    - features (e.g. Bombs) and spells (e.g. Rays)
+  - Finesse (already exists)
+- Create new "Roll Bonuses" section for attack dialog inputs
+- Change all "is type" into a single target with checkboxes for various types it should allow
+- Replace "checklist-input" with a proper Item application instead of a warpgate menu
+- Update Auto-recognition stuff in "renderItemSheet" to use the same logic as martial-focus.mjs for specific bonuses
+- Add "Fortune configuration app" to help with configuring specific fortune abilities
+- Targeting
+  - Add a configuration error if "this target is not configured"
+
+# vnext
+- Update bonus picker tabs to have the same style as actor sheet tabs

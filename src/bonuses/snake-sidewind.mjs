@@ -1,5 +1,4 @@
 import { showEnabledLabel } from '../handlebars-handlers/enabled-label.mjs';
-import { hasAnyBFlag } from '../util/flag-helpers.mjs';
 import { getSkillFormula } from '../util/get-skill-formula.mjs';
 import { LocalHookHandler, localHooks } from '../util/hooks.mjs';
 import { localizeBonusLabel } from '../util/localize.mjs';
@@ -9,9 +8,7 @@ import { SpecificBonuses } from './all-specific-bonuses.mjs';
 const key = 'snake-sidewind';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#snake-sidewind';
 
-Hooks.once('ready', () =>
-    SpecificBonuses.registerSpecificBonus({ journal, key, type: 'boolean' })
-);
+SpecificBonuses.registerSpecificBonus({ journal, key });
 
 class Settings {
     static get snakeSidewind() { return LanguageSettings.getTranslation(key); }
@@ -39,7 +36,7 @@ const getFormulaMax = (formula, rollData) => {
  * @returns {string | undefined}
  */
 const isSnakeSideWindCrit = (chatAttack) => {
-    const hasFlag = hasAnyBFlag(chatAttack.action?.actor, key);
+    const hasFlag = chatAttack.action?.actor.hasItemBooleanFlag(key);
     if (!hasFlag) {
         return;
     }
@@ -107,10 +104,10 @@ Hooks.on('renderItemSheet', (
 
     const name = item?.name?.toLowerCase() ?? '';
 
-    const hasFlag = item.system.flags.boolean?.hasOwnProperty(key);
+    const hasFlag = item.hasItemBooleanFlag(key);
     if (!hasFlag) {
         if (name === Settings.snakeSidewind) {
-            item.update({ [`system.flags.boolean.${key}`]: true });
+            item.addItemBooleanFlag(key);
         }
         return;
     }

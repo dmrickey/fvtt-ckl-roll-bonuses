@@ -1,6 +1,6 @@
 import { MODULE_NAME } from "../consts.mjs";
 import { registerItemHint } from "../util/item-hints.mjs";
-import { localize, localizeBonusTooltip } from "../util/localize.mjs";
+import { localize } from "../util/localize.mjs";
 import { LanguageSettings } from "../util/settings.mjs";
 import { truthiness } from "../util/truthiness.mjs";
 import { SpecificBonuses } from './all-specific-bonuses.mjs';
@@ -16,7 +16,7 @@ const key = 'versatile-training';
 const selectedKey = 'versatile-training-selected';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#versatile-training';
 
-Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ journal, key, type: 'boolean' }));
+SpecificBonuses.registerSpecificBonus({ journal, key });
 
 class Settings {
     static get versatileTraining() { return LanguageSettings.getTranslation(key); }
@@ -26,7 +26,7 @@ class Settings {
     }
 }
 
-(() => {
+{
     /** @type {(keyof typeof pf1.config.skills)[]} */
     const allChoices = ['blf', 'int'];
     api.config.versatileTraining.default = allChoices;
@@ -50,10 +50,10 @@ class Settings {
         'thrown': sort([...allChoices, 'acr', 'per']),
         'tribal': sort([...allChoices, 'clm', 'sur']),
     };
-})();
+}
 
 registerItemHint((hintcls, actor, item, _data) => {
-    const selectedSkills = getDocFlags(item, selectedKey, { includeInactive: false })
+    const selectedSkills = getDocFlags(item, selectedKey)
         .flatMap(x => x)
         .filter(truthiness);
 
@@ -75,7 +75,7 @@ function createVTIcon(actor) {
     icon.classList.add('ra', 'ra-crossed-swords', 'ckl-skill-icon');
 
     const rollData = actor.getRollData();
-    const tip = localize('versatile-training.skillTip', { bab: rollData.attributes.bab.total });
+    const tip = localize('versatile-training.skill-tip', { bab: rollData.attributes.bab.total });
     icon.setAttribute('data-tooltip', tip);
     icon.setAttribute('data-tooltip-direction', 'UP');
 
@@ -87,7 +87,7 @@ Hooks.on('renderActorSheetPF', (
     /** @type {{ find: (arg0: string) => { (): any; new (): any; each: { (arg0: { (_: any, element: HTMLElement): void; }): void; new (): any; }; }; }} */ html,
     /** @type {{ actor: ActorPF; }} */ { actor }
 ) => {
-    const selectedSkills = getDocFlags(actor, selectedKey, { includeInactive: false })
+    const selectedSkills = getDocFlags(actor, selectedKey)
         .flatMap(x => x)
         .filter(truthiness);
 
@@ -118,7 +118,7 @@ Hooks.on('renderActorSheetPF', (
  * @returns {void}
  */
 function versatileRollSkill(seed, actor) {
-    const selectedSkills = getDocFlags(actor, selectedKey, { includeInactive: false })
+    const selectedSkills = getDocFlags(actor, selectedKey)
         .flatMap(x => x)
         .filter(truthiness);
 
@@ -144,7 +144,7 @@ function versatileRollSkill(seed, actor) {
  * @param {RollData} rollData
  */
 function getSkillInfo(skillInfo, actor, rollData) {
-    const selectedSkills = getDocFlags(actor, selectedKey, { includeInactive: false })
+    const selectedSkills = getDocFlags(actor, selectedKey)
         .flatMap(x => x)
         .filter(truthiness);
     if (selectedSkills.includes(skillInfo.id)) {
@@ -167,9 +167,12 @@ Hooks.on('renderItemSheet', (
 ) => {
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
-    const name = item?.name?.toLowerCase() ?? '';
-
-    if (!(name === Settings.versatileTraining || item.system.flags.boolean[key] !== undefined)) {
+    const hasKey = item.hasItemBooleanFlag(key);
+    if (!hasKey) {
+        const name = item?.name?.toLowerCase() ?? '';
+        if (name === Settings.versatileTraining) {
+            item.addItemBooleanFlag(key);
+        }
         return;
     }
 
@@ -214,7 +217,6 @@ Hooks.on('renderItemSheet', (
         parent: html
     }, {
         canEdit: isEditable,
-        isModuleFlag: true,
     });
     showChecklist({
         description: localize('versatile-training.description'),

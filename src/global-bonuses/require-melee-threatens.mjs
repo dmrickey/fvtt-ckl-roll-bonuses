@@ -2,6 +2,7 @@ import { PositionalHelper } from '../util/positional-helper.mjs';
 import { currentTargets } from '../util/get-current-targets.mjs';
 import { customGlobalHooks } from '../util/hooks.mjs'
 import { BaseGlobalBonus } from './base-global-bonus.mjs';
+import { addCheckToAttackDialog, hasFormData } from '../util/attack-dialog-helper.mjs';
 
 /** @extends {BaseGlobalBonus} */
 export class RequireMeleeThreatenGlobalBonus extends BaseGlobalBonus {
@@ -13,11 +14,47 @@ export class RequireMeleeThreatenGlobalBonus extends BaseGlobalBonus {
     static get bonusKey() { return 'require-melee-threaten'; }
 
     /**
+     * @inheritdoc
+     * @override
+     * @returns {string}
+     */
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.4A4bCh8VsQVbTsAY#require-melee-threatens'; }
+
+    /**
+     * @this {ActionUse}
+     * @param {AttackDialog} dialog
+     * @param {[HTMLElement]} html
+     * @param {AttackDialogData} data
+     */
+    static addSkipMeleeThreatenToDialog(dialog, [html], data) {
+        if (!(dialog instanceof pf1.applications.AttackDialog)) {
+            return;
+        }
+        if (RequireMeleeThreatenGlobalBonus.isDisabled() || RequireMeleeThreatenGlobalBonus.isDisabledForActor(data.item?.actor)) {
+            return;
+        }
+
+        const isMelee = ['mcman', 'mwak', 'msak'].includes(data.action.data.actionType);
+        if (!isMelee) {
+            return;
+        }
+
+        addCheckToAttackDialog(
+            html,
+            RequireMeleeThreatenGlobalBonus.dialogDisableKey,
+            dialog,
+        );
+    }
+
+    /**
      * @param {ActionUse} actionUse
      */
-    static addHigherGroundBonus(actionUse) {
+    static requireMelee(actionUse) {
         const { action, actor, shared } = actionUse;
         if (RequireMeleeThreatenGlobalBonus.isDisabled() || RequireMeleeThreatenGlobalBonus.isDisabledForActor(actor)) {
+            return;
+        }
+        if (hasFormData(actionUse, RequireMeleeThreatenGlobalBonus.dialogDisableKey)) {
             return;
         }
         if (!actor) {
@@ -51,7 +88,19 @@ export class RequireMeleeThreatenGlobalBonus extends BaseGlobalBonus {
         }
     }
 
+    /**
+     * @param {ActionUse} actionUse
+     * @param {string[]} notes
+     */
+    static addSkipFootnote(actionUse, notes) {
+        if (hasFormData(actionUse, RequireMeleeThreatenGlobalBonus.dialogDisableKey)) {
+            notes.push(RequireMeleeThreatenGlobalBonus.disabledFootnote);
+        }
+    }
+
     static {
-        Hooks.on(customGlobalHooks.actionUseAlterRollData, RequireMeleeThreatenGlobalBonus.addHigherGroundBonus);
+        Hooks.on('renderApplication', RequireMeleeThreatenGlobalBonus.addSkipMeleeThreatenToDialog);
+        Hooks.on(customGlobalHooks.actionUseAlterRollData, RequireMeleeThreatenGlobalBonus.requireMelee);
+        Hooks.on(customGlobalHooks.actionUseFootnotes, RequireMeleeThreatenGlobalBonus.addSkipFootnote)
     }
 }

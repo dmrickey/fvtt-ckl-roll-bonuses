@@ -4,48 +4,55 @@
         <table>
             <thead>
                 <tr>
-                    <th>{{localize 'ckl-roll-bonuses.versatilePerformance.label.perform'}}</th>
-                    <th>{{localize 'ckl-roll-bonuses.versatilePerformance.label.skill1'}}</th>
-                    <th>{{localize 'ckl-roll-bonuses.versatilePerformance.label.skill2'}}</th>
+                    <th>{{localize 'ckl-roll-bonuses.versatile-performance.label.perform'}}</th>
+                    <th>{{localize 'ckl-roll-bonuses.versatile-performance.label.skill1'}}</th>
+                    <th>{{localize 'ckl-roll-bonuses.versatile-performance.label.skill2'}}</th>
+                    {{#if hasExpanded}}<th>{{localize 'ckl-roll-bonuses.versatile-performance.label.expanded'}}</th>{{/if}}
                 </tr>
             </thead>
             <tbody>
+                {{#each currentVPs as |vp i| }}
                 <tr>
-                    {{#if readonly}}
-                    <td><input type="text" readonly value="{{base.name}}" /></td>
-                    <td><input type="text" readonly value="{{skill1.name}}" /></td>
-                    <td><input type="text" readonly value="{{skill2.name}}" /></td>
+                    {{#if ../readonly}}
+                    <td data-tooltip="{{lookup ../allSkills base}}"><input type="text" readonly value="{{lookup ../performs base}}" /></td>
+                    <td data-tooltip="{{lookup ../allSkills choice1}}"><input type="text" readonly value="{{lookup ../allSkills choice1}}" /></td>
+                    <td data-tooltip="{{lookup ../allSkills choice2}}"><input type="text" readonly value="{{lookup ../allSkills choice2}}" /></td>
+                    {{#if ../hasExpanded}}<td data-tooltip="{{lookup ../allSkills expanded}}"><input type="text" readonly value="{{lookup ../expandedSkills expanded}}" /></td>{{/if}}
                     {{else}}
-                    <td>
-                        <select id="vp-base-selector">
-                            {{#select base.id}}
-                            {{#each performs}}
-                            <option value="{{this.id}}">{{this.name}}</option>
-                            {{/each}}
-                            {{/select}}
+                    <td data-tooltip="{{lookup ../allSkills base}}">
+                        <select data-path="{{i}}.base">
+                            {{selectOptions ../performs selected=base}}
                         </select>
                     </td>
-                    <td>
-                        <select id="vp-skill1-selector">
-                            {{#select skill1.id}}
-                            {{#each allSkills}}
-                            <option value="{{this.id}}">{{this.name}}</option>
-                            {{/each}}
-                            {{/select}}
+                    <td data-tooltip="{{lookup ../allSkills choice1}}">
+                        <select data-path="{{i}}.choice1">
+                            {{selectOptions ../allSkills selected=choice1}}
                         </select>
                     </td>
-                    <td>
-                        <select id="vp-skill2-selector">
-                            {{#select skill2.id}}
-                            {{#each allSkills}}
-                            <option value="{{this.id}}">{{this.name}}</option>
-                            {{/each}}
-                            {{/select}}
+                    <td data-tooltip="{{lookup ../allSkills choice2}}">
+                        <select data-path="{{i}}.choice2">
+                            {{selectOptions ../allSkills selected=choice2}}
+                        </select>
+                    </td>
+                    {{#if ../hasExpanded}}
+                    <td data-tooltip="{{lookup ../allSkills expanded}}">
+                        <select data-path="{{i}}.expanded">
+                            {{selectOptions ../expandedSkills selected=expanded blank=""}}
                         </select>
                     </td>
                     {{/if}}
+                    {{/if}}
                 </tr>
+                {{/each}}
             </tbody>
         </table>
+        {{#unless readonly}}
+        <div class="vp-actions">
+            <a class="add" data-tooltip="{{localize 'ckl-roll-bonuses.versatile-performance.add'}}"><i class="fas fa-plus"></i></a>
+            {{#unless (eq 1 currentVPs.length)}}
+            <a class="delete" data-tooltip="{{localize 'ckl-roll-bonuses.versatile-performance.delete'}}"><i class="fas fa-trash"></i></a>
+            {{/unless}}
+        </div>
+        {{/unless}}
     </div>
 </div>

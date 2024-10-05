@@ -3,12 +3,7 @@ import { showItemInput } from "../../../handlebars-handlers/targeted/targets/ite
 import { truthiness } from "../../../util/truthiness.mjs";
 import { BaseTarget } from "../base-target.mjs";
 
-export class ItemTarget extends BaseTarget {
-
-    /**
-     * @returns {(item: ItemPF) => boolean}
-     */
-    static get itemFilter() { return (/** @type {ItemPF} */ item) => item.hasAction; }
+export class SpecificItemTarget extends BaseTarget {
 
     /**
      * @override
@@ -19,7 +14,26 @@ export class ItemTarget extends BaseTarget {
      * @override
      * @returns {string}
      */
-    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.iurMG1TBoX3auh5z#item'; }
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.iurMG1TBoX3auh5z#specific-item'; }
+
+    /**
+     * @param {ItemPF} item
+     * @returns {string[]}
+     */
+    static _getIdsFromItem(item) {
+        const ids = (/** @type {string[]} */(item.getFlag(MODULE_NAME, this.key) ?? []))
+            .map((id) => id.split('.').at(-1))
+            .filter(truthiness);
+        return ids;
+    }
+
+    /**
+     * @param {ActorPF} actor
+     * @returns {ItemPF[]}
+     */
+    static getItemsFromActor(actor) {
+        return actor.items.filter(x => x.hasAction);
+    }
 
     /**
      * @override
@@ -28,8 +42,10 @@ export class ItemTarget extends BaseTarget {
      */
     static getHints(source) {
         /** @type {string[]} */
-        const flaggedItems = source.getFlag(MODULE_NAME, this.key) ?? [];
-        return flaggedItems.map((flagged) => fromUuidSync(flagged)?.name).filter(truthiness);
+        if (!source?.actor) return;
+
+        const ids = this._getIdsFromItem(source);
+        return ids.map((id) => source.actor?.items.get(id)?.name).filter(truthiness);
     }
 
     /**
@@ -39,26 +55,14 @@ export class ItemTarget extends BaseTarget {
      * @returns {ItemPF[]}
      */
     static _getSourcesFor(item, sources) {
-        if (!item.uuid) {
+        if (!item?.id || !item.actor?.items?.size) {
             return [];
         }
 
-        const bonusSources = sources.filter((flagged) => {
-            /** @type {string[]} */
-            const targetedItemUuids = flagged.getFlag(MODULE_NAME, this.key) || [];
-            // todo in v10 stop here when I can lookup the parent link instead of having to look up the parent and see if this is a child
-            // return targetedItemUuids.includes(item.uuid);
-            if (targetedItemUuids.includes(item.uuid)) {
-                return true;
-            }
-
-            /** @type {ItemPF[]} */
-            const targetedItems = targetedItemUuids
-                .map((uuid) => fromUuidSync(uuid))
-                .filter(truthiness);
-            return !!targetedItems.find((ti) => ti.system.links.children.find(({ id }) => id === item.id));
+        const bonusSources = sources.filter((source) => {
+            const ids = this._getIdsFromItem(source);
+            return ids.includes(item.id) || !!item.links.parent && ids.includes(item.links.parent.id);
         });
-
         return bonusSources;
     }
 
@@ -72,7 +76,7 @@ export class ItemTarget extends BaseTarget {
      */
     static showInputOnItemSheet({ html, isEditable, item }) {
         showItemInput({
-            filter: this.itemFilter,
+            itemsFromActorFunc: this.getItemsFromActor,
             item,
             journal: this.journal,
             key: this.key,

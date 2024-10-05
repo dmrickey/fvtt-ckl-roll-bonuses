@@ -1,4 +1,3 @@
-import { hasLegacyCritFlag } from '../../bonuses/critical.mjs';
 import { MODULE_NAME } from '../../consts.mjs';
 import { checkboxInput } from '../../handlebars-handlers/bonus-inputs/chekbox-input.mjs';
 import { textInput } from "../../handlebars-handlers/bonus-inputs/text-input.mjs";
@@ -28,14 +27,6 @@ export class CritBonus extends BaseBonus {
     static get #critKeenKey() { return `${this.key}-keen`; }
     static get #critMultKey() { return `${this.key}-mult`; }
     static get #critOffsetKey() { return `${this.key}-offset`; }
-
-    /**
-     * If the item is providing this bonus
-     * @override
-     * @param {ItemPF} source
-     * @returns {boolean}
-     */
-    static isSource(source) { return super.isSource(source) && !hasLegacyCritFlag(source); };
 
     /**
      * If the item is providing keen
@@ -323,7 +314,6 @@ export class CritBonus extends BaseBonus {
             parent: html,
         }, {
             canEdit: isEditable,
-            isModuleFlag: true,
         });
         textInput({
             item,
@@ -332,7 +322,6 @@ export class CritBonus extends BaseBonus {
             parent: html,
         }, {
             canEdit: isEditable,
-            isModuleFlag: true,
         });
         textInput({
             item,
@@ -341,7 +330,6 @@ export class CritBonus extends BaseBonus {
             parent: html,
         }, {
             canEdit: isEditable,
-            isModuleFlag: true,
         });
     }
 }

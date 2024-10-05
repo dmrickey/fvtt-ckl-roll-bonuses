@@ -69,8 +69,8 @@ export function showChecklist({
                 });
             }
             const buttons = [
-                { label: localize('ok'), value: true, },
                 { label: localize('PF1.Cancel'), value: false },
+                { label: localize('ok'), value: true, },
             ];
 
             const results = await menu(

@@ -107,25 +107,30 @@ export function conditionalModToItemChangeForDamageTooltip(conditional, modifier
 
 /**
  * @param {object} args
- * @param {string} args.name
+ * @param {string} [args.name]
  * @param {number | string} args.value
- * @param {BuffTarget} [args.subTarget]
+ * @param {BuffTarget} [args.target]
  * @param {BonusTypes} [args.type]
+ * @param {ItemChangeOptions} [options]
  * @return {ItemChange}
  */
 export function createChange({
-    name,
+    name = undefined,
     type = 'untypedPerm',
     value,
-    subTarget = 'damage',
-}) {
+    target = 'damage',
+}, {
+    parent,
+} = { parent: undefined }) {
     const change = new pf1.components.ItemChange({
         flavor: name,
         formula: value,
-        modifier: type,
+        type,
         operator: 'add',
         priority: 0,
-        subTarget,
+        target,
+    }, {
+        parent
     });
 
     change.value = value;
@@ -138,7 +143,7 @@ export function createChange({
  * @param {object} args
  * @param {string} args.name
  * @param {number | string} args.value
- * @param {BuffTarget} [args.subTarget]
+ * @param {BuffTarget} [args.target]
  * @param {BonusTypes} [args.type]
  * @return {ItemChange}
  */
@@ -146,16 +151,16 @@ export function createChangeForTooltip({
     name,
     type = 'untypedPerm',
     value,
-    subTarget = 'damage',
+    target = 'damage',
 }) {
     const label = pf1.config.bonusTypes[type] || type;
     const change = new pf1.components.ItemChange({
         flavor: name,
         formula: value,
-        modifier: label,
+        type: label,
         operator: 'add',
         priority: 0,
-        subTarget,
+        target,
     });
 
     change.value = value;

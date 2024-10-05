@@ -1,7 +1,5 @@
 // @ts-nocheck
 
-import { getHighestChanges } from './get-highest-change.mjs';
-
 /**
  * @param {ActorPF} actor
  * @param {RollData} rollData
@@ -28,7 +26,7 @@ export const getSkillFormula = (actor, rollData, skillId) => {
 
     // Gather changes
     const parts = [];
-    const changes = getHighestChanges(
+    const changes = pf1.documents.actor.changes.getHighestChanges(
         actor.changes.filter((c) => {
             const cf = c.getTargets(actor);
 

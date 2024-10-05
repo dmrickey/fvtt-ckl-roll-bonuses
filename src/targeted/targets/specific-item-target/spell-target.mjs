@@ -1,11 +1,15 @@
-import { ItemTarget } from "./item-target.mjs";
+import { SpecificItemTarget } from "./specific-item-target.mjs";
 
-export class SpellTarget extends ItemTarget {
+export class SpellTarget extends SpecificItemTarget {
+
     /**
      * @override
-     * @returns {(item: ItemPF) => boolean}
+     * @param {ActorPF} actor
+     * @returns {ItemPF[]}
      */
-    static get itemFilter() { return (/** @type {ItemPF} */ item) => item.hasAction && item.type === 'spell'; }
+    static getItemsFromActor(actor) {
+        return actor.itemTypes.spell.filter(x => x.hasAction);
+    }
 
     /**
      * @override

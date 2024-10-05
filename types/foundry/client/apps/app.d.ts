@@ -28,7 +28,7 @@ interface ApplicationOptions {
      * The default pixel height for the rendered HTML
      * @defaultValue `null`
      */
-    height: number | "auto" | null;
+    height: number | 'auto' | null;
 
     /**
      * The default offset-top position for the rendered HTML
@@ -102,24 +102,26 @@ interface ApplicationOptions {
      * for the application.
      * @defaultValue `[]`
      */
-    tabs: Omit<TabsConfiguration, "callback">[];
+    tabs: Omit<TabsConfiguration, 'callback'>[];
 
     /**
      * @defaultValue `[]`
      */
-    dragDrop: Omit<DragDropConfiguration, "permissions" | "callbacks">[];
+    dragDrop: Omit<DragDropConfiguration, 'permissions' | 'callbacks'>[];
 
     /**
      * @defaultValue `[]`
      */
-    filters: Omit<SearchFilterConfiguration, "callback">[];
+    filters: Omit<SearchFilterConfiguration, 'callback'>[];
 }
 
 /**
  * The standard application window that is rendered for a large variety of UI elements in Foundry VTT.
  * @typeParam Options - the type of the options object
  */
-declare abstract class Application<Options extends ApplicationOptions = ApplicationOptions> {
+declare abstract class Application<
+    Options extends ApplicationOptions = ApplicationOptions
+> {
     /**
      * @param options - Configuration options which control how the application is rendered.
      *                  Application subclasses may add additional supported options, but the
@@ -286,7 +288,10 @@ declare abstract class Application<Options extends ApplicationOptions = Applicat
      * @returns The rendered Application instance
      * @remarks Some subclasses return other results.
      */
-    render(force?: boolean, options?: Application.RenderOptions<Options>): unknown;
+    render(
+        force?: boolean,
+        options?: Application.RenderOptions<Options>
+    ): unknown;
 
     /**
      * An asynchronous inner function which handles the rendering of the Application
@@ -296,13 +301,16 @@ declare abstract class Application<Options extends ApplicationOptions = Applicat
      *                  (default: `{}`)
      * @returns A Promise that resolves to the Application once rendering is complete
      */
-    protected _render(force?: boolean, options?: Application.RenderOptions<Options>): Promise<void>;
+    protected _render(
+        force?: boolean,
+        options?: Application.RenderOptions<Options>
+    ): Promise<void>;
 
     /**
      * Return the inheritance chain for this Application class up to (and including) it's base Application class.
      * @internal
      */
-    protected static _getInheritanceChain(): typeof Application[];
+    protected static _getInheritanceChain(): (typeof Application)[];
 
     /**
      * Persist the scroll positions of containers within the app before re-rendering the content
@@ -398,7 +406,11 @@ declare abstract class Application<Options extends ApplicationOptions = Applicat
      * @param tabs   - The Tabs controller
      * @param active - The new active tab name
      */
-    protected _onChangeTab(event: MouseEvent | null, tabs: Tabs, active: string): void;
+    protected _onChangeTab(
+        event: MouseEvent | null,
+        tabs: Tabs,
+        active: string
+    ): void;
 
     /**
      * Handle changes to search filtering controllers which are bound to the Application
@@ -407,7 +419,12 @@ declare abstract class Application<Options extends ApplicationOptions = Applicat
      * @param rgx   - The regular expression to test against
      * @param html  - The HTML element which should be filtered
      */
-    protected _onSearchFilter(event: KeyboardEvent, query: string, rgx: RegExp, html: HTMLElement): void;
+    protected _onSearchFilter(
+        event: KeyboardEvent,
+        query: string,
+        rgx: RegExp,
+        html: HTMLElement
+    ): void;
 
     /**
      * Define whether a user is able to begin a dragstart workflow for a given drag selector
@@ -475,7 +492,7 @@ declare abstract class Application<Options extends ApplicationOptions = Applicat
      * @param position - Positional data
      */
     setPosition(
-        position?: Partial<Omit<Application.Position, "zIndex">>
+        position?: Partial<Omit<Application.Position, 'zIndex'>>
     ): (Application.Position & { height: number }) | void;
 
     /**
@@ -512,7 +529,7 @@ declare namespace Application {
         width: number | null;
 
         /** The application height in pixels */
-        height: number | null | "auto";
+        height: number | null | 'auto';
 
         /** The application scale as a numeric factor where 1.0 is default */
         scale: number | null;
@@ -521,7 +538,9 @@ declare namespace Application {
         zIndex: number;
     }
 
-    type RenderOptions<Options extends ApplicationOptions = ApplicationOptions> = Partial<Options> & {
+    type RenderOptions<
+        Options extends ApplicationOptions = ApplicationOptions
+    > = Partial<Options> & {
         /**
          * The left positioning attribute
          */
@@ -540,7 +559,7 @@ declare namespace Application {
         /**
          * The rendered height
          */
-        height?: number | "auto" | null | undefined;
+        height?: number | 'auto' | null | undefined;
 
         /**
          * The rendered transformation scale
@@ -568,5 +587,5 @@ declare namespace Application {
     /**
      * @see {@link Application.RENDER_STATES}
      */
-    type RenderState = ValueOf<typeof Application["RENDER_STATES"]>;
+    type RenderState = ValueOf<(typeof Application)['RENDER_STATES']>;
 }

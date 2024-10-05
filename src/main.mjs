@@ -4,7 +4,7 @@ import './handlebars-handlers/init.mjs';
 import './util/item-hints.mjs';
 import './bonuses.mjs';
 import './patch/init.mjs';
-import { FormulaCacheHelper, hasAnyBFlag } from './util/flag-helpers.mjs';
+import { FormulaCacheHelper } from './util/flag-helpers.mjs';
 import { simplifyRollFormula } from './util/simplify-roll-formula.mjs';
 import './auto-recognition/init.mjs';
 import { api } from './util/api.mjs';
@@ -119,6 +119,41 @@ function d20RollWrapper(wrapped, options = {}) {
 //     debugger;
 // }
 // Hooks.on('pf1PreDamageRoll', preDamageRoll);
+
+/**
+ * @this {ActorPF}
+ * @param {() => any} wrapped
+ */
+function prepareActorBasedData(wrapped) {
+    wrapped();
+    this[MODULE_NAME] = {};
+}
+
+/**
+ * @this {ActorPF}
+ * @param {() => any} wrapped
+ */
+function prepareActorDerivedData(wrapped) {
+    wrapped();
+    LocalHookHandler.fireHookNoReturnSync(localHooks.postPrepareActorDerivedData, this);
+}
+
+/**
+ * @this {ActorPF}
+ */
+function actor_prepareEmbeddedDocuments() {
+    // my only override
+    this.items.forEach((item) => {
+        if (!item?.actor?.[MODULE_NAME] || !item.isActive) return;
+        LocalHookHandler.fireHookNoReturnSync(localHooks.cacheBonusTypeOnActor, item);
+    });
+
+    // super.prepareEmbeddedDocuments();
+    Object.getPrototypeOf(pf1.documents.actor.ActorBasePF).prototype.prepareEmbeddedDocuments.apply(this);
+
+    // @ts-ignore
+    this.applyActiveEffects();
+}
 
 /**
  * @this {ItemPF}
@@ -300,17 +335,7 @@ function safeTotal(
     formula,
     data,
 ) {
-    return (isNaN(+formula) ? RollPF.safeRollSync(formula, data).total : +formula) || 0;
-}
-
-/**
- * @param {() => any} wrapped
- * @this {ActorPF}
- */
-function prepareActorDerivedData(wrapped) {
-    wrapped();
-    this[MODULE_NAME] ||= {};
-    LocalHookHandler.fireHookNoReturnSync(localHooks.postPrepareActorDerivedData, this);
+    return (isNaN(+formula) ? RollPF.create(formula + '', data).evaluate({ async: false }).total : +formula) || 0;
 }
 
 /**
@@ -359,7 +384,7 @@ async function itemActionRollAttack(
     LocalHookHandler.fireHookNoReturnSync(localHooks.itemActionRollAttack, seed, this, rollData);
 
     if (formula !== seed.formula || !foundry.utils.objectsEqual(options, seed.options)) {
-        const replaced = await new pf1.dice.D20RollPF(seed.formula, rollData, seed.options).evaluate();
+        const replaced = await new pf1.dice.D20RollPF(seed.formula, rollData, seed.options).evaluate({ async: false });
         return replaced;
     }
     return roll;
@@ -375,13 +400,14 @@ async function itemActionRollDamage(wrapped, ...args) {
     let i = 0;
     for (const roll of rolls) {
         const formula = roll.formula;
-        const options = roll.options;
+        const options = { ...roll.options };
         const rollData = roll.data;
         const seed = { formula, options };
         LocalHookHandler.fireHookNoReturnSync(localHooks.itemActionRollDamage, seed, this, rollData, i);
 
-        if (formula !== seed.formula || !foundry.utils.objectsEqual(options, seed.options)) {
-            const replaced = await new pf1.dice.DamageRoll(seed.formula, rollData, seed.options).evaluate();
+        if (formula !== seed.formula || !foundry.utils.objectsEqual(roll.options, seed.options)) {
+            const replaced = await new pf1.dice.DamageRoll(seed.formula, rollData, seed.options)
+                .evaluate({ async: true, maximize: !!seed.options.maximize, minimize: !!seed.options.minimize });
             rolls[i] = replaced;
         }
         i++;
@@ -478,13 +504,20 @@ Hooks.once('init', () => {
     libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.rollDamage', itemActionRollDamage, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.dice.d20Roll', d20RollWrapper, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorPF.prototype.getSkillInfo', actorGetSkillInfo, libWrapper.WRAPPER);
+    libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorPF.prototype.prepareBaseData', prepareActorBasedData, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorPF.prototype.prepareSpecificDerivedData', prepareActorDerivedData, libWrapper.WRAPPER);
+    libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorBasePF.prototype.prepareEmbeddedDocuments', actor_prepareEmbeddedDocuments, libWrapper.OVERRIDE);
     libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorPF.prototype.rollSkill', actorRollSkill, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemAttackPF.fromItem', itemAttackFromItem, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype._prepareDependentData', prepareItemData, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype.getAttackSources', itemGetAttackSources, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype.getTypeChatData', itemGetTypeChatData, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemSpellPF.prototype.getTypeChatData', itemGetTypeChatData, libWrapper.WRAPPER);
+
+    libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorHauntPF.prototype.prepareBaseData', prepareActorBasedData, libWrapper.WRAPPER);
+    libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorTrapPF.prototype.prepareBaseData', prepareActorBasedData, libWrapper.WRAPPER);
+    libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorVehiclePF.prototype.prepareBaseData', prepareActorBasedData, libWrapper.WRAPPER);
+    libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorBasePF.prototype.prepareBaseData', prepareActorBasedData, libWrapper.WRAPPER);
 
     // for patching resources - both
     // libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype._updateMaxUses', updateMaxUses, libWrapper.WRAPPER);
@@ -513,6 +546,26 @@ Hooks.once('init', () => {
     game.modules.get(MODULE_NAME).ready = true;
     Hooks.callAll(`${MODULE_NAME}.ready`)
 });
+
+/**
+ * Whether or not the document has any of the given boolean flags
+ *
+ * @param {Nullable<ItemPF>} doc
+ * @param  {...string} flags
+ * @returns {boolean} True if the actor has any of the boolean flags.
+ */
+const hasAnyBFlag = (
+    doc,
+    ...flags
+) => {
+    if (!doc) return false;
+
+    if (doc instanceof pf1.documents.item.ItemPF) {
+        return flags.some((flag) => doc.hasItemBooleanFlag(flag));
+    }
+
+    return false;
+}
 
 // specifically at end so it's registered last
 Hooks.on('renderItemSheet', (

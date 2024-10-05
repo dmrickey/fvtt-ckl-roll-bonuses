@@ -1,5 +1,6 @@
+import { changeTypeOffsetFormulaKey, changeTypeOffsetKey } from '../bonuses/change-type-modification.mjs';
+import { MODULE_NAME } from '../consts.mjs';
 import { LanguageSettings } from '../util/settings.mjs';
-import { bonusKey, formulaKey } from '../bonuses/change-type-offset.mjs';
 
 const compendiumId = 'WSRZEwNGpQUNcvI9';
 const key = 'extreme-mood-swings';
@@ -20,15 +21,17 @@ Hooks.on('renderItemSheet', (
     if (!isEditable) return;
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
-    const name = item?.name?.toLowerCase() ?? '';
-    const sourceId = item?.flags.core?.sourceId ?? '';
-    const hasBonus = item.system.flags.dictionary?.hasOwnProperty(bonusKey);
-    const hasBonusFormula = item.system.flags.dictionary?.hasOwnProperty(formulaKey);
+    const hasBonus = item.hasItemBooleanFlag(changeTypeOffsetKey);
 
-    if ((name === Settings.name || sourceId.includes(compendiumId)) && !hasBonus && !hasBonusFormula) {
-        item.update({
-            [`system.flags.dictionary.${bonusKey}`]: 'morale',
-            [`system.flags.dictionary.${formulaKey}`]: 1,
-        });
+    if (!hasBonus) {
+        const name = item?.name?.toLowerCase() ?? '';
+        const sourceId = item?.flags.core?.sourceId ?? '';
+        if (name === Settings.name || sourceId.includes(compendiumId)) {
+            item.update({
+                [`system.flags.boolean.${changeTypeOffsetKey}`]: true,
+                [`flags.${MODULE_NAME}.${changeTypeOffsetKey}`]: 'morale',
+                [`flags.${MODULE_NAME}.${changeTypeOffsetFormulaKey}`]: 1,
+            });
+        }
     }
 });

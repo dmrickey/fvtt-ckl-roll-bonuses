@@ -39,7 +39,7 @@ function getConditionalParts(actionUse, result, atk, index) {
         const itemMw = item.system.masterwork;
         const itemEnh = actionUse.action.enhancementBonus;
 
-        const { base: actionBaseEnh, stacks: actionStacksEnh, total: actionTotal } = getEnhancementBonusForAction({action: actionUse.action});
+        const { base: actionBaseEnh, stacks: actionStacksEnh, total: actionTotal } = getEnhancementBonusForAction({ action: actionUse.action });
 
         const ammoMw = !!ammo.getFlag(MODULE_NAME, ammoMasterworkKey);
         const ammoEnhBonus = FormulaCacheHelper.getModuleFlagValue(ammo, ammoEnhancementKey);
@@ -55,7 +55,7 @@ function getConditionalParts(actionUse, result, atk, index) {
             result['attack.normal'].push(`1[${localize('PF1.AmmunitionAbbr')} - ${localize('PF1.Masterwork')}]`)
         }
         else {
-            const { total: totalWithAmmo } = getEnhancementBonusForAction({action: actionUse.action, ammo});
+            const { total: totalWithAmmo } = getEnhancementBonusForAction({ action: actionUse.action, ammo });
             const diff = totalWithAmmo - actionTotal;
             if (diff > 0) {
                 const label = `${localize('PF1.AmmunitionAbbr')} ${localize('PF1.EnhancementBonus')}`;
@@ -99,7 +99,7 @@ async function addEffectNotes(chatAttack) {
         const ammo = chatAttack.actor.items.get(chatAttack.ammo.id)
         const note = ammo[MODULE_NAME][ammoEffectKey];
         if (note) {
-            const enriched = await TextEditor.enrichHTML(`<div>${note}</div>`);
+            const enriched = await TextEditor.enrichHTML(`<div>${note}</div>`, { async: true });
             chatAttack.effectNotes.push(enriched);
         }
     }
@@ -123,7 +123,6 @@ Hooks.on('renderItemSheet', (
         parent: html,
     }, {
         canEdit: isEditable,
-        isModuleFlag: true,
     });
     textInput({
         item,
@@ -132,7 +131,6 @@ Hooks.on('renderItemSheet', (
         parent: html,
     }, {
         canEdit: isEditable,
-        isModuleFlag: true,
     });
     textInput({
         item,
@@ -141,7 +139,6 @@ Hooks.on('renderItemSheet', (
         parent: html,
     }, {
         canEdit: isEditable,
-        isModuleFlag: true,
     });
     textInput({
         item,
@@ -150,7 +147,6 @@ Hooks.on('renderItemSheet', (
         parent: html,
     }, {
         canEdit: isEditable,
-        isModuleFlag: true,
     });
     damageInput({
         item,
@@ -168,7 +164,6 @@ Hooks.on('renderItemSheet', (
     }, {
         canEdit: isEditable,
         isFormula: false,
-        isModuleFlag: true,
     });
 });
 
@@ -176,7 +171,7 @@ LocalHookHandler.registerHandler(localHooks.prepareData, (item, rollData) => {
     const damages = item.getFlag(MODULE_NAME, ammoDamageKey) || [];
     damages.forEach((/** @type {DamageInputModel}*/ damage) => {
         item[MODULE_NAME][ammoDamageKey] ||= [];
-        const roll = RollPF.safeRollSync(damage.formula, rollData);
+        const roll = RollPF.create(damage.formula, rollData);
         item[MODULE_NAME][ammoDamageKey].push(roll.simplifiedFormula);
     });
 
@@ -187,7 +182,7 @@ LocalHookHandler.registerHandler(localHooks.prepareData, (item, rollData) => {
 
         // const simplified = [];
         matches.forEach(([_, match]) => {
-            const roll = RollPF.safeRollSync(match, rollData);
+            const roll = RollPF.create(match, rollData);
             note = note.replace(match, roll.simplifiedFormula);
         });
 

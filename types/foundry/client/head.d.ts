@@ -1,5 +1,6 @@
 export {};
 
+import { Document } from '../common/abstract/document.mjs';
 import './core/hooks';
 
 declare global {
@@ -22,6 +23,11 @@ declare global {
     let Hooks: Hooks;
 
     let foundry: {
+        CONST: {
+            GRID_TYPES: {
+                GRIDLESS: number;
+            };
+        };
         utils: {
             objectsEqual<T>(a: T, b: T): boolean;
             expandObject(_: object, depth?: number): Record<string, unknown>;
@@ -35,6 +41,8 @@ declare global {
             isNewerVersion(v0: string, v1: string): boolean;
         };
     };
+
+    class JournalEntryPage extends Document {}
 }
 
 interface ui {

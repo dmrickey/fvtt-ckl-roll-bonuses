@@ -28,10 +28,10 @@ export class AttackBonus extends BaseBonus {
      */
     static getHints(source) {
         const formula = FormulaCacheHelper.getModuleFlagFormula(source, this.key)[this.key];
-        const roll = RollPF.safeRollSync(formula);
+        const roll = RollPF.create(formula + '');
 
-        return roll.isNumber && roll.total
-            ? [`${signed(roll.total)}`]
+        return roll.isDeterministic
+            ? [`${signed(roll.evaluate({ async: false }).total)}`]
             : [`${formula}`];
     }
 
@@ -88,7 +88,6 @@ export class AttackBonus extends BaseBonus {
             tooltip: this.tooltip,
         }, {
             canEdit: isEditable,
-            isModuleFlag: true,
         });
     }
 

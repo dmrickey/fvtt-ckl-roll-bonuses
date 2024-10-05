@@ -70,7 +70,7 @@ export class FinesseTarget extends BaseTarget {
         }
 
         if (item.system.weaponGroups?.value.includes('natural')
-            || item.system.flags.boolean[this.finesseTargetOverride]
+            || item.hasItemBooleanFlag(this.finesseTargetOverride)
             || (isWeapon && item.system.properties.fin)
         ) {
             return sources;

@@ -43,6 +43,12 @@ export class BaseGlobalBonus {
     /** @returns { string } */
     static get key() { return `global-bonus_${this.bonusKey}`; }
 
+    /** @returns { string } */
+    static get dialogDisableKey() { return `global-bonus.dialog-disable.${this.bonusKey}`; }
+
+    /** @returns { string } */
+    static get disabledFootnote() { return localize(`global-bonus.disabled-footnote.${this.bonusKey}`); }
+
     /**
      * Key for this global bonus
      *
@@ -80,7 +86,7 @@ export class BaseGlobalBonus {
     /**
      * Whether or not this bonus is disabled. Includes actor for cases when checking if it's disabled for a particular actor.
      *
-     * @param {ActorBasePF} actor
+     * @param {Nullable<ActorBasePF>} actor
      * @returns {boolean}
      */
     static isDisabledForActor(actor) {
