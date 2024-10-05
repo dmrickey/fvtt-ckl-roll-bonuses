@@ -245,7 +245,6 @@ export function createElementalClOrDc(t) {
             text: { current: currentText, key: formulaKey },
         }, {
             canEdit: isEditable,
-            isModuleFlag: true,
         });
     });
 }

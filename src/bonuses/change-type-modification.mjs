@@ -110,7 +110,6 @@ Hooks.on('renderItemSheet', (
         text: { current: formula, key: formulaKey },
     }, {
         canEdit: isEditable,
-        isModuleFlag: true,
     });
 
     radioInput(
