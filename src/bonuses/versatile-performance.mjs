@@ -234,20 +234,17 @@ function versatileRollSkill(seed, actor) {
     const { skillId } = seed;
     const data = getVPDataFromActor(actor);
 
-    // todo v10 change this to use the single journal entry in `getSkillInfo`
-
     const originalSkillElement = () => {
-        const parentId = skillId.split('.')[0];
         const skillInfo = actor.getSkillInfo(skillId);
-        const link = skillInfo.journal || actor.getSkillInfo(parentId)?.journal || pf1.config.skillCompendiumEntries[parentId] || '';
-        const linkProp = link ? `data-compendium-entry="${link}"` : '';
+        const journal = skillInfo.journal;
+        const linkProp = journal
+            ? `<a data-tooltip="PF1.OpenAssociatedCompendiumEntry" data-action="open-compendium-entry" data-compendium-entry="${journal}" data-document-type="JournalEntry"><i class="fas fa-book"></i></a>`
+            : '';
         const label = localize('PF1.SkillCheck', { skill: skillInfo.name });
         const vpTitle = localize('versatile-performance.title', { skill: label });
         return `
 <span class="flavor-text">
-<a data-tooltip="PF1.OpenAssociatedCompendiumEntry" data-action="open-compendium-entry" ${linkProp} data-document-type="JournalEntry">
-    <i class="fas fa-book"></i>
-</a>
+${linkProp}
 ${vpTitle}
 </span>
 `;
