@@ -1,7 +1,5 @@
 import { createTemplate, templates } from '../templates.mjs';
 
-const combatBonusSectionSelector = '#ckl-roll-bonus-container'
-
 /**
  * @typedef {object} GlobalActorDisableSetting
  * @property {string} label
@@ -22,6 +20,29 @@ export const addGlobalBonusDisablerToActor = (actorSheetHtml, settings, canEdit)
     }
 
     const template = createTemplate(templates.globalBonusActorDisabledContainer, { settings });
+
+    // @ts-ignore
+    const journals = /** @type {HTMLElement[]} */ (template.querySelectorAll('[data-journal]'));
+    journals.forEach((journal) => {
+        journal?.addEventListener(
+            'click',
+            async (event) => {
+                event.preventDefault();
+                const journalLink = journal.dataset.journal;
+                if (journalLink) {
+                    const [uuid, header] = journalLink.split('#');
+                    const doc = await fromUuid(uuid);
+
+                    // @ts-ignore
+                    if (doc instanceof JournalEntryPage) {
+                        doc.parent.sheet.render(true, { pageId: doc.id, anchor: header });
+                    } else {
+                        doc.sheet.render(true);
+                    }
+                }
+            },
+        );
+    });
 
     tab.appendChild(template);
 }

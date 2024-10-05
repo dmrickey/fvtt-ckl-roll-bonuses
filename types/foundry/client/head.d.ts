@@ -1,5 +1,6 @@
 export {};
 
+import { Document } from '../common/abstract/document.mjs';
 import './core/hooks';
 
 declare global {
@@ -40,6 +41,8 @@ declare global {
             isNewerVersion(v0: string, v1: string): boolean;
         };
     };
+
+    class JournalEntryPage extends Document {}
 }
 
 interface ui {

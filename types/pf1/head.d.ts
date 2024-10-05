@@ -1,5 +1,6 @@
 export {};
 
+import { Document } from '../foundry/common/abstract/document.mjs';
 import { RollPF } from './pf1';
 
 declare global {

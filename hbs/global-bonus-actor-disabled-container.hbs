@@ -8,6 +8,9 @@
             <label class="checkbox" {{#if checked}}style="text-decoration: line-through;"{{/if}}>
                 <input type="checkbox" name="{{path}}" {{#if checked}}checked{{/if}}>
                 {{label}}
+                <a data-journal="{{journal}}">
+                    <i class="fas fa-book"></i>
+                </a>
             </label>
         </li>
         {{/each}}

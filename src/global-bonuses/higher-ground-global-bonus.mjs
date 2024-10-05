@@ -13,6 +13,13 @@ export class HigherGroundGlobalBonus extends BaseGlobalBonus {
     static get bonusKey() { return 'higher-ground'; }
 
     /**
+     * @inheritdoc
+     * @override
+     * @returns {string}
+     */
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.4A4bCh8VsQVbTsAY#higher-ground-bonus'; }
+
+    /**
      * @param {ActionUse} actionUse
      */
     static addHigherGroundBonus(actionUse) {

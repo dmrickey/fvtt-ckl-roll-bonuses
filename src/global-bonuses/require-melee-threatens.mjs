@@ -14,6 +14,13 @@ export class RequireMeleeThreatenGlobalBonus extends BaseGlobalBonus {
     static get bonusKey() { return 'require-melee-threaten'; }
 
     /**
+     * @inheritdoc
+     * @override
+     * @returns {string}
+     */
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.4A4bCh8VsQVbTsAY#require-melee-threatens'; }
+
+    /**
      * @this {ActionUse}
      * @param {AttackDialog} dialog
      * @param {[HTMLElement]} html

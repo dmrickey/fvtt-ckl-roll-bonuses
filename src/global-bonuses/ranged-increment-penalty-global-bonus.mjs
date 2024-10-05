@@ -18,6 +18,13 @@ export class RangedIncrementPenaltyGlobalBonus extends BaseGlobalBonus {
     /**
      * @inheritdoc
      * @override
+     * @returns {string}
+     */
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.4A4bCh8VsQVbTsAY#ranged-increment-penalty'; }
+
+    /**
+     * @inheritdoc
+     * @override
      * @param {ItemAction} action
      * @param {RollData} rollData
      */

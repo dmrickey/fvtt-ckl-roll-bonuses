@@ -54,7 +54,7 @@ Hooks.on('renderActorSheet', (
         .filter((b) => !b.isDisabled());
     const settings = bonuses.map((b) => ({
         checked: b.isDisabledForActor(actor),
-        journal: `journal - ${b.key}`, // TODO
+        journal: b.journal,
         label: b.label,
         path: `flags.${MODULE_NAME}.${b.actorDisabledFlag}`,
     }));
