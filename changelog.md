@@ -11,6 +11,7 @@ _**Lots of data changed internally. Anything necessary should automatically migr
   - When viewing Item/Spell/Weapon/Attack/Action/Tokens targets you can now right click on them (icon in the Item sheet after selecting targets, or on the row in the picker dialog itself) to open the associated sheet (if you have the rights to be able to see the sheet to begin with)
   - Token Targeting UI highlights the corresponding tokens on the map so you can be sure the token you're selecting in the dialog is the correct token for the 
   - Most dialogs have helper text in them to give a bit more context about exactly how they work
+- Modified 153 files. Added 4066 new lines. Removed 2954 lines.
 
 ### Global Bonuses
 - Global bonuses that restricted actions from completing or applied penalties now have an optional checkbox in the attack dialog to suppress the check and allow the attack to happen regardless
