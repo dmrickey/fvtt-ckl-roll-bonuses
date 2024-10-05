@@ -23,7 +23,7 @@ _**Lots of data changed internally. Anything necessary should automatically migr
 
 ### New Targeted Bonuses
 - Maximize Damage
-  - This maximizes damage for anything it tagets
+  - This maximizes damage for anything it targets
 
 ### New Targeted Targets
 - Action Target
