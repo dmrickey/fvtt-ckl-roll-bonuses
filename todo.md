@@ -10,6 +10,7 @@
     - [Script Call bonus](#script-call-bonus)
     - [AC bonus](#ac-bonus)
     - [Alignment](#alignment)
+    - [Conditional Bonus](#conditional-bonus)
   - [Targets](#targets)
     - [Creature type/subtype](#creature-typesubtype)
     - [By Disposition](#by-disposition)
@@ -20,6 +21,7 @@
     - [Skill Target](#skill-target)
     - [Die Result](#die-result)
 - [Affect other tokens](#affect-other-tokens)
+- [Figure out how to embed buffs directly into a scene](#figure-out-how-to-embed-buffs-directly-into-a-scene)
 - [Class Features](#class-features)
   - [Cleric](#cleric)
     - [Healing Domain - Healer's Blessing](#healing-domain---healers-blessing)
@@ -40,6 +42,7 @@
   - [I am targeted](#i-am-targeted)
   - [Magic](#magic)
   - [Misc](#misc-1)
+  - [Ammo](#ammo)
   - [UX](#ux)
   - [Bonuses](#bonuses-1)
   - [Bonus Improvements](#bonus-improvements)
@@ -86,6 +89,8 @@
 ### Alignment
 - Actually align the weapon/attack instead of just adding typed damage
   - I can make it work but it won't do anything (the system doesn't show it in the attack, it's kinda pointless without extra functionality)
+### Conditional Bonus
+- See if I can make a way to add a conditional modifier into an attack dialog that can optionally be enabled for targeted attacks
 
 ## Targets
 ### Creature type/subtype
@@ -112,6 +117,8 @@
 
 # Affect other tokens
 - add a way to affect other tokens (e.g. cavalier challenge which gives them -2 attack vs other targets) - this might just be a buff assi
+
+# Figure out how to embed buffs directly into a scene
 
 # Class Features
 ## Cleric
@@ -157,8 +164,12 @@
 - Alter bonus effect for crit confirmation only
   - https://www.aonprd.com/MonsterTemplates.aspx?ItemName=Commando%20Construct#:~:text=to%20this%20ability.-,Precision,-(Ex)%3A%20A
 
-## UX
+## Ammo
+- Try and refactor ammo so that it takes any "bonus" and then pumps that into the ranged weapon
+  - If not, add size bonus for ammo
 - Add item hints for ammo
+
+## UX
 - Add method for sources to say "I have a source key but no value" and show a broken item hint
 
 ## Bonuses

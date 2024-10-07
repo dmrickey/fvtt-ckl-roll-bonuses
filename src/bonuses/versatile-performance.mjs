@@ -12,6 +12,7 @@ import { getSkillName } from '../util/get-skill-name.mjs';
 import { truthiness } from '../util/truthiness.mjs';
 import { api } from '../util/api.mjs';
 import { isNotEmptyObject } from '../util/is-empty-object.mjs';
+import { getCachedBonuses } from '../util/get-cached-bonuses.mjs';
 
 const key = 'versatile-performance';
 export { key as versatilePerformanceKey };
@@ -96,7 +97,7 @@ const getVPsFromItem = (item) => {
  * @returns { VPData[] }
  */
 const getVPDataFromActor = (actor) => {
-    const items = actor[MODULE_NAME]?.[key] ?? [];
+    const items = getCachedBonuses(actor, key);
     return items.flatMap(getVPsFromItem).filter(truthiness);
 }
 

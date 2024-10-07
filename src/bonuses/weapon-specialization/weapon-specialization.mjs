@@ -5,6 +5,7 @@ import { MODULE_NAME } from '../../consts.mjs';
 import { stringSelect } from "../../handlebars-handlers/bonus-inputs/string-select.mjs";
 import { intersects } from "../../util/array-intersects.mjs";
 import { createChangeForTooltip } from '../../util/conditional-helpers.mjs';
+import { getCachedBonuses } from '../../util/get-cached-bonuses.mjs';
 import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize, localizeBonusLabel } from "../../util/localize.mjs";
@@ -34,7 +35,7 @@ export { Settings as WeaponSpecializationSettings }
  * @returns {string[]}
  */
 export const getSpecializedWeapons = (actor) =>
-    uniqueArray(actor?.[MODULE_NAME][key]?.
+    uniqueArray(getCachedBonuses(actor, key).
         filter(x => x.hasItemBooleanFlag(key))
         .flatMap(x => x.getFlag(MODULE_NAME, key))
         ?? []

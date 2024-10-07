@@ -1,6 +1,7 @@
 import { MODULE_NAME } from "../../consts.mjs";
 import { textInput } from "../../handlebars-handlers/bonus-inputs/text-input.mjs";
 import { intersects } from '../../util/array-intersects.mjs';
+import { getCachedBonuses } from '../../util/get-cached-bonuses.mjs';
 import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize, localizeBonusLabel } from "../../util/localize.mjs";
@@ -36,7 +37,7 @@ class Settings {
  */
 const isItemFocused = (actor, item) => {
     const tags = (item.system.tags || []).map((tag) => tag.toLocaleLowerCase());
-    const values = (actor[MODULE_NAME][key] || [])
+    const values = getCachedBonuses(actor, key)
         .map(x => x.getFlag(MODULE_NAME, key))
         .filter(truthiness)
         .map(x => x.toLocaleLowerCase());

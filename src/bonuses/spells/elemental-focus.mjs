@@ -2,6 +2,7 @@ import { MODULE_NAME } from '../../consts.mjs';
 import { keyValueSelect } from "../../handlebars-handlers/bonus-inputs/key-value-select.mjs";
 import { api } from '../../util/api.mjs';
 import { intersects } from "../../util/array-intersects.mjs";
+import { getCachedBonuses } from '../../util/get-cached-bonuses.mjs';
 import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize, localizeBonusLabel } from "../../util/localize.mjs";
@@ -63,11 +64,10 @@ class Settings {
  * @returns {damageElements[number][]}
  */
 const getFocusedElements = (actor, key) =>
-    uniqueArray(actor[MODULE_NAME][key]?.
+    uniqueArray(getCachedBonuses(actor, key).
         filter(x => x.hasItemBooleanFlag(key))
         .flatMap(x => x.getFlag(MODULE_NAME, key))
         .filter(truthiness)
-        ?? []
     );
 
 /**

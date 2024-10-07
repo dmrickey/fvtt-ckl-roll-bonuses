@@ -1,3 +1,5 @@
+import { Document } from '../common/abstract/document.mjs';
+
 /**
  * Runtime configuration settings for Foundry VTT which exposes a large number of variables which determine how
  * aspects of the software behaves.
@@ -6,6 +8,9 @@
  * session or modified by system and module developers to adjust how the application behaves.
  */
 interface CONFIG {
+    Actor: {
+        documentClasses: Record<string, typeof Document>;
+    };
     Dice: {
         rolls: {
             D20RollPF: {

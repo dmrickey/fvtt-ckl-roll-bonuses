@@ -121,7 +121,7 @@ export const handleFortune = (options) => {
     options.fortuneCount ||= 0;
     options.misfortuneCount ||= 0;
 
-    const roll = RollPF.create(options.dice);
+    const roll = RollPF.safeRollSync(options.dice);
     const dice = roll.dice[0];
     if (!dice) {
         // no actual roll, a static number was probably given
@@ -205,6 +205,7 @@ function handleInitiative(formula) {
         defaultParts.push(`(@attributes.init.total / 100)[${game.i18n.localize("PF1.Tiebreaker")}]`);
     const parts = CONFIG.Combat.initiative.formula ? CONFIG.Combat.initiative.formula.split(/\s*\+\s*/) : defaultParts;
     if (!actor) return parts[0] || "0";
+    // @ts-ignore
     return parts.filter((p) => p !== null).join(" + ");
 };
 

@@ -1,5 +1,6 @@
 import { MODULE_NAME } from '../consts.mjs';
 import { api } from '../util/api.mjs';
+import { intersection } from '../util/array-intersects.mjs';
 import { LocalHookHandler, localHooks } from '../util/hooks.mjs';
 import { localizeBonusLabel, localizeBonusTooltip } from '../util/localize.mjs';
 
@@ -12,9 +13,12 @@ export class SpecificBonuses {
      * @param {Nullable<string>} [bonus.label]
      * @param {Nullable<string>?} [bonus.tooltip]
      * @param {Nullable<string>?} [bonus.parent]
-    */
+     */
     static registerSpecificBonus({ journal, label = null, key, tooltip = undefined, parent }) {
-        this.allBonuses[key] = new SpecificBonus(journal, key, label, parent, tooltip);
+        const doIt = () => this.allBonuses[key] = new SpecificBonus(journal, key, label, parent, tooltip);
+        game.ready
+            ? doIt()
+            : Hooks.once('ready', doIt);
     }
 
     /**
@@ -25,20 +29,6 @@ export class SpecificBonuses {
     static get allBonusKeys() {
         return Object.values(this.allBonuses)
             .map((bonus) => bonus.key);
-    }
-
-    static {
-        /** @param {ItemPF} item */
-        function cacheBonusTypeOnActor(item) {
-            const _item = /** @type {ItemPF & { actor: ActorPF}} */(/** @type {any} */ item);
-            SpecificBonuses.allBonusKeys.forEach((key) => {
-                if (item.hasItemBooleanFlag(key)) {
-                    _item.actor[MODULE_NAME][key] ||= [];
-                    _item.actor[MODULE_NAME][key].push(item);
-                }
-            })
-        }
-        LocalHookHandler.registerHandler(localHooks.cacheBonusTypeOnActor, cacheBonusTypeOnActor);
     }
 }
 
