@@ -41,8 +41,8 @@ class Settings {
  * @returns {string[]}
  */
 export const getFocusedSchools = (actor, key = spellFocusKey) =>
-    uniqueArray(getCachedBonuses(actor, key).
-        filter(x => x.hasItemBooleanFlag(key))
+    uniqueArray(getCachedBonuses(actor, key)
+        .filter(x => x.hasItemBooleanFlag(key))
         .flatMap(x => x.getFlag(MODULE_NAME, key))
         .filter(truthiness)
     );

@@ -15,10 +15,7 @@ export class SpecificBonuses {
      * @param {Nullable<string>?} [bonus.parent]
      */
     static registerSpecificBonus({ journal, label = null, key, tooltip = undefined, parent }) {
-        const doIt = () => this.allBonuses[key] = new SpecificBonus(journal, key, label, parent, tooltip);
-        game.ready
-            ? doIt()
-            : Hooks.once('ready', doIt);
+        this.allBonuses[key] = new SpecificBonus(journal, key, label, parent, tooltip);
     }
 
     /**

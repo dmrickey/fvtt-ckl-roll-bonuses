@@ -35,10 +35,9 @@ export { Settings as WeaponSpecializationSettings }
  * @returns {string[]}
  */
 export const getSpecializedWeapons = (actor) =>
-    uniqueArray(getCachedBonuses(actor, key).
-        filter(x => x.hasItemBooleanFlag(key))
+    uniqueArray(getCachedBonuses(actor, key)
+        .filter(x => x.hasItemBooleanFlag(key))
         .flatMap(x => x.getFlag(MODULE_NAME, key))
-        ?? []
     );
 
 // register hint on source feat

@@ -5,7 +5,6 @@
  */
 export const getCachedBonuses = (actor, key) => {
     if (!actor) return [];
-    /** @type {{ [key: string]: { sources: ItemPF[] } }} */
 
     actor.itemFlags ||= { dictionary: {}, boolean: {} };
     actor.itemFlags.boolean ||= {};

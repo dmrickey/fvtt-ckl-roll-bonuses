@@ -28,10 +28,9 @@ SpecificBonuses.registerSpecificBonus({ journal, key, parent: weaponSpecializati
  * @returns {string[]}
  */
 const getGreaterSpecializedWeapons = (actor) =>
-    uniqueArray(getCachedBonuses(actor, key).
-        filter(x => x.hasItemBooleanFlag(key))
+    uniqueArray(getCachedBonuses(actor, key)
+        .filter(x => x.hasItemBooleanFlag(key))
         .flatMap(x => x.getFlag(MODULE_NAME, key))
-        ?? []
     );
 
 // register hint on source feat

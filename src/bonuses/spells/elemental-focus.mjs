@@ -64,8 +64,8 @@ class Settings {
  * @returns {damageElements[number][]}
  */
 const getFocusedElements = (actor, key) =>
-    uniqueArray(getCachedBonuses(actor, key).
-        filter(x => x.hasItemBooleanFlag(key))
+    uniqueArray(getCachedBonuses(actor, key)
+        .filter(x => x.hasItemBooleanFlag(key))
         .flatMap(x => x.getFlag(MODULE_NAME, key))
         .filter(truthiness)
     );
