@@ -5,6 +5,7 @@ import { MODULE_NAME } from '../../consts.mjs';
 import { stringSelect } from "../../handlebars-handlers/bonus-inputs/string-select.mjs";
 import { intersection, intersects } from "../../util/array-intersects.mjs";
 import { createChangeForTooltip } from '../../util/conditional-helpers.mjs';
+import { getCachedBonuses } from '../../util/get-cached-bonuses.mjs';
 import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize, localizeBonusLabel } from "../../util/localize.mjs";
@@ -27,10 +28,9 @@ SpecificBonuses.registerSpecificBonus({ journal, key, parent: weaponSpecializati
  * @returns {string[]}
  */
 const getGreaterSpecializedWeapons = (actor) =>
-    uniqueArray(actor?.[MODULE_NAME][key]?.
-        filter(x => x.hasItemBooleanFlag(key))
+    uniqueArray(getCachedBonuses(actor, key)
+        .filter(x => x.hasItemBooleanFlag(key))
         .flatMap(x => x.getFlag(MODULE_NAME, key))
-        ?? []
     );
 
 // register hint on source feat

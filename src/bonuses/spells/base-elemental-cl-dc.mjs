@@ -2,6 +2,7 @@ import { MODULE_NAME } from '../../consts.mjs';
 import { textInputAndKeyValueSelect } from "../../handlebars-handlers/bonus-inputs/text-input-and-key-value-select.mjs";
 import { intersection } from "../../util/array-intersects.mjs";
 import { FormulaCacheHelper } from "../../util/flag-helpers.mjs";
+import { getCachedBonuses } from '../../util/get-cached-bonuses.mjs';
 import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize, localizeBonusLabel } from "../../util/localize.mjs";
@@ -102,7 +103,7 @@ export function createElementalClOrDc(t) {
         const comparators = damageElements.flatMap((element) => [element, pf1.registry.damageTypes.get(element)?.name?.toLowerCase() || element]);
         const toFind = intersection([...damageTypes, ...types, ...domains], comparators);
 
-        const matches = (actor[MODULE_NAME]?.[key] ?? [])
+        const matches = getCachedBonuses(actor, key)
             .filter((x) => toFind.includes(x.getFlag(MODULE_NAME, key)));
         const offset = matches
             .reduce((acc, item) => acc + FormulaCacheHelper.getModuleFlagValue(item, formulaKey), 0);

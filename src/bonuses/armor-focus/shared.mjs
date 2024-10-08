@@ -1,4 +1,5 @@
 import { MODULE_NAME } from '../../consts.mjs';
+import { getCachedBonuses } from '../../util/get-cached-bonuses.mjs';
 import { uniqueArray } from '../../util/unique-array.mjs';
 
 export const armorFocusKey = 'armor-focus';
@@ -9,10 +10,9 @@ export const improvedArmorFocusKey = 'armor-focus-improved';
  * @returns {string[]}
  */
 export const getFocusedArmor = (actor) =>
-    uniqueArray(actor[MODULE_NAME][armorFocusKey]?.
-        filter(x => x.hasItemBooleanFlag(armorFocusKey))
+    uniqueArray(getCachedBonuses(actor, armorFocusKey)
+        .filter(x => x.hasItemBooleanFlag(armorFocusKey))
         .flatMap(x => x.getFlag(MODULE_NAME, armorFocusKey))
-        ?? []
     );
 
 /**
@@ -20,8 +20,7 @@ export const getFocusedArmor = (actor) =>
  * @returns {string[]}
  */
 export const getImprovedFocusedArmor = (actor) =>
-    uniqueArray(actor[MODULE_NAME][improvedArmorFocusKey]?.
-        filter(x => x.hasItemBooleanFlag(improvedArmorFocusKey))
+    uniqueArray(getCachedBonuses(actor, improvedArmorFocusKey)
+        .filter(x => x.hasItemBooleanFlag(improvedArmorFocusKey))
         .flatMap(x => x.getFlag(MODULE_NAME, improvedArmorFocusKey))
-        ?? []
     );

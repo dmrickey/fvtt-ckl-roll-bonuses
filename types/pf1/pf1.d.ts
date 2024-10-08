@@ -110,30 +110,6 @@ declare global {
         getSkillInfo(skillId: string): SkillInfo;
         hasCondition(key: keyof Conditions): boolean;
 
-        [MODULE_NAME]: {
-            [spellFocusKey]?: ItemPF[];
-            [greaterSpellFocusKey]?: ItemPF[];
-            [mythicSpellFocusKey]?: ItemPF[];
-            [weaponFocusKey]?: ItemPF[];
-            [greaterWeaponFocusKey]?: ItemPF[];
-            [mythicWeaponFocusKey]?: ItemPF[];
-            [racialWeaponFocusKey]?: ItemPF[];
-            ['spell-specialization']?: ItemPF[];
-            ['martial-focus']?: ItemPF[];
-            [elementalFocusKey]?: ItemPF[];
-            [greaterElementalFocusKey]?: ItemPF[];
-            [mythicElementalFocusKey]?: ItemPF[];
-            [weaponSpecializationKey]?: ItemPF[];
-            [greaterWeaponSpecializationKey]?: ItemPF[];
-            [armorFocusKey]?: ItemPF[];
-            [improvedArmorFocusKey]?: ItemPF[];
-            [changeTypeOffsetKey]?: ItemPF[];
-            ['elemental-cl']?: ItemPF[];
-            ['elemental-dc']?: ItemPF[];
-            [versatilePerformanceKey]?: ItemPF[];
-            [key: string]: number | string | object | array;
-        };
-
         /**
          * Gets the actor's roll data.
          * @param refresh - pass true to force the roll data to recalculate
@@ -564,6 +540,7 @@ declare global {
     class ItemPF<
         SystemData extends SystemItemData = SystemItemData
     > extends ItemDocument {
+        _prepareDependentData(final: boolean): void;
         [MODULE_NAME]: {
             bonuses: (typeof BaseBonus)[];
             targets: (typeof BaseTarget)[];

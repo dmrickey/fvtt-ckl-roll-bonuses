@@ -3,6 +3,7 @@
 
 import { MODULE_NAME } from '../../consts.mjs';
 import { stringSelect } from "../../handlebars-handlers/bonus-inputs/string-select.mjs";
+import { getCachedBonuses } from '../../util/get-cached-bonuses.mjs';
 import { customGlobalHooks, LocalHookHandler, localHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize, localizeBonusLabel } from "../../util/localize.mjs";
@@ -36,7 +37,7 @@ function isSpecializedSpell(actor, spell) {
     if (!actor) return false;
 
     const spellName = spell.name?.toLowerCase() ?? '';
-    const sources = actor[MODULE_NAME][key] || [];
+    const sources = getCachedBonuses(actor, key);
 
     /** @param { string } value */
     const matches = (value) => {

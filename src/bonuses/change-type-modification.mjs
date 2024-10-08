@@ -2,6 +2,7 @@ import { MODULE_NAME } from '../consts.mjs';
 import { radioInput } from '../handlebars-handlers/bonus-inputs/radio-input.mjs';
 import { textInputAndKeyValueSelect } from "../handlebars-handlers/bonus-inputs/text-input-and-key-value-select.mjs";
 import { FormulaCacheHelper } from "../util/flag-helpers.mjs";
+import { getCachedBonuses } from '../util/get-cached-bonuses.mjs';
 import { LocalHookHandler, localHooks } from "../util/hooks.mjs";
 import { localize, localizeBonusLabel, localizeBonusTooltip } from '../util/localize.mjs';
 import { SpecificBonuses } from './all-specific-bonuses.mjs';
@@ -52,7 +53,7 @@ function patchChangeValue(value, itemChange) {
         return value;
     }
 
-    const bonuses = (actor[MODULE_NAME][key] ?? [])
+    const bonuses = getCachedBonuses(actor, key)
         .filter((x) => x.getFlag(MODULE_NAME, changeTypeKey) === itemChange.type);
     if (!bonuses.length) {
         return value;

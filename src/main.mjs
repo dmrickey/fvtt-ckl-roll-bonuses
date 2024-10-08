@@ -122,33 +122,16 @@ function d20RollWrapper(wrapped, options = {}) {
 
 /**
  * @this {ActorPF}
- * @param {() => any} wrapped
- */
-function prepareActorBasedData(wrapped) {
-    wrapped();
-    this[MODULE_NAME] = {};
-}
-
-/**
- * @this {ActorPF}
- * @param {() => any} wrapped
- */
-function prepareActorDerivedData(wrapped) {
-    wrapped();
-    LocalHookHandler.fireHookNoReturnSync(localHooks.postPrepareActorDerivedData, this);
-}
-
-/**
- * @this {ActorPF}
  */
 function actor_prepareEmbeddedDocuments() {
-    // my only override
+    /** BEGIN MY CODE */
     this.items.forEach((item) => {
-        if (!item?.actor?.[MODULE_NAME] || !item.isActive) return;
-        LocalHookHandler.fireHookNoReturnSync(localHooks.cacheBonusTypeOnActor, item);
+        item.system.flags ||= { boolean: {}, dictionary: {} };
+        item.system.flags.boolean ||= {};
     });
+    /** END MY CODE */
 
-    // super.prepareEmbeddedDocuments();
+    // super.prepareEmbeddedDocuments(); // ← original code --- ↓ libwrapper equivalent
     Object.getPrototypeOf(pf1.documents.actor.ActorBasePF).prototype.prepareEmbeddedDocuments.apply(this);
 
     // @ts-ignore
@@ -504,8 +487,6 @@ Hooks.once('init', () => {
     libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.rollDamage', itemActionRollDamage, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.dice.d20Roll', d20RollWrapper, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorPF.prototype.getSkillInfo', actorGetSkillInfo, libWrapper.WRAPPER);
-    libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorPF.prototype.prepareBaseData', prepareActorBasedData, libWrapper.WRAPPER);
-    libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorPF.prototype.prepareSpecificDerivedData', prepareActorDerivedData, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorBasePF.prototype.prepareEmbeddedDocuments', actor_prepareEmbeddedDocuments, libWrapper.OVERRIDE);
     libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorPF.prototype.rollSkill', actorRollSkill, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemAttackPF.fromItem', itemAttackFromItem, libWrapper.WRAPPER);
@@ -513,11 +494,6 @@ Hooks.once('init', () => {
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype.getAttackSources', itemGetAttackSources, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype.getTypeChatData', itemGetTypeChatData, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemSpellPF.prototype.getTypeChatData', itemGetTypeChatData, libWrapper.WRAPPER);
-
-    libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorHauntPF.prototype.prepareBaseData', prepareActorBasedData, libWrapper.WRAPPER);
-    libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorTrapPF.prototype.prepareBaseData', prepareActorBasedData, libWrapper.WRAPPER);
-    libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorVehiclePF.prototype.prepareBaseData', prepareActorBasedData, libWrapper.WRAPPER);
-    libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorBasePF.prototype.prepareBaseData', prepareActorBasedData, libWrapper.WRAPPER);
 
     // for patching resources - both
     // libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype._updateMaxUses', updateMaxUses, libWrapper.WRAPPER);

@@ -5,6 +5,7 @@ import { MODULE_NAME } from '../consts.mjs';
 import { keyValueSelect } from "../handlebars-handlers/bonus-inputs/key-value-select.mjs";
 import { intersects } from "../util/array-intersects.mjs";
 import { createChangeForTooltip } from '../util/conditional-helpers.mjs';
+import { getCachedBonuses } from '../util/get-cached-bonuses.mjs';
 import { customGlobalHooks } from "../util/hooks.mjs";
 import { registerItemHint } from "../util/item-hints.mjs";
 import { localizeBonusLabel } from "../util/localize.mjs";
@@ -34,7 +35,7 @@ class Settings {
  */
 const isItemFocused = (actor, item) => {
     const weaponGroups = [...item.system.weaponGroups.value, ...item.system.weaponGroups.custom].map(x => x.trim()).filter(truthiness);
-    const focuses = (actor[MODULE_NAME][key] || [])
+    const focuses = getCachedBonuses(actor, key)
         .flatMap(x => x.getFlag(MODULE_NAME, key))
         .filter(truthiness);
     return intersects(weaponGroups, focuses);

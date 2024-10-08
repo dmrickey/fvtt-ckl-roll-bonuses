@@ -23,6 +23,9 @@ declare global {
     let Hooks: Hooks;
 
     let foundry: {
+        abstract: {
+            TypeDataModel: any;
+        };
         CONST: {
             GRID_TYPES: {
                 GRIDLESS: number;
