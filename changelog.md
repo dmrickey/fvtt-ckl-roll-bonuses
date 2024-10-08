@@ -1,3 +1,17 @@
+## Roll Bonuses 2.15.2
+
+### Bugfixes
+- Fixed "Specific Bonuses" throwing errors during startup for NPCs (specifically unlinked tokens)
+
+---
+
+## Roll Bonuses 2.15.1
+
+### Bugfixes
+Fixed an issue where values might not migrate properly if a player logged in before a GM.
+
+---
+
 ## Roll Bonuses 2.15.0
 
 _**Lots of data changed internally. Anything necessary should automatically migrate to the new format when the GM first logs in. I tried to test as thoroughly as I can and everything I tested is working, but it's always possible that I missed something. Please take advantage of foundry's backup and backup before updating just in case.**_
