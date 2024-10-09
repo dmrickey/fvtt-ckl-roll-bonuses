@@ -1,5 +1,4 @@
 import { MODULE_NAME } from '../consts.mjs';
-import { countBFlags } from '../util/flag-helpers.mjs';
 import { LocalHookHandler, customGlobalHooks, localHooks } from '../util/hooks.mjs';
 import { registerItemHint } from '../util/item-hints.mjs';
 import { localize } from '../util/localize.mjs';
@@ -34,6 +33,28 @@ const skillMisfortune = 'misfortune-skill';
  * @type {{[key: string]: (key?: string, actor?: ActorPF) => string}}
  */
 let fortuneHintLookup = {};
+
+/**
+ * Counts the amount of items that have a given boolean flags
+ * @param {EmbeddedCollection<ItemPF>} items
+ * @param {string[]} flags
+ * @returns {{[key: string]: number}} - the count of items that have the given boolean flags
+ */
+const countBFlags = (items, ...flags) => {
+    const count = Object.fromEntries(flags.map((flag) => [flag, 0]));
+
+    (items || []).forEach((/** @type {ItemPF} */item) => {
+        if (!item.isActive) return;
+
+        flags.forEach((flag) => {
+            if (item.hasItemBooleanFlag(flag)) {
+                count[flag]++;
+            }
+        });
+    });
+
+    return count;
+}
 
 Hooks.once('ready', () => {
     fortuneHintLookup = {

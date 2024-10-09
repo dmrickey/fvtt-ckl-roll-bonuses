@@ -3,9 +3,7 @@ import { FormulaCacheHelper } from "../../util/flag-helpers.mjs";
 import { signed } from "../../util/to-signed-string.mjs";
 import { BaseBonus } from "./base-bonus.mjs";
 
-/**
- * @extends BaseBonus
- */
+/** @extends BaseBonus */
 export class AttackBonus extends BaseBonus {
     /**
      * @override
@@ -14,8 +12,8 @@ export class AttackBonus extends BaseBonus {
     static get sourceKey() { return 'attack'; }
 
     /**
-     * @inheritdoc
      * @override
+     * @inheritdoc
      * @returns {string}
      */
     static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.PiyJbkTuzKHugPSk#attack'; }
@@ -28,10 +26,13 @@ export class AttackBonus extends BaseBonus {
      */
     static getHints(source) {
         const formula = FormulaCacheHelper.getModuleFlagFormula(source, this.key)[this.key];
-        const roll = RollPF.create(formula + '');
+        const value = this.#getAttackBonus(source);
+        if (!value && !formula) return;
+
+        const roll = RollPF.create((formula + '') || '0');
 
         return roll.isDeterministic
-            ? [`${signed(roll.evaluate({ async: false }).total)}`]
+            ? [`${signed(value)}`]
             : [`${formula}`];
     }
 

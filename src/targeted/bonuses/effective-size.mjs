@@ -4,30 +4,33 @@ import { localize } from '../../util/localize.mjs';
 import { signed } from '../../util/to-signed-string.mjs';
 import { BaseBonus } from './base-bonus.mjs';
 
+/** @extends BaseBonus */
 export class EffectiveSizeBonus extends BaseBonus {
     /**
-     * @inheritdoc
      * @override
+     * @inheritdoc
      */
     static get sourceKey() { return 'effective-size'; }
 
     /**
      * @override
+     * @inheritdoc
      * @returns {string}
      */
     static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.PiyJbkTuzKHugPSk#effective-size'; }
 
     /**
      * @override
+     * @inheritdoc
      * @param {ItemPF} source
      * @returns {Nullable<string[]>}
      */
     static getHints(source) {
-        const size = this.#getCachedSizeBonus(source);
-        if (!size) return;
-
         const formula = FormulaCacheHelper.getModuleFlagFormula(source, this.key)[this.key];
-        const roll = RollPF.create(formula + '');
+        const size = this.#getCachedSizeBonus(source);
+        if (!size && !formula) return;
+
+        const roll = RollPF.create((formula + '') || '0');
         const mod = roll.isDeterministic
             ? signed(size)
             : formula;
@@ -37,6 +40,7 @@ export class EffectiveSizeBonus extends BaseBonus {
 
     /**
      * @override
+     * @inheritdoc
      * @param {ItemPF} target
      * @returns {Nullable<ItemConditional>}
      */
@@ -50,6 +54,7 @@ export class EffectiveSizeBonus extends BaseBonus {
 
     /**
      * @override
+     * @inheritdoc
      * @param {object} options
      * @param {ActorPF | null} options.actor
      * @param {HTMLElement} options.html
