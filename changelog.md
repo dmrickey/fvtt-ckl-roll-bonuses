@@ -1,3 +1,11 @@
+
+
+## Roll Bonuses 2.15.3
+
+### Bugfixes
+- Fixed Attack Bonus breaking Item Hints when the bonus totals 0
+
+---
 ## Roll Bonuses 2.15.2
 
 ### Bugfixes

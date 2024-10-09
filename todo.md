@@ -16,10 +16,11 @@
     - [By Disposition](#by-disposition)
     - [All healing](#all-healing)
     - [Armor Target (useful for something like Magic Vestment)](#armor-target-useful-for-something-like-magic-vestment)
+    - [Die Result](#die-result)
+    - [Secondary Attack](#secondary-attack)
+    - [Skill Target](#skill-target)
     - [Spellbook target](#spellbook-target)
     - [Spell preparation Qty](#spell-preparation-qty)
-    - [Skill Target](#skill-target)
-    - [Die Result](#die-result)
 - [Affect other tokens](#affect-other-tokens)
 - [Figure out how to embed buffs directly into a scene](#figure-out-how-to-embed-buffs-directly-into-a-scene)
 - [Class Features](#class-features)
@@ -60,7 +61,6 @@
 - [Not Possible](#not-possible)
 - [Range/Positional ideas](#rangepositional-ideas)
 - [Other Ideas](#other-ideas)
-- [vnext.next](#vnextnext)
 - [vnext](#vnext)
 
 # TODO
@@ -104,16 +104,18 @@
 ### All healing
 ### Armor Target (useful for something like Magic Vestment)
 - see Armor Focus for similar
-### Spellbook target
-### Spell preparation Qty
-- Don't see how it's possible with my framework
+### Die Result
+- When the die is (some value range)
+  - Would allow for "1s turn to 2s" (e.g. target die = 1; bonus + 1)
+### Secondary Attack
+- target secondary natural attacks
 ### Skill Target
 - Include "smart groups" that will give options e.g.
   - specific ability skills (e.g. all int skills)
   - The default layout will group subskills under the base skill and checking the base skill will automatically check all subskills
-### Die Result
-- When the die is (some value range)
-  - Would allow for "1s turn to 2s" (e.g. target die = 1; bonus + 1)
+### Spellbook target
+### Spell preparation Qty
+- Don't see how it's possible with my framework
 
 # Affect other tokens
 - add a way to affect other tokens (e.g. cavalier challenge which gives them -2 attack vs other targets) - this might just be a buff assi
@@ -268,14 +270,17 @@
   - This would allow me to automatically add effect notes for each roll to automatically roll for concealment
   - And would allow automating rerolls for abilities like Weapon of the Chosen
 
-# vnext.next
+# vnext
 - apply auto-config on create to all auto-config stuff (see Precise Shot)
   - Try to come up with a more generic framework for this
 - Add "target-able overrides" section to the configuration popup for Items that can have actions but don't have the necessary data
   - Weapon Group (will be a new override)
+    - Will require creating a "get weapon groups" function that all "weapon group" targets/specific-bonuses use instead of doing their own lookup so that that one method can do the "Target override" lookup instead of needing to duplicate that logic in multiple places
   - Weapon Base Type (will be a new override)
     - features (e.g. Bombs) and spells (e.g. Rays)
+    - Will require creating a "get weapon base type" function that all "weapon base type" targets/specific-bonuses use instead of doing their own lookup so that that one method can do the "Target override" lookup instead of needing to duplicate that logic in multiple places
   - Finesse (already exists)
+    - Will require creating a "get finessable target" function that all "finesse" targets/specific-bonuses use instead of doing their own lookup so that that one method can do the "Target override" lookup instead of needing to duplicate that logic in multiple places
 - Create new "Roll Bonuses" section for attack dialog inputs
 - Change all "is type" into a single target with checkboxes for various types it should allow
 - Replace "checklist-input" with a proper Item application instead of a warpgate menu
@@ -283,6 +288,12 @@
 - Add "Fortune configuration app" to help with configuring specific fortune abilities
 - Targeting
   - Add a configuration error if "this target is not configured"
-
-# vnext
-- Update bonus picker tabs to have the same style as actor sheet tabs
+  - Add a toggle for any/all (also include a hover tooltip explaining which is different)
+- Roll Bonuses button in header that goes "show me a list of items with bonuses". This can also have a button to auto-populate any that it thinks should have bonuses added
+- Add Headers for various bonus types to the Item Inputs section
+  - Targets
+    - Include a toggle for all/any (Defaults to all (like now))
+  - Bonuses
+  - Specific Bonuses
+- Weapon Target shows `-` if targeted weapon type is removed from inventory -- it should still show what's been configured so it shows up as expected after the weapon has been removed or if viewing the Item on its own from the Item directory
+- Weapon Type targets (and anything similar to that) should also check items within containers

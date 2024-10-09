@@ -29,34 +29,10 @@ const getDocFlags = (doc, key) => {
     return [];
 }
 
-/**
- * Counts the amount of items that have a given boolean flags
- * @param {EmbeddedCollection<ItemPF>} items
- * @param {string[]} flags
- * @returns {{[key: string]: number}} - the count of items that have the given boolean flags
- */
-const countBFlags = (items, ...flags) => {
-    const count = Object.fromEntries(flags.map((flag) => [flag, 0]));
-
-    (items || []).forEach((/** @type {ItemPF} */item) => {
-        if (!item.isActive) return;
-
-        flags.forEach((flag) => {
-            if (item.hasItemBooleanFlag(flag)) {
-                count[flag]++;
-            }
-        });
-    });
-
-    return count;
-}
-
 export {
-    countBFlags,
     getDocFlags,
 }
 
-api.utils.countBFlags = countBFlags;
 api.utils.getDocFlags = getDocFlags;
 
 export class FormulaCacheHelper {
