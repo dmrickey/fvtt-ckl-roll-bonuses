@@ -180,6 +180,18 @@ export class PositionalHelper {
             if (action.data.range.units === 'reach') {
                 return true;
             }
+            if (action.data.range.units === 'ft'
+                && +action.data.range.value === 10
+                && (action.data.range.maxIncrements === 1 || !action.data.range.maxIncrements)
+            ) {
+                return true;
+            }
+            if (action.data.range.units === 'm'
+                && +action.data.range.value === 3
+                && (action.data.range.maxIncrements === 1 || !action.data.range.maxIncrements)
+            ) {
+                return true;
+            }
             return false;
         }
 
