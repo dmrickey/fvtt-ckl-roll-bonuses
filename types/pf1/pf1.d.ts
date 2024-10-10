@@ -1527,6 +1527,13 @@ declare global {
             formula: string | number,
             rollData?: Nullable<RollData>
         ): RollPF;
+
+        evaluate(
+            options: InexactPartial<Options & { async: false }>
+        ): Evaluated<this>;
+        evaluate(
+            options?: InexactPartial<Options> & { async: true }
+        ): Promise<Evaluated<this>>;
     }
 
     interface DamageRoll extends RollPF {}

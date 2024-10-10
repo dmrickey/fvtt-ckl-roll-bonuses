@@ -145,6 +145,7 @@ export class DamageBonus extends BaseBonus {
             tooltip: this.tooltip,
         }, {
             canEdit: isEditable,
+            inputType: 'bonus',
         });
     }
 

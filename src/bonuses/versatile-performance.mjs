@@ -414,5 +414,5 @@ Hooks.on('renderItemSheet', (
         });
     }
 
-    addNodeToRollBonus(html, div, item, isEditable);
+    addNodeToRollBonus(html, div, item, isEditable, 'specific-bonus');
 });

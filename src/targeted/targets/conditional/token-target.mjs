@@ -134,6 +134,7 @@ export class TokenTarget extends BaseTarget {
             parent: html,
         }, {
             canEdit: isEditable,
+            inputType: 'target',
         });
     }
 

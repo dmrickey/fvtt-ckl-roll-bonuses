@@ -14,6 +14,7 @@ import { createTemplate, templates } from "./templates.mjs";
  * @param {string} [args.tooltip]
  * @param {object} options
  * @param {boolean} options.canEdit
+ * @param {InputType} options.inputType
  */
 export function showEnabledLabel({
     item,
@@ -25,6 +26,7 @@ export function showEnabledLabel({
     tooltip = '',
 }, {
     canEdit,
+    inputType,
 }) {
     label ||= localizeBonusLabel(key);
     tooltip ||= localizeBonusTooltip(key);
@@ -39,7 +41,7 @@ export function showEnabledLabel({
         },
     );
 
-    addNodeToRollBonus(parent, div, item, canEdit);
+    addNodeToRollBonus(parent, div, item, canEdit, inputType);
 }
 
 api.inputs.showEnabledLabel = showEnabledLabel;

@@ -42,6 +42,7 @@ Hooks.on('renderItemSheet', (
             parent: html,
         }, {
             canEdit: isEditable,
+            inputType: 'specific-bonus',
         });
     }
 });

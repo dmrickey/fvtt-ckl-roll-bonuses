@@ -1,5 +1,6 @@
 import { api } from '../util/api.mjs';
 import { handleJournalClick } from '../util/handle-journal-click.mjs';
+import { localize } from '../util/localize.mjs';
 import { showBonusPicker } from './bonus-picker.mjs';
 import { createTemplate, templates } from './templates.mjs';
 
@@ -17,8 +18,9 @@ const openDocumenation = async () => {
  * @param {Element?} child
  * @param {ItemPF?} item
  * @param {boolean} canEdit
- */
-const addNodeToRollBonus = (itemSheetHtml, child, item, canEdit) => {
+ * @param {InputType?} [inputType]
+*/
+const addNodeToRollBonus = (itemSheetHtml, child, item, canEdit, inputType) => {
     const flagsContainer = itemSheetHtml.querySelector('.tab[data-tab="advanced"] .tags');
     if (!flagsContainer || !item) {
         return;
@@ -63,6 +65,20 @@ const addNodeToRollBonus = (itemSheetHtml, child, item, canEdit) => {
     const container = section.querySelector(containerSelector);
     if (!container) return;
 
+    let bonusContainer = null;
+    if (inputType) {
+        let bonusContainer = container.querySelector(`.${inputType}`);
+        if (!bonusContainer) {
+            bonusContainer = document.createElement('div');
+            bonusContainer.classList.add(inputType);
+            const header = document.createElement('h2');
+            header.classList.add('bonus-header');
+            header.innerText = localize(`bonus-header-labels.${inputType}`);
+            container.appendChild(header);
+            container.appendChild(bonusContainer);
+        }
+    }
+
     const button = /** @type {HTMLElement} */ (child.querySelector('[data-journal]'));
     button?.addEventListener(
         'click',
@@ -73,7 +89,7 @@ const addNodeToRollBonus = (itemSheetHtml, child, item, canEdit) => {
     );
     addSettingsHandler(child);
 
-    container.appendChild(child);
+    (bonusContainer ?? container).appendChild(child);
 }
 
 export { addNodeToRollBonus };

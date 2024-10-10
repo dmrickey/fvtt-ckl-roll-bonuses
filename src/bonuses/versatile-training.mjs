@@ -217,6 +217,7 @@ Hooks.on('renderItemSheet', (
         parent: html
     }, {
         canEdit: isEditable,
+        inputType: 'specific-bonus',
     });
     showChecklist({
         description: localize('versatile-training.description'),
@@ -228,5 +229,6 @@ Hooks.on('renderItemSheet', (
         parent: html,
     }, {
         canEdit: isEditable,
+        inputType: 'specific-bonus',
     });
 });

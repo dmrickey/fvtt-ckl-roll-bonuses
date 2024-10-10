@@ -95,6 +95,7 @@ export class SpellDescriptorTarget extends BaseTarget {
             tooltip: this.tooltip,
         }, {
             canEdit: isEditable,
+            inputType: 'target',
         });
     }
 }

@@ -111,6 +111,7 @@ Hooks.on('renderItemSheet', (
         text: { current: formula, key: formulaKey },
     }, {
         canEdit: isEditable,
+        inputType: 'specific-bonus',
     });
 
     radioInput(
@@ -125,7 +126,8 @@ Hooks.on('renderItemSheet', (
             })),
         },
         {
-            canEdit: isEditable
+            canEdit: isEditable,
+            inputType: 'specific-bonus',
         },
     );
 });

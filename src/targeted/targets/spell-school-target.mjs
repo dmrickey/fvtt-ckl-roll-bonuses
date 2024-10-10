@@ -82,6 +82,7 @@ export class SpellSchoolTarget extends BaseTarget {
             tooltip: this.tooltip,
         }, {
             canEdit: isEditable,
+            inputType: 'target',
         });
     }
 }

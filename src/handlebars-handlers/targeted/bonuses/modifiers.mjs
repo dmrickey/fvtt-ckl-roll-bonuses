@@ -354,7 +354,7 @@ export function modifiersInput({
         );
     });
 
-    addNodeToRollBonus(parentElement, div, item, canEdit);
+    addNodeToRollBonus(parentElement, div, item, canEdit, 'target');
 }
 
 // api.inputs.modifiersInput = modifiersInput;

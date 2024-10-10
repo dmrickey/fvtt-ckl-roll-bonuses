@@ -72,6 +72,7 @@ export class DCBonus extends BaseBonus {
             tooltip: this.tooltip,
         }, {
             canEdit: isEditable,
+            inputType: 'bonus',
         });
     }
 

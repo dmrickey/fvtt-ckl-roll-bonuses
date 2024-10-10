@@ -79,6 +79,7 @@ export class RangedIncrementPenaltyBonus extends BaseBonus {
             tooltip: localizeBonusTooltip(this.#incrementPenaltyOffsetKey),
         }, {
             canEdit: isEditable,
+            inputType: 'target',
         });
         textInput({
             item,
@@ -88,6 +89,7 @@ export class RangedIncrementPenaltyBonus extends BaseBonus {
             tooltip: localizeBonusTooltip(this.#penaltyOffsetKey),
         }, {
             canEdit: isEditable,
+            inputType: 'target',
         });
         textInput({
             item,
@@ -97,6 +99,7 @@ export class RangedIncrementPenaltyBonus extends BaseBonus {
             tooltip: localizeBonusTooltip(this.#incrementRangeOffsetKey),
         }, {
             canEdit: isEditable,
+            inputType: 'target',
         });
         textInput({
             item,
@@ -106,6 +109,7 @@ export class RangedIncrementPenaltyBonus extends BaseBonus {
             tooltip: localizeBonusTooltip(this.#maxIncrementOffsetKey),
         }, {
             canEdit: isEditable,
+            inputType: 'target',
         });
     }
 

@@ -83,6 +83,7 @@ export class MaximizeDamageBonus extends BaseBonus {
             parent: html,
         }, {
             canEdit: isEditable,
+            inputType: 'bonus',
         });
     }
 }

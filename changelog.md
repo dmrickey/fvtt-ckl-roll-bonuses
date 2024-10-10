@@ -1,4 +1,10 @@
+## Roll Bonuses 2.15.4
 
+### Misc
+- Added Headers to each bonus section on item sheet
+
+### Bugfixes
+- Fixed remaining warning for rolls
 
 ## Roll Bonuses 2.15.3
 

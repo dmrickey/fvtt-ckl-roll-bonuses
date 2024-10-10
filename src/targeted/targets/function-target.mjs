@@ -85,6 +85,7 @@ export class FunctionTarget extends BaseTarget {
             }, {
                 canEdit: isEditable,
                 isFormula: false,
+                inputType: 'target',
             });
             textInput({
                 item,
@@ -95,6 +96,7 @@ export class FunctionTarget extends BaseTarget {
             }, {
                 canEdit: isEditable,
                 isFormula: false,
+                inputType: 'target',
             });
         }
         else {
@@ -107,6 +109,7 @@ export class FunctionTarget extends BaseTarget {
                 tooltip: this.tooltip,
             }, {
                 canEdit: isEditable,
+                inputType: 'target',
             });
         }
     }

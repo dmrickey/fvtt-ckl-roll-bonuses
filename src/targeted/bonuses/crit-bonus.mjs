@@ -314,6 +314,7 @@ export class CritBonus extends BaseBonus {
             parent: html,
         }, {
             canEdit: isEditable,
+            inputType: 'bonus',
         });
         textInput({
             item,
@@ -322,6 +323,7 @@ export class CritBonus extends BaseBonus {
             parent: html,
         }, {
             canEdit: isEditable,
+            inputType: 'bonus',
         });
         textInput({
             item,
@@ -330,6 +332,7 @@ export class CritBonus extends BaseBonus {
             parent: html,
         }, {
             canEdit: isEditable,
+            inputType: 'bonus',
         });
     }
 }

@@ -88,7 +88,7 @@ export function showTokenInput({
         });
     });
 
-    addNodeToRollBonus(parent, div, item, canEdit);
+    addNodeToRollBonus(parent, div, item, canEdit, 'target');
 }
 
 api.inputs.showTokenInput = showTokenInput;

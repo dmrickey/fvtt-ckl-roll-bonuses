@@ -13,6 +13,7 @@ import { localize, localizeBonusTooltip } from "../../../util/localize.mjs";
  * @param {HTMLElement} args.parent
  * @param {object} options
  * @param {boolean} options.canEdit
+ * @param {InputType} options.inputType
  */
 export function damageInput({
     item,
@@ -22,6 +23,7 @@ export function damageInput({
     tooltip,
 }, {
     canEdit,
+    inputType,
 }) {
     const critChoices = {
         crit: localize('PF1.OnCritBonusFormula'),
@@ -164,7 +166,7 @@ export function damageInput({
         });
     });
 
-    addNodeToRollBonus(parent, div, item, canEdit);
+    addNodeToRollBonus(parent, div, item, canEdit, inputType);
 }
 
 api.inputs.damageInput = damageInput;

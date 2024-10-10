@@ -246,6 +246,7 @@ export function createElementalClOrDc(t) {
             text: { current: currentText, key: formulaKey },
         }, {
             canEdit: isEditable,
+            inputType: 'specific-bonus',
         });
     });
 }

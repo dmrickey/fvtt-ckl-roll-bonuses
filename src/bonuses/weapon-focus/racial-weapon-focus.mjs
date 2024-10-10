@@ -135,5 +135,6 @@ Hooks.on('renderItemSheet', (
     }, {
         canEdit: isEditable,
         isFormula: false,
+        inputType: 'bonus',
     });
 });

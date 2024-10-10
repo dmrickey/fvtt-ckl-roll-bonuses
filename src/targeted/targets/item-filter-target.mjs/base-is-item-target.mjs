@@ -59,6 +59,7 @@ export class BaseIsItemTarget extends BaseTarget {
             tooltip: this.tooltip,
         }, {
             canEdit: isEditable,
+            inputType: 'target',
         });
     }
 

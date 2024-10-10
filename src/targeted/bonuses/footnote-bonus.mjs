@@ -85,6 +85,7 @@ export class FootnoteBonus extends BaseBonus {
             tooltip: this.tooltip,
         }, {
             canEdit: isEditable,
+            inputType: 'bonus',
             isFormula: false,
         });
     }

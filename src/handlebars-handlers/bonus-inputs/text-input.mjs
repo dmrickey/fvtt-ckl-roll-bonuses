@@ -17,6 +17,7 @@ import { createTemplate, templates } from "../templates.mjs";
  * @param {boolean} options.canEdit
  * @param {string} [options.placeholder]
  * @param {boolean} [options.isFormula]
+ * @param {InputType} options.inputType
  * @param {true} [options.isModuleFlag] - true (default) if this is a data flag, false if this is a dictionary flag
 */
 export function textInput({
@@ -29,13 +30,11 @@ export function textInput({
     tooltip = '',
 }, {
     canEdit,
+    inputType,
     isFormula = true,
-    isModuleFlag = true,
     placeholder = '',
 }) {
-    current ||= isModuleFlag
-        ? item.getFlag(MODULE_NAME, key)
-        : item.getItemDictionaryFlag(key);
+    current ||= item.getFlag(MODULE_NAME, key);
     label ||= localizeBonusLabel(key);
     tooltip ||= localizeBonusTooltip(key);
 
@@ -60,14 +59,11 @@ export function textInput({
 
             // @ts-ignore - event.target is HTMLTextAreaElement
             const /** @type {HTMLTextAreaElement} */ target = event.target;
-
-            isModuleFlag
-                ? await item.setFlag(MODULE_NAME, key, target?.value)
-                : await item.setItemDictionaryFlag(key, target?.value);
+            await item.setFlag(MODULE_NAME, key, target?.value);
         },
     );
 
-    addNodeToRollBonus(parent, div, item, canEdit);
+    addNodeToRollBonus(parent, div, item, canEdit, inputType);
 }
 
 api.inputs.textInput = textInput;

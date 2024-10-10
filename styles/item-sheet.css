@@ -11,6 +11,10 @@
     padding: unset;
 }
 
+#ckl-roll-bonus-container .bonus-header {
+    font-size: 1rem;
+}
+
 #ckl-roll-bonus-container .pf1.item-action {
     height: unset;
 }

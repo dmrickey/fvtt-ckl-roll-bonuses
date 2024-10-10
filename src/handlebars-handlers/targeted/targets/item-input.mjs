@@ -108,7 +108,7 @@ export function showItemInput({
         });
     });
 
-    addNodeToRollBonus(parent, div, item, canEdit);
+    addNodeToRollBonus(parent, div, item, canEdit, 'target');
 }
 
 /** @ts-ignore */

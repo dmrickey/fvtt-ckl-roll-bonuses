@@ -16,6 +16,7 @@ import { createTemplate, templates } from "../templates.mjs";
  * @param {HTMLElement} args.parent
  * @param {object} options
  * @param {boolean} options.canEdit
+ * @param {InputType} options.inputType
 */
 export function stringSelect({
     choices,
@@ -28,6 +29,7 @@ export function stringSelect({
     tooltip = '',
 }, {
     canEdit,
+    inputType,
 }) {
     current ||= item.getFlag(MODULE_NAME, key);
     label ||= localizeBonusLabel(key);
@@ -70,7 +72,7 @@ export function stringSelect({
         },
     );
 
-    addNodeToRollBonus(parent, div, item, canEdit);
+    addNodeToRollBonus(parent, div, item, canEdit, inputType);
 }
 
 api.inputs.stringSelect = stringSelect;

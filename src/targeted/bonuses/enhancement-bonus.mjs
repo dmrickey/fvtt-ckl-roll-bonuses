@@ -84,6 +84,7 @@ export class EnhancementBonus extends BaseBonus {
             parent: html,
         }, {
             canEdit: isEditable,
+            inputType: 'bonus',
         });
         textInput({
             item,
@@ -92,6 +93,7 @@ export class EnhancementBonus extends BaseBonus {
             parent: html,
         }, {
             canEdit: isEditable,
+            inputType: 'bonus',
         });
     }
 

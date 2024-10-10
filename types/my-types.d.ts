@@ -93,6 +93,8 @@ declare global {
         };
     }
 
+    type InputType = 'bonus' | 'target' | 'specific-bonus' | 'ammo';
+
     interface IdObject {
         id: string;
     }

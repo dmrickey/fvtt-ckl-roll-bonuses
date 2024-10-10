@@ -15,6 +15,7 @@ import { createTemplate, templates } from "../templates.mjs";
  * @param {string} [args.tooltip]
  * @param {object} options
  * @param {boolean} options.canEdit
+ * @param {InputType} options.inputType
 */
 export function checkboxInput({
     current = undefined,
@@ -26,6 +27,7 @@ export function checkboxInput({
     tooltip = '',
 }, {
     canEdit,
+    inputType
 }
 ) {
     if (current === undefined) {
@@ -63,7 +65,7 @@ export function checkboxInput({
         },
     );
 
-    addNodeToRollBonus(parent, div, item, canEdit);
+    addNodeToRollBonus(parent, div, item, canEdit, inputType);
 }
 
 api.inputs.checkboxInput = checkboxInput;

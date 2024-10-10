@@ -76,8 +76,9 @@ export class HasBooleanFlagTarget extends BaseTarget {
             parent: html,
             tooltip: this.tooltip,
         }, {
-            isFormula: false,
             canEdit: isEditable,
+            inputType: 'target',
+            isFormula: false,
         });
     }
 }

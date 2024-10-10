@@ -123,6 +123,7 @@ Hooks.on('renderItemSheet', (
         parent: html,
     }, {
         canEdit: isEditable,
+        inputType: 'ammo',
     });
     textInput({
         item,
@@ -131,6 +132,7 @@ Hooks.on('renderItemSheet', (
         parent: html,
     }, {
         canEdit: isEditable,
+        inputType: 'ammo',
     });
     textInput({
         item,
@@ -139,6 +141,7 @@ Hooks.on('renderItemSheet', (
         parent: html,
     }, {
         canEdit: isEditable,
+        inputType: 'ammo',
     });
     textInput({
         item,
@@ -147,6 +150,7 @@ Hooks.on('renderItemSheet', (
         parent: html,
     }, {
         canEdit: isEditable,
+        inputType: 'ammo',
     });
     damageInput({
         item,
@@ -155,6 +159,7 @@ Hooks.on('renderItemSheet', (
         parent: html,
     }, {
         canEdit: isEditable,
+        inputType: 'ammo',
     });
     textInput({
         item,
@@ -164,6 +169,7 @@ Hooks.on('renderItemSheet', (
     }, {
         canEdit: isEditable,
         isFormula: false,
+        inputType: 'ammo',
     });
 });
 

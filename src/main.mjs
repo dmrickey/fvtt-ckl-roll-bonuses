@@ -562,10 +562,10 @@ Hooks.on('renderItemSheet', (
     }
 
     if (hasBonus && !hasTarget) {
-        addNodeToRollBonus(html, label(localize('hint-missing-target')), item, isEditable);
+        addNodeToRollBonus(html, label(localize('hint-missing-target')), item, isEditable, 'target');
     }
     else if (!hasBonus && hasTarget) {
-        addNodeToRollBonus(html, label(localize('hint-missing-bonus')), item, isEditable);
+        addNodeToRollBonus(html, label(localize('hint-missing-bonus')), item, isEditable, 'bonus');
     }
 });
 // NOTHING BELOW THIS BLOCK

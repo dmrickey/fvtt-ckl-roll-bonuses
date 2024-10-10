@@ -15,6 +15,7 @@ import { MODULE_NAME } from '../../consts.mjs';
  * @param {string} [args.tooltip]
  * @param {object} options
  * @param {boolean} options.canEdit
+ * @param {InputType} options.inputType
  */
 export function textInputAndKeyValueSelect({
     item,
@@ -26,6 +27,7 @@ export function textInputAndKeyValueSelect({
     tooltip = '',
 }, {
     canEdit,
+    inputType,
 }) {
     label ||= localizeBonusLabel(select.key);
     tooltip ||= localizeBonusTooltip(select.key);
@@ -72,7 +74,7 @@ export function textInputAndKeyValueSelect({
         },
     );
 
-    addNodeToRollBonus(parent, div, item, canEdit);
+    addNodeToRollBonus(parent, div, item, canEdit, inputType);
 }
 
 api.inputs.textInputAndKeyValueSelect = textInputAndKeyValueSelect;

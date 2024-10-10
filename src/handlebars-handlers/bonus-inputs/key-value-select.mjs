@@ -16,6 +16,7 @@ import { createTemplate, templates } from "../templates.mjs";
  * @param {HTMLElement} args.parent,
  * @param {object} options
  * @param {boolean} options.canEdit
+ * @param {InputType} options.inputType
  */
 export function keyValueSelect({
     choices,
@@ -28,6 +29,7 @@ export function keyValueSelect({
     tooltip = '',
 }, {
     canEdit,
+    inputType,
 }) {
     label ||= localizeBonusLabel(key);
     tooltip ||= localizeBonusTooltip(key);
@@ -72,7 +74,7 @@ export function keyValueSelect({
         },
     );
 
-    addNodeToRollBonus(parent, div, item, canEdit);
+    addNodeToRollBonus(parent, div, item, canEdit, inputType);
 }
 
 api.inputs.keyValueSelect = keyValueSelect;

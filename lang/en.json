@@ -13,6 +13,12 @@
         "all-spells": "All Spells",
         "any-target-except": "Any target except:",
         "base-dice": "Base Dice",
+        "bonus-header-labels": {
+            "bonus": "Bonuses",
+            "target": "Targets",
+            "specific-bonus": "Specific Bonuses",
+            "ammo": "Ammo Bonuses"
+        },
         "bonuses": {
             "label": {
                 "action": "Action Target",
@@ -201,6 +207,30 @@
         "cl-mod": "{mod} CL",
         "cl-label": "CL ({label})",
         "cl-label-mod": "{mod} CL ({label})",
+        "crit-damage-label": {
+            "crit": " (Crit Only)",
+            "nonCrit": " (Non-crit Only)",
+            "normal": ""
+        },
+        "crit-mult-mod": "Crit Multiplier ({mod})",
+        "crit-mult-offset-all": "Crit Multiplier Offset (all)",
+        "crit-mult-offset-self": "Crit Multiplier Offset (self)",
+        "crit-mult-offset-targeted": "Crit Multiplier Offset ({id})",
+        "crit-mult": "Crit Multiplier",
+        "crit-offset-all": "Crit Offset (all)",
+        "crit-offset-mod": "Crit Threat ({mod})",
+        "crit-offset-self": "Crit Offset (self)",
+        "crit-offset-targeted": "Crit Offset ({id})",
+        "crit-offset": "Crit Offset",
+        "dc-label-mod": "{mod} DC ({label})",
+        "dc-mod": "{mod} DC",
+        "driver": "Profession (Driver)",
+        "enh-mod-stacks": "{mod} Enhancement Bonus (Stacks)",
+        "enh-mod": "Enhancement Bonus -> {mod}",
+        "effective-size": {
+            "hint": "Size: {mod}"
+        },
+        "fortune": "Fortune",
         "global-bonus": {
             "actor": {
                 "description": "The global bonuses that the GM has enabled for this world. Each setting can be individually disabled here if it is not suitable for this particular actor.",
@@ -258,30 +288,6 @@
                 }
             }
         },
-        "crit-damage-label": {
-            "crit": " (Crit Only)",
-            "nonCrit": " (Non-crit Only)",
-            "normal": ""
-        },
-        "crit-mult-mod": "Crit Multiplier ({mod})",
-        "crit-mult-offset-all": "Crit Multiplier Offset (all)",
-        "crit-mult-offset-self": "Crit Multiplier Offset (self)",
-        "crit-mult-offset-targeted": "Crit Multiplier Offset ({id})",
-        "crit-mult": "Crit Multiplier",
-        "crit-offset-all": "Crit Offset (all)",
-        "crit-offset-mod": "Crit Threat ({mod})",
-        "crit-offset-self": "Crit Offset (self)",
-        "crit-offset-targeted": "Crit Offset ({id})",
-        "crit-offset": "Crit Offset",
-        "dc-label-mod": "{mod} DC ({label})",
-        "dc-mod": "{mod} DC",
-        "driver": "Profession (Driver)",
-        "enh-mod-stacks": "{mod} Enhancement Bonus (Stacks)",
-        "enh-mod": "Enhancement Bonus -> {mod}",
-        "effective-size": {
-            "hint": "Size: {mod}"
-        },
-        "fortune": "Fortune",
         "hint-missing-bonus": "Missing Bonus, click to add",
         "hint-missing-target": "Missing Target, click to add",
         "item-app": {
