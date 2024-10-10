@@ -149,7 +149,7 @@ registerItemHint((hintcls, _actor, item, _data) => {
     }
 
     const match = icons[currentElement];
-    const label = pf1.registry.damageTypes.get(`${currentElement}`) ?? currentElement;
+    const label = pf1.registry.damageTypes.get(`${currentElement}`) ?? { name: currentElement };
 
     const hint = match
         ? hintcls.create('', [match.css], { hint: label.name, icon: match.icon })
@@ -247,7 +247,7 @@ Hooks.on('renderItemSheet', (
         return;
     }
 
-    const choices = Object.keys(elements).map((key) => ({ key, label: elements[key].name }));
+    const choices = Object.keys(elements).map((key) => ({ key, label: elements[key]?.name ?? '' }));
 
     keyValueSelect({
         choices,

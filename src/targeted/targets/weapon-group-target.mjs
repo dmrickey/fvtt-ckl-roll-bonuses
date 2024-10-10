@@ -1,6 +1,7 @@
 import { MODULE_NAME } from "../../consts.mjs";
 import { showChecklist } from "../../handlebars-handlers/targeted/targets/checklist-input.mjs";
 import { intersects } from "../../util/array-intersects.mjs";
+import { getActorItemsByTypes } from '../../util/get-actor-items-by-type.mjs';
 import { truthiness } from "../../util/truthiness.mjs";
 import { uniqueArray } from "../../util/unique-array.mjs";
 import { BaseTarget } from "./base-target.mjs";
@@ -71,15 +72,11 @@ export class WeaponGroupTarget extends BaseTarget {
      * @param {ItemPF} options.item
      */
     static showInputOnItemSheet({ actor, html, isEditable, item }) {
+        const actorItems = getActorItemsByTypes(actor, 'attack', 'weapon');
         const custom = uniqueArray(
-            actor?.items
-                .filter(
-                    /** @returns {i is ItemWeaponPF | ItemAttackPF} */
-                    (i) => i instanceof pf1.documents.item.ItemWeaponPF || i instanceof pf1.documents.item.ItemAttackPF
-                )
+            actorItems
                 .flatMap((i) => (i.system.weaponGroups?.custom ?? []))
                 .filter(truthiness)
-            ?? []
         );
         custom.sort();
 

@@ -96,11 +96,17 @@ Hooks.on(customGlobalHooks.getConditionalParts, getConditionalParts);
  */
 async function addEffectNotes(chatAttack) {
     if (chatAttack.ammo) {
-        const ammo = chatAttack.actor.items.get(chatAttack.ammo.id)
-        const note = ammo[MODULE_NAME][ammoEffectKey];
-        if (note) {
-            const enriched = await TextEditor.enrichHTML(`<div>${note}</div>`, { async: true });
-            chatAttack.effectNotes.push(enriched);
+        let ammo = chatAttack.actor.items.get(chatAttack.ammo.id);
+        if (!ammo) {
+            const containerItems = chatAttack.actor.itemTypes.container.flatMap((c) => [...c.items]);
+            ammo = containerItems.find((x) => x.id === chatAttack.ammo.id);
+        }
+        if (ammo) {
+            const note = ammo[MODULE_NAME][ammoEffectKey];
+            if (note) {
+                const enriched = await TextEditor.enrichHTML(`<div>${note}</div>`, { async: true });
+                chatAttack.effectNotes.push(enriched);
+            }
         }
     }
 }

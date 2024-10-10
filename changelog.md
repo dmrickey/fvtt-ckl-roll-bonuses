@@ -8,6 +8,7 @@
 
 ### Bugfixes
 - Fixed remaining warning for rolls
+- Added more cases for 10' diagonal reach
 
 ## Roll Bonuses 2.15.3
 

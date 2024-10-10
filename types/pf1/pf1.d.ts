@@ -99,6 +99,7 @@ declare global {
         | ItemWeaponPF;
 
     class ActorPF extends ActorBasePF {
+        allItems: ItemPF[];
         hasItemBooleanFlag(key: string): boolean;
         hasWeaponProficiency(
             item: ItemWeaponPF | ItemAttackPF,
@@ -462,7 +463,7 @@ declare global {
                 maxIncrements: number;
                 minUnits: '';
                 minValue: null;
-                units: 'ft' | 'reach';
+                units: 'ft' | 'm' | 'reach';
                 value: string;
             };
         };
@@ -579,7 +580,7 @@ declare global {
         parentActor: ActorPF;
         subType: string;
         system: SystemData;
-        type!: string;
+        type!: ItemType;
 
         /**
          * Sets a boolean flag on this item.

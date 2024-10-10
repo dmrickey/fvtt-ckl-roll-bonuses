@@ -27,7 +27,7 @@ declare global {
         length: unknown;
         contents: Array<T>;
 
-        get(id: string): T;
+        get(id: string): T | undefined;
 
         toObject(): { [key: string]: any };
     }

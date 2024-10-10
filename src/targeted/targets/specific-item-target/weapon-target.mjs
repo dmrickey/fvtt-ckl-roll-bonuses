@@ -8,6 +8,7 @@ export class WeaponTarget extends SpecificItemTarget {
      */
     static getItemsFromActor(actor) {
         return [
+            ...actor.itemTypes.container.flatMap((c) => [...c.items]).filter(x => ['weapon', 'attack'].includes(x.type)),
             ...actor.itemTypes.weapon,
             ...actor.itemTypes.attack,
         ].filter(x => x.hasAction);

@@ -32,7 +32,7 @@ export class SpecificItemTarget extends BaseTarget {
      * @returns {ItemPF[]}
      */
     static getItemsFromActor(actor) {
-        return actor.items.filter(x => x.hasAction);
+        return actor.allItems.filter(x => x.hasAction);
     }
 
     /**

@@ -1,12 +1,12 @@
 /**
  * @template {ItemType} T
- * @param {ActorPF | null | undefined} foo
+ * @param {ActorPF | null | undefined} actor
  * @param {...T} types
  * @returns {Extract<Item, { type: T }>[]}
  */
-export const getActorItemsByTypes = (foo, ...types) => {
-    if (!foo) return [];
-    const { itemTypes } = foo;
+export const getActorItemsByTypes = (actor, ...types) => {
+    if (!actor) return [];
+    const { itemTypes } = actor;
 
     // @ts-expect-error
     const typedItems = (types.flatMap((t) => itemTypes[t]));

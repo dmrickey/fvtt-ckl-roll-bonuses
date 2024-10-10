@@ -208,7 +208,7 @@ class ActionSelector extends DocumentSheet {
         const itemId = parent?.dataset.itemId;
         if (itemId) {
             const actionId = parent?.dataset.actionId
-            const action = actionId && this.object.actor?.items.get(itemId).actions.get(actionId);
+            const action = actionId && this.object.actor?.items.get(itemId)?.actions.get(actionId);
             if (action) {
                 action.sheet.render(true, { focus: true });
             }
