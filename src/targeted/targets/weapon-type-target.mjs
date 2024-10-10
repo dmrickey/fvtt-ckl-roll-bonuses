@@ -1,6 +1,7 @@
 import { MODULE_NAME } from "../../consts.mjs";
 import { showChecklist } from "../../handlebars-handlers/targeted/targets/checklist-input.mjs";
 import { intersects } from "../../util/array-intersects.mjs";
+import { getActorItemsByTypes } from '../../util/get-actor-items-by-type.mjs';
 import { truthiness } from "../../util/truthiness.mjs";
 import { uniqueArray } from "../../util/unique-array.mjs";
 import { BaseTarget } from "./base-target.mjs";
@@ -19,14 +20,22 @@ export class WeaponTypeTarget extends BaseTarget {
     static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.iurMG1TBoX3auh5z#weapon-type'; }
 
     /**
+     * @param {ItemPF} source
+     * @returns {string[]}
+     */
+    static #getTypes(source) {
+        const types = source.getFlag(MODULE_NAME, this.key) ?? [];
+        return types.filter(truthiness);
+    }
+
+    /**
      * @override
      * @inheritdoc
      * @param {ItemPF} source
      * @returns {Nullable<string[]>}
      */
     static getHints(source) {
-        const types = source.getFlag(MODULE_NAME, this.key) ?? [];
-        return types.filter(truthiness);
+        return this.#getTypes(source);
     }
 
     /**
@@ -48,13 +57,7 @@ export class WeaponTypeTarget extends BaseTarget {
         }
 
         const bonusSources = sources.filter((sources) => {
-            /** @type {string[]} */
-            const types = sources.getFlag(MODULE_NAME, this.key);
-            if (!types) {
-                return false;
-            }
-
-            const targetedTypes = types.filter(truthiness);
+            const targetedTypes = this.#getTypes(sources);
             return intersects(typesOnItem, targetedTypes);
         });
 
@@ -71,11 +74,12 @@ export class WeaponTypeTarget extends BaseTarget {
      * @param {ItemPF} options.item
      */
     static showInputOnItemSheet({ html, isEditable, item }) {
-        const options = uniqueArray(item.actor?.items
-            ?.filter(
-                /** @returns {item is ItemWeaponPF | ItemAttackPF} */
-                (item) => item.type === 'weapon' || item.type === 'attack')
-            .flatMap((item) => item.system.baseTypes ?? []));
+        const actorItems = getActorItemsByTypes(item?.actor, 'attack', 'weapon');
+        const typesOnActor = actorItems
+            .flatMap((item) => item.system.baseTypes ?? [])
+            ?? [];
+        const currentTypes = this.#getTypes(item);
+        const options = uniqueArray([...typesOnActor, ...currentTypes]);
         options.sort();
 
         showChecklist({

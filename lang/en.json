@@ -357,7 +357,7 @@
         "target-toggle": {
             "all": "All",
             "any": "Any",
-            "tooltip": "Determines if targets should be grouped or individual<br><br>All: Bonuses will only activate for a given action if it matches every target.<br><br>Any: Bonuses can activate when it matches any configured target."
+            "tooltip": "Selects if the bonus targets are evaluated as a group or individually.<br><br>All: Bonuses will be applied only if all targets are matched.<br><br>Any: Bonuses will be applied if any target is matched."
         },
         "targets": "Targets",
         "to-hit-mod": "{mod} to hit",

@@ -84,6 +84,20 @@ declare global {
         };
     }
 
+    type Item =
+        | ItemAttackPF
+        | ItemBuffPF
+        | ItemClassPF
+        | ItemConsumablePF
+        | ItemContainerPF
+        | ItemEquipmentPF
+        | ItemFeatPF
+        | ItemImplantPF
+        | ItemLootPF
+        | ItemRacePF
+        | ItemSpellPF
+        | ItemWeaponPF;
+
     class ActorPF extends ActorBasePF {
         hasItemBooleanFlag(key: string): boolean;
         hasWeaponProficiency(
@@ -92,19 +106,8 @@ declare global {
         ): boolean;
         allSkills: Array<keyof typeof pf1.config.skills>;
         get isOwner(): boolean;
-        itemTypes: {
-            attack: ItemAttackPF[];
-            base: ItemPF[];
-            buff: ItemBuffPF[];
-            class: ItemClassPF[];
-            consumable: ItemConsumablePF[];
-            equipment: ItemEquipmentPF[];
-            feat: ItemFeatPF[];
-            implant: ItemPF[];
-            loot: ItemLootPF[];
-            race: ItemRacePF[];
-            spell: ItemSpellPF[];
-            weapon: ItemWeaponPF[];
+        itemTypes!: {
+            [T in Item as T['type']]: T[];
         };
         getActiveTokens(): Array<TokenPF>;
         getSkillInfo(skillId: string): SkillInfo;
@@ -576,7 +579,7 @@ declare global {
         parentActor: ActorPF;
         subType: string;
         system: SystemData;
-        type: ItemType;
+        type!: string;
 
         /**
          * Sets a boolean flag on this item.
@@ -638,11 +641,40 @@ declare global {
         sheet: ItemSheetPF;
     }
 
-    class ItemAttackPF extends ItemPF<SystemItemDataAttackPF> {}
-    class ItemEquipmentPF extends ItemPF<SystemItemDataEquipmentPF> {}
-    class ItemFeatPF extends ItemPF {}
+    class ItemAttackPF extends ItemPF<SystemItemDataAttackPF> {
+        type = 'attack' as const;
+    }
+    class ItemBuffPF extends ItemPF<SystemItemDataBuffPF> {
+        type = 'buff' as const;
+    }
+    class ItemClassPF extends ItemPF<SystemItemDataClassPF> {
+        type = 'class' as const;
+    }
+    class ItemConsumablePF extends ItemPF<SystemItemDataConsumablePF> {
+        type = 'consumable' as const;
+    }
+    class ItemContainerPF extends ItemPF<SystemItemDataContainerPF> {
+        items: Collection<ItemPF>;
+        type = 'container' as const;
+    }
+    class ItemEquipmentPF extends ItemPF<SystemItemDataEquipmentPF> {
+        type = 'equipment' as const;
+    }
+    class ItemFeatPF extends ItemPF {
+        type = 'feat' as const;
+    }
+    class ItemImplantPF extends ItemPF<SystemItemDataImplantPF> {
+        get isActive(): boolean;
+        get activeState(): boolean;
+        async setActive(active: boolean, context: object): Promise<void>;
+        type = 'implant' as const;
+    }
     class ItemLootPF extends ItemPF {
         subType: 'gear' | 'ammo' | 'tradeGoods' | 'misc';
+        type = 'loot' as const;
+    }
+    class ItemRacePF extends ItemPF<SystemItemDataRacePF> {
+        type = 'race' as const;
     }
     class ItemSpellPF extends ItemPF<SystemItemDataSpellPF> {
         learnedAt: {
@@ -652,8 +684,11 @@ declare global {
 
         /** @deprecated Spells don't have tags */
         tag: string;
+        type = 'spell' as const;
     }
-    class ItemWeaponPF extends ItemPF<SystemItemDataWeaponPF> {}
+    class ItemWeaponPF extends ItemPF<SystemItemDataWeaponPF> {
+        type = 'weapon' as const;
+    }
 
     class SkillData {
         ability: keyof Abilities;
@@ -1009,7 +1044,10 @@ declare global {
         masterwork: boolean;
         weaponGroups: TraitSelector<keyof WeaponGroups>;
     }
+    class SystemItemDataContainerPF extends SystemItemData {}
     class SystemIteMDataBuffPF extends SystemItemData {}
+    class SystemItemDataClassPF extends SystemItemData {}
+    class SystemItemDataConsumablePF extends SystemItemData {}
     class SystemItemDataEquipmentPF extends SystemItemData {
         armor: {
             acp: number;
@@ -1022,6 +1060,11 @@ declare global {
         proficient: boolean;
         slot: 'armor' | 'shield';
     }
+    class SystemItemDataImplantPF extends SystemItemData {
+        implanted: boolean;
+        slot: string;
+    }
+    class SystemItemDataRacePF extends SystemItemData {}
     class SystemItemDataSpellPF extends SystemItemData {
         descriptors: {
             value: Array<keyof SpellDescriptors>;
@@ -1043,20 +1086,7 @@ declare global {
         weaponGroups: TraitSelector<keyof WeaponGroups>;
     }
 
-    type ItemType =
-        | 'attack'
-        | 'base'
-        | 'buff'
-        | 'class'
-        | 'consumable'
-        | 'container'
-        | 'equipment'
-        | 'feat'
-        | 'implant'
-        | 'loot'
-        | 'race'
-        | 'spell'
-        | 'weapon';
+    type ItemType = Item['type'];
 
     interface AbilityRollData {
         base: number;
