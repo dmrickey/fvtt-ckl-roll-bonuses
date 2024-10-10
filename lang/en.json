@@ -354,6 +354,11 @@
             "self": "Self",
             "target": "Targeted Tokens"
         },
+        "target-toggle": {
+            "all": "All",
+            "any": "Any",
+            "tooltip": "Determines if targets should be grouped or individual<br><br>All: Bonuses will only activate for a given action if it matches every target.<br><br>Any: Bonuses can activate when it matches any configured target."
+        },
         "targets": "Targets",
         "to-hit-mod": "{mod} to hit",
         "versatile-performance": {

@@ -2,6 +2,7 @@
 
 ### Misc
 - Added Headers to each bonus section on item sheet
+- Added Target Toggle to switch between any/all targets.
 
 ### Bugfixes
 - Fixed remaining warning for rolls

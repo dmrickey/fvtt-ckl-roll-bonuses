@@ -3,6 +3,7 @@ import { MODULE_NAME } from "../consts.mjs";
 export const templates = /** @type {const} */ ({
     /** bonus container for item sheets */
     rollBonusesContainer: `modules/${MODULE_NAME}/hbs/roll-bonuses-container.hbs`,
+    targetHeaderToggle: `modules/${MODULE_NAME}/hbs/target-header-toggle.hbs`,
 
     /** container for turning off global bonuses on actors */
     globalBonusActorDisabledContainer: `modules/${MODULE_NAME}/hbs/global-bonus-actor-disabled-container.hbs`,

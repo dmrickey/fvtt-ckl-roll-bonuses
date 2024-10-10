@@ -15,6 +15,16 @@
     font-size: 1rem;
 }
 
+#ckl-roll-bonus-container .target-header {
+    position: relative;
+}
+
+#ckl-roll-bonus-container .target-header .target-toggle {
+    position: absolute;
+    right: 10px;
+    top: 0;
+}
+
 #ckl-roll-bonus-container .pf1.item-action {
     height: unset;
 }
