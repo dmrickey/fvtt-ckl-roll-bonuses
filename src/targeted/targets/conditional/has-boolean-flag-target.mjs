@@ -1,5 +1,7 @@
 import { MODULE_NAME } from '../../../consts.mjs';
 import { textInput } from '../../../handlebars-handlers/bonus-inputs/text-input.mjs';
+import { api } from '../../../util/api.mjs';
+import { difference } from '../../../util/array-intersects.mjs';
 import { BaseTarget } from '../base-target.mjs';
 
 /**
@@ -69,12 +71,25 @@ export class HasBooleanFlagTarget extends BaseTarget {
      * @param {ItemPF} options.item
      */
     static showInputOnItemSheet({ html, isEditable, item }) {
+        const flags = Object.keys(item.actor?.itemFlags?.boolean ?? {});
+        const choices = difference(
+            flags,
+            [
+                ...api.SpecificBonuses.allBonusKeys,
+                ...api.allBonusTypesKeys,
+                ...api.allGlobalTypesKeys,
+                ...api.allTargetTypesKeys
+            ]
+        );
+        choices.sort();
+
         textInput({
             item,
             journal: this.journal,
             key: this.key,
             parent: html,
             tooltip: this.tooltip,
+            choices,
         }, {
             canEdit: isEditable,
             inputType: 'target',

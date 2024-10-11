@@ -7,7 +7,15 @@
             {{#if readonly}}readonly{{/if}}
             value="{{current}}"
             id="text-input-{{key}}"
+            {{#if choices.length}}list="text-input-{{key}}-list"{{/if}}
             placeholder="{{placeholder}}"
         />
+        {{#if choices.length}}
+        <datalist id="text-input-{{key}}-list">
+            {{#each choices}}
+            <option value="{{this}}">
+            {{/each}}
+        </datalist>
+        {{/if}}
     </div>
 </div>

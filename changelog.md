@@ -5,6 +5,7 @@
 - Added Target Toggle to switch between any/all targets.
 - Better support for items in containers 
   - Primarily when selecting Item/Weapon targets and when choosing what options are available for Weapon Type and custom Weapon Group targets
+- Added autocomplete options for "Has Boolean Flag" conditional target based on currently active flags
 
 ### Bugfixes
 - Fixed remaining warning for rolls

@@ -6,6 +6,7 @@ import { createTemplate, templates } from "../templates.mjs";
 
 /**
  * @param {object} args
+ * @param {string[]} [args.choices]
  * @param {FlagValue} [args.current]
  * @param {ItemPF} args.item
  * @param {string} args.journal
@@ -21,6 +22,7 @@ import { createTemplate, templates } from "../templates.mjs";
  * @param {true} [options.isModuleFlag] - true (default) if this is a data flag, false if this is a dictionary flag
 */
 export function textInput({
+    choices = [],
     current = '',
     item,
     journal,
@@ -41,6 +43,7 @@ export function textInput({
     const div = createTemplate(
         templates.textInput,
         {
+            choices,
             current,
             isFormula,
             journal,

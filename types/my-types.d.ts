@@ -47,12 +47,15 @@ declare global {
 
         /** Array of all targeted bonuses */
         get allBonusTypes(): (typeof BaseBonus)[];
+        get allBonusTypesKeys(): string[];
 
         /** Array of all global bonuses */
         get allGlobalTypes(): (typeof BaseGlobalBonus)[];
+        get allGlobalTypesKeys(): string[];
 
         /** Array of all targeted targets */
         get allTargetTypes(): (typeof BaseTarget)[];
+        get allTargetTypesKeys(): string[];
 
         /** map of every targeted bonus from its key to its type */
         bonusTypeMap: Record<string, typeof BaseBonus>;
