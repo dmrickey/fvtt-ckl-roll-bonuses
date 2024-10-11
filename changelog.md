@@ -9,6 +9,7 @@
 ### Bugfixes
 - Fixed remaining warning for rolls
 - Added more cases for 10' diagonal reach
+- Added workaround for misconfigured without range increment resulting in an attack with 0 reach
 
 ## Roll Bonuses 2.15.3
 

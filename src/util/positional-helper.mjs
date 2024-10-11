@@ -201,7 +201,7 @@ export class PositionalHelper {
                     ui.notifications.error(`Action (${action.id}) on Item '${action.item.name}' (${action.item.uuid}) has invalid range. Verify the max increments and range has been set up correctly.`);
                 }
             });
-            return this.#isWithinRange(attacker, target, action.minRange, action.maxRange, hasReach(action));
+            return this.#isWithinRange(attacker, target, action.minRange, action.maxRange || action.range, hasReach(action));
         });
     }
 

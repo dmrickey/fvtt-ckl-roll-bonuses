@@ -477,6 +477,7 @@ declare global {
         maxRange: number;
         minRange: number;
         name: string;
+        range: number;
         sheet: ItemActionSheet;
     }
 
