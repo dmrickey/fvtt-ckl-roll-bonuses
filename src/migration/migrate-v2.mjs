@@ -416,7 +416,7 @@ export const migrateActor = async (actor) => {
     log('...finished migrating actor');
 };
 
-const migrateWorldItems = async () => {
+export const migrateWorldItems = async () => {
     log('migrating game items');
 
     for (const item of game.items ?? []) {
@@ -426,7 +426,7 @@ const migrateWorldItems = async () => {
     log('...finished migrating game items');
 };
 
-const migratePacks = async () => {
+export const migratePacks = async () => {
     log('migrating unlocked packs');
 
     for (const pack of game.packs.filter(x => x.documentName === "Item" && !x.locked)) {
@@ -448,7 +448,7 @@ const migratePacks = async () => {
     log('...finished migrating unlocked packs');
 };
 
-const migrateWorldActors = async () => {
+export const migrateWorldActors = async () => {
     log('migrating world actors');
 
     for (const actor of game.actors) {
@@ -462,7 +462,7 @@ const migrateWorldActors = async () => {
     log('...finished migrating world actors');
 };
 
-const migrateSyntheticActors = async () => {
+export const migrateSyntheticActors = async () => {
     log('migrating synthetic actors');
 
     const synthetics = [...game.scenes].flatMap(s => [...s.tokens].filter(t => !t.isLinked && t.actor?.items?.size));
