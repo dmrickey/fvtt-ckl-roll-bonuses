@@ -105,11 +105,10 @@ export class PositionalHelper {
     /**
      * @param {number} minFeet
      * @param {number} maxFeet
-     * @param {boolean} [reach]
      * @returns {boolean}
      */
-    isWithinRange(minFeet, maxFeet, reach) {
-        return PositionalHelper.#isWithinRange(this.token1, this.token2, minFeet, maxFeet, reach);
+    isWithinRange(minFeet, maxFeet) {
+        return PositionalHelper.#isWithinRange(this.token1, this.token2, minFeet, maxFeet);
     }
 
     /**
@@ -167,51 +166,23 @@ export class PositionalHelper {
             actions = [...meleeAttacks];
         }
 
-        /**
-         * @param {ItemAction} action
-         */
-        const hasReach = (action) => {
-            const { item } = action;
-            if (item instanceof pf1.documents.item.ItemWeaponPF || item instanceof pf1.documents.item.ItemAttackPF) {
-                if (item.system.weaponGroups?.value.includes("natural")) {
-                    return true;
-                }
-            }
-            if (action.data.range.units === 'reach') {
-                return true;
-            }
-            if (action.data.range.units === 'ft'
-                && +action.data.range.value === 10
-                && (action.data.range.maxIncrements === 1 || !action.data.range.maxIncrements)
-            ) {
-                return true;
-            }
-            if (action.data.range.units === 'm'
-                && +action.data.range.value === 3
-                && (action.data.range.maxIncrements === 1 || !action.data.range.maxIncrements)
-            ) {
-                return true;
-            }
-            return false;
-        }
-
         return actions.some((action) => {
             ifDebug(() => {
                 if (action.getRange() && !action.maxRange) {
                     ui.notifications.error(`Action (${action.id}) on Item '${action.item.name}' (${action.item.uuid}) has invalid range. Verify the max increments and range has been set up correctly.`);
                 }
             });
-            return this.#isWithinRange(attacker, target, action.minRange, action.maxRange || action.range, hasReach(action));
+            return this.#isWithinRange(attacker, target, action.minRange, action.maxRange || action.range);
         });
     }
 
     /**
      * @param {TokenPF} left
      * @param {TokenPF} right
-     * @param {boolean} [diagonalReach] if the check is for "10 foot reach adjacency test"
+     * @param {boolean} [tenFootCheck] if the check is for "10 foot reach adjacency test"
      * @returns {boolean}
      */
-    static #isAdjacent(left, right, diagonalReach = false) {
+    static #isAdjacent(left, right, tenFootCheck = false) {
         const scene = left.scene;
         const gridSize = scene.grid.size;
 
@@ -219,7 +190,7 @@ export class PositionalHelper {
         let ceiling = this.#ceiling(left);
 
         let enlarged;
-        if (diagonalReach) {
+        if (tenFootCheck) {
             // add "1 square (gridSize)" in all directions and see if adjacent
             enlarged = new PIXI.Rectangle(
                 left.bounds.left - gridSize - 1,
@@ -265,19 +236,16 @@ export class PositionalHelper {
      * @param {TokenPF} token2
      * @param {number} minFeet
      * @param {number} maxFeet
-     * @param {boolean} [reach]
      * @returns {boolean}
      */
-    static #isWithinRange(token1, token2, minFeet, maxFeet, reach = false) {
+    static #isWithinRange(token1, token2, minFeet, maxFeet) {
         minFeet ||= 0;
         if (!maxFeet && maxFeet !== 0) {
             maxFeet = Number.POSITIVE_INFINITY;
         }
 
         // special case for 10' diagonal
-        if (
-            reach
-            && maxFeet === 10
+        if (maxFeet === 10
             && this.#isAdjacent(token1, token2, true)
             && (!minFeet || !this.#isAdjacent(token1, token2))
         ) {

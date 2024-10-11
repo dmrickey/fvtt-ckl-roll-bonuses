@@ -8,7 +8,7 @@
 - Added autocomplete options for "Has Boolean Flag" conditional target based on currently active flags
 
 ### Bugfixes
-- Fixed remaining warning for rolls
+- Fixed remaining warning for rolls (when checking for (mis)fortune bonuses)
 - Added more cases for 10' diagonal reach
 - Added workaround for misconfigured without range increment resulting in an attack with 0 reach
 
