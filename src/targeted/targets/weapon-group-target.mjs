@@ -73,11 +73,13 @@ export class WeaponGroupTarget extends BaseTarget {
      */
     static showInputOnItemSheet({ actor, html, isEditable, item }) {
         const actorItems = getActorItemsByTypes(actor, 'attack', 'weapon');
-        const custom = uniqueArray(
-            actorItems
+        const targetedGroups = item.getFlag(MODULE_NAME, this.key) || [];
+        const custom = uniqueArray([
+            ...targetedGroups,
+            ...actorItems
                 .flatMap((i) => (i.system.weaponGroups?.custom ?? []))
-                .filter(truthiness)
-        );
+                .filter(truthiness),
+        ]);
         custom.sort();
 
         const options = {
