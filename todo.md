@@ -288,12 +288,5 @@
 - Add "Fortune configuration app" to help with configuring specific fortune abilities
 - Targeting
   - Add a configuration error if "this target is not configured"
-  - Add a toggle for any/all (also include a hover tooltip explaining which is different)
 - Roll Bonuses button in header that goes "show me a list of items with bonuses". This can also have a button to auto-populate any that it thinks should have bonuses added
-- Add Headers for various bonus types to the Item Inputs section
-  - Targets
-    - Include a toggle for all/any (Defaults to all (like now))
-  - Bonuses
-  - Specific Bonuses
-- Weapon Target shows `-` if targeted weapon type is removed from inventory -- it should still show what's been configured so it shows up as expected after the weapon has been removed or if viewing the Item on its own from the Item directory
-- Weapon Type targets (and anything similar to that) should also check items within containers
+  - See example [https://gitlab.com/mxzf/adventure-uninstaller/-/blob/master/adventure-uninstaller.mjs](here)
