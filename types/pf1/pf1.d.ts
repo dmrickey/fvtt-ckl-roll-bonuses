@@ -446,6 +446,13 @@ declare global {
         id: string;
         actor: ActorPF;
         data: {
+            naturalAttack: {
+                primaryAttack: boolean;
+                secondary: {
+                    attackBonus: string;
+                    damageMult: number;
+                };
+            };
             ability: {
                 attack: string;
                 critMult: number;

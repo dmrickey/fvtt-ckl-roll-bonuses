@@ -1,5 +1,8 @@
 ## Roll Bonuses 2.15.4
 
+### Targets
+- Added Natural Secondary Attack Target
+
 ### Misc
 - Added Headers to each bonus section on item sheet
 - Added Target Toggle to switch between any/all targets.
