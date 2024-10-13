@@ -1,3 +1,8 @@
+## Roll Bonuses 2.15.5
+
+### Bugfixes
+- include ranged spell attacks in ranged penalties for those spells that need it.
+
 ## Roll Bonuses 2.15.4
 
 ### Targets
