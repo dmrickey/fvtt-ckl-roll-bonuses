@@ -1,12 +1,12 @@
 /**
  *
  * @param {ActionUseShared} shared
- * @param {*} conditional
+ * @param {ItemConditional} conditional
  */
 export function conditionalCalculator(shared, conditional) {
     const conditionalData = shared.rollData.conditionals || {};
     const tag = pf1.utils.createTag(conditional.name);
-    for (const [i, modifier] of conditional.modifiers.entries()) {
+    conditional.data.modifiers.forEach((modifier, i) => {
         // Adds a formula's result to rollData to allow referencing it.
         // Due to being its own roll, this will only correctly work for static formulae.
         const rollTotal = RollPF.safeTotal(modifier.formula, shared.rollData);
@@ -34,7 +34,7 @@ export function conditionalCalculator(shared, conditional) {
         else if (modifier.target === "size") {
             shared.rollData.size += rollTotal;
         }
-    }
+    });
     // Expand data into rollData to enable referencing in formulae
     shared.rollData.conditionals = expandObject(conditionalData, 5);
 
