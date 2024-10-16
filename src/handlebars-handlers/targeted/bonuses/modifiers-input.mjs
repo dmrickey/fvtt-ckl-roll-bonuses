@@ -1,5 +1,4 @@
 import { MODULE_NAME } from "../../../consts.mjs";
-import { localize } from "../../../util/localize.mjs";
 import { createTemplate, templates } from "../../templates.mjs";
 import { addNodeToRollBonus } from "../../add-bonus-to-item-sheet.mjs";
 import { api } from '../../../util/api.mjs';
@@ -145,13 +144,18 @@ export function modifiersInput({
     let conditionals = loadConditionals(item, key);
     // Prepare stuff for actions with conditionals
 
-    for (const conditional of conditionals) {
-        for (const modifier of conditional.data.modifiers) {
-            modifier.targets = getConditionalTargets();
-            modifier.subTargets = getConditionalSubTargets(modifier.target);
-            modifier.conditionalModifierTypes = getConditionalModifierTypes(modifier.target);
-            modifier.conditionalCritical = getConditionalCritical(modifier.target);
+    const createConditionalTemplateData = () => {
+        /** @type {ItemConditionalData[]} */
+        const conditionalData = deepClone(conditionals.map((c) => c.data));
+        for (const conditional of conditionalData) {
+            for (const modifier of conditional.modifiers) {
+                modifier.targets = getConditionalTargets();
+                modifier.subTargets = getConditionalSubTargets(modifier.target);
+                modifier.conditionalModifierTypes = getConditionalModifierTypes(modifier.target);
+                modifier.conditionalCritical = getConditionalCritical(modifier.target);
+            }
         }
+        return conditionalData;
     }
 
     const templateData = {
@@ -160,7 +164,7 @@ export function modifiersInput({
         tooltip: 'tooltip',
         damageTypes: pf1.registry.damageTypes.toObject(),
         data: {
-            conditionals: conditionals.map((c) => c.data),
+            conditionals: createConditionalTemplateData(),
         }
     };
 
@@ -179,7 +183,7 @@ export function modifiersInput({
 
     async function updateItem() {
         const sanitized = conditionals.map((c) => c.data);
-        debugger;
+        // debugger;
         // await item.unsetFlag(MODULE_NAME, key);
         await item.setFlag(MODULE_NAME, key, sanitized);
         // can't do this without rehooking up bindings and adding
@@ -190,19 +194,11 @@ export function modifiersInput({
     const named = div.querySelectorAll('[name]');
     named.forEach((elem) => elem.removeAttribute('name'));
 
-    div.querySelectorAll('.conditional-control, .conditional-default').forEach((element) => {
-        element.addEventListener('click', async (event) => {
-            event.preventDefault();
-
+    div.querySelectorAll('.conditional-default').forEach((element) => {
+        element.addEventListener('change', async (event) => {
             const a = event.currentTarget;
 
             if (!a || !(a instanceof Element)) return;
-
-            // Add new conditional
-            if (a.classList.contains("add-conditional")) {
-                conditionals.push(new pf1.components.ItemConditional(pf1.components.ItemConditional.defaultData));
-                await updateItem();
-            }
 
             /** @type {HTMLDataListElement | null} */
             let li;
@@ -218,6 +214,25 @@ export function modifiersInput({
                 conditional.data.default = checkbox.checked;
                 await updateItem();
             }
+        });
+    });
+
+    div.querySelectorAll('.conditional-control').forEach((element) => {
+        element.addEventListener('click', async (event) => {
+            event.preventDefault();
+
+            const a = event.currentTarget;
+
+            if (!a || !(a instanceof Element)) return;
+
+            // Add new conditional
+            if (a.classList.contains("add-conditional")) {
+                conditionals.push(new pf1.components.ItemConditional(pf1.components.ItemConditional.defaultData));
+                await updateItem();
+            }
+
+            /** @type {HTMLDataListElement | null} */
+            let li;
 
             // Remove a conditional
             if (a.classList.contains("delete-conditional")) {
@@ -259,59 +274,113 @@ export function modifiersInput({
         size: { subTarget: undefined, critical: undefined, damageType: undefined, type: undefined, },
     };
 
-    /**
-     *
-     * @param {string} selector
-     */
-    function handleChangeForSelector(selector) {
-        // @ts-ignore
-        div.querySelectorAll(selector).forEach((/** @type {HTMLSelectElement} */ element) => {
-            if (!element) return;
+    div.querySelectorAll('.conditionals select').forEach((element) => {
+        if (!element) return;
 
-            /**
-             * Listen to mousedown event
-             *
-            * @type {HTMLSelectElement} - the target of the event
-            * @listens document#mousedown - the namespace and name of the event
-             */
-            element.addEventListener(
-                'change',
-                async (event) => {
-                    const props = element.name.split('.');
-                    props.shift();
-                    props.splice(props.length - 1, 0, 'data');
-                    const path = props.join('.');
+        /**
+        * @type {HTMLSelectElement} - the target of the event
+         */
+        element.addEventListener(
+            'change',
+            async (event) => {
+                const a = event.currentTarget;
 
+                if (!a || !(a instanceof Element)) return;
+
+                /** @type {HTMLDataListElement | null} */
+                const li = a.closest(".conditional-modifier");
+
+                const conditional = conditionals.find((c) => c.id === li?.dataset.conditional);
+                if (!conditional) return;
+                const modifier = conditional.data.modifiers.find((m) => m._id === li?.dataset.modifier);
+                if (!modifier) return;
+
+                // @ts-ignore
+                const /** @type {ItemConditionalModifierData['target']} */ value = event.target?.value || 'attack';
+
+                if (element.classList.contains('conditional-target')) {
+                    modifier.subTarget = modDefaults[value].subTarget;
+                    modifier.critical = modDefaults[value].critical;
+                    modifier.damageType = modDefaults[value].damageType;
+                    modifier.type = modDefaults[value].type;
+                    modifier.target = value;
+                }
+                else if (element.classList.contains('conditional-sub-target')) {
                     // @ts-ignore
-                    const /** @type {HTMLSelectElement}*/ eventTarget = event.target;
+                    modifier.subTarget = value;
+                }
+                else if (element.classList.contains('conditional-critical')) {
                     // @ts-ignore
-                    let /** @type {ItemConditionalModifierData['target']} */ value = eventTarget?.value;
+                    modifier.critical = value;
+                }
+                else if (element.classList.contains('conditional-type')) {
+                    // @ts-ignore
+                    modifier.type = value;
+                }
 
-                    if (!value) {
-                        value = 'attack';
-                    }
+                await updateItem();
+            },
+        );
+    });
 
-                    if (element.classList.contains('conditional-target')) {
-                        const base = path.split('.');
-                        // @ts-ignore
-                        base.pop();
-                        const baseProp = base.join('.');
-                        setProperty(conditionals, `${baseProp}.subTarget`, modDefaults[value].subTarget);
-                        setProperty(conditionals, `${baseProp}.critical`, modDefaults[value].critical);
-                        setProperty(conditionals, `${baseProp}.damageType`, modDefaults[value].damageType);
-                        setProperty(conditionals, `${baseProp}.type`, modDefaults[value].type);
-                    }
+    div.querySelectorAll('input.conditional-formula').forEach((element) => {
+        if (!element) return;
 
-                    setProperty(conditionals, path, value);
-                    await updateItem();
-                },
-            );
-        });
-    }
-    [
-        '.conditionals input[type=text]',
-        '.conditionals select',
-    ].forEach(handleChangeForSelector);
+        /**
+        * @type {HTMLSelectElement} - the target of the event
+         */
+        element.addEventListener(
+            'change',
+            async (event) => {
+                const a = event.currentTarget;
+
+                if (!a || !(a instanceof Element)) return;
+
+                /** @type {HTMLDataListElement | null} */
+                const li = a.closest(".conditional-modifier");
+
+                const conditional = conditionals.find((c) => c.id === li?.dataset.conditional);
+                if (!conditional) return;
+                const modifier = conditional.data.modifiers.find((m) => m._id === li?.dataset.modifier);
+                if (!modifier) return;
+
+                // @ts-ignore
+                const value = event.target?.value;
+                modifier.formula = value;
+
+                await updateItem();
+            },
+        );
+    });
+
+    div.querySelectorAll('input.conditional-name').forEach((element) => {
+        if (!element) return;
+
+        /**
+        * @type {HTMLSelectElement} - the target of the event
+         */
+        element.addEventListener(
+            'change',
+            async (event) => {
+
+                const a = event.currentTarget;
+
+                if (!a || !(a instanceof Element)) return;
+
+                /** @type {HTMLDataListElement | null} */
+                const li = a.closest(".conditional");
+
+                const conditional = conditionals.find((c) => c.id === li?.dataset.conditional);
+                if (!conditional) return;
+
+                // @ts-ignore
+                const value = event.target?.value;
+                conditional.data.name = value;
+
+                await updateItem();
+            },
+        );
+    });
 
     div.querySelectorAll('.damage-type-visual').forEach((element) => {
         if (!(element instanceof Element)) return;
@@ -319,21 +388,22 @@ export function modifiersInput({
             'click',
             async (event) => {
                 event.preventDefault();
-                /** @type {string[]} */
-                let props = element.getAttribute('data-name')?.split('.') || [];
-                if (!props.length) {
-                    const parent = element.parentElement?.parentElement?.querySelector('.conditional-target');
-                    // @ts-ignore
-                    props = parent.name.split('.');
-                    props.pop();
-                    props.push('damageType');
-                }
-                props.shift();
-                props.splice(props.length - 1, 0, 'data');
-                const path = props.join('.');
+                const a = event.currentTarget;
 
-                async function update( /** @type {{ [key: string]: object }} */arg) {
-                    setProperty(conditionals, path, arg[path]);
+                if (!a || !(a instanceof Element)) return;
+
+                /** @type {HTMLDataListElement | null} */
+                const li = a.closest(".conditional-modifier");
+
+                const conditional = conditionals.find((c) => c.id === li?.dataset.conditional);
+                if (!conditional) return;
+                const modifier = conditional.data.modifiers.find((m) => m._id === li?.dataset.modifier);
+                if (!modifier) return;
+
+
+                async function update( /** @type {{ [key: string]: TraitSelectorValuePlural }} */arg) {
+                    if (!modifier) return;
+                    modifier.damageType = arg[modifier._id];
                     await updateItem();
                 }
                 const app = new pf1.applications.DamageTypeSelector(
@@ -341,8 +411,8 @@ export function modifiersInput({
                         id: key,
                         update,
                     },
-                    path,
-                    getProperty(conditionals, path) || { values: [] },
+                    modifier._id,
+                    modifier.damageType || { custom: '', values: [] },
                 );
                 return app.render(true);
             },

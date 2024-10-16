@@ -1977,7 +1977,7 @@ declare global {
                 new (
                     object: { id: string; update({ [dataPath]: object }) },
                     dataPath: string,
-                    data: {},
+                    data: TraitSelectorValuePlural,
                     options = {}
                 ): DamageTypeSelector;
             };

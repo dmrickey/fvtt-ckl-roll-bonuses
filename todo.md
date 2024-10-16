@@ -297,8 +297,7 @@
   - Verify Damage Bonus still shows tooltip and adds bonus
   - Verify Effective Size Bonus still shows tooltip and adds bonus
 - Modifiers Bonus
-  - Add "name" to input saving
-  - Dropdowns don't save correctly
+  - Fix input layout
   - Rename to "Conditional Modifiers"
   - Add checkbox to attack dialog based off of "default" values
   - Actually add bonus based on attack dialog checkbox (or based off of default if checkbox is skipped)
