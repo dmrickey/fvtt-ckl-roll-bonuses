@@ -12,7 +12,7 @@ import { FootnoteBonus } from './footnote-bonus.mjs';
 import { FortuneBonus } from './fortune-bonus.mjs';
 import { MaximizeDamageBonus } from './maximize-damage-bonus.mjs';
 import { MisfortuneBonus } from './misfortune-bonus.mjs';
-import { ModifiersBonus } from './unused/modifiers.mjs';
+import { ConditionalModifiersBonus } from './unused/conditional-modifiers.mjs';
 
 export const registerBonuses = () => [
     AgileBonus,
@@ -27,7 +27,7 @@ export const registerBonuses = () => [
     FootnoteBonus,
     FortuneBonus,
     MisfortuneBonus,
-    ModifiersBonus, // only if I can get the function to remove duplicates working (which needs to work with conditionals)
+    ConditionalModifiersBonus, // only if I can get the function to remove duplicates working (which needs to work with conditionals)
 
     // Specifically last so it'll include other damage bonuses in its tooltip
     MaximizeDamageBonus,
