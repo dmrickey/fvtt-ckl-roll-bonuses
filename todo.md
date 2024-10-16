@@ -293,12 +293,14 @@
   - See example [https://gitlab.com/mxzf/adventure-uninstaller/-/blob/master/adventure-uninstaller.mjs](here)
 
 # v 2.16
-- Verify ItemConditionalData refactor stuff
-  - Verify Damage Bonus still shows tooltip and adds bonus
-  - Verify Effective Size Bonus still shows tooltip and adds bonus
 - Modifiers Bonus
   - Fix input layout
-  - Rename to "Conditional Modifiers"
+  - Add journal entry 
+    - ..and make sure to hook it up properly
   - Add checkbox to attack dialog based off of "default" values
   - Actually add bonus based on attack dialog checkbox (or based off of default if checkbox is skipped)
   - ..probably no item hints?
+- Fix
+  - Actor's Combat damage column does not include damage bonus (it did not in 2.14)
+    - Tooltip is correctly showing
+  - Actor's Combat damage column does not include Effective Size Modifier (it did in 2.14)
