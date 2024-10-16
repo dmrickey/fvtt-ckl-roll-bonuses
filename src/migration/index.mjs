@@ -31,6 +31,42 @@ class Settings {
     static #getSetting(/** @type {string} */key) { return game.settings.get(MODULE_NAME, key); }
 
     static {
+
+        /**
+         * @param {object} setting
+         * @param {boolean} [setting.config]
+         * @param {string} setting.key
+         * @param {any} [setting.defaultValue]
+         * @param {'world' | 'client'} [setting.scope]
+         * @param {BooleanConstructor | StringConstructor | NumberConstructor | ObjectConstructor} [setting.settingType]
+         * @param {object} [options]
+         * @param {boolean} [options.skipReady]
+         */
+        const registerSetting = ({
+            config = true,
+            defaultValue = null,
+            key,
+            scope = 'world',
+            settingType = String,
+        }, {
+            skipReady = false
+        } = {}) => {
+            const doIt = () =>
+                game.settings.register(MODULE_NAME, key, {
+                    name: `${MODULE_NAME}.settings.${key}.name`,
+                    hint: `${MODULE_NAME}.settings.${key}.hint`,
+                    default: defaultValue === null ? game.i18n.localize(`settings.${key}.default`) : defaultValue,
+                    scope,
+                    requiresReload: false,
+                    config,
+                    type: settingType
+                });
+
+            game.ready || skipReady
+                ? doIt()
+                : Hooks.once('ready', doIt);
+        };
+
         registerSetting({
             config: false,
             defaultValue: -1,

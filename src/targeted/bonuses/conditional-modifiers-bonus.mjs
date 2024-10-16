@@ -1,8 +1,8 @@
-import { MODULE_NAME } from "../../../consts.mjs";
-import { modifiersInput } from "../../../handlebars-handlers/targeted/bonuses/conditional-modifiers-input.mjs";
-import { conditionalAttackTooltipModSource, conditionalModToItemChangeForDamageTooltip } from "../../../util/conditional-helpers.mjs";
-import { truthiness } from "../../../util/truthiness.mjs";
-import { BaseBonus } from "../base-bonus.mjs";
+import { MODULE_NAME } from "../../consts.mjs";
+import { modifiersInput } from "../../handlebars-handlers/targeted/bonuses/conditional-modifiers-input.mjs";
+import { conditionalAttackTooltipModSource, conditionalModToItemChangeForDamageTooltip } from "../../util/conditional-helpers.mjs";
+import { truthiness } from "../../util/truthiness.mjs";
+import { BaseBonus } from "./base-bonus.mjs";
 
 /**
  * @extends BaseBonus
@@ -104,6 +104,7 @@ export class ConditionalModifiersBonus extends BaseBonus {
             item,
             key: this.key,
             parentElement: html,
+            journal: this.journal,
         }, {
             canEdit: isEditable,
         });

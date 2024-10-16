@@ -2,6 +2,7 @@ import { MODULE_NAME } from "../../../consts.mjs";
 import { createTemplate, templates } from "../../templates.mjs";
 import { addNodeToRollBonus } from "../../add-bonus-to-item-sheet.mjs";
 import { api } from '../../../util/api.mjs';
+import { localizeBonusLabel, localizeBonusTooltip } from '../../../util/localize.mjs';
 
 /** @returns {ItemConditionalModifierData['targets']} */
 function getConditionalTargets() {
@@ -129,17 +130,26 @@ export const loadConditionals = (item, key) => {
  * @param {object} args
  * @param {ItemPF} args.item
  * @param {string} args.key
+ * @param {string} args.journal
  * @param {HTMLElement} args.parentElement
+ * @param {string} [args.label]
+ * @param {string} [args.tooltip]
  * @param {object} options
  * @param {boolean} options.canEdit
  */
 export function modifiersInput({
     item,
     key,
+    journal,
     parentElement,
+    label = '',
+    tooltip = '',
 }, {
     canEdit,
 }) {
+    label ||= localizeBonusLabel(key);
+    tooltip ||= localizeBonusTooltip(key);
+
     /** @type {ItemConditional[]} */
     let conditionals = loadConditionals(item, key);
     // Prepare stuff for actions with conditionals
@@ -159,9 +169,9 @@ export function modifiersInput({
     }
 
     const templateData = {
-        label: 'name goes here',
-        journal: '',
-        tooltip: 'tooltip',
+        label,
+        journal,
+        tooltip,
         damageTypes: pf1.registry.damageTypes.toObject(),
         data: {
             conditionals: createConditionalTemplateData(),
