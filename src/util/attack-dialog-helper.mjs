@@ -1,3 +1,4 @@
+import { api } from './api.mjs';
 import { localize } from './localize.mjs'
 
 /**
@@ -5,25 +6,38 @@ import { localize } from './localize.mjs'
  * @param {string} key
  * @param {AttackDialog} dialog
  * @param {object} [options]
+ * @param {boolean} [options.checked]
  * @param {string} [options.label]
  */
-export const addCheckToAttackDialog = (html, key, dialog, { label = '' } = {}) => {
+export const addCheckToAttackDialog = (
+    html,
+    key,
+    dialog,
+    {
+        checked = false,
+        label = '',
+    } = {},
+) => {
     label ||= localize(key);
     const flags = html.querySelector('div.form-group.stacked.flags');
     if (flags) {
         const labelElement = document.createElement('label');
         labelElement.classList.add('checkbox');
 
+        if (checked) {
+            DialogBooleanTracker.track(dialog.appId, key);
+        }
+
         const input = document.createElement('input');
         input.setAttribute('type', 'checkbox');
         input.setAttribute('name', key);
 
-        input.checked = !!trackedApps.get(dialog.appId);
+        input.checked = DialogBooleanTracker.isTracked(dialog.appId, key);
         input.addEventListener('change', function () {
             if (this.checked) {
-                track(dialog.appId);
+                DialogBooleanTracker.track(dialog.appId, key);
             } else {
-                untrack(dialog.appId);
+                DialogBooleanTracker.untrack(dialog.appId, key);
             }
         });
 
@@ -34,18 +48,52 @@ export const addCheckToAttackDialog = (html, key, dialog, { label = '' } = {}) =
     }
 }
 
-const trackedApps = new Map();
-/** @param {number} id */
-const track = (id) => {
-    trackedApps.set(id, true);
-    // remove any tracked ids that are no longer present
-    trackedApps.keys()
-        // @ts-ignore
-        .filter((key) => !ui.windows[key])
-        .forEach(untrack);
+class DialogBooleanTracker {
+    /** @typedef {number} AppId */
+
+    /** @type {Map<AppId, Map<string, boolean>} */
+    static #trackedApplications = new Map();
+
+    /**
+     * @param {AppId} id
+     * @param {string} key
+     */
+    static track(id, key) {
+        this.#trackedApplications.has(id)
+            ? this.#trackedApplications.get(id)?.set(key, true)
+            : this.#trackedApplications.set(id, new Map([[key, true]]));
+
+        // remove any tracked ids that are no longer on screen
+        const toRemove = this.#trackedApplications.keys()
+            // @ts-ignore
+            .filter((key) => !ui.windows[key]);
+        for (const key of toRemove) {
+            this.#removeApp(key);
+        }
+    }
+
+    /**
+     * @param {AppId} id
+     * @param {string} key
+     */
+    static isTracked(id, key) {
+        return !!this.#trackedApplications.get(id)?.get(key);
+    }
+
+    /**
+     * @param {AppId} id
+     * @param {string} key
+     */
+    static untrack(id, key) {
+        return !!this.#trackedApplications.get(id)?.delete(key);
+    }
+
+    /** @param {AppId} id */
+    static #removeApp(id) { this.#trackedApplications.delete(id); }
 }
-/** @param {number} id */
-const untrack = (id) => trackedApps.delete(id);
+
+api.utils.DialogBooleanTracker = DialogBooleanTracker;
+
 
 /**
  * @param {ActionUse} actionUse
