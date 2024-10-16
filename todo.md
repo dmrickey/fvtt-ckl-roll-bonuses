@@ -62,6 +62,7 @@
 - [Range/Positional ideas](#rangepositional-ideas)
 - [Other Ideas](#other-ideas)
 - [vnext](#vnext)
+- [v 2.16](#v-216)
 
 # TODO
 - Figure out a way to support multiple target groups on a single Item (so I can add `Favored Enemy (Human) +4` and `Favored Enemy (goblin) +2` on a single Item)
@@ -290,3 +291,15 @@
   - Add a configuration error if "this target is not configured"
 - Roll Bonuses button in header that goes "show me a list of items with bonuses". This can also have a button to auto-populate any that it thinks should have bonuses added
   - See example [https://gitlab.com/mxzf/adventure-uninstaller/-/blob/master/adventure-uninstaller.mjs](here)
+
+# v 2.16
+- Verify ItemConditionalData refactor stuff
+  - Verify Damage Bonus still shows tooltip and adds bonus
+  - Verify Effective Size Bonus still shows tooltip and adds bonus
+- Modifiers Bonus
+  - Add "name" to input saving
+  - Dropdowns don't save correctly
+  - Rename to "Conditional Modifiers"
+  - Add checkbox to attack dialog based off of "default" values
+  - Actually add bonus based on attack dialog checkbox (or based off of default if checkbox is skipped)
+  - ..probably no item hints?

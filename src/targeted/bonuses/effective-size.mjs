@@ -96,7 +96,7 @@ export class EffectiveSizeBonus extends BaseBonus {
      * @returns {ItemConditional}
      */
     static #createConditional(bonus, name) {
-        return {
+        return new pf1.components.ItemConditional({
             _id: foundry.utils.randomID(),
             default: true,
             name,
@@ -109,6 +109,6 @@ export class EffectiveSizeBonus extends BaseBonus {
                 target: 'size',
                 type: '',
             }],
-        }
+        });
     }
 }

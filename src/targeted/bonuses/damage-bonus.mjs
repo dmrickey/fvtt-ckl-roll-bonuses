@@ -7,9 +7,7 @@ import { signed } from '../../util/to-signed-string.mjs';
 import { truthiness } from "../../util/truthiness.mjs";
 import { BaseBonus } from "./base-bonus.mjs";
 
-/**
- * @extends BaseBonus
- */
+/** @extends BaseBonus */
 export class DamageBonus extends BaseBonus {
     /**
      * @inheritdoc
@@ -101,7 +99,7 @@ export class DamageBonus extends BaseBonus {
         const damages = this.#getCachedDamageBonuses(source);
         const conditional = this.#createConditional(damages, source.name);
         return conditional.modifiers?.length
-            ? conditional
+            ? new pf1.components.ItemConditional(conditional)
             : null;
     }
 
@@ -120,7 +118,7 @@ export class DamageBonus extends BaseBonus {
         }
 
         sources = (conditional.modifiers ?? [])
-            .filter((mod) => mod.target === 'damage')
+            .filter((mod) => mod.data.target === 'damage')
             .map((mod) => conditionalModToItemChangeForDamageTooltip(conditional, mod, { isDamage: true }))
             .filter(truthiness);
 
@@ -188,14 +186,14 @@ export class DamageBonus extends BaseBonus {
     /**
      * @param {DamageInputModel[]} damageBonuses
      * @param {string} name
-     * @returns {ItemConditional}
+     * @returns {ItemConditionalData}
      */
     static #createConditional(damageBonuses, name) {
         return {
             _id: foundry.utils.randomID(),
             default: true,
             name,
-            modifiers: damageBonuses?.map( /** @return {ItemConditionalModifier} */(bonus) => ({
+            modifiers: damageBonuses?.map( /** @return {ItemConditionalModifierData} */(bonus) => ({
                 _id: foundry.utils.randomID(),
                 critical: bonus.crit || 'normal', // normal | crit | nonCrit
                 damageType: bonus.type,

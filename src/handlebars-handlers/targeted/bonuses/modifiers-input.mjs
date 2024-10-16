@@ -4,12 +4,9 @@ import { createTemplate, templates } from "../../templates.mjs";
 import { addNodeToRollBonus } from "../../add-bonus-to-item-sheet.mjs";
 import { api } from '../../../util/api.mjs';
 
-/**
- *
- * @returns {ItemConditionalModifier['targets']}
- */
+/** @returns {ItemConditionalModifierData['targets']} */
 function getConditionalTargets() {
-    /** @type {ItemConditionalModifier['targets']} */
+    /** @type {ItemConditionalModifierData['targets']} */
     const result = {
         attack: pf1.config.conditionalTargets.attack._label,
         damage: pf1.config.conditionalTargets.damage._label,
@@ -18,7 +15,7 @@ function getConditionalTargets() {
     };
 
     // Only add Misc target if subTargets are available
-    if (Object.keys(getConditionalSubTargets("misc")).length > 0) {
+    if (Object.keys(getConditionalSubTargets("misc")).length) {
         result.misc = game.i18n.localize(pf1.config.conditionalTargets.misc._label);
     }
     return result;
@@ -50,6 +47,7 @@ function getConditionalSubTargets(target) {
     // Add subtargets affecting effects
     if (target === "effect") {
         result["dc"] = game.i18n.localize("PF1.DC");
+        result["cl"] = game.i18n.localize("PF1.CasterLevelAbbr");
     }
     // Add misc subtargets
     if (target === "misc") {
@@ -59,7 +57,8 @@ function getConditionalSubTargets(target) {
     return result;
 }
 
-/** Generates lists of conditional modifier bonus types applicable to a formula.
+/**
+ * Generates lists of conditional modifier bonus types applicable to a formula.
  * @param {string} target - The target key as defined in PF1.conditionTargets.
  * @returns {{[key: string]: string}} A list of bonus types.
  */
@@ -80,7 +79,8 @@ function getConditionalModifierTypes(target) {
     return result;
 }
 
-/** Generates a list of critical applications for a given formula target.
+/**
+ * Generates a list of critical applications for a given formula target.
  * @param {string} target - The target key as defined in PF1.conditionalTargets.
  * @returns {{[key: string]: string}} A list of critical applications.
  */
@@ -104,53 +104,6 @@ function getConditionalCritical(target) {
 }
 
 /**
- *
- * @param {Nullable<any>} data
- * @returns {ItemConditionalModifier}
- */
-function createModifier(data = null) {
-    data ||= pf1.components.ItemConditionalModifier.defaultData;
-    let modifier = new pf1.components.ItemConditionalModifier(data);
-
-    modifier = { ...modifier, ...modifier.data };
-    modifier.id = modifier._id;
-
-    modifier.targets = getConditionalTargets();
-    modifier.subTargets = getConditionalSubTargets(modifier.target);
-    modifier.conditionalModifierTypes = getConditionalModifierTypes(modifier.target);
-    modifier.conditionalCritical = getConditionalCritical(modifier.target);
-
-    return modifier;
-}
-
-/**
- *
- * @param {ItemPF} item
- * @param {Nullable<ItemConditional>} existing
- * @returns
- */
-function createConditional(item, existing = null) {
-    const data = existing?.data || pf1.components.ItemConditional.defaultData;
-    data.default = true;
-    data.name = item.name;
-    const c = new pf1.components.ItemConditional(data);
-    c._id = c.id ?? '';
-
-    const modifiers = existing?.modifiers;
-    if (modifiers?.length) {
-        // c.data.modifiers = loadModifiers(modifiers);
-        c.modifiers = modifiers.map(({ data }) => createModifier(data));
-        c.data.modifiers = c.modifiers;
-    }
-    else {
-        c.modifiers = [createModifier()];
-    }
-
-    return c;
-}
-
-/**
- *
  * @param {ItemPF} item
  * @param {string} key
  * @returns
@@ -160,7 +113,19 @@ function createId(item, key) {
 }
 
 /**
- * Uses PF1's conditionals.hbs and only shows the modifiers instead of individual conditionals
+ * @param {ItemPF} item
+ * @param {string} key
+ * @return {ItemConditional[]}
+ */
+export const loadConditionals = (item, key) => {
+    /** @type {ItemConditionalData[]} */
+    const flags = item.getFlag(MODULE_NAME, key) || [];
+    const conditionals = flags.map((d) => new pf1.components.ItemConditional(d));
+    return conditionals;
+}
+
+/**
+ * Roll Bonus wrapper around system's Conditionals input
  *
  * @param {object} args
  * @param {ItemPF} args.item
@@ -177,39 +142,55 @@ export function modifiersInput({
     canEdit,
 }) {
     /** @type {ItemConditional[]} */
-    let conditionals = (item.getFlag(MODULE_NAME, key) || [createConditional(item)]).map((/** @type {ItemConditional} */c) => createConditional(item, c));
+    let conditionals = loadConditionals(item, key);
+    // Prepare stuff for actions with conditionals
+
+    for (const conditional of conditionals) {
+        for (const modifier of conditional.data.modifiers) {
+            modifier.targets = getConditionalTargets();
+            modifier.subTargets = getConditionalSubTargets(modifier.target);
+            modifier.conditionalModifierTypes = getConditionalModifierTypes(modifier.target);
+            modifier.conditionalCritical = getConditionalCritical(modifier.target);
+        }
+    }
+
     const templateData = {
+        label: 'name goes here',
+        journal: '',
+        tooltip: 'tooltip',
         damageTypes: pf1.registry.damageTypes.toObject(),
         data: {
-            conditionals,
+            conditionals: conditionals.map((c) => c.data),
         }
     };
 
-    const div = createTemplate(templates.conditionals, templateData);
-    div.classList.add('pf1', 'item-action');
+    const div = createTemplate(templates.conditionalsInput, templateData);
+    // div.classList.add('pf1', 'sheet', 'action');
     div.setAttribute('id', createId(item, key));
 
     // todo make sure "defaults" are saved when swapping to a new 'type'
-
     setTimeout(() => {
         const conditionalInput = document.querySelector(`#${createId(item, key)}`);
         // @ts-ignore
         const jq = $(conditionalInput);
-        jq.find('.conditional.flexrow')?.hide();
-        jq.find('.conditional-header')?.text(localize('modifiers'));
+        // jq.find('.conditional.flexrow')?.hide();
+        jq.find('.conditional-header')?.hide();
     });
 
     async function updateItem() {
-        const sanitized = conditionals.map((c) => ({
-            data: c.data,
-            modifiers: c.modifiers.map(({ data }) => ({ data })),
-        }));
+        const sanitized = conditionals.map((c) => c.data);
+        debugger;
+        // await item.unsetFlag(MODULE_NAME, key);
         await item.setFlag(MODULE_NAME, key, sanitized);
         // can't do this without rehooking up bindings and adding
         // await item.update({ flags: { [MODULE_NAME]: { [key]: sanitized } } }, { render: false });
     }
 
-    div.querySelectorAll('.conditional-control').forEach((element) => {
+    // remove system's name property so it doesn't save automatically
+    const named = div.querySelectorAll('[name]');
+    named.forEach((elem) => elem.removeAttribute('name'));
+
+    div.querySelectorAll('.conditional-control, .conditional-default').forEach((element) => {
         element.addEventListener('click', async (event) => {
             event.preventDefault();
 
@@ -219,12 +200,24 @@ export function modifiersInput({
 
             // Add new conditional
             if (a.classList.contains("add-conditional")) {
-                conditionals.push(createConditional(item));
+                conditionals.push(new pf1.components.ItemConditional(pf1.components.ItemConditional.defaultData));
                 await updateItem();
             }
 
             /** @type {HTMLDataListElement | null} */
             let li;
+
+            // handle default toggle
+            if (a.classList.contains('conditional-default')) {
+                li = a.closest(".conditional");
+                if (!(li instanceof Element)) return;
+                const conditional = conditionals.find((c) => c.id === li?.dataset.conditional);
+                if (!conditional) return;
+
+                const checkbox = /** @type {HTMLInputElement} */ (a);
+                conditional.data.default = checkbox.checked;
+                await updateItem();
+            }
 
             // Remove a conditional
             if (a.classList.contains("delete-conditional")) {
@@ -239,7 +232,9 @@ export function modifiersInput({
                 li = a.closest(".conditional");
                 if (!(li instanceof Element)) return;
                 const conditional = conditionals.find((c) => c.id === li?.dataset.conditional);
-                conditional?.modifiers.push(createModifier());
+
+                const modifier = new pf1.components.ItemConditionalModifier(pf1.components.ItemConditionalModifier.defaultData);
+                conditional?.data.modifiers.push(modifier.data);
                 await updateItem();
             }
 
@@ -249,13 +244,13 @@ export function modifiersInput({
                 if (!(li instanceof Element)) return;
                 const conditional = conditionals.find((c) => c.id === li?.dataset.conditional);
                 if (!conditional) return;
-                conditional.modifiers = conditional.modifiers.filter((m) => m.id !== li?.dataset.modifier);
+                conditional.data.modifiers = conditional.data.modifiers.filter((m) => m._id !== li?.dataset.modifier);
                 await updateItem();
             }
         });
     });
 
-    /** @type {{ [key in ItemConditionalModifier['target']]: { subTarget: ItemConditionalModifier['subTarget'], critical: ItemConditionalModifier['critical'], damageType: ItemConditionalModifier['damageType'], type: ItemConditionalModifier['type'],} }} */
+    /** @type {{ [key in ItemConditionalModifierData['target']]: { subTarget: ItemConditionalModifierData['subTarget'], critical: ItemConditionalModifierData['critical'], damageType: ItemConditionalModifierData['damageType'], type: ItemConditionalModifierData['type'],} }} */
     const modDefaults = {
         attack: { subTarget: 'allAttack', critical: 'normal', damageType: undefined, type: 'untyped', },
         damage: { subTarget: 'allDamage', critical: 'normal', damageType: pf1.components.ItemAction.defaultDamageType, type: 'untyped', },
@@ -290,7 +285,7 @@ export function modifiersInput({
                     // @ts-ignore
                     const /** @type {HTMLSelectElement}*/ eventTarget = event.target;
                     // @ts-ignore
-                    let /** @type {ItemConditionalModifier['target']} */ value = eventTarget?.value;
+                    let /** @type {ItemConditionalModifierData['target']} */ value = eventTarget?.value;
 
                     if (!value) {
                         value = 'attack';
@@ -354,7 +349,7 @@ export function modifiersInput({
         );
     });
 
-    addNodeToRollBonus(parentElement, div, item, canEdit, 'target');
+    addNodeToRollBonus(parentElement, div, item, canEdit, 'bonus');
 }
 
-// api.inputs.modifiersInput = modifiersInput;
+api.inputs.modifiersInput = modifiersInput;

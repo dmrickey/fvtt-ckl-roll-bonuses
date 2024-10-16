@@ -486,6 +486,11 @@ declare global {
         name: string;
         range: number;
         sheet: ItemActionSheet;
+
+        defaultDamageType: {
+            values: string[];
+            custom: '';
+        };
     }
 
     /** used for weapons and attacks */
@@ -1740,40 +1745,48 @@ declare global {
         toObject(): object;
     }
 
-    class ItemConditional {
-        _id: string;
-        data?: any;
+    class ItemConditionalData {
         default: boolean;
-        id?: string;
-        modifiers: ItemConditionalModifier[];
+        modifiers: ItemConditionalModifierData[];
         name: string;
-        static get defaultData(): any;
+        _id: string;
+    }
+    class ItemConditional {
+        // _id: string;
+        data: ItemConditionalData;
+        default: boolean;
 
-        constructor(obj: { [modifiers]: object[] }): ItemConditional;
-        static create(
-            modifiers: object[],
-            options: {
-                parent: {
-                    data: {
-                        conditionals: any[];
-                    };
-                    update: any;
-                };
-            }
+        get id(): string;
+        get modifiers(): Readonly<ItemConditionalModifier>[];
+        get name(): string;
+        get parent(): undefined | ItemPF;
+        static get defaultData(): {
+            _id: string;
+            default: false;
+            modifiers: ItemConditionalModifierData[];
+            name: '';
+        };
+
+        constructor(
+            obj: ItemConditionalData,
+            parent?: ItemAction
         ): ItemConditional;
+        /** @deprecated do not use within this mod */
+        static async create(
+            data: ItemConditionalData[],
+            options: {
+                parent: ItemAction;
+            }
+        ): Promise<Array<ItemConditional>>;
     }
 
-    class ItemConditionalModifier {
-        _id: string;
+    class ItemConditionalModifierData {
         critical: Mullable<'crit' | 'nonCrit' | 'normal'>; // all for 'damage', 'crit' and 'normal' also for attack
         damageType: Nullable<TraitSelectorValuePlural>;
-        data?: any;
         formula: string;
-        id?: string;
         subTarget:
             | 'hasteAttack'
             | 'rapidShotAttack'
-            | 'attack_0'
             | 'allAttack' // when target is 'attack'
             | 'hasteDamage'
             | 'rapidShotDamage'
@@ -1785,7 +1798,9 @@ declare global {
             | undefined; // no subtarget for 'size'
         target: 'attack' | 'damage' | 'effect' | 'misc' | 'size';
         type: Nullable<BonusTypes | string>;
+        _id: string;
 
+        /** PREPPED DATA FOR SHEET */
         targets?: {
             attack: string;
             damage: string;
@@ -1800,9 +1815,25 @@ declare global {
             crit?: 'PF1.OnCritBonusFormula';
             nonCrit?: 'PF1.NonMultBonusFormula';
         };
+        /** END PREPPED DATA FOR SHEET */
+    }
+    class ItemConditionalModifier {
+        get id(): string;
+        set id(value: string);
+
+        data: ItemConditionalModifierData;
+        parent: ItemConditional;
 
         constructor(any);
-        static get defaultData(): any;
+        static get defaultData(): {
+            critical: '';
+            damageType: ItemAction['defaultDamageType'];
+            formula: '';
+            subTarget: '';
+            target: '';
+            type: '';
+            _id: string;
+        };
     }
 
     interface ActorSheetPF {

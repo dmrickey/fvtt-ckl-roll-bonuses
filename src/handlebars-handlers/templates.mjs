@@ -10,6 +10,7 @@ export const templates = /** @type {const} */ ({
 
     // generic shortcuts
     checkboxInput: `modules/${MODULE_NAME}/hbs/checkbox-input.hbs`,
+    conditionalsInput: `modules/${MODULE_NAME}/hbs/conditionals-input.hbs`,
     enabledLabel: `modules/${MODULE_NAME}/hbs/enabled-label.hbs`,
     keyValueSelect: `modules/${MODULE_NAME}/hbs/labeled-key-value-dropdown-select.hbs`,
     radioInput: `modules/${MODULE_NAME}/hbs/radio-input.hbs`,

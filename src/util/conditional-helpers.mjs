@@ -73,22 +73,22 @@ export function conditionalCalculator(shared, conditional) {
 export function conditionalModToItemChangeForDamageTooltip(conditional, modifier, { isDamage = false } = {}) {
     if (!modifier) return;
 
-    const subTarget = modifier.target;
+    const subTarget = modifier.data.target;
     if (subTarget !== 'attack' && subTarget !== 'damage') {
         return;
     }
 
-    if (modifier.critical !== 'normal') {
+    if (modifier.data.critical !== 'normal') {
         return;
     }
 
-    if (modifier.subTarget !== 'allAttack' && modifier.subTarget !== 'allDamage') {
+    if (modifier.data.subTarget !== 'allAttack' && modifier.data.subTarget !== 'allDamage') {
         return;
     }
 
     const change = new pf1.components.ItemChange({
         flavor: conditional.name,
-        formula: modifier.formula,
+        formula: modifier.data.formula,
         // @ts-ignore
         modifier: modifier.type ? pf1.config.bonusTypes[modifier.type] : modifier.type || undefined,
         operator: 'add',
@@ -96,10 +96,10 @@ export function conditionalModToItemChangeForDamageTooltip(conditional, modifier
         subTarget,
     });
     if (isDamage) {
-        change.type = modifier.type;
+        change.type = modifier.data.type;
     }
 
-    change.value = modifier.formula;
+    change.value = modifier.data.formula;
     change.name = change.flavor;
 
     return change;
@@ -172,7 +172,7 @@ export function createChangeForTooltip({
 /**
  *
  * @param {ItemConditional} conditional
- * @param {ItemConditionalModifier} modifier
+ * @param {ItemConditionalModifierData} modifier
  * @returns {Nullable<ModifierSource>}
  */
 export function conditionalAttackTooltipModSource(conditional, modifier) {
