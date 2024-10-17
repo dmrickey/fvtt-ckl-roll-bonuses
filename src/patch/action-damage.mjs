@@ -1,6 +1,7 @@
 // @ts-nocheck
 
 import { handleBonusesFor } from '../target-and-bonus-join.mjs';
+import { truthiness } from '../util/truthiness.mjs';
 
 /**
  * Get action's damage formula.
@@ -39,10 +40,13 @@ function actionDamage(action, { simplify = true, strict = true } = {}) {
                     if (!isNaN(rd.size)) {
                         handleBonusesFor(
                             action,
-                            (bonusType, sourceItem) => rd.size += bonusType.getConditional?.(sourceItem)?.modifiers
+                            (bonusType, sourceItem) => rd.size += (bonusType.getConditionals(sourceItem) ?? [])
+                                .flatMap(x => x)
+                                .filter(truthiness)
+                                .flatMap(x => x.data.modifiers)
                                 .filter((x) => x.target === 'size')
                                 .map((x) => RollPF.safeTotal(x.formula))
-                                .reduce((acc, x) => acc + x, 0) ?? 0
+                                .reduce((acc, x) => acc + x, 0)
                         );
                         /** END OVERRIDE */
                     }
