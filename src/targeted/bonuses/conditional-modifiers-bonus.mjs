@@ -4,6 +4,7 @@ import { handleBonusTypeFor } from '../../target-and-bonus-join.mjs';
 import { addCheckToAttackDialog, getFormData } from '../../util/attack-dialog-helper.mjs';
 import { conditionalAttackTooltipModSource, conditionalModToItemChangeForDamageTooltip } from "../../util/conditional-helpers.mjs";
 import { truthiness } from "../../util/truthiness.mjs";
+import { uniqueArray } from '../../util/unique-array.mjs';
 import { BaseBonus } from "./base-bonus.mjs";
 
 /**
@@ -24,6 +25,16 @@ export class ConditionalModifiersBonus extends BaseBonus {
     static get journal() { return 'todo'; }
 
     /**
+     * @param {ItemPF} item
+     * @returns {ItemConditional[]}
+     */
+    static loadConfiguredConditionals(item) {
+        const conditionals = loadConditionals(item, this.key)
+            .filter(x => x.data.modifiers.length && x.data.modifiers.find((m) => !!m.formula && !!m.target));
+        return conditionals;
+    }
+
+    /**
      * @override
      * @param {ItemPF} target
      * @param {ActionUse | ItemAction} [action] The thing for the source is being applied to for contextually aware bonuses
@@ -32,7 +43,7 @@ export class ConditionalModifiersBonus extends BaseBonus {
     static getConditionals(target, action) {
         if (!(action instanceof pf1.actionUse.ActionUse)) return;
 
-        const conditionals = loadConditionals(target, this.key)
+        const conditionals = this.loadConfiguredConditionals(target)
             .filter((c) => {
                 if (action instanceof pf1.actionUse.ActionUse) {
                     const formData = getFormData(action, c.id);
@@ -128,7 +139,7 @@ export class ConditionalModifiersBonus extends BaseBonus {
             dialog.action,
             ConditionalModifiersBonus,
             (bonusType, sourceItem) => {
-                const conditionals = loadConditionals(sourceItem, bonusType.key);
+                const conditionals = bonusType.loadConfiguredConditionals(sourceItem);
                 conditionals.forEach((c) => {
                     addCheckToAttackDialog(
                         html,
@@ -137,7 +148,7 @@ export class ConditionalModifiersBonus extends BaseBonus {
                         {
                             checked: c.data.default,
                             isConditional: true,
-                            label: `${sourceItem.name} ${c.name}`.trim(),
+                            label: uniqueArray([sourceItem.name, c.name].filter(truthiness)).join(' - '),
                         }
                     )
                 })
