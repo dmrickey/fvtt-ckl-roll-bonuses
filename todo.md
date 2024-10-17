@@ -11,6 +11,7 @@
     - [AC bonus](#ac-bonus)
     - [Alignment](#alignment)
     - [Conditional Bonus](#conditional-bonus)
+    - [Consume Item/Charge](#consume-itemcharge)
   - [Targets](#targets)
     - [Creature type/subtype](#creature-typesubtype)
     - [By Disposition](#by-disposition)
@@ -92,6 +93,8 @@
   - I can make it work but it won't do anything (the system doesn't show it in the attack, it's kinda pointless without extra functionality)
 ### Conditional Bonus
 - See if I can make a way to add a conditional modifier into an attack dialog that can optionally be enabled for targeted attacks
+### Consume Item/Charge
+- consume a charge from <pick Item> when used
 
 ## Targets
 ### Creature type/subtype
@@ -294,11 +297,10 @@
 
 # v 2.16
 - Modifiers Bonus
+  - Add safety for readonly
   - Fix input layout
   - Add journal entry 
     - ..and make sure to hook it up properly
-  - Add checkbox to attack dialog based off of "default" values
-  - Actually add bonus based on attack dialog checkbox (or based off of default if checkbox is skipped)
   - ..probably no item hints?
 - Fix
   - Actor's Combat damage column does not include damage bonus (it did not in 2.14)

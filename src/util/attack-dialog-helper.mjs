@@ -26,7 +26,24 @@ export const addCheckToAttackDialog = (
 
     const group = isConditional ? 'conditionals' : 'flags';
 
-    const container = html.querySelector(`div.form-group.stacked.${group}`);
+    let container = html.querySelector(`div.form-group.stacked.${group}`);
+
+    if (!container) {
+        container = document.createElement('div');
+        container.classList.add('form-group', 'stacked', group);
+        const label = document.createElement('label');
+        const labelText = isConditional
+            ? localize('PF1.Conditionals')
+            : localize('PF1.Misc');
+        label.textContent = ` ${labelText} `;
+        container.appendChild(label);
+
+        const sibling = html.querySelector('.form-group.flags') || html.querySelector('.form-group');
+        if (sibling) {
+            sibling.after(container);
+        }
+    }
+
     if (container) {
         const labelElement = document.createElement('label');
         labelElement.classList.add('checkbox');
@@ -38,6 +55,9 @@ export const addCheckToAttackDialog = (
         const input = document.createElement('input');
         input.setAttribute('type', 'checkbox');
         input.setAttribute('name', key);
+        if (isConditional) {
+            input.classList.add('conditional');
+        }
 
         input.checked = DialogBooleanTracker.isTracked(dialog.appId, key);
         input.addEventListener('change', function () {
