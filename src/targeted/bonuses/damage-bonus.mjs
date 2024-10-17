@@ -22,13 +22,14 @@ export class DamageBonus extends BaseBonus {
     static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.PiyJbkTuzKHugPSk#damage'; }
 
     /**
-     * @inheritdoc
      * @override
+     * @inheritdoc
      */
     static get label() { return localize('PF1.DamageBonus'); }
 
     /**
      * @override
+     * @inheritdoc
      */
     static init() {
         LocalHookHandler.registerHandler(localHooks.prepareData, (item, rollData) => {
@@ -91,11 +92,10 @@ export class DamageBonus extends BaseBonus {
     }
 
     /**
-     * @override
      * @param {ItemPF} source
      * @returns {Nullable<ItemConditional>}
      */
-    static getConditional(source) {
+    static #getConditional(source) {
         const damages = this.#getCachedDamageBonuses(source);
         const conditional = this.#createConditional(damages, source.name);
         return conditional.modifiers?.length
@@ -105,6 +105,20 @@ export class DamageBonus extends BaseBonus {
 
     /**
      * @override
+     * @inheritdoc
+     * @param {ItemPF} source
+     * @returns {Nullable<ItemConditional[]>}
+     */
+    static getConditionals(source) {
+        const conditional = this.#getConditional(source);
+        if (conditional) {
+            return [conditional]
+        }
+    }
+
+    /**
+     * @override
+     * @inheritdoc
      * @param {ItemPF} source
      * @returns {ItemChange[]}
      */
@@ -112,7 +126,7 @@ export class DamageBonus extends BaseBonus {
         /** @type {ItemChange[]} */
         let sources = [];
 
-        const conditional = this.getConditional(source);
+        const conditional = this.#getConditional(source);
         if (!conditional) {
             return sources;
         }
@@ -126,8 +140,8 @@ export class DamageBonus extends BaseBonus {
     }
 
     /**
-     * @inheritdoc
      * @override
+     * @inheritdoc
      * @param {object} options
      * @param {ActorPF | null} options.actor
      * @param {HTMLElement} options.html

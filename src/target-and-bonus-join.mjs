@@ -160,14 +160,16 @@ api.utils.handleBonusTypeFor = handleBonusTypeFor;
  * @param {ActionUse} actionUse
  */
 function actionUseHandleConditionals(actionUse) {
-    /** @type {Nullable<ItemConditional>[]} */
+    /** @type {Nullable<ItemConditional[]>[]} */
     const conditionals = [];
     handleBonusesFor(
         actionUse,
-        (bonusType, sourceItem) => conditionals.push(bonusType.getConditional(sourceItem, actionUse)),
+        (bonusType, sourceItem) => conditionals.push(bonusType.getConditionals(sourceItem, actionUse)),
     );
 
     conditionals
+        .filter(truthiness)
+        .flatMap((x) => x)
         .filter(truthiness)
         .filter((c) => c.data.modifiers.length)
         .forEach((conditional) => conditionalCalculator(actionUse.shared, conditional));

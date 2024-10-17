@@ -4,7 +4,7 @@ import { currentTargets } from '../util/get-current-targets.mjs';
 import { customGlobalHooks } from '../util/hooks.mjs'
 import { BaseGlobalBonus } from './base-global-bonus.mjs';
 import { RangedIncrementPenaltyBonus } from './targeted/bonuses/ranged-increment-penalty-bonus.mjs';
-import { addCheckToAttackDialog, hasFormData } from '../util/attack-dialog-helper.mjs';
+import { addCheckToAttackDialog, getFormData } from '../util/attack-dialog-helper.mjs';
 
 /** @type {ActionType[]} */
 const rangedTypes = ['rcman', 'rwak', 'twak', 'rsak'];
@@ -105,7 +105,7 @@ export class RangedIncrementPenaltyGlobalBonus extends BaseGlobalBonus {
         if (RangedIncrementPenaltyGlobalBonus.isDisabled() || RangedIncrementPenaltyGlobalBonus.isDisabledForActor(actor)) {
             return;
         }
-        if (hasFormData(actionUse, RangedIncrementPenaltyGlobalBonus.dialogDisableKey)) {
+        if (getFormData(actionUse, RangedIncrementPenaltyGlobalBonus.dialogDisableKey)) {
             return;
         }
         if (!actor || !shared?.rollData?.rb) {
@@ -163,7 +163,7 @@ export class RangedIncrementPenaltyGlobalBonus extends BaseGlobalBonus {
      * @param {string[]} notes
      */
     static addSkipFootnote(actionUse, notes) {
-        if (hasFormData(actionUse, RangedIncrementPenaltyGlobalBonus.dialogDisableKey)) {
+        if (getFormData(actionUse, RangedIncrementPenaltyGlobalBonus.dialogDisableKey)) {
             notes.push(RangedIncrementPenaltyGlobalBonus.disabledFootnote);
         }
     }

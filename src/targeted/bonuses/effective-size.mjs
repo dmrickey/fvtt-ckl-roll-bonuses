@@ -39,17 +39,28 @@ export class EffectiveSizeBonus extends BaseBonus {
     }
 
     /**
-     * @override
-     * @inheritdoc
-     * @param {ItemPF} target
+     * @param {ItemPF} source
      * @returns {Nullable<ItemConditional>}
      */
-    static getConditional(target) {
-        const size = this.#getCachedSizeBonus(target);
+    static #getConditional(source) {
+        const size = this.#getCachedSizeBonus(source);
         if (!size) return
 
-        const conditional = this.#createConditional(size, target.name);
+        const conditional = this.#createConditional(size, source.name);
         return conditional;
+    }
+
+    /**
+     * @override
+     * @inheritdoc
+     * @param {ItemPF} source
+     * @returns {Nullable<ItemConditional[]>}
+     */
+    static getConditionals(source) {
+        const conditional = this.#getConditional(source);
+        if (conditional) {
+            return [conditional]
+        }
     }
 
     /**

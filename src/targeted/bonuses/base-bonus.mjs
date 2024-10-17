@@ -18,9 +18,9 @@ export class BaseBonus extends BaseSource {
      * @abstract
      * @param {ItemPF} source
      * @param {ActionUse | ItemAction} [action] The thing for the source is being applied to for contextually aware bonuses
-     * @returns {Nullable<ItemConditional>}
+     * @returns {Nullable<ItemConditional[]>}
      */
-    static getConditional(source, action) { return null; }
+    static getConditionals(source, action) { return null; }
 
     /**
      * Add damage bonus to actor's Combat damage column tooltip
@@ -44,7 +44,7 @@ export class BaseBonus extends BaseSource {
 
     /**
      * Alters roll data for attack rolls - for simple changes that don't need an ItemConditional/Modifier or ItemChange
-     * use either this or @see {@link getConditional}
+     * use either this or @see {@link getConditionals}
      *
      * @abstract
      * @param {ItemPF} source

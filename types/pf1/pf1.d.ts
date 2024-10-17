@@ -1754,7 +1754,6 @@ declare global {
     class ItemConditional {
         // _id: string;
         data: ItemConditionalData;
-        default: boolean;
 
         get id(): string;
         get modifiers(): Readonly<ItemConditionalModifier>[];

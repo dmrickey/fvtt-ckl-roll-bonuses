@@ -1,7 +1,16 @@
+## Roll Bonuses 2.16.0
+
+### Bugfixes
+- Effective Size Bonuses once again show in the actor's sheet's Combat Damage column
+
+---
+
 ## Roll Bonuses 2.15.5
 
 ### Bugfixes
 - include ranged spell attacks in ranged penalties for those spells that need it.
+
+---
 
 ## Roll Bonuses 2.15.4
 
@@ -20,12 +29,15 @@
 - Added more cases for 10' diagonal reach
 - Added workaround for misconfigured without range increment resulting in an attack with 0 reach
 
+---
+
 ## Roll Bonuses 2.15.3
 
 ### Bugfixes
 - Fixed Attack Bonus breaking Item Hints when the bonus totals 0
 
 ---
+
 ## Roll Bonuses 2.15.2
 
 ### Bugfixes

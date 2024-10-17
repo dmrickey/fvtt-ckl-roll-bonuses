@@ -303,4 +303,3 @@
 - Fix
   - Actor's Combat damage column does not include damage bonus (it did not in 2.14)
     - Tooltip is correctly showing
-  - Actor's Combat damage column does not include Effective Size Modifier (it did in 2.14)

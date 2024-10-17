@@ -1,5 +1,7 @@
 import { MODULE_NAME } from "../../consts.mjs";
-import { modifiersInput } from "../../handlebars-handlers/targeted/bonuses/conditional-modifiers-input.mjs";
+import { loadConditionals, modifiersInput } from "../../handlebars-handlers/targeted/bonuses/conditional-modifiers-input.mjs";
+import { handleBonusTypeFor } from '../../target-and-bonus-join.mjs';
+import { addCheckToAttackDialog, getFormData } from '../../util/attack-dialog-helper.mjs';
 import { conditionalAttackTooltipModSource, conditionalModToItemChangeForDamageTooltip } from "../../util/conditional-helpers.mjs";
 import { truthiness } from "../../util/truthiness.mjs";
 import { BaseBonus } from "./base-bonus.mjs";
@@ -21,27 +23,28 @@ export class ConditionalModifiersBonus extends BaseBonus {
      */
     static get journal() { return 'todo'; }
 
-    //     /**
-    //      * @override
-    //      * @param {ItemPF} target
-    //      * @returns {Nullable<ItemConditional>}
-    //      */
-    //     static getConditional(target) {
-    //
-    //         /** @type {ItemConditional} */
-    //         const data = (target.getFlag(MODULE_NAME, this.key) || [])[0];
-    //
-    //         if (data) {
-    //             const conditional = {
-    //                 ...data,
-    //                 ...data.data,
-    //                 modifiers: data.modifiers?.map((m) => ({ ...m.data }) ?? []),
-    //             };
-    //             if (conditional.modifiers.length) {
-    //                 return conditional;
-    //             }
-    //         }
-    //     }
+    /**
+     * @override
+     * @param {ItemPF} target
+     * @param {ActionUse | ItemAction} [action] The thing for the source is being applied to for contextually aware bonuses
+     * @returns {Nullable<ItemConditional[]>}
+     */
+    static getConditionals(target, action) {
+        if (!(action instanceof pf1.actionUse.ActionUse)) return;
+
+        const conditionals = loadConditionals(target, this.key)
+            .filter((c) => {
+                if (action instanceof pf1.actionUse.ActionUse) {
+                    const formData = getFormData(action, c.id);
+                    if (typeof formData === 'boolean') {
+                        return formData;
+                    }
+                }
+                return c.data.default;
+            });
+
+        return conditionals;
+    }
 
     //     /**
     //      * @override
@@ -108,5 +111,41 @@ export class ConditionalModifiersBonus extends BaseBonus {
         }, {
             canEdit: isEditable,
         });
+    }
+
+    /**
+     * @this {ActionUse}
+     * @param {AttackDialog} dialog
+     * @param {[HTMLElement]} html
+     * @param {AttackDialogData} data
+     */
+    static addConditionalModifierToDialog(dialog, [html], data) {
+        if (!(dialog instanceof pf1.applications.AttackDialog)) {
+            return;
+        }
+
+        handleBonusTypeFor(
+            dialog.action,
+            ConditionalModifiersBonus,
+            (bonusType, sourceItem) => {
+                const conditionals = loadConditionals(sourceItem, bonusType.key);
+                conditionals.forEach((c) => {
+                    addCheckToAttackDialog(
+                        html,
+                        c.id,
+                        dialog,
+                        {
+                            checked: c.data.default,
+                            isConditional: true,
+                            label: `${sourceItem.name} ${c.name}`.trim(),
+                        }
+                    )
+                })
+            }
+        );
+    }
+
+    static {
+        Hooks.on('renderApplication', this.addConditionalModifierToDialog);
     }
 }
