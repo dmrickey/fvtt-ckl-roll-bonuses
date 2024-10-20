@@ -65,7 +65,11 @@ declare global {
         | 'rwak'
         | 'mcman'
         | 'rcman'
-        | 'twak';
+        | 'twak'
+        | 'spellsave'
+        | 'save'
+        | 'heal'
+        | 'other';
 
     declare type SkillInfo = SkillRollData & {
         id: keyof typeof pf1.config.skills;
