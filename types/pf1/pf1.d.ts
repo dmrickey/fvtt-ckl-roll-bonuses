@@ -440,7 +440,8 @@ declare global {
             rollData: RollData = null,
         } = {}): number;
         [MODULE_NAME]: {
-            enhancement: {
+            conditionals?: ItemConditionalModifierData[];
+            enhancement?: {
                 base: number;
                 stacks: number;
                 total: number;
@@ -1784,7 +1785,7 @@ declare global {
     }
 
     class ItemConditionalModifierData {
-        critical: Mullable<'crit' | 'nonCrit' | 'normal'>; // all for 'damage', 'crit' and 'normal' also for attack
+        critical: Nullable<'crit' | 'nonCrit' | 'normal'>; // all for 'damage', 'crit' and 'normal' also for attack
         damageType: Nullable<TraitSelectorValuePlural>;
         formula: string;
         subTarget:

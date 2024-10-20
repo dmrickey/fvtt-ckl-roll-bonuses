@@ -6,6 +6,7 @@
 
 ### Bugfixes
 - Effective Size Bonuses once again show in the actor's sheet's Combat Damage column
+- Fixed Actor's Combat's damage column not including targeted damage bonuses
 
 ---
 
