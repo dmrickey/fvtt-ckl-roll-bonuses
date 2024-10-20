@@ -1760,7 +1760,7 @@ declare global {
         data: ItemConditionalData;
 
         get id(): string;
-        get modifiers(): Readonly<ItemConditionalModifier>[];
+        get modifiers(): Readonly<Collection<ItemConditionalModifier>>;
         get name(): string;
         get parent(): undefined | ItemPF;
         static get defaultData(): {

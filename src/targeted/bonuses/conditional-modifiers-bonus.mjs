@@ -3,6 +3,7 @@ import { loadConditionals, modifiersInput } from "../../handlebars-handlers/targ
 import { handleBonusTypeFor } from '../../target-and-bonus-join.mjs';
 import { addCheckToAttackDialog, getFormData } from '../../util/attack-dialog-helper.mjs';
 import { conditionalAttackTooltipModSource, conditionalModToItemChangeForDamageTooltip } from "../../util/conditional-helpers.mjs";
+import { LocalHookHandler, localHooks } from '../../util/hooks.mjs';
 import { truthiness } from "../../util/truthiness.mjs";
 import { uniqueArray } from '../../util/unique-array.mjs';
 import { BaseBonus } from "./base-bonus.mjs";
@@ -22,14 +23,34 @@ export class ConditionalModifiersBonus extends BaseBonus {
      * @override
      * @returns {string}
      */
-    static get journal() { return 'todo'; }
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.PiyJbkTuzKHugPSk#conditional-modifiers'; }
+
+    /**
+     * @override
+     * @inheritdoc
+     */
+    static init() {
+        LocalHookHandler.registerHandler(localHooks.prepareData, (item, rollData) => {
+            const conditionals = loadConditionals(item, this.key)
+                .filter(x => x.data.modifiers.length && x.data.modifiers.find((m) => !!m.formula && !!m.target));
+            conditionals.forEach((c) => {
+                c.data.modifiers.forEach((m) => {
+                    item[MODULE_NAME][this.key] ||= [];
+                    item[MODULE_NAME][this.key].conditionals ||= { [c.id]: {} };
+
+                    const roll = RollPF.create(m.formula, rollData);
+                    item[MODULE_NAME][this.key].conditionals[c.id][m._id] = roll.simplifiedFormula;
+                });
+            });
+        });
+    }
 
     /**
      * @param {ItemPF} item
      * @returns {ItemConditional[]}
      */
     static loadConfiguredConditionals(item) {
-        const conditionals = loadConditionals(item, this.key)
+        const conditionals = loadConditionals(item, this.key, { useCachedFormula: true })
             .filter(x => x.data.modifiers.length && x.data.modifiers.find((m) => !!m.formula && !!m.target));
         return conditionals;
     }

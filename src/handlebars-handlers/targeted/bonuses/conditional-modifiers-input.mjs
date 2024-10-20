@@ -115,11 +115,25 @@ function createId(item, key) {
 /**
  * @param {ItemPF} item
  * @param {string} key
+ * @param {object} [options]
+ * @param {boolean} [options.useCachedFormula]
  * @return {ItemConditional[]}
  */
-export const loadConditionals = (item, key) => {
+export const loadConditionals = (item, key, { useCachedFormula = false } = {}) => {
     /** @type {ItemConditionalData[]} */
-    const flags = item.getFlag(MODULE_NAME, key) || [];
+    const flags = deepClone(item.getFlag(MODULE_NAME, key) || []);
+
+    if (useCachedFormula) {
+        flags.forEach((c) => {
+            c.modifiers.forEach((m) => {
+                const formula = item[MODULE_NAME][key].conditionals[c._id][m._id];
+                if (formula) {
+                    m.formula = formula;
+                }
+            });
+        });
+    }
+
     const conditionals = flags.map((d) => new pf1.components.ItemConditional(d));
     return conditionals;
 }
@@ -182,6 +196,15 @@ export function modifiersInput({
     // div.classList.add('pf1', 'sheet', 'action');
     div.setAttribute('id', createId(item, key));
 
+    if (!canEdit) {
+        div.querySelectorAll('input').forEach((element) => {
+            element.setAttribute('readonly', 'true');
+        });
+        div.querySelectorAll('select, input[type="checkbox"]').forEach((element) => {
+            element.setAttribute('disabled', 'true');
+        });
+    }
+
     // todo make sure "defaults" are saved when swapping to a new 'type'
     setTimeout(() => {
         const conditionalInput = document.querySelector(`#${createId(item, key)}`);
@@ -193,8 +216,6 @@ export function modifiersInput({
 
     async function updateItem() {
         const sanitized = conditionals.map((c) => c.data);
-        // debugger;
-        // await item.unsetFlag(MODULE_NAME, key);
         await item.setFlag(MODULE_NAME, key, sanitized);
         // can't do this without rehooking up bindings and adding
         // await item.update({ flags: { [MODULE_NAME]: { [key]: sanitized } } }, { render: false });
@@ -228,6 +249,8 @@ export function modifiersInput({
     });
 
     div.querySelectorAll('.conditional-control').forEach((element) => {
+        if (!canEdit) return;
+
         element.addEventListener('click', async (event) => {
             event.preventDefault();
 
@@ -393,7 +416,7 @@ export function modifiersInput({
     });
 
     div.querySelectorAll('.damage-type-visual').forEach((element) => {
-        if (!(element instanceof Element)) return;
+        if (!(element instanceof Element) || !canEdit) return;
         element?.addEventListener(
             'click',
             async (event) => {

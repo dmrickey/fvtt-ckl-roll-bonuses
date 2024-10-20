@@ -1,5 +1,9 @@
 ## Roll Bonuses 2.16.0
 
+### New Bonus
+- **Conditional Modifier**
+  - Configure conditional modifiers on buffs/features/etc and have them show up as if they were configured on the targeted actions. This means you can do something like "Sneak Attack" and Target "Melee Attacks" to have a Conditional Modifier for it show up on every melee attack that you can enable/disable per action.
+
 ### Bugfixes
 - Effective Size Bonuses once again show in the actor's sheet's Combat Damage column
 

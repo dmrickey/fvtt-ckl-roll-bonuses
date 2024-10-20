@@ -297,10 +297,10 @@
 
 # v 2.16
 - Modifiers Bonus
-  - Add safety for readonly
-  - Fix input layout
-  - Add journal entry 
-    - ..and make sure to hook it up properly
+  - Make sure the modifiers show up in the appropriate places if they're enabled.
+    - Attack/Damage/Size in the Combat section
+      - For size, make sure the override is update to also look for this (look for usages of the existing EffectiveSizeBonus)
+    - CL/DC in the spells
   - ..probably no item hints?
 - Fix
   - Actor's Combat damage column does not include damage bonus (it did not in 2.14)
