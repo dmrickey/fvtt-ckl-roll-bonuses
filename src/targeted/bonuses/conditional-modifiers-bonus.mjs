@@ -62,8 +62,6 @@ export class ConditionalModifiersBonus extends BaseBonus {
      * @returns {Nullable<ItemConditional[]>}
      */
     static getConditionals(target, action) {
-        if (!(action instanceof pf1.actionUse.ActionUse)) return;
-
         const conditionals = this.loadConfiguredConditionals(target)
             .filter((c) => {
                 if (action instanceof pf1.actionUse.ActionUse) {
