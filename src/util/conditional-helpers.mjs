@@ -66,8 +66,8 @@ export function conditionalCalculator(shared, conditional) {
 /**
  * "ItemChange" is used in damage tooltip source
  *
- * @param {ItemConditional} conditional
- * @param {ItemConditionalModifier} modifier
+ * @param {{ name: string }} conditional
+ * @param {ItemConditionalModifierData} modifier
  * @param {object} [options]
  * @param {boolean} [options.isDamage]
  * @returns {Nullable<ItemChange>}
@@ -75,22 +75,22 @@ export function conditionalCalculator(shared, conditional) {
 export function conditionalModToItemChangeForDamageTooltip(conditional, modifier, { isDamage = false } = {}) {
     if (!modifier) return;
 
-    const subTarget = modifier.data.target;
+    const subTarget = modifier.target;
     if (subTarget !== 'attack' && subTarget !== 'damage') {
         return;
     }
 
-    if (modifier.data.critical !== 'normal') {
+    if (modifier.critical !== 'normal') {
         return;
     }
 
-    if (modifier.data.subTarget !== 'allAttack' && modifier.data.subTarget !== 'allDamage') {
+    if (modifier.subTarget !== 'allAttack' && modifier.subTarget !== 'allDamage') {
         return;
     }
 
     const change = new pf1.components.ItemChange({
         flavor: conditional.name,
-        formula: modifier.data.formula,
+        formula: modifier.formula,
         // @ts-ignore
         modifier: modifier.type ? pf1.config.bonusTypes[modifier.type] : modifier.type || undefined,
         operator: 'add',
@@ -98,10 +98,10 @@ export function conditionalModToItemChangeForDamageTooltip(conditional, modifier
         subTarget,
     });
     if (isDamage) {
-        change.type = modifier.data.type;
+        change.type = modifier.type;
     }
 
-    change.value = modifier.data.formula;
+    change.value = modifier.formula;
     change.name = change.flavor;
 
     return change;
@@ -173,7 +173,7 @@ export function createChangeForTooltip({
 
 /**
  *
- * @param {ItemConditional} conditional
+ * @param {{ name: string }} conditional
  * @param {ItemConditionalModifierData} modifier
  * @returns {Nullable<ModifierSource>}
  */

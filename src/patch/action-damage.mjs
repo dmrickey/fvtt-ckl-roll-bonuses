@@ -1,6 +1,8 @@
 // @ts-nocheck
+
 import { MODULE_NAME } from '../consts.mjs';
 import { handleBonusesFor } from '../target-and-bonus-join.mjs';
+import { LocalHookHandler, localHooks } from '../util/hooks.mjs';
 import { truthiness } from '../util/truthiness.mjs';
 
 /**
@@ -32,8 +34,12 @@ function actionDamage(action, { simplify = true, strict = true } = {}) {
         },
     };
 
+    // TODO THIS CACHE IS NOT CLEARED WHEN AN ITEM CHANGES
+
     /** BEGIN OVERRIDE */
     if (!action[MODULE_NAME]?.conditionals) {
+        // item[MODULE_NAME] ||= {};
+        item[MODULE_NAME].conditionals ||= [];
         handleBonusesFor(
             action,
             (bonusType, sourceItem) => {
@@ -42,14 +48,12 @@ function actionDamage(action, { simplify = true, strict = true } = {}) {
                     .flatMap(x => x)
                     .filter(truthiness)
                     .flatMap(x => x.data.modifiers));
-                action[MODULE_NAME] ||= {};
-                action[MODULE_NAME].conditionals ||= [];
-                action[MODULE_NAME].conditionals.push(...conditionals);
+                item[MODULE_NAME].conditionals.push(...conditionals);
             }
         );
     }
 
-    const conditionals = action[MODULE_NAME]?.conditionals || [];
+    const conditionals = item[MODULE_NAME]?.conditionals || [];
     /** END OVERRIDE */
 
     const handleFormula = (formula, change) => {

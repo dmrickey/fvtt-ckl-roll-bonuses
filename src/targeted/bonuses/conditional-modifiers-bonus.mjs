@@ -2,7 +2,7 @@ import { MODULE_NAME } from "../../consts.mjs";
 import { modifiersInput } from "../../handlebars-handlers/targeted/bonuses/conditional-modifiers-input.mjs";
 import { handleBonusTypeFor } from '../../target-and-bonus-join.mjs';
 import { addCheckToAttackDialog, getFormData } from '../../util/attack-dialog-helper.mjs';
-import { conditionalModToItemChangeForDamageTooltip, loadConditionals } from "../../util/conditional-helpers.mjs";
+import { conditionalAttackTooltipModSource, conditionalModToItemChangeForDamageTooltip, loadConditionals } from "../../util/conditional-helpers.mjs";
 import { LocalHookHandler, localHooks } from '../../util/hooks.mjs';
 import { truthiness } from "../../util/truthiness.mjs";
 import { uniqueArray } from '../../util/unique-array.mjs';
@@ -60,7 +60,7 @@ export class ConditionalModifiersBonus extends BaseBonus {
      * @inheritdoc
      * @param {ItemPF} target
      * @param {ActionUse | ItemAction} [action] The thing for the source is being applied to for contextually aware bonuses
-     * @returns {Nullable<ItemConditional[]>}
+     * @returns {ItemConditional[]}
      */
     static getConditionals(target, action) {
         const conditionals = this.loadConfiguredConditionals(target)
@@ -85,10 +85,6 @@ export class ConditionalModifiersBonus extends BaseBonus {
      */
     static getDamageSourcesForTooltip(target) {
         const conditionals = this.getConditionals(target);
-        if (!conditionals) {
-            return [];
-        }
-
         const sources = conditionals
             .map((c) => c.data)
             .flatMap((cd) => cd.modifiers
@@ -99,32 +95,27 @@ export class ConditionalModifiersBonus extends BaseBonus {
         return sources;
     }
 
-    //     /**
-    //      * @override
-    //      * @inheritdoc
-    //      * @param {ItemPF} target
-    //      * @returns {ModifierSource[]}
-    //      */
-    //     static getAttackSourcesForTooltip(target) {
-    //         /** @type {ModifierSource[]} */
-    //         let sources = [];
-    //
-    //         if (!target.actor) {
-    //             return sources;
-    //         }
-    //
-    //         const conditional = this.getConditional(target);
-    //         if (!conditional) {
-    //             return sources;
-    //         }
-    //
-    //         sources = (conditional.modifiers ?? [])
-    //             .filter((mod) => mod.target === 'attack')
-    //             .map((mod) => conditionalAttackTooltipModSource(conditional, mod))
-    //             .filter(truthiness);
-    //
-    //         return sources;
-    //     }
+    /**
+     * @override
+     * @inheritdoc
+     * @param {ItemPF} target
+     * @returns {ModifierSource[]}
+     */
+    static getAttackSourcesForTooltip(target) {
+        if (!target.actor) {
+            return [];
+        }
+
+        const conditionals = this.getConditionals(target);
+        const sources = conditionals
+            .map((c) => c.data)
+            .flatMap((cd) => cd.modifiers
+                .filter((mod) => mod.target === 'attack')
+                .map((mod) => conditionalAttackTooltipModSource(cd, mod)))
+            .filter(truthiness);
+
+        return sources;
+    }
 
     /**
      * @override

@@ -110,7 +110,7 @@ declare global {
         name: string;
 
         /** The damage type of this modifier */
-        modifier: Nullable<BonusTypes | string>;
+        modifier: Nullable<BonusTypes | DamageTypes | string>;
 
         /** The sort priority for this modifier */
         sort: number;

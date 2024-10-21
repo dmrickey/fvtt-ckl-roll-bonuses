@@ -440,7 +440,6 @@ declare global {
             rollData: RollData = null,
         } = {}): number;
         [MODULE_NAME]: {
-            conditionals?: ItemConditionalModifierData[];
             enhancement?: {
                 base: number;
                 stacks: number;
@@ -566,6 +565,7 @@ declare global {
         [MODULE_NAME]: {
             bonuses: (typeof BaseBonus)[];
             targets: (typeof BaseTarget)[];
+            conditionals?: ItemConditional[];
             [key: string]: number | string | object | array;
         };
 
@@ -1733,7 +1733,7 @@ declare global {
         parent?: undefined | ItemPF;
         priority: number;
         target: string;
-        type?: Nullable<BonusTypes | string>;
+        type?: Nullable<BonusTypes | DamageTypes | string>;
         value: number | string;
 
         data: {
@@ -1785,7 +1785,7 @@ declare global {
     }
 
     class ItemConditionalModifierData {
-        critical: Nullable<'crit' | 'nonCrit' | 'normal'>; // all for 'damage', 'crit' and 'normal' also for attack
+        critical: Nullable<'crit' | 'nonCrit' | 'normal' | ''>; // all for 'damage', 'crit' and 'normal' also for attack
         damageType: Nullable<TraitSelectorValuePlural>;
         formula: string;
         subTarget:
@@ -1801,7 +1801,7 @@ declare global {
             | '' // size
             | undefined; // no subtarget for 'size'
         target: 'attack' | 'damage' | 'effect' | 'misc' | 'size';
-        type: Nullable<BonusTypes | string>;
+        type: Nullable<BonusTypes | DamageTypes | string>;
         _id: string;
 
         /** PREPPED DATA FOR SHEET */
@@ -1959,6 +1959,23 @@ declare global {
         texture: string;
         track: string;
         id: string;
+    }
+
+    class DamageTypes {
+        untyped: 'Untyped';
+        slashing: 'Slashing';
+        piercing: 'Piercing';
+        bludgeoning: 'Bludgeoning';
+        fire: 'Fire';
+        cold: 'Cold';
+        electric: 'Electricity';
+        acid: 'Acid';
+        sonic: 'Sonic';
+        force: 'Force';
+        negative: 'Negative';
+        positive: 'Positive';
+        precision: 'Precision';
+        nonlethal: 'Nonlethal';
     }
 
     interface pf1 {
@@ -2119,22 +2136,7 @@ declare global {
                 contents: Array<Condition>;
             };
             damageTypes: EmbeddedCollection<DamageType> & {
-                getLabels(): {
-                    untyped: 'Untyped';
-                    slashing: 'Slashing';
-                    piercing: 'Piercing';
-                    bludgeoning: 'Bludgeoning';
-                    fire: 'Fire';
-                    cold: 'Cold';
-                    electric: 'Electricity';
-                    acid: 'Acid';
-                    sonic: 'Sonic';
-                    force: 'Force';
-                    negative: 'Negative';
-                    positive: 'Positive';
-                    precision: 'Precision';
-                    nonlethal: 'Nonlethal';
-                };
+                getLabels(): DamgeTypes;
             };
         };
         spellcasting: {

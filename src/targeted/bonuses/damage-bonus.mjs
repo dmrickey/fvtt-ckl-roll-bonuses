@@ -123,16 +123,13 @@ export class DamageBonus extends BaseBonus {
      * @returns {ItemChange[]}
      */
     static getDamageSourcesForTooltip(source) {
-        /** @type {ItemChange[]} */
-        let sources = [];
-
         const conditional = this.#getConditional(source);
         if (!conditional) {
-            return sources;
+            return [];
         }
 
-        sources = (conditional.modifiers ?? [])
-            .filter((mod) => mod.data.target === 'damage')
+        const sources = (conditional.data.modifiers ?? [])
+            .filter((mod) => mod.target === 'damage')
             .map((mod) => conditionalModToItemChangeForDamageTooltip(conditional, mod, { isDamage: true }))
             .filter(truthiness);
 
