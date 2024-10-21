@@ -1,6 +1,6 @@
 import { MODULE_NAME } from "../../consts.mjs";
 import { damageInput } from "../../handlebars-handlers/targeted/bonuses/damage.mjs";
-import { conditionalModToItemChangeForDamageTooltip } from "../../util/conditional-helpers.mjs";
+import { conditionalModToItemChangeForDamageTooltip, damagesTypeToString } from "../../util/conditional-helpers.mjs";
 import { LocalHookHandler, localHooks } from "../../util/hooks.mjs";
 import { localize } from "../../util/localize.mjs";
 import { signed } from '../../util/to-signed-string.mjs';
@@ -59,7 +59,7 @@ export class DamageBonus extends BaseBonus {
          * @returns
          */
         const typeLabel = (types) => {
-            const label = this.#damagesTypeToString(types);
+            const label = damagesTypeToString(types);
             return `[${label}]`;
         }
 
@@ -176,28 +176,6 @@ export class DamageBonus extends BaseBonus {
     }
 
     /**
-     * @param {TraitSelectorValuePlural} types
-     * @returns {string}
-     */
-    static #damagesTypeToString(types) {
-        if (!types.custom?.trim() && !types.values?.length) {
-            const untyped = pf1.registry.damageTypes.get('untyped')?.name;
-            if (!untyped) {
-                throw new Error("There's no `untyped` damage type in the pf1 config.");
-            }
-            return untyped;
-        }
-
-        const valueLookup = ( /** @type {DamageType['id']} */ t) => pf1.registry.damageTypes.getLabels()[t] || t;
-        /**
-         * @param {TraitSelectorValuePlural} t
-         */
-        // @ts-ignore
-        const typeToString = (t) => `${t.custom?.trim() ? `${t.custom.trim()}, ` : ''}${t.values.map(valueLookup).join(', ')}`;
-        return typeToString(types);
-    }
-
-    /**
      * @param {DamageInputModel[]} damageBonuses
      * @param {string} name
      * @returns {ItemConditionalData}
@@ -214,7 +192,7 @@ export class DamageBonus extends BaseBonus {
                 formula: bonus.formula,
                 subTarget: 'allDamage',
                 target: 'damage',
-                type: this.#damagesTypeToString(bonus.type),
+                type: damagesTypeToString(bonus.type),
             }) ?? []),
         }
     }

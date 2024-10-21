@@ -3,6 +3,7 @@ import { createTemplate, templates } from "../../templates.mjs";
 import { addNodeToRollBonus } from "../../add-bonus-to-item-sheet.mjs";
 import { api } from '../../../util/api.mjs';
 import { localizeBonusLabel, localizeBonusTooltip } from '../../../util/localize.mjs';
+import { loadConditionals } from '../../../util/conditional-helpers.mjs';
 
 /** @returns {ItemConditionalModifierData['targets']} */
 function getConditionalTargets() {
@@ -110,32 +111,6 @@ function getConditionalCritical(target) {
  */
 function createId(item, key) {
     return `${item.id}-${key}`;
-}
-
-/**
- * @param {ItemPF} item
- * @param {string} key
- * @param {object} [options]
- * @param {boolean} [options.useCachedFormula]
- * @return {ItemConditional[]}
- */
-export const loadConditionals = (item, key, { useCachedFormula = false } = {}) => {
-    /** @type {ItemConditionalData[]} */
-    const flags = deepClone(item.getFlag(MODULE_NAME, key) || []);
-
-    if (useCachedFormula) {
-        flags.forEach((c) => {
-            c.modifiers.forEach((m) => {
-                const formula = item[MODULE_NAME][key].conditionals[c._id][m._id];
-                if (formula) {
-                    m.formula = formula;
-                }
-            });
-        });
-    }
-
-    const conditionals = flags.map((d) => new pf1.components.ItemConditional(d));
-    return conditionals;
 }
 
 /**

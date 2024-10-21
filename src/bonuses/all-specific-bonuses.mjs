@@ -1,7 +1,4 @@
-import { MODULE_NAME } from '../consts.mjs';
 import { api } from '../util/api.mjs';
-import { intersection } from '../util/array-intersects.mjs';
-import { LocalHookHandler, localHooks } from '../util/hooks.mjs';
 import { localizeBonusLabel, localizeBonusTooltip } from '../util/localize.mjs';
 
 export class SpecificBonuses {

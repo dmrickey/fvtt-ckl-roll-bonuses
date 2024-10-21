@@ -154,7 +154,10 @@ function prepareItemData(wrapped, final) {
     FormulaCacheHelper.cacheFormulas(item, rollData);
     LocalHookHandler.fireHookNoReturnSync(localHooks.prepareData, item, rollData);
     ifDebug(() => {
-        if (!foundry.utils.objectsEqual({ bonuses: [], targets: [] }, item[MODULE_NAME])) {
+        if (!foundry.utils.objectsEqual(
+            { bonuses: [], targets: [] },
+            { bonuses: item[MODULE_NAME].bonuses, targets: item[MODULE_NAME].targets },
+        )) {
             console.debug(`Cached info for '${item.name}':`, item[MODULE_NAME]);
         }
     });

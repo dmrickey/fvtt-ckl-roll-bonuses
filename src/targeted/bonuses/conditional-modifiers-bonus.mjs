@@ -1,8 +1,8 @@
 import { MODULE_NAME } from "../../consts.mjs";
-import { loadConditionals, modifiersInput } from "../../handlebars-handlers/targeted/bonuses/conditional-modifiers-input.mjs";
+import { modifiersInput } from "../../handlebars-handlers/targeted/bonuses/conditional-modifiers-input.mjs";
 import { handleBonusTypeFor } from '../../target-and-bonus-join.mjs';
 import { addCheckToAttackDialog, getFormData } from '../../util/attack-dialog-helper.mjs';
-import { conditionalAttackTooltipModSource, conditionalModToItemChangeForDamageTooltip } from "../../util/conditional-helpers.mjs";
+import { loadConditionals } from "../../util/conditional-helpers.mjs";
 import { LocalHookHandler, localHooks } from '../../util/hooks.mjs';
 import { truthiness } from "../../util/truthiness.mjs";
 import { uniqueArray } from '../../util/unique-array.mjs';

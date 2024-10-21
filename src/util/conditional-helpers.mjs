@@ -1,3 +1,5 @@
+import { MODULE_NAME } from '../consts.mjs';
+
 /**
  *
  * @param {ActionUseShared} shared
@@ -199,4 +201,59 @@ export function conditionalAttackTooltipModSource(conditional, modifier) {
     };
 
     return source;
+}
+
+/**
+ * @param {Nullable<TraitSelectorValuePlural>} types
+ * @returns {string}
+ */
+export function damagesTypeToString(types) {
+    if (!types) return '';
+
+    if (!types.custom?.trim() && !types.values?.length) {
+        const untyped = pf1.registry.damageTypes.get('untyped')?.name;
+        if (!untyped) {
+            throw new Error("There's no `untyped` damage type in the pf1 config.");
+        }
+        return untyped;
+    }
+
+    const valueLookup = ( /** @type {DamageType['id']} */ t) => pf1.registry.damageTypes.getLabels()[t] || t;
+    /**
+     * @param {TraitSelectorValuePlural} t
+     */
+    // @ts-ignore
+    const typeToString = (t) => `${t.custom?.trim() ? `${t.custom.trim()}, ` : ''}${t.values.map(valueLookup).join(', ')}`;
+    return typeToString(types);
+}
+
+/**
+ * @param {ItemPF} item
+ * @param {string} key
+ * @param {object} [options]
+ * @param {boolean} [options.useCachedFormula]
+ * @return {ItemConditional[]}
+ */
+export const loadConditionals = (item, key, { useCachedFormula = false } = {}) => {
+    /** @type {ItemConditionalData[]} */
+    const flags = deepClone(item.getFlag(MODULE_NAME, key) || []);
+
+    flags.forEach((c) => {
+        c.modifiers.forEach((m) => {
+            if (useCachedFormula) {
+                const formula = item[MODULE_NAME][key].conditionals[c._id][m._id];
+                if (formula) {
+                    m.formula = formula;
+                }
+            }
+            if (m.target === 'damage') {
+                m.type = damagesTypeToString(m.damageType)
+            }
+        });
+    });
+
+
+
+    const conditionals = flags.map((d) => new pf1.components.ItemConditional(d));
+    return conditionals;
 }
