@@ -2,7 +2,7 @@ import { MODULE_NAME } from "../../consts.mjs";
 import { modifiersInput } from "../../handlebars-handlers/targeted/bonuses/conditional-modifiers-input.mjs";
 import { handleBonusTypeFor } from '../../target-and-bonus-join.mjs';
 import { addCheckToAttackDialog, getFormData } from '../../util/attack-dialog-helper.mjs';
-import { loadConditionals } from "../../util/conditional-helpers.mjs";
+import { conditionalModToItemChangeForDamageTooltip, loadConditionals } from "../../util/conditional-helpers.mjs";
 import { LocalHookHandler, localHooks } from '../../util/hooks.mjs';
 import { truthiness } from "../../util/truthiness.mjs";
 import { uniqueArray } from '../../util/unique-array.mjs';
@@ -57,6 +57,7 @@ export class ConditionalModifiersBonus extends BaseBonus {
 
     /**
      * @override
+     * @inheritdoc
      * @param {ItemPF} target
      * @param {ActionUse | ItemAction} [action] The thing for the source is being applied to for contextually aware bonuses
      * @returns {Nullable<ItemConditional[]>}
@@ -76,30 +77,31 @@ export class ConditionalModifiersBonus extends BaseBonus {
         return conditionals;
     }
 
-    //     /**
-    //      * @override
-    //      * @param {ItemPF} target
-    //      * @returns {ItemChange[]}
-    //      */
-    //     static getDamageSourcesForTooltip(target) {
-    //         /** @type {ItemChange[]} */
-    //         let sources = [];
-    //
-    //         const conditional = this.getConditional(target);
-    //         if (!conditional) {
-    //             return sources;
-    //         }
-    //
-    //         sources = (conditional.modifiers ?? [])
-    //             .filter((mod) => mod.target === 'damage')
-    //             .map((mod) => conditionalModToItemChangeForDamageTooltip(conditional, mod, { isDamage: true }))
-    //             .filter(truthiness);
-    //
-    //         return sources;
-    //     }
+    /**
+     * @override
+     * @inheritdoc
+     * @param {ItemPF} target
+     * @returns {ItemChange[]}
+     */
+    static getDamageSourcesForTooltip(target) {
+        const conditionals = this.getConditionals(target);
+        if (!conditionals) {
+            return [];
+        }
+
+        const sources = conditionals
+            .map((c) => c.data)
+            .flatMap((cd) => cd.modifiers
+                .filter((mod) => mod.target === 'damage')
+                .map((mod) => conditionalModToItemChangeForDamageTooltip(cd, mod, { isDamage: true })))
+            .filter(truthiness);
+
+        return sources;
+    }
 
     //     /**
     //      * @override
+    //      * @inheritdoc
     //      * @param {ItemPF} target
     //      * @returns {ModifierSource[]}
     //      */
