@@ -2,7 +2,6 @@
 
 import { MODULE_NAME } from '../consts.mjs';
 import { handleBonusesFor } from '../target-and-bonus-join.mjs';
-import { LocalHookHandler, localHooks } from '../util/hooks.mjs';
 import { truthiness } from '../util/truthiness.mjs';
 
 /**
