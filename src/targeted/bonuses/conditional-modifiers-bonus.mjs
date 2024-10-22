@@ -36,7 +36,8 @@ export class ConditionalModifiersBonus extends BaseBonus {
             conditionals.forEach((c) => {
                 c.data.modifiers.forEach((m) => {
                     item[MODULE_NAME][this.key] ||= [];
-                    item[MODULE_NAME][this.key].conditionals ||= { [c.id]: {} };
+                    item[MODULE_NAME][this.key].conditionals ||= {};
+                    item[MODULE_NAME][this.key].conditionals[c.id] ||= {};
 
                     const roll = RollPF.create(m.formula, rollData);
                     item[MODULE_NAME][this.key].conditionals[c.id][m._id] = roll.simplifiedFormula;
