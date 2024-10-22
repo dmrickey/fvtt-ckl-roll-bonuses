@@ -297,9 +297,10 @@
 
 # v 2.16
 - Modifiers Bonus
-  - Make sure the modifiers show up in the appropriate places if they're enabled.
-    - Size in the Combat section
-      - For size, make sure the override is update to also look for this (look for usages of the existing EffectiveSizeBonus)
-    - CL/DC in the spells
   - ..probably no item hints?
 - Fix
+- Refactor
+  - Attack Bonus
+    - Add type
+    - Patch action.getAllSources
+    - make sure to call `getHighestChanges` afterwards

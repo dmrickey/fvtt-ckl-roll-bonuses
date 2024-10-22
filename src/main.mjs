@@ -312,6 +312,26 @@ function itemActionEnhancementBonus(wrapped) {
 }
 
 /**
+ * @this {ItemAction}
+ * @param {(args: { rollData?: RollData}) => Record<string, string>} wrapped
+ * @param {object} [options]
+ * @param {RollData} [options.rollData] - Pre-determined roll data. If not provided, finds the action's own roll data.
+ * @returns {Record<string, string>} This action's labels
+ */
+function itemAction_getLabels(wrapped, { rollData } = {}) {
+    const labels = wrapped({ rollData });
+
+    if (this.hasSave && rollData) {
+        const seed = { dc: 0 };
+        LocalHookHandler.fireHookNoReturnSync(localHooks.modifyActionLabelDC, this, seed);
+        const totalDC = rollData.dc + (rollData.dcBonus ?? 0) + seed.dc;
+        labels.save = game.i18n.format("PF1.DCThreshold", { threshold: totalDC });
+    }
+
+    return labels;
+}
+
+/**
  * Safely get the result of a roll, returns 0 if unsafe.
  * @param {string | number} formula - The string that should resolve to a number
  * @param {Nullable<RollData>} data - The roll data used for resolving any variables in the formula
@@ -486,11 +506,12 @@ Hooks.once('init', () => {
     libWrapper.register(MODULE_NAME, 'pf1.applications.actor.ActorSheetPF.prototype._getTooltipContext', getDamageTooltipSources, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.critRange', itemActionCritRangeWrapper, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.enhancementBonus', itemActionEnhancementBonus, libWrapper.WRAPPER);
+    libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.getLabels', itemAction_getLabels, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.rollAttack', itemActionRollAttack, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.rollDamage', itemActionRollDamage, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.dice.d20Roll', d20RollWrapper, libWrapper.WRAPPER);
-    libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorPF.prototype.getSkillInfo', actorGetSkillInfo, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorBasePF.prototype.prepareEmbeddedDocuments', actor_prepareEmbeddedDocuments, libWrapper.OVERRIDE);
+    libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorPF.prototype.getSkillInfo', actorGetSkillInfo, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorPF.prototype.rollSkill', actorRollSkill, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemAttackPF.fromItem', itemAttackFromItem, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype._prepareDependentData', prepareItemData, libWrapper.WRAPPER);

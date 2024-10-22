@@ -24,6 +24,7 @@ export const localHooks = /** @type {const} */ ({
     itemActionEnhancementBonus: `${MODULE_NAME}_itemActionEnhancementBonus`,
     itemActionRollAttack: `${MODULE_NAME}_itemActionRollAttack`,
     itemActionRollDamage: `${MODULE_NAME}_itemActionRollDamage`,
+    modifyActionLabelDC: `${MODULE_NAME}_modifyActionLabelDC`,
     patchChangeValue: `${MODULE_NAME}_patchChangeValue`,
     prepareData: `${MODULE_NAME}_prepareData`,
     updateItemActionRollData: `${MODULE_NAME}_updateItemActionRollData`,
@@ -133,6 +134,13 @@ export class LocalHookHandler {
      * @overload
      * @param {typeof localHooks.itemActionRollDamage} hook
      * @param {(seed: ItemActionRollAttackHookArgs, action: ItemAction, data: RollData, index: number) => void} func
+     * @returns {void}
+     */
+
+    /**
+     * @overload
+     * @param {typeof localHooks.modifyActionLabelDC} hook
+     * @param {(action: ItemAction, seed: {dc: number}) => void} func
      * @returns {void}
      */
 
@@ -280,6 +288,14 @@ export class LocalHookHandler {
      * @overload
      * @param {typeof localHooks.cacheBonusTypeOnActor} hook
      * @param {ItemPF} item
+     * @returns {void}
+     */
+
+    /**
+     * @overload
+     * @param {typeof localHooks.modifyActionLabelDC} hook
+     * @param {ItemAction} action
+     * @param {{ dc: number}} seed
      * @returns {void}
      */
 

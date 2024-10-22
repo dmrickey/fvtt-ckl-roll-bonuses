@@ -133,6 +133,14 @@ export class BaseBonus extends BaseSource {
 
     /**
      * @abstract
+     * @param {ItemPF} source
+     * @param {ItemAction} action
+     * @returns {number}
+     */
+    static modifyActionLabelDC(source, action) { return 0; }
+
+    /**
+     * @abstract
      * @param {ItemPF} source The source of the bonus
      * @param {(ActionUse | ItemPF | ItemAction)?} [item] The item receiving the bonus for contextually aware hints.
      * @returns {string[] | undefined}

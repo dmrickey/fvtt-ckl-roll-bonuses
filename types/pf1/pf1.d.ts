@@ -495,6 +495,8 @@ declare global {
             values: string[];
             custom: '';
         };
+
+        get hasSave(): boolean;
     }
 
     /** used for weapons and attacks */

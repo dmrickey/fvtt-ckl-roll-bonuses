@@ -90,7 +90,8 @@ export class ConditionalModifiersBonus extends BaseBonus {
             .map((c) => c.data)
             .flatMap((cd) => cd.modifiers
                 .filter((mod) => mod.target === 'damage')
-                .map((mod) => conditionalModToItemChangeForDamageTooltip(cd, mod, { isDamage: true })))
+                .map((mod) => conditionalModToItemChangeForDamageTooltip(cd, mod, { isDamage: true }))
+            )
             .filter(truthiness);
 
         return sources;
@@ -112,10 +113,31 @@ export class ConditionalModifiersBonus extends BaseBonus {
             .map((c) => c.data)
             .flatMap((cd) => cd.modifiers
                 .filter((mod) => mod.target === 'attack')
-                .map((mod) => conditionalAttackTooltipModSource(cd, mod)))
+                .map((mod) => conditionalAttackTooltipModSource(cd, mod))
+            )
             .filter(truthiness);
 
         return sources;
+    }
+
+    /**
+     * @override
+     * @inheritdoc
+     * @param {ItemPF} source
+     * @param {ItemAction} action
+     * @returns {number}
+     */
+    static modifyActionLabelDC(source, action) {
+        const conditionals = this.loadConfiguredConditionals(source);
+        const bonus = conditionals
+            .map((c) => c.data)
+            .flatMap((cd) => cd.modifiers
+                .filter((mod) => mod.target === 'effect' && mod.subTarget === 'dc')
+                .map((mod) => mod.formula?.trim())
+            )
+            .filter(truthiness)
+            .reduce((acc, formula) => acc + RollPF.safeTotal(formula), 0);
+        return bonus;
     }
 
     /**

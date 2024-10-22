@@ -321,9 +321,21 @@ function actionUseProcess(actionUse) {
     handleBonusesFor(
         actionUse,
         (bonusType, sourceItem) => bonusType.actionUseProcess(sourceItem, actionUse),
-    )
+    );
 }
 LocalHookHandler.registerHandler(localHooks.actionUseProcess, actionUseProcess);
+
+/**
+ * @param {ItemAction} action
+ * @param {{ dc: number }} seed
+ */
+function modifyActionLabelDC(action, seed) {
+    handleBonusesFor(
+        action,
+        (bonusType, sourceItem) => seed.dc += bonusType.modifyActionLabelDC(sourceItem, action),
+    );
+}
+LocalHookHandler.registerHandler(localHooks.modifyActionLabelDC, modifyActionLabelDC);
 
 /**
  * @param {ItemPF} item
