@@ -78,6 +78,40 @@ Hooks.on(customGlobalHooks.actionUseAlterRollData, addWeaponSpecialization);
 
 /**
  * @param {ItemPF} item
+ * @returns {ItemConditional | undefined}
+ */
+export function getGreaterWeaponSpecializaitonConditional(item) {
+    const actor = item.actor;
+    if (!actor
+        || !(item instanceof pf1.documents.item.ItemWeaponPF || item instanceof pf1.documents.item.ItemAttackPF)
+    ) {
+        return;
+    }
+
+    const baseTypes = item.system.baseTypes;
+    const specializations = getSpecializedWeapons(actor);
+    const overlap = intersection(baseTypes, specializations)
+    if (overlap.length) {
+        const source = actor.itemFlags?.boolean[key]?.sources?.find((s) => overlap.includes(s.flags[MODULE_NAME]?.[key]));
+        return new pf1.components.ItemConditional({
+            _id: foundry.utils.randomID(),
+            default: true,
+            name: source?.name ?? '',
+            modifiers: [{
+                ...pf1.components.ItemConditionalModifier.defaultData,
+                _id: foundry.utils.randomID(),
+                critical: 'normal',
+                formula: '+2',
+                subTarget: 'allDamage',
+                target: 'damage',
+                type: 'untyped',
+            }],
+        });
+    }
+}
+
+/**
+ * @param {ItemPF} item
  * @param {ItemChange[]} sources
  */
 function getDamageTooltipSources(item, sources) {

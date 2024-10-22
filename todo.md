@@ -303,7 +303,4 @@
     - CL/DC in the spells
   - ..probably no item hints?
 - Fix
-  - Actor's Combat damage column does not include damage bonus (it did not in 2.14)
-    - Tooltip is correctly showing
   - Martial Focus is attempting to modify sheets on render (double check its inputs and other specific bonuses)
-  - Specific Damage Bonuses don't work in Actor's Damage column

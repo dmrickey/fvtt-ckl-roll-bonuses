@@ -41,6 +41,36 @@ const isItemFocused = (actor, item) => {
     return intersects(weaponGroups, focuses);
 }
 
+/**
+ * @param {ItemPF} item
+ * @returns {ItemConditional | undefined}
+ */
+export function getMartialFocusCondtional(item) {
+    const actor = item.actor;
+    if (!actor
+        || !(item instanceof pf1.documents.item.ItemWeaponPF || item instanceof pf1.documents.item.ItemAttackPF)
+    ) {
+        return;
+    }
+
+    if (isItemFocused(actor, item)) {
+        return new pf1.components.ItemConditional({
+            _id: foundry.utils.randomID(),
+            default: true,
+            name: Settings.martialFocus,
+            modifiers: [{
+                ...pf1.components.ItemConditionalModifier.defaultData,
+                _id: foundry.utils.randomID(),
+                critical: 'normal',
+                formula: '+1',
+                subTarget: 'allDamage',
+                target: 'damage',
+                type: 'untyped',
+            }],
+        });
+    }
+}
+
 // register hint on source feat
 registerItemHint((hintcls, _actor, item, _data) => {
     const has = item.hasItemBooleanFlag(key);

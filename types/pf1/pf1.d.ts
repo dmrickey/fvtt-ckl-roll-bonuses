@@ -565,7 +565,7 @@ declare global {
         [MODULE_NAME]: {
             bonuses: (typeof BaseBonus)[];
             targets: (typeof BaseTarget)[];
-            conditionals?: ItemConditional[];
+            conditionals?: ItemConditionalModifierData[];
             [key: string]: number | string | object | array;
         };
 

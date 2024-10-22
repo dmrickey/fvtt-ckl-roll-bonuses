@@ -97,7 +97,7 @@ export class DamageBonus extends BaseBonus {
      */
     static #getConditional(source) {
         const damages = this.#getCachedDamageBonuses(source);
-        const conditional = this.#createConditional(damages, source.name);
+        const conditional = this.#createConditionalData(damages, source.name);
         return conditional.modifiers?.length
             ? new pf1.components.ItemConditional(conditional)
             : null;
@@ -177,7 +177,7 @@ export class DamageBonus extends BaseBonus {
      * @param {string} name
      * @returns {ItemConditionalData}
      */
-    static #createConditional(damageBonuses, name) {
+    static #createConditionalData(damageBonuses, name) {
         return {
             _id: foundry.utils.randomID(),
             default: true,
@@ -191,6 +191,6 @@ export class DamageBonus extends BaseBonus {
                 target: 'damage',
                 type: damagesTypeToString(bonus.type),
             }) ?? []),
-        }
+        };
     }
 }

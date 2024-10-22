@@ -1,7 +1,6 @@
 import { MODULE_NAME } from '../consts.mjs';
 
 /**
- *
  * @param {ActionUseShared} shared
  * @param {ItemConditional} conditional
  */

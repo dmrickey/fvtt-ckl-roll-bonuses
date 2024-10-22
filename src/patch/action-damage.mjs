@@ -1,5 +1,8 @@
 // @ts-nocheck
 
+import { getMartialFocusCondtional } from '../bonuses/martial-focus.mjs';
+import { getGreaterWeaponSpecializaitonConditional } from '../bonuses/weapon-specialization/greater-weapon-specialization.mjs';
+import { getWeaponSpecializaitonConditional } from '../bonuses/weapon-specialization/weapon-specialization.mjs';
 import { MODULE_NAME } from '../consts.mjs';
 import { handleBonusesFor } from '../target-and-bonus-join.mjs';
 import { truthiness } from '../util/truthiness.mjs';
@@ -47,9 +50,15 @@ function actionDamage(action, { simplify = true, strict = true } = {}) {
                     .flatMap(x => x)
                     .filter(truthiness)
                     .flatMap(x => x.data.modifiers));
-                item[MODULE_NAME].conditionals.push(...conditionals);
+                item[MODULE_NAME].conditionals?.push(...conditionals);
             }
         );
+        const extras = [
+            getWeaponSpecializaitonConditional(item)?.data.modifiers[0],
+            getGreaterWeaponSpecializaitonConditional(item)?.data.modifiers[0],
+            getMartialFocusCondtional(item)?.data.modifiers[0],
+        ].filter(truthiness);
+        item[MODULE_NAME].conditionals.push(...extras);
     }
 
     const conditionals = item[MODULE_NAME]?.conditionals || [];
