@@ -75,7 +75,7 @@ Hooks.on('renderItemSheet', (
 
     const hasFlag = item.hasItemBooleanFlag(fatesFavored);
     if (!hasFlag) {
-        if (name === Settings.fatesFavored) {
+        if (isEditable && name === Settings.fatesFavored) {
             item.addItemBooleanFlag(fatesFavored);
         }
         return;

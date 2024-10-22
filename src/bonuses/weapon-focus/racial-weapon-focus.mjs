@@ -115,14 +115,14 @@ Hooks.on('renderItemSheet', (
         const name = item?.name?.toLowerCase() ?? '';
         const sourceId = item?.flags.core?.sourceId ?? '';
         const isRacial = sourceId.includes(gnomeWeaponFocusId) || name.includes(Settings.defaultRace);
-        if (isRacial) {
+        if (isEditable && isRacial) {
             item.addItemBooleanFlag(key);
         }
         return;
     }
 
     const current = item.getFlag(MODULE_NAME, key);
-    if (!current) {
+    if (isEditable && !current) {
         item.setFlag(MODULE_NAME, key, Settings.defaultRace);
     }
 

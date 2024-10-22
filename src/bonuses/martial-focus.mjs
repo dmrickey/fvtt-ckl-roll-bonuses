@@ -183,7 +183,7 @@ Hooks.on('renderItemSheet', (
     if (!hasKey) {
         const name = item?.name?.toLowerCase() ?? '';
         const sourceId = item?.flags.core?.sourceId ?? '';
-        if (name === Settings.martialFocus || sourceId.includes(compendiumId)) {
+        if (isEditable && (name === Settings.martialFocus || sourceId.includes(compendiumId))) {
             item.addItemBooleanFlag(key);
         }
         return;

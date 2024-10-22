@@ -298,9 +298,8 @@
 # v 2.16
 - Modifiers Bonus
   - Make sure the modifiers show up in the appropriate places if they're enabled.
-    - Attack/Damage/Size in the Combat section
+    - Size in the Combat section
       - For size, make sure the override is update to also look for this (look for usages of the existing EffectiveSizeBonus)
     - CL/DC in the spells
   - ..probably no item hints?
 - Fix
-  - Martial Focus is attempting to modify sheets on render (double check its inputs and other specific bonuses)

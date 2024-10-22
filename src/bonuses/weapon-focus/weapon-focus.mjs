@@ -215,7 +215,7 @@ Hooks.on('renderItemSheet', (
             .flatMap((item) => item.system.baseTypes ?? []));
     }
 
-    if (key && !item.hasItemBooleanFlag(key)) {
+    if (isEditable && key && !item.hasItemBooleanFlag(key)) {
         item.addItemBooleanFlag(key);
     }
     else if (!key) {

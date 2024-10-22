@@ -106,7 +106,7 @@ Hooks.on('renderItemSheet', (
 
     const hasFlag = item.hasItemBooleanFlag(key);
     if (!hasFlag) {
-        if (name === Settings.snakeSidewind) {
+        if (isEditable && name === Settings.snakeSidewind) {
             item.addItemBooleanFlag(key);
         }
         return;

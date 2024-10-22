@@ -151,7 +151,7 @@ Hooks.on('renderItemSheet', (
     if (!hasKey) {
         const name = item?.name?.toLowerCase() ?? '';
         const sourceId = item?.flags.core?.sourceId ?? '';
-        if (name === Settings.weaponSpecialization || sourceId.includes(compendiumId)) {
+        if (isEditable && (name === Settings.weaponSpecialization || sourceId.includes(compendiumId))) {
             item.addItemBooleanFlag(key);
         }
         return;

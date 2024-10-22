@@ -139,7 +139,7 @@ Hooks.on('renderItemSheet', (
     if (!hasKey) {
         const hasName = item.name?.toLowerCase() === Settings.spellSpecialization;
         const hasId = !!item?.flags?.core?.sourceId?.includes(compendiumId);
-        if (hasName || hasId) {
+        if (isEditable && (hasName || hasId)) {
             item.addItemBooleanFlag(key);
         }
         return;

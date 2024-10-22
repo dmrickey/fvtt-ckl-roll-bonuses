@@ -68,7 +68,7 @@ Hooks.on('renderItemSheet', (
     if (!hasFlag) {
         const name = item?.name?.toLowerCase() ?? '';
         const sourceId = item?.flags.core?.sourceId ?? '';
-        if (name === Settings.furiousFocus || sourceId.includes(compendiumId)) {
+        if (isEditable && (name === Settings.furiousFocus || sourceId.includes(compendiumId))) {
             item.addItemBooleanFlag(furiousFocus);
         }
         return;

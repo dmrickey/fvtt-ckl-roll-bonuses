@@ -170,7 +170,7 @@ Hooks.on('renderItemSheet', (
     const hasKey = item.hasItemBooleanFlag(key);
     if (!hasKey) {
         const name = item?.name?.toLowerCase() ?? '';
-        if (name === Settings.versatileTraining) {
+        if (isEditable && name === Settings.versatileTraining) {
             item.addItemBooleanFlag(key);
         }
         return;

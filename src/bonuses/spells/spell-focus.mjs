@@ -209,7 +209,7 @@ Hooks.on('renderItemSheet', (
         }
     }
 
-    if (key && !item.hasItemBooleanFlag(key)) {
+    if (isEditable && key && !item.hasItemBooleanFlag(key)) {
         item.addItemBooleanFlag(key);
     }
 

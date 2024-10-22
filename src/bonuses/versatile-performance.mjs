@@ -308,7 +308,7 @@ Hooks.on('renderItemSheet', (
     const name = item?.name?.toLowerCase() ?? '';
     const hasFlag = item.hasItemBooleanFlag(key);
     if (!hasFlag) {
-        if (name === Settings.versatilePerformance) {
+        if (isEditable && name === Settings.versatilePerformance) {
             item.addItemBooleanFlag(key);
         }
         return;

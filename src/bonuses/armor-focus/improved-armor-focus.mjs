@@ -97,8 +97,9 @@ Hooks.on('renderItemSheet', (
     if (!hasKey) {
         const name = item?.name?.toLowerCase() ?? '';
         const sourceId = item?.flags.core?.sourceId ?? '';
-        if ((name.includes(LanguageSettings.getTranslation(armorFocusKey)) && name.includes(LanguageSettings.improved))
-            || sourceId.includes(compendiumId)
+        if (isEditable &&
+            ((name.includes(LanguageSettings.getTranslation(armorFocusKey)) && name.includes(LanguageSettings.improved))
+                || sourceId.includes(compendiumId))
         ) {
             item.addItemBooleanFlag(key);
         }
