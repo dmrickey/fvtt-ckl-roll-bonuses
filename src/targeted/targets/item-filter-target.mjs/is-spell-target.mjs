@@ -10,10 +10,12 @@ export class IsSpellTarget extends BaseIsItemTarget {
     /**
      * @override
      * @param {object} args
+     * @param {ItemPF} [args.item]
      * @param {Nullable<ItemAction>} [args.action]
      * @returns {boolean}
      */
-    static extendedItemFilter({ action = null }) {
-        return ['msak', 'rsak', 'spellsave'].includes(action?.data.actionType ?? '');
+    static extendedItemFilter({ item, action = null }) {
+        const isSpell = item instanceof pf1.documents.item.ItemSpellPF;
+        return isSpell || ['msak', 'rsak', 'spellsave'].includes(action?.data.actionType ?? '');
     }
 }
