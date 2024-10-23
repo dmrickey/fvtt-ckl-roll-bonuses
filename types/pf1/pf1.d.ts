@@ -1745,7 +1745,7 @@ declare global {
             operator: '+' | '-';
             priority: number;
             get subTarget(): string;
-            target: BuffTarget = 'skillzz';
+            target: BuffTarget = 'skill';
             value: number;
         };
 
