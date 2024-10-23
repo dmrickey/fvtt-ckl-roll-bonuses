@@ -6,8 +6,8 @@ import { MODULE_NAME } from '../../consts.mjs';
 
 /**
  * @param {object} args
- * @param {{current: FlagValue, key: string, placeholder?: string}} args.text
- * @param {{current: FlagValue, key: string, choices: {key: string, label: string}[]}} args.select
+ * @param {{current?: FlagValue, key: string, placeholder?: string}} args.text
+ * @param {{current?: FlagValue, key: string, choices: {key: string, label: string}[] | Record<string, string>}} args.select
  * @param {ItemPF} args.item
  * @param {string} args.journal
  * @param {string} [args.label]
@@ -32,16 +32,27 @@ export function textInputAndKeyValueSelect({
     label ||= localizeBonusLabel(select.key);
     tooltip ||= localizeBonusTooltip(select.key);
 
+    const choices = Array.isArray(select.choices)
+        ? select.choices
+        : Object.entries(select.choices).map(([key, label]) => ({ key, label }));
+
     if (canEdit) {
-        if ((!select.current && select.choices.length) || (select.choices.length === 1 && select.current !== select.choices[0].key)) {
-            item.setFlag(MODULE_NAME, select.key, select.choices[0].key);
+        if ((!select.current && choices.length) || (choices.length === 1 && select.current !== choices[0].key)) {
+            item.setFlag(MODULE_NAME, select.key, choices[0].key);
         }
+    }
+
+    if (text.current === undefined) {
+        text.current = item.getFlag(MODULE_NAME, text.key);
+    }
+    if (select.current === undefined) {
+        select.current = item.getFlag(MODULE_NAME, select.key);
     }
 
     const div = createTemplate(
         templates.textInputAndKeyValueSelect,
         {
-            choices: select.choices,
+            choices,
             current: select.current,
             formula: text.current,
             journal,

@@ -1741,10 +1741,10 @@ declare global {
         data: {
             flavor: string;
             formula: string;
-            modifier: BonusTypes;
+            type: BonusTypes | DamageTypes | string;
             operator: '+' | '-';
             priority: number;
-            subTarget: 'skill.kna';
+            get subTarget(): string;
             target: BuffTarget = 'skillzz';
             value: number;
         };
