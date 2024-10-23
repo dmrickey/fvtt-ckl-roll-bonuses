@@ -304,3 +304,7 @@
     - Add type
     - Patch action.getAllSources
     - make sure to call `getHighestChanges` afterwards
+- action type target
+  - migrate legacy versions to new singular version
+  - migrate "all" vs "every" based on the overall item flag for it
+  - remove old code after migration is implemented
