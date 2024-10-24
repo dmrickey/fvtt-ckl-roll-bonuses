@@ -36,17 +36,17 @@ export function textInputAndKeyValueSelect({
         ? select.choices
         : Object.entries(select.choices).map(([key, label]) => ({ key, label }));
 
-    if (canEdit) {
-        if ((!select.current && choices.length) || (choices.length === 1 && select.current !== choices[0].key)) {
-            item.setFlag(MODULE_NAME, select.key, choices[0].key);
-        }
-    }
-
     if (text.current === undefined) {
         text.current = item.getFlag(MODULE_NAME, text.key);
     }
     if (select.current === undefined) {
         select.current = item.getFlag(MODULE_NAME, select.key);
+    }
+
+    if (canEdit) {
+        if ((!select.current && choices.length) || (choices.length === 1 && select.current !== choices[0].key)) {
+            item.setFlag(MODULE_NAME, select.key, choices[0].key);
+        }
     }
 
     const div = createTemplate(

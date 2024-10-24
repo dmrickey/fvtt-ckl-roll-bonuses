@@ -2,6 +2,7 @@
     "ckl-roll-bonuses": {
         "ac-mod": "{mod} AC",
         "acp-mod": "{mod} ACP",
+        "add-damage-change": "Add Damage Change",
         "add-damage-formula": "Add Damage Formula",
         "add-healing-formula": "Add Healing Formula",
         "alignment": {

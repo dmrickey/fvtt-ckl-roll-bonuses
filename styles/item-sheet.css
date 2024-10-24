@@ -60,6 +60,7 @@
 }
 
 /* copied from apps.less in pf1 repo */
+.pf1.sheet .roll-bonuses .delete-change,
 .pf1.sheet .roll-bonuses .delete-damage {
     width: 18px;
     flex: 0 0 18px;

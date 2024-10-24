@@ -7,7 +7,7 @@
                 class="damage-formula formula"
                 type="text"
                 name="{{i}}.formula"
-                placeholder="{{label}}"
+                placeholder="{{../label}}"
                 value="{{formula}}"
                 {{#if ../readonly}}readonly{{/if}}
             />
@@ -33,11 +33,34 @@
             {{/if}}
         </li>
         {{/each}}
+        {{#if hasChanges}}
+        {{#each changes as |change i| }}
+        <li class="damage-part flexrow" data-change-index="{{i}}">
+            <input
+                class="damage-change-formula formula"
+                type="text"
+                name="{{i}}.change-formula"
+                placeholder="{{../label}}"
+                value="{{formula}}"
+                {{#if ../readonly}}readonly{{/if}}
+            />
+            <select name="{{i}}.change-type" class="change-type">
+                {{ selectOptions @root.bonusTypes selected=type }}
+            </select>
+            <a class="damage-control delete-change"><i class="fas fa-trash"></i></a>
+        </li>
+        {{/each}}
+        {{/if}}
         {{#unless readonly}}
         <li class="damage-part flexrow">
             <a class="damage-control add-damage"><i class="fas fa-plus"></i>
                 {{#if isHealing}}{{localize "ckl-roll-bonuses.add-healing-formula"}}{{else}}{{localize "ckl-roll-bonuses.add-damage-formula"}}{{/if}}
             </a>
+            {{#if hasChanges}}
+            <a class="damage-control add-change"><i class="fas fa-plus"></i>
+                {{localize "ckl-roll-bonuses.add-damage-change"}}
+            </a>
+            {{/if}}
         </li>
         {{/unless}}
     </ol>

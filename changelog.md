@@ -7,6 +7,8 @@
 ### Existing Bonuses
 - **Attack Bonus**
   -  Now includes a bonus type. This makes it so that stacking bonuses can be correctly configured.
+-  **Damage Bonus**
+   -  Now includes both effect damage (previously available) and "change types" (new addition). This allows configurations with types such as Alchemical, Luck, Morale, etc. that stack as expected 
 
 ### Bugfixes
 - Effective Size Bonuses once again show in the actor's sheet's Combat Damage column

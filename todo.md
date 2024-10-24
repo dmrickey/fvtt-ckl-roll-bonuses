@@ -300,10 +300,9 @@
   - ..probably no item hints?
 - Fix
 - Refactor
-  - Attack Bonus
-    - Add type
-    - Patch action.getAllSources
-    - make sure to call `getHighestChanges` afterwards
+  - Damage Bonus
+    - Update HBS for effect/change
+    - Update documentation
 - action type target
   - migrate legacy versions to new singular version
   - migrate "all" vs "every" based on the overall item flag for it

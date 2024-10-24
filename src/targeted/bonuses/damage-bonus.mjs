@@ -1,6 +1,7 @@
 import { MODULE_NAME } from "../../consts.mjs";
 import { damageInput } from "../../handlebars-handlers/targeted/bonuses/damage.mjs";
-import { conditionalModToItemChangeForDamageTooltip, damagesTypeToString } from "../../util/conditional-helpers.mjs";
+import { handleBonusTypeFor } from '../../target-and-bonus-join.mjs';
+import { conditionalModToItemChangeForDamageTooltip, createChange, damagesTypeToString } from "../../util/conditional-helpers.mjs";
 import { LocalHookHandler, localHooks } from "../../util/hooks.mjs";
 import { localize } from "../../util/localize.mjs";
 import { signed } from '../../util/to-signed-string.mjs';
@@ -9,6 +10,8 @@ import { BaseBonus } from "./base-bonus.mjs";
 
 /** @extends BaseBonus */
 export class DamageBonus extends BaseBonus {
+    static get #changeKey() { return `${this.key}-change`; }
+
     /**
      * @inheritdoc
      * @override
@@ -38,6 +41,13 @@ export class DamageBonus extends BaseBonus {
                 item[MODULE_NAME][this.key] ||= [];
                 const roll = RollPF.create(damage.formula, rollData);
                 item[MODULE_NAME][this.key].push(roll.simplifiedFormula);
+            });
+
+            const changes = item.getFlag(MODULE_NAME, this.#changeKey) || [];
+            changes.forEach((/** @type {{formula: string, type: BonusTypes}}*/ change) => {
+                item[MODULE_NAME][this.#changeKey] ||= [];
+                const roll = RollPF.create(change.formula, rollData);
+                item[MODULE_NAME][this.#changeKey].push(roll.simplifiedFormula);
             });
         });
     }
@@ -150,6 +160,7 @@ export class DamageBonus extends BaseBonus {
             item,
             journal: this.journal,
             key: this.key,
+            changeKey: this.#changeKey,
             parent: html,
             tooltip: this.tooltip,
         }, {
@@ -169,7 +180,7 @@ export class DamageBonus extends BaseBonus {
         return damages.map((damage, i) => ({
             ...damage,
             formula: item[MODULE_NAME][this.key]?.[i],
-        }));
+        })).filter((x) => !!x.formula);
     }
 
     /**
@@ -192,5 +203,57 @@ export class DamageBonus extends BaseBonus {
                 type: damagesTypeToString(bonus.type),
             }) ?? []),
         };
+    }
+
+    /**
+     * @param {ItemPF} source
+     * @returns {ItemChange[]}
+     */
+    static #getCachedDamageItemChange(source) {
+        /** @type {{formula: string, type: BonusTypes}[]} */
+        const flags = (source.getFlag(MODULE_NAME, this.#changeKey) || [])
+        const changes = flags
+            .map(({ type }, i) => ({
+                type,
+                value: source[MODULE_NAME][this.#changeKey]?.[i],
+            }))
+            .filter((x) => !isNaN(x.value))
+            .map(({ type, value }) => {
+                value = value = LocalHookHandler.fireHookWithReturnSync(localHooks.patchChangeValue, value, type, source.actor);
+                const typeName = pf1.config.bonusTypes[type] || type;
+                const name = `${source.name} (${typeName})`
+                const change = createChange({
+                    value,
+                    target: 'damage',
+                    type,
+                    name,
+                });
+                return change;
+            })
+            .filter((x) => !!x.value);
+
+        return changes;
+    }
+
+    static {
+        /**
+         * @this {ItemAction}
+         * @param {() => ItemChange[]} wrapped
+         */
+        function itemAction_damageSources(wrapped) {
+            const damageSources = wrapped() || [];
+            handleBonusTypeFor(
+                this,
+                DamageBonus,
+                (bonusType, sourceItem) => {
+                    const changes = bonusType.#getCachedDamageItemChange(sourceItem);
+                    damageSources.push(...changes);
+                }
+            );
+            return damageSources;
+        };
+        Hooks.once('init', () => {
+            libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.damageSources', itemAction_damageSources, libWrapper.WRAPPER);
+        });
     }
 }

@@ -3,6 +3,7 @@ import { textInputAndKeyValueSelect } from '../../handlebars-handlers/bonus-inpu
 import { handleBonusTypeFor } from '../../target-and-bonus-join.mjs';
 import { createChange } from '../../util/conditional-helpers.mjs';
 import { FormulaCacheHelper } from "../../util/flag-helpers.mjs";
+import { LocalHookHandler, localHooks } from '../../util/hooks.mjs';
 import { signed } from "../../util/to-signed-string.mjs";
 import { BaseBonus } from "./base-bonus.mjs";
 
@@ -52,8 +53,10 @@ export class AttackBonus extends BaseBonus {
                 this,
                 AttackBonus,
                 (bonusType, sourceItem) => {
-                    const value = bonusType.#getAttackBonus(sourceItem);
                     const type = bonusType.#getAttackBonusType(sourceItem);
+                    /** @type { string | number } */
+                    let value = bonusType.#getAttackBonus(sourceItem);
+                    value = LocalHookHandler.fireHookWithReturnSync(localHooks.patchChangeValue, value, type, sourceItem.actor);
                     if (value) {
                         const typeName = pf1.config.bonusTypes[type] || type;
                         const name = `${sourceItem.name} (${typeName})`
@@ -84,16 +87,6 @@ export class AttackBonus extends BaseBonus {
      * @param {ItemPF} options.item
      */
     static showInputOnItemSheet({ html, isEditable, item }) {
-        // textInput({
-        //     item,
-        //     journal: this.journal,
-        //     key: this.key,
-        //     parent: html,
-        //     tooltip: this.tooltip,
-        // }, {
-        //     canEdit: isEditable,
-        //     inputType: 'bonus',
-        // });
         textInputAndKeyValueSelect({
             item,
             label: this.label,

@@ -19,12 +19,12 @@ class Settings {
 
 /**
  * @param {number | string} value
- * @param {ItemChange} itemChange
+ * @param {BonusTypes} type
+ * @param {Nullable<ActorPF>} actor
  * @returns {number | string}
  */
-function patchChangeValue(value, itemChange) {
-    const actor = itemChange.parent?.actor;
-    value = itemChange.type === 'luck' && actor?.hasItemBooleanFlag(fatesFavored)
+function patchChangeValue(value, type, actor) {
+    value = type === 'luck' && actor?.hasItemBooleanFlag(fatesFavored)
         ? isNaN(+value) ? `${value} + 1` : (+value + 1)
         : value;
     return value;
