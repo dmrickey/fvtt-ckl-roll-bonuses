@@ -71,6 +71,7 @@ declare global {
             migrate(): Promise;
             v1: {};
             v2: {};
+            v3: {};
         };
 
         /** Base source classes for extending */
@@ -120,5 +121,9 @@ declare global {
 
     declare type DamageInputModel = DamagePart & {
         crit: Nullable<'crit' | 'nonCrit' | 'normal'>;
+    };
+
+    declare type RecursivePartial<T> = {
+        [P in keyof T]?: RecursivePartial<T[P]>;
     };
 }

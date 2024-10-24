@@ -1,6 +1,7 @@
 import { log } from './migration-log.mjs';
 import * as v1 from './migrate-v1.mjs';
 import * as v2 from './migrate-v2.mjs';
+import * as v3 from './migrate-v3.mjs';
 import { MODULE_NAME } from '../consts.mjs';
 import { api } from '../util/api.mjs';
 import { registerSetting } from '../util/settings.mjs';
@@ -48,7 +49,7 @@ class Settings {
     }
 }
 
-const currentMigrationVersion = 3;
+const currentMigrationVersion = 4;
 
 const migrateWorld = async () => {
     const current = Settings.worldMigrationVersion || 0;
@@ -61,9 +62,16 @@ const migrateWorld = async () => {
             await v1.migrateV1();
         }
 
+        // v2.15
         if (current <= 2) {
             log('Migrating bugbears');
             await v2.migrateWorldV2();
+        }
+
+        // v2.16
+        if (current <= 3) {
+            log('Migrating catoblepas');
+            await v3.migrateWorldV2();
         }
 
         log('Finalized world migration');
@@ -89,7 +97,7 @@ const migrateClient = async () => {
     Settings.clientMigrationVersion = currentMigrationVersion;
 };
 
-export default async () => {
+const migrate = async () => {
     if (game.users.activeGM === game.user) {
         await migrateWorld();
     }
@@ -97,11 +105,11 @@ export default async () => {
     await migrateClient();
 }
 
+export default migrate;
+
 api.migrate = {
-    migrate: async () => {
-        await v1.migrateV1();
-        await v2.migrateWorldV2();
-    },
+    migrate,
     v1,
     v2,
+    v3,
 };

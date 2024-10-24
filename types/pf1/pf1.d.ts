@@ -140,7 +140,7 @@ declare global {
 
         updateEmbeddedDocuments(
             type: 'Item',
-            updates: Partial<ItemPF<SystemItemData>>[]
+            updates: RecursivePartial<ItemPF<SystemItemData>>[]
         );
     }
 
@@ -582,6 +582,7 @@ declare global {
             core?: { sourceId: string };
             [key: string]: any;
         };
+        _id: string;
         id: string;
         img: string;
         get isActive(): boolean;

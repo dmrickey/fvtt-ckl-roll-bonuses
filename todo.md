@@ -298,12 +298,13 @@
 # v 2.16
 - Modifiers Bonus
   - ..probably no item hints?
+- Action Target
+  - Add "is physical"
 - Fix
 - Refactor
   - Damage Bonus
     - Update HBS for effect/change
     - Update documentation
 - action type target
-  - migrate legacy versions to new singular version
-  - migrate "all" vs "every" based on the overall item flag for it
+  - verify migration works
   - remove old code after migration is implemented

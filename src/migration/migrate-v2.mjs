@@ -124,7 +124,7 @@ const specificCritMappings = [
 
 /**
  * @param {ItemPF} item
- * @returns {Partial<ItemPF> | undefined}
+ * @returns {RecursivePartial<ItemPF> | undefined}
  */
 const getItemUpdateData = (item) => {
 
@@ -376,7 +376,7 @@ const getItemUpdateData = (item) => {
         || isNotEmptyObject(boolean)
         || isNotEmptyObject(changes)
     ) {
-        /** @type {Partial<ItemPF>} */
+        /** @type {RecursivePartial<ItemPF>} */
         const update = {
             _id: item.id,
             system: {
