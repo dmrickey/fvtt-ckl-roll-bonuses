@@ -1,14 +1,17 @@
 ## Roll Bonuses 2.16.0
 
 ### New Bonus
+- **Action Type**
+  - Removed individual Targets for various action types and reduced them to a single action. All of the following are now configured through this single Target.
+    - `Is Melee`, `Is Natural`, `Is Natural Secondary`, `Is Ranged`, `Is Spell`, `Is Thrown`, `Is Weapon`
 - **Conditional Modifier**
   - Configure conditional modifiers on buffs/features/etc and have them show up as if they were configured on the targeted actions. This means you can do something like "Sneak Attack" and Target "Melee Attacks" to have a Conditional Modifier for it show up on every melee attack that you can enable/disable per action. (do note that becuase of how Conditional Modifiers work within the system, the bonuses defined there always stack (yes even the system's own conditional modifiers stack with other same-type bonuses))
 
 ### Existing Bonuses
 - **Attack Bonus**
-  -  Now includes a bonus type. This makes it so that stacking bonuses can be correctly configured.
--  **Damage Bonus**
-   -  Now includes both effect damage (previously available) and "change types" (new addition). This allows configurations with types such as Alchemical, Luck, Morale, etc. that stack as expected 
+  - Now includes a bonus type. This makes it so that stacking bonuses can be correctly configured.
+- **Damage Bonus**
+  - Now includes both effect damage (previously available) and "change types" (new addition). This allows configurations with types such as Alchemical, Luck, Morale, etc. that stack as expected 
 
 ### Bugfixes
 - Effective Size Bonuses once again show in the actor's sheet's Combat Damage column
