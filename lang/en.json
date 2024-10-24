@@ -30,6 +30,7 @@
                     "is-melee": "Melee Attacks",
                     "is-natural": "Natural Attacks",
                     "is-natural-secondary": "Natural Secondary Attacks",
+                    "is-physical": "Physical Item",
                     "is-ranged": "Ranged Attacks",
                     "is-spell": "Spells",
                     "is-thrown": "Thrown Weapons",

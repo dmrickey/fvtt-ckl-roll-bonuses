@@ -4,10 +4,12 @@ import { showChecklist } from '../../handlebars-handlers/targeted/targets/checkl
 import { localize, localizeBonusLabel } from '../../util/localize.mjs';
 import { BaseTarget } from './base-target.mjs';
 
-/** @param {ItemAction} action */
-const isNaturalSecondary = (action) => {
-    if (!action) return false;
-    const item = action?.item;
+/**
+ * @param {ItemPF} item
+ * @param {ItemAction} action
+ */
+const isNaturalSecondary = (item, action) => {
+    if (!action || !item) return false;
 
     const isAttack = item instanceof pf1.documents.item.ItemAttackPF;
     const isWeapon = item instanceof pf1.documents.item.ItemWeaponPF;
@@ -18,10 +20,11 @@ const isNaturalSecondary = (action) => {
 
     return isNatural && !isPrimary;
 }
-/** @param {ItemAction} action */
-const isNatural = (action) => {
-    const item = action?.item;
-
+/**
+ * @param {ItemPF} item
+ * @param {ItemAction} action
+ */
+const isNatural = (item, action) => {
     const isAttack = item instanceof pf1.documents.item.ItemAttackPF;
     const isWeapon = item instanceof pf1.documents.item.ItemWeaponPF;
     return (isAttack && item.subType === 'natural')
@@ -39,9 +42,10 @@ const isSpell = (item, action) => {
 // /** @type {{ [key: string]: {label: string, filter: (item: ItemPF, action: ItemAction) => boolean}}} */
 const filterTypes = /** @type {const} */ ({
     ['is-melee']: { label: '', filter: (/** @type {ItemPF} */ item, /** @type {ItemAction} */ action) => ['mwak', 'msak', 'mcman'].includes(action?.data.actionType) },
-    ['is-natural']: { label: '', filter: (/** @type {ItemPF} */ item, /** @type {ItemAction} */ action) => isNatural(action) },
-    ['is-natural-secondary']: { label: '', filter: (/** @type {ItemPF} */ item, /** @type {ItemAction} */ action) => isNaturalSecondary(action) },
-    ['is-ranged']: { label: '', filter: (/** @type {ItemPF} */ item, /** @type {ItemAction} */ action) => ['rcman', 'rwak', 'rsak', 'twak'].includes(action?.data.actionType) },
+    ['is-natural']: { label: '', filter: isNatural },
+    ['is-natural-secondary']: { label: '', filter: isNaturalSecondary },
+    ['is-physical']: { label: '', filter: (/** @type {ItemPF} */ item, /** @type {ItemAction} */ action) => ['rcman', 'rwak', 'rsak', 'twak'].includes(action?.data.actionType) },
+    ['is-ranged']: { label: '', filter: (/** @type {ItemPF} */ item, /** @type {ItemAction} */ action) => !!item?.isPhysical },
     ['is-spell']: { label: '', filter: isSpell },
     ['is-thrown']: { label: '', filter: (/** @type {ItemPF} */ item, /** @type {ItemAction} */ action) => action?.data.actionType === 'twak' },
     ['is-weapon']: { label: '', filter: (/** @type {ItemPF} */ item, /** @type {ItemAction} */ action) => ['mwak', 'rwak', 'twak'].includes(action?.data.actionType) },

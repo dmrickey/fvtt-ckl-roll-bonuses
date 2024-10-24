@@ -572,6 +572,8 @@ declare global {
         };
 
         get hasAction(): boolean;
+        get isPhysical(): boolean;
+
         actions: EmbeddedCollection<ItemAction>;
 
         activeState: boolean;

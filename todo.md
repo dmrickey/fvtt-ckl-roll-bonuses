@@ -278,6 +278,7 @@
 - apply auto-config on create to all auto-config stuff (see Precise Shot)
   - Try to come up with a more generic framework for this
 - Add "target-able overrides" section to the configuration popup for Items that can have actions but don't have the necessary data
+    - If I can just add this into the system data at the expected path during item prep, then that would solve needing to patch everywhere that looks for that data as it's already looking in those spots
   - Weapon Group (will be a new override)
     - Will require creating a "get weapon groups" function that all "weapon group" targets/specific-bonuses use instead of doing their own lookup so that that one method can do the "Target override" lookup instead of needing to duplicate that logic in multiple places
   - Weapon Base Type (will be a new override)
@@ -298,8 +299,6 @@
 # v 2.16
 - Modifiers Bonus
   - ..probably no item hints?
-- Action Target
-  - Add "is physical"
 - Fix
 - Refactor
   - Damage Bonus
