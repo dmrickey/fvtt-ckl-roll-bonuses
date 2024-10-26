@@ -4,12 +4,15 @@ class Api {
     get allBonusTypesKeys() { return Object.keys(this.bonusTypeMap); }
     get allTargetTypes() { return Object.values(this.targetTypeMap); }
     get allTargetTypesKeys() { return Object.keys(this.targetTypeMap); }
+    get allTargetOverrideTypes() { return Object.values(this.targetOverrideTypeMap); }
+    get allTargetOverrideTypesKeys() { return Object.keys(this.targetOverrideTypeMap); }
     get allGlobalTypes() { return Object.values(this.globalTypeMap); }
     get allGlobalTypesKeys() { return Object.keys(this.globalTypeMap); }
     bonusTypeMap = {};
     globalTypeMap = {};
     sources = {};
     targetTypeMap = {};
+    targetOverrideTypeMap = {};
     migrate = {
         migrate: async () => { },
         v1: {

@@ -1,8 +1,6 @@
 import { BaseSource } from '../base-source.mjs';
 
-/**
- * @abstract
- */
+/** @abstract */
 export class BaseBonus extends BaseSource {
 
     /**

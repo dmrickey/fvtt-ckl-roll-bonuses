@@ -1,6 +1,7 @@
 import { log } from './migration-log.mjs';
 import { MODULE_NAME } from '../consts.mjs';
 import { truthiness } from '../util/truthiness.mjs';
+import { isNotEmptyObject } from '../util/is-empty-object.mjs';
 
 const legacyActionFlags = [
     'target_is-melee',
@@ -10,6 +11,10 @@ const legacyActionFlags = [
     'target_is-spell',
     'target_is-thrown',
     'target_is-weapon',
+];
+
+const booleanFlagMigrations = [
+    ['finesse-override', 'target-override_finesse-override'],
 ];
 
 /**
@@ -40,6 +45,13 @@ const getItemUpdateData = (item) => {
     /** @type {Record<string, any>} */
     const moduleFlags = {};
 
+    booleanFlagMigrations.forEach(([legacy, updated]) => {
+        if (item.hasItemBooleanFlag(legacy)) {
+            boolean[legacy] = false;
+            boolean[updated] = true;
+        }
+    });
+
     const current = getCurrentLegacyActionFlags(item);
 
     if (current.length) {
@@ -50,10 +62,12 @@ const getItemUpdateData = (item) => {
 
         const newProps = current.map(x => x.split('_')[1]);
         moduleFlags[newActionTypeTargetTypesKey] = newProps;
-        if (isAll) {
-            moduleFlags[newActionTypeTargetRadioKey] = 'all';
-        }
+        moduleFlags[newActionTypeTargetRadioKey] = isAll ? 'all' : 'any';
+    }
 
+    if (isNotEmptyObject(moduleFlags)
+        || isNotEmptyObject(boolean)
+    ) {
         /** @type {RecursivePartial<ItemPF>} */
         const update = {
             _id: item.id,

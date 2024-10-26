@@ -13,10 +13,25 @@
 - **Damage Bonus**
   - Now includes both effect damage (previously available) and "change types" (new addition). This allows configurations with types such as Alchemical, Luck, Morale, etc. that stack as expected 
 
+### Target Overrides (New Feature)
+- These are new "Bonuses" you can add to specific Items so that they can be "targeted" by the mod's Targets.
+- **Finesse Override**
+  - The system only allows you to mark Weapons with the Finesse property -- this does not extend to attacks. Adding this Finesse Override to an Attack (or a spell, feature, or anything else) automatically enables it as a finesseable target.
+- **Proficiency Override**
+  - Force profiency with something that is not weapon, attack, or equipment. This is mostly useful when paired with a Weapon Group Override that needs to work Martial Focus or Weapon Specialization.
+- **Weapon Type Override**
+  - This allows you to add Weapon Types to Features and Spells (and any other Item). This is useful if you have `Weapon Focus (Bombs)` as it allows you to add a "Bomb" Weapon Type to a bomb class feature. Or if you have `Weapon Focus (Ray)` you can add a `Ray` weapon type to spells.
+- **Weapon Group Override**
+  - This allows you to add Weapon Groups to spells, features, or any other item type.
+
+### Miscellaneous
+- Feats and abilities that are specifically supported are now auto-configured (as much as can be) when added to an actor (e.g. Fate's Favored, Furious Focus, Extreme Mood Swings). Any that **have to be configured** will still need to modified -- I can't make the choice for you for feats such as Weapon Focus or Spell Focus.
+
 ### Bugfixes
 - Effective Size Bonuses once again show in the actor's sheet's Combat Damage column
 - Fixed Actor's Combat's damage column not including targeted damage bonuses
 - Fixed "Targets all Spells" not affecting some non-hostile spells
+- Damage Bonuses are once again shown for Attacks in the actor's Combat tab
 
 ---
 

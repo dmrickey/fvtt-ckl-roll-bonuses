@@ -51,9 +51,7 @@ registerItemHint((hintcls, _actor, item, _data) => {
 
 // register hint on focused weapon/attack
 registerItemHint((hintcls, actor, item, _data) => {
-    if (!(item instanceof pf1.documents.item.ItemWeaponPF || item instanceof pf1.documents.item.ItemAttackPF)
-        || !actor?.hasWeaponProficiency(item)
-    ) {
+    if (!item.system.baseTypes || !actor?.hasWeaponProficiency(item)) {
         return;
     }
 
@@ -68,10 +66,7 @@ registerItemHint((hintcls, actor, item, _data) => {
  * @param {ActionUse} actionUse
  */
 function addWeaponSpecialization({ actor, item, shared }) {
-    if (!(item instanceof pf1.documents.item.ItemWeaponPF || item instanceof pf1.documents.item.ItemAttackPF)
-        || !actor
-        || !item.system.baseTypes?.length
-    ) {
+    if (!actor || !item.system.baseTypes?.length) {
         return;
     }
 
@@ -89,9 +84,7 @@ Hooks.on(customGlobalHooks.actionUseAlterRollData, addWeaponSpecialization);
  */
 export function getWeaponSpecializaitonConditional(item) {
     const actor = item.actor;
-    if (!actor
-        || !(item instanceof pf1.documents.item.ItemWeaponPF || item instanceof pf1.documents.item.ItemAttackPF)
-    ) {
+    if (!actor || !item.system.baseTypes?.length) {
         return;
     }
 
@@ -121,9 +114,7 @@ export function getWeaponSpecializaitonConditional(item) {
  */
 function getDamageTooltipSources(item, sources) {
     const actor = item.actor;
-    if (!actor
-        || !(item instanceof pf1.documents.item.ItemWeaponPF || item instanceof pf1.documents.item.ItemAttackPF)
-    ) {
+    if (!actor || !item.system.baseTypes?.length) {
         return sources;
     }
 
@@ -172,3 +163,25 @@ Hooks.on('renderItemSheet', (
         inputType: 'specific-bonus',
     });
 });
+
+/**
+ * @param {ItemPF} item
+ * @param {object} data
+ * @param {{temporary: boolean}} param2
+ * @param {string} id
+ */
+const onCreate = (item, data, { temporary }, id) => {
+    if (!(item instanceof pf1.documents.item.ItemPF)) return;
+    if (temporary) return;
+
+    const name = item?.name?.toLowerCase() ?? '';
+    const sourceId = item?.flags.core?.sourceId ?? '';
+    const hasBonus = item.hasItemBooleanFlag(key);
+
+    if ((name === Settings.weaponSpecialization || sourceId.includes(compendiumId)) && !hasBonus) {
+        item.updateSource({
+            [`system.flags.boolean.${key}`]: true,
+        });
+    }
+};
+Hooks.on('preCreateItem', onCreate);

@@ -17,6 +17,7 @@
         "bonus-header-labels": {
             "bonus": "Bonuses",
             "target": "Targets",
+            "target-override": "Target Overrides",
             "specific-bonus": "Specific Bonuses",
             "ammo": "Ammo Bonuses"
         },
@@ -69,6 +70,7 @@
                 "enh-stacks": "Enhancement Bonus (Stacking)",
                 "fates-favored": "Fate's Favored",
                 "finesse-bonus": "Finesse (Bonus)",
+                "finesse-override": "Finesse",
                 "finesse-target": "Finesse (Target)",
                 "footnote": "Footnote",
                 "fortune": "Fortune",
@@ -84,6 +86,7 @@
                 "maximize-damage": "Maximize Damage",
                 "misfortune": "Misfortune",
                 "precise-shot": "Precise Shot",
+                "proficiency": "Is Proficient",
                 "ranged-increment-penalty": "Ranged Increment Penalty Bonuses",
                 "ranged-increment-penalty-increment-penalty-offset": "Increment Penalty Reduction",
                 "ranged-increment-penalty-increment-range-offset": "Increment Range Offset",
@@ -112,9 +115,11 @@
                 "weapon-focus-mythic": "Mythic Weapon Focus",
                 "weapon-focus-racial": "Racial Weapon Focus",
                 "weapon-group": "Weapon Group Targets",
+                "weapon-group-override": "Weapon Group",
                 "weapon-specialization": "Weapon Specialization",
                 "weapon-specialization-greater": "Greater Weapon Specialization",
                 "weapon-type": "Weapon Type Targets",
+                "weapon-type-override": "Weapon Type",
                 "weapon": "Weapon and Attack Targets",
                 "when-active": "When Active",
                 "when-in-combat": "When in Combat"
@@ -158,6 +163,7 @@
                 "enh-stacks": "Modify an attack or weapon's enhancement bonus.",
                 "fates-favored": "Incrase all luck bonuses by 1.",
                 "finesse-bonus": "Use dex for attack rolls instead of strength.",
+                "finesse-override": "Add the finesse weapon property to an Item that doesn't norally have weapon properties.",
                 "finesse-target": "Activate bonuses for all finesse-able targets. This requires the weapon/attack to have the Finesse weapon property, be in the Natural Attack weapon group, or have the `finesse-override` boolean flag.",
                 "footnote": "Targeted attacks will include this footnote.",
                 "fortune": "Roll twice and take the better. Multiple bonuses stack.",
@@ -173,6 +179,7 @@
                 "maximize-damage": "Maximize the damage rolls for the targeted abilities.",
                 "misfortune": "Roll twice and take the worse. Multiple bonuses stack.",
                 "precise-shot": "Negate penalty for shooting into melee.",
+                "proficiency": "Adds Proficiency for this item (usually needed alongside a Weapon Group override).",
                 "ranged-increment-penalty": "Modify the penalties associated with ranged weapon increments.",
                 "ranged-increment-penalty-increment-penalty-offset": "Modify the number of maximum range increments.",
                 "ranged-increment-penalty-increment-range-offset": "Modify the range for each increment.",
@@ -199,11 +206,13 @@
                 "weapon-focus": "+1 bonus on attack rolls for chosen weapon type. Attacks and Weapons must be properly configured with Equipment Base Types.",
                 "weapon-focus-greater": "Further increase attack roll for a chosen weapon type from Weapon Focus by +1.",
                 "weapon-group": "Apply bonuses when using weapons from chosen Weapon Group(s). Attacks and Weapons must be properly configured with weapon groups.",
+                "weapon-group-override": "Adds Weapon Groups to an Item that normally can't have one.",
                 "weapon-specialization": "+2 to damage rolls for chosen weapon type. Attacks and Weapons must be properly configured with Equipment Base Types.",
                 "weapon-specialization-greater": "Further increase damage for a weapon type chosen for Weapon Specialization by +2.",
                 "weapon-focus-mythic": "Double Weapon Focus attack bonuses.",
                 "weapon-focus-racial": "+1 bonus on attack rolls for chosen racial weapons. The weapon must be tagged with the race to be able to apply the bonus.",
                 "weapon-type": "Apply bonuses when using the chosen Weapon. Attacks and Weapons must be properly configured with Equipment Base Types.",
+                "weapon-type-override": "Adds a Weapon Type to an Item that normally can't have one.",
                 "weapon": "Choose specific Attacks and Weapons for bonuses.",
                 "when-active": "Apply bonuses when specified Buff/Weapon/Feat/etc is active.",
                 "when-in-combat": "Active when this actor is in combat."
@@ -327,7 +336,7 @@
                 "specific": "Specific Bonuses",
                 "specific-description": "These are for bonuses that are either too specific or too broad to be a targeted bonus. Most of these are for unique abilities or feats, or are very broard and affect something more globally that doesn't fit into the \"Targeted\" system.",
                 "targeted": "Targeted Bonuses",
-                "targeted-description": "Targeted Bonuses require at least one bonus and at least one target. If you select multiple targets, then the bonus will only be active while all targeting criteria is matched."
+                "targeted-description": "Targeted Bonuses require at least one bonus and at least one target."
             },
             "bonuses": {
                 "label": "Bonuses",
@@ -340,6 +349,10 @@
             "specific-bonuses": {
                 "label": "Specific Bonuses",
                 "tooltip": "Specific Bonuses are more specific bonuses that are less configurable then generic bonuses. These are named after the specific ability they implement."
+            },
+            "target-overrides": {
+                "label": "Target Overrides",
+                "tooltip": "This adds data onto item types that don't normally have that data so it works with other Targets. E.g. Adding a \"Ray\" Weapon Type to spells so it works with Weapon Focus or adding the Finesse weapon property to an attack so it works with Weapon Finesse."
             },
             "targets": {
                 "label": "Targets",

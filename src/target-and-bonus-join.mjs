@@ -291,6 +291,10 @@ Hooks.on('renderItemSheet', (
     item[MODULE_NAME].targets.forEach((targetType) => {
         targetType.showInputOnItemSheet({ actor, item, isEditable, html });
     });
+
+    item[MODULE_NAME].targetOverrides.forEach((override) => {
+        override.showInputOnItemSheet({ actor, item, isEditable, html });
+    });
 });
 
 Hooks.on('updateItem', (
@@ -344,11 +348,7 @@ LocalHookHandler.registerHandler(localHooks.modifyActionLabelDC, modifyActionLab
 const prepare = (item, rollData) => {
     item[MODULE_NAME].bonuses = [];
     item[MODULE_NAME].targets = [];
-
-    [
-        ...api.allBonusTypes,
-        ...api.allTargetTypes,
-    ].forEach((source) => source.prepareBaseData(item, rollData));
+    item[MODULE_NAME].targetOverrides = [];
 
     api.allBonusTypes.forEach((bonusType) => {
         if (bonusType.isSource(item)) {
@@ -362,6 +362,13 @@ const prepare = (item, rollData) => {
             targetType.prepareSourceData(item, rollData);
         }
     });
+    api.allTargetOverrideTypes.forEach((overrideType) => {
+        if (overrideType.isSource(item)) {
+            item[MODULE_NAME].targetOverrides.push(overrideType);
+            overrideType.prepareSourceData(item, rollData);
+        }
+    })
+
 };
 LocalHookHandler.registerHandler(localHooks.prepareData, prepare);
 

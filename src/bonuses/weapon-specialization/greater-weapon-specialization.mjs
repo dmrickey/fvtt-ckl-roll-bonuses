@@ -44,13 +44,13 @@ registerItemHint((hintcls, _actor, item, _data) => {
 
 // register hint on focused weapon/attack
 registerItemHint((hintcls, actor, item, _data) => {
-    if (!(item instanceof pf1.documents.item.ItemWeaponPF || item instanceof pf1.documents.item.ItemAttackPF)
-        || !actor?.hasWeaponProficiency(item)
-    ) {
+    if (!actor?.hasWeaponProficiency(item)) {
         return;
     }
 
     const baseTypes = item.system.baseTypes;
+    if (!baseTypes?.length) return;
+
     const specializations = getGreaterSpecializedWeapons(actor);
     if (intersects(baseTypes, specializations)) {
         return hintcls.create(`+2 ${localize('PF1.Damage')}`, [], { hint: localizeBonusLabel(key) });
@@ -61,10 +61,7 @@ registerItemHint((hintcls, actor, item, _data) => {
  * @param {ActionUse} actionUse
  */
 function addWeaponSpecialization({ actor, item, shared }) {
-    if (!(item instanceof pf1.documents.item.ItemWeaponPF || item instanceof pf1.documents.item.ItemAttackPF)
-        || !actor
-        || !item.system.baseTypes?.length
-    ) {
+    if (!actor || !item.system.baseTypes?.length) {
         return;
     }
 
@@ -82,9 +79,7 @@ Hooks.on(customGlobalHooks.actionUseAlterRollData, addWeaponSpecialization);
  */
 export function getGreaterWeaponSpecializaitonConditional(item) {
     const actor = item.actor;
-    if (!actor
-        || !(item instanceof pf1.documents.item.ItemWeaponPF || item instanceof pf1.documents.item.ItemAttackPF)
-    ) {
+    if (!actor || !item.system.baseTypes?.length) {
         return;
     }
 
@@ -118,13 +113,11 @@ function getDamageTooltipSources(item, sources) {
     const actor = item.actor;
     if (!actor) return sources;
 
-    if (!(item instanceof pf1.documents.item.ItemWeaponPF || item instanceof pf1.documents.item.ItemAttackPF)) {
-        return sources;
-    }
-
     const name = localizeBonusLabel(key);
 
     const baseTypes = item.system.baseTypes;
+    if (!baseTypes?.length) return sources;
+
     const specializations = getGreaterSpecializedWeapons(actor);
     if (intersects(baseTypes, specializations)) {
         const change = createChangeForTooltip({ name, value: 2 });
@@ -175,3 +168,25 @@ Hooks.on('renderItemSheet', (
         inputType: 'specific-bonus',
     });
 });
+
+/**
+ * @param {ItemPF} item
+ * @param {object} data
+ * @param {{temporary: boolean}} param2
+ * @param {string} id
+ */
+const onCreate = (item, data, { temporary }, id) => {
+    if (!(item instanceof pf1.documents.item.ItemPF)) return;
+    if (temporary) return;
+
+    const name = item?.name?.toLowerCase() ?? '';
+    const sourceId = item?.flags.core?.sourceId ?? '';
+    const hasBonus = item.hasItemBooleanFlag(key);
+
+    if (((name.includes(WeaponSpecializationSettings.weaponSpecialization) && name.includes(LanguageSettings.greater)) || sourceId.includes(compendiumId)) && !hasBonus) {
+        item.updateSource({
+            [`system.flags.boolean.${key}`]: true,
+        });
+    }
+};
+Hooks.on('preCreateItem', onCreate);

@@ -14,6 +14,7 @@ import { emptyObject } from './util/empty-object.mjs';
 import { registerSetting } from './util/settings.mjs';
 import { addNodeToRollBonus } from './handlebars-handlers/add-bonus-to-item-sheet.mjs';
 import { localize } from './util/localize.mjs';
+import { FinesseOverride } from './targeted/target-overides/finesse-override.mjs';
 
 Hooks.once('pf1PostReady', () => migrate());
 
@@ -480,7 +481,7 @@ function itemAttackFromItem(wrapped, item) {
 
         if (item instanceof pf1.documents.item.ItemWeaponPF && item.system.properties.fin) {
             data.system.flags.boolean ||= {};
-            data.system.flags.boolean['finesse-override'] = true;
+            data.system.flags.boolean[FinesseOverride.key] = true;
         }
 
         const flags = item.flags?.[MODULE_NAME] || {};

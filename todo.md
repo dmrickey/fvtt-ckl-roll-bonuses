@@ -275,21 +275,8 @@
   - And would allow automating rerolls for abilities like Weapon of the Chosen
 
 # vnext
-- apply auto-config on create to all auto-config stuff (see Precise Shot)
-  - Try to come up with a more generic framework for this
-- Add "target-able overrides" section to the configuration popup for Items that can have actions but don't have the necessary data
-    - If I can just add this into the system data at the expected path during item prep, then that would solve needing to patch everywhere that looks for that data as it's already looking in those spots
-  - Weapon Group (will be a new override)
-    - Will require creating a "get weapon groups" function that all "weapon group" targets/specific-bonuses use instead of doing their own lookup so that that one method can do the "Target override" lookup instead of needing to duplicate that logic in multiple places
-  - Weapon Base Type (will be a new override)
-    - features (e.g. Bombs) and spells (e.g. Rays)
-    - Will require creating a "get weapon base type" function that all "weapon base type" targets/specific-bonuses use instead of doing their own lookup so that that one method can do the "Target override" lookup instead of needing to duplicate that logic in multiple places
-  - Finesse (already exists)
-    - Will require creating a "get finessable target" function that all "finesse" targets/specific-bonuses use instead of doing their own lookup so that that one method can do the "Target override" lookup instead of needing to duplicate that logic in multiple places
 - Create new "Roll Bonuses" section for attack dialog inputs
-- Change all "is type" into a single target with checkboxes for various types it should allow
 - Replace "checklist-input" with a proper Item application instead of a warpgate menu
-- Update Auto-recognition stuff in "renderItemSheet" to use the same logic as martial-focus.mjs for specific bonuses
 - Add "Fortune configuration app" to help with configuring specific fortune abilities
 - Targeting
   - Add a configuration error if "this target is not configured"
@@ -297,13 +284,39 @@
   - See example [https://gitlab.com/mxzf/adventure-uninstaller/-/blob/master/adventure-uninstaller.mjs](here)
 
 # v 2.16
+- Action Type Target
+  - Add documentation for `isPhysical`
+  - Item hints - use the language helper thing to do and/or based on any/all
 - Modifiers Bonus
-  - ..probably no item hints?
-- Fix
+  - Item Hints that show the Nmae
 - Refactor
   - Damage Bonus
     - Update HBS for effect/change
     - Update documentation
-- action type target
-  - verify migration works
-  - remove old code after migration is implemented
+- Target Override
+  - Add Documenation
+  - Add "invalid" label for if it's added to item types that already support these system properties
+  - Finesse
+    - Add Migration
+    - Remove override documentation from existing "Finesse Target"
+    - Make sure it works with existing Finesse Target
+  - Weapon Base Types
+    - Verify Functionality for
+      - Specific Bonuses
+        - Weapon Focus
+        - Greater Weapon Focus
+        - Weapon Specialization
+      - Targeted Bonus
+        - Weapon Type Target
+  - Weapon Group
+    - Make sure to document that a custom weapon group must first be defined on a "real" item first
+    - Verify Functionality for
+      - Martial Focus
+      - Versatile Training
+      - Action Type Target
+      - Finesse Target (for natural override)
+      - Weapon Group Target (..obviously)
+- Verify
+  - Weapon Group Target input (also weapon group override input)
+  - Martial Focus input
+  - Action Group Type Targets (especially natural/secondary when using the group override)

@@ -27,7 +27,8 @@ const setLabelKey = (id) => {
 };
 
 export {
-    key as changeTypeOffsetKey,
+    key as changeKey,
+    changeTypeKey,
     formulaKey as changeTypeOffsetFormulaKey,
 }
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#change-modifier';

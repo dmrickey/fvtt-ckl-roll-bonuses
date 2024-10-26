@@ -17,9 +17,9 @@ export const mythicSpellFocusKey = 'spell-focus-mythic';
 
 const allKeys = [spellFocusKey, greaterSpellFocusKey, mythicSpellFocusKey];
 
-const spellFocusId = 'V2zY7BltkpSXwejy';
-const greaterSpellFocusId = 'LSykiaxYWzva2boF';
-const mythicSpellFocusId = 'TOMEhAeZsgGHrSH6';
+const spellFocusCompendiumId = 'V2zY7BltkpSXwejy';
+const greaterSpellFocusCompendiumId = 'LSykiaxYWzva2boF';
+const mythicSpellFocusCompendiumId = 'TOMEhAeZsgGHrSH6';
 
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#spell-focus';
 
@@ -184,17 +184,17 @@ Hooks.on('renderItemSheet', (
     if (
         item.hasItemBooleanFlag(spellFocusKey)
         || name.includes(Settings.spellFocus)
-        || sourceId.includes(spellFocusId)
+        || sourceId.includes(spellFocusCompendiumId)
     ) {
         key = spellFocusKey;
     }
 
-    const isGreater = item.hasItemBooleanFlag(greaterSpellFocusKey) ||
-        (name.includes(Settings.spellFocus) && name.includes(LanguageSettings.greater))
-        || sourceId.includes(greaterSpellFocusId);
+    const isGreater = item.hasItemBooleanFlag(greaterSpellFocusKey)
+        || (name.includes(Settings.spellFocus) && name.includes(LanguageSettings.greater))
+        || sourceId.includes(greaterSpellFocusCompendiumId);
     const isMythic = item.hasItemBooleanFlag(mythicSpellFocusKey)
         || (name.includes(Settings.spellFocus) && name.includes(LanguageSettings.mythic))
-        || sourceId.includes(mythicSpellFocusId);
+        || sourceId.includes(mythicSpellFocusCompendiumId);
 
     if (isGreater || isMythic) {
         key = isGreater ? greaterSpellFocusKey : mythicSpellFocusKey;
@@ -233,3 +233,41 @@ Hooks.on('renderItemSheet', (
         inputType: 'specific-bonus',
     });
 });
+
+/**
+ * @param {ItemPF} item
+ * @param {object} data
+ * @param {{temporary: boolean}} param2
+ * @param {string} id
+ */
+const onCreate = (item, data, { temporary }, id) => {
+    if (!(item instanceof pf1.documents.item.ItemPF)) return;
+    if (temporary) return;
+
+    const name = item?.name?.toLowerCase() ?? '';
+    const sourceId = item?.flags.core?.sourceId ?? '';
+
+    const isRegular = name === Settings.spellFocus
+        || sourceId.includes(spellFocusCompendiumId);
+    const isGreater = (name.includes(Settings.spellFocus) && name.includes(LanguageSettings.greater))
+        || sourceId.includes(greaterSpellFocusCompendiumId);
+    const isMythic = (name.includes(Settings.spellFocus) && name.includes(LanguageSettings.mythic))
+        || sourceId.includes(mythicSpellFocusCompendiumId);
+
+    if (isRegular) {
+        item.updateSource({
+            [`system.flags.boolean.${spellFocusKey}`]: true,
+        });
+    }
+    else if (isGreater) {
+        item.updateSource({
+            [`system.flags.boolean.${greaterSpellFocusKey}`]: true,
+        });
+    }
+    else if (isMythic) {
+        item.updateSource({
+            [`system.flags.boolean.${mythicSpellFocusKey}`]: true,
+        });
+    }
+};
+Hooks.on('preCreateItem', onCreate);

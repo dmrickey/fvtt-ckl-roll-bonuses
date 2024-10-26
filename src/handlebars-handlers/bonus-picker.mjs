@@ -16,9 +16,10 @@ import { templates } from './templates.mjs';
 
 /**
  * @typedef {object} BonusPickerData
+ * @property {PickerItemData[]} bonuses
  * @property {PickerItemData[]} targets
  * @property {PickerItemData[]} conditionalTargets
- * @property {PickerItemData[]} bonuses
+ * @property {PickerItemData[]} targetOverrides
  * @property {(PickerItemData & {children?: PickerItemData[]})[]} specifics
  */
 
@@ -40,6 +41,9 @@ export function showBonusPicker({
     const allConditionalTargets = api.allTargetTypes
         .filter((source) => (!source.gmOnlyForPicker || game.user.isGM) && source.isConditionalTarget)
         .sort((a, b) => a.label.localeCompare(b.label));
+    const allTargetOverrides = api.allTargetOverrideTypes
+        .filter((source) => !source.gmOnlyForPicker || game.user.isGM)
+        .sort((a, b) => a.label.localeCompare(b.label));
     const specifics = Object.values(SpecificBonuses.allBonuses)
         .sort((a, b) => a.label.localeCompare(b.label));
 
@@ -55,10 +59,22 @@ export function showBonusPicker({
         allTargets.map((source) => source.key),
         currentBooleanKeys,
     );
+    const currentTargetOverrideSources = intersection(
+        allTargetOverrides.map((source) => source.key),
+        currentBooleanKeys,
+    );
     const currentSpecificBonuses = intersection(currentBooleanKeys, SpecificBonuses.allBonusKeys);
 
     /** @type {BonusPickerData} */
     const data = {
+        bonuses: allBonuses.map((source, i) => ({
+            journal: source.journal,
+            key: source.key,
+            label: source.label,
+            path: `bonuses.${i}`,
+            tooltip: source.tooltip,
+            value: currentBonusSources.includes(source.key),
+        })),
         targets: allTargets.map((source, i) => ({
             journal: source.journal,
             key: source.key,
@@ -75,13 +91,13 @@ export function showBonusPicker({
             tooltip: source.tooltip,
             value: currentConditionalTargetSources.includes(source.key),
         })),
-        bonuses: allBonuses.map((source, i) => ({
+        targetOverrides: allTargetOverrides.map((source, i) => ({
             journal: source.journal,
             key: source.key,
             label: source.label,
-            path: `bonuses.${i}`,
+            path: `targetOverrides.${i}`,
             tooltip: source.tooltip,
-            value: currentBonusSources.includes(source.key),
+            value: currentTargetOverrideSources.includes(source.key),
         })),
         specifics: specifics
             .filter((bonus) => !bonus.parent)
@@ -144,7 +160,7 @@ class BonusPickerApp extends DocumentSheet {
     }
 
     /** @type {(keyof BonusPickerData)[]} */
-    sources = ['bonuses', 'conditionalTargets', 'targets'];
+    sources = ['bonuses', 'conditionalTargets', 'targets', 'targetOverrides'];
 
     /**
      * @override

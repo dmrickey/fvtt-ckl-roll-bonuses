@@ -8,6 +8,7 @@ import {
     handleBonusTypeFor,
 } from '../src/target-and-bonus-join.mjs';
 import { showBonusPicker } from '../src/handlebars-handlers/bonus-picker.mjs';
+import { BaseTargetOverride } from '../src/targeted/target-overides/_base-target-override.mjs';
 
 export {};
 
@@ -57,11 +58,21 @@ declare global {
         get allTargetTypes(): (typeof BaseTarget)[];
         get allTargetTypesKeys(): string[];
 
+        /** Array of all targeted targets */
+        get allTargetOverrideTypes(): (typeof BaseTargetOverride)[];
+        get allTargetOverrideTypesKeys(): string[];
+
         /** map of every targeted bonus from its key to its type */
         bonusTypeMap: Record<string, typeof BaseBonus>;
 
         /** map of every targeted bonus from its key to its type */
         globalTypeMap: Record<string, typeof BaseGlobalBonus>;
+
+        /** map of every targeted target from its key to its type */
+        targetTypeMap: Record<string, typeof BaseTarget>;
+
+        /** map of every target override from its key to its type */
+        targetOverrideTypeMap: Record<string, typeof BaseTargetOverride>;
 
         /** all the input helpers for adding various inputs for bonusees */
         inputs: Record<string, (...args) => void>;
@@ -79,14 +90,12 @@ declare global {
             BaseBonus: typeof BaseBonus;
             BaseSource: typeof BaseSource;
             BaseTarget: typeof BaseTarget;
+            BaseTargetOverride: typeof BaseTargetOverride;
         };
         BaseGlobalBonus: typeof BaseGlobalBonus;
 
         /** Helper class for registering non-targeted bonuses. Used mostly for the bonus picker application */
         SpecificBonuses: typeof SpecificBonuses;
-
-        /** map of every targeted target from its key to its type */
-        targetTypeMap: Record<string, typeof BaseTarget>;
 
         /** various utility helper methods and classes used throughout the mod */
         utils: {
@@ -97,7 +106,12 @@ declare global {
         };
     }
 
-    type InputType = 'bonus' | 'target' | 'specific-bonus' | 'ammo';
+    type InputType =
+        | 'bonus'
+        | 'target'
+        | 'target-override'
+        | 'specific-bonus'
+        | 'ammo';
 
     interface IdObject {
         id: string;

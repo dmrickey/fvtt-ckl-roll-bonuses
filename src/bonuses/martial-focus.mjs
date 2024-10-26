@@ -5,6 +5,7 @@ import { MODULE_NAME } from '../consts.mjs';
 import { keyValueSelect } from "../handlebars-handlers/bonus-inputs/key-value-select.mjs";
 import { intersects } from "../util/array-intersects.mjs";
 import { createChangeForTooltip } from '../util/conditional-helpers.mjs';
+import { getActorItemsByTypes } from '../util/get-actor-items-by-type.mjs';
 import { getCachedBonuses } from '../util/get-cached-bonuses.mjs';
 import { customGlobalHooks } from "../util/hooks.mjs";
 import { registerItemHint } from "../util/item-hints.mjs";
@@ -30,11 +31,11 @@ class Settings {
 
 /**
  * @param {ActorPF} actor
- * @param {ItemAttackPF | ItemWeaponPF} item
+ * @param {ItemPF} item
  * @returns {boolean}
  */
 const isItemFocused = (actor, item) => {
-    const weaponGroups = [...item.system.weaponGroups.value, ...item.system.weaponGroups.custom].map(x => x.trim()).filter(truthiness);
+    const weaponGroups = [...(item.system.weaponGroups?.value ?? []), ...(item.system.weaponGroups?.custom ?? [])].map(x => x.trim()).filter(truthiness);
     const focuses = getCachedBonuses(actor, key)
         .flatMap(x => x.getFlag(MODULE_NAME, key))
         .filter(truthiness);
@@ -47,9 +48,7 @@ const isItemFocused = (actor, item) => {
  */
 export function getMartialFocusCondtional(item) {
     const actor = item.actor;
-    if (!actor
-        || !(item instanceof pf1.documents.item.ItemWeaponPF || item instanceof pf1.documents.item.ItemAttackPF)
-    ) {
+    if (!actor || !item.system.weaponGroups) {
         return;
     }
 
@@ -82,8 +81,7 @@ registerItemHint((hintcls, _actor, item, _data) => {
 
 // register hint on focused weapon/attack
 registerItemHint((hintcls, actor, item, _data) => {
-    if (!(item instanceof pf1.documents.item.ItemWeaponPF || item instanceof pf1.documents.item.ItemAttackPF)
-        || !actor?.hasWeaponProficiency(item) || !item.system.weaponGroups) {
+    if (!actor?.hasWeaponProficiency(item) || !item.system.weaponGroups) {
         return;
     }
 
@@ -97,8 +95,7 @@ registerItemHint((hintcls, actor, item, _data) => {
  * @param {ActionUse} actionUse
  */
 function addMartialFocus({ actor, item, shared }) {
-    if (!(item instanceof pf1.documents.item.ItemWeaponPF || item instanceof pf1.documents.item.ItemAttackPF)
-        || !actor?.hasWeaponProficiency(item)
+    if (!actor?.hasWeaponProficiency(item)
         || !item.system.weaponGroups
     ) {
         return;
@@ -195,18 +192,13 @@ Hooks.on('renderItemSheet', (
         !actor || !isEditable
             ? []
             : uniqueArray(
-                actor.items
-                    .filter(
-                        /** @returns {i is ItemWeaponPF | ItemAttackPF} */
-                        (i) => i instanceof pf1.documents.item.ItemWeaponPF || i instanceof pf1.documents.item.ItemAttackPF
-                    )
+                getActorItemsByTypes(actor, 'attack', 'weapon')
                     .flatMap((i) => (i.system.weaponGroups?.custom ?? []))
                     .filter(truthiness)
-                ?? []
             ).map((i) => ({ key: i, label: i }));
 
     const groups = Object.entries(pf1.config.weaponGroups).map(([key, label]) => ({ key, label }));
-    const choices = [...groups, ...customs].sort();
+    const choices = [...groups, ...customs].sort((a, b) => a.label.localeCompare(b.label));
 
     keyValueSelect({
         choices,

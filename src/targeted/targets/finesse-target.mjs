@@ -3,33 +3,40 @@ import { localizeBonusLabel, localizeBonusTooltip } from '../../util/localize.mj
 import { BaseTarget } from './base-target.mjs';
 
 export class FinesseTarget extends BaseTarget {
-
-    static finesseTargetOverride = 'finesse-override';
-
     /**
      * @override
+     * @inheritdoc
      */
     static get sourceKey() { return 'finesse'; }
 
     /**
      * @override
+     * @inheritdoc
      * @returns {string}
      */
     static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.iurMG1TBoX3auh5z#finesse'; }
 
-    /** @override @returns { string } */
+    /**
+     * @override
+     * @inheritdoc
+     * @returns { string }
+     */
     static get tooltip() { return localizeBonusTooltip('finesse-target'); }
 
-    /** @override @returns {string} */
+    /**
+     * @override
+     * @inheritdoc
+     * @returns {string}
+     */
     static get label() { return localizeBonusLabel('finesse-target'); }
 
     /**
-     * @inheritdoc
      * @override
-     * @param {ItemPF} source
+     * @inheritdoc
+     * @param {ItemPF} _source
      * @returns {Nullable<string[]>}
      */
-    static getHints(source) {
+    static getHints(_source) {
         return [this.label];
     }
 
@@ -63,17 +70,10 @@ export class FinesseTarget extends BaseTarget {
      * @returns {Nullable<ItemPF[]>}
      */
     static _getSourcesFor(item, sources) {
-        const isWeapon = item instanceof pf1.documents.item.ItemWeaponPF;
-        const isAttack = item instanceof pf1.documents.item.ItemAttackPF;
+        const isNatural = !!item.system.weaponGroups?.value?.includes('natural') || item.system.subType === 'natural';
+        const isFinesse = !!item.system.properties?.fin;
 
-        if (!isWeapon && !isAttack) {
-            return [];
-        }
-
-        if (item.system.weaponGroups?.value.includes('natural')
-            || item.hasItemBooleanFlag(this.finesseTargetOverride)
-            || (isWeapon && item.system.properties.fin)
-        ) {
+        if (isNatural || isFinesse) {
             return sources;
         }
     };

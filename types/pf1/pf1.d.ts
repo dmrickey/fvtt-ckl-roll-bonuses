@@ -25,6 +25,7 @@ import { weaponSpecializationKey } from '../../src/bonuses/weapon-specialization
 import { MODULE_NAME } from '../../src/consts.mjs';
 import { RangedIncrementPenaltyGlobalBonus } from '../../src/global-bonuses/attack-dialog-helper.mjs';
 import { BaseBonus } from '../../src/targeted/bonuses/base-bonus.mjs';
+import { BaseTargetOverride } from '../../src/targeted/target-overides/_base-target-override.mjs';
 import { BaseTarget } from '../../src/targeted/targets/base-target.mjs';
 import Document from '../foundry/common/abstract/document.mjs';
 
@@ -105,10 +106,7 @@ declare global {
     class ActorPF extends ActorBasePF {
         allItems: ItemPF[];
         hasItemBooleanFlag(key: string): boolean;
-        hasWeaponProficiency(
-            item: ItemWeaponPF | ItemAttackPF,
-            { override = true } = {}
-        ): boolean;
+        hasWeaponProficiency(item: ItemPF, { override = true } = {}): boolean;
         allSkills: Array<keyof typeof pf1.config.skills>;
         get isOwner(): boolean;
         itemTypes!: {
@@ -501,9 +499,9 @@ declare global {
 
     /** used for weapons and attacks */
     interface TraitSelector<T extends string = string> {
-        /** custom entries split by ; */
         custom: string[];
         value: T[];
+        total: Set<string>;
     }
 
     /** used for damage parts */
@@ -567,6 +565,7 @@ declare global {
         [MODULE_NAME]: {
             bonuses: (typeof BaseBonus)[];
             targets: (typeof BaseTarget)[];
+            targetOverrides: (typeof BaseTargetOverride)[];
             conditionals?: ItemConditionalModifierData[];
             [key: string]: number | string | object | array;
         };
@@ -1057,9 +1056,20 @@ declare global {
             boolean: Record<string, boolean>;
             dictionary: DictionaryFlags;
         };
+        subType: 'natural';
         tag: string;
         tags: string[];
         changes: ItemChange[];
+
+        /** These properties are not natively on all item types, but I'm adding them during data prep to better target _unintended_ items */
+        /** weapon */
+        properties?: Partial<Record<keyof WeaponProperties, boolean>>;
+        /** attack, equipment, weapon */
+        baseTypes?: string[];
+        /** attack, weapon */
+        weaponGroups?: Partial<TraitSelector<keyof WeaponGroups>>;
+        /** attack, equipment, weapon */
+        proficient: boolean;
     }
     class SystemItemDataAttackPF extends SystemItemData {
         baseTypes: string[];
@@ -2153,13 +2163,13 @@ declare global {
         };
     }
 
-    interface SavingThrows {
+    type SavingThrows = {
         fort: 'Fortitude';
         ref: 'Reflex';
         will: 'Will';
-    }
+    };
 
-    interface WeaponGroups {
+    type WeaponGroups = {
         axes: 'Axes';
         bladesHeavy: 'Blades, Heavy';
         bladesLight: 'Blades, Light';
@@ -2177,9 +2187,9 @@ declare global {
         spears: 'Spears';
         thrown: 'Thrown';
         tribal: 'Tribal';
-    }
+    };
 
-    interface WeaponProperties {
+    type WeaponProperties = {
         ato: 'Automatic';
         blc: 'Blocking';
         brc: 'Brace';
@@ -2202,5 +2212,5 @@ declare global {
         spc: 'Special';
         thr: 'Thrown';
         trp: 'Trip';
-    }
+    };
 }

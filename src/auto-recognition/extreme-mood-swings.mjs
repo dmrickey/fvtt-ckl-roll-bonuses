@@ -1,4 +1,4 @@
-import { changeTypeOffsetFormulaKey, changeTypeOffsetKey } from '../bonuses/change-type-modification.mjs';
+import { changeKey, changeTypeOffsetFormulaKey, changeTypeKey } from '../bonuses/change-type-modification.mjs';
 import { MODULE_NAME } from '../consts.mjs';
 import { LanguageSettings } from '../util/settings.mjs';
 
@@ -21,17 +21,40 @@ Hooks.on('renderItemSheet', (
     if (!isEditable) return;
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
-    const hasBonus = item.hasItemBooleanFlag(changeTypeOffsetKey);
+    const hasBonus = item.hasItemBooleanFlag(changeKey);
 
     if (!hasBonus) {
         const name = item?.name?.toLowerCase() ?? '';
         const sourceId = item?.flags.core?.sourceId ?? '';
         if (name === Settings.name || sourceId.includes(compendiumId)) {
             item.update({
-                [`system.flags.boolean.${changeTypeOffsetKey}`]: true,
-                [`flags.${MODULE_NAME}.${changeTypeOffsetKey}`]: 'morale',
+                [`system.flags.boolean.${changeKey}`]: true,
+                [`flags.${MODULE_NAME}.${changeTypeKey}`]: 'morale',
                 [`flags.${MODULE_NAME}.${changeTypeOffsetFormulaKey}`]: 1,
             });
         }
     }
 });
+
+/**
+ * @param {ItemPF} item
+ * @param {object} data
+ * @param {{temporary: boolean}} param2
+ * @param {string} id
+ */
+const onCreate = (item, data, { temporary }, id) => {
+    if (!(item instanceof pf1.documents.item.ItemPF)) return;
+    if (temporary) return;
+
+    const name = item?.name?.toLowerCase() ?? '';
+    const sourceId = item?.flags.core?.sourceId ?? '';
+
+    if (name === Settings.name || sourceId.includes(compendiumId)) {
+        item.updateSource({
+            [`system.flags.boolean.${changeKey}`]: true,
+            [`flags.${MODULE_NAME}.${changeTypeKey}`]: 'morale',
+            [`flags.${MODULE_NAME}.${changeTypeOffsetFormulaKey}`]: 1,
+        });
+    }
+};
+Hooks.on('preCreateItem', onCreate);

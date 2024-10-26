@@ -12,9 +12,8 @@ const isNaturalSecondary = (item, action) => {
     if (!action || !item) return false;
 
     const isAttack = item instanceof pf1.documents.item.ItemAttackPF;
-    const isWeapon = item instanceof pf1.documents.item.ItemWeaponPF;
     const isNatural = (isAttack && item.subType === 'natural')
-        || ((isAttack || isWeapon) && item.system.weaponGroups?.value.includes("natural"));
+        || (item.system.weaponGroups?.value?.includes("natural"));
 
     const isPrimary = action.data.naturalAttack.primaryAttack;
 
@@ -26,9 +25,8 @@ const isNaturalSecondary = (item, action) => {
  */
 const isNatural = (item, action) => {
     const isAttack = item instanceof pf1.documents.item.ItemAttackPF;
-    const isWeapon = item instanceof pf1.documents.item.ItemWeaponPF;
     return (isAttack && item.subType === 'natural')
-        || ((isAttack || isWeapon) && item.system.weaponGroups?.value.includes("natural"));
+        || (item.system.weaponGroups?.value?.includes("natural"));
 }
 /**
  * @param {ItemPF} item

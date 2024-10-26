@@ -8,7 +8,7 @@ import { localize, localizeBonusLabel } from "../../util/localize.mjs";
 import { registerSetting } from "../../util/settings.mjs";
 import { truthiness } from '../../util/truthiness.mjs';
 import { SpecificBonuses } from '../all-specific-bonuses.mjs';
-import { gnomeWeaponFocusId, racialWeaponFocusKey, weaponFocusKey } from "./ids.mjs";
+import { gnomeWeaponFocusCompendiumId, racialWeaponFocusKey, weaponFocusKey } from "./ids.mjs";
 
 const key = racialWeaponFocusKey;
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#weapon-focus';
@@ -114,7 +114,7 @@ Hooks.on('renderItemSheet', (
     if (!hasKey) {
         const name = item?.name?.toLowerCase() ?? '';
         const sourceId = item?.flags.core?.sourceId ?? '';
-        const isRacial = sourceId.includes(gnomeWeaponFocusId) || name.includes(Settings.defaultRace);
+        const isRacial = sourceId.includes(gnomeWeaponFocusCompendiumId) || name === Settings.racialWeaponFocus;
         if (isEditable && isRacial) {
             item.addItemBooleanFlag(key);
         }
@@ -138,3 +138,25 @@ Hooks.on('renderItemSheet', (
         inputType: 'bonus',
     });
 });
+
+/**
+ * @param {ItemPF} item
+ * @param {object} data
+ * @param {{temporary: boolean}} param2
+ * @param {string} id
+ */
+const onCreate = (item, data, { temporary }, id) => {
+    if (!(item instanceof pf1.documents.item.ItemPF)) return;
+    if (temporary) return;
+
+    const name = item?.name?.toLowerCase() ?? '';
+    const sourceId = item?.flags.core?.sourceId ?? '';
+    const hasBonus = item.hasItemBooleanFlag(key);
+
+    if ((name === Settings.racialWeaponFocus || sourceId.includes(gnomeWeaponFocusCompendiumId)) && !hasBonus) {
+        item.updateSource({
+            [`system.flags.boolean.${key}`]: true,
+        });
+    }
+};
+Hooks.on('preCreateItem', onCreate);

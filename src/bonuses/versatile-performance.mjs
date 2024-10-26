@@ -20,6 +20,8 @@ const expandedKey = `${key}-expanded`;
 
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#versatile-performance';
 
+const compendiumIds = ['HAqAsb5H56C6cZm3', 'EuQ3UFsJX9njW3pm', 'KQeYLQvYh1QgS0XI'];
+
 {
     /** @type {Array<keyof typeof pf1.config.skills>} */
     const expandedChoices = [
@@ -306,9 +308,10 @@ Hooks.on('renderItemSheet', (
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
     const name = item?.name?.toLowerCase() ?? '';
+    const sourceId = item?.flags.core?.sourceId ?? '';
     const hasFlag = item.hasItemBooleanFlag(key);
     if (!hasFlag) {
-        if (isEditable && name === Settings.versatilePerformance) {
+        if (isEditable && (name === Settings.versatilePerformance || compendiumIds.some(x => sourceId.includes(x)))) {
             item.addItemBooleanFlag(key);
         }
         return;
@@ -416,3 +419,25 @@ Hooks.on('renderItemSheet', (
 
     addNodeToRollBonus(html, div, item, isEditable, 'specific-bonus');
 });
+
+/**
+ * @param {ItemPF} item
+ * @param {object} data
+ * @param {{temporary: boolean}} param2
+ * @param {string} id
+ */
+const onCreate = (item, data, { temporary }, id) => {
+    if (!(item instanceof pf1.documents.item.ItemPF)) return;
+    if (temporary) return;
+
+    const name = item?.name?.toLowerCase() ?? '';
+    const sourceId = item?.flags.core?.sourceId ?? '';
+    const hasBonus = item.hasItemBooleanFlag(key);
+
+    if ((name === Settings.versatilePerformance || compendiumIds.some(x => sourceId.includes(x))) && !hasBonus) {
+        item.updateSource({
+            [`system.flags.boolean.${key}`]: true,
+        });
+    }
+};
+Hooks.on('preCreateItem', onCreate);

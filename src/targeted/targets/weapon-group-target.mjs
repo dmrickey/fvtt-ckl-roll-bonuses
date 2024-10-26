@@ -1,6 +1,6 @@
 import { MODULE_NAME } from "../../consts.mjs";
 import { showChecklist } from "../../handlebars-handlers/targeted/targets/checklist-input.mjs";
-import { intersects } from "../../util/array-intersects.mjs";
+import { difference, intersects } from "../../util/array-intersects.mjs";
 import { getActorItemsByTypes } from '../../util/get-actor-items-by-type.mjs';
 import { truthiness } from "../../util/truthiness.mjs";
 import { uniqueArray } from "../../util/unique-array.mjs";
@@ -41,16 +41,11 @@ export class WeaponGroupTarget extends BaseTarget {
      * @returns {ItemPF[]}
      */
     static _getSourcesFor(item, sources) {
-        if (!(item instanceof pf1.documents.item.ItemAttackPF
-            || item instanceof pf1.documents.item.ItemWeaponPF)
-        ) {
-            return [];
-        }
         if (!item.system.weaponGroups) {
             return [];
         }
 
-        const groupsOnItem = [...item.system.weaponGroups.value, ...item.system.weaponGroups.custom]
+        const groupsOnItem = [...(item.system.weaponGroups.value ?? []), ...(item.system.weaponGroups.custom ?? [])]
             .map(x => x.trim())
             .filter(truthiness);
 
@@ -72,19 +67,22 @@ export class WeaponGroupTarget extends BaseTarget {
      * @param {ItemPF} options.item
      */
     static showInputOnItemSheet({ actor, html, isEditable, item }) {
-        const actorItems = getActorItemsByTypes(actor, 'attack', 'weapon');
+        const actorGroups = getActorItemsByTypes(actor, 'attack', 'weapon')
+            .flatMap((i) => (i.system.weaponGroups.custom))
+            .filter(truthiness);
         const targetedGroups = item.getFlag(MODULE_NAME, this.key) || [];
-        const custom = uniqueArray([
-            ...targetedGroups,
-            ...actorItems
-                .flatMap((i) => (i.system.weaponGroups?.custom ?? []))
-                .filter(truthiness),
-        ]);
+        const custom = difference(
+            uniqueArray([
+                ...targetedGroups,
+                ...actorGroups,
+            ]),
+            Object.keys(pf1.config.weaponGroups),
+        );
         custom.sort();
 
         const options = {
             ...pf1.config.weaponGroups,
-            ...custom.reduce((acc, curr) => ({ ...acc, [curr]: curr, }), {})
+            ...custom.reduce((acc, curr) => ({ ...acc, [curr]: curr, }), {}),
         };
 
         showChecklist({
