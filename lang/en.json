@@ -2,8 +2,6 @@
     "ckl-roll-bonuses": {
         "ac-mod": "{mod} AC",
         "acp-mod": "{mod} ACP",
-        "add-damage-change": "Add Damage Change",
-        "add-damage-formula": "Add Damage Formula",
         "add-healing-formula": "Add Healing Formula",
         "alignment": {
             "lawful": "Lawful",
@@ -58,6 +56,7 @@
                 "crit-mult": "Crit Multiplier",
                 "crit-offset": "Crit Offset",
                 "crit": "Critical",
+                "damage": "Damage",
                 "damage-type": "Damage Type Target",
                 "dc": "DC",
                 "effective-size": "Effective Size",
@@ -150,8 +149,8 @@
                 "crit-mult": "Increase or Decrease the critical multiplier.",
                 "crit-offset": "Modify the critical threat range. This modification happens after Keen.",
                 "crit": "Modify the crit range and/or multiplier.",
-                "damage-type": "Bonuses will be applied to actions that deal the chosen damage type.",
                 "damage": "Add bonus damage to the targeted actions.",
+                "damage-type": "Bonuses will be applied to actions that deal the chosen damage type.",
                 "dc": "Modify the DC for spells and abilities.",
                 "effective-size": "Formula input for increasing a sizeRoll formula's Effective Size. This is used for buffs like Lead Blades, Gravity Bow, etc.",
                 "elemental-cl": "Modify CL for spells with the chosen element.",
@@ -237,6 +236,12 @@
         "crit-offset-self": "Crit Offset (self)",
         "crit-offset-targeted": "Crit Offset ({id})",
         "crit-offset": "Crit Offset",
+        "damage-app": {
+            "add-effect-damage": "Add Effect Damage",
+            "add-typed-damage": "Add Typed Damage",
+            "effect-formula": "Damage Effect Formula",
+            "typed-formula": "Damage Type Formula"
+        },
         "dc-label-mod": "{mod} DC ({label})",
         "dc-mod": "{mod} DC",
         "driver": "Profession (Driver)",

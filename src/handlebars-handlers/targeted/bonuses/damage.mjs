@@ -2,7 +2,7 @@ import { MODULE_NAME } from "../../../consts.mjs";
 import { api } from '../../../util/api.mjs';
 import { createTemplate, templates } from "../../templates.mjs";
 import { addNodeToRollBonus } from "../../add-bonus-to-item-sheet.mjs";
-import { localize, localizeBonusTooltip } from "../../../util/localize.mjs";
+import { localize, localizeBonusLabel, localizeBonusTooltip } from "../../../util/localize.mjs";
 
 /**
  * @param {object} args
@@ -34,8 +34,8 @@ export function damageInput({
     };
 
     const hasChanges = !!changeKey;
-    const isHealing = false;
     const damageTypes = pf1.registry.damageTypes.toObject();
+    const label = localizeBonusLabel(key);
     tooltip ||= localizeBonusTooltip(key);
 
     /** @type {DamageInputModel[]} */
@@ -54,10 +54,9 @@ export function damageInput({
         critChoices,
         damageTypes,
         hasChanges,
-        isHealing,
         item,
         journal,
-        label: isHealing ? localize('PF1.HealingFormula') : localize('PF1.DamageFormula'),
+        label,
         parts,
         partsLabels,
         readonly: !canEdit,

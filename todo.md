@@ -288,7 +288,3 @@
   - Item hints - use the language helper thing to do and/or based on any/all
 - Modifiers Bonus
   - Item Hints that show the Nmae
-- Refactor
-  - Damage Bonus
-    - Update HBS for effect/change
-    - Update documentation

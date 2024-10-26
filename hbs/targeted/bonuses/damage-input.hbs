@@ -7,7 +7,7 @@
                 class="damage-formula formula"
                 type="text"
                 name="{{i}}.formula"
-                placeholder="{{../label}}"
+                placeholder="{{localize "ckl-roll-bonuses.damage-app.effect-formula"}}"
                 value="{{formula}}"
                 {{#if ../readonly}}readonly{{/if}}
             />
@@ -40,7 +40,7 @@
                 class="damage-change-formula formula"
                 type="text"
                 name="{{i}}.change-formula"
-                placeholder="{{../label}}"
+                placeholder="{{localize "ckl-roll-bonuses.damage-app.typed-formula"}}"
                 value="{{formula}}"
                 {{#if ../readonly}}readonly{{/if}}
             />
@@ -54,11 +54,11 @@
         {{#unless readonly}}
         <li class="damage-part flexrow">
             <a class="damage-control add-damage"><i class="fas fa-plus"></i>
-                {{#if isHealing}}{{localize "ckl-roll-bonuses.add-healing-formula"}}{{else}}{{localize "ckl-roll-bonuses.add-damage-formula"}}{{/if}}
+                {{localize "ckl-roll-bonuses.damage-app.add-effect-damage"}}
             </a>
             {{#if hasChanges}}
             <a class="damage-control add-change"><i class="fas fa-plus"></i>
-                {{localize "ckl-roll-bonuses.add-damage-change"}}
+                {{localize "ckl-roll-bonuses.damage-app.add-typed-damage"}}
             </a>
             {{/if}}
         </li>
