@@ -55,8 +55,6 @@
 - [Add Quench Testings](#add-quench-testings)
 - [Add create hooks for initializing some items (like anything based off of name/id)](#add-create-hooks-for-initializing-some-items-like-anything-based-off-of-nameid)
 - [Add inpsiration checkbox to roll dialogs](#add-inpsiration-checkbox-to-roll-dialogs)
-- [Won't do](#wont-do)
-- [Refactor](#refactor)
 - [Skills](#skills)
 - [in pf1 V10](#in-pf1-v10)
 - [Not Possible](#not-possible)
@@ -185,12 +183,9 @@
 ## Bonus Improvements
 - Enhancement Bonus
   - add checkbox for "applies for DR" (some spell buffs don't appy for DR (e.g. Greater Magic Weapon))
-- Change Offset
-  - add a "set" option (in addition to +/-)
 
 ## Targeting
 - show warning if target has an inappropriate bonus
-- add checkbox to toggle between union (current implementation) and intersection (item has to supply all targeting requirements)
 
 # Housekeeping
 - Consolidate weapon hints (Weapon Focus, Specialization, Martial) - find a way to make them more concise
@@ -205,13 +200,8 @@
 - Has tooltip
 
 # Deprecate
-- Weapon Focus (use bonus targets instead)
-- Martial Focus (use bonus targets instead)
-- Weapon Specialization (use bonus targets instead)
 - as of v9, PF1 now defers Roll Bonuses. So that means that the `Bonus` on the Skill settings can go away
 - It should create a new Feature with a change that includes the current formula as part of migration for deleting this
-- all specific DC/CL bonuses (after v10 once descriptor-based targeting is available)
-- specific crit bonuses
 
 # Add Quench Testings
 # Add create hooks for initializing some items (like anything based off of name/id)
@@ -219,22 +209,6 @@
 # Add inpsiration checkbox to roll dialogs
 - https://gitlab.com/foundryvtt_pathfinder1e/foundryvtt-pathfinder1/-/merge_requests/2758
   - > "So actionUse.formData for actions and overriding _getFormData() for d20rolls"
-
-# Won't do
-- Add specific inputs for Improved Crit.
-  - handling crit bonuses is already complicated enough without adding in a third option
-
-# Refactor
-- `BaseTarget`'s `getSourcesFor` because every single one of them follows this pattern
-  - ```js
-    const item = doc instanceof pf1.documents.item.ItemPF
-        ? doc
-        : doc.item;
-
-    if (!item?.actor) {
-        return [];
-    }
-    ```
 
 # Skills
 - Condtional Bonus when taking 10
@@ -260,14 +234,8 @@
   - Needs a "Target" so that I can give out extra bonuses when flanking
     - Dirty Fighter Trait
     - Outflank (would need extra info about flank target) 
-- Range Penalties
-    - checkbox to ignore range penalties
 - IsAdjacent
 - IsSharingSquare
-- TargetEngagedInMelee
-  - (for shooting into combat penalties)
-- Higher Ground with melee bonus
-- Make sure melee weapon can reach
 
 # Other Ideas
 - Add Concealment
