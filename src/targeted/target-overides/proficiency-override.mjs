@@ -60,8 +60,6 @@ export class ProficiencyOverride extends BaseTargetOverride {
      * @param {ItemPF} options.item
      */
     static showInputOnItemSheet({ actor, html, isEditable, item }) {
-        // TOOD add invalid label if this is an attack or weapon
-
         showEnabledLabel({
             item,
             journal: this.journal,

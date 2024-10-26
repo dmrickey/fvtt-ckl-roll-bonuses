@@ -12,6 +12,7 @@ export const templates = /** @type {const} */ ({
     checkboxInput: `modules/${MODULE_NAME}/hbs/checkbox-input.hbs`,
     conditionalsInput: `modules/${MODULE_NAME}/hbs/conditionals-input.hbs`,
     enabledLabel: `modules/${MODULE_NAME}/hbs/enabled-label.hbs`,
+    invalidLabel: `modules/${MODULE_NAME}/hbs/invalid-label.hbs`,
     keyValueSelect: `modules/${MODULE_NAME}/hbs/labeled-key-value-dropdown-select.hbs`,
     radioInput: `modules/${MODULE_NAME}/hbs/radio-input.hbs`,
     stringSelect: `modules/${MODULE_NAME}/hbs/labeled-string-dropdown-select.hbs`,

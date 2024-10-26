@@ -61,8 +61,6 @@ export class WeaponBaseTypeOverride extends BaseTargetOverride {
      * @param {ItemPF} options.item
      */
     static showInputOnItemSheet({ html, isEditable, item }) {
-        // TOOD add invalid label if this is an armor, attack, or weapon
-
         textInput({
             item,
             journal: this.journal,

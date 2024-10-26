@@ -55,8 +55,6 @@ export class FinesseOverride extends BaseTargetOverride {
      * @param {ItemPF} options.item
      */
     static showInputOnItemSheet({ html, isEditable, item }) {
-        // TOOD add invalid label if this is a weapon
-
         showEnabledLabel({
             item,
             journal: this.journal,

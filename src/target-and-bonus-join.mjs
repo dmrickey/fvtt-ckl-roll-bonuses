@@ -293,7 +293,12 @@ Hooks.on('renderItemSheet', (
     });
 
     item[MODULE_NAME].targetOverrides.forEach((override) => {
-        override.showInputOnItemSheet({ actor, item, isEditable, html });
+        if (override.isInvalidItemType(item)) {
+            override.showInvalidInput({ actor, item, isEditable, html });
+        }
+        else {
+            override.showInputOnItemSheet({ actor, item, isEditable, html });
+        }
     });
 });
 
@@ -365,9 +370,11 @@ const prepare = (item, rollData) => {
     api.allTargetOverrideTypes.forEach((overrideType) => {
         if (overrideType.isSource(item)) {
             item[MODULE_NAME].targetOverrides.push(overrideType);
-            overrideType.prepareSourceData(item, rollData);
+            if (!overrideType.isInvalidItemType(item)) {
+                overrideType.prepareSourceData(item, rollData);
+            }
         }
-    })
+    });
 
 };
 LocalHookHandler.registerHandler(localHooks.prepareData, prepare);

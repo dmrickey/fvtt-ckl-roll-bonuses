@@ -33,7 +33,10 @@ export function radioInput({
 }
 ) {
     if (current === undefined) {
-        current = item.getFlag(MODULE_NAME, key) || values[0].id;
+        current = item.getFlag(MODULE_NAME, key);
+        if (!current && values?.[0]?.id) {
+            item.setFlag(MODULE_NAME, key, values[0].id);
+        }
     }
     label ||= localizeBonusLabel(key);
     tooltip ||= localizeBonusTooltip(key);
