@@ -14,7 +14,7 @@ export class ProficiencyOverride extends BaseTargetOverride {
      * @inheritdoc
      * @returns {string}
      */
-    static get journal() { return 'TODO'; }
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.fzOO7K3iPTrSolY1#proficiency'; }
 
     /**
      * @override
@@ -70,7 +70,7 @@ export class ProficiencyOverride extends BaseTargetOverride {
             tooltip: this.tooltip,
         }, {
             canEdit: isEditable,
-            inputType: 'target',
+            inputType: 'target-override',
         });
     }
 }

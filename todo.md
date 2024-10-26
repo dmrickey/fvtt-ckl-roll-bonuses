@@ -285,7 +285,6 @@
 
 # v 2.16
 - Action Type Target
-  - Add documentation for `isPhysical`
   - Item hints - use the language helper thing to do and/or based on any/all
 - Modifiers Bonus
   - Item Hints that show the Nmae
@@ -294,12 +293,7 @@
     - Update HBS for effect/change
     - Update documentation
 - Target Override
-  - Add Documenation
   - Add "invalid" label for if it's added to item types that already support these system properties
-  - Finesse
-    - Add Migration
-    - Remove override documentation from existing "Finesse Target"
-    - Make sure it works with existing Finesse Target
   - Weapon Base Types
     - Verify Functionality for
       - Specific Bonuses

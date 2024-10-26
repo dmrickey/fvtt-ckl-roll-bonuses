@@ -14,7 +14,7 @@ export class FinesseOverride extends BaseTargetOverride {
      * @inheritdoc
      * @returns {string}
      */
-    static get journal() { return 'TODO'; }
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.fzOO7K3iPTrSolY1#finesse'; }
 
     /**
      * @override
@@ -55,7 +55,7 @@ export class FinesseOverride extends BaseTargetOverride {
      * @param {ItemPF} options.item
      */
     static showInputOnItemSheet({ html, isEditable, item }) {
-        // TOOD add invalid label if this is an weapon
+        // TOOD add invalid label if this is a weapon
 
         showEnabledLabel({
             item,

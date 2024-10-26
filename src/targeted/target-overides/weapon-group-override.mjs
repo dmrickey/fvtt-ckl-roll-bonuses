@@ -19,7 +19,7 @@ export class WeaponGroupOverride extends BaseTargetOverride {
      * @inheritdoc
      * @returns {string}
      */
-    static get journal() { return 'TODO'; }
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.fzOO7K3iPTrSolY1#weapon-groups'; }
 
     /**
      * @override
@@ -109,7 +109,7 @@ export class WeaponGroupOverride extends BaseTargetOverride {
             tooltip: this.tooltip,
         }, {
             canEdit: isEditable,
-            inputType: 'target',
+            inputType: 'target-override',
         });
     }
 }
