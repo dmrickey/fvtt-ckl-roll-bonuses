@@ -561,6 +561,7 @@ declare global {
     class ItemPF<
         SystemData extends SystemItemData = SystemItemData
     > extends ItemDocument {
+        scriptCalls: Collection<pf1['components']['ItemScriptCall']>;
         _prepareDependentData(final: boolean): void;
         [MODULE_NAME]: {
             bonuses: (typeof BaseBonus)[];
@@ -1855,6 +1856,8 @@ declare global {
         };
     }
 
+    class ItemScriptCall {}
+
     interface ActorSheetPF {
         get actor(): ActorPF;
         get isEditable(): boolean;
@@ -2019,10 +2022,11 @@ declare global {
             };
         };
         components: {
-            ItemConditional: typeof ItemConditional;
-            ItemConditionalModifier: typeof ItemConditionalModifier;
             ItemAction: typeof ItemAction;
             ItemChange: typeof ItemChange;
+            ItemConditional: typeof ItemConditional;
+            ItemConditionalModifier: typeof ItemConditionalModifier;
+            ItemScriptCall: typeof ItemScriptCall;
         };
         config: {
             backgroundOnlySkills: (keyof typeof pf1.config.skills)[];

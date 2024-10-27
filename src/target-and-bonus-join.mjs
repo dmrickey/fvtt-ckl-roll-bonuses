@@ -331,7 +331,7 @@ function actionUseProcess(actionUse) {
         actionUse,
         (bonusType, sourceItem) => bonusType.actionUseProcess(sourceItem, actionUse),
     );
-}
+};
 LocalHookHandler.registerHandler(localHooks.actionUseProcess, actionUseProcess);
 
 /**
@@ -343,7 +343,7 @@ function modifyActionLabelDC(action, seed) {
         action,
         (bonusType, sourceItem) => seed.dc += bonusType.modifyActionLabelDC(sourceItem, action),
     );
-}
+};
 LocalHookHandler.registerHandler(localHooks.modifyActionLabelDC, modifyActionLabelDC);
 
 /**
@@ -390,8 +390,29 @@ const itemActionRollAttack = (seed, action, data) => {
         action,
         (bonusType, sourceItem) => bonusType.itemActionRollAttack(sourceItem, seed, action, data),
     );
-}
+};
 LocalHookHandler.registerHandler(localHooks.itemActionRollAttack, itemActionRollAttack);
+
+/**
+ * @param {ItemPF} item
+ * @returns {void}
+ */
+const itemPF_prepareScriptCalls = (item) => {
+    handleBonusesFor(
+        item,
+        (bonusType, sourceItem) => {
+            const script = bonusType.getScriptCalls(sourceItem);
+            if (script) {
+                item.scriptCalls ||= new Collection();
+                const scripts = Array.isArray(script) ? script : [script];
+                scripts.forEach((s) => {
+                    item.scriptCalls.set(s.id, s);
+                })
+            }
+        },
+    );
+};
+LocalHookHandler.registerHandler(localHooks.itemPF_prepareScriptCalls, itemPF_prepareScriptCalls);
 
 /**
  * @param {{base: number, stacks: number}} seed
@@ -417,7 +438,7 @@ const itemActionRollDamage = (seed, action, data, index) => {
         action,
         (bonusType, sourceItem) => bonusType.itemActionRollDamage(sourceItem, seed, action, data, index),
     );
-}
+};
 LocalHookHandler.registerHandler(localHooks.itemActionRollDamage, itemActionRollDamage);
 
 /**
@@ -430,7 +451,7 @@ const itemGetTypeChatData = (item, props, rollData) => {
         item,
         (bonusType, sourceItem) => props.push(...(bonusType.getItemChatCardInfo(sourceItem, rollData) || []))
     );
-}
+};
 Hooks.on(customGlobalHooks.itemGetTypeChatData, itemGetTypeChatData);
 
 /**
@@ -443,5 +464,5 @@ const updateItemActionRollData = (action, rollData) => {
         action,
         (bonusType, sourceItem) => bonusType.updateItemActionRollData(sourceItem, action, rollData),
     );
-}
+};
 LocalHookHandler.registerHandler(localHooks.updateItemActionRollData, updateItemActionRollData)

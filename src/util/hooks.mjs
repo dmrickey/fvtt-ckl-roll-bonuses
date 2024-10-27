@@ -24,6 +24,7 @@ export const localHooks = /** @type {const} */ ({
     itemActionEnhancementBonus: `${MODULE_NAME}_itemActionEnhancementBonus`,
     itemActionRollAttack: `${MODULE_NAME}_itemActionRollAttack`,
     itemActionRollDamage: `${MODULE_NAME}_itemActionRollDamage`,
+    itemPF_prepareScriptCalls: `${MODULE_NAME}_itemPF_prepareScriptCalls`,
     modifyActionLabelDC: `${MODULE_NAME}_modifyActionLabelDC`,
     patchChangeValue: `${MODULE_NAME}_patchChangeValue`,
     prepareData: `${MODULE_NAME}_prepareData`,
@@ -141,6 +142,13 @@ export class LocalHookHandler {
      * @overload
      * @param {typeof localHooks.modifyActionLabelDC} hook
      * @param {(action: ItemAction, seed: {dc: number}) => void} func
+     * @returns {void}
+     */
+
+    /**
+     * @overload
+     * @param {typeof localHooks.itemPF_prepareScriptCalls} hook
+     * @param {(item: ItemPF) => void} func
      * @returns {void}
      */
 
@@ -305,6 +313,13 @@ export class LocalHookHandler {
      * @param {typeof localHooks.prepareData} hook
      * @param {ItemPF} item
      * @param {RollData} rollData
+     * @returns {void}
+     */
+
+    /**
+     * @overload
+     * @param {typeof localHooks.itemPF_prepareScriptCalls} hook
+     * @param {ItemPF} item
      * @returns {void}
      */
 

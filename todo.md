@@ -10,7 +10,6 @@
     - [Script Call bonus](#script-call-bonus)
     - [AC bonus](#ac-bonus)
     - [Alignment](#alignment)
-    - [Conditional Bonus](#conditional-bonus)
     - [Consume Item/Charge](#consume-itemcharge)
   - [Targets](#targets)
     - [Creature type/subtype](#creature-typesubtype)
@@ -18,7 +17,6 @@
     - [All healing](#all-healing)
     - [Armor Target (useful for something like Magic Vestment)](#armor-target-useful-for-something-like-magic-vestment)
     - [Die Result](#die-result)
-    - [Secondary Attack](#secondary-attack)
     - [Skill Target](#skill-target)
     - [Spellbook target](#spellbook-target)
     - [Spell preparation Qty](#spell-preparation-qty)
@@ -89,8 +87,6 @@
 ### Alignment
 - Actually align the weapon/attack instead of just adding typed damage
   - I can make it work but it won't do anything (the system doesn't show it in the attack, it's kinda pointless without extra functionality)
-### Conditional Bonus
-- See if I can make a way to add a conditional modifier into an attack dialog that can optionally be enabled for targeted attacks
 ### Consume Item/Charge
 - consume a charge from <pick Item> when used
 
@@ -109,8 +105,6 @@
 ### Die Result
 - When the die is (some value range)
   - Would allow for "1s turn to 2s" (e.g. target die = 1; bonus + 1)
-### Secondary Attack
-- target secondary natural attacks
 ### Skill Target
 - Include "smart groups" that will give options e.g.
   - specific ability skills (e.g. all int skills)
@@ -128,6 +122,8 @@
 ## Cleric
 ### Healing Domain - Healer's Blessing
 - Cure Spells are treated as if they're empowered (+50% healing)
+  - IsHealing target
+  - Empowered Bonus
 ## Psychic
 ### Phrenic Amplification
   - increases DC of `mind-affecting` spells by 1/2/3
@@ -255,4 +251,7 @@
 - Action Type Target
   - Item hints - use the language helper thing to do and/or based on any/all
 - Modifiers Bonus
-  - Item Hints that show the Nmae
+  - Item Hints that show the Name
+- Script Call Bonus
+  - Try to create this
+- Rename `effect-size.mjs` to `effective-size-bonus.mjs`
