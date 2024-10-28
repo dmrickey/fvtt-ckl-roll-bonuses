@@ -16,7 +16,7 @@
   - Now includes both effect damage (previously available) and "change types" (new addition). This allows configurations with types such as Alchemical, Luck, Morale, etc. that stack as expected 
 
 ### Target Overrides (New Feature)
-- These are new "Bonuses" you can add to specific Items so that they can be "targeted" by the mod's Targets.
+These are new "Bonuses" you can add to specific Items so that they can be "targeted" by the mod's Targets.
 - **Finesse Override**
   - The system only allows you to mark Weapons with the Finesse property -- this does not extend to attacks. Adding this Finesse Override to an Attack (or a spell, feature, or anything else) automatically enables it as a finesseable target.
 - **Proficiency Override**
@@ -27,7 +27,7 @@
   - This allows you to add Weapon Groups to spells, features, or any other item type.
 
 ### Miscellaneous
-- Feats and abilities that are specifically supported are now auto-configured (as much as can be) when added to an actor (e.g. Fate's Favored, Furious Focus, Extreme Mood Swings). Any that **have to be configured** will still need to modified -- I can't make the choice for you for feats such as Weapon Focus or Spell Focus.
+- Feats and abilities that are specifically supported are now auto-configured (as much as can be) when added to an actor (e.g. Fate's Favored, Furious Focus, Extreme Mood Swings). Any that **have to be configured** will probably still need to modified -- I can't guarantee the correct choice for feats such as Weapon Focus or Spell Focus.
 
 ### Bugfixes
 - Effective Size Bonuses once again show in the actor's sheet's Combat Damage column
