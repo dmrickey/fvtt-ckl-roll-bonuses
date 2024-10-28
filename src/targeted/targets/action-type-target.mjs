@@ -21,9 +21,9 @@ const isNaturalSecondary = (item, action) => {
 }
 /**
  * @param {ItemPF} item
- * @param {ItemAction} action
+ * @param {ItemAction} _action
  */
-const isNatural = (item, action) => {
+const isNatural = (item, _action) => {
     const isAttack = item instanceof pf1.documents.item.ItemAttackPF;
     return (isAttack && item.subType === 'natural')
         || (item.system.weaponGroups?.value?.includes("natural"));
