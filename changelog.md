@@ -4,6 +4,7 @@
 - **Action Type**
   - Removed individual Targets for various action types and reduced them to a single action. All of the following are now configured through this single Target.
     - `Is Melee`, `Is Natural`, `Is Natural Secondary`, `Is Ranged`, `Is Spell`, `Is Thrown`, `Is Weapon`
+    - Added a new `Is Physical` type to be able to target physical items (e.g. weapon, armor, etc but not spell, ability, etc.) 
 - **Conditional Modifier**
   - Configure conditional modifiers on buffs/features/etc and have them show up as if they were configured on the targeted actions. This means you can do something like "Sneak Attack" and Target "Melee Attacks" to have a Conditional Modifier for it show up on every melee attack that you can enable/disable per action. (do note that becuase of how Conditional Modifiers work within the system, the bonuses defined there always stack (yes even the system's own conditional modifiers stack with other same-type bonuses))
 - **Script Call**
