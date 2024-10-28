@@ -252,6 +252,8 @@
   - Make specific abilities that have multiple choices auto-configure to the first available choice
 - Action Type Target
   - Item hints - use the language helper thing to do and/or based on any/all
+- Attack Bonus
+  - Add "crit confirm only" option
 - Damage Bonus
   - Double check the labels
     - Overall label
@@ -270,3 +272,6 @@
   - Only add script calls that can be used by the source item type
   - Modify input so it has select/macro name/edit icon on a single line
 - Rename file from `effect-size.mjs` to `effective-size-bonus.mjs`
+- Existing Buffs
+  - Update example Smite buff (documentation and in compendium (if it's already within the compendium))
+  - audit existing buffs to see if they make use of any new features

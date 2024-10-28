@@ -7,37 +7,35 @@ import { BaseTarget } from './base-target.mjs';
 /**
  * @param {ItemPF} item
  * @param {ItemAction} action
+ * @returns {boolean}
  */
 const isNaturalSecondary = (item, action) => {
-    if (!action || !item) return false;
-
-    const isAttack = item instanceof pf1.documents.item.ItemAttackPF;
-    const isNatural = (isAttack && item.subType === 'natural')
-        || (item.system.weaponGroups?.value?.includes("natural"));
-
-    const isPrimary = action.data.naturalAttack.primaryAttack;
-
-    return isNatural && !isPrimary;
+    const _isNatural = isNatural(item, action);
+    const isPrimary = action?.data.naturalAttack.primaryAttack;
+    return _isNatural && !isPrimary;
 }
 /**
  * @param {ItemPF} item
  * @param {ItemAction} _action
+ * @returns {boolean}
  */
 const isNatural = (item, _action) => {
     const isAttack = item instanceof pf1.documents.item.ItemAttackPF;
     return (isAttack && item.subType === 'natural')
-        || (item.system.weaponGroups?.value?.includes("natural"));
+        || !!item.system.weaponGroups?.value?.includes("natural");
 }
 /**
  * @param {ItemPF} item
  * @param {ItemAction} action
+ * @returns {boolean}
  */
 const isSpell = (item, action) => {
     const isSpell = item instanceof pf1.documents.item.ItemSpellPF;
     return isSpell || ['msak', 'rsak', 'spellsave'].includes(action?.data.actionType ?? '');
 }
 
-// /** @type {{ [key: string]: {label: string, filter: (item: ItemPF, action: ItemAction) => boolean}}} */
+/** @typedef {keyof typeof filterTypes} FilterType */
+
 const filterTypes = /** @type {const} */ ({
     ['is-melee']: { label: '', filter: (/** @type {ItemPF} */ item, /** @type {ItemAction} */ action) => ['mwak', 'msak', 'mcman'].includes(action?.data.actionType) },
     ['is-natural']: { label: '', filter: isNatural },
@@ -61,7 +59,7 @@ export class ActionTypeTarget extends BaseTarget {
     static {
         Hooks.once("i18nInit", () => {
             Object.keys(filterTypes).forEach((f) => {
-                const key = /** @type {keyof typeof filterTypes} */ (f);
+                const key = /** @type {FilterType} */ (f);
                 // @ts-expect-error overwrite readonly label with translation
                 filterTypes[key].label = localizeBonusLabel(`action-type-types-choices.${f}`);
             });
@@ -79,7 +77,7 @@ export class ActionTypeTarget extends BaseTarget {
 
     /**
      * @param {ItemPF} source
-     * @returns {(keyof typeof filterTypes)[]}
+     * @returns {(FilterType)[]}
      */
     static #getFilterTypes(source) {
         const filters = source.getFlag(MODULE_NAME, this.#typesKey) || [];
@@ -119,7 +117,7 @@ export class ActionTypeTarget extends BaseTarget {
             const filters = this.#getFilterTypes(source);
             if (!filters.length) return false;
 
-            /** @param {keyof typeof filterTypes} f */
+            /** @param {FilterType} f */
             const hasType = (f) => filterTypes[f].filter(item, action);
             return filters[func](hasType);
         });
@@ -140,7 +138,7 @@ export class ActionTypeTarget extends BaseTarget {
         /** @type {{[key: string]: string}} */
         const options = {};
         Object.keys(filterTypes).forEach((f) => {
-            const key = /** @type {keyof typeof filterTypes} */ (f);
+            const key = /** @type {FilterType} */ (f);
             options[key] = filterTypes[key].label;
         });
 

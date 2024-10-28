@@ -1,6 +1,6 @@
 ## Roll Bonuses 2.16.0
 
-### New Bonus
+### New Bonuses
 - **Action Type**
   - Removed individual Targets for various action types and reduced them to a single action. All of the following are now configured through this single Target.
     - `Is Melee`, `Is Natural`, `Is Natural Secondary`, `Is Ranged`, `Is Spell`, `Is Thrown`, `Is Weapon`
@@ -19,11 +19,11 @@
   - Now includes both effect damage (previously available) and "change types" (new addition). This allows configurations with types such as Alchemical, Luck, Morale, etc. that stack as expected 
 
 ### Target Overrides (New Feature)
-These are new "Bonuses" you can add to specific Items so that they can be "targeted" by the mod's Targets.
+These are new "bonuses" you can add to specific Items so that they can be "targeted" by the mod's Targets.
 - **Finesse Override**
   - The system only allows you to mark Weapons with the Finesse property -- this does not extend to attacks. Adding this Finesse Override to an Attack (or a spell, feature, or anything else) automatically enables it as a finesseable target.
 - **Proficiency Override**
-  - Force profiency with something that is not weapon, attack, or equipment. This is mostly useful when paired with a Weapon Group Override that needs to work Martial Focus or Weapon Specialization.
+  - Force profiency with something that is not weapon, attack, or equipment. This is mostly useful when paired with a Weapon Group Override that needs to work with Martial Focus or Weapon Specialization.
 - **Weapon Type Override**
   - This allows you to add Weapon Types to Features and Spells (and any other Item). This is useful if you have `Weapon Focus (Bombs)` as it allows you to add a "Bomb" Weapon Type to a bomb class feature. Or if you have `Weapon Focus (Ray)` you can add a `Ray` weapon type to spells.
 - **Weapon Group Override**
@@ -37,6 +37,7 @@ These are new "Bonuses" you can add to specific Items so that they can be "targe
 - Fixed Actor's Combat's damage column not including targeted damage bonuses
 - Fixed "Targets all Spells" not affecting some non-hostile spells
 - Damage Bonuses are once again shown for Attacks in the actor's Combat tab
+- Fixed accidental change that broke `Is Weapon` target (it was incorrectly targeting only natural attacks)
 
 ---
 
