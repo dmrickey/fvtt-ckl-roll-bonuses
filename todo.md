@@ -248,10 +248,25 @@
   - See example [https://gitlab.com/mxzf/adventure-uninstaller/-/blob/master/adventure-uninstaller.mjs](here)
 
 # v 2.16
+- Auto configuration
+  - Make specific abilities that have multiple choices auto-configure to the first available choice
 - Action Type Target
   - Item hints - use the language helper thing to do and/or based on any/all
+- Damage Bonus
+  - Double check the labels
+    - Overall label
+    - placeholder for effect damage
+    - placeholder for typed damage
 - Modifiers Bonus
   - Item Hints that show the Name
+  - Make sure conditionals edtior still works after moving its folder location
+  - try to add drag/drop
 - Script Call Bonus
-  - Try to create this
-- Rename `effect-size.mjs` to `effective-size-bonus.mjs`
+  - Add documentation
+  - Item Hints show script names
+  - try to add drag/drop from other scripts
+    - including macros
+  - Make macro work
+  - Only add script calls that can be used by the source item type
+  - Modify input so it has select/macro name/edit icon on a single line
+- Rename file from `effect-size.mjs` to `effective-size-bonus.mjs`

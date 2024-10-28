@@ -561,7 +561,7 @@ declare global {
     class ItemPF<
         SystemData extends SystemItemData = SystemItemData
     > extends ItemDocument {
-        scriptCalls: Collection<pf1['components']['ItemScriptCall']>;
+        scriptCalls: Collection<ItemScriptCall>;
         _prepareDependentData(final: boolean): void;
         [MODULE_NAME]: {
             bonuses: (typeof BaseBonus)[];
@@ -1856,7 +1856,24 @@ declare global {
         };
     }
 
-    class ItemScriptCall {}
+    class ItemScriptCallData {
+        _id: string;
+        name: string;
+        img: string;
+        type: string;
+        value: string;
+        category: string;
+        hidden: boolean;
+    }
+    class ItemScriptCall {
+        id: string;
+        parent: ItemPF<SystemItemData>;
+        /** in-memory value to determine if this mod created this */
+        rollBonus: boolean;
+        get hide(): boolean;
+        get category(): string;
+        constructor(data: Partial<ItemScriptCallData>);
+    }
 
     interface ActorSheetPF {
         get actor(): ActorPF;
@@ -2008,6 +2025,7 @@ declare global {
         actorSizes: Record<ActorSize, string>;
         actorStatures: Record<ActorStature, string>;
         applications: {
+            ScriptEditor: any;
             AttackDialog: { new (): AttackDialog };
             ActorTraitSelector: {
                 new (doc: BaseDocument, options: object): ActorTraitSelector;
@@ -2150,6 +2168,7 @@ declare global {
             TokenDocumentPF: { new (): TokenDocumentPF };
         };
         registry: {
+            scriptCalls: ScriptCallRegistry;
             conditions: {
                 get(condition: string): Condition;
                 contents: Array<Condition>;
@@ -2166,6 +2185,17 @@ declare global {
             createTag(name: string): string;
         };
     }
+
+    class ScriptCallCategory {
+        _id: string;
+        hidden: boolean;
+        itemTypes: string[];
+        name: string;
+        get id(): string;
+        get name(): string;
+        get info(): string;
+    }
+    class ScriptCallRegistry extends Collection<ScriptCallCategory> {}
 
     type SavingThrows = {
         fort: 'Fortitude';

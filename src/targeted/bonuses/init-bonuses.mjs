@@ -13,11 +13,13 @@ import { FortuneBonus } from './fortune-bonus.mjs';
 import { MaximizeDamageBonus } from './maximize-damage-bonus.mjs';
 import { MisfortuneBonus } from './misfortune-bonus.mjs';
 import { ConditionalModifiersBonus } from './conditional-modifiers-bonus.mjs';
+import { ScriptCallBonus } from './script-call-bonus.mjs';
 
 export const registerBonuses = () => [
     AgileBonus,
     AttackBonus,
     CasterLevelBonus,
+    ConditionalModifiersBonus,
     CritBonus,
     DamageBonus,
     DCBonus,
@@ -27,7 +29,7 @@ export const registerBonuses = () => [
     FootnoteBonus,
     FortuneBonus,
     MisfortuneBonus,
-    ConditionalModifiersBonus,
+    ScriptCallBonus,
 
     // Specifically last so it'll include other damage bonuses in its tooltip
     MaximizeDamageBonus,

@@ -108,9 +108,9 @@ export class BaseBonus extends BaseSource {
      *
      * @abstract
      * @param {ItemPF} _sourceItem
-     * @return {Nullable<ItemScriptCall | ItemScriptCall[]> | void}
+     * @return {Nullable<ItemScriptCall | ItemScriptCall[]>}
      */
-    static getScriptCalls(_sourceItem) { }
+    static getScriptCalls(_sourceItem) { return; }
 
     /**
      * Returns true the targeting is too generic to show a hint on a specific item
@@ -123,10 +123,10 @@ export class BaseBonus extends BaseSource {
 
     /**
      * @abstract
-      * @param {ItemPF} source
-      * @param {ItemAction} action
-      * @param {RollData} rollData
-      */
+     * @param {ItemPF} source
+     * @param {ItemAction} action
+     * @param {RollData} rollData
+     */
     static updateItemActionRollData(source, action, rollData) { }
 
     /**

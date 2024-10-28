@@ -406,8 +406,9 @@ const itemPF_prepareScriptCalls = (item) => {
                 item.scriptCalls ||= new Collection();
                 const scripts = Array.isArray(script) ? script : [script];
                 scripts.forEach((s) => {
+                    s.parent = item;
                     item.scriptCalls.set(s.id, s);
-                })
+                });
             }
         },
     );

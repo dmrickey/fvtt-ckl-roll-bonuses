@@ -6,6 +6,8 @@
     - `Is Melee`, `Is Natural`, `Is Natural Secondary`, `Is Ranged`, `Is Spell`, `Is Thrown`, `Is Weapon`
 - **Conditional Modifier**
   - Configure conditional modifiers on buffs/features/etc and have them show up as if they were configured on the targeted actions. This means you can do something like "Sneak Attack" and Target "Melee Attacks" to have a Conditional Modifier for it show up on every melee attack that you can enable/disable per action. (do note that becuase of how Conditional Modifiers work within the system, the bonuses defined there always stack (yes even the system's own conditional modifiers stack with other same-type bonuses))
+- **Script Call**
+  - Runs an Item Script as if it were configured directly on targeted items. This allows you to configure a script exactly once and have it run when needed. If you have a script that you want to run on every melee attack, or any time you cast a spell, this allows you to configure that script exactly once and have it run for any of those abilities. Any `item` references within the script will refer to the item that is being used as part of the action (not the item that this script is configured on).
 
 ### Existing Bonuses
 - **Attack Bonus**

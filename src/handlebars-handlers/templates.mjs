@@ -10,7 +10,6 @@ export const templates = /** @type {const} */ ({
 
     // generic shortcuts
     checkboxInput: `modules/${MODULE_NAME}/hbs/checkbox-input.hbs`,
-    conditionalsInput: `modules/${MODULE_NAME}/hbs/conditionals-input.hbs`,
     enabledLabel: `modules/${MODULE_NAME}/hbs/enabled-label.hbs`,
     invalidLabel: `modules/${MODULE_NAME}/hbs/invalid-label.hbs`,
     keyValueSelect: `modules/${MODULE_NAME}/hbs/labeled-key-value-dropdown-select.hbs`,
@@ -22,11 +21,10 @@ export const templates = /** @type {const} */ ({
     /** versatile performance picker used on item sheets */
     versatilePerformance: `modules/${MODULE_NAME}/hbs/versatile-performance-selector.hbs`,
 
-    /** damage input used on item sheets */
+    // targeted - bonuses
+    conditionalsInput: `modules/${MODULE_NAME}/hbs/targeted/bonuses/conditionals-input.hbs`,
     damageInput: `modules/${MODULE_NAME}/hbs/targeted/bonuses/damage-input.hbs`,
-
-    /** not used */
-    conditionals: 'systems/pf1/templates/apps/item-action/conditionals.hbs', // (targeted but belongs to pf1) belongs to pf1
+    scriptCallBonus: `modules/${MODULE_NAME}/hbs/targeted/bonuses/script-call-bonus-input.hbs`,
 
     // targeted - targets
     actionsApp: `modules/${MODULE_NAME}/hbs/targeted/targets/actions-input-application.hbs`,

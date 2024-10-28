@@ -1,0 +1,9 @@
+<div class="form-group script-bonus-input roll-bonuses">
+  <div class="form-group">{{> "modules/ckl-roll-bonuses/hbs/label.hbs"}}</div>
+  {{#if name}}
+  <div>name</div>
+  {{/if}}
+  {{#unless readonly}}
+  <a class="trait-selector" data-options="{{flag}}"><i class="fas fa-edit"></i></a>
+  {{/unless}}
+</div>
