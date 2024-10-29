@@ -166,6 +166,7 @@ export class AttackBonus extends BaseBonus {
         }, {
             canEdit: isEditable,
             inputType: 'bonus',
+            isSubLabel: true,
         });
     }
 

@@ -42,6 +42,10 @@
     margin-inline-start: 0.125rem;
 }
 
+#ckl-roll-bonus-container .bonus-label.sub-label {
+    margin-inline-start: 1rem;
+}
+
 #ckl-roll-bonus-container .error label {
     color: var(--pf1-color-text-error);
 }
