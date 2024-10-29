@@ -122,6 +122,15 @@ export class BaseBonus extends BaseSource {
     static get skipTargetedHint() { return false; }
 
     /**
+     * Get Critical parts for chat attack
+     *
+     * @abstract
+     * @param {ItemPF} source
+     * @returns {Nullable<string | string[]>}
+     */
+    static getCritBonusParts(source) { return; }
+
+    /**
      * @abstract
      * @param {ItemPF} source
      * @param {ItemAction} action

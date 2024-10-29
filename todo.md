@@ -253,16 +253,23 @@
 - Action Type Target
   - Item hints - use the language helper thing to do and/or based on any/all
 - Attack Bonus
-  - Add "crit confirm only" option
+  - Add "crit only" option
+    - Add documentation
+    - make sure it works (both with/without crit only checkbox)
+    - add localization
+    - hide type selection if crit confirm is checked
 - Damage Bonus
   - Double check the labels
     - Overall label
     - placeholder for effect damage
     - placeholder for typed damage
+- Label
+  - Add "inset" option for all inputs so its label can be inset underneath a "parent" bonus
 - Modifiers Bonus
   - Item Hints that show the Name
   - Make sure conditionals edtior still works after moving its folder location
   - try to add drag/drop
+- Rename file from `effect-size.mjs` to `effective-size-bonus.mjs`
 - Script Call Bonus
   - Add documentation
   - Item Hints show script names
@@ -271,7 +278,8 @@
   - Make macro work
   - Only add script calls that can be used by the source item type
   - Modify input so it has select/macro name/edit icon on a single line
-- Rename file from `effect-size.mjs` to `effective-size-bonus.mjs`
+- textInputAndKeyValueSelect
+  - add 
 - Existing Buffs
   - Update example Smite buff (documentation and in compendium (if it's already within the compendium))
   - audit existing buffs to see if they make use of any new features

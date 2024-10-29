@@ -277,6 +277,33 @@ function getDamageTooltipSources(thing, sources) {
 }
 Hooks.on(customGlobalHooks.getDamageTooltipSources, getDamageTooltipSources);
 
+/**
+ * @param {ChatAttack} chatAttack
+ * @param {object} args
+ * @param {boolean} args.noAttack
+ * @param {unknown} args.bonus
+ * @param {string[]} args.extraParts
+ * @param {boolean} args.critical Whether or not this roll is a for a critical confirmation
+ * @param {object} args.conditionalParts
+ */
+const preRollChatAttackAddAttack = async (chatAttack, args) => {
+    if (!args.critical) return;
+
+    handleBonusesFor(
+        chatAttack.action,
+        (bonusType, sourceItem) => {
+            if (args.critical) {
+                const part = bonusType.getCritBonusParts(sourceItem);
+                if (part) {
+                    const parts = Array.isArray(part) ? part : [part];
+                    args.extraParts.push(...parts);
+                }
+            }
+        }
+    );
+}
+LocalHookHandler.registerHandler(localHooks.preRollChatAttackAddAttack, preRollChatAttackAddAttack);
+
 Hooks.on('renderItemSheet', (
     /** @type {ItemSheetPF} */ { actor, isEditable, item },
     /** @type {[HTMLElement]} */[html],

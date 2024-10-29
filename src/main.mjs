@@ -52,11 +52,12 @@ async function setEffectNotesHTMLWrapper(wrapped) {
  * @param {object} obj
  * @param {boolean} [obj.noAttack]
  * @param {unknown} [obj.bonus]
- * @param {unknown[]} [obj.extraParts]
+ * @param {string[]} [obj.extraParts]
  * @param {boolean} [obj.critical] Whether or not this roll is a for a critical confirmation
  * @param {object} [obj.conditionalParts]
  */
 async function chatAttackAddAttack(wrapped, { noAttack = false, bonus = null, extraParts = [], critical = false, conditionalParts = {} }) {
+    await LocalHookHandler.fireHookNoReturnAsync(localHooks.preRollChatAttackAddAttack, this, { noAttack, bonus, extraParts, critical, conditionalParts });
     await wrapped({ noAttack, bonus, extraParts, critical, conditionalParts });
     await LocalHookHandler.fireHookNoReturnAsync(localHooks.chatAttackAddAttack, this, { noAttack, bonus, extraParts, critical, conditionalParts });
 }

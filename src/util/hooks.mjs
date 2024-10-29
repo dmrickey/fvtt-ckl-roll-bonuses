@@ -18,6 +18,7 @@ export const localHooks = /** @type {const} */ ({
     actorRollSkill: `${MODULE_NAME}_actorRollSkill`,
     cacheBonusTypeOnActor: `${MODULE_NAME}_cacheBonusTypeOnActor`,
     chatAttackAddAttack: `${MODULE_NAME}_chatAttackAddAttack`,
+    preRollChatAttackAddAttack: `${MODULE_NAME}_preRollChatAttackAddAttack`,
     chatAttackEffectNotes: `${MODULE_NAME}_chatAttackEffectNotes`,
     initItemActionRollData: `${MODULE_NAME}_initItemActionRollData`,
     itemActionCritRangeWrapper: `${MODULE_NAME}_itemActionCritRangeWrapper`,
@@ -71,7 +72,14 @@ export class LocalHookHandler {
     /**
      * @overload
      * @param {typeof localHooks.chatAttackAddAttack} hook
-     * @param {(chatAttack: ChatAttack,  args: { noAttack: boolean, bonus: unknown, extraParts: unknown[], critical: boolean, conditionalParts: object }) => Promise<void>} func
+     * @param {(chatAttack: ChatAttack,  args: { noAttack: boolean, bonus: unknown, extraParts: string[], critical: boolean, conditionalParts: object }) => Promise<void>} func
+     * @returns {void}
+     */
+
+    /**
+     * @overload
+     * @param {typeof localHooks.preRollChatAttackAddAttack} hook
+     * @param {(chatAttack: ChatAttack,  args: { noAttack: boolean, bonus: unknown, extraParts: string[], critical: boolean, conditionalParts: object }) => Promise<void>} func
      * @returns {void}
      */
 
@@ -215,9 +223,17 @@ export class LocalHookHandler {
 
     /**
      * @overload
+     * @param {typeof localHooks.preRollChatAttackAddAttack} hook
+     * @param {ChatAttack} chatAttack
+     * @param {{ noAttack: boolean, bonus: unknown, extraParts: string[], critical: boolean, conditionalParts: object }} args
+     * @returns {Promise<void>}
+     */
+
+    /**
+     * @overload
      * @param {typeof localHooks.chatAttackAddAttack} hook
      * @param {ChatAttack} chatAttack
-     * @param {{ noAttack: boolean, bonus: unknown, extraParts: unknown[], critical: boolean, conditionalParts: object }} args
+     * @param {{ noAttack: boolean, bonus: unknown, extraParts: string[], critical: boolean, conditionalParts: object }} args
      * @returns {Promise<void>}
      */
 

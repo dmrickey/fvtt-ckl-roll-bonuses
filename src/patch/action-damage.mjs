@@ -36,8 +36,6 @@ function actionDamage(action, { simplify = true, strict = true } = {}) {
         },
     };
 
-    // TODO THIS CACHE IS NOT CLEARED WHEN AN ITEM CHANGES
-
     /** BEGIN OVERRIDE */
     if (!action[MODULE_NAME]?.conditionals) {
         // item[MODULE_NAME] ||= {};

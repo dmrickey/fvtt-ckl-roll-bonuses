@@ -1,15 +1,19 @@
 import { MODULE_NAME } from '../../consts.mjs';
+import { checkboxInput } from '../../handlebars-handlers/bonus-inputs/chekbox-input.mjs';
 import { textInputAndKeyValueSelect } from '../../handlebars-handlers/bonus-inputs/text-input-and-key-value-select.mjs';
+import { textInput } from '../../handlebars-handlers/bonus-inputs/text-input.mjs';
 import { handleBonusTypeFor } from '../../target-and-bonus-join.mjs';
 import { createChange } from '../../util/conditional-helpers.mjs';
 import { FormulaCacheHelper } from "../../util/flag-helpers.mjs";
 import { LocalHookHandler, localHooks } from '../../util/hooks.mjs';
+import { localize } from '../../util/localize.mjs';
 import { signed } from "../../util/to-signed-string.mjs";
 import { BaseBonus } from "./base-bonus.mjs";
 
 /** @extends BaseBonus */
 export class AttackBonus extends BaseBonus {
     static get #typeKey() { return `${this.key}-type`; }
+    static get #critOnlyKey() { return `${this.key}-crit-only`; }
 
     /**
      * @override
@@ -24,24 +28,6 @@ export class AttackBonus extends BaseBonus {
      */
     static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.PiyJbkTuzKHugPSk#attack'; }
 
-    /**
-     * @override
-     * @inheritdoc
-     * @param {ItemPF} source
-     * @returns {Nullable<string[]>}
-     */
-    static getHints(source) {
-        const formula = FormulaCacheHelper.getModuleFlagFormula(source, this.key)[this.key];
-        const value = this.#getAttackBonus(source);
-        if (!value && !formula) return;
-
-        const roll = RollPF.create((formula + '') || '0');
-
-        return roll.isDeterministic
-            ? [`${signed(value)}`]
-            : [`${formula}`];
-    }
-
     static {
         /**
          * @this {ItemAction}
@@ -53,6 +39,9 @@ export class AttackBonus extends BaseBonus {
                 this,
                 AttackBonus,
                 (bonusType, sourceItem) => {
+                    const critOnly = !!sourceItem.getFlag(MODULE_NAME, bonusType.#critOnlyKey);
+                    if (critOnly) return;
+
                     const type = bonusType.#getAttackBonusType(sourceItem);
                     /** @type { string | number } */
                     let value = bonusType.#getAttackBonus(sourceItem);
@@ -72,9 +61,62 @@ export class AttackBonus extends BaseBonus {
             );
             return attackSources;
         };
+
         Hooks.once('init', () => {
             libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.attackSources', itemAction_attackSources, libWrapper.WRAPPER);
         });
+    }
+
+    /**
+     * @override
+     * @inheritdoc
+     */
+    static init() {
+        FormulaCacheHelper.registerModuleFlag(this.key);
+    }
+
+    /**
+     * @override
+     * @inheritdoc
+     * @param {ItemPF} source
+     * @returns {Nullable<string[]>}
+     */
+    static getHints(source) {
+        const formula = FormulaCacheHelper.getModuleFlagFormula(source, this.key)[this.key];
+        const value = this.#getAttackBonus(source);
+        const critOnly = !!source.getFlag(MODULE_NAME, this.#critOnlyKey);
+        if (!value && !formula) return;
+
+        const roll = RollPF.create((formula + '') || '0');
+
+        const hint = roll.isDeterministic
+            ? `${signed(value)}`
+            : `${formula}`;
+        return critOnly
+            ? [`${hint} (${localize('PF1.CriticalConfirmBonus')})`]
+            : [hint];
+    }
+
+    /**
+     * @override
+     * @inheritdoc
+     * @param {ItemPF} source
+     * @returns {Nullable<string | string[]>}
+     */
+    static getCritBonusParts(source) {
+        const critOnly = !!source.getFlag(MODULE_NAME, this.#critOnlyKey);
+        if (!critOnly) return;
+
+        const formula = FormulaCacheHelper.getModuleFlagFormula(source, this.key)[this.key];
+        const value = this.#getAttackBonus(source);
+        if (!value && !formula) return;
+
+        const roll = RollPF.create((formula + '') || '0');
+
+        const part = roll.isDeterministic
+            ? `(${signed(value)})`
+            : `(${formula})`;
+        return `${part}[${source.name}]`;
     }
 
     /**
@@ -87,14 +129,40 @@ export class AttackBonus extends BaseBonus {
      * @param {ItemPF} options.item
      */
     static showInputOnItemSheet({ html, isEditable, item }) {
-        textInputAndKeyValueSelect({
+        const critOnly = !!item.getFlag(MODULE_NAME, this.#critOnlyKey);
+
+        if (critOnly) {
+            textInput({
+                item,
+                label: this.label,
+                journal: this.journal,
+                key: this.key,
+                parent: html,
+                tooltip: this.tooltip,
+            }, {
+                canEdit: isEditable,
+                inputType: 'bonus',
+            });
+        }
+        else {
+            textInputAndKeyValueSelect({
+                item,
+                label: this.label,
+                journal: this.journal,
+                text: { key: this.key },
+                select: { key: this.#typeKey, choices: pf1.config.bonusTypes },
+                parent: html,
+                tooltip: this.tooltip,
+            }, {
+                canEdit: isEditable,
+                inputType: 'bonus',
+            });
+        }
+        checkboxInput({
             item,
-            label: this.label,
             journal: this.journal,
-            text: { key: this.key },
-            select: { key: this.#typeKey, choices: pf1.config.bonusTypes },
+            key: this.#critOnlyKey,
             parent: html,
-            tooltip: this.tooltip,
         }, {
             canEdit: isEditable,
             inputType: 'bonus',
@@ -117,13 +185,5 @@ export class AttackBonus extends BaseBonus {
     static #getAttackBonusType(item) {
         const t = item.getFlag(MODULE_NAME, this.#typeKey);
         return t || 'untyped';
-    }
-
-    /**
-     * @override
-     * @inheritdoc
-     */
-    static init() {
-        FormulaCacheHelper.registerModuleFlag(this.key);
     }
 }

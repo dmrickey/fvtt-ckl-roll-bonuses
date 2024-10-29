@@ -15,6 +15,7 @@
 ### Existing Bonuses
 - **Attack Bonus**
   - Now includes a bonus type. This makes it so that stacking bonuses can be correctly configured.
+  - Added option for "crit only" to be able to add targeted crit confirmation bonuses
 - **Damage Bonus**
   - Now includes both effect damage (previously available) and "change types" (new addition). This allows configurations with types such as Alchemical, Luck, Morale, etc. that stack as expected 
 
