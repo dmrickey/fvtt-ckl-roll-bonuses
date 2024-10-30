@@ -126,6 +126,11 @@ form .versatile-performance-selector .form-fields {
     width: 100%;
 }
 
+#ckl-roll-bonus-container .script-bonus-input .script-name {
+    padding-inline-end: 4px;
+    text-align: end;
+}
+
 #ckl-roll-bonus-container .conditional-modifier-inputs {
     flex-direction: column;
 }

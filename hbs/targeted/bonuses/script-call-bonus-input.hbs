@@ -1,9 +1,22 @@
 <div class="form-group script-bonus-input roll-bonuses">
-  <div class="form-group">{{> "modules/ckl-roll-bonuses/hbs/label.hbs"}}</div>
-  {{#if name}}
-  <div>name</div>
-  {{/if}}
-  {{#unless readonly}}
-  <a class="trait-selector" data-options="{{flag}}"><i class="fas fa-edit"></i></a>
-  {{/unless}}
+    {{> "modules/ckl-roll-bonuses/hbs/label.hbs"}}
+    <div class="form-fields">
+        {{#if readonly}}
+        <input type="text" readonly value="{{currentCategory.label}}" />
+        {{else}}
+        <select id="key-value-selector-{{key}}">
+            {{selectOptions categories selected=currentCategory nameAttr="key" labelAttr="label"}}
+        </select>
+        {{/if}}
+    <div class="script-name">
+        {{#if current.name}}
+        {{current.name}}
+        {{else}}
+        {{localize "ckl-roll-bonuses.script-call-default-name"}}
+        {{/if}}
+    </div>
+    {{#unless readonly}}
+    <a class="trait-selector" data-options="{{flag}}"><i class="fas fa-edit"></i></a>
+    {{/unless}}
+  </div>
 </div>

@@ -109,25 +109,18 @@ export class ScriptCallBonus extends BaseBonus {
      * @param {ItemPF} options.item
      */
     static showInputOnItemSheet({ html, isEditable, item }) {
-        const choices = pf1.registry.scriptCalls.map((sc) => ({
-            key: sc._id,
-            label: sc.name,
-        }));
-        keyValueSelect({
-            choices,
-            item,
-            journal: this.journal,
-            key: this.#categoryKey,
-            parent: html,
-            tooltip: this.tooltip,
-        }, {
-            canEdit: isEditable,
-            inputType: 'bonus',
-        });
+        const categories = pf1.registry.scriptCalls
+            .map((sc) => ({
+                key: sc._id,
+                label: sc.name,
+            }));
         showScriptBonusEditor({
+            bonusKey: this.#scriptKey,
+            categories,
+            categoryKey: this.#categoryKey,
             item,
             journal: this.journal,
-            key: this.#scriptKey,
+            label: this.label,
             parent: html,
             tooltip: this.tooltip,
         }, {

@@ -6,10 +6,11 @@ import { createTemplate, templates } from "../../templates.mjs";
 
 /**
  * @param {object} args
- * @param {string} [args.description]
- * @param {string} args.journal
- * @param {string} args.key
+ * @param {string} args.bonusKey
+ * @param {{key: string, label: string}[]} args.categories
+ * @param {string} args.categoryKey
  * @param {ItemPF} args.item
+ * @param {string} args.journal
  * @param {string} [args.label]
  * @param {string} [args.tooltip]
  * @param {HTMLElement} args.parent
@@ -18,23 +19,36 @@ import { createTemplate, templates } from "../../templates.mjs";
  * @param {InputType} options.inputType
  */
 export function showScriptBonusEditor({
-    description = '',
+    categories,
     item,
     journal,
-    key,
-    label = '',
+    bonusKey,
+    categoryKey,
     parent,
+    label = '',
     tooltip = '',
 }, {
     canEdit,
     inputType,
 }) {
-    label ||= localizeBonusLabel(key);
-    tooltip ||= localizeBonusTooltip(key);
+    label ||= localizeBonusLabel(bonusKey);
+    tooltip ||= localizeBonusTooltip(bonusKey);
+
+    const currentCategory = item.getFlag(MODULE_NAME, categoryKey);
+    if (canEdit) {
+        if ((categories.length && (!currentCategory || !categories.some((c) => c.key === currentCategory)))
+            || (categories.length === 1 && currentCategory !== categories[0].key)
+        ) {
+            item.setFlag(MODULE_NAME, categoryKey, categories[0].key);
+        }
+        else if (!categories.length && currentCategory) {
+            item.setFlag(MODULE_NAME, categoryKey, '');
+        }
+    }
 
     /** @type {Partial<ItemScriptCallData>} */
     const current = {
-        ...(item.getFlag(MODULE_NAME, key) || {
+        ...(item.getFlag(MODULE_NAME, bonusKey) || {
             _id: foundry.utils.randomID(),
             command: '',
             name: '',
@@ -49,14 +63,16 @@ export function showScriptBonusEditor({
     current.scriptCall = true;
 
     const templateData = {
+        categories,
         current,
-        flag: key,
+        currentCategory,
+        flag: bonusKey,
         journal,
         label,
         readonly: !canEdit,
         tooltip,
     };
-    const div = createTemplate(templates.checklist, templateData);
+    const div = createTemplate(templates.scriptCallBonus, templateData);
 
     div.querySelectorAll('.trait-selector').forEach((element) => {
         element.addEventListener('click', async (event) => {
@@ -66,11 +82,22 @@ export function showScriptBonusEditor({
 
             const result = await scriptEditor.awaitResult();
             if (result) {
-                await item.setFlag(MODULE_NAME, key, { _id: current._id, ...result });
+                await item.setFlag(MODULE_NAME, bonusKey, { _id: current._id, ...result });
                 return;
             }
         });
     });
+    const select = div.querySelector(`#key-value-selector-${categoryKey}`);
+    select?.addEventListener(
+        'change',
+        async (event) => {
+            if (!categoryKey) return;
+
+            // @ts-ignore - event.target is HTMLTextAreaElement
+            const /** @type {HTMLTextAreaElement} */ target = event.target;
+            await item.setFlag(MODULE_NAME, categoryKey, target?.value);
+        },
+    );
 
     addNodeToRollBonus(parent, div, item, canEdit, inputType);
 }
