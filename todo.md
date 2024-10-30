@@ -257,11 +257,9 @@
   - Make specific abilities that have multiple choices auto-configure to the first available choice
 - Action Type Target
   - Item hints - use the language helper thing to do and/or based on any/all
-- Attack Bonus
-  - Add "crit only" option
-    - Add documentation
-    - make sure it works (both with/without crit only checkbox)
-    - hide type selection if crit confirm is checked
+- Conditional Modifiers Bonus
+  - Item Hints that show the Name
+  - try to add drag/drop
 - Damage Bonus
   - Add hints for Typed Damage
   - Double check the labels
@@ -270,9 +268,6 @@
     - placeholder for typed damage
 - Label
   - Add "inset" option for all inputs so its label can be inset underneath a "parent" bonus
-- Modifiers Bonus
-  - Item Hints that show the Name
-  - try to add drag/drop
 - Rename file from `effect-size.mjs` to `effective-size-bonus.mjs`
 - Script Call Bonus
   - Add documentation
