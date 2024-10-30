@@ -127,8 +127,11 @@ form .versatile-performance-selector .form-fields {
 }
 
 #ckl-roll-bonus-container .script-bonus-input .script-name {
-    padding-inline-end: 4px;
+    overflow-x: hidden;
+    padding-inline: 4px;
     text-align: end;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 #ckl-roll-bonus-container .conditional-modifier-inputs {

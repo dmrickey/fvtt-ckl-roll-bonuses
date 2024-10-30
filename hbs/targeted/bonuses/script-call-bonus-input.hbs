@@ -8,12 +8,8 @@
             {{selectOptions categories selected=currentCategory nameAttr="key" labelAttr="label"}}
         </select>
         {{/if}}
-    <div class="script-name">
-        {{#if current.name}}
+    <div class="script-name" data-tooltip="{{current.name}}">
         {{current.name}}
-        {{else}}
-        {{localize "ckl-roll-bonuses.script-call-default-name"}}
-        {{/if}}
     </div>
     {{#unless readonly}}
     <a class="trait-selector" data-options="{{flag}}"><i class="fas fa-edit"></i></a>
