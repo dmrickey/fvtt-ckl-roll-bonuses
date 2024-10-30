@@ -58,6 +58,7 @@
 - [Not Possible](#not-possible)
 - [Range/Positional ideas](#rangepositional-ideas)
 - [Other Ideas](#other-ideas)
+- [PF1 v11](#pf1-v11)
 - [vnext](#vnext)
 - [v 2.16](#v-216)
 
@@ -238,6 +239,9 @@
   - This would allow me to automatically add effect notes for each roll to automatically roll for concealment
   - And would allow automating rerolls for abilities like Weapon of the Chosen
 
+# PF1 v11
+- Type/Subtype targets are now viable.
+
 # vnext
 - Create new "Roll Bonuses" section for attack dialog inputs
 - Replace "checklist-input" with a proper Item application instead of a warpgate menu
@@ -246,6 +250,7 @@
   - Add a configuration error if "this target is not configured"
 - Roll Bonuses button in header that goes "show me a list of items with bonuses". This can also have a button to auto-populate any that it thinks should have bonuses added
   - See example [https://gitlab.com/mxzf/adventure-uninstaller/-/blob/master/adventure-uninstaller.mjs](here)
+- Add "Weapon Focus" hint hook so Weapon Focus, Weapon Specialization, and Martial Focus can all use the sword icon hint
 
 # v 2.16
 - Auto configuration
@@ -256,9 +261,9 @@
   - Add "crit only" option
     - Add documentation
     - make sure it works (both with/without crit only checkbox)
-    - add localization
     - hide type selection if crit confirm is checked
 - Damage Bonus
+  - Add hints for Typed Damage
   - Double check the labels
     - Overall label
     - placeholder for effect damage
@@ -272,7 +277,6 @@
 - Rename file from `effect-size.mjs` to `effective-size-bonus.mjs`
 - Script Call Bonus
   - Add documentation
-  - Item Hints show script names
   - try to add drag/drop from other scripts
     - including macros
   - Make macro work
@@ -283,3 +287,4 @@
 - Existing Buffs
   - Update example Smite buff (documentation and in compendium (if it's already within the compendium))
   - audit existing buffs to see if they make use of any new features
+- Audit Bonus/Target labels for superfluous uses of "Bonus" or "Target"

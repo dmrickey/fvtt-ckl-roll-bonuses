@@ -58,8 +58,9 @@ export class DamageBonus extends BaseBonus {
      * @returns {Nullable<string[]>}
      */
     static getHints(source) {
+        const changes = this.#getCachedDamageItemChange(source);
         const damages = this.#getCachedDamageBonuses(source);
-        if (!damages.length) {
+        if (!changes.length || !damages.length) {
             return;
         }
 
@@ -74,13 +75,12 @@ export class DamageBonus extends BaseBonus {
         }
 
         /**
-         *
          * @param {Nullable<'crit' | 'nonCrit' | 'normal'>} crit
-         * @returns string
+         * @returns {string}
          */
         const critLabel = (crit) => crit ? localize(`crit-damage-label.${crit}`) : '';
 
-        const hints = damages
+        const damageHints = damages
             .filter((d) => !!d.formula?.trim())
             .map(({ formula, type, crit }) => ({
                 type,
@@ -93,6 +93,24 @@ export class DamageBonus extends BaseBonus {
                 })(),
             }))
             .map((d) => `${d.formula}${typeLabel(d.type)}${critLabel(d.crit)}`);
+
+        /**
+         * @param {BonusTypes} type
+         * @returns {string}
+         */
+        const changeTypeLabel = (type) => pf1.config.bonusTypes[type] || type;
+
+        /**
+         * @param {string | number} value
+         * @returns {string}
+         */
+        const changeTypeValue = (value) => typeof value === 'string' ? `(${value})` : signed(value);
+
+        const changeHints = changes
+            .filter((d) => !!d.value)
+            .map(({ value, type }) => `${changeTypeValue(value)}[${changeTypeLabel(/** @type {BonusTypes} */(type))}]`);
+
+        const hints = [...damageHints, ...changeHints];
 
         if (!hints.length) {
             return;
@@ -214,12 +232,12 @@ export class DamageBonus extends BaseBonus {
         const flags = (source.getFlag(MODULE_NAME, this.#changeKey) || [])
         const changes = flags
             .map(({ type }, i) => ({
-                type,
+                type: type || 'untyped',
                 value: source[MODULE_NAME][this.#changeKey]?.[i],
             }))
-            .filter((x) => !isNaN(x.value))
+            .filter((x) => x.value?.trim())
             .map(({ type, value }) => {
-                value = value = LocalHookHandler.fireHookWithReturnSync(localHooks.patchChangeValue, value, type, source.actor);
+                value = LocalHookHandler.fireHookWithReturnSync(localHooks.patchChangeValue, value, type, source.actor);
                 const typeName = pf1.config.bonusTypes[type] || type;
                 const name = `${source.name} (${typeName})`
                 const change = createChange({

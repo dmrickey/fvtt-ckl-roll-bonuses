@@ -9,7 +9,7 @@ import { getActorItemsByTypes } from '../util/get-actor-items-by-type.mjs';
 import { getCachedBonuses } from '../util/get-cached-bonuses.mjs';
 import { customGlobalHooks } from "../util/hooks.mjs";
 import { registerItemHint } from "../util/item-hints.mjs";
-import { localizeBonusLabel } from "../util/localize.mjs";
+import { localize, localizeBonusLabel } from "../util/localize.mjs";
 import { LanguageSettings } from "../util/settings.mjs";
 import { truthiness } from "../util/truthiness.mjs";
 import { uniqueArray } from "../util/unique-array.mjs";
@@ -87,7 +87,7 @@ registerItemHint((hintcls, actor, item, _data) => {
 
     const isFocused = isItemFocused(actor, item);
     if (isFocused) {
-        return hintcls.create(localizeBonusLabel(key), [], {});
+        return hintcls.create(`+1 ${localize('PF1.Damage')}`, [], { hint: localizeBonusLabel(key) });
     }
 });
 

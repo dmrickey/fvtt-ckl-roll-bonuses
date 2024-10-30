@@ -27,6 +27,8 @@ export class ScriptCallBonus extends BaseBonus {
     static {
 
         /**
+         * Copied directly from the system with one line changed
+         *
          * @this {ItemSheetPF}
          * @param {any} context
          */
@@ -70,18 +72,8 @@ export class ScriptCallBonus extends BaseBonus {
      * @returns {Nullable<string[]>}
      */
     static getHints(source, target = undefined) {
-        // TODO - show what type of script call this is.
-        return [this.label];
-    }
-
-    /**
-     * @override
-     * @inheritdoc
-     * @param {ItemPF} item
-     * @param {RollData} rollData
-     */
-    static prepareSourceData(item, rollData) {
-        // TOOD - try it without this, if it doesn't work then try again with whatever `_prepareScriptCall` is doing
+        const script = source.getFlag(MODULE_NAME, this.#scriptKey);
+        return script?.name ? [script.name] : [this.label];
     }
 
     /**
