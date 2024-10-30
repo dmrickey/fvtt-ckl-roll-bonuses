@@ -272,7 +272,6 @@
   - Add "inset" option for all inputs so its label can be inset underneath a "parent" bonus
 - Modifiers Bonus
   - Item Hints that show the Name
-  - Make sure conditionals edtior still works after moving its folder location
   - try to add drag/drop
 - Rename file from `effect-size.mjs` to `effective-size-bonus.mjs`
 - Script Call Bonus
@@ -282,9 +281,4 @@
   - Make macro work
   - Only add script calls that can be used by the source item type
   - Modify input so it has select/macro name/edit icon on a single line
-- textInputAndKeyValueSelect
-  - add 
-- Existing Buffs
-  - Update example Smite buff (documentation and in compendium (if it's already within the compendium))
-  - audit existing buffs to see if they make use of any new features
 - Audit Bonus/Target labels for superfluous uses of "Bonus" or "Target"

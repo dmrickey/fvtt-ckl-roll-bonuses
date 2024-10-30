@@ -204,3 +204,9 @@
 .ckl-auto-global-settings label:has(input[type="checkbox"]) {
     display: flex;
 }
+
+.ckl-compendium-buff {
+    border-bottom-width: 0;
+    font-size: 14px;
+    margin-top: 8px !important;
+}
