@@ -1860,7 +1860,7 @@ declare global {
         _id: string;
         name: string;
         img: string;
-        type: string;
+        type: 'macro' | 'script';
         value: string;
         category: string;
         hidden: boolean;

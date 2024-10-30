@@ -1,12 +1,10 @@
 
 import { MODULE_NAME } from '../../consts.mjs';
-import { keyValueSelect } from '../../handlebars-handlers/bonus-inputs/key-value-select.mjs';
 import { showScriptBonusEditor } from '../../handlebars-handlers/targeted/bonuses/script-call-bonus-input.mjs';
 import { BaseBonus } from './base-bonus.mjs';
 
 /** @extends {BaseBonus} */
 export class ScriptCallBonus extends BaseBonus {
-
     /**
      * @override
      * @inheritdoc
@@ -25,7 +23,6 @@ export class ScriptCallBonus extends BaseBonus {
     static get #scriptKey() { return `${this.key}-script`; }
 
     static {
-
         /**
          * Copied directly from the system with one line changed
          *
@@ -83,13 +80,13 @@ export class ScriptCallBonus extends BaseBonus {
      * @return {Nullable<ItemScriptCall | ItemScriptCall[]>}
      */
     static getScriptCalls(item) {
-        /** @type {{ command: string, name: string, _id: string } | undefined} */
+        /** @type {Partial<ItemScriptCallData> | undefined} */
         const script = item.getFlag(MODULE_NAME, this.#scriptKey);
         const category = item.getFlag(MODULE_NAME, this.#categoryKey);
         if (script && category) {
             const scriptCall = new pf1.components.ItemScriptCall({
                 name: script.name,
-                value: script.command,
+                value: script.value,
                 _id: script._id,
                 hidden: true,
                 category,

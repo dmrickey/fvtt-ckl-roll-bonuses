@@ -46,21 +46,19 @@ export function showScriptBonusEditor({
         }
     }
 
-    /** @type {Partial<ItemScriptCallData>} */
+    /** @type {Partial<ItemScriptCallData> & {value: ItemScriptCallData['value']}} */
     const current = {
         ...(item.getFlag(MODULE_NAME, bonusKey) || {
             _id: foundry.utils.randomID(),
-            command: '',
+            value: '',
             name: localize('script-call-default-name'),
+            type: 'script',
         })
     };
 
-    // @ts-ignore
-    current.parent = { uuid: foundry.utils.randomID(), isOwner: !!canEdit };
-    // @ts-ignore
-    current.script = current._id;
-    // @ts-ignore
-    current.scriptCall = true;
+    if (current.type === 'macro') {
+        const macro = fromUuidSync(current.value);
+    }
 
     const templateData = {
         categories,
@@ -78,16 +76,30 @@ export function showScriptBonusEditor({
         element.addEventListener('click', async (event) => {
             event.preventDefault();
 
-            const scriptEditor = new pf1.applications.ScriptEditor(current).render(true, { editable: canEdit });
+            if (current.type === 'script') {
+                const scriptEditor = new pf1.applications.ScriptEditor({
+                    command: current.value,
+                    name: current.name,
+                    parent: { uuid: foundry.utils.randomID(), isOwner: !!canEdit },
+                    script: current._id,
+                    scriptCall: true,
+                })
+                    .render(true, { editable: canEdit });
 
-            const result = await scriptEditor.awaitResult();
-            if (result) {
-                await item.setFlag(MODULE_NAME, bonusKey, {
-                    _id: current._id,
-                    ...result,
-                    name: result.name?.trim() || localize('script-call-default-name'),
-                });
-                return;
+                const result = await scriptEditor.awaitResult();
+                if (result) {
+                    await item.setFlag(MODULE_NAME, bonusKey, {
+                        // can't spread current because I don't want the other properties
+                        _id: current._id,
+                        type: current.type,
+                        value: result.command,
+                        name: result.name?.trim() || localize('script-call-default-name'),
+                    });
+                    return;
+                }
+            }
+            else {
+                const macro = fromUuidSync(current.value);
             }
         });
     });
