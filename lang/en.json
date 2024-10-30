@@ -243,8 +243,8 @@
         "damage-app": {
             "add-effect-damage": "Add Effect Damage",
             "add-typed-damage": "Add Typed Damage",
-            "effect-formula": "Damage Effect Formula",
-            "typed-formula": "Damage Type Formula"
+            "effect-formula": "Effect Damage Formula",
+            "typed-formula": "Typed Damage Formula"
         },
         "dc-label-mod": "{mod} DC ({label})",
         "dc-mod": "{mod} DC",

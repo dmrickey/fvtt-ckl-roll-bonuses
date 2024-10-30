@@ -3,6 +3,7 @@ import { checkboxInput } from '../../handlebars-handlers/bonus-inputs/chekbox-in
 import { textInputAndKeyValueSelect } from '../../handlebars-handlers/bonus-inputs/text-input-and-key-value-select.mjs';
 import { textInput } from '../../handlebars-handlers/bonus-inputs/text-input.mjs';
 import { handleBonusTypeFor } from '../../target-and-bonus-join.mjs';
+import { changeTypeLabel } from '../../util/change-type-label.mjs';
 import { createChange } from '../../util/conditional-helpers.mjs';
 import { FormulaCacheHelper } from "../../util/flag-helpers.mjs";
 import { LocalHookHandler, localHooks } from '../../util/hooks.mjs';
@@ -84,8 +85,11 @@ export class AttackBonus extends BaseBonus {
     static getHints(source) {
         const formula = FormulaCacheHelper.getModuleFlagFormula(source, this.key)[this.key];
         const value = this.#getAttackBonus(source);
-        const critOnly = !!source.getFlag(MODULE_NAME, this.#critOnlyKey);
         if (!value && !formula) return;
+
+        const critOnly = !!source.getFlag(MODULE_NAME, this.#critOnlyKey);
+        const type = this.#getAttackBonusType(source);
+        const typeLabel = changeTypeLabel(type);
 
         const roll = RollPF.create((formula + '') || '0');
 
@@ -94,7 +98,7 @@ export class AttackBonus extends BaseBonus {
             : `${formula}`;
         return critOnly
             ? [`${hint} (${localize('PF1.CriticalConfirmBonus')})`]
-            : [hint];
+            : [`${hint}[${typeLabel}]`];
     }
 
     /**

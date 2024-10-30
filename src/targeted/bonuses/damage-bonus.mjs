@@ -1,6 +1,7 @@
 import { MODULE_NAME } from "../../consts.mjs";
 import { damageInput } from "../../handlebars-handlers/targeted/bonuses/damage.mjs";
 import { handleBonusTypeFor } from '../../target-and-bonus-join.mjs';
+import { changeTypeLabel } from '../../util/change-type-label.mjs';
 import { conditionalModToItemChangeForDamageTooltip, createChange, damagesTypeToString } from "../../util/conditional-helpers.mjs";
 import { LocalHookHandler, localHooks } from "../../util/hooks.mjs";
 import { localize } from "../../util/localize.mjs";
@@ -89,16 +90,10 @@ export class DamageBonus extends BaseBonus {
                     const roll = RollPF.create(formula);
                     return roll.isDeterministic
                         ? signed(roll.evaluate({ async: false }).total)
-                        : formula;
+                        : `(${formula})`;
                 })(),
             }))
             .map((d) => `${d.formula}${typeLabel(d.type)}${critLabel(d.crit)}`);
-
-        /**
-         * @param {BonusTypes} type
-         * @returns {string}
-         */
-        const changeTypeLabel = (type) => pf1.config.bonusTypes[type] || type;
 
         /**
          * @param {string | number} value
