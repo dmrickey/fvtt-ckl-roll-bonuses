@@ -1,6 +1,6 @@
 import { MODULE_NAME } from "../../../consts.mjs";
 import { api } from '../../../util/api.mjs';
-import { localizeBonusLabel, localizeBonusTooltip } from "../../../util/localize.mjs";
+import { localize, localizeBonusLabel, localizeBonusTooltip } from "../../../util/localize.mjs";
 import { addNodeToRollBonus } from "../../add-bonus-to-item-sheet.mjs";
 import { createTemplate, templates } from "../../templates.mjs";
 
@@ -51,7 +51,7 @@ export function showScriptBonusEditor({
         ...(item.getFlag(MODULE_NAME, bonusKey) || {
             _id: foundry.utils.randomID(),
             command: '',
-            name: '',
+            name: localize('script-call-default-name'),
         })
     };
 
@@ -82,7 +82,11 @@ export function showScriptBonusEditor({
 
             const result = await scriptEditor.awaitResult();
             if (result) {
-                await item.setFlag(MODULE_NAME, bonusKey, { _id: current._id, ...result });
+                await item.setFlag(MODULE_NAME, bonusKey, {
+                    _id: current._id,
+                    ...result,
+                    name: result.name?.trim() || localize('script-call-default-name'),
+                });
                 return;
             }
         });
