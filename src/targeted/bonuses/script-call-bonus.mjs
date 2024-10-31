@@ -60,8 +60,6 @@ export class ScriptCallBonus extends BaseBonus {
     }
 
     /**
-     * Get Item Hints tooltip value
-     *
      * @override
      * @inheritdoc
      * @param {ItemPF} source The source of the bonus
