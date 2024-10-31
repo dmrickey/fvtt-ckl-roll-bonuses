@@ -264,10 +264,14 @@
   - Add "inset" option for all inputs so its label can be inset underneath a "parent" bonus
 - Rename file from `effect-size.mjs` to `effective-size-bonus.mjs`
 - Script Call Bonus
-  - Add documentation
-  - try to add drag/drop from other scripts
-    - including macros
-  - Make macro work
+  - Add UI hover state for dragging
   - Only add script calls that can be used by the source item type
-  - Modify input so it has select/macro name/edit icon on a single line
+  - When "macro", add "reset icon" (thinking `fas fa-arrow-rotate-left`) to reset the macro so you can start editing again
+    - Alternatively, if adding multiple, then just add a trash can
+  - Add "confirmation" callback when editing macros vs a script call
+  - refactor it so multiple can be added
+    - Add delete button to end of each row
+    - Add "add" button to add a new row
+    - Make it so dropping a macro adds a new item instead of modifying the current
+  - Double check what happens if an Item has multiple actions, and a single one of those actions is targeted for a script call -- do the other actions also get the script call?
 - Audit Bonus/Target labels for superfluous uses of "Bonus" or "Target"

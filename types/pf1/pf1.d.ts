@@ -91,6 +91,7 @@ declare global {
         sheet: {
             render(force: boolean, { focus: boolean } = {});
         };
+        name: string;
     }
 
     type Item =

@@ -87,6 +87,7 @@ export class ScriptCallBonus extends BaseBonus {
             const scriptCall = new pf1.components.ItemScriptCall({
                 name: script.name,
                 value: script.value,
+                type: script.type,
                 _id: script._id,
                 hidden: true,
                 category,

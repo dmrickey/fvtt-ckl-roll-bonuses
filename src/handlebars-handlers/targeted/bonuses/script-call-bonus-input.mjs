@@ -56,7 +56,8 @@ export function showScriptBonusEditor({
         })
     };
 
-    let macro;
+    /** @type {Macro?} */
+    let macro = null;
     if (current.type === 'macro') {
         macro = fromUuidSync(current.value);
     }
@@ -72,6 +73,25 @@ export function showScriptBonusEditor({
         tooltip,
     };
     const div = createTemplate(templates.scriptCallBonus, templateData);
+
+    div.addEventListener('drop', async (event) => {
+        event.preventDefault();
+
+        /** @type {{ type: string, uuid: string }} */ //@ts-ignore
+        const data = JSON.parse(event.dataTransfer.getData("text/plain"));
+        if (!data) return;
+
+        if (data.type === 'Macro' && data.uuid) {
+            macro = fromUuidSync(data.uuid);
+            if (macro) {
+                current.value = data.uuid;
+                current.name = macro.name;
+                current.type = 'macro';
+                await item.setFlag(MODULE_NAME, bonusKey, current);
+                return;
+            }
+        }
+    });
 
     div.querySelectorAll('.trait-selector').forEach((element) => {
         element.addEventListener('click', async (event) => {
