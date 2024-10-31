@@ -71,17 +71,9 @@ export function damageInput({
     div.querySelectorAll('.damage-control').forEach((element) => {
         element.addEventListener('click', async (event) => {
             event.preventDefault();
-            /** @type {HTMLElement } */
-            // @ts-ignore
-            const a = event.currentTarget;
-            if (!a) return;
 
-            /**
-             * @param {string} key
-             * @param {DamageInputModel[]} arg
-             */
-            async function update(key, arg) {
-            };
+            const a = /** @type {HTMLElement} */ (event.currentTarget);
+            if (!a) return;
 
             // Add new damage component
             if (a.classList.contains("add-damage")) {
@@ -147,12 +139,12 @@ export function damageInput({
     div.querySelectorAll('.damage-type-visual').forEach((element) => {
         element.addEventListener('click', (event) => {
             event.preventDefault();
-            const clickedElement = event.currentTarget;
+            const clickedElement = /** @type {HTMLElement} */ (event.currentTarget);
+            /** @type {HTMLDataListElement | null} */
+            const data = clickedElement?.closest(".damage-part")
 
-            // Check for normal damage part
-            // @ts-ignore
-            const damageIndex = clickedElement?.closest(".damage-part")?.dataset.damagePart;
-            if (damageIndex !== null) {
+            const damageIndex = data?.dataset.damagePart;
+            if (damageIndex !== null && damageIndex !== undefined) {
                 const path = `${damageIndex}.type`;
 
                 /**
@@ -166,7 +158,7 @@ export function damageInput({
                 const app = new pf1.applications.DamageTypeSelector(
                     { id: key, update },
                     path,
-                    parts[damageIndex].type,
+                    parts[+damageIndex].type,
                 );
                 return app.render(true);
             }
@@ -176,14 +168,13 @@ export function damageInput({
     div.querySelectorAll('.damage-formula').forEach((element) => {
         element.addEventListener('change', async (event) => {
             event.preventDefault();
-            // @ts-ignore - event.target is HTMLTextAreaElement
-            const /** @type {HTMLTextAreaElement} */ target = event.target;
+            const target = /** @type {HTMLTextAreaElement} */ (event.target);
             const updatedFormula = target?.value;
 
             // Check for normal damage part
             // @ts-ignore
             const damageIndex = target?.closest(".damage-part")?.dataset.damagePart;
-            if (damageIndex !== null) {
+            if (damageIndex !== null && damageIndex !== undefined) {
                 const path = `${damageIndex}.formula`;
 
                 setProperty(parts, path, updatedFormula);
@@ -195,8 +186,7 @@ export function damageInput({
     div.querySelectorAll('.damage-crit').forEach((element) => {
         element.addEventListener('change', async (event) => {
             event.preventDefault();
-            // @ts-ignore - event.target is HTMLTextAreaElement
-            const /** @type {HTMLTextAreaElement} */ target = event.target;
+            const target = /** @type {HTMLTextAreaElement} */ (event.target);
             const critValue = target?.value;
 
             // Check for normal damage part
@@ -215,14 +205,13 @@ export function damageInput({
         div.querySelectorAll('.damage-change-formula').forEach((element) => {
             element.addEventListener('change', async (event) => {
                 event.preventDefault();
-                // @ts-ignore - event.target is HTMLTextAreaElement
-                const /** @type {HTMLTextAreaElement} */ target = event.target;
+                const target = /** @type {HTMLTextAreaElement} */ (event.target);
                 const updatedFormula = target?.value;
 
                 // Check for normal damage part
                 // @ts-ignore
                 const index = target?.closest(".damage-part")?.dataset.changeIndex;
-                if (index !== null) {
+                if (index !== null && index !== undefined) {
                     const path = `${index}.formula`;
 
                     setProperty(changes, path, updatedFormula);
@@ -234,14 +223,13 @@ export function damageInput({
         div.querySelectorAll('.change-type').forEach((element) => {
             element.addEventListener('change', async (event) => {
                 event.preventDefault();
-                // @ts-ignore - event.target is HTMLTextAreaElement
-                const /** @type {HTMLTextAreaElement} */ target = event.target;
+                const target = /** @type {HTMLTextAreaElement} */ (event.target);
                 const critValue = target?.value;
 
                 // Check for normal damage part
                 // @ts-ignore
                 const index = target?.closest(".damage-part")?.dataset.changeIndex;
-                if (index !== null) {
+                if (index !== null && index !== undefined) {
                     const path = `${index}.type`;
 
                     setProperty(changes, path, critValue);

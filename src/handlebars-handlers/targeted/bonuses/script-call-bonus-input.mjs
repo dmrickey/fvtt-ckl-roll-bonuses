@@ -5,10 +5,48 @@ import { addNodeToRollBonus } from "../../add-bonus-to-item-sheet.mjs";
 import { createTemplate, templates } from "../../templates.mjs";
 
 /**
+ * @param {object} [args]
+ * @param {string} [args.category]
+ * @param {string} [args.id]
+ * @param {string} [args.name]
+ * @param {'script' | 'macro'} [args.type]
+ * @param {string} [args.value]
+ * @return {Partial<ItemScriptCallData> & {value: ItemScriptCallData['value']}}
+ */
+const createScriptCallData = ({ category, id, name, type, value } = {}) => {
+    category ||= 'use';
+    name = name?.trim() ? name.trim() : localize('script-call-default-name');
+    type ||= 'script';
+    value ||= '';
+    return {
+        _id: id || foundry.utils.randomID(),
+        category,
+        name,
+        type,
+        value,
+    }
+};
+
+/**
+ * @param {string} uuid
+ * @return {Partial<ItemScriptCallData> & {value: ItemScriptCallData['value']}}
+ */
+const createScriptCallDataFromMacro = (uuid) => {
+    const macro = fromUuidSync(uuid);
+    if (!macro) return createScriptCallData();
+
+    return {
+        _id: foundry.utils.randomID(),
+        category: 'use',
+        name: macro.name,
+        type: 'macro',
+        value: uuid,
+    }
+};
+
+/**
  * @param {object} args
- * @param {string} args.bonusKey
- * @param {{key: string, label: string}[]} args.categories
- * @param {string} args.categoryKey
+ * @param {string} args.key
  * @param {ItemPF} args.item
  * @param {string} args.journal
  * @param {string} [args.label]
@@ -19,11 +57,9 @@ import { createTemplate, templates } from "../../templates.mjs";
  * @param {InputType} options.inputType
  */
 export function showScriptBonusEditor({
-    categories,
     item,
     journal,
-    bonusKey,
-    categoryKey,
+    key,
     parent,
     label = '',
     tooltip = '',
@@ -31,45 +67,31 @@ export function showScriptBonusEditor({
     canEdit,
     inputType,
 }) {
-    label ||= localizeBonusLabel(bonusKey);
-    tooltip ||= localizeBonusTooltip(bonusKey);
+    label ||= localizeBonusLabel(key);
+    tooltip ||= localizeBonusTooltip(key);
 
-    const currentCategory = item.getFlag(MODULE_NAME, categoryKey);
-    if (canEdit) {
-        if ((categories.length && (!currentCategory || !categories.some((c) => c.key === currentCategory)))
-            || (categories.length === 1 && currentCategory !== categories[0].key)
-        ) {
-            item.setFlag(MODULE_NAME, categoryKey, categories[0].key);
-        }
-        else if (!categories.length && currentCategory) {
-            item.setFlag(MODULE_NAME, categoryKey, '');
-        }
-    }
+    const categories = pf1.registry.scriptCalls
+        .map((sc) => ({
+            key: sc._id,
+            label: sc.name,
+        }));
 
-    /** @type {Partial<ItemScriptCallData> & {value: ItemScriptCallData['value']}} */
-    const current = {
-        ...(item.getFlag(MODULE_NAME, bonusKey) || {
-            _id: foundry.utils.randomID(),
-            value: '',
-            name: localize('script-call-default-name'),
-            type: 'script',
-        })
-    };
-
-    /** @type {Macro?} */
-    let macro = null;
-    if (current.type === 'macro') {
-        macro = fromUuidSync(current.value);
+    /** @type {(Partial<ItemScriptCallData> & {value: ItemScriptCallData['value']})[]} */
+    const saved = item.getFlag(MODULE_NAME, key);
+    /** @type {(Partial<ItemScriptCallData> & {value: ItemScriptCallData['value']})[]} */
+    const scripts = saved
+        ? saved.map((c) => c.type === 'macro' ? createScriptCallDataFromMacro(c.value) : c)
+        : [];
+    if (!scripts.length) {
+        scripts.push(createScriptCallData());
     }
 
     const templateData = {
         categories,
-        current: macro || current,
-        currentCategory,
-        flag: bonusKey,
         journal,
         label,
         readonly: !canEdit,
+        scripts,
         tooltip,
     };
     const div = createTemplate(templates.scriptCallBonus, templateData);
@@ -82,12 +104,15 @@ export function showScriptBonusEditor({
         if (!data) return;
 
         if (data.type === 'Macro' && data.uuid) {
-            macro = fromUuidSync(data.uuid);
+            const macro = fromUuidSync(data.uuid);
             if (macro) {
-                current.value = data.uuid;
-                current.name = macro.name;
-                current.type = 'macro';
-                await item.setFlag(MODULE_NAME, bonusKey, current);
+                const created = createScriptCallData({
+                    value: data.uuid,
+                    name: macro.name,
+                    type: 'macro',
+                });
+                scripts.push(created);
+                await item.setFlag(MODULE_NAME, key, scripts);
                 return;
             }
         }
@@ -96,6 +121,14 @@ export function showScriptBonusEditor({
     div.querySelectorAll('.trait-selector').forEach((element) => {
         element.addEventListener('click', async (event) => {
             event.preventDefault();
+
+            const clicked = /** @type {HTMLElement} */ (event.currentTarget);
+            /** @type {HTMLDataListElement | null} */
+            const row = clicked.closest('.script-row');
+            if (!row) return;
+
+            const index = +(row.dataset.index || 0);
+            const current = scripts[index];
 
             if (current.type === 'script') {
                 const scriptEditor = new pf1.applications.ScriptEditor({
@@ -109,34 +142,76 @@ export function showScriptBonusEditor({
 
                 const result = await scriptEditor.awaitResult();
                 if (result) {
-                    await item.setFlag(MODULE_NAME, bonusKey, {
-                        // can't spread current because I don't want the other properties
-                        _id: current._id,
+                    const updated = createScriptCallData({
+                        category: current.category,
+                        id: current._id,
                         type: current.type,
                         value: result.command,
-                        name: result.name?.trim() || localize('script-call-default-name'),
+                        name: result.name,
                     });
+                    scripts[index] = updated;
+                    await item.setFlag(MODULE_NAME, key, scripts);
                     return;
                 }
             }
             else {
                 /** @type {Macro | undefined} */
                 const macro = fromUuidSync(current.value);
+                // TODO inject confirmation dialog stating that this is editing a macro
                 macro?.sheet.render(true);
             }
         });
     });
-    const select = div.querySelector(`#key-value-selector-${categoryKey}`);
-    select?.addEventListener(
-        'change',
-        async (event) => {
-            if (!categoryKey) return;
 
-            // @ts-ignore - event.target is HTMLTextAreaElement
-            const /** @type {HTMLTextAreaElement} */ target = event.target;
-            await item.setFlag(MODULE_NAME, categoryKey, target?.value);
-        },
+    div.querySelectorAll('.category-select').forEach((select) => {
+        select?.addEventListener(
+            'change',
+            async (event) => {
+                const target = /** @type {HTMLTextAreaElement} */ (event.target);
+                if (!target?.value) return;
+
+                const clicked = /** @type {HTMLElement} */ (event.currentTarget);
+                /** @type {HTMLDataListElement | null} */
+                const row = clicked.closest('.script-row');
+                if (!row) return;
+
+                const index = +(row.dataset.index || 0);
+                if (scripts[index]) {
+                    scripts[index].category = target.value;
+                    await item.setFlag(MODULE_NAME, key, scripts);
+                }
+            },
+        );
+    });
+
+    const createButton = div.querySelector('.add-script');
+    createButton?.addEventListener(
+        'click',
+        async (event) => {
+            scripts.push(createScriptCallData());
+            await item.setFlag(MODULE_NAME, key, scripts);
+        }
     );
+
+    div.querySelectorAll('.delete-script').forEach((select) => {
+        select?.addEventListener(
+            'click',
+            async (event) => {
+                // TODO inject confirmation dialog stating that this can't be undone if `type === 'script'`
+                const clicked = /** @type {HTMLElement} */ (event.currentTarget);
+                /** @type {HTMLDataListElement | null} */
+                const row = clicked.closest('.script-row');
+                if (!row) return;
+
+                const index = +(row.dataset.index || 0);
+                if (scripts[index]) {
+                    const clonedScripts = deepClone(scripts);
+                    clonedScripts.splice(index, 1);
+                    await item.setFlag(MODULE_NAME, key, clonedScripts);
+                }
+            },
+        );
+    });
 
     addNodeToRollBonus(parent, div, item, canEdit, inputType);
 }

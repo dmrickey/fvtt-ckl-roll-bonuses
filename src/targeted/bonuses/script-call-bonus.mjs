@@ -1,6 +1,7 @@
 
 import { MODULE_NAME } from '../../consts.mjs';
 import { showScriptBonusEditor } from '../../handlebars-handlers/targeted/bonuses/script-call-bonus-input.mjs';
+import { truthiness } from '../../util/truthiness.mjs';
 import { BaseBonus } from './base-bonus.mjs';
 
 /** @extends {BaseBonus} */
@@ -18,9 +19,6 @@ export class ScriptCallBonus extends BaseBonus {
      * @returns {string}
      */
     static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.PiyJbkTuzKHugPSk#script-call'; }
-
-    static get #categoryKey() { return `${this.key}-category`; }
-    static get #scriptKey() { return `${this.key}-script`; }
 
     static {
         /**
@@ -67,8 +65,12 @@ export class ScriptCallBonus extends BaseBonus {
      * @returns {Nullable<string[]>}
      */
     static getHints(source, target = undefined) {
-        const script = source.getFlag(MODULE_NAME, this.#scriptKey);
-        return script?.name ? [script.name] : [this.label];
+        /** @type {ItemScriptCallData[]} */
+        const scriptData = source.getFlag(MODULE_NAME, this.key) || [];
+        const hints = scriptData
+            .map((script) => script.name)
+            .filter(truthiness);
+        return hints;
     }
 
     /**
@@ -78,21 +80,21 @@ export class ScriptCallBonus extends BaseBonus {
      * @return {Nullable<ItemScriptCall | ItemScriptCall[]>}
      */
     static getScriptCalls(item) {
-        /** @type {Partial<ItemScriptCallData> | undefined} */
-        const script = item.getFlag(MODULE_NAME, this.#scriptKey);
-        const category = item.getFlag(MODULE_NAME, this.#categoryKey);
-        if (script && category) {
-            const scriptCall = new pf1.components.ItemScriptCall({
-                name: script.name,
-                value: script.value,
-                type: script.type,
+        /** @type {ItemScriptCallData[]} */
+        const scriptData = (item.getFlag(MODULE_NAME, this.key) || []);
+
+        const scripts = scriptData
+            .filter(x => !!x?.value)
+            .map((script) => new pf1.components.ItemScriptCall({
                 _id: script._id,
+                category: script.category,
                 hidden: true,
-                category,
-            });
-            scriptCall.rollBonus = true;
-            return scriptCall;
-        }
+                name: script.name,
+                type: script.type,
+                value: script.value,
+            }));
+        scripts.forEach(x => x.rollBonus = true);
+        return scripts;
     }
 
     /**
@@ -105,16 +107,9 @@ export class ScriptCallBonus extends BaseBonus {
      * @param {ItemPF} options.item
      */
     static showInputOnItemSheet({ html, isEditable, item }) {
-        const categories = pf1.registry.scriptCalls
-            .map((sc) => ({
-                key: sc._id,
-                label: sc.name,
-            }));
         showScriptBonusEditor({
-            bonusKey: this.#scriptKey,
-            categories,
-            categoryKey: this.#categoryKey,
             item,
+            key: this.key,
             journal: this.journal,
             label: this.label,
             parent: html,

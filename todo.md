@@ -250,6 +250,7 @@
   - Add a configuration error if "this target is not configured"
 - Roll Bonuses button in header that goes "show me a list of items with bonuses". This can also have a button to auto-populate any that it thinks should have bonuses added
   - See example [https://gitlab.com/mxzf/adventure-uninstaller/-/blob/master/adventure-uninstaller.mjs](here)
+
 - Add "Weapon Focus" hint hook so Weapon Focus, Weapon Specialization, and Martial Focus can all use the sword icon hint
 
 # v 2.16
@@ -260,18 +261,17 @@
 - Conditional Modifiers Bonus
   - Item Hints that show the Name
   - try to add drag/drop
+- Damage Bonus
+  - Double check listeners for all inputs (add/delete/modify/type/etc) after changing jsdoc and implementation slightly
+  - Look into adding form-fields class so inputs will be better laid out
 - Label
   - Add "inset" option for all inputs so its label can be inset underneath a "parent" bonus
 - Rename file from `effect-size.mjs` to `effective-size-bonus.mjs`
 - Script Call Bonus
   - Add UI hover state for dragging
   - Only add script calls that can be used by the source item type
-  - When "macro", add "reset icon" (thinking `fas fa-arrow-rotate-left`) to reset the macro so you can start editing again
-    - Alternatively, if adding multiple, then just add a trash can
   - Add "confirmation" callback when editing macros vs a script call
-  - refactor it so multiple can be added
-    - Add delete button to end of each row
-    - Add "add" button to add a new row
-    - Make it so dropping a macro adds a new item instead of modifying the current
   - Double check what happens if an Item has multiple actions, and a single one of those actions is targeted for a script call -- do the other actions also get the script call?
+  - Fix the UI now that it has multiple rows
 - Audit Bonus/Target labels for superfluous uses of "Bonus" or "Target"
+- Audit Specific Bonus "click to expand" rules and make sure they're concise enough (_specifically_ looking at you, Weapon Focus)

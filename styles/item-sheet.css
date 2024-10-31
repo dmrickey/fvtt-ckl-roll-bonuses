@@ -134,6 +134,11 @@ form .versatile-performance-selector .form-fields {
     white-space: nowrap;
 }
 
+#ckl-roll-bonus-container .script-bonus-input .form-fields {
+    display: flex;
+    flex-direction: column;
+}
+
 #ckl-roll-bonus-container .conditional-modifier-inputs {
     flex-direction: column;
 }

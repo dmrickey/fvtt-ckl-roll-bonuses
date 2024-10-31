@@ -1,18 +1,30 @@
 <div class="form-group script-bonus-input roll-bonuses">
     {{> "modules/ckl-roll-bonuses/hbs/label.hbs"}}
     <div class="form-fields">
-        {{#if readonly}}
-        <input type="text" readonly value="{{currentCategory.label}}" />
-        {{else}}
-        <select id="key-value-selector-{{key}}">
-            {{selectOptions categories selected=currentCategory nameAttr="key" labelAttr="label"}}
-        </select>
-        {{/if}}
-    <div class="script-name" data-tooltip="{{current.name}}">
-        {{current.name}}
+        {{#each scripts as |script i|}}
+        <li class="flexrow script-row" data-index="{{i}}">
+            {{#if readonly}}
+            <input type="text" readonly value="{{category.label}}" />
+            {{else}}
+            <select class="category-select">
+                {{selectOptions ../categories selected=category nameAttr="key" labelAttr="label"}}
+            </select>
+            {{/if}}
+            <div class="script-name" data-tooltip="{{name}}">
+                {{name}}
+            </div>
+            {{#unless readonly}}
+            <a class="trait-selector"><i class="fas fa-edit"></i></a>
+            <a class="delete-script"><i class="fas fa-trash"></i></a>
+            {{/unless}}
+        </li>
+        {{/each}}
+        {{#unless readonly}}
+        {{!-- <li class="flexrow"> --}}
+            <a class="add-script"><i class="fas fa-plus"></i>
+                {{localize "PF1.ScriptCalls.NewName"}}
+            </a>
+        {{!-- </li> --}}
+        {{/unless}}
     </div>
-    {{#unless readonly}}
-    <a class="trait-selector" data-options="{{flag}}"><i class="fas fa-edit"></i></a>
-    {{/unless}}
-  </div>
 </div>
