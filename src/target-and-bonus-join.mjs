@@ -421,28 +421,6 @@ const itemActionRollAttack = (seed, action, data) => {
 LocalHookHandler.registerHandler(localHooks.itemActionRollAttack, itemActionRollAttack);
 
 /**
- * @param {ItemPF} item
- * @returns {void}
- */
-const itemPF_prepareScriptCalls = (item) => {
-    handleBonusesFor(
-        item,
-        (bonusType, sourceItem) => {
-            const script = bonusType.getScriptCalls(sourceItem);
-            if (script) {
-                item.scriptCalls ||= new Collection();
-                const scripts = Array.isArray(script) ? script : [script];
-                scripts.forEach((s) => {
-                    s.parent = item;
-                    item.scriptCalls.set(s.id, s);
-                });
-            }
-        },
-    );
-};
-LocalHookHandler.registerHandler(localHooks.itemPF_prepareScriptCalls, itemPF_prepareScriptCalls);
-
-/**
  * @param {{base: number, stacks: number}} seed
  * @param {ItemAction} action
  */

@@ -166,15 +166,6 @@ function prepareItemData(wrapped, final) {
 }
 
 /**
- * @this {ItemPF}
- * @param {() => Promise<void>} wrapped
- */
-async function itemPF_prepareScriptCalls(wrapped) {
-    await wrapped();
-    LocalHookHandler.fireHookNoReturnSync(localHooks.itemPF_prepareScriptCalls, this);
-}
-
-/**
  * @this {ActionUse}
  * @param {function({skipDialog: boolean}): Promise<void>} wrapped
  * @param {{skipDialog: boolean}} options
@@ -526,7 +517,6 @@ Hooks.once('init', () => {
     libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorPF.prototype.rollSkill', actorRollSkill, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemAttackPF.fromItem', itemAttackFromItem, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype._prepareDependentData', prepareItemData, libWrapper.WRAPPER);
-    libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype._prepareScriptCalls', itemPF_prepareScriptCalls, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype.getAttackSources', itemGetAttackSources, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype.getTypeChatData', itemGetTypeChatData, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemSpellPF.prototype.getTypeChatData', itemGetTypeChatData, libWrapper.WRAPPER);

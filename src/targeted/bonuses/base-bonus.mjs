@@ -104,15 +104,6 @@ export class BaseBonus extends BaseSource {
     static modifyPreRollAttack(_sourceItem, _action, _config, _rollData, _rollOptions, _parts, _changes) { }
 
     /**
-     * Get extra calls
-     *
-     * @abstract
-     * @param {ItemPF} _sourceItem
-     * @return {Nullable<ItemScriptCall | ItemScriptCall[]>}
-     */
-    static getScriptCalls(_sourceItem) { return; }
-
-    /**
      * Returns true the targeting is too generic to show a hint on a specific item
      * - used for something like `crit` that needs to combine all hints in a single registration
      *

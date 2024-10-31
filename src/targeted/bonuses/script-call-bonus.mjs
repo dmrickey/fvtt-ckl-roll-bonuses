@@ -1,6 +1,7 @@
 
 import { MODULE_NAME } from '../../consts.mjs';
 import { showScriptBonusEditor } from '../../handlebars-handlers/targeted/bonuses/script-call-bonus-input.mjs';
+import { handleBonusTypeFor } from '../../target-and-bonus-join.mjs';
 import { truthiness } from '../../util/truthiness.mjs';
 import { BaseBonus } from './base-bonus.mjs';
 
@@ -40,7 +41,9 @@ export class ScriptCallBonus extends BaseBonus {
             context.scriptCalls = {};
 
             // Iterate over all script calls, and adjust data
-            const scriptCalls = this.item.scriptCalls?.filter((s) => !s.rollBonus) ?? []; /** THIS IS MY OVERRIDE */
+            const scriptCalls = this.item.scriptCalls
+                ?.filter((s) => !s.rollBonus)  /** ADDING THIS FILTER IS MY OVERRIDE */
+                ?? [];
 
             // Create categories, and assign items to them
             for (const { id, name, info } of categories) {
@@ -52,7 +55,32 @@ export class ScriptCallBonus extends BaseBonus {
                 };
             }
         }
+
+        /**
+         * @this {ItemPF}
+         * @param {() => Promise<void>} wrapped
+         */
+        async function itemPF_prepareScriptCalls(wrapped) {
+            await wrapped();
+            handleBonusTypeFor(
+                this,
+                ScriptCallBonus,
+                (bonusType, sourceItem) => {
+                    const script = bonusType.getScriptCalls(sourceItem);
+                    if (script) {
+                        this.scriptCalls ||= new Collection();
+                        const scripts = Array.isArray(script) ? script : [script];
+                        scripts.forEach((s) => {
+                            s.parent = this;
+                            this.scriptCalls.set(s.id, s);
+                        });
+                    }
+                },
+            );
+        }
+
         Hooks.once('init', () => {
+            libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype._prepareScriptCalls', itemPF_prepareScriptCalls, libWrapper.WRAPPER);
             libWrapper.register(MODULE_NAME, 'pf1.applications.item.ItemSheetPF.prototype._prepareScriptCalls', itemSheetPF_prepareScriptCalls, libWrapper.OVERRIDE);
         });
     }
@@ -74,14 +102,14 @@ export class ScriptCallBonus extends BaseBonus {
     }
 
     /**
-     * @override
-     * @inheritdoc
-     * @param {ItemPF} item
+     * Get script from the source
+     *
+     * @param {ItemPF} source
      * @return {Nullable<ItemScriptCall | ItemScriptCall[]>}
      */
-    static getScriptCalls(item) {
+    static getScriptCalls(source) {
         /** @type {ItemScriptCallData[]} */
-        const scriptData = (item.getFlag(MODULE_NAME, this.key) || []);
+        const scriptData = (source.getFlag(MODULE_NAME, this.key) || []);
 
         const scripts = scriptData
             .filter(x => !!x?.value)
