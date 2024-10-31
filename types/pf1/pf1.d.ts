@@ -78,12 +78,16 @@ declare global {
     };
     class ActorBasePF extends BaseDocument {
         itemFlags?: {
-            /**
-             * The tags for Items that are active with a boolean flag
-             */
+            /** The tags for Items that are active with a boolean flag */
             boolean: { [key: string]: { sources: ItemPF[] } };
             dictionary: ItemDictionaryFlags;
         };
+        sheet: {
+            render(force: boolean, { focus: boolean } = {});
+        };
+    }
+
+    class Macro extends BaseDocument {
         sheet: {
             render(force: boolean, { focus: boolean } = {});
         };

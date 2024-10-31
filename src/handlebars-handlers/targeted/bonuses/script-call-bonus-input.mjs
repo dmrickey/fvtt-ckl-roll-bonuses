@@ -56,13 +56,14 @@ export function showScriptBonusEditor({
         })
     };
 
+    let macro;
     if (current.type === 'macro') {
-        const macro = fromUuidSync(current.value);
+        macro = fromUuidSync(current.value);
     }
 
     const templateData = {
         categories,
-        current,
+        current: macro || current,
         currentCategory,
         flag: bonusKey,
         journal,
@@ -99,7 +100,9 @@ export function showScriptBonusEditor({
                 }
             }
             else {
+                /** @type {Macro | undefined} */
                 const macro = fromUuidSync(current.value);
+                macro?.sheet.render(true);
             }
         });
     });
