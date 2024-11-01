@@ -97,8 +97,8 @@ function getConditionalCritical(target) {
         result = {
             ...result,
             normal: "PF1.Normal",
-            crit: "PF1.OnCritBonusFormula", // TODO
-            nonCrit: "PF1.NonMultBonusFormula", // TODO
+            crit: "PF1.OnCritBonusFormula",
+            nonCrit: "PF1.NonMultBonusFormula",
         };
     }
     return result;
@@ -180,7 +180,6 @@ export function modifiersInput({
         });
     }
 
-    // todo make sure "defaults" are saved when swapping to a new 'type'
     setTimeout(() => {
         const conditionalInput = document.querySelector(`#${createId(item, key)}`);
         // @ts-ignore

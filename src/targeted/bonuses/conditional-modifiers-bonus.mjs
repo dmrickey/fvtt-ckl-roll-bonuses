@@ -47,6 +47,18 @@ export class ConditionalModifiersBonus extends BaseBonus {
     }
 
     /**
+     * @override
+     * @param {ItemPF} source
+     * @returns {Nullable<string[]>}
+     */
+    static getHints(source) {
+        const hints = this.loadConfiguredConditionals(source)
+            .map(x => x.name)
+            .filter(truthiness);
+        return hints;
+    }
+
+    /**
      * @param {ItemPF} item
      * @returns {ItemConditional[]}
      */

@@ -259,8 +259,9 @@
 - Action Type Target
   - Item hints - use the language helper thing to do and/or based on any/all
 - Conditional Modifiers Bonus
-  - Item Hints that show the Name
   - try to add drag/drop
+  - make sure "defaults" are saved when swapping to a new 'type'
+  - make sure crit and non-crit only damage bonuses are working (tooltip and on attack card)
 - Damage Bonus
   - Double check listeners for all inputs (add/delete/modify/type/etc) after changing jsdoc and implementation slightly
   - Look into adding form-fields class so inputs will be better laid out
