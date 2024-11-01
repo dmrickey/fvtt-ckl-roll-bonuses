@@ -273,5 +273,4 @@
 - Script Call Bonus
   - Add duplicate button
   - Add UI hover state for dragging
-- Audit Bonus/Target labels for superfluous uses of "Bonus" or "Target"
 - Audit Specific Bonus "click to expand" rules and make sure they're concise enough (_specifically_ looking at you, Weapon Focus)

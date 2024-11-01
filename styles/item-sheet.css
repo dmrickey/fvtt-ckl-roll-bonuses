@@ -43,6 +43,7 @@
 }
 
 #ckl-roll-bonus-container .bonus-label.sub-label {
+    font-weight: normal;
     margin-inline-start: 1rem;
 }
 
@@ -128,6 +129,10 @@ form .versatile-performance-selector .form-fields {
 
 #ckl-roll-bonus-container .script-bonus-input .bonus-label {
     flex: 1;
+    margin-block-end: auto;
+}
+
+#ckl-roll-bonus-container .bonus-label {
     margin-block-end: auto;
 }
 

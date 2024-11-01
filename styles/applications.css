@@ -128,6 +128,12 @@
     text-wrap: balance;
 }
 
+.roll-bonuses-form.token-selector .no-tokens {
+    color: var(--pf1-color-text-error);
+    padding: 1rem;
+    text-align: center;
+}
+
 .roll-bonuses-form.token-selector .grouped-tokens {
     display: flex;
     flex-wrap: wrap;
