@@ -209,20 +209,21 @@ export function showScriptBonusEditor({
                 if (!row) return;
 
                 const index = +(row.dataset.index || 0);
-                if (scripts[index]) {
+                const script = scripts[index];
+                if (script) {
                     const deleteScript = async () => {
                         const clonedScripts = deepClone(scripts);
                         clonedScripts.splice(index, 1);
                         await item.setFlag(MODULE_NAME, key, clonedScripts);
                     }
 
-                    scripts[index].value?.trim()
-                        ? confirmationDialog({
-                            title: localize('script-call-dialog.delete-script-title', { name: scripts[index].name }),
+                    (script?.type !== 'script' || !script.value?.trim())
+                        ? deleteScript()
+                        : confirmationDialog({
+                            title: localize('script-call-dialog.delete-script-title', { name: script.name }),
                             message: localize('script-call-dialog.delete-script-message'),
                             confirmCallback: () => deleteScript(),
-                        })
-                        : deleteScript();
+                        });
                 }
             },
         );

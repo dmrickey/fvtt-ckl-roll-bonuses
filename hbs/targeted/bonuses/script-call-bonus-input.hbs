@@ -15,16 +15,14 @@
             {{/if}}
             {{#unless readonly}}
             <a class="trait-selector edit-script"><i class="fas fa-edit"></i></a>
-            <a class="trait-selector delete-script"><i class="fas fa-trash"></i></a>
+            <a class="trait-selector delete-script"><i class="fas {{#if (eq ../scripts.length 1)}}fa-arrow-rotate-left{{else}}fa-trash{{/if}}"></i></a>
             {{/unless}}
         </li>
         {{/each}}
         {{#unless readonly}}
-        {{!-- <li class="flexrow"> --}}
-            <a class="add-script"><i class="fas fa-plus"></i>
-                {{localize "PF1.ScriptCalls.NewName"}}
-            </a>
-        {{!-- </li> --}}
+        <a class="add-script"><i class="fas fa-plus"></i>
+            {{localize "PF1.ScriptCalls.NewName"}}
+        </a>
         {{/unless}}
     </div>
 </div>

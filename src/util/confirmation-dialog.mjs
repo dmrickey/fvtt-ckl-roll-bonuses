@@ -37,12 +37,12 @@ export const confirmationDialog = ({
             </div>
         `,
         buttons: {
+            cancel: {
+                label: localize('PF1.Cancel'),
+            },
             submit: {
                 label: localize('PF1.Confirm'),
                 callback: confirmCallback,
-            },
-            cancel: {
-                label: localize('PF1.Cancel'),
             },
         },
         default: "submit"

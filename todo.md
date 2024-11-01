@@ -260,6 +260,7 @@
   - Item hints - use the language helper thing to do and/or based on any/all
 - Conditional Modifiers Bonus
   - try to add drag/drop
+    - Add UI hover state for dragging
   - make sure "defaults" are saved when swapping to a new 'type'
   - make sure crit and non-crit only damage bonuses are working (tooltip and on attack card)
 - Damage Bonus

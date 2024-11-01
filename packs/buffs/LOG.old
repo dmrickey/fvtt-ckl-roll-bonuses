@@ -1,7 +1,5 @@
-2024/11/01-10:35:59.597 1588 Recovering log #877
-2024/11/01-10:35:59.600 1588 Delete type=0 #877
-2024/11/01-10:35:59.600 1588 Delete type=3 #875
-2024/11/01-11:52:03.710 5780 Level-0 table #882: started
-2024/11/01-11:52:03.710 5780 Level-0 table #882: 0 bytes OK
-2024/11/01-11:52:03.712 5780 Delete type=0 #880
-2024/11/01-11:52:03.715 5780 Manual compaction at level-0 from '!items!3p2PtsJOLjsF390z' @ 72057594037927935 : 1 .. '!items!bExfitM1TiM3jNPv' @ 0 : 0; will stop at (end)
+2024/11/01-13:12:56.561 4c4 Log #884: 0 ops saved to Table #885 OK
+2024/11/01-13:12:56.562 4c4 Archiving C:\Users\David\AppData\Local\FoundryVTT-dev\Data\modules\ckl-roll-bonuses\packs\buffs/000884.log: OK
+2024/11/01-13:12:56.562 4c4 Table #870: 5 entries OK
+2024/11/01-13:12:56.563 4c4 Archiving C:\Users\David\AppData\Local\FoundryVTT-dev\Data\modules\ckl-roll-bonuses\packs\buffs/MANIFEST-000883: OK
+2024/11/01-13:12:56.565 4c4 **** Repaired leveldb C:\Users\David\AppData\Local\FoundryVTT-dev\Data\modules\ckl-roll-bonuses\packs\buffs; recovered 1 files; 6914 bytes. Some data may have been lost. ****
