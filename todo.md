@@ -256,6 +256,9 @@
 # v 2.16
 - Auto configuration
   - Make specific abilities that have multiple choices auto-configure to the first available choice
+    - double check creation of these things that they autoconfigure (search for `const onCreate` in the project to see exactly which ones need it)
+    - then modify the configuration, copy into a compendium, then move onto a new actor and make sure the configuration remains (check the item hint)
+  - Consider Versatile Performance/Training
 - Action Type Target
   - Item hints - use the language helper thing to do and/or based on any/all
 - Conditional Modifiers Bonus
@@ -270,6 +273,7 @@
   - Add "inset" option for all inputs so its label can be inset underneath a "parent" bonus
 - Rename file from `effect-size.mjs` to `effective-size-bonus.mjs`
 - Script Call Bonus
+  - Add duplicate button
   - Add UI hover state for dragging
 - Audit Bonus/Target labels for superfluous uses of "Bonus" or "Target"
 - Audit Specific Bonus "click to expand" rules and make sure they're concise enough (_specifically_ looking at you, Weapon Focus)

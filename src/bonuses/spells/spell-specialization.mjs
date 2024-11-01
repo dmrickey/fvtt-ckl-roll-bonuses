@@ -185,9 +185,31 @@ const onCreate = (item, data, { temporary }, id) => {
     const sourceId = item?.flags.core?.sourceId ?? '';
     const hasBonus = item.hasItemBooleanFlag(key);
 
+    let choice = '';
+    if (item.actor) {
+        const focuses = getFocusedSchools(item.actor);
+
+        const spellChoices = item.actor?.items
+            .filter(
+                /** @returns {spell is ItemSpellPF} */
+                (spell) => spell instanceof pf1.documents.item.ItemSpellPF
+                    && focuses.includes(spell.system.school))
+            ?? [];
+        const choices = uniqueArray(spellChoices.map(({ name }) => name)).sort();
+        choice = choices[0] || '';
+    }
+
+    let updated = false;
     if ((name === Settings.spellSpecialization || sourceId.includes(compendiumId)) && !hasBonus) {
         item.updateSource({
             [`system.flags.boolean.${key}`]: true,
+        });
+        updated = true;
+    }
+
+    if ((hasBonus || updated) && choice && !item.flags[MODULE_NAME]?.[key]) {
+        item.updateSource({
+            [`flags.${MODULE_NAME}.${key}`]: choice,
         });
     }
 };

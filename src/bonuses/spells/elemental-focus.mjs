@@ -281,20 +281,44 @@ const onCreate = (item, data, { temporary }, id) => {
     const isMythic = (name.includes(Settings.elementalFocus) && name.includes(LanguageSettings.mythic))
         || sourceId.includes(mythicElementalFocusCompendiumId);
 
+    /** @type {damageElements[number]} */
+    let focused = damageElements[0];
+    if (item.actor && (isGreater || isMythic)) {
+        focused = getFocusedElements(item.actor, elementalFocusKey)[0] || '';
+    }
+
     if (isRegular) {
         item.updateSource({
             [`system.flags.boolean.${elementalFocusKey}`]: true,
         });
+
+        if (focused && !item.flags[MODULE_NAME]?.[elementalFocusKey]) {
+            item.updateSource({
+                [`flags.${MODULE_NAME}.${elementalFocusKey}`]: focused,
+            });
+        }
     }
     else if (isGreater) {
         item.updateSource({
             [`system.flags.boolean.${greaterElementalFocusKey}`]: true,
         });
+
+        if (focused && !item.flags[MODULE_NAME]?.[greaterElementalFocusKey]) {
+            item.updateSource({
+                [`flags.${MODULE_NAME}.${greaterElementalFocusKey}`]: focused,
+            });
+        }
     }
     else if (isMythic) {
         item.updateSource({
             [`system.flags.boolean.${mythicElementalFocusKey}`]: true,
         });
+
+        if (focused && !item.flags[MODULE_NAME]?.[mythicElementalFocusKey]) {
+            item.updateSource({
+                [`flags.${MODULE_NAME}.${mythicElementalFocusKey}`]: focused,
+            });
+        }
     }
 };
 Hooks.on('preCreateItem', onCreate);

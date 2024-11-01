@@ -136,9 +136,21 @@ const onCreate = (item, data, { temporary }, id) => {
     const sourceId = item?.flags.core?.sourceId ?? '';
     const hasBonus = item.hasItemBooleanFlag(key);
 
+    let focused = '';
+    if (item.actor) {
+        focused = getFocusedArmor(item.actor)[0] || '';
+    }
+
+    let updated = false;
     if (((name.includes(LanguageSettings.getTranslation(armorFocusKey)) && name.includes(LanguageSettings.improved)) || sourceId.includes(compendiumId)) && !hasBonus) {
         item.updateSource({
             [`system.flags.boolean.${key}`]: true,
+        });
+        updated = true;
+    }
+    if ((hasBonus || updated) && focused && !item.flags[MODULE_NAME]?.[key]) {
+        item.updateSource({
+            [`flags.${MODULE_NAME}.${key}`]: focused,
         });
     }
 };

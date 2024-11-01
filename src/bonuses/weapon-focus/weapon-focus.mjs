@@ -242,20 +242,49 @@ const onCreate = (item, data, { temporary }, id) => {
     const isMythic = (name.includes(Settings.weaponFocus) && name.includes(LanguageSettings.mythic))
         || sourceId.includes(mythicWeaponFocusCompendiumId);
 
+    let focused = '';
+    if (item.actor) {
+        if (isRegular) {
+            focused = uniqueArray([...(item.actor?.items ?? [])]
+                .flatMap((item) => item.system.baseTypes ?? []))[0] || '';
+        }
+        else if (isGreater || isMythic) {
+            focused = getFocusedWeapons(item.actor, weaponFocusKey)[0] || '';
+        }
+    }
+
     if (isRegular) {
         item.updateSource({
             [`system.flags.boolean.${weaponFocusKey}`]: true,
         });
+
+        if (focused && !item.flags[MODULE_NAME]?.[weaponFocusKey]) {
+            item.updateSource({
+                [`flags.${MODULE_NAME}.${weaponFocusKey}`]: focused,
+            });
+        }
     }
     else if (isGreater) {
         item.updateSource({
             [`system.flags.boolean.${greaterWeaponFocusKey}`]: true,
         });
+
+        if (focused && !item.flags[MODULE_NAME]?.[greaterWeaponFocusKey]) {
+            item.updateSource({
+                [`flags.${MODULE_NAME}.${greaterWeaponFocusKey}`]: focused,
+            });
+        }
     }
     else if (isMythic) {
         item.updateSource({
             [`system.flags.boolean.${mythicWeaponFocusKey}`]: true,
         });
+
+        if (focused && !item.flags[MODULE_NAME]?.[mythicWeaponFocusKey]) {
+            item.updateSource({
+                [`flags.${MODULE_NAME}.${mythicWeaponFocusKey}`]: focused,
+            });
+        }
     }
 };
 Hooks.on('preCreateItem', onCreate);

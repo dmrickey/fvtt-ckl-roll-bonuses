@@ -166,9 +166,27 @@ const onCreate = (item, data, { temporary }, id) => {
     const sourceId = item?.flags.core?.sourceId ?? '';
     const hasBonus = item.hasItemBooleanFlag(key);
 
+    let focused = '';
+    if (item.actor) {
+        focused = uniqueArray(item.actor.items
+            ?.filter(
+                /** @returns {item is ItemEquipmentPF} */
+                (_item) => _item.type === 'equipment'
+                    && _item instanceof pf1.documents.item.ItemEquipmentPF
+                    && _item.system.slot === 'armor')
+            .flatMap((_item) => _item.system.baseTypes ?? []))[0] || '';
+    }
+
+    let updated = false;
     if ((name === Settings.armorFocus || sourceId.includes(compendiumId)) && !hasBonus) {
         item.updateSource({
             [`system.flags.boolean.${key}`]: true,
+        });
+        updated = true;
+    }
+    if ((hasBonus || updated) && focused && !item.flags[MODULE_NAME]?.[key]) {
+        item.updateSource({
+            [`flags.${MODULE_NAME}.${key}`]: focused,
         });
     }
 };

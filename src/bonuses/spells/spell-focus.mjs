@@ -254,20 +254,43 @@ const onCreate = (item, data, { temporary }, id) => {
     const isMythic = (name.includes(Settings.spellFocus) && name.includes(LanguageSettings.mythic))
         || sourceId.includes(mythicSpellFocusCompendiumId);
 
+    let focused = Object.keys(pf1.config.spellSchools)[0];
+    if (item.actor && (isGreater || isMythic)) {
+        focused = getFocusedSchools(item.actor, spellFocusKey)[0] || '';
+    }
+
     if (isRegular) {
         item.updateSource({
             [`system.flags.boolean.${spellFocusKey}`]: true,
         });
+
+        if (focused && !item.flags[MODULE_NAME]?.[spellFocusKey]) {
+            item.updateSource({
+                [`flags.${MODULE_NAME}.${spellFocusKey}`]: focused,
+            });
+        }
     }
     else if (isGreater) {
         item.updateSource({
             [`system.flags.boolean.${greaterSpellFocusKey}`]: true,
         });
+
+        if (focused && !item.flags[MODULE_NAME]?.[greaterSpellFocusKey]) {
+            item.updateSource({
+                [`flags.${MODULE_NAME}.${greaterSpellFocusKey}`]: focused,
+            });
+        }
     }
     else if (isMythic) {
         item.updateSource({
             [`system.flags.boolean.${mythicSpellFocusKey}`]: true,
         });
+
+        if (focused && !item.flags[MODULE_NAME]?.[mythicSpellFocusKey]) {
+            item.updateSource({
+                [`flags.${MODULE_NAME}.${mythicSpellFocusKey}`]: focused,
+            });
+        }
     }
 };
 Hooks.on('preCreateItem', onCreate);
