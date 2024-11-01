@@ -4,4 +4,7 @@
  * @param {T | false | 0 | "" | null | undefined} x
  * @returns {x is T} True if object is truthy
  */
-export const truthiness = x => !!x;
+export const truthiness = x =>
+    typeof x === 'string'
+        ? !!x?.trim()
+        : !!x;

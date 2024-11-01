@@ -1,5 +1,6 @@
 import { MODULE_NAME } from "../../../consts.mjs";
 import { api } from '../../../util/api.mjs';
+import { confirmationDialog } from '../../../util/confirmation-dialog.mjs';
 import { localize, localizeBonusLabel, localizeBonusTooltip } from "../../../util/localize.mjs";
 import { addNodeToRollBonus } from "../../add-bonus-to-item-sheet.mjs";
 import { createTemplate, templates } from "../../templates.mjs";
@@ -157,8 +158,13 @@ export function showScriptBonusEditor({
             else {
                 /** @type {Macro | undefined} */
                 const macro = fromUuidSync(current.value);
-                // TODO inject confirmation dialog stating that this is editing a macro
-                macro?.sheet.render(true);
+                if (macro) {
+                    confirmationDialog({
+                        title: localize('script-call-dialog.edit-macro-title', { name: macro.name }),
+                        message: localize('script-call-dialog.edit-macro-message'),
+                        confirmCallback: () => macro?.sheet.render(true),
+                    });
+                }
             }
         });
     });
@@ -197,7 +203,6 @@ export function showScriptBonusEditor({
         select?.addEventListener(
             'click',
             async (event) => {
-                // TODO inject confirmation dialog stating that this can't be undone if `type === 'script'`
                 const clicked = /** @type {HTMLElement} */ (event.currentTarget);
                 /** @type {HTMLDataListElement | null} */
                 const row = clicked.closest('.script-row');
@@ -205,9 +210,19 @@ export function showScriptBonusEditor({
 
                 const index = +(row.dataset.index || 0);
                 if (scripts[index]) {
-                    const clonedScripts = deepClone(scripts);
-                    clonedScripts.splice(index, 1);
-                    await item.setFlag(MODULE_NAME, key, clonedScripts);
+                    const deleteScript = async () => {
+                        const clonedScripts = deepClone(scripts);
+                        clonedScripts.splice(index, 1);
+                        await item.setFlag(MODULE_NAME, key, clonedScripts);
+                    }
+
+                    scripts[index].value?.trim()
+                        ? confirmationDialog({
+                            title: localize('script-call-dialog.delete-script-title', { name: scripts[index].name }),
+                            message: localize('script-call-dialog.delete-script-message'),
+                            confirmCallback: () => deleteScript(),
+                        })
+                        : deleteScript();
                 }
             },
         );

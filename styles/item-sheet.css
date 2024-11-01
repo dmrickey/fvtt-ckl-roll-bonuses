@@ -127,6 +127,7 @@ form .versatile-performance-selector .form-fields {
 }
 
 #ckl-roll-bonus-container .script-bonus-input .bonus-label {
+    flex: 1;
     margin-block-end: auto;
 }
 
@@ -164,24 +165,6 @@ form .versatile-performance-selector .form-fields {
 #ckl-roll-bonus-container .conditional-modifier-inputs label.bonus-label {
     align-self: start;
 }
-/* #ckl-roll-bonus-container
-    .conditional-modifier-inputs
-    ol.conditionals.form-group {
-    align-items: start;
-    flex-direction: column;
-    width: 100%;
-}
-#ckl-roll-bonus-container
-    .conditional-modifier-inputs
-    ol.conditionals.form-group
-    li {
-    width: 100%;
-}
-#ckl-roll-bonus-container
-    .conditional-modifier-inputs
-    li.conditional.flexcolumn {
-    width: 100%;
-} */
 
 /* copied from pf1 */
 #ckl-roll-bonus-container .conditional-modifier-inputs .conditionals {

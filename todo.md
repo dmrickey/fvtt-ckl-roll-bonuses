@@ -269,6 +269,5 @@
 - Rename file from `effect-size.mjs` to `effective-size-bonus.mjs`
 - Script Call Bonus
   - Add UI hover state for dragging
-  - Add "confirmation" callback when editing macros vs a script call
 - Audit Bonus/Target labels for superfluous uses of "Bonus" or "Target"
 - Audit Specific Bonus "click to expand" rules and make sure they're concise enough (_specifically_ looking at you, Weapon Focus)

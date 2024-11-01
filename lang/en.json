@@ -187,7 +187,7 @@
                 "ranged-increment-penalty-increment-range-offset": "Modify the range for each increment.",
                 "ranged-increment-penalty-max-increment-offset": "Reduce the penalty per increment.",
                 "ranged-increment-penalty-penalty-offset": "Reduce the total penalty.",
-                "script-call": "Configure Script Calls that are executed for the targeted actions.",
+                "script-call": "Configure Script Calls that are executed for the targeted actions. You can drag macros here as well.",
                 "self": "Apply bonuses to all actions on this same Item.",
                 "skill-rank-override": "Set skill rank for a chosen skill to a specific value. This is useful for an item such as a Headband of Vast Intellect.",
                 "skill-rank-override-formula": "Formula to set skill rank for chosen skill(s) to a specific value. This is useful for an item such as a Headband of Vast Intellect.",
@@ -371,6 +371,12 @@
         },
         "roll-bonuses": "Roll Bonuses",
         "script-call-default-name": "Script Call",
+        "script-call-dialog": {
+            "delete-script-message": "Once this script is deleted it cannot be recovered.<br>Are you sure you want to delete this script?",
+            "delete-script-title": "Delete Script - {name}",
+            "edit-macro-message": "You are attempting to edit a referenced macro which is not owned by this item.<br><br>Modifying this macro means that you'll be editing the world's macro directly. Any usage of this macro will be modified.<br><br>Are you sure you want to edit this macro?",
+            "edit-macro-title": "Edit Macro - {name}"
+        },
         "skill-rank-override": {
             "skill-card-name": "{skillName} - ({sourceName} ranks: {rank})",
             "skill-sheet-tip": "{itemName}\nSet skill ranks to {rank}."

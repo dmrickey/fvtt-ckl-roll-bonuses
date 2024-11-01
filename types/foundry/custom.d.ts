@@ -54,4 +54,18 @@ declare global {
             options: EnrichOptions,
         ): Promise<string>;
     }
+
+    class DialogButtonData {
+        label: string;
+        callback: () => void;
+    }
+    class Dialog {
+        constructor({
+            buttons: { [string]: DialogButton},
+            content: string,
+            default: string,
+            title: string,
+        }) {}
+        render(boolean): void;
+    }
 }
