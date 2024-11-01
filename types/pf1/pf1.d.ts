@@ -260,16 +260,40 @@ declare global {
     }
 
     class ActionUseShared<T extends SystemItemData = SystemItemData> {
-        action: any;
+        action: ItemAction;
         attackBonus: string[];
         attacks: ActionUseAttack[];
+        casterLevelCheck: boolean;
+        category?: ItemScriptCategory;
+        chatAttacks?: ChatAttack[];
+        chatMessage?: boolean;
+        concentrationCheck?: undefined;
         conditionalPartsCommon: any;
-        conditionals: any;
+        conditionals: [];
+        cost?: null;
         damageBonus: string[];
         dice: string;
-        powerAttack: boolean;
+        fullAttack?: boolean;
+        item: ItemPF;
+        powerAttack?: boolean;
         reject: boolean;
         rollData: RollData<T>;
+        rollMode?: string;
+        save?: string;
+        saveDC?: number;
+        scriptData: unknown;
+        skipDialog?: boolean;
+        targets?: unknown[];
+        templateData: {
+            action?: ItemAction;
+            item?: ItemPF;
+            footnotes?: string[];
+        };
+        token?: TokenDocumentPF;
+        useMeasureTemplate?: boolean;
+        useOptions: unknown;
+
+        get attackData(): unknown;
 
         templateData: {
             footnotes?: string[];
@@ -1877,7 +1901,12 @@ declare global {
         rollBonus: boolean;
         get hide(): boolean;
         get category(): string;
+
         constructor(data: Partial<ItemScriptCallData>);
+        execute(
+            shared: Partial<ActionUseShared<SystemItemData>>,
+            extraParams: { [x: string]: object } = {}
+        ): Promise;
     }
 
     interface ActorSheetPF {

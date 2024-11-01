@@ -126,6 +126,15 @@ form .versatile-performance-selector .form-fields {
     width: 100%;
 }
 
+#ckl-roll-bonus-container .script-bonus-input .bonus-label {
+    margin-block-end: auto;
+}
+
+#ckl-roll-bonus-container .script-bonus-input .form-fields {
+    display: flex;
+    flex-direction: column;
+}
+
 #ckl-roll-bonus-container .script-bonus-input .script-name {
     overflow-x: hidden;
     padding-inline: 4px;
@@ -134,9 +143,19 @@ form .versatile-performance-selector .form-fields {
     white-space: nowrap;
 }
 
-#ckl-roll-bonus-container .script-bonus-input .form-fields {
-    display: flex;
-    flex-direction: column;
+#ckl-roll-bonus-container .script-bonus-input .form-fields > * {
+    width: 100%;
+}
+#ckl-roll-bonus-container
+    .script-bonus-input
+    .form-fields
+    .script-row
+    > *:not(:last-child) {
+    margin-inline-end: 0.5rem;
+}
+
+#ckl-roll-bonus-container .script-bonus-input .add-script {
+    text-align: end;
 }
 
 #ckl-roll-bonus-container .conditional-modifier-inputs {

@@ -3,6 +3,9 @@
     <div class="form-fields">
         {{#each scripts as |script i|}}
         <li class="flexrow script-row" data-index="{{i}}">
+            <div class="script-name" data-tooltip="{{name}}">
+                {{name}}
+            </div>
             {{#if readonly}}
             <input type="text" readonly value="{{category.label}}" />
             {{else}}
@@ -10,12 +13,9 @@
                 {{selectOptions ../categories selected=category nameAttr="key" labelAttr="label"}}
             </select>
             {{/if}}
-            <div class="script-name" data-tooltip="{{name}}">
-                {{name}}
-            </div>
             {{#unless readonly}}
-            <a class="trait-selector"><i class="fas fa-edit"></i></a>
-            <a class="delete-script"><i class="fas fa-trash"></i></a>
+            <a class="trait-selector edit-script"><i class="fas fa-edit"></i></a>
+            <a class="trait-selector delete-script"><i class="fas fa-trash"></i></a>
             {{/unless}}
         </li>
         {{/each}}

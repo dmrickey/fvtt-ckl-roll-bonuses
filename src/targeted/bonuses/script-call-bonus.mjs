@@ -23,65 +23,53 @@ export class ScriptCallBonus extends BaseBonus {
 
     static {
         /**
-         * Copied directly from the system with one line changed
-         *
-         * @this {ItemSheetPF}
-         * @param {any} context
-         */
-        async function itemSheetPF_prepareScriptCalls(context) {
-            context.scriptCalls = null;
+        * Executes all script calls on this item of a specified category.
+        *
+        * @this {ItemPF}
+        * @param {string} category - The category of script calls to call.
+        * @param {Object<string, object>} [extraParams={}] - A dictionary of extra parameters to pass as variables for use in the script.
+        * @param {Partial<ActionUseShared>} [shared={}] - Shared data object
+        * @returns {Promise.<object>} The shared object between calls which may have been given data.
+        */
+        async function executeScriptCalls(category, extraParams = {}, shared = {}) {
+            /** @type {ItemScriptCall[]} */
+            const scripts = this.scriptCalls?.filter((o) => o.category === category) ?? [];
 
-            const categories = pf1.registry.scriptCalls.filter((category) => {
-                if (!category.itemTypes.includes(this.item.type)) return false;
-                return !(category.hidden === true && !game.user.isGM);
-            });
-            // Don't show the Script Calls section if there are no categories for this item type
-            if (!categories.length) return;
-
-            context.scriptCalls = {};
-
-            // Iterate over all script calls, and adjust data
-            const scriptCalls = this.item.scriptCalls
-                ?.filter((s) => !s.rollBonus)  /** ADDING THIS FILTER IS MY OVERRIDE */
-                ?? [];
-
-            // Create categories, and assign items to them
-            for (const { id, name, info } of categories) {
-                context.scriptCalls[id] = {
-                    name,
-                    tooltip: info,
-                    items: scriptCalls.filter((sc) => sc.category === id && !sc.hide),
-                    dataset: { category: id },
-                };
+            // BEGIN MY OVERRIDE
+            if (shared.action) {
+                handleBonusTypeFor(
+                    shared.action,
+                    ScriptCallBonus,
+                    (bonusType, sourceItem) => {
+                        const scriptCalls = bonusType.getScriptCalls(sourceItem);
+                        scriptCalls
+                            .filter((s) => s.category === category)
+                            .forEach((s) => {
+                                s.parent = this;
+                                scripts.push(s);
+                            });
+                    },
+                );
             }
-        }
+            // END MY OVERRIDE
 
-        /**
-         * @this {ItemPF}
-         * @param {() => Promise<void>} wrapped
-         */
-        async function itemPF_prepareScriptCalls(wrapped) {
-            await wrapped();
-            handleBonusTypeFor(
-                this,
-                ScriptCallBonus,
-                (bonusType, sourceItem) => {
-                    const script = bonusType.getScriptCalls(sourceItem);
-                    if (script) {
-                        this.scriptCalls ||= new Collection();
-                        const scripts = Array.isArray(script) ? script : [script];
-                        scripts.forEach((s) => {
-                            s.parent = this;
-                            this.scriptCalls.set(s.id, s);
-                        });
-                    }
-                },
-            );
+            shared.category = category;
+
+            try {
+                for (const s of scripts) {
+                    await s.execute(shared, extraParams);
+                }
+            } catch (error) {
+                console.error(`Script call execution failed\n`, error, this);
+                // Rethrow to ensure everything cancels
+                throw new Error("Error occurred while executing a script call", { cause: error });
+            }
+
+            return shared;
         }
 
         Hooks.once('init', () => {
-            libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype._prepareScriptCalls', itemPF_prepareScriptCalls, libWrapper.WRAPPER);
-            libWrapper.register(MODULE_NAME, 'pf1.applications.item.ItemSheetPF.prototype._prepareScriptCalls', itemSheetPF_prepareScriptCalls, libWrapper.OVERRIDE);
+            libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype.executeScriptCalls', executeScriptCalls, libWrapper.OVERRIDE);
         });
     }
 
@@ -105,7 +93,7 @@ export class ScriptCallBonus extends BaseBonus {
      * Get script from the source
      *
      * @param {ItemPF} source
-     * @return {Nullable<ItemScriptCall | ItemScriptCall[]>}
+     * @return {ItemScriptCall[]}
      */
     static getScriptCalls(source) {
         /** @type {ItemScriptCallData[]} */

@@ -269,9 +269,6 @@
 - Rename file from `effect-size.mjs` to `effective-size-bonus.mjs`
 - Script Call Bonus
   - Add UI hover state for dragging
-  - Only add script calls that can be used by the source item type
   - Add "confirmation" callback when editing macros vs a script call
-  - Double check what happens if an Item has multiple actions, and a single one of those actions is targeted for a script call -- do the other actions also get the script call?
-  - Fix the UI now that it has multiple rows
 - Audit Bonus/Target labels for superfluous uses of "Bonus" or "Target"
 - Audit Specific Bonus "click to expand" rules and make sure they're concise enough (_specifically_ looking at you, Weapon Focus)

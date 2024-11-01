@@ -118,7 +118,7 @@ export function showScriptBonusEditor({
         }
     });
 
-    div.querySelectorAll('.trait-selector').forEach((element) => {
+    div.querySelectorAll('.edit-script').forEach((element) => {
         element.addEventListener('click', async (event) => {
             event.preventDefault();
 
