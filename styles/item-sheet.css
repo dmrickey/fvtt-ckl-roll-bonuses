@@ -156,6 +156,7 @@ form .versatile-performance-selector .form-fields {
 }
 
 #ckl-roll-bonus-container .script-bonus-input .add-script {
+    margin-block-start: 0.25rem;
     text-align: end;
 }
 
