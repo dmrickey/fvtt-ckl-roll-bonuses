@@ -1,7 +1,9 @@
 import { MODULE_NAME } from '../../consts.mjs';
 import { radioInput } from '../../handlebars-handlers/bonus-inputs/radio-input.mjs';
 import { showChecklist } from '../../handlebars-handlers/targeted/targets/checklist-input.mjs';
+import { listFormat } from '../../util/list-format.mjs';
 import { localize, localizeBonusLabel } from '../../util/localize.mjs';
+import { truthiness } from '../../util/truthiness.mjs';
 import { BaseTarget } from './base-target.mjs';
 
 /**
@@ -96,6 +98,20 @@ export class ActionTypeTarget extends BaseTarget {
      * @returns {string}
      */
     static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.iurMG1TBoX3auh5z#action-type'; }
+
+    /**
+     * @override
+     * @inheritdoc
+     * @param {ItemPF} source
+     * @returns {Nullable<string[]>}
+     */
+    static getHints(source) {
+        const types = (/** @type {FilterType[]} */ (source.getFlag(MODULE_NAME, this.#typesKey) ?? []))
+            .filter(truthiness)
+            .map((x) => filterTypes[x].label);
+        const join = source.getFlag(MODULE_NAME, this.#radioKey) === all ? 'and' : 'or';
+        return [listFormat(types, join)];
+    }
 
     /**
      * @override

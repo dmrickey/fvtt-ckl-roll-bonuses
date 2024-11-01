@@ -259,8 +259,6 @@
     - double check creation of these things that they autoconfigure (search for `const onCreate` in the project to see exactly which ones need it)
     - then modify the configuration, copy into a compendium, then move onto a new actor and make sure the configuration remains (check the item hint)
   - Consider Versatile Performance/Training
-- Action Type Target
-  - Item hints - use the language helper thing to do and/or based on any/all
 - Conditional Modifiers Bonus
   - try to add drag/drop
     - Add UI hover state for dragging
