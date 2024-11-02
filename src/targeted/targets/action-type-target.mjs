@@ -12,16 +12,15 @@ import { BaseTarget } from './base-target.mjs';
  * @returns {boolean}
  */
 const isNaturalSecondary = (item, action) => {
-    const _isNatural = isNatural(item, action);
+    const _isNatural = isNatural(item);
     const isPrimary = action?.data.naturalAttack.primaryAttack;
     return _isNatural && !isPrimary;
 }
 /**
  * @param {ItemPF} item
- * @param {ItemAction} _action
  * @returns {boolean}
  */
-const isNatural = (item, _action) => {
+const isNatural = (item) => {
     const isAttack = item instanceof pf1.documents.item.ItemAttackPF;
     return (isAttack && item.subType === 'natural')
         || !!item.system.weaponGroups?.value?.includes("natural");
@@ -46,7 +45,7 @@ const filterTypes = /** @type {const} */ ({
     ['is-ranged']: { label: '', filter: (/** @type {ItemPF} */ item, /** @type {ItemAction} */ action) => ['rcman', 'rwak', 'rsak', 'twak'].includes(action?.data.actionType) },
     ['is-spell']: { label: '', filter: isSpell },
     ['is-thrown']: { label: '', filter: (/** @type {ItemPF} */ item, /** @type {ItemAction} */ action) => action?.data.actionType === 'twak' },
-    ['is-weapon']: { label: '', filter: (/** @type {ItemPF} */ item, /** @type {ItemAction} */ action) => ['mwak', 'rwak', 'twak'].includes(action?.data.actionType) },
+    ['is-weapon']: { label: '', filter: (/** @type {ItemPF} */ item, /** @type {ItemAction} */ action) => ['mwak', 'rwak', 'twak'].includes(action?.data.actionType) || isNatural(item) },
 });
 
 const all = 'all';
