@@ -160,15 +160,18 @@ api.utils.handleBonusTypeFor = handleBonusTypeFor;
  * @param {ActionUse} actionUse
  */
 function actionUseHandleConditionals(actionUse) {
-    /** @type {Nullable<ItemConditional>[]} */
+    /** @type {Nullable<ItemConditional[]>[]} */
     const conditionals = [];
     handleBonusesFor(
         actionUse,
-        (bonusType, sourceItem) => conditionals.push(bonusType.getConditional(sourceItem, actionUse)),
+        (bonusType, sourceItem) => conditionals.push(bonusType.getConditionals(sourceItem, actionUse)),
     );
 
     conditionals
-        .filter((c) => c?.modifiers?.length)
+        .filter(truthiness)
+        .flatMap((x) => x)
+        .filter(truthiness)
+        .filter((c) => c.data.modifiers.length)
         .forEach((conditional) => conditionalCalculator(actionUse.shared, conditional));
 
     // todo reduce attack bonus highest of each type
@@ -274,6 +277,33 @@ function getDamageTooltipSources(thing, sources) {
 }
 Hooks.on(customGlobalHooks.getDamageTooltipSources, getDamageTooltipSources);
 
+/**
+ * @param {ChatAttack} chatAttack
+ * @param {object} args
+ * @param {boolean} args.noAttack
+ * @param {unknown} args.bonus
+ * @param {string[]} args.extraParts
+ * @param {boolean} args.critical Whether or not this roll is a for a critical confirmation
+ * @param {object} args.conditionalParts
+ */
+const preRollChatAttackAddAttack = async (chatAttack, args) => {
+    if (!args.critical) return;
+
+    handleBonusesFor(
+        chatAttack.action,
+        (bonusType, sourceItem) => {
+            if (args.critical) {
+                const part = bonusType.getCritBonusParts(sourceItem);
+                if (part) {
+                    const parts = Array.isArray(part) ? part : [part];
+                    args.extraParts.push(...parts);
+                }
+            }
+        }
+    );
+}
+LocalHookHandler.registerHandler(localHooks.preRollChatAttackAddAttack, preRollChatAttackAddAttack);
+
 Hooks.on('renderItemSheet', (
     /** @type {ItemSheetPF} */ { actor, isEditable, item },
     /** @type {[HTMLElement]} */[html],
@@ -287,6 +317,15 @@ Hooks.on('renderItemSheet', (
 
     item[MODULE_NAME].targets.forEach((targetType) => {
         targetType.showInputOnItemSheet({ actor, item, isEditable, html });
+    });
+
+    item[MODULE_NAME].targetOverrides.forEach((override) => {
+        if (override.isInvalidItemType(item)) {
+            override.showInvalidInput({ actor, item, isEditable, html });
+        }
+        else {
+            override.showInputOnItemSheet({ actor, item, isEditable, html });
+        }
     });
 });
 
@@ -318,9 +357,21 @@ function actionUseProcess(actionUse) {
     handleBonusesFor(
         actionUse,
         (bonusType, sourceItem) => bonusType.actionUseProcess(sourceItem, actionUse),
-    )
-}
+    );
+};
 LocalHookHandler.registerHandler(localHooks.actionUseProcess, actionUseProcess);
+
+/**
+ * @param {ItemAction} action
+ * @param {{ dc: number }} seed
+ */
+function modifyActionLabelDC(action, seed) {
+    handleBonusesFor(
+        action,
+        (bonusType, sourceItem) => seed.dc += bonusType.modifyActionLabelDC(sourceItem, action),
+    );
+};
+LocalHookHandler.registerHandler(localHooks.modifyActionLabelDC, modifyActionLabelDC);
 
 /**
  * @param {ItemPF} item
@@ -329,11 +380,7 @@ LocalHookHandler.registerHandler(localHooks.actionUseProcess, actionUseProcess);
 const prepare = (item, rollData) => {
     item[MODULE_NAME].bonuses = [];
     item[MODULE_NAME].targets = [];
-
-    [
-        ...api.allBonusTypes,
-        ...api.allTargetTypes,
-    ].forEach((source) => source.prepareBaseData(item, rollData));
+    item[MODULE_NAME].targetOverrides = [];
 
     api.allBonusTypes.forEach((bonusType) => {
         if (bonusType.isSource(item)) {
@@ -347,6 +394,15 @@ const prepare = (item, rollData) => {
             targetType.prepareSourceData(item, rollData);
         }
     });
+    api.allTargetOverrideTypes.forEach((overrideType) => {
+        if (overrideType.isSource(item)) {
+            item[MODULE_NAME].targetOverrides.push(overrideType);
+            if (!overrideType.isInvalidItemType(item)) {
+                overrideType.prepareSourceData(item, rollData);
+            }
+        }
+    });
+
 };
 LocalHookHandler.registerHandler(localHooks.prepareData, prepare);
 
@@ -361,7 +417,7 @@ const itemActionRollAttack = (seed, action, data) => {
         action,
         (bonusType, sourceItem) => bonusType.itemActionRollAttack(sourceItem, seed, action, data),
     );
-}
+};
 LocalHookHandler.registerHandler(localHooks.itemActionRollAttack, itemActionRollAttack);
 
 /**
@@ -388,7 +444,7 @@ const itemActionRollDamage = (seed, action, data, index) => {
         action,
         (bonusType, sourceItem) => bonusType.itemActionRollDamage(sourceItem, seed, action, data, index),
     );
-}
+};
 LocalHookHandler.registerHandler(localHooks.itemActionRollDamage, itemActionRollDamage);
 
 /**
@@ -401,7 +457,7 @@ const itemGetTypeChatData = (item, props, rollData) => {
         item,
         (bonusType, sourceItem) => props.push(...(bonusType.getItemChatCardInfo(sourceItem, rollData) || []))
     );
-}
+};
 Hooks.on(customGlobalHooks.itemGetTypeChatData, itemGetTypeChatData);
 
 /**
@@ -414,5 +470,5 @@ const updateItemActionRollData = (action, rollData) => {
         action,
         (bonusType, sourceItem) => bonusType.updateItemActionRollData(sourceItem, action, rollData),
     );
-}
+};
 LocalHookHandler.registerHandler(localHooks.updateItemActionRollData, updateItemActionRollData)

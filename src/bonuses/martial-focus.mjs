@@ -5,10 +5,11 @@ import { MODULE_NAME } from '../consts.mjs';
 import { keyValueSelect } from "../handlebars-handlers/bonus-inputs/key-value-select.mjs";
 import { intersects } from "../util/array-intersects.mjs";
 import { createChangeForTooltip } from '../util/conditional-helpers.mjs';
+import { getActorItemsByTypes } from '../util/get-actor-items-by-type.mjs';
 import { getCachedBonuses } from '../util/get-cached-bonuses.mjs';
 import { customGlobalHooks } from "../util/hooks.mjs";
 import { registerItemHint } from "../util/item-hints.mjs";
-import { localizeBonusLabel } from "../util/localize.mjs";
+import { localize, localizeBonusLabel } from "../util/localize.mjs";
 import { LanguageSettings } from "../util/settings.mjs";
 import { truthiness } from "../util/truthiness.mjs";
 import { uniqueArray } from "../util/unique-array.mjs";
@@ -30,15 +31,43 @@ class Settings {
 
 /**
  * @param {ActorPF} actor
- * @param {ItemAttackPF | ItemWeaponPF} item
+ * @param {ItemPF} item
  * @returns {boolean}
  */
 const isItemFocused = (actor, item) => {
-    const weaponGroups = [...item.system.weaponGroups.value, ...item.system.weaponGroups.custom].map(x => x.trim()).filter(truthiness);
+    const weaponGroups = [...(item.system.weaponGroups?.value ?? []), ...(item.system.weaponGroups?.custom ?? [])].map(x => x.trim()).filter(truthiness);
     const focuses = getCachedBonuses(actor, key)
         .flatMap(x => x.getFlag(MODULE_NAME, key))
         .filter(truthiness);
     return intersects(weaponGroups, focuses);
+}
+
+/**
+ * @param {ItemPF} item
+ * @returns {ItemConditional | undefined}
+ */
+export function getMartialFocusCondtional(item) {
+    const actor = item.actor;
+    if (!actor || !item.system.weaponGroups) {
+        return;
+    }
+
+    if (isItemFocused(actor, item)) {
+        return new pf1.components.ItemConditional({
+            _id: foundry.utils.randomID(),
+            default: true,
+            name: Settings.martialFocus,
+            modifiers: [{
+                ...pf1.components.ItemConditionalModifier.defaultData,
+                _id: foundry.utils.randomID(),
+                critical: 'normal',
+                formula: '+1',
+                subTarget: 'allDamage',
+                target: 'damage',
+                type: 'untyped',
+            }],
+        });
+    }
 }
 
 // register hint on source feat
@@ -52,14 +81,13 @@ registerItemHint((hintcls, _actor, item, _data) => {
 
 // register hint on focused weapon/attack
 registerItemHint((hintcls, actor, item, _data) => {
-    if (!(item instanceof pf1.documents.item.ItemWeaponPF || item instanceof pf1.documents.item.ItemAttackPF)
-        || !actor?.hasWeaponProficiency(item) || !item.system.weaponGroups) {
+    if (!actor?.hasWeaponProficiency(item) || !item.system.weaponGroups) {
         return;
     }
 
     const isFocused = isItemFocused(actor, item);
     if (isFocused) {
-        return hintcls.create(localizeBonusLabel(key), [], {});
+        return hintcls.create(`+1 ${localize('PF1.Damage')}`, [], { hint: localizeBonusLabel(key) });
     }
 });
 
@@ -67,8 +95,7 @@ registerItemHint((hintcls, actor, item, _data) => {
  * @param {ActionUse} actionUse
  */
 function addMartialFocus({ actor, item, shared }) {
-    if (!(item instanceof pf1.documents.item.ItemWeaponPF || item instanceof pf1.documents.item.ItemAttackPF)
-        || !actor?.hasWeaponProficiency(item)
+    if (!actor?.hasWeaponProficiency(item)
         || !item.system.weaponGroups
     ) {
         return;
@@ -153,7 +180,7 @@ Hooks.on('renderItemSheet', (
     if (!hasKey) {
         const name = item?.name?.toLowerCase() ?? '';
         const sourceId = item?.flags.core?.sourceId ?? '';
-        if (name === Settings.martialFocus || sourceId.includes(compendiumId)) {
+        if (isEditable && (name === Settings.martialFocus || sourceId.includes(compendiumId))) {
             item.addItemBooleanFlag(key);
         }
         return;
@@ -165,18 +192,13 @@ Hooks.on('renderItemSheet', (
         !actor || !isEditable
             ? []
             : uniqueArray(
-                actor.items
-                    .filter(
-                        /** @returns {i is ItemWeaponPF | ItemAttackPF} */
-                        (i) => i instanceof pf1.documents.item.ItemWeaponPF || i instanceof pf1.documents.item.ItemAttackPF
-                    )
+                getActorItemsByTypes(actor, 'attack', 'weapon')
                     .flatMap((i) => (i.system.weaponGroups?.custom ?? []))
                     .filter(truthiness)
-                ?? []
             ).map((i) => ({ key: i, label: i }));
 
     const groups = Object.entries(pf1.config.weaponGroups).map(([key, label]) => ({ key, label }));
-    const choices = [...groups, ...customs].sort();
+    const choices = [...groups, ...customs].sort((a, b) => a.label.localeCompare(b.label));
 
     keyValueSelect({
         choices,

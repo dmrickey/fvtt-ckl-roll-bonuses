@@ -14,6 +14,7 @@ import { emptyObject } from './util/empty-object.mjs';
 import { registerSetting } from './util/settings.mjs';
 import { addNodeToRollBonus } from './handlebars-handlers/add-bonus-to-item-sheet.mjs';
 import { localize } from './util/localize.mjs';
+import { FinesseOverride } from './targeted/target-overides/finesse-override.mjs';
 
 Hooks.once('pf1PostReady', () => migrate());
 
@@ -51,11 +52,12 @@ async function setEffectNotesHTMLWrapper(wrapped) {
  * @param {object} obj
  * @param {boolean} [obj.noAttack]
  * @param {unknown} [obj.bonus]
- * @param {unknown[]} [obj.extraParts]
+ * @param {string[]} [obj.extraParts]
  * @param {boolean} [obj.critical] Whether or not this roll is a for a critical confirmation
  * @param {object} [obj.conditionalParts]
  */
 async function chatAttackAddAttack(wrapped, { noAttack = false, bonus = null, extraParts = [], critical = false, conditionalParts = {} }) {
+    await LocalHookHandler.fireHookNoReturnAsync(localHooks.preRollChatAttackAddAttack, this, { noAttack, bonus, extraParts, critical, conditionalParts });
     await wrapped({ noAttack, bonus, extraParts, critical, conditionalParts });
     await LocalHookHandler.fireHookNoReturnAsync(localHooks.chatAttackAddAttack, this, { noAttack, bonus, extraParts, critical, conditionalParts });
 }
@@ -154,7 +156,10 @@ function prepareItemData(wrapped, final) {
     FormulaCacheHelper.cacheFormulas(item, rollData);
     LocalHookHandler.fireHookNoReturnSync(localHooks.prepareData, item, rollData);
     ifDebug(() => {
-        if (!foundry.utils.objectsEqual({ bonuses: [], targets: [] }, item[MODULE_NAME])) {
+        if (!foundry.utils.objectsEqual(
+            { bonuses: [], targets: [] },
+            { bonuses: item[MODULE_NAME].bonuses, targets: item[MODULE_NAME].targets },
+        )) {
             console.debug(`Cached info for '${item.name}':`, item[MODULE_NAME]);
         }
     });
@@ -309,6 +314,26 @@ function itemActionEnhancementBonus(wrapped) {
 }
 
 /**
+ * @this {ItemAction}
+ * @param {(args: { rollData?: RollData}) => Record<string, string>} wrapped
+ * @param {object} [options]
+ * @param {RollData} [options.rollData] - Pre-determined roll data. If not provided, finds the action's own roll data.
+ * @returns {Record<string, string>} This action's labels
+ */
+function itemAction_getLabels(wrapped, { rollData } = {}) {
+    const labels = wrapped({ rollData });
+
+    if (this.hasSave && rollData) {
+        const seed = { dc: 0 };
+        LocalHookHandler.fireHookNoReturnSync(localHooks.modifyActionLabelDC, this, seed);
+        const totalDC = rollData.dc + (rollData.dcBonus ?? 0) + seed.dc;
+        labels.save = game.i18n.format("PF1.DCThreshold", { threshold: totalDC });
+    }
+
+    return labels;
+}
+
+/**
  * Safely get the result of a roll, returns 0 if unsafe.
  * @param {string | number} formula - The string that should resolve to a number
  * @param {Nullable<RollData>} data - The roll data used for resolving any variables in the formula
@@ -457,7 +482,7 @@ function itemAttackFromItem(wrapped, item) {
 
         if (item instanceof pf1.documents.item.ItemWeaponPF && item.system.properties.fin) {
             data.system.flags.boolean ||= {};
-            data.system.flags.boolean['finesse-override'] = true;
+            data.system.flags.boolean[FinesseOverride.key] = true;
         }
 
         const flags = item.flags?.[MODULE_NAME] || {};
@@ -483,11 +508,12 @@ Hooks.once('init', () => {
     libWrapper.register(MODULE_NAME, 'pf1.applications.actor.ActorSheetPF.prototype._getTooltipContext', getDamageTooltipSources, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.critRange', itemActionCritRangeWrapper, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.enhancementBonus', itemActionEnhancementBonus, libWrapper.WRAPPER);
+    libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.getLabels', itemAction_getLabels, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.rollAttack', itemActionRollAttack, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.rollDamage', itemActionRollDamage, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.dice.d20Roll', d20RollWrapper, libWrapper.WRAPPER);
-    libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorPF.prototype.getSkillInfo', actorGetSkillInfo, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorBasePF.prototype.prepareEmbeddedDocuments', actor_prepareEmbeddedDocuments, libWrapper.OVERRIDE);
+    libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorPF.prototype.getSkillInfo', actorGetSkillInfo, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorPF.prototype.rollSkill', actorRollSkill, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemAttackPF.fromItem', itemAttackFromItem, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype._prepareDependentData', prepareItemData, libWrapper.WRAPPER);

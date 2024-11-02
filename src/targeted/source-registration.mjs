@@ -16,6 +16,10 @@ export class Sources {
             const target = /** @type {RollBonusesAPI['sources']['BaseTarget']} */ (/** @type {unknown} */ (source));
             api.targetTypeMap[source.key] = target;
         }
+        else if (source.prototype instanceof api.sources.BaseTargetOverride) {
+            const targetOverride = /** @type {RollBonusesAPI['sources']['BaseTargetOverride']} */ (/** @type {unknown} */ (source));
+            api.targetOverrideTypeMap[source.key] = targetOverride;
+        }
     }
 
     static {

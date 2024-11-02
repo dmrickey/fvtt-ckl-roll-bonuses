@@ -12,6 +12,20 @@
             <div class="sources">
                 <div>
                     <h2>
+                        {{ localize 'ckl-roll-bonuses.picker.bonuses.label' }}
+                        <a
+                            data-tooltip="{{localize 'ckl-roll-bonuses.picker.bonuses.tooltip'}}"
+                            data-journal="Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.PiyJbkTuzKHugPSk"
+                        >
+                            <i class="fas fa-book"></i>
+                        </a>
+                    </h2>
+                    {{#each bonuses}}
+                    {{> "modules/ckl-roll-bonuses/hbs/bonus-picker-item.hbs"}}
+                    {{/each}}
+                </div>
+                <div>
+                    <h2>
                         {{ localize 'ckl-roll-bonuses.picker.targets.label' }}
                         <a
                             data-tooltip="{{localize 'ckl-roll-bonuses.picker.targets.tooltip'}}"
@@ -40,15 +54,15 @@
                 </div>
                 <div>
                     <h2>
-                        {{ localize 'ckl-roll-bonuses.picker.bonuses.label' }}
+                        {{ localize 'ckl-roll-bonuses.picker.target-overrides.label' }}
                         <a
-                            data-tooltip="{{localize 'ckl-roll-bonuses.picker.bonuses.tooltip'}}"
-                            data-journal="Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.PiyJbkTuzKHugPSk"
+                            data-tooltip="{{localize 'ckl-roll-bonuses.picker.target-overrides.tooltip'}}"
+                            data-journal="Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.IpRhJqZEX2TUarSX"
                         >
                             <i class="fas fa-book"></i>
                         </a>
                     </h2>
-                    {{#each bonuses}}
+                    {{#each targetOverrides}}
                     {{> "modules/ckl-roll-bonuses/hbs/bonus-picker-item.hbs"}}
                     {{/each}}
                 </div>

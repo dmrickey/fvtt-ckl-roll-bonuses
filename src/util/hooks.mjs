@@ -18,12 +18,14 @@ export const localHooks = /** @type {const} */ ({
     actorRollSkill: `${MODULE_NAME}_actorRollSkill`,
     cacheBonusTypeOnActor: `${MODULE_NAME}_cacheBonusTypeOnActor`,
     chatAttackAddAttack: `${MODULE_NAME}_chatAttackAddAttack`,
+    preRollChatAttackAddAttack: `${MODULE_NAME}_preRollChatAttackAddAttack`,
     chatAttackEffectNotes: `${MODULE_NAME}_chatAttackEffectNotes`,
     initItemActionRollData: `${MODULE_NAME}_initItemActionRollData`,
     itemActionCritRangeWrapper: `${MODULE_NAME}_itemActionCritRangeWrapper`,
     itemActionEnhancementBonus: `${MODULE_NAME}_itemActionEnhancementBonus`,
     itemActionRollAttack: `${MODULE_NAME}_itemActionRollAttack`,
     itemActionRollDamage: `${MODULE_NAME}_itemActionRollDamage`,
+    modifyActionLabelDC: `${MODULE_NAME}_modifyActionLabelDC`,
     patchChangeValue: `${MODULE_NAME}_patchChangeValue`,
     prepareData: `${MODULE_NAME}_prepareData`,
     updateItemActionRollData: `${MODULE_NAME}_updateItemActionRollData`,
@@ -69,7 +71,14 @@ export class LocalHookHandler {
     /**
      * @overload
      * @param {typeof localHooks.chatAttackAddAttack} hook
-     * @param {(chatAttack: ChatAttack,  args: { noAttack: boolean, bonus: unknown, extraParts: unknown[], critical: boolean, conditionalParts: object }) => Promise<void>} func
+     * @param {(chatAttack: ChatAttack,  args: { noAttack: boolean, bonus: unknown, extraParts: string[], critical: boolean, conditionalParts: object }) => Promise<void>} func
+     * @returns {void}
+     */
+
+    /**
+     * @overload
+     * @param {typeof localHooks.preRollChatAttackAddAttack} hook
+     * @param {(chatAttack: ChatAttack,  args: { noAttack: boolean, bonus: unknown, extraParts: string[], critical: boolean, conditionalParts: object }) => Promise<void>} func
      * @returns {void}
      */
 
@@ -104,7 +113,7 @@ export class LocalHookHandler {
     /**
      * @overload
      * @param {typeof localHooks.patchChangeValue} hook
-     * @param {(value: number | string, itemChange: ItemChange) => number | string} func
+     * @param {(value: number | string, type: BonusTypes, actor: Nullable<ActorPF>) => number | string} func
      * @returns {void}
      */
 
@@ -133,6 +142,13 @@ export class LocalHookHandler {
      * @overload
      * @param {typeof localHooks.itemActionRollDamage} hook
      * @param {(seed: ItemActionRollAttackHookArgs, action: ItemAction, data: RollData, index: number) => void} func
+     * @returns {void}
+     */
+
+    /**
+     * @overload
+     * @param {typeof localHooks.modifyActionLabelDC} hook
+     * @param {(action: ItemAction, seed: {dc: number}) => void} func
      * @returns {void}
      */
 
@@ -166,7 +182,8 @@ export class LocalHookHandler {
      * @overload
      * @param {typeof localHooks.patchChangeValue} hook
      * @param {number | string} seed
-     * @param {ItemChange} itemChange
+     * @param {BonusTypes} type
+     * @param {Nullable<ActorPF>} actor
      * @returns {number | string}
      */
 
@@ -198,9 +215,17 @@ export class LocalHookHandler {
 
     /**
      * @overload
+     * @param {typeof localHooks.preRollChatAttackAddAttack} hook
+     * @param {ChatAttack} chatAttack
+     * @param {{ noAttack: boolean, bonus: unknown, extraParts: string[], critical: boolean, conditionalParts: object }} args
+     * @returns {Promise<void>}
+     */
+
+    /**
+     * @overload
      * @param {typeof localHooks.chatAttackAddAttack} hook
      * @param {ChatAttack} chatAttack
-     * @param {{ noAttack: boolean, bonus: unknown, extraParts: unknown[], critical: boolean, conditionalParts: object }} args
+     * @param {{ noAttack: boolean, bonus: unknown, extraParts: string[], critical: boolean, conditionalParts: object }} args
      * @returns {Promise<void>}
      */
 
@@ -280,6 +305,14 @@ export class LocalHookHandler {
      * @overload
      * @param {typeof localHooks.cacheBonusTypeOnActor} hook
      * @param {ItemPF} item
+     * @returns {void}
+     */
+
+    /**
+     * @overload
+     * @param {typeof localHooks.modifyActionLabelDC} hook
+     * @param {ItemAction} action
+     * @param {{ dc: number}} seed
      * @returns {void}
      */
 

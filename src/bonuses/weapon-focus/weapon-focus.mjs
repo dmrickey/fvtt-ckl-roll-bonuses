@@ -10,13 +10,13 @@ import { signed } from '../../util/to-signed-string.mjs';
 import { uniqueArray } from "../../util/unique-array.mjs";
 import { SpecificBonuses } from '../all-specific-bonuses.mjs';
 import {
-    gnomeWeaponFocusId,
-    greaterWeaponFocusId,
+    gnomeWeaponFocusCompendiumId,
+    greaterWeaponFocusCompendiumId,
     greaterWeaponFocusKey,
     mythicWeaponFocusKey,
-    mythicWeaponFocusId,
+    mythicWeaponFocusCompendiumId,
     racialWeaponFocusKey,
-    weaponFocusId,
+    weaponFocusCompendiumId,
     weaponFocusKey,
 } from "./ids.mjs";
 
@@ -66,11 +66,8 @@ registerItemHint((hintcls, _actor, item, _data) => {
 
 // register hint on focused weapon/attack
 registerItemHint((hintcls, actor, item, _data) => {
-    if (!(item instanceof pf1.documents.item.ItemWeaponPF || item instanceof pf1.documents.item.ItemAttackPF)) {
-        return;
-    }
-
     const baseTypes = item.system.baseTypes;
+    if (!baseTypes?.length) return;
 
     const isFocused = intersects(baseTypes, getFocusedWeapons(actor, weaponFocusKey));
     const isGreater = intersects(baseTypes, getFocusedWeapons(actor, greaterWeaponFocusKey));
@@ -106,11 +103,9 @@ function getAttackSources(item, sources) {
     const actor = item.actor;
     if (!actor) return sources;
 
-    if (!(item instanceof pf1.documents.item.ItemWeaponPF || item instanceof pf1.documents.item.ItemAttackPF)) {
-        return sources;
-    }
-
     const baseTypes = item.system.baseTypes;
+    if (!baseTypes?.length) return sources;
+
     let value = 0;
     let name = localizeBonusLabel(weaponFocusKey);
 
@@ -139,9 +134,6 @@ Hooks.on(customGlobalHooks.itemGetAttackSources, getAttackSources);
  * @param {ActionUse} actionUse
  */
 function addWeaponFocusBonus({ actor, item, shared }) {
-    if (!(item instanceof pf1.documents.item.ItemWeaponPF || item instanceof pf1.documents.item.ItemAttackPF)) {
-        return;
-    }
     if (!actor || !item.system.baseTypes?.length) return;
 
     const baseTypes = item.system.baseTypes;
@@ -183,14 +175,14 @@ Hooks.on('renderItemSheet', (
 
     const name = item?.name?.toLowerCase() ?? '';
     const sourceId = item?.flags.core?.sourceId ?? '';
-    const isGreater = item.hasItemBooleanFlag(greaterWeaponFocusId)
+    const isGreater = item.hasItemBooleanFlag(greaterWeaponFocusKey)
         || (name.includes(Settings.weaponFocus) && name.includes(LanguageSettings.greater))
-        || sourceId.includes(greaterWeaponFocusId);
+        || sourceId.includes(greaterWeaponFocusCompendiumId);
     const isMythic = item.hasItemBooleanFlag(mythicWeaponFocusKey)
         || (name.includes(Settings.weaponFocus) && name.includes(LanguageSettings.mythic))
-        || sourceId.includes(mythicWeaponFocusId);
+        || sourceId.includes(mythicWeaponFocusCompendiumId);
     const isRacial = item.hasItemBooleanFlag(racialWeaponFocusKey)
-        || sourceId.includes(gnomeWeaponFocusId);
+        || sourceId.includes(gnomeWeaponFocusCompendiumId);
 
     if (isGreater || isMythic) {
         key = isGreater ? greaterWeaponFocusKey : mythicWeaponFocusKey;
@@ -205,17 +197,14 @@ Hooks.on('renderItemSheet', (
     }
     else if (item.hasItemBooleanFlag(weaponFocusKey)
         || (name.includes(Settings.weaponFocus) && !isRacial)
-        || sourceId.includes(weaponFocusId)
+        || sourceId.includes(weaponFocusCompendiumId)
     ) {
         key = weaponFocusKey;
-        choices = uniqueArray(actor?.items
-            ?.filter(
-                /** @returns {item is ItemWeaponPF | ItemAttackPF} */
-                (item) => item.type === 'weapon' || item.type === 'attack')
+        choices = uniqueArray([...(actor?.items ?? [])]
             .flatMap((item) => item.system.baseTypes ?? []));
     }
 
-    if (key && !item.hasItemBooleanFlag(key)) {
+    if (isEditable && key && !item.hasItemBooleanFlag(key)) {
         item.addItemBooleanFlag(key);
     }
     else if (!key) {
@@ -233,3 +222,69 @@ Hooks.on('renderItemSheet', (
         inputType: 'specific-bonus',
     });
 });
+
+/**
+ * @param {ItemPF} item
+ * @param {object} data
+ * @param {{temporary: boolean}} param2
+ * @param {string} id
+ */
+const onCreate = (item, data, { temporary }, id) => {
+    if (!(item instanceof pf1.documents.item.ItemPF)) return;
+    if (temporary) return;
+
+    const name = item?.name?.toLowerCase() ?? '';
+    const sourceId = item?.flags.core?.sourceId ?? '';
+    const isRegular = name === Settings.weaponFocus
+        || sourceId.includes(weaponFocusCompendiumId);
+    const isGreater = (name.includes(Settings.weaponFocus) && name.includes(LanguageSettings.greater))
+        || sourceId.includes(greaterWeaponFocusCompendiumId);
+    const isMythic = (name.includes(Settings.weaponFocus) && name.includes(LanguageSettings.mythic))
+        || sourceId.includes(mythicWeaponFocusCompendiumId);
+
+    let focused = '';
+    if (item.actor) {
+        if (isRegular) {
+            focused = uniqueArray([...(item.actor?.items ?? [])]
+                .flatMap((item) => item.system.baseTypes ?? []))[0] || '';
+        }
+        else if (isGreater || isMythic) {
+            focused = getFocusedWeapons(item.actor, weaponFocusKey)[0] || '';
+        }
+    }
+
+    if (isMythic) {
+        item.updateSource({
+            [`system.flags.boolean.${mythicWeaponFocusKey}`]: true,
+        });
+
+        if (focused && !item.flags[MODULE_NAME]?.[mythicWeaponFocusKey]) {
+            item.updateSource({
+                [`flags.${MODULE_NAME}.${mythicWeaponFocusKey}`]: focused,
+            });
+        }
+    }
+    else if (isGreater) {
+        item.updateSource({
+            [`system.flags.boolean.${greaterWeaponFocusKey}`]: true,
+        });
+
+        if (focused && !item.flags[MODULE_NAME]?.[greaterWeaponFocusKey]) {
+            item.updateSource({
+                [`flags.${MODULE_NAME}.${greaterWeaponFocusKey}`]: focused,
+            });
+        }
+    }
+    else if (isRegular) {
+        item.updateSource({
+            [`system.flags.boolean.${weaponFocusKey}`]: true,
+        });
+
+        if (focused && !item.flags[MODULE_NAME]?.[weaponFocusKey]) {
+            item.updateSource({
+                [`flags.${MODULE_NAME}.${weaponFocusKey}`]: focused,
+            });
+        }
+    }
+};
+Hooks.on('preCreateItem', onCreate);

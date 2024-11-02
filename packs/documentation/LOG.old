@@ -1,14 +1,12 @@
-2024/10/11-18:55:00.702 5108 Recovering log #735
-2024/10/11-18:55:00.705 5108 Delete type=0 #735
-2024/10/11-18:55:00.705 5108 Delete type=3 #733
-2024/10/11-19:15:28.397 748c Level-0 table #741: started
-2024/10/11-19:15:28.398 748c Level-0 table #741: 13991 bytes OK
-2024/10/11-19:15:28.399 748c Delete type=0 #739
-2024/10/11-19:15:28.399 748c Manual compaction at level-0 from '!journal!FrG2K3YAM1jdSxcC' @ 72057594037927935 : 1 .. '!journal.pages!FrG2K3YAM1jdSxcC.zHKvVEnQ3jAyUiKn' @ 0 : 0; will stop at '!journal.pages!FrG2K3YAM1jdSxcC.iurMG1TBoX3auh5z' @ 2996 : 1
-2024/10/11-19:15:28.399 748c Compacting 1@0 + 1@1 files
-2024/10/11-19:15:28.401 748c Generated table #742@0: 10 keys, 39582 bytes
-2024/10/11-19:15:28.401 748c Compacted 1@0 + 1@1 files => 39582 bytes
-2024/10/11-19:15:28.402 748c compacted to: files[ 0 1 0 0 0 0 0 ]
-2024/10/11-19:15:28.402 748c Delete type=2 #737
-2024/10/11-19:15:28.402 748c Delete type=2 #741
-2024/10/11-19:15:28.405 748c Manual compaction at level-0 from '!journal.pages!FrG2K3YAM1jdSxcC.iurMG1TBoX3auh5z' @ 2996 : 1 .. '!journal.pages!FrG2K3YAM1jdSxcC.zHKvVEnQ3jAyUiKn' @ 0 : 0; will stop at (end)
+2024/11/01-13:12:56.584 1588 Delete type=3 #1
+2024/11/02-00:17:09.264 5780 Level-0 table #851: started
+2024/11/02-00:17:09.267 5780 Level-0 table #851: 234157 bytes OK
+2024/11/02-00:17:09.268 5780 Delete type=0 #849
+2024/11/02-00:17:09.271 5780 Manual compaction at level-0 from '!journal!FrG2K3YAM1jdSxcC' @ 72057594037927935 : 1 .. '!journal.pages!FrG2K3YAM1jdSxcC.zHKvVEnQ3jAyUiKn' @ 0 : 0; will stop at '!journal.pages!FrG2K3YAM1jdSxcC.zHKvVEnQ3jAyUiKn' @ 3577 : 1
+2024/11/02-00:17:09.271 5780 Compacting 2@0 + 0@1 files
+2024/11/02-00:17:09.273 5780 Generated table #852@0: 11 keys, 42667 bytes
+2024/11/02-00:17:09.273 5780 Compacted 2@0 + 0@1 files => 42667 bytes
+2024/11/02-00:17:09.274 5780 compacted to: files[ 0 1 0 0 0 0 0 ]
+2024/11/02-00:17:09.274 5780 Delete type=2 #844
+2024/11/02-00:17:09.274 5780 Delete type=2 #851
+2024/11/02-00:17:09.276 5780 Manual compaction at level-0 from '!journal.pages!FrG2K3YAM1jdSxcC.zHKvVEnQ3jAyUiKn' @ 3577 : 1 .. '!journal.pages!FrG2K3YAM1jdSxcC.zHKvVEnQ3jAyUiKn' @ 0 : 0; will stop at (end)

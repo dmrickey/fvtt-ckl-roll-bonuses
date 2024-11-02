@@ -13,6 +13,14 @@ export class BaseSource {
     static getHints(source, target = undefined) { return; }
 
     /**
+     * Whether or not this Source should be available in the picker application
+     *
+     * @abstract
+     * @returns { boolean }
+     */
+    static get gmOnlyForPicker() { return false; }
+
+    /**
      * Initialize any source-specific settings.
      *
      * @abstract
@@ -31,22 +39,13 @@ export class BaseSource {
      * @abstract
      * @returns {string}
      */
-    static get journal() { throw new Error('must be overridden') }
+    static get journal() { throw new Error('must be overridden'); }
 
     /** @returns { string } */
     static get key() { return `${this.sourceBaseType}_${this.sourceKey}`; }
 
     /** @returns {string} */
     static get label() { return localizeBonusLabel(this.sourceKey); }
-
-    /**
-     * Prepare data on any item so that it can be referenced by a source later
-     *
-     * @abstract
-     * @param {ItemPF} item
-     * @param {RollData} rollData
-     */
-    static prepareBaseData(item, rollData) { }
 
     /**
      * Prepare data on the source that it needs to reference later
@@ -69,14 +68,6 @@ export class BaseSource {
 
     /** @abstract @returns { string } */
     static get sourceBaseType() { throw new Error('must be overridden'); }
-
-    /**
-     * Whether or not this Source should be available in the picker application
-     *
-     * @abstract
-     * @returns { boolean }
-     */
-    static get gmOnlyForPicker() { return false; }
 
     /** @abstract @returns { string } */
     static get sourceKey() { throw new Error('must be overridden'); }

@@ -27,7 +27,8 @@ const setLabelKey = (id) => {
 };
 
 export {
-    key as changeTypeOffsetKey,
+    key as changeKey,
+    changeTypeKey,
     formulaKey as changeTypeOffsetFormulaKey,
 }
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#change-modifier';
@@ -44,17 +45,17 @@ const getOffsetType = (item) => item.getFlag(MODULE_NAME, setTypeKey) || setType
 
 /**
  * @param {number | string} value
- * @param {ItemChange} itemChange
+ * @param {BonusTypes} type
+ * @param {Nullable<ActorPF>} actor
  * @returns {number | string}
  */
-function patchChangeValue(value, itemChange) {
-    const actor = itemChange.parent?.actor;
+function patchChangeValue(value, type, actor) {
     if (!actor) {
         return value;
     }
 
     const bonuses = getCachedBonuses(actor, key)
-        .filter((x) => x.getFlag(MODULE_NAME, changeTypeKey) === itemChange.type);
+        .filter((x) => x.getFlag(MODULE_NAME, changeTypeKey) === type);
     if (!bonuses.length) {
         return value;
     }

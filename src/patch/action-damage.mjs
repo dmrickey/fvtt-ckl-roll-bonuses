@@ -1,6 +1,11 @@
 // @ts-nocheck
 
+import { getMartialFocusCondtional } from '../bonuses/martial-focus.mjs';
+import { getGreaterWeaponSpecializaitonConditional } from '../bonuses/weapon-specialization/greater-weapon-specialization.mjs';
+import { getWeaponSpecializaitonConditional } from '../bonuses/weapon-specialization/weapon-specialization.mjs';
+import { MODULE_NAME } from '../consts.mjs';
 import { handleBonusesFor } from '../target-and-bonus-join.mjs';
+import { truthiness } from '../util/truthiness.mjs';
 
 /**
  * Get action's damage formula.
@@ -15,8 +20,11 @@ import { handleBonusesFor } from '../target-and-bonus-join.mjs';
 function actionDamage(action, { simplify = true, strict = true } = {}) {
     const actor = action.actor,
         item = action.item,
-        actorData = actor?.system,
-        actionData = action.data;
+        actorData = actor?.system;
+
+    /** BEGIN OVERRIDE */
+    const actionData = deepClone(action.data);
+    /** END OVERRIDE */
 
     const parts = [];
 
@@ -28,6 +36,32 @@ function actionDamage(action, { simplify = true, strict = true } = {}) {
         },
     };
 
+    /** BEGIN OVERRIDE */
+    if (!action[MODULE_NAME]?.conditionals) {
+        // item[MODULE_NAME] ||= {};
+        item[MODULE_NAME].conditionals ||= [];
+        handleBonusesFor(
+            action,
+            (bonusType, sourceItem) => {
+                const conditionals = [];
+                conditionals.push(...(bonusType.getConditionals(sourceItem) ?? [])
+                    .flatMap(x => x)
+                    .filter(truthiness)
+                    .flatMap(x => x.data.modifiers));
+                item[MODULE_NAME].conditionals?.push(...conditionals);
+            }
+        );
+        const extras = [
+            getWeaponSpecializaitonConditional(item)?.data.modifiers[0],
+            getGreaterWeaponSpecializaitonConditional(item)?.data.modifiers[0],
+            getMartialFocusCondtional(item)?.data.modifiers[0],
+        ].filter(truthiness);
+        item[MODULE_NAME].conditionals.push(...extras);
+    }
+
+    const conditionals = item[MODULE_NAME]?.conditionals || [];
+    /** END OVERRIDE */
+
     const handleFormula = (formula, change) => {
         try {
             switch (typeof formula) {
@@ -37,13 +71,10 @@ function actionDamage(action, { simplify = true, strict = true } = {}) {
                     const _rd = formula.indexOf("@") >= 0 ? change?.parent?.getRollData() ?? lazy.rollData : {};
                     const rd = { ..._rd };
                     if (!isNaN(rd.size)) {
-                        handleBonusesFor(
-                            action,
-                            (bonusType, sourceItem) => rd.size += bonusType.getConditional?.(sourceItem)?.modifiers
-                                .filter((x) => x.target === 'size')
-                                .map((x) => RollPF.safeTotal(x.formula))
-                                .reduce((acc, x) => acc + x, 0) ?? 0
-                        );
+                        rd.size += conditionals
+                            .filter((x) => x.target === 'size')
+                            .map((x) => RollPF.safeTotal(x.formula))
+                            .reduce((acc, x) => acc + x, 0);
                         /** END OVERRIDE */
                     }
                     if (formula != 0) {
@@ -61,6 +92,16 @@ function actionDamage(action, { simplify = true, strict = true } = {}) {
             parts.push("NaN");
         }
     };
+
+    /** BEGIN OVERRIDE */
+    /** @type {ItemConditionalModifierData['subTarget'][]} */
+    const subTargets = ['allDamage', 'attack_0'];
+    const allDamageParts = conditionals
+        .filter((x) => x.target === 'damage' && subTargets.includes(x.subTarget) && x.critical === 'normal' && !!x.formula)
+        .map(x => ({ formula: x.formula, type: x.damageType }));
+
+    actionData.damage.parts.push(...allDamageParts);
+    /** END OVERRIDE */
 
     const handleParts = (parts) => parts.forEach(({ formula }) => handleFormula(formula));
 
@@ -84,6 +125,14 @@ function actionDamage(action, { simplify = true, strict = true } = {}) {
         const dmgAblMod = dmgAblBaseMod >= 0 ? Math.floor(dmgAblBaseMod * ablDmgMult) : dmgAblBaseMod;
         if (dmgAblMod != 0) parts.push(dmgAblMod);
     }
+
+    /** BEGIN OVERRIDE */
+    const nonCritDamageParts = conditionals
+        .filter((x) => x.target === 'damage' && subTargets.includes(x.subTarget) && x.critical === 'nonCrit' && !!x.formula)
+        .map(x => ({ formula: x.formula, type: { custom: '', values: [x.type] } }));
+
+    actionData.damage.nonCritParts.push(...nonCritDamageParts);
+    /** END OVERRIDE */
 
     // Include damage parts that don't happen on crits
     handleParts(actionData.damage.nonCritParts);

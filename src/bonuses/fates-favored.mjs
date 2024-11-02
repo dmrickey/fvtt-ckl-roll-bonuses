@@ -6,6 +6,7 @@ import { SpecificBonuses } from './all-specific-bonuses.mjs';
 
 const fatesFavored = 'fates-favored';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#fates-favored';
+const compendiumId = 'Cvgd7Dehxxj6Muup';
 
 SpecificBonuses.registerSpecificBonus({ journal, key: fatesFavored });
 
@@ -19,12 +20,12 @@ class Settings {
 
 /**
  * @param {number | string} value
- * @param {ItemChange} itemChange
+ * @param {BonusTypes} type
+ * @param {Nullable<ActorPF>} actor
  * @returns {number | string}
  */
-function patchChangeValue(value, itemChange) {
-    const actor = itemChange.parent?.actor;
-    value = itemChange.type === 'luck' && actor?.hasItemBooleanFlag(fatesFavored)
+function patchChangeValue(value, type, actor) {
+    value = type === 'luck' && actor?.hasItemBooleanFlag(fatesFavored)
         ? isNaN(+value) ? `${value} + 1` : (+value + 1)
         : value;
     return value;
@@ -72,10 +73,11 @@ Hooks.on('renderItemSheet', (
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
     const name = item?.name?.toLowerCase() ?? '';
+    const sourceId = item?.flags.core?.sourceId ?? '';
 
     const hasFlag = item.hasItemBooleanFlag(fatesFavored);
     if (!hasFlag) {
-        if (name === Settings.fatesFavored) {
+        if (isEditable && (name === Settings.fatesFavored || sourceId.includes(compendiumId))) {
             item.addItemBooleanFlag(fatesFavored);
         }
         return;
@@ -91,3 +93,25 @@ Hooks.on('renderItemSheet', (
         inputType: 'specific-bonus',
     });
 });
+
+/**
+ * @param {ItemPF} item
+ * @param {object} data
+ * @param {{temporary: boolean}} param2
+ * @param {string} id
+ */
+const onCreate = (item, data, { temporary }, id) => {
+    if (!(item instanceof pf1.documents.item.ItemPF)) return;
+    if (temporary) return;
+
+    const name = item?.name?.toLowerCase() ?? '';
+    const sourceId = item?.flags.core?.sourceId ?? '';
+    const hasBonus = item.hasItemBooleanFlag(fatesFavored);
+
+    if ((name === Settings.fatesFavored || sourceId.includes(compendiumId)) && !hasBonus) {
+        item.updateSource({
+            [`system.flags.boolean.${fatesFavored}`]: true,
+        });
+    }
+};
+Hooks.on('preCreateItem', onCreate);

@@ -78,7 +78,8 @@ export class HasBooleanFlagTarget extends BaseTarget {
                 ...api.SpecificBonuses.allBonusKeys,
                 ...api.allBonusTypesKeys,
                 ...api.allGlobalTypesKeys,
-                ...api.allTargetTypesKeys
+                ...api.allTargetTypesKeys,
+                ...api.allTargetOverrideTypesKeys,
             ]
         );
         choices.sort();

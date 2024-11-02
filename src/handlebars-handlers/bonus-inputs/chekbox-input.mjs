@@ -16,7 +16,8 @@ import { createTemplate, templates } from "../templates.mjs";
  * @param {object} options
  * @param {boolean} options.canEdit
  * @param {InputType} options.inputType
-*/
+ * @param {boolean} [options.isSubLabel]
+ */
 export function checkboxInput({
     current = undefined,
     item,
@@ -27,7 +28,8 @@ export function checkboxInput({
     tooltip = '',
 }, {
     canEdit,
-    inputType
+    inputType,
+    isSubLabel = false,
 }
 ) {
     if (current === undefined) {
@@ -40,6 +42,7 @@ export function checkboxInput({
         templates.checkboxInput,
         {
             current,
+            isSubLabel,
             journal,
             key,
             label,

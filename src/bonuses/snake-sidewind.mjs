@@ -7,6 +7,7 @@ import { SpecificBonuses } from './all-specific-bonuses.mjs';
 
 const key = 'snake-sidewind';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#snake-sidewind';
+const compendiumId = '6HVdbIFcRuTq8o7p';
 
 SpecificBonuses.registerSpecificBonus({ journal, key });
 
@@ -103,10 +104,11 @@ Hooks.on('renderItemSheet', (
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
     const name = item?.name?.toLowerCase() ?? '';
+    const sourceId = item?.flags.core?.sourceId ?? '';
 
     const hasFlag = item.hasItemBooleanFlag(key);
     if (!hasFlag) {
-        if (name === Settings.snakeSidewind) {
+        if (isEditable && (name === Settings.snakeSidewind || sourceId.includes(compendiumId))) {
             item.addItemBooleanFlag(key);
         }
         return;
@@ -122,3 +124,25 @@ Hooks.on('renderItemSheet', (
         inputType: 'specific-bonus',
     });
 });
+
+/**
+ * @param {ItemPF} item
+ * @param {object} data
+ * @param {{temporary: boolean}} param2
+ * @param {string} id
+ */
+const onCreate = (item, data, { temporary }, id) => {
+    if (!(item instanceof pf1.documents.item.ItemPF)) return;
+    if (temporary) return;
+
+    const name = item?.name?.toLowerCase() ?? '';
+    const sourceId = item?.flags.core?.sourceId ?? '';
+    const hasBonus = item.hasItemBooleanFlag(key);
+
+    if ((name === Settings.snakeSidewind || sourceId.includes(compendiumId)) && !hasBonus) {
+        item.updateSource({
+            [`system.flags.boolean.${key}`]: true,
+        });
+    }
+};
+Hooks.on('preCreateItem', onCreate);

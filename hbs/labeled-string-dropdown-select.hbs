@@ -1,8 +1,10 @@
 <div class="form-group roll-bonuses">
-    {{> "modules/ckl-roll-bonuses/hbs/label.hbs"}}
+    {{> "modules/ckl-roll-bonuses/hbs/label-partial.hbs"}}
     <div class="form-fields">
         {{#if readonly}}
+        {{#if current}}
         <input type="text" readonly value="{{current}}" />
+        {{/if}}
         {{else if errorMsg}}
         <div class="error-text">{{errorMsg}}</div>
         {{else}}

@@ -42,6 +42,10 @@ const templateData = {
             </div>
             {{/each}}
         </div>
+        {{else}}
+        <div class="no-tokens">
+            {{localize "ckl-roll-bonuses.applications.token.no-tokens"}}
+        </div>
         {{/each}}
     </div>
     <div class="control-group">

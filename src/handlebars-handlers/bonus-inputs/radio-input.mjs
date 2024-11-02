@@ -17,7 +17,8 @@ import { createTemplate, templates } from "../templates.mjs";
  * @param {object} options
  * @param {boolean} options.canEdit
  * @param {InputType} options.inputType
-*/
+ * @param {boolean} [options.isSubLabel]
+ */
 export function radioInput({
     current = undefined,
     item,
@@ -30,10 +31,14 @@ export function radioInput({
 }, {
     canEdit,
     inputType,
+    isSubLabel = false,
 }
 ) {
     if (current === undefined) {
-        current = item.getFlag(MODULE_NAME, key) || values[0].id;
+        current = item.getFlag(MODULE_NAME, key);
+        if (!current && values?.[0]?.id) {
+            item.setFlag(MODULE_NAME, key, values[0].id);
+        }
     }
     label ||= localizeBonusLabel(key);
     tooltip ||= localizeBonusTooltip(key);
@@ -42,6 +47,7 @@ export function radioInput({
         templates.radioInput,
         {
             current,
+            isSubLabel,
             journal,
             key,
             label,

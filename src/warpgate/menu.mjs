@@ -303,7 +303,7 @@ export const menu = async (prompts = {}, config = {}) => {
 
     return await new Promise((resolve) => {
         let content = dialogInputs(inputs);
-        /** @type Object<string, object> */
+        /** @type {Object<string, DialogButtonData>} */
         let buttonData = {};
         let def = buttons.at(-1)?.label;
         buttons.forEach((button) => {

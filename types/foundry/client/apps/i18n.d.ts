@@ -2,6 +2,7 @@
  * A helper class which assists with localization and string translation
  */
 class Localization {
+    lang: string;
     /**
      * Localize a string by drawing a translation from the available translations dictionary, if available
      * If a translation is not available, the original string is returned

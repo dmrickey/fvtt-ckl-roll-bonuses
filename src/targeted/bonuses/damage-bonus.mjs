@@ -1,16 +1,18 @@
 import { MODULE_NAME } from "../../consts.mjs";
 import { damageInput } from "../../handlebars-handlers/targeted/bonuses/damage.mjs";
-import { conditionalModToItemChangeForDamageTooltip } from "../../util/conditional-helpers.mjs";
+import { handleBonusTypeFor } from '../../target-and-bonus-join.mjs';
+import { changeTypeLabel } from '../../util/change-type-label.mjs';
+import { conditionalModToItemChangeForDamageTooltip, createChange, damagesTypeToString } from "../../util/conditional-helpers.mjs";
 import { LocalHookHandler, localHooks } from "../../util/hooks.mjs";
 import { localize } from "../../util/localize.mjs";
 import { signed } from '../../util/to-signed-string.mjs';
 import { truthiness } from "../../util/truthiness.mjs";
 import { BaseBonus } from "./base-bonus.mjs";
 
-/**
- * @extends BaseBonus
- */
+/** @extends BaseBonus */
 export class DamageBonus extends BaseBonus {
+    static get #changeKey() { return `${this.key}-change`; }
+
     /**
      * @inheritdoc
      * @override
@@ -24,13 +26,14 @@ export class DamageBonus extends BaseBonus {
     static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.PiyJbkTuzKHugPSk#damage'; }
 
     /**
-     * @inheritdoc
      * @override
+     * @inheritdoc
      */
     static get label() { return localize('PF1.DamageBonus'); }
 
     /**
      * @override
+     * @inheritdoc
      */
     static init() {
         LocalHookHandler.registerHandler(localHooks.prepareData, (item, rollData) => {
@@ -39,6 +42,13 @@ export class DamageBonus extends BaseBonus {
                 item[MODULE_NAME][this.key] ||= [];
                 const roll = RollPF.create(damage.formula, rollData);
                 item[MODULE_NAME][this.key].push(roll.simplifiedFormula);
+            });
+
+            const changes = item.getFlag(MODULE_NAME, this.#changeKey) || [];
+            changes.forEach((/** @type {{formula: string, type: BonusTypes}}*/ change) => {
+                item[MODULE_NAME][this.#changeKey] ||= [];
+                const roll = RollPF.create(change.formula, rollData);
+                item[MODULE_NAME][this.#changeKey].push(roll.simplifiedFormula);
             });
         });
     }
@@ -49,8 +59,9 @@ export class DamageBonus extends BaseBonus {
      * @returns {Nullable<string[]>}
      */
     static getHints(source) {
+        const changes = this.#getCachedDamageItemChange(source);
         const damages = this.#getCachedDamageBonuses(source);
-        if (!damages.length) {
+        if (!changes.length || !damages.length) {
             return;
         }
 
@@ -60,18 +71,17 @@ export class DamageBonus extends BaseBonus {
          * @returns
          */
         const typeLabel = (types) => {
-            const label = this.#damagesTypeToString(types);
+            const label = damagesTypeToString(types);
             return `[${label}]`;
         }
 
         /**
-         *
          * @param {Nullable<'crit' | 'nonCrit' | 'normal'>} crit
-         * @returns string
+         * @returns {string}
          */
         const critLabel = (crit) => crit ? localize(`crit-damage-label.${crit}`) : '';
 
-        const hints = damages
+        const damageHints = damages
             .filter((d) => !!d.formula?.trim())
             .map(({ formula, type, crit }) => ({
                 type,
@@ -80,10 +90,22 @@ export class DamageBonus extends BaseBonus {
                     const roll = RollPF.create(formula);
                     return roll.isDeterministic
                         ? signed(roll.evaluate({ async: false }).total)
-                        : formula;
+                        : `(${formula})`;
                 })(),
             }))
             .map((d) => `${d.formula}${typeLabel(d.type)}${critLabel(d.crit)}`);
+
+        /**
+         * @param {string | number} value
+         * @returns {string}
+         */
+        const changeTypeValue = (value) => typeof value === 'string' ? `(${value})` : signed(value);
+
+        const changeHints = changes
+            .filter((d) => !!d.value)
+            .map(({ value, type }) => `${changeTypeValue(value)}[${changeTypeLabel(/** @type {BonusTypes} */(type))}]`);
+
+        const hints = [...damageHints, ...changeHints];
 
         if (!hints.length) {
             return;
@@ -93,33 +115,43 @@ export class DamageBonus extends BaseBonus {
     }
 
     /**
-     * @override
      * @param {ItemPF} source
      * @returns {Nullable<ItemConditional>}
      */
-    static getConditional(source) {
+    static #getConditional(source) {
         const damages = this.#getCachedDamageBonuses(source);
-        const conditional = this.#createConditional(damages, source.name);
+        const conditional = this.#createConditionalData(damages, source.name);
         return conditional.modifiers?.length
-            ? conditional
+            ? new pf1.components.ItemConditional(conditional)
             : null;
     }
 
     /**
      * @override
+     * @inheritdoc
+     * @param {ItemPF} source
+     * @returns {Nullable<ItemConditional[]>}
+     */
+    static getConditionals(source) {
+        const conditional = this.#getConditional(source);
+        if (conditional) {
+            return [conditional]
+        }
+    }
+
+    /**
+     * @override
+     * @inheritdoc
      * @param {ItemPF} source
      * @returns {ItemChange[]}
      */
     static getDamageSourcesForTooltip(source) {
-        /** @type {ItemChange[]} */
-        let sources = [];
-
-        const conditional = this.getConditional(source);
+        const conditional = this.#getConditional(source);
         if (!conditional) {
-            return sources;
+            return [];
         }
 
-        sources = (conditional.modifiers ?? [])
+        const sources = (conditional.data.modifiers ?? [])
             .filter((mod) => mod.target === 'damage')
             .map((mod) => conditionalModToItemChangeForDamageTooltip(conditional, mod, { isDamage: true }))
             .filter(truthiness);
@@ -128,8 +160,8 @@ export class DamageBonus extends BaseBonus {
     }
 
     /**
-     * @inheritdoc
      * @override
+     * @inheritdoc
      * @param {object} options
      * @param {ActorPF | null} options.actor
      * @param {HTMLElement} options.html
@@ -141,6 +173,7 @@ export class DamageBonus extends BaseBonus {
             item,
             journal: this.journal,
             key: this.key,
+            changeKey: this.#changeKey,
             parent: html,
             tooltip: this.tooltip,
         }, {
@@ -160,50 +193,80 @@ export class DamageBonus extends BaseBonus {
         return damages.map((damage, i) => ({
             ...damage,
             formula: item[MODULE_NAME][this.key]?.[i],
-        }));
-    }
-
-    /**
-     * @param {TraitSelectorValuePlural} types
-     * @returns {string}
-     */
-    static #damagesTypeToString(types) {
-        if (!types.custom?.trim() && !types.values?.length) {
-            const untyped = pf1.registry.damageTypes.get('untyped')?.name;
-            if (!untyped) {
-                throw new Error("There's no `untyped` damage type in the pf1 config.");
-            }
-            return untyped;
-        }
-
-        const valueLookup = ( /** @type {DamageType['id']} */ t) => pf1.registry.damageTypes.getLabels()[t] || t;
-        /**
-         * @param {TraitSelectorValuePlural} t
-         */
-        // @ts-ignore
-        const typeToString = (t) => `${t.custom?.trim() ? `${t.custom.trim()}, ` : ''}${t.values.map(valueLookup).join(', ')}`;
-        return typeToString(types);
+        })).filter((x) => !!x.formula);
     }
 
     /**
      * @param {DamageInputModel[]} damageBonuses
      * @param {string} name
-     * @returns {ItemConditional}
+     * @returns {ItemConditionalData}
      */
-    static #createConditional(damageBonuses, name) {
+    static #createConditionalData(damageBonuses, name) {
         return {
             _id: foundry.utils.randomID(),
             default: true,
             name,
-            modifiers: damageBonuses?.map( /** @return {ItemConditionalModifier} */(bonus) => ({
+            modifiers: damageBonuses?.map( /** @return {ItemConditionalModifierData} */(bonus) => ({
                 _id: foundry.utils.randomID(),
                 critical: bonus.crit || 'normal', // normal | crit | nonCrit
                 damageType: bonus.type,
                 formula: bonus.formula,
                 subTarget: 'allDamage',
                 target: 'damage',
-                type: this.#damagesTypeToString(bonus.type),
+                type: damagesTypeToString(bonus.type),
             }) ?? []),
-        }
+        };
+    }
+
+    /**
+     * @param {ItemPF} source
+     * @returns {ItemChange[]}
+     */
+    static #getCachedDamageItemChange(source) {
+        /** @type {{formula: string, type: BonusTypes}[]} */
+        const flags = (source.getFlag(MODULE_NAME, this.#changeKey) || [])
+        const changes = flags
+            .map(({ type }, i) => ({
+                type: type || 'untyped',
+                value: source[MODULE_NAME][this.#changeKey]?.[i],
+            }))
+            .filter((x) => x.value?.trim())
+            .map(({ type, value }) => {
+                value = LocalHookHandler.fireHookWithReturnSync(localHooks.patchChangeValue, value, type, source.actor);
+                const typeName = pf1.config.bonusTypes[type] || type;
+                const name = `${source.name} (${typeName})`
+                const change = createChange({
+                    value,
+                    target: 'damage',
+                    type,
+                    name,
+                });
+                return change;
+            })
+            .filter((x) => !!x.value);
+
+        return changes;
+    }
+
+    static {
+        /**
+         * @this {ItemAction}
+         * @param {() => ItemChange[]} wrapped
+         */
+        function itemAction_damageSources(wrapped) {
+            const damageSources = wrapped() || [];
+            handleBonusTypeFor(
+                this,
+                DamageBonus,
+                (bonusType, sourceItem) => {
+                    const changes = bonusType.#getCachedDamageItemChange(sourceItem);
+                    damageSources.push(...changes);
+                }
+            );
+            return damageSources;
+        };
+        Hooks.once('init', () => {
+            libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.damageSources', itemAction_damageSources, libWrapper.WRAPPER);
+        });
     }
 }

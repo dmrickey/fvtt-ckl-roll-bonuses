@@ -51,9 +51,7 @@ registerItemHint((hintcls, _actor, item, _data) => {
 
 // register hint on focused weapon/attack
 registerItemHint((hintcls, actor, item, _data) => {
-    if (!(item instanceof pf1.documents.item.ItemWeaponPF || item instanceof pf1.documents.item.ItemAttackPF)
-        || !actor?.hasWeaponProficiency(item)
-    ) {
+    if (!item.system.baseTypes || !actor?.hasWeaponProficiency(item)) {
         return;
     }
 
@@ -68,10 +66,7 @@ registerItemHint((hintcls, actor, item, _data) => {
  * @param {ActionUse} actionUse
  */
 function addWeaponSpecialization({ actor, item, shared }) {
-    if (!(item instanceof pf1.documents.item.ItemWeaponPF || item instanceof pf1.documents.item.ItemAttackPF)
-        || !actor
-        || !item.system.baseTypes?.length
-    ) {
+    if (!actor || !item.system.baseTypes?.length) {
         return;
     }
 
@@ -85,13 +80,41 @@ Hooks.on(customGlobalHooks.actionUseAlterRollData, addWeaponSpecialization);
 
 /**
  * @param {ItemPF} item
+ * @returns {ItemConditional | undefined}
+ */
+export function getWeaponSpecializaitonConditional(item) {
+    const actor = item.actor;
+    if (!actor || !item.system.baseTypes?.length) {
+        return;
+    }
+
+    const baseTypes = item.system.baseTypes;
+    const specializations = getSpecializedWeapons(actor);
+    if (intersects(baseTypes, specializations)) {
+        return new pf1.components.ItemConditional({
+            _id: foundry.utils.randomID(),
+            default: true,
+            name: Settings.weaponSpecialization,
+            modifiers: [{
+                ...pf1.components.ItemConditionalModifier.defaultData,
+                _id: foundry.utils.randomID(),
+                critical: 'normal',
+                formula: '+2',
+                subTarget: 'allDamage',
+                target: 'damage',
+                type: 'untyped',
+            }],
+        });
+    }
+}
+
+/**
+ * @param {ItemPF} item
  * @param {ItemChange[]} sources
  */
 function getDamageTooltipSources(item, sources) {
     const actor = item.actor;
-    if (!actor
-        || !(item instanceof pf1.documents.item.ItemWeaponPF || item instanceof pf1.documents.item.ItemAttackPF)
-    ) {
+    if (!actor || !item.system.baseTypes?.length) {
         return sources;
     }
 
@@ -119,7 +142,7 @@ Hooks.on('renderItemSheet', (
     if (!hasKey) {
         const name = item?.name?.toLowerCase() ?? '';
         const sourceId = item?.flags.core?.sourceId ?? '';
-        if (name === Settings.weaponSpecialization || sourceId.includes(compendiumId)) {
+        if (isEditable && (name === Settings.weaponSpecialization || sourceId.includes(compendiumId))) {
             item.addItemBooleanFlag(key);
         }
         return;
@@ -140,3 +163,37 @@ Hooks.on('renderItemSheet', (
         inputType: 'specific-bonus',
     });
 });
+
+/**
+ * @param {ItemPF} item
+ * @param {object} data
+ * @param {{temporary: boolean}} param2
+ * @param {string} id
+ */
+const onCreate = (item, data, { temporary }, id) => {
+    if (!(item instanceof pf1.documents.item.ItemPF)) return;
+    if (temporary) return;
+
+    const name = item?.name?.toLowerCase() ?? '';
+    const sourceId = item?.flags.core?.sourceId ?? '';
+    const hasBonus = item.hasItemBooleanFlag(key);
+
+    let choice = '';
+    if (item.actor) {
+        choice = getFocusedWeapons(item.actor)[0] || '';
+    }
+
+    let updated = false;
+    if ((name === Settings.weaponSpecialization || sourceId.includes(compendiumId)) && !hasBonus) {
+        item.updateSource({
+            [`system.flags.boolean.${key}`]: true,
+        });
+        updated = true;
+    }
+    if ((hasBonus || updated) && choice && !item.flags[MODULE_NAME]?.[key]) {
+        item.updateSource({
+            [`flags.${MODULE_NAME}.${key}`]: choice,
+        });
+    }
+};
+Hooks.on('preCreateItem', onCreate);

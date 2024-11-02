@@ -20,7 +20,8 @@ import { createTemplate, templates } from "../templates.mjs";
  * @param {boolean} [options.isFormula]
  * @param {InputType} options.inputType
  * @param {true} [options.isModuleFlag] - true (default) if this is a data flag, false if this is a dictionary flag
-*/
+ * @param {boolean} [options.isSubLabel]
+ */
 export function textInput({
     choices = [],
     current = '',
@@ -34,6 +35,7 @@ export function textInput({
     canEdit,
     inputType,
     isFormula = true,
+    isSubLabel = false,
     placeholder = '',
 }) {
     current ||= item.getFlag(MODULE_NAME, key);
@@ -46,6 +48,7 @@ export function textInput({
             choices,
             current,
             isFormula,
+            isSubLabel,
             journal,
             key,
             label,

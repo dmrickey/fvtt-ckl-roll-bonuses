@@ -124,7 +124,7 @@ Hooks.on('renderItemSheet', (
     if (!hasKey) {
         const name = item?.name?.toLowerCase() ?? '';
         const sourceId = item?.flags.core?.sourceId ?? '';
-        if (name === Settings.armorFocus || sourceId.includes(compendiumId)) {
+        if (isEditable && (name === Settings.armorFocus || sourceId.includes(compendiumId))) {
             item.addItemBooleanFlag(key);
         }
         return;
@@ -151,3 +151,43 @@ Hooks.on('renderItemSheet', (
         inputType: 'specific-bonus',
     });
 });
+
+/**
+ * @param {ItemPF} item
+ * @param {object} data
+ * @param {{temporary: boolean}} param2
+ * @param {string} id
+ */
+const onCreate = (item, data, { temporary }, id) => {
+    if (!(item instanceof pf1.documents.item.ItemPF)) return;
+    if (temporary) return;
+
+    const name = item?.name?.toLowerCase() ?? '';
+    const sourceId = item?.flags.core?.sourceId ?? '';
+    const hasBonus = item.hasItemBooleanFlag(key);
+
+    let focused = '';
+    if (item.actor) {
+        focused = uniqueArray(item.actor.items
+            ?.filter(
+                /** @returns {item is ItemEquipmentPF} */
+                (_item) => _item.type === 'equipment'
+                    && _item instanceof pf1.documents.item.ItemEquipmentPF
+                    && _item.system.slot === 'armor')
+            .flatMap((_item) => _item.system.baseTypes ?? []))[0] || '';
+    }
+
+    let updated = false;
+    if ((name === Settings.armorFocus || sourceId.includes(compendiumId)) && !hasBonus) {
+        item.updateSource({
+            [`system.flags.boolean.${key}`]: true,
+        });
+        updated = true;
+    }
+    if ((hasBonus || updated) && focused && !item.flags[MODULE_NAME]?.[key]) {
+        item.updateSource({
+            [`flags.${MODULE_NAME}.${key}`]: focused,
+        });
+    }
+};
+Hooks.on('preCreateItem', onCreate);

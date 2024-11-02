@@ -18,9 +18,9 @@ export const mythicElementalFocusKey = 'elemental-focus-mythic';
 
 const allKeys = [elementalFocusKey, greaterElementalFocusKey, mythicElementalFocusKey];
 
-const elementalFocusId = '1frgqDSnQFiTq0MC';
-const greaterElementalFocusId = 'l4yE4RGFbORuDfp7';
-const mythicElementalFocusId = 'yelJyBhjWtiIMgci';
+const elementalFocusCompendiumId = '1frgqDSnQFiTq0MC';
+const greaterElementalFocusCompendiumId = 'l4yE4RGFbORuDfp7';
+const mythicElementalFocusCompendiumId = 'yelJyBhjWtiIMgci';
 
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#elemental-focus';
 
@@ -215,16 +215,16 @@ Hooks.on('renderItemSheet', (
     const name = item?.name?.toLowerCase() ?? '';
     const isElementalFocusFeat = item.hasItemBooleanFlag(elementalFocusKey) || (name.includes(Settings.elementalFocus) && item.type === 'feat' && item.subType !== 'classFeat');
     const sourceId = item?.flags.core?.sourceId ?? '';
-    if (isElementalFocusFeat || sourceId.includes(elementalFocusId)) {
+    if (isElementalFocusFeat || sourceId.includes(elementalFocusCompendiumId)) {
         key = elementalFocusKey;
     }
 
     const isGreater = item.hasItemBooleanFlag(greaterElementalFocusKey)
         || (isElementalFocusFeat && name.includes(LanguageSettings.greater))
-        || sourceId.includes(greaterElementalFocusId);
+        || sourceId.includes(greaterElementalFocusCompendiumId);
     const isMythic = item.hasItemBooleanFlag(mythicElementalFocusKey)
         || (isElementalFocusFeat && name.includes(LanguageSettings.mythic))
-        || sourceId.includes(mythicElementalFocusId);
+        || sourceId.includes(mythicElementalFocusCompendiumId);
 
     if (isGreater || isMythic) {
         key = isGreater ? greaterElementalFocusKey : mythicElementalFocusKey;
@@ -239,7 +239,7 @@ Hooks.on('renderItemSheet', (
         }
     }
 
-    if (key && !item.hasItemBooleanFlag(key)) {
+    if (isEditable && key && !item.hasItemBooleanFlag(key)) {
         item.addItemBooleanFlag(key);
     }
 
@@ -260,3 +260,65 @@ Hooks.on('renderItemSheet', (
         inputType: 'specific-bonus',
     });
 });
+
+/**
+ * @param {ItemPF} item
+ * @param {object} data
+ * @param {{temporary: boolean}} param2
+ * @param {string} id
+ */
+const onCreate = (item, data, { temporary }, id) => {
+    if (!(item instanceof pf1.documents.item.ItemPF)) return;
+    if (temporary) return;
+
+    const name = item?.name?.toLowerCase() ?? '';
+    const sourceId = item?.flags.core?.sourceId ?? '';
+
+    const isRegular = (name.includes(Settings.elementalFocus) && item.type === 'feat' && item.subType !== 'classFeat')
+        || sourceId.includes(elementalFocusCompendiumId);
+    const isGreater = (name.includes(Settings.elementalFocus) && name.includes(LanguageSettings.greater))
+        || sourceId.includes(greaterElementalFocusCompendiumId);
+    const isMythic = (name.includes(Settings.elementalFocus) && name.includes(LanguageSettings.mythic))
+        || sourceId.includes(mythicElementalFocusCompendiumId);
+
+    /** @type {damageElements[number]} */
+    let focused = damageElements[0];
+    if (item.actor && (isGreater || isMythic)) {
+        focused = getFocusedElements(item.actor, elementalFocusKey)[0] || '';
+    }
+
+    if (isMythic) {
+        item.updateSource({
+            [`system.flags.boolean.${mythicElementalFocusKey}`]: true,
+        });
+
+        if (focused && !item.flags[MODULE_NAME]?.[mythicElementalFocusKey]) {
+            item.updateSource({
+                [`flags.${MODULE_NAME}.${mythicElementalFocusKey}`]: focused,
+            });
+        }
+    }
+    else if (isGreater) {
+        item.updateSource({
+            [`system.flags.boolean.${greaterElementalFocusKey}`]: true,
+        });
+
+        if (focused && !item.flags[MODULE_NAME]?.[greaterElementalFocusKey]) {
+            item.updateSource({
+                [`flags.${MODULE_NAME}.${greaterElementalFocusKey}`]: focused,
+            });
+        }
+    }
+    else if (isRegular) {
+        item.updateSource({
+            [`system.flags.boolean.${elementalFocusKey}`]: true,
+        });
+
+        if (focused && !item.flags[MODULE_NAME]?.[elementalFocusKey]) {
+            item.updateSource({
+                [`flags.${MODULE_NAME}.${elementalFocusKey}`]: focused,
+            });
+        }
+    }
+};
+Hooks.on('preCreateItem', onCreate);

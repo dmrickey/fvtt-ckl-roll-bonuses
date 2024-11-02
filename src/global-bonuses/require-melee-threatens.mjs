@@ -2,7 +2,7 @@ import { PositionalHelper } from '../util/positional-helper.mjs';
 import { currentTargets } from '../util/get-current-targets.mjs';
 import { customGlobalHooks } from '../util/hooks.mjs'
 import { BaseGlobalBonus } from './base-global-bonus.mjs';
-import { addCheckToAttackDialog, hasFormData } from '../util/attack-dialog-helper.mjs';
+import { addCheckToAttackDialog, getFormData } from '../util/attack-dialog-helper.mjs';
 
 /** @extends {BaseGlobalBonus} */
 export class RequireMeleeThreatenGlobalBonus extends BaseGlobalBonus {
@@ -54,7 +54,7 @@ export class RequireMeleeThreatenGlobalBonus extends BaseGlobalBonus {
         if (RequireMeleeThreatenGlobalBonus.isDisabled() || RequireMeleeThreatenGlobalBonus.isDisabledForActor(actor)) {
             return;
         }
-        if (hasFormData(actionUse, RequireMeleeThreatenGlobalBonus.dialogDisableKey)) {
+        if (getFormData(actionUse, RequireMeleeThreatenGlobalBonus.dialogDisableKey)) {
             return;
         }
         if (!actor) {
@@ -93,7 +93,7 @@ export class RequireMeleeThreatenGlobalBonus extends BaseGlobalBonus {
      * @param {string[]} notes
      */
     static addSkipFootnote(actionUse, notes) {
-        if (hasFormData(actionUse, RequireMeleeThreatenGlobalBonus.dialogDisableKey)) {
+        if (getFormData(actionUse, RequireMeleeThreatenGlobalBonus.dialogDisableKey)) {
             notes.push(RequireMeleeThreatenGlobalBonus.disabledFootnote);
         }
     }

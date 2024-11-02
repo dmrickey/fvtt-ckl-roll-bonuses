@@ -53,7 +53,7 @@ function applyChange(actor, targets = null, { applySourceInfo = true, rollData }
         }
 
         // THIS IS MY ONLY CHANGE - MODIFY THE VALUE BEFORE IT'S USED BELOW
-        value = LocalHookHandler.fireHookWithReturnSync(localHooks.patchChangeValue, value, this);
+        value = LocalHookHandler.fireHookWithReturnSync(localHooks.patchChangeValue, value, this.type, this.parent?.actor);
         // END MY ONLY CHANGE
 
         this.value = value;

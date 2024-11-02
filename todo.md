@@ -10,14 +10,13 @@
     - [Script Call bonus](#script-call-bonus)
     - [AC bonus](#ac-bonus)
     - [Alignment](#alignment)
-    - [Conditional Bonus](#conditional-bonus)
+    - [Consume Item/Charge](#consume-itemcharge)
   - [Targets](#targets)
     - [Creature type/subtype](#creature-typesubtype)
     - [By Disposition](#by-disposition)
     - [All healing](#all-healing)
     - [Armor Target (useful for something like Magic Vestment)](#armor-target-useful-for-something-like-magic-vestment)
     - [Die Result](#die-result)
-    - [Secondary Attack](#secondary-attack)
     - [Skill Target](#skill-target)
     - [Spellbook target](#spellbook-target)
     - [Spell preparation Qty](#spell-preparation-qty)
@@ -54,14 +53,14 @@
 - [Add Quench Testings](#add-quench-testings)
 - [Add create hooks for initializing some items (like anything based off of name/id)](#add-create-hooks-for-initializing-some-items-like-anything-based-off-of-nameid)
 - [Add inpsiration checkbox to roll dialogs](#add-inpsiration-checkbox-to-roll-dialogs)
-- [Won't do](#wont-do)
-- [Refactor](#refactor)
 - [Skills](#skills)
 - [in pf1 V10](#in-pf1-v10)
 - [Not Possible](#not-possible)
 - [Range/Positional ideas](#rangepositional-ideas)
 - [Other Ideas](#other-ideas)
+- [PF1 v11](#pf1-v11)
 - [vnext](#vnext)
+- [v 2.16](#v-216)
 
 # TODO
 - Figure out a way to support multiple target groups on a single Item (so I can add `Favored Enemy (Human) +4` and `Favored Enemy (goblin) +2` on a single Item)
@@ -89,8 +88,8 @@
 ### Alignment
 - Actually align the weapon/attack instead of just adding typed damage
   - I can make it work but it won't do anything (the system doesn't show it in the attack, it's kinda pointless without extra functionality)
-### Conditional Bonus
-- See if I can make a way to add a conditional modifier into an attack dialog that can optionally be enabled for targeted attacks
+### Consume Item/Charge
+- consume a charge from <pick Item> when used
 
 ## Targets
 ### Creature type/subtype
@@ -107,8 +106,6 @@
 ### Die Result
 - When the die is (some value range)
   - Would allow for "1s turn to 2s" (e.g. target die = 1; bonus + 1)
-### Secondary Attack
-- target secondary natural attacks
 ### Skill Target
 - Include "smart groups" that will give options e.g.
   - specific ability skills (e.g. all int skills)
@@ -126,6 +123,8 @@
 ## Cleric
 ### Healing Domain - Healer's Blessing
 - Cure Spells are treated as if they're empowered (+50% healing)
+  - IsHealing target
+  - Empowered Bonus
 ## Psychic
 ### Phrenic Amplification
   - increases DC of `mind-affecting` spells by 1/2/3
@@ -181,12 +180,9 @@
 ## Bonus Improvements
 - Enhancement Bonus
   - add checkbox for "applies for DR" (some spell buffs don't appy for DR (e.g. Greater Magic Weapon))
-- Change Offset
-  - add a "set" option (in addition to +/-)
 
 ## Targeting
 - show warning if target has an inappropriate bonus
-- add checkbox to toggle between union (current implementation) and intersection (item has to supply all targeting requirements)
 
 # Housekeeping
 - Consolidate weapon hints (Weapon Focus, Specialization, Martial) - find a way to make them more concise
@@ -201,13 +197,8 @@
 - Has tooltip
 
 # Deprecate
-- Weapon Focus (use bonus targets instead)
-- Martial Focus (use bonus targets instead)
-- Weapon Specialization (use bonus targets instead)
 - as of v9, PF1 now defers Roll Bonuses. So that means that the `Bonus` on the Skill settings can go away
 - It should create a new Feature with a change that includes the current formula as part of migration for deleting this
-- all specific DC/CL bonuses (after v10 once descriptor-based targeting is available)
-- specific crit bonuses
 
 # Add Quench Testings
 # Add create hooks for initializing some items (like anything based off of name/id)
@@ -215,22 +206,6 @@
 # Add inpsiration checkbox to roll dialogs
 - https://gitlab.com/foundryvtt_pathfinder1e/foundryvtt-pathfinder1/-/merge_requests/2758
   - > "So actionUse.formData for actions and overriding _getFormData() for d20rolls"
-
-# Won't do
-- Add specific inputs for Improved Crit.
-  - handling crit bonuses is already complicated enough without adding in a third option
-
-# Refactor
-- `BaseTarget`'s `getSourcesFor` because every single one of them follows this pattern
-  - ```js
-    const item = doc instanceof pf1.documents.item.ItemPF
-        ? doc
-        : doc.item;
-
-    if (!item?.actor) {
-        return [];
-    }
-    ```
 
 # Skills
 - Condtional Bonus when taking 10
@@ -256,37 +231,27 @@
   - Needs a "Target" so that I can give out extra bonuses when flanking
     - Dirty Fighter Trait
     - Outflank (would need extra info about flank target) 
-- Range Penalties
-    - checkbox to ignore range penalties
 - IsAdjacent
 - IsSharingSquare
-- TargetEngagedInMelee
-  - (for shooting into combat penalties)
-- Higher Ground with melee bonus
-- Make sure melee weapon can reach
 
 # Other Ideas
 - Add Concealment
   - This would allow me to automatically add effect notes for each roll to automatically roll for concealment
   - And would allow automating rerolls for abilities like Weapon of the Chosen
 
+# PF1 v11
+- Type/Subtype targets are now viable.
+
 # vnext
-- apply auto-config on create to all auto-config stuff (see Precise Shot)
-  - Try to come up with a more generic framework for this
-- Add "target-able overrides" section to the configuration popup for Items that can have actions but don't have the necessary data
-  - Weapon Group (will be a new override)
-    - Will require creating a "get weapon groups" function that all "weapon group" targets/specific-bonuses use instead of doing their own lookup so that that one method can do the "Target override" lookup instead of needing to duplicate that logic in multiple places
-  - Weapon Base Type (will be a new override)
-    - features (e.g. Bombs) and spells (e.g. Rays)
-    - Will require creating a "get weapon base type" function that all "weapon base type" targets/specific-bonuses use instead of doing their own lookup so that that one method can do the "Target override" lookup instead of needing to duplicate that logic in multiple places
-  - Finesse (already exists)
-    - Will require creating a "get finessable target" function that all "finesse" targets/specific-bonuses use instead of doing their own lookup so that that one method can do the "Target override" lookup instead of needing to duplicate that logic in multiple places
 - Create new "Roll Bonuses" section for attack dialog inputs
-- Change all "is type" into a single target with checkboxes for various types it should allow
 - Replace "checklist-input" with a proper Item application instead of a warpgate menu
-- Update Auto-recognition stuff in "renderItemSheet" to use the same logic as martial-focus.mjs for specific bonuses
 - Add "Fortune configuration app" to help with configuring specific fortune abilities
 - Targeting
   - Add a configuration error if "this target is not configured"
 - Roll Bonuses button in header that goes "show me a list of items with bonuses". This can also have a button to auto-populate any that it thinks should have bonuses added
   - See example [https://gitlab.com/mxzf/adventure-uninstaller/-/blob/master/adventure-uninstaller.mjs](here)
+
+- Add "Weapon Focus" hint hook so Weapon Focus, Weapon Specialization, and Martial Focus can all use the sword icon hint
+
+# v 2.16
+- Audit Specific Bonus "click to expand" rules and make sure they're concise enough (_specifically_ looking at you, Weapon Focus)

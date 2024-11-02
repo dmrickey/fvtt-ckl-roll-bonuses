@@ -15,6 +15,7 @@ import { intersection } from '../util/array-intersects.mjs';
 const key = 'versatile-training';
 const selectedKey = 'versatile-training-selected';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#versatile-training';
+const compendiumId = 'ORQUp9lBAMxPhRVu';
 
 SpecificBonuses.registerSpecificBonus({ journal, key });
 
@@ -170,7 +171,8 @@ Hooks.on('renderItemSheet', (
     const hasKey = item.hasItemBooleanFlag(key);
     if (!hasKey) {
         const name = item?.name?.toLowerCase() ?? '';
-        if (name === Settings.versatileTraining) {
+        const sourceId = item?.flags.core?.sourceId ?? '';
+        if (isEditable && (name === Settings.versatileTraining || sourceId.includes(compendiumId))) {
             item.addItemBooleanFlag(key);
         }
         return;
@@ -185,6 +187,8 @@ Hooks.on('renderItemSheet', (
     if (isEditable && actor) {
         if (!currentGroup) {
             currentGroup =  /** @type {keyof typeof pf1.config.weaponGroups} */ (Object.keys(api.config.versatileTraining.mapping)[0]);
+            item.setFlag(MODULE_NAME, key, currentGroup);
+            return;
         }
 
         const getName = (/** @type {keyof typeof pf1.config.skills} */ skillId) => isDriver(skillId)
@@ -232,3 +236,25 @@ Hooks.on('renderItemSheet', (
         inputType: 'specific-bonus',
     });
 });
+
+/**
+ * @param {ItemPF} item
+ * @param {object} data
+ * @param {{temporary: boolean}} param2
+ * @param {string} id
+ */
+const onCreate = (item, data, { temporary }, id) => {
+    if (!(item instanceof pf1.documents.item.ItemPF)) return;
+    if (temporary) return;
+
+    const name = item?.name?.toLowerCase() ?? '';
+    const sourceId = item?.flags.core?.sourceId ?? '';
+    const hasBonus = item.hasItemBooleanFlag(key);
+
+    if ((name === Settings.versatileTraining || sourceId.includes(compendiumId)) && !hasBonus) {
+        item.updateSource({
+            [`system.flags.boolean.${key}`]: true,
+        });
+    }
+};
+Hooks.on('preCreateItem', onCreate);

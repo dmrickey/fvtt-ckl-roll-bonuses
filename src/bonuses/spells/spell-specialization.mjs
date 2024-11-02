@@ -139,7 +139,7 @@ Hooks.on('renderItemSheet', (
     if (!hasKey) {
         const hasName = item.name?.toLowerCase() === Settings.spellSpecialization;
         const hasId = !!item?.flags?.core?.sourceId?.includes(compendiumId);
-        if (hasName || hasId) {
+        if (isEditable && (hasName || hasId)) {
             item.addItemBooleanFlag(key);
         }
         return;
@@ -170,3 +170,47 @@ Hooks.on('renderItemSheet', (
         inputType: 'specific-bonus',
     });
 });
+
+/**
+ * @param {ItemPF} item
+ * @param {object} data
+ * @param {{temporary: boolean}} param2
+ * @param {string} id
+ */
+const onCreate = (item, data, { temporary }, id) => {
+    if (!(item instanceof pf1.documents.item.ItemPF)) return;
+    if (temporary) return;
+
+    const name = item?.name?.toLowerCase() ?? '';
+    const sourceId = item?.flags.core?.sourceId ?? '';
+    const hasBonus = item.hasItemBooleanFlag(key);
+
+    let choice = '';
+    if (item.actor) {
+        const focuses = getFocusedSchools(item.actor);
+
+        const spellChoices = item.actor?.items
+            .filter(
+                /** @returns {spell is ItemSpellPF} */
+                (spell) => spell instanceof pf1.documents.item.ItemSpellPF
+                    && focuses.includes(spell.system.school))
+            ?? [];
+        const choices = uniqueArray(spellChoices.map(({ name }) => name)).sort();
+        choice = choices[0] || '';
+    }
+
+    let updated = false;
+    if ((name === Settings.spellSpecialization || sourceId.includes(compendiumId)) && !hasBonus) {
+        item.updateSource({
+            [`system.flags.boolean.${key}`]: true,
+        });
+        updated = true;
+    }
+
+    if ((hasBonus || updated) && choice && !item.flags[MODULE_NAME]?.[key]) {
+        item.updateSource({
+            [`flags.${MODULE_NAME}.${key}`]: choice,
+        });
+    }
+};
+Hooks.on('preCreateItem', onCreate);

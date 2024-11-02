@@ -25,6 +25,7 @@ import { weaponSpecializationKey } from '../../src/bonuses/weapon-specialization
 import { MODULE_NAME } from '../../src/consts.mjs';
 import { RangedIncrementPenaltyGlobalBonus } from '../../src/global-bonuses/attack-dialog-helper.mjs';
 import { BaseBonus } from '../../src/targeted/bonuses/base-bonus.mjs';
+import { BaseTargetOverride } from '../../src/targeted/target-overides/_base-target-override.mjs';
 import { BaseTarget } from '../../src/targeted/targets/base-target.mjs';
 import Document from '../foundry/common/abstract/document.mjs';
 
@@ -65,7 +66,11 @@ declare global {
         | 'rwak'
         | 'mcman'
         | 'rcman'
-        | 'twak';
+        | 'twak'
+        | 'spellsave'
+        | 'save'
+        | 'heal'
+        | 'other';
 
     declare type SkillInfo = SkillRollData & {
         id: keyof typeof pf1.config.skills;
@@ -73,15 +78,20 @@ declare global {
     };
     class ActorBasePF extends BaseDocument {
         itemFlags?: {
-            /**
-             * The tags for Items that are active with a boolean flag
-             */
+            /** The tags for Items that are active with a boolean flag */
             boolean: { [key: string]: { sources: ItemPF[] } };
             dictionary: ItemDictionaryFlags;
         };
         sheet: {
             render(force: boolean, { focus: boolean } = {});
         };
+    }
+
+    class Macro extends BaseDocument {
+        sheet: {
+            render(force: boolean, { focus: boolean } = {});
+        };
+        name: string;
     }
 
     type Item =
@@ -101,10 +111,7 @@ declare global {
     class ActorPF extends ActorBasePF {
         allItems: ItemPF[];
         hasItemBooleanFlag(key: string): boolean;
-        hasWeaponProficiency(
-            item: ItemWeaponPF | ItemAttackPF,
-            { override = true } = {}
-        ): boolean;
+        hasWeaponProficiency(item: ItemPF, { override = true } = {}): boolean;
         allSkills: Array<keyof typeof pf1.config.skills>;
         get isOwner(): boolean;
         itemTypes!: {
@@ -136,7 +143,7 @@ declare global {
 
         updateEmbeddedDocuments(
             type: 'Item',
-            updates: Partial<ItemPF<SystemItemData>>[]
+            updates: RecursivePartial<ItemPF<SystemItemData>>[]
         );
     }
 
@@ -253,16 +260,40 @@ declare global {
     }
 
     class ActionUseShared<T extends SystemItemData = SystemItemData> {
-        action: any;
+        action: ItemAction;
         attackBonus: string[];
         attacks: ActionUseAttack[];
+        casterLevelCheck: boolean;
+        category?: ItemScriptCategory;
+        chatAttacks?: ChatAttack[];
+        chatMessage?: boolean;
+        concentrationCheck?: undefined;
         conditionalPartsCommon: any;
-        conditionals: any;
+        conditionals: [];
+        cost?: null;
         damageBonus: string[];
         dice: string;
-        powerAttack: boolean;
+        fullAttack?: boolean;
+        item: ItemPF;
+        powerAttack?: boolean;
         reject: boolean;
         rollData: RollData<T>;
+        rollMode?: string;
+        save?: string;
+        saveDC?: number;
+        scriptData: unknown;
+        skipDialog?: boolean;
+        targets?: unknown[];
+        templateData: {
+            action?: ItemAction;
+            item?: ItemPF;
+            footnotes?: string[];
+        };
+        token?: TokenDocumentPF;
+        useMeasureTemplate?: boolean;
+        useOptions: unknown;
+
+        get attackData(): unknown;
 
         templateData: {
             footnotes?: string[];
@@ -436,7 +467,7 @@ declare global {
             rollData: RollData = null,
         } = {}): number;
         [MODULE_NAME]: {
-            enhancement: {
+            enhancement?: {
                 base: number;
                 stacks: number;
                 total: number;
@@ -486,13 +517,20 @@ declare global {
         name: string;
         range: number;
         sheet: ItemActionSheet;
+
+        defaultDamageType: {
+            values: string[];
+            custom: '';
+        };
+
+        get hasSave(): boolean;
     }
 
     /** used for weapons and attacks */
     interface TraitSelector<T extends string = string> {
-        /** custom entries split by ; */
         custom: string[];
         value: T[];
+        total: Set<string>;
     }
 
     /** used for damage parts */
@@ -552,14 +590,19 @@ declare global {
     class ItemPF<
         SystemData extends SystemItemData = SystemItemData
     > extends ItemDocument {
+        scriptCalls: Collection<ItemScriptCall>;
         _prepareDependentData(final: boolean): void;
         [MODULE_NAME]: {
             bonuses: (typeof BaseBonus)[];
             targets: (typeof BaseTarget)[];
+            targetOverrides: (typeof BaseTargetOverride)[];
+            conditionals?: ItemConditionalModifierData[];
             [key: string]: number | string | object | array;
         };
 
         get hasAction(): boolean;
+        get isPhysical(): boolean;
+
         actions: EmbeddedCollection<ItemAction>;
 
         activeState: boolean;
@@ -570,6 +613,7 @@ declare global {
             core?: { sourceId: string };
             [key: string]: any;
         };
+        _id: string;
         id: string;
         img: string;
         get isActive(): boolean;
@@ -1042,9 +1086,20 @@ declare global {
             boolean: Record<string, boolean>;
             dictionary: DictionaryFlags;
         };
+        subType: 'natural';
         tag: string;
         tags: string[];
         changes: ItemChange[];
+
+        /** These properties are not natively on all item types, but I'm adding them during data prep to better target _unintended_ items */
+        /** weapon */
+        properties?: Partial<Record<keyof WeaponProperties, boolean>>;
+        /** attack, equipment, weapon */
+        baseTypes?: string[];
+        /** attack, weapon */
+        weaponGroups?: Partial<TraitSelector<keyof WeaponGroups>>;
+        /** attack, equipment, weapon */
+        proficient: boolean;
     }
     class SystemItemDataAttackPF extends SystemItemData {
         baseTypes: string[];
@@ -1723,57 +1778,64 @@ declare global {
         parent?: undefined | ItemPF;
         priority: number;
         target: string;
-        type?: Nullable<BonusTypes | string>;
+        type?: Nullable<BonusTypes | DamageTypes | string>;
         value: number | string;
 
         data: {
             flavor: string;
             formula: string;
-            modifier: BonusTypes;
+            type: BonusTypes | DamageTypes | string;
             operator: '+' | '-';
             priority: number;
-            subTarget: 'skill.kna';
-            target: BuffTarget = 'skillzz';
+            get subTarget(): string;
+            target: BuffTarget = 'skill';
             value: number;
         };
 
         toObject(): object;
     }
 
-    class ItemConditional {
-        _id: string;
-        data?: any;
+    class ItemConditionalData {
         default: boolean;
-        id?: string;
-        modifiers: ItemConditionalModifier[];
+        modifiers: ItemConditionalModifierData[];
         name: string;
-        static get defaultData(): any;
+        _id: string;
+    }
+    class ItemConditional {
+        // _id: string;
+        data: ItemConditionalData;
 
-        constructor(obj: { [modifiers]: object[] }): ItemConditional;
-        static create(
-            modifiers: object[],
-            options: {
-                parent: {
-                    data: {
-                        conditionals: any[];
-                    };
-                    update: any;
-                };
-            }
+        get id(): string;
+        get modifiers(): Readonly<Collection<ItemConditionalModifier>>;
+        get name(): string;
+        get parent(): undefined | ItemPF;
+        static get defaultData(): {
+            _id: string;
+            default: false;
+            modifiers: ItemConditionalModifierData[];
+            name: '';
+        };
+
+        constructor(
+            obj: ItemConditionalData,
+            parent?: ItemAction
         ): ItemConditional;
+        /** @deprecated do not use within this mod */
+        static async create(
+            data: ItemConditionalData[],
+            options: {
+                parent: ItemAction;
+            }
+        ): Promise<Array<ItemConditional>>;
     }
 
-    class ItemConditionalModifier {
-        _id: string;
-        critical: Mullable<'crit' | 'nonCrit' | 'normal'>; // all for 'damage', 'crit' and 'normal' also for attack
+    class ItemConditionalModifierData {
+        critical: Nullable<'crit' | 'nonCrit' | 'normal' | ''>; // all for 'damage', 'crit' and 'normal' also for attack
         damageType: Nullable<TraitSelectorValuePlural>;
-        data?: any;
         formula: string;
-        id?: string;
         subTarget:
             | 'hasteAttack'
             | 'rapidShotAttack'
-            | 'attack_0'
             | 'allAttack' // when target is 'attack'
             | 'hasteDamage'
             | 'rapidShotDamage'
@@ -1784,8 +1846,10 @@ declare global {
             | '' // size
             | undefined; // no subtarget for 'size'
         target: 'attack' | 'damage' | 'effect' | 'misc' | 'size';
-        type: Nullable<BonusTypes | string>;
+        type: Nullable<BonusTypes | DamageTypes | string>;
+        _id: string;
 
+        /** PREPPED DATA FOR SHEET */
         targets?: {
             attack: string;
             damage: string;
@@ -1800,9 +1864,49 @@ declare global {
             crit?: 'PF1.OnCritBonusFormula';
             nonCrit?: 'PF1.NonMultBonusFormula';
         };
+        /** END PREPPED DATA FOR SHEET */
+    }
+    class ItemConditionalModifier {
+        get id(): string;
+        set id(value: string);
+
+        data: ItemConditionalModifierData;
+        parent: ItemConditional;
 
         constructor(any);
-        static get defaultData(): any;
+        static get defaultData(): {
+            critical: '';
+            damageType: ItemAction['defaultDamageType'];
+            formula: '';
+            subTarget: '';
+            target: '';
+            type: '';
+            _id: string;
+        };
+    }
+
+    class ItemScriptCallData {
+        _id: string;
+        name: string;
+        img: string;
+        type: 'macro' | 'script';
+        value: string;
+        category: string;
+        hidden: boolean;
+    }
+    class ItemScriptCall {
+        id: string;
+        parent: ItemPF<SystemItemData>;
+        /** in-memory value to determine if this mod created this */
+        rollBonus: boolean;
+        get hide(): boolean;
+        get category(): string;
+
+        constructor(data: Partial<ItemScriptCallData>);
+        execute(
+            shared: Partial<ActionUseShared<SystemItemData>>,
+            extraParams: { [x: string]: object } = {}
+        ): Promise;
     }
 
     interface ActorSheetPF {
@@ -1926,6 +2030,23 @@ declare global {
         id: string;
     }
 
+    class DamageTypes {
+        untyped: 'Untyped';
+        slashing: 'Slashing';
+        piercing: 'Piercing';
+        bludgeoning: 'Bludgeoning';
+        fire: 'Fire';
+        cold: 'Cold';
+        electric: 'Electricity';
+        acid: 'Acid';
+        sonic: 'Sonic';
+        force: 'Force';
+        negative: 'Negative';
+        positive: 'Positive';
+        precision: 'Precision';
+        nonlethal: 'Nonlethal';
+    }
+
     interface pf1 {
         dice: {
             DamageRoll: typeof DamageRoll;
@@ -1938,6 +2059,7 @@ declare global {
         actorSizes: Record<ActorSize, string>;
         actorStatures: Record<ActorStature, string>;
         applications: {
+            ScriptEditor: any;
             AttackDialog: { new (): AttackDialog };
             ActorTraitSelector: {
                 new (doc: BaseDocument, options: object): ActorTraitSelector;
@@ -1946,16 +2068,17 @@ declare global {
                 new (
                     object: { id: string; update({ [dataPath]: object }) },
                     dataPath: string,
-                    data: {},
+                    data: TraitSelectorValuePlural,
                     options = {}
                 ): DamageTypeSelector;
             };
         };
         components: {
-            ItemConditional: typeof ItemConditional;
-            ItemConditionalModifier: typeof ItemConditionalModifier;
             ItemAction: typeof ItemAction;
             ItemChange: typeof ItemChange;
+            ItemConditional: typeof ItemConditional;
+            ItemConditionalModifier: typeof ItemConditionalModifier;
+            ItemScriptCall: typeof ItemScriptCall;
         };
         config: {
             backgroundOnlySkills: (keyof typeof pf1.config.skills)[];
@@ -2079,27 +2202,13 @@ declare global {
             TokenDocumentPF: { new (): TokenDocumentPF };
         };
         registry: {
+            scriptCalls: ScriptCallRegistry;
             conditions: {
                 get(condition: string): Condition;
                 contents: Array<Condition>;
             };
             damageTypes: EmbeddedCollection<DamageType> & {
-                getLabels(): {
-                    untyped: 'Untyped';
-                    slashing: 'Slashing';
-                    piercing: 'Piercing';
-                    bludgeoning: 'Bludgeoning';
-                    fire: 'Fire';
-                    cold: 'Cold';
-                    electric: 'Electricity';
-                    acid: 'Acid';
-                    sonic: 'Sonic';
-                    force: 'Force';
-                    negative: 'Negative';
-                    positive: 'Positive';
-                    precision: 'Precision';
-                    nonlethal: 'Nonlethal';
-                };
+                getLabels(): DamgeTypes;
             };
         };
         spellcasting: {
@@ -2111,13 +2220,24 @@ declare global {
         };
     }
 
-    interface SavingThrows {
+    class ScriptCallCategory {
+        _id: string;
+        hidden: boolean;
+        itemTypes: string[];
+        name: string;
+        get id(): string;
+        get name(): string;
+        get info(): string;
+    }
+    class ScriptCallRegistry extends Collection<ScriptCallCategory> {}
+
+    type SavingThrows = {
         fort: 'Fortitude';
         ref: 'Reflex';
         will: 'Will';
-    }
+    };
 
-    interface WeaponGroups {
+    type WeaponGroups = {
         axes: 'Axes';
         bladesHeavy: 'Blades, Heavy';
         bladesLight: 'Blades, Light';
@@ -2135,9 +2255,9 @@ declare global {
         spears: 'Spears';
         thrown: 'Thrown';
         tribal: 'Tribal';
-    }
+    };
 
-    interface WeaponProperties {
+    type WeaponProperties = {
         ato: 'Automatic';
         blc: 'Blocking';
         brc: 'Brace';
@@ -2160,5 +2280,5 @@ declare global {
         spc: 'Special';
         thr: 'Thrown';
         trp: 'Trip';
-    }
+    };
 }

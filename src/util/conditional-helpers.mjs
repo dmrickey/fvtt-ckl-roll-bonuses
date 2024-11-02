@@ -1,12 +1,13 @@
+import { MODULE_NAME } from '../consts.mjs';
+
 /**
- *
  * @param {ActionUseShared} shared
- * @param {*} conditional
+ * @param {ItemConditional} conditional
  */
 export function conditionalCalculator(shared, conditional) {
     const conditionalData = shared.rollData.conditionals || {};
     const tag = pf1.utils.createTag(conditional.name);
-    for (const [i, modifier] of conditional.modifiers.entries()) {
+    conditional.data.modifiers.forEach((modifier, i) => {
         // Adds a formula's result to rollData to allow referencing it.
         // Due to being its own roll, this will only correctly work for static formulae.
         const rollTotal = RollPF.safeTotal(modifier.formula, shared.rollData);
@@ -34,7 +35,7 @@ export function conditionalCalculator(shared, conditional) {
         else if (modifier.target === "size") {
             shared.rollData.size += rollTotal;
         }
-    }
+    });
     // Expand data into rollData to enable referencing in formulae
     shared.rollData.conditionals = expandObject(conditionalData, 5);
 
@@ -64,8 +65,8 @@ export function conditionalCalculator(shared, conditional) {
 /**
  * "ItemChange" is used in damage tooltip source
  *
- * @param {ItemConditional} conditional
- * @param {ItemConditionalModifier} modifier
+ * @param {{ name: string }} conditional
+ * @param {ItemConditionalModifierData} modifier
  * @param {object} [options]
  * @param {boolean} [options.isDamage]
  * @returns {Nullable<ItemChange>}
@@ -171,8 +172,8 @@ export function createChangeForTooltip({
 
 /**
  *
- * @param {ItemConditional} conditional
- * @param {ItemConditionalModifier} modifier
+ * @param {{ name: string }} conditional
+ * @param {ItemConditionalModifierData} modifier
  * @returns {Nullable<ModifierSource>}
  */
 export function conditionalAttackTooltipModSource(conditional, modifier) {
@@ -199,4 +200,59 @@ export function conditionalAttackTooltipModSource(conditional, modifier) {
     };
 
     return source;
+}
+
+/**
+ * @param {Nullable<TraitSelectorValuePlural>} types
+ * @returns {string}
+ */
+export function damagesTypeToString(types) {
+    if (!types) return '';
+
+    if (!types.custom?.trim() && !types.values?.length) {
+        const untyped = pf1.registry.damageTypes.get('untyped')?.name;
+        if (!untyped) {
+            throw new Error("There's no `untyped` damage type in the pf1 config.");
+        }
+        return untyped;
+    }
+
+    const valueLookup = ( /** @type {DamageType['id']} */ t) => pf1.registry.damageTypes.getLabels()[t] || t;
+    /**
+     * @param {TraitSelectorValuePlural} t
+     */
+    // @ts-ignore
+    const typeToString = (t) => `${t.custom?.trim() ? `${t.custom.trim()}, ` : ''}${t.values.map(valueLookup).join(', ')}`;
+    return typeToString(types);
+}
+
+/**
+ * @param {ItemPF} item
+ * @param {string} key
+ * @param {object} [options]
+ * @param {boolean} [options.useCachedFormula]
+ * @return {ItemConditional[]}
+ */
+export const loadConditionals = (item, key, { useCachedFormula = false } = {}) => {
+    /** @type {ItemConditionalData[]} */
+    const flags = deepClone(item.getFlag(MODULE_NAME, key) || []);
+
+    flags.forEach((c) => {
+        c.modifiers.forEach((m) => {
+            if (useCachedFormula) {
+                const formula = item[MODULE_NAME][key]?.conditionals?.[c._id]?.[m._id];
+                if (formula) {
+                    m.formula = formula;
+                }
+            }
+            if (m.target === 'damage') {
+                m.type = damagesTypeToString(m.damageType)
+            }
+        });
+    });
+
+
+
+    const conditionals = flags.map((d) => new pf1.components.ItemConditional(d));
+    return conditionals;
 }
