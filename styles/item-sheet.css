@@ -73,6 +73,9 @@
     text-align: right;
     color: #7a7971;
 }
+.pf1.sheet .roll-bonuses .damage-control {
+    color: var(--pf1-tan);
+}
 
 .pf1.sheet .roll-bonuses .damage-type i.icon {
     margin-inline-end: 0.25rem;
@@ -161,6 +164,7 @@ form .versatile-performance-selector .form-fields {
 }
 
 #ckl-roll-bonus-container .script-bonus-input .add-script {
+    color: var(--pf1-tan);
     margin-block-start: 0.25rem;
     text-align: end;
 }
