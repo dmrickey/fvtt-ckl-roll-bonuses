@@ -5,7 +5,7 @@ import { CasterLevelBonus } from './caster-level-bonus.mjs';
 import { CritBonus } from './crit-bonus.mjs';
 import { DamageBonus } from "./damage-bonus.mjs";
 import { DCBonus } from './dc-bonus.mjs';
-import { EffectiveSizeBonus } from './effective-size.mjs';
+import { EffectiveSizeBonus } from './effective-size-bonus.mjs';
 import { EnhancementBonus } from './enhancement-bonus.mjs';
 import { FinesseBonus as FinesseBonus } from './finesse-bonus.mjs';
 import { FootnoteBonus } from './footnote-bonus.mjs';

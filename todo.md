@@ -269,5 +269,4 @@
   - Look into adding form-fields class so inputs will be better laid out
 - Label
   - Add "inset" option for all inputs so its label can be inset underneath a "parent" bonus
-- Rename file from `effect-size.mjs` to `effective-size-bonus.mjs`
 - Audit Specific Bonus "click to expand" rules and make sure they're concise enough (_specifically_ looking at you, Weapon Focus)
