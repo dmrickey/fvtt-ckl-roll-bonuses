@@ -259,14 +259,14 @@ const onCreate = (item, data, { temporary }, id) => {
         focused = getFocusedSchools(item.actor, spellFocusKey)[0] || '';
     }
 
-    if (isRegular) {
+    if (isMythic) {
         item.updateSource({
-            [`system.flags.boolean.${spellFocusKey}`]: true,
+            [`system.flags.boolean.${mythicSpellFocusKey}`]: true,
         });
 
-        if (focused && !item.flags[MODULE_NAME]?.[spellFocusKey]) {
+        if (focused && !item.flags[MODULE_NAME]?.[mythicSpellFocusKey]) {
             item.updateSource({
-                [`flags.${MODULE_NAME}.${spellFocusKey}`]: focused,
+                [`flags.${MODULE_NAME}.${mythicSpellFocusKey}`]: focused,
             });
         }
     }
@@ -281,16 +281,17 @@ const onCreate = (item, data, { temporary }, id) => {
             });
         }
     }
-    else if (isMythic) {
+    else if (isRegular) {
         item.updateSource({
-            [`system.flags.boolean.${mythicSpellFocusKey}`]: true,
+            [`system.flags.boolean.${spellFocusKey}`]: true,
         });
 
-        if (focused && !item.flags[MODULE_NAME]?.[mythicSpellFocusKey]) {
+        if (focused && !item.flags[MODULE_NAME]?.[spellFocusKey]) {
             item.updateSource({
-                [`flags.${MODULE_NAME}.${mythicSpellFocusKey}`]: focused,
+                [`flags.${MODULE_NAME}.${spellFocusKey}`]: focused,
             });
         }
     }
+
 };
 Hooks.on('preCreateItem', onCreate);

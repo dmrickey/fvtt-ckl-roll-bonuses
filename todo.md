@@ -254,11 +254,6 @@
 - Add "Weapon Focus" hint hook so Weapon Focus, Weapon Specialization, and Martial Focus can all use the sword icon hint
 
 # v 2.16
-- Auto configuration
-  - Make specific abilities that have multiple choices auto-configure to the first available choice
-    - double check creation of these things that they autoconfigure (search for `const onCreate` in the project to see exactly which ones need it)
-    - then modify the configuration, copy into a compendium, then move onto a new actor and make sure the configuration remains (check the item hint)
-  - Consider Versatile Performance/Training
 - Damage Bonus
   - Double check listeners for all inputs (add/delete/modify/type/etc) after changing jsdoc and implementation slightly
   - Look into adding form-fields class so inputs will be better laid out

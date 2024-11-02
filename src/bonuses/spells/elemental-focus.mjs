@@ -287,14 +287,14 @@ const onCreate = (item, data, { temporary }, id) => {
         focused = getFocusedElements(item.actor, elementalFocusKey)[0] || '';
     }
 
-    if (isRegular) {
+    if (isMythic) {
         item.updateSource({
-            [`system.flags.boolean.${elementalFocusKey}`]: true,
+            [`system.flags.boolean.${mythicElementalFocusKey}`]: true,
         });
 
-        if (focused && !item.flags[MODULE_NAME]?.[elementalFocusKey]) {
+        if (focused && !item.flags[MODULE_NAME]?.[mythicElementalFocusKey]) {
             item.updateSource({
-                [`flags.${MODULE_NAME}.${elementalFocusKey}`]: focused,
+                [`flags.${MODULE_NAME}.${mythicElementalFocusKey}`]: focused,
             });
         }
     }
@@ -309,14 +309,14 @@ const onCreate = (item, data, { temporary }, id) => {
             });
         }
     }
-    else if (isMythic) {
+    else if (isRegular) {
         item.updateSource({
-            [`system.flags.boolean.${mythicElementalFocusKey}`]: true,
+            [`system.flags.boolean.${elementalFocusKey}`]: true,
         });
 
-        if (focused && !item.flags[MODULE_NAME]?.[mythicElementalFocusKey]) {
+        if (focused && !item.flags[MODULE_NAME]?.[elementalFocusKey]) {
             item.updateSource({
-                [`flags.${MODULE_NAME}.${mythicElementalFocusKey}`]: focused,
+                [`flags.${MODULE_NAME}.${elementalFocusKey}`]: focused,
             });
         }
     }

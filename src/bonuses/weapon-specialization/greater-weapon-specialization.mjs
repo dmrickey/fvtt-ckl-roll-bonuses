@@ -183,10 +183,24 @@ const onCreate = (item, data, { temporary }, id) => {
     const sourceId = item?.flags.core?.sourceId ?? '';
     const hasBonus = item.hasItemBooleanFlag(key);
 
+    let updated = false;
     if (((name.includes(WeaponSpecializationSettings.weaponSpecialization) && name.includes(LanguageSettings.greater)) || sourceId.includes(compendiumId)) && !hasBonus) {
         item.updateSource({
             [`system.flags.boolean.${key}`]: true,
         });
+        updated = true;
+    }
+
+    if (item.actor) {
+        const focuses = getFocusedWeapons(item.actor, greaterWeaponFocusKey);
+        const specs = getSpecializedWeapons(item.actor);
+        const choice = intersection(focuses, specs)[0] || '';
+
+        if ((hasBonus || updated) && !item.flags[MODULE_NAME]?.[key]) {
+            item.updateSource({
+                [`flags.${MODULE_NAME}.${key}`]: choice,
+            });
+        }
     }
 };
 Hooks.on('preCreateItem', onCreate);

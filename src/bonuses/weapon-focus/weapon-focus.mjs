@@ -253,14 +253,14 @@ const onCreate = (item, data, { temporary }, id) => {
         }
     }
 
-    if (isRegular) {
+    if (isMythic) {
         item.updateSource({
-            [`system.flags.boolean.${weaponFocusKey}`]: true,
+            [`system.flags.boolean.${mythicWeaponFocusKey}`]: true,
         });
 
-        if (focused && !item.flags[MODULE_NAME]?.[weaponFocusKey]) {
+        if (focused && !item.flags[MODULE_NAME]?.[mythicWeaponFocusKey]) {
             item.updateSource({
-                [`flags.${MODULE_NAME}.${weaponFocusKey}`]: focused,
+                [`flags.${MODULE_NAME}.${mythicWeaponFocusKey}`]: focused,
             });
         }
     }
@@ -275,14 +275,14 @@ const onCreate = (item, data, { temporary }, id) => {
             });
         }
     }
-    else if (isMythic) {
+    else if (isRegular) {
         item.updateSource({
-            [`system.flags.boolean.${mythicWeaponFocusKey}`]: true,
+            [`system.flags.boolean.${weaponFocusKey}`]: true,
         });
 
-        if (focused && !item.flags[MODULE_NAME]?.[mythicWeaponFocusKey]) {
+        if (focused && !item.flags[MODULE_NAME]?.[weaponFocusKey]) {
             item.updateSource({
-                [`flags.${MODULE_NAME}.${mythicWeaponFocusKey}`]: focused,
+                [`flags.${MODULE_NAME}.${weaponFocusKey}`]: focused,
             });
         }
     }

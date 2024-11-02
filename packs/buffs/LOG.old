@@ -1,5 +1,11 @@
-2024/11/01-13:12:56.561 4c4 Log #884: 0 ops saved to Table #885 OK
-2024/11/01-13:12:56.562 4c4 Archiving C:\Users\David\AppData\Local\FoundryVTT-dev\Data\modules\ckl-roll-bonuses\packs\buffs/000884.log: OK
-2024/11/01-13:12:56.562 4c4 Table #870: 5 entries OK
-2024/11/01-13:12:56.563 4c4 Archiving C:\Users\David\AppData\Local\FoundryVTT-dev\Data\modules\ckl-roll-bonuses\packs\buffs/MANIFEST-000883: OK
-2024/11/01-13:12:56.565 4c4 **** Repaired leveldb C:\Users\David\AppData\Local\FoundryVTT-dev\Data\modules\ckl-roll-bonuses\packs\buffs; recovered 1 files; 6914 bytes. Some data may have been lost. ****
+2024/11/01-13:12:56.570 4c4 Delete type=3 #1
+2024/11/02-00:17:09.263 5780 Level-0 table #889: started
+2024/11/02-00:17:09.263 5780 Level-0 table #889: 0 bytes OK
+2024/11/02-00:17:09.263 5780 Delete type=0 #887
+2024/11/02-00:17:09.269 5780 Manual compaction at level-0 from '!items!3p2PtsJOLjsF390z' @ 72057594037927935 : 1 .. '!items!bExfitM1TiM3jNPv' @ 0 : 0; will stop at '!items!bExfitM1TiM3jNPv' @ 69 : 1
+2024/11/02-00:17:09.269 5780 Compacting 1@0 + 0@1 files
+2024/11/02-00:17:09.270 5780 Generated table #890@0: 5 keys, 6914 bytes
+2024/11/02-00:17:09.270 5780 Compacted 1@0 + 0@1 files => 6914 bytes
+2024/11/02-00:17:09.271 5780 compacted to: files[ 0 1 0 0 0 0 0 ]
+2024/11/02-00:17:09.271 5780 Delete type=2 #870
+2024/11/02-00:17:09.276 5780 Manual compaction at level-0 from '!items!bExfitM1TiM3jNPv' @ 69 : 1 .. '!items!bExfitM1TiM3jNPv' @ 0 : 0; will stop at (end)
