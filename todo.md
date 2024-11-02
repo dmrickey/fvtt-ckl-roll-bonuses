@@ -254,8 +254,4 @@
 - Add "Weapon Focus" hint hook so Weapon Focus, Weapon Specialization, and Martial Focus can all use the sword icon hint
 
 # v 2.16
-- Damage Bonus
-  - Double check listeners for all inputs (add/delete/modify/type/etc) after changing jsdoc and implementation slightly
-  - Look into adding form-fields class so inputs will be better laid out
-- Label
 - Audit Specific Bonus "click to expand" rules and make sure they're concise enough (_specifically_ looking at you, Weapon Focus)

@@ -65,6 +65,23 @@
     justify-content: flex-end;
 }
 
+#ckl-roll-bonus-container .damage.roll-bonuses .damage-type-visual {
+    min-width: fit-content;
+    padding-inline: 0.25rem;
+}
+#ckl-roll-bonus-container
+    .damage.roll-bonuses
+    .damage-type-visual
+    .damage-type:not(:has(.name)) {
+    padding-block: 0.25rem;
+}
+#ckl-roll-bonus-container
+    .damage.roll-bonuses
+    .damage-type-visual
+    .damage-type:not(:last-child) {
+    padding-inline-end: 0.25rem;
+}
+
 /* copied from apps.less in pf1 repo */
 .pf1.sheet .roll-bonuses .delete-change,
 .pf1.sheet .roll-bonuses .delete-damage {
