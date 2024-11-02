@@ -270,7 +270,4 @@
 - Label
   - Add "inset" option for all inputs so its label can be inset underneath a "parent" bonus
 - Rename file from `effect-size.mjs` to `effective-size-bonus.mjs`
-- Script Call Bonus
-  - Add duplicate button
-  - Add UI hover state for dragging
 - Audit Specific Bonus "click to expand" rules and make sure they're concise enough (_specifically_ looking at you, Weapon Focus)

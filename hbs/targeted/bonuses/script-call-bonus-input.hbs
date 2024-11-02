@@ -1,4 +1,4 @@
-<div class="form-group script-bonus-input roll-bonuses">
+<div class="form-group script-bonus-input roll-bonuses" data-drop="true">
     {{> "modules/ckl-roll-bonuses/hbs/label.hbs"}}
     <div class="form-fields">
         {{#each scripts as |script i|}}
@@ -15,6 +15,7 @@
             {{/if}}
             {{#unless readonly}}
             <a class="trait-selector edit-script"><i class="fas fa-edit"></i></a>
+            <a class="trait-selector copy-script"><i class="fas fa-copy"></i></a>
             <a class="trait-selector delete-script"><i class="fas {{#if (eq ../scripts.length 1)}}fa-arrow-rotate-left{{else}}fa-trash{{/if}}"></i></a>
             {{/unless}}
         </li>

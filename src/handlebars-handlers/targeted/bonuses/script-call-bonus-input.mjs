@@ -199,6 +199,26 @@ export function showScriptBonusEditor({
         }
     );
 
+    const copyButton = div.querySelector('.copy-script');
+    copyButton?.addEventListener(
+        'click',
+        async (event) => {
+            const clicked = /** @type {HTMLElement} */ (event.currentTarget);
+            /** @type {HTMLDataListElement | null} */
+            const row = clicked.closest('.script-row');
+            if (!row) return;
+
+            const index = +(row.dataset.index || 0);
+            const script = scripts[index];
+            if (script) {
+                const copy = deepClone(script);
+                copy.name = `${copy.name} ${localize('PF1.Copy')}`;
+                scripts.push(copy);
+                await item.setFlag(MODULE_NAME, key, scripts);
+            }
+        }
+    );
+
     div.querySelectorAll('.delete-script').forEach((select) => {
         select?.addEventListener(
             'click',
