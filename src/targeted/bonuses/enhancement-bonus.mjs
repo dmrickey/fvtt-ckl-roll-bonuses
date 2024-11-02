@@ -1,3 +1,4 @@
+import { showLabel } from '../../handlebars-handlers/bonus-inputs/show-label.mjs';
 import { textInput } from '../../handlebars-handlers/bonus-inputs/text-input.mjs';
 import { FormulaCacheHelper } from '../../util/flag-helpers.mjs';
 import { localize } from '../../util/localize.mjs';
@@ -76,7 +77,15 @@ export class EnhancementBonus extends BaseBonus {
      * @param {boolean} options.isEditable
      * @param {ItemPF} options.item
      */
-    static showInputOnItemSheet({ html, isEditable, item },) {
+    static showInputOnItemSheet({ html, isEditable, item }) {
+        showLabel({
+            item,
+            journal: this.journal,
+            key: this.key,
+            parent: html,
+        }, {
+            inputType: 'bonus',
+        })
         textInput({
             item,
             journal: this.journal,
@@ -85,6 +94,7 @@ export class EnhancementBonus extends BaseBonus {
         }, {
             canEdit: isEditable,
             inputType: 'bonus',
+            isSubLabel: true,
         });
         textInput({
             item,
@@ -94,6 +104,7 @@ export class EnhancementBonus extends BaseBonus {
         }, {
             canEdit: isEditable,
             inputType: 'bonus',
+            isSubLabel: true,
         });
     }
 

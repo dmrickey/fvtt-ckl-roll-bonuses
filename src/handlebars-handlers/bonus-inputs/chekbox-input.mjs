@@ -17,7 +17,7 @@ import { createTemplate, templates } from "../templates.mjs";
  * @param {boolean} options.canEdit
  * @param {InputType} options.inputType
  * @param {boolean} [options.isSubLabel]
-*/
+ */
 export function checkboxInput({
     current = undefined,
     item,

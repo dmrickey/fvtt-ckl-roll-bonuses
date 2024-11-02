@@ -43,8 +43,9 @@
 }
 
 #ckl-roll-bonus-container .bonus-label.sub-label {
+    font-size: 12.5px;
     font-weight: normal;
-    margin-inline-start: 1rem;
+    /* margin-inline-start: 1rem; */
 }
 
 #ckl-roll-bonus-container .error label {

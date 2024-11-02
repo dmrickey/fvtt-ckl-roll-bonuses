@@ -41,6 +41,7 @@ export const templates = /** @type {const} */ ({
 
     /** label used for all bonuses that shows label, tooltip, and journal */
     label: `modules/${MODULE_NAME}/hbs/label.hbs`,
+    labelPartial: `modules/${MODULE_NAME}/hbs/label-partial.hbs`,
 
     /** item name translation app for auto-recognition */
     itemNameTranslationConfigApp: `modules/${MODULE_NAME}/hbs/item-name-translation-config.hbs`,

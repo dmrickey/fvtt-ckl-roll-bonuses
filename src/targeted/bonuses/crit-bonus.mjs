@@ -1,5 +1,6 @@
 import { MODULE_NAME } from '../../consts.mjs';
 import { checkboxInput } from '../../handlebars-handlers/bonus-inputs/chekbox-input.mjs';
+import { showLabel } from '../../handlebars-handlers/bonus-inputs/show-label.mjs';
 import { textInput } from "../../handlebars-handlers/bonus-inputs/text-input.mjs";
 import { handleBonusTypeFor } from '../../target-and-bonus-join.mjs';
 import { FormulaCacheHelper } from "../../util/flag-helpers.mjs";
@@ -307,6 +308,14 @@ export class CritBonus extends BaseBonus {
      * @param {ItemPF} options.item
      */
     static showInputOnItemSheet({ html, item, isEditable }) {
+        showLabel({
+            item,
+            key: this.key,
+            journal: this.journal,
+            parent: html,
+        }, {
+            inputType: 'bonus',
+        });
         checkboxInput({
             item,
             journal: this.journal,
@@ -315,6 +324,7 @@ export class CritBonus extends BaseBonus {
         }, {
             canEdit: isEditable,
             inputType: 'bonus',
+            isSubLabel: true,
         });
         textInput({
             item,
@@ -324,6 +334,7 @@ export class CritBonus extends BaseBonus {
         }, {
             canEdit: isEditable,
             inputType: 'bonus',
+            isSubLabel: true,
         });
         textInput({
             item,
@@ -333,6 +344,7 @@ export class CritBonus extends BaseBonus {
         }, {
             canEdit: isEditable,
             inputType: 'bonus',
+            isSubLabel: true,
         });
     }
 }

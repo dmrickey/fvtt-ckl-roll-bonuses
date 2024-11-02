@@ -17,7 +17,8 @@ import { createTemplate, templates } from "../templates.mjs";
  * @param {object} options
  * @param {boolean} options.canEdit
  * @param {InputType} options.inputType
-*/
+ * @param {boolean} [options.isSubLabel]
+ */
 export function radioInput({
     current = undefined,
     item,
@@ -30,6 +31,7 @@ export function radioInput({
 }, {
     canEdit,
     inputType,
+    isSubLabel = false,
 }
 ) {
     if (current === undefined) {
@@ -45,6 +47,7 @@ export function radioInput({
         templates.radioInput,
         {
             current,
+            isSubLabel,
             journal,
             key,
             label,

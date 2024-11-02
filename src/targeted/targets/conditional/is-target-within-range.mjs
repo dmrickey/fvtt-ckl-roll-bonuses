@@ -3,6 +3,7 @@ import { PositionalHelper } from '../../../util/positional-helper.mjs';
 import { FormulaCacheHelper } from '../../../util/flag-helpers.mjs';
 import { localizeBonusLabel } from '../../../util/localize.mjs';
 import { BaseTarget } from '../base-target.mjs';
+import { showLabel } from '../../../handlebars-handlers/bonus-inputs/show-label.mjs';
 
 export class WhenTargetInRange extends BaseTarget {
 
@@ -111,6 +112,14 @@ export class WhenTargetInRange extends BaseTarget {
      * @param {ItemPF} options.item
      */
     static showInputOnItemSheet({ html, isEditable, item }) {
+        showLabel({
+            item,
+            journal: this.journal,
+            key: this.key,
+            parent: html,
+        }, {
+            inputType: 'target',
+        });
         textInput({
             item,
             journal: this.journal,
@@ -121,6 +130,7 @@ export class WhenTargetInRange extends BaseTarget {
             canEdit: isEditable,
             inputType: 'target',
             placeholder: '0',
+            isSubLabel: true,
         });
         textInput({
             item,
@@ -132,6 +142,7 @@ export class WhenTargetInRange extends BaseTarget {
             canEdit: isEditable,
             inputType: 'target',
             placeholder: `${Number.POSITIVE_INFINITY}`,
+            isSubLabel: true,
         });
     }
 }

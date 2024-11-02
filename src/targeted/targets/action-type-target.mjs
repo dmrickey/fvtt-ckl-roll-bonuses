@@ -186,6 +186,7 @@ export class ActionTypeTarget extends BaseTarget {
             }, {
                 canEdit: isEditable,
                 inputType: 'target',
+                isSubLabel: true,
             });
         }
     }

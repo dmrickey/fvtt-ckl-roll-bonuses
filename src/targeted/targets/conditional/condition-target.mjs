@@ -135,6 +135,7 @@ export class ConditionTarget extends BaseTarget {
         }, {
             canEdit: isEditable,
             inputType: 'target',
+            isSubLabel: true,
         });
     }
 }
