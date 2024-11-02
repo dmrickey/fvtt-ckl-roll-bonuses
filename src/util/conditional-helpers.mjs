@@ -240,7 +240,7 @@ export const loadConditionals = (item, key, { useCachedFormula = false } = {}) =
     flags.forEach((c) => {
         c.modifiers.forEach((m) => {
             if (useCachedFormula) {
-                const formula = item[MODULE_NAME][key].conditionals[c._id][m._id];
+                const formula = item[MODULE_NAME][key]?.conditionals?.[c._id]?.[m._id];
                 if (formula) {
                     m.formula = formula;
                 }

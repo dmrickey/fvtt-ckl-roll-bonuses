@@ -175,6 +175,9 @@ form .versatile-performance-selector .form-fields {
 #ckl-roll-bonus-container .conditional-modifier-inputs label.bonus-label {
     align-self: start;
 }
+#ckl-roll-bonus-container .conditionals.form-group {
+    width: 100%;
+}
 
 /* copied from pf1 */
 #ckl-roll-bonus-container .conditional-modifier-inputs .conditionals {
@@ -237,8 +240,8 @@ form .versatile-performance-selector .form-fields {
     /* copied from pf1 */
     border: var(--pf1-invalid-input-border);
     /* copied from pf1 */
-    background: url(icons/misc/hazard-sign.svg) no-repeat 95% 50%
-        /* copied from pf1 */ var(--pf1-bg-dark-0);
+    /* background: url(icons/misc/hazard-sign.svg) no-repeat 95% 50% */
+    /* copied from pf1 var(--pf1-bg-dark-0); */
     /* copied from pf1 */
     background-size: contain;
     /* copied from pf1 */
@@ -272,8 +275,8 @@ form .versatile-performance-selector .form-fields {
     /* copied from pf1 */
     border: var(--pf1-invalid-input-border);
     /* copied from pf1 */
-    background: url(icons/misc/hazard-sign.svg) no-repeat 75% 50%
-        /* copied from pf1 */ var(--pf1-bg-dark-0);
+    /* background: url(icons/misc/hazard-sign.svg) no-repeat 75% 50% */
+    /* copied from pf1 var(--pf1-bg-dark-0); */
     /* copied from pf1 */
     background-size: contain;
     /* copied from pf1 */
@@ -448,8 +451,8 @@ form .versatile-performance-selector .form-fields {
     /* copied from pf1 */
     border: var(--pf1-invalid-input-border);
     /* copied from pf1 */
-    background: url(icons/misc/hazard-sign.svg) no-repeat 95% 50%
-        /* copied from pf1 */ var(--pf1-bg-dark-0);
+    /* background: url(icons/misc/hazard-sign.svg) no-repeat 95% 50% */
+    /* copied from pf1 var(--pf1-bg-dark-0); */
     /* copied from pf1 */
 }
 /* copied from pf1 */
@@ -548,8 +551,8 @@ form .versatile-performance-selector .form-fields {
     /* copied from pf1 */
     border: var(--pf1-invalid-input-border);
     /* copied from pf1 */
-    background: url(icons/misc/hazard-sign.svg) no-repeat 80% 50%
-        /* copied from pf1 */ var(--pf1-bg-dark-0);
+    /* background: url(icons/misc/hazard-sign.svg) no-repeat 80% 50% */
+    /* copied from pf1 var(--pf1-bg-dark-0); */
     /* copied from pf1 */
 }
 /* copied from pf1 */
@@ -585,8 +588,8 @@ form .versatile-performance-selector .form-fields {
     /* copied from pf1 */
     border: var(--pf1-invalid-input-border);
     /* copied from pf1 */
-    background: url(icons/misc/hazard-sign.svg) no-repeat 100% 50%
-        /* copied from pf1 */ var(--pf1-bg-dark-0);
+    /* background: url(icons/misc/hazard-sign.svg) no-repeat 100% 50% */
+    /* copied from pf1 var(--pf1-bg-dark-0); */
     /* copied from pf1 */
 }
 /* copied from pf1 */

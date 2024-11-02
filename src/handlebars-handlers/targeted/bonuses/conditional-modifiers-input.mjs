@@ -199,6 +199,35 @@ export function modifiersInput({
     const named = div.querySelectorAll('[name]');
     named.forEach((elem) => elem.removeAttribute('name'));
 
+    div.addEventListener('drop', async (event) => {
+        event.preventDefault();
+
+        /** @type {ItemConditionalData} */ // @ts-ignore
+        const data = JSON.parse(event.dataTransfer.getData("text/plain"));
+        if (!data) return;
+
+        if (data.modifiers) {
+            data._id = foundry.utils.randomID();
+            conditionals.push(new pf1.components.ItemConditional(data));
+            await updateItem();
+        }
+    });
+
+    div.querySelectorAll('li.conditional[data-conditional]').forEach((element) => {
+        element.setAttribute('draggable', 'true');
+        element.addEventListener('dragstart', async (event) => {
+            const id = (/** @type {HTMLDataListElement}*/(element)).dataset?.conditional;
+            if (id) {
+                const conditional = conditionals.find(x => x.id === id);
+                if (conditional) {
+                    // @ts-ignore
+                    event.dataTransfer.setData("text/plain", JSON.stringify(conditional.data));
+                    return;
+                }
+            }
+        });
+    });
+
     div.querySelectorAll('.conditional-default').forEach((element) => {
         element.addEventListener('change', async (event) => {
             const a = event.currentTarget;
