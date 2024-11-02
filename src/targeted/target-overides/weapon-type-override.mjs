@@ -71,6 +71,7 @@ export class WeaponBaseTypeOverride extends BaseTargetOverride {
         }, {
             canEdit: isEditable,
             inputType: 'target-override',
+            isFormula: false,
         });
     }
 }

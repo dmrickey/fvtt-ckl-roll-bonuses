@@ -1,3 +1,10 @@
+## Roll Bonuses 2.16.1
+
+### Buffixes
+- Removed formula class from Weapon Type Override. This made Little Helper try to resolve it which obviously shouldn't do anything
+
+---
+
 ## Roll Bonuses 2.16.0
 
 ### New Bonuses
