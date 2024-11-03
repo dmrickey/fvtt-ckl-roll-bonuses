@@ -6,46 +6,36 @@ import { localize, localizeBonusLabel } from '../../util/localize.mjs';
 import { truthiness } from '../../util/truthiness.mjs';
 import { BaseTarget } from './base-target.mjs';
 
-/**
- * @param {ItemPF} item
- * @param {ItemAction} action
- * @returns {boolean}
- */
-const isNaturalSecondary = (item, action) => {
+/** @type {FilterFunc} */
+const isNaturalSecondary = (item, action, actionUse) => {
     const _isNatural = isNatural(item);
     const isPrimary = action?.data.naturalAttack.primaryAttack;
     return _isNatural && !isPrimary;
 }
-/**
- * @param {ItemPF} item
- * @returns {boolean}
- */
+/** @type {FilterFunc} */
 const isNatural = (item) => {
     const isAttack = item instanceof pf1.documents.item.ItemAttackPF;
     return (isAttack && item.subType === 'natural')
         || !!item.system.weaponGroups?.value?.includes("natural");
 }
-/**
- * @param {ItemPF} item
- * @param {ItemAction} action
- * @returns {boolean}
- */
+/** @type {FilterFunc} */
 const isSpell = (item, action) => {
     const isSpell = item instanceof pf1.documents.item.ItemSpellPF;
     return isSpell || ['msak', 'rsak', 'spellsave'].includes(action?.data.actionType ?? '');
 }
 
 /** @typedef {keyof typeof filterTypes} FilterType */
+/** @typedef {(item: ItemPF, action?: ItemAction, actionUse?: ActionUse | null) => boolean} FilterFunc */
 
 const filterTypes = /** @type {const} */ ({
-    ['is-melee']: { label: '', filter: (/** @type {ItemPF} */ item, /** @type {ItemAction} */ action) => ['mwak', 'msak', 'mcman'].includes(action?.data.actionType) },
+    ['is-melee']: { label: '', filter: /**@type {FilterFunc}*/ (_item, action) => ['mwak', 'msak', 'mcman'].includes(action?.data.actionType ?? '') },
     ['is-natural']: { label: '', filter: isNatural },
     ['is-natural-secondary']: { label: '', filter: isNaturalSecondary },
-    ['is-physical']: { label: '', filter: (/** @type {ItemPF} */ item, /** @type {ItemAction} */ action) => !!item?.isPhysical },
-    ['is-ranged']: { label: '', filter: (/** @type {ItemPF} */ item, /** @type {ItemAction} */ action) => ['rcman', 'rwak', 'rsak', 'twak'].includes(action?.data.actionType) },
+    ['is-physical']: { label: '', filter: /**@type {FilterFunc}*/ (item, action) => !!item?.isPhysical },
+    ['is-ranged']: { label: '', filter: /**@type {FilterFunc}*/ (_item, action) => ['rcman', 'rwak', 'rsak', 'twak'].includes(action?.data.actionType ?? '') },
     ['is-spell']: { label: '', filter: isSpell },
-    ['is-thrown']: { label: '', filter: (/** @type {ItemPF} */ item, /** @type {ItemAction} */ action) => action?.data.actionType === 'twak' },
-    ['is-weapon']: { label: '', filter: (/** @type {ItemPF} */ item, /** @type {ItemAction} */ action) => ['mwak', 'rwak', 'twak'].includes(action?.data.actionType) || isNatural(item) },
+    ['is-thrown']: { label: '', filter: /**@type {FilterFunc}*/ (_item, action) => action?.data.actionType === 'twak' },
+    ['is-weapon']: { label: '', filter: /**@type {FilterFunc}*/ (item, action) => ['mwak', 'rwak', 'twak'].includes(action?.data.actionType ?? '') || isNatural(item) },
 });
 
 const all = 'all';
@@ -127,13 +117,15 @@ export class ActionTypeTarget extends BaseTarget {
                 ? doc.action
                 : doc;
 
+        const actionUse = doc instanceof pf1.actionUse.ActionUse ? doc : null;
+
         const filteredSources = sources.filter((source) => {
             const func = this.#getFilterArrayFunc(source);
             const filters = this.#getFilterTypes(source);
             if (!filters.length) return false;
 
             /** @param {FilterType} f */
-            const hasType = (f) => filterTypes[f].filter(item, action);
+            const hasType = (f) => filterTypes[f].filter(item, action, actionUse);
             return filters[func](hasType);
         });
 

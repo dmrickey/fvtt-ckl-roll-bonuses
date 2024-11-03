@@ -215,7 +215,7 @@
                 "weapon-focus-mythic": "Double Weapon Focus attack bonuses.",
                 "weapon-focus-racial": "+1 bonus on attack rolls for chosen racial weapons. The weapon must be tagged with the race to be able to apply the bonus.",
                 "weapon-type": "Apply bonuses when using the chosen Weapon. Attacks and Weapons must be properly configured with Equipment Base Types.",
-                "weapon-type-override": "Adds a Weapon Type to an Item that normally can't have one.",
+                "weapon-type-override": "Adds a Weapon Type to an Item that normally can't have one. This is equivalent to a weapon's Equipment Base Type.",
                 "weapon": "Choose specific Attacks and Weapons for bonuses.",
                 "when-active": "Apply bonuses when specified Buff/Weapon/Feat/etc is active.",
                 "when-in-combat": "Active when this actor is in combat."
