@@ -6,8 +6,6 @@
     - [Swap Ability for Damage Rolls](#swap-ability-for-damage-rolls)
     - [Swap Ability for Attack Rolls](#swap-ability-for-attack-rolls)
     - [Add/Swap Damage Types](#addswap-damage-types)
-    - [Crit Only Attack Bonus](#crit-only-attack-bonus)
-    - [Script Call bonus](#script-call-bonus)
     - [AC bonus](#ac-bonus)
     - [Alignment](#alignment)
     - [Consume Item/Charge](#consume-itemcharge)
@@ -79,10 +77,6 @@
   - waiting on 10.5
 ### Add/Swap Damage Types
 - e.g. swap fire to acid
-### Crit Only Attack Bonus
-- Attack bonus needs to give optional "crit only" attack bonuses
-### Script Call bonus
-- Use <this script> for anything that matches the criteria
 ### AC bonus
 - See armor focus for how I first implemented it
 ### Alignment
