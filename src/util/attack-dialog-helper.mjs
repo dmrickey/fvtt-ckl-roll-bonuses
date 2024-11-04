@@ -91,7 +91,7 @@ class DialogBooleanTracker {
             : this.#trackedApplications.set(id, new Map([[key, true]]));
 
         // remove any tracked ids that are no longer on screen
-        const toRemove = this.#trackedApplications.keys()
+        const toRemove = [...this.#trackedApplications.keys()]
             // @ts-ignore
             .filter((key) => !ui.windows[key]);
         for (const key of toRemove) {

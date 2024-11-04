@@ -1,5 +1,8 @@
 ## Roll Bonuses 2.16.2
 
+### Bugfixes
+- Fixed potential benign error thrown when checking global override in attack dialog
+
 ### Misc
 - Updated documentation for target overrides
 
