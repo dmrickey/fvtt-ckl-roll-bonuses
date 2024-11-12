@@ -392,7 +392,7 @@ async function itemActionRollAttack(
     LocalHookHandler.fireHookNoReturnSync(localHooks.itemActionRollAttack, seed, this, rollData);
 
     if (formula !== seed.formula || !foundry.utils.objectsEqual(options, seed.options)) {
-        const replaced = await new pf1.dice.D20RollPF(seed.formula, rollData, seed.options).evaluate({ async: false });
+        const replaced = await new pf1.dice.D20RollPF(seed.formula, rollData, seed.options).evaluate({ async: true });
         return replaced;
     }
     return roll;
