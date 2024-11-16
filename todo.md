@@ -267,3 +267,6 @@
   - Add mythic functionality
 - Fix
   - Invisible tokens can't target adjacent tokens in melee
+- Dice Modifier
+  - Documentation
+  - Does it work with Maximize?

@@ -460,6 +460,13 @@ declare global {
         type: TraitSelectorValuePlural;
     }
 
+    interface PreDamageRollPart {
+        base: string;
+        damageType: TraitSelectorValuePlural;
+        extra: Array;
+        type: 'crit' | 'nonCrit' | 'normal';
+    }
+
     class ItemAction {
         getRollData(): RollData;
         getRange({
@@ -2215,6 +2222,9 @@ declare global {
             type: SpellcastingType;
         };
         utils: {
+            formula: {
+                simplify(formula: string, rollData?: RollData): string;
+            };
             getDistanceSystem(): 'metric' | 'imperial';
             createTag(name: string): string;
         };

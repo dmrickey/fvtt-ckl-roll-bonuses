@@ -14,6 +14,7 @@ import { MaximizeDamageBonus } from './maximize-damage-bonus.mjs';
 import { MisfortuneBonus } from './misfortune-bonus.mjs';
 import { ConditionalModifiersBonus } from './conditional-modifiers-bonus.mjs';
 import { ScriptCallBonus } from './script-call-bonus.mjs';
+import { DiceModifierBonus } from './dice-modifier-bonus.mjs';
 
 export const registerBonuses = () => [
     AgileBonus,
@@ -23,6 +24,7 @@ export const registerBonuses = () => [
     CritBonus,
     DamageBonus,
     DCBonus,
+    DiceModifierBonus,
     EffectiveSizeBonus,
     EnhancementBonus,
     FinesseBonus,
