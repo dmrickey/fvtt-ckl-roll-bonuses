@@ -1,6 +1,8 @@
 ## Roll Bonuses 2.17.0
 
 ### New Bonuses
+- **Dice Modification**
+  - Alter dice quantity or faces for the base damage of targeted attcks. This lets you do things like double dice, add two more of the kind of die already being used, or even just replace the targeted dice with a simple `1`.
 - **Vital Strike**
   - Added Specific Bonuses for Vital Strike (including Improved and Greater)
 
