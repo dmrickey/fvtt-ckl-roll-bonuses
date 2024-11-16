@@ -2,7 +2,7 @@ import { FRIENDLY_MODULE_NAME, MODULE_NAME } from './consts.mjs';
 import { LocalHookHandler, customGlobalHooks, localHooks } from './util/hooks.mjs';
 import './handlebars-handlers/init.mjs';
 import './util/item-hints.mjs';
-import './bonuses.mjs';
+import './_all-bonuses.mjs';
 import './patch/init.mjs';
 import { FormulaCacheHelper } from './util/flag-helpers.mjs';
 import { simplifyRollFormula } from './util/simplify-roll-formula.mjs';
