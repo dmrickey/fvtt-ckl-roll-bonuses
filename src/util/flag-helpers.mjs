@@ -62,7 +62,7 @@ export class FormulaCacheHelper {
 
         /**
          *
-         * @param {FlagValue} exactFormula
+         * @param {string} exactFormula
          * @param {string} flag
          */
         const cacheFormula = (exactFormula, flag) => {
@@ -73,7 +73,7 @@ export class FormulaCacheHelper {
         }
 
         this.#moduleFlags.forEach((flag) => {
-            const exactFormula = item.flags?.[MODULE_NAME]?.[flag];
+            const exactFormula = item.flags?.[MODULE_NAME]?.[flag] + '';
             cacheFormula(exactFormula, flag);
         });
     }

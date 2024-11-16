@@ -90,7 +90,7 @@ export class CasterLevelBonus extends BaseBonus {
      * @param {boolean} options.isEditable
      * @param {ItemPF} options.item
      */
-    static showInputOnItemSheet({ html, isEditable, item },) {
+    static showInputOnItemSheet({ html, isEditable, item }) {
         textInput({
             item,
             journal: this.journal,
