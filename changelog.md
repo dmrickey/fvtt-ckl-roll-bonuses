@@ -2,7 +2,7 @@
 
 ### New Bonuses
 - **Vital Strike**
-  - Added Specific Bonuses for Vital Strike (including Greater, Improved, and Mythic)
+  - Added Specific Bonuses for Vital Strike (including Improved and Greater)
 
 ### Misc
 - Added Item Hints with tooltips to all Specific Bonuses

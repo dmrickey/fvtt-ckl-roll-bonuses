@@ -31,15 +31,20 @@ const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalE
 SpecificBonuses.registerSpecificBonus({ journal, key: vitalStrike });
 SpecificBonuses.registerSpecificBonus({ journal, key: vitalStrikeImproved, parent: vitalStrike });
 SpecificBonuses.registerSpecificBonus({ journal, key: vitalStrikeGreater, parent: vitalStrike });
-SpecificBonuses.registerSpecificBonus({ journal, key: vitalStrikeMythic, parent: vitalStrike });
+// SpecificBonuses.registerSpecificBonus({ journal, key: vitalStrikeMythic, parent: vitalStrike });
 
 const hintInfo = /** @type {const} */ ({
     [vitalStrike]: { label: '×2', tooltipKey: vitalStrike, icon: undefined },
     [vitalStrikeImproved]: { label: '×3', tooltipKey: vitalStrike, icon: undefined },
     [vitalStrikeGreater]: { label: '×4', tooltipKey: vitalStrike, icon: undefined },
-    [vitalStrikeMythic]: { label: '', tooltipKey: vitalStrikeMythic, icon: 'ra ra-croc-sword' },
+    // [vitalStrikeMythic]: { label: '', tooltipKey: vitalStrikeMythic, icon: 'ra ra-croc-sword' },
 });
-const allKeys = /** @type {const} */ ([vitalStrike, vitalStrikeImproved, vitalStrikeGreater, vitalStrikeMythic,]);
+const allKeys = /** @type {const} */ ([
+    vitalStrike,
+    vitalStrikeImproved,
+    vitalStrikeGreater,
+    // vitalStrikeMythic,
+]);
 
 // register hint on source
 registerItemHint((hintcls, _actor, item, _data) => {
@@ -109,19 +114,20 @@ class VitalStrikeData {
 
     enabled = false;
     enabledByDefault = false;
-    formula = '';
     key = '';
     label = '';
+
+    /** @type {ItemConditional[]} */
+    conditionals = [];
 
     /**
      * @param {ActorPF} actor
      * @param {object} [options]
      * @param {ActionUse?} [options.actionUse]
-     * @param {ItemAction['data']['damage']} [options.allParts]
      */
-    constructor(actor, { actionUse = null, allParts } = {}) {
+    constructor(actor, { actionUse = null } = {}) {
 
-        this.mythic = this.#hasVitalStrikeMythic(actor);
+        // this.mythic = this.#hasVitalStrikeMythic(actor);
 
         /**
          * @param {string} key
@@ -136,16 +142,42 @@ class VitalStrikeData {
                 this.enabledByDefault = vital.enabled;
 
                 if (actionUse) {
-                    const part = allParts?.parts[0].formula || '';
-                    const formula = getFirstTermFormula(part);
+                    // if (!this.mythic) {
+                    const part = actionUse.action.data.damage?.parts[0];
+                    const partFormula = part.formula || '';
+                    const firstDice = getFirstTermFormula(partFormula);
 
-                    if (formula) {
-                        this.formula = Array(amount).fill(`${formula}[${this.label}]`).join(' + ');
+                    if (firstDice) {
+                        const formula =
+                            this.isGreater ? `${firstDice}[${localizeBonusLabel(vitalStrike)}] + ${firstDice}[${localizeBonusLabel(vitalStrikeImproved)}] + ${firstDice}[${localizeBonusLabel(vitalStrikeGreater)}]`
+                                : this.isImproved ? `${firstDice}[${localizeBonusLabel(vitalStrike)}] + ${firstDice}[${localizeBonusLabel(vitalStrikeImproved)}]`
+                                    : `${firstDice}[${localizeBonusLabel(vitalStrike)}]`;
+                        // this.formula = Array(amount).fill(`${firstDice}[${this.label}]`).join(' + ');
                         const formData = getFormData(actionUse, key);
                         this.enabled = typeof formData === 'boolean'
                             ? formData
                             : this.enabledByDefault;
+                        var conditional = new pf1.components.ItemConditional({
+                            _id: foundry.utils.randomID(),
+                            default: true,
+                            name: this.label,
+                            modifiers: [{
+                                ...pf1.components.ItemConditionalModifier.defaultData,
+                                _id: foundry.utils.randomID(),
+                                critical: 'nonCrit',
+                                formula: formula,
+                                subTarget: 'attack_0',
+                                target: 'damage',
+                                type: '',
+                                damageType: part.type,
+                            }],
+                        });
+                        this.conditionals.push(conditional);
                     }
+                    // }
+                    // else {
+                    //     debugger;
+                    // }
                 }
                 return true;
             }
@@ -218,27 +250,10 @@ function actionUseHandleConditionals(actionUse) {
         return;
     }
 
-    const allParts = actionUse.action.data.damage;
-    const vital = new VitalStrikeData(actionUse.actor, { actionUse, allParts });
+    const vital = new VitalStrikeData(actionUse.actor, { actionUse });
     if (!vital.hasVitalStrike || !vital.enabled) return;
 
-    var conditional = new pf1.components.ItemConditional({
-        _id: foundry.utils.randomID(),
-        default: true,
-        name: vital.label,
-        modifiers: [{
-            ...pf1.components.ItemConditionalModifier.defaultData,
-            _id: foundry.utils.randomID(),
-            critical: 'nonCrit',
-            formula: vital.formula,
-            subTarget: 'attack_0',
-            target: 'damage',
-            type: '',
-            damageType: allParts.parts[0].type,
-        }],
-    });
-
-    conditionalCalculator(actionUse.shared, conditional);
+    vital.conditionals.forEach((c) => conditionalCalculator(actionUse.shared, c));
 }
 Hooks.on(customGlobalHooks.actionUseHandleConditionals, actionUseHandleConditionals);
 
@@ -283,9 +298,9 @@ Hooks.on('renderItemSheet', (
     if (isVital) {
         showVitalStrike(vitalStrike);
     }
-    if (isMythic) {
-        showVitalStrike(vitalStrikeMythic, vitalStrikeMythic);
-    }
+    // if (isMythic) {
+    //     showVitalStrike(vitalStrikeMythic, vitalStrikeMythic);
+    // }
 
     if (isVital || isImproved || isGreater) {
         checkboxInput({
@@ -338,7 +353,7 @@ const configureIfNecesary = (item, { onCreate = false } = {}) => {
             : item.addItemBooleanFlag(flag);
 
     if (isMythic && !item.hasItemBooleanFlag(vitalStrikeMythic)) {
-        addFlag(vitalStrikeMythic);
+        // addFlag(vitalStrikeMythic);
     }
     else if (isGreater && !item.hasItemBooleanFlag(vitalStrikeGreater)) {
         addFlag(vitalStrikeGreater);
