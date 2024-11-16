@@ -1,6 +1,7 @@
 import { showEnabledLabel } from '../handlebars-handlers/enabled-label.mjs';
 import { LocalHookHandler, customGlobalHooks, localHooks } from '../util/hooks.mjs';
-import { localizeBonusLabel } from '../util/localize.mjs';
+import { registerItemHint } from '../util/item-hints.mjs';
+import { localizeBonusLabel, localizeBonusTooltip } from '../util/localize.mjs';
 import { LanguageSettings } from '../util/settings.mjs';
 import { SpecificBonuses } from './all-specific-bonuses.mjs';
 
@@ -31,6 +32,17 @@ function patchChangeValue(value, type, actor) {
     return value;
 }
 LocalHookHandler.registerHandler(localHooks.patchChangeValue, patchChangeValue);
+
+// register hint on source
+registerItemHint((hintcls, _actor, item, _data) => {
+    const has = !!item.hasItemBooleanFlag(fatesFavored);
+    if (!has) {
+        return;
+    }
+
+    const hint = hintcls.create('', ['ckl-lucky-horseshoe'], { hint: localizeBonusTooltip(fatesFavored), icon: 'ra ra-horseshoe' });
+    return hint;
+});
 
 /**
  * Increase luck source modifier by 1 for tooltip

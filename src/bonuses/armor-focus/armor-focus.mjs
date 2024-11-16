@@ -3,7 +3,7 @@
 
 import { getFocusedArmor, getImprovedFocusedArmor, improvedArmorFocusKey, armorFocusKey as key } from "./shared.mjs";
 import { intersects } from "../../util/array-intersects.mjs";
-import { localize, localizeBonusLabel } from "../../util/localize.mjs";
+import { localize, localizeBonusLabel, localizeBonusTooltip } from "../../util/localize.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { LanguageSettings } from "../../util/settings.mjs";
 import { uniqueArray } from "../../util/unique-array.mjs";
@@ -29,7 +29,7 @@ registerItemHint((hintcls, _actor, item, _data) => {
     const has = item.hasItemBooleanFlag(key);
     const current = item.getFlag(MODULE_NAME, key);
     if (has && current) {
-        return hintcls.create(`${current}`, [], {});
+        return hintcls.create(`${current}`, [], { hint: localizeBonusTooltip(key) });
     }
 });
 

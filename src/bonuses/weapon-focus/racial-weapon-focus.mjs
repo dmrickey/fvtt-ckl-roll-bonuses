@@ -4,7 +4,7 @@ import { intersects } from '../../util/array-intersects.mjs';
 import { getCachedBonuses } from '../../util/get-cached-bonuses.mjs';
 import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
-import { localize, localizeBonusLabel } from "../../util/localize.mjs";
+import { localize, localizeBonusLabel, localizeBonusTooltip } from "../../util/localize.mjs";
 import { registerSetting } from "../../util/settings.mjs";
 import { truthiness } from '../../util/truthiness.mjs';
 import { SpecificBonuses } from '../all-specific-bonuses.mjs';
@@ -54,7 +54,7 @@ registerItemHint((hintcls, _actor, item, _data) => {
 
     const label = `${current}`;
 
-    const hint = hintcls.create(label, [], {});
+    const hint = hintcls.create(label, [], { hint: localizeBonusTooltip(key) });
     return hint;
 });
 

@@ -8,7 +8,7 @@ import { createChangeForTooltip } from '../../util/conditional-helpers.mjs';
 import { getCachedBonuses } from '../../util/get-cached-bonuses.mjs';
 import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
-import { localize, localizeBonusLabel } from "../../util/localize.mjs";
+import { localize, localizeBonusLabel, localizeBonusTooltip } from "../../util/localize.mjs";
 import { SharedSettings, LanguageSettings } from "../../util/settings.mjs";
 import { uniqueArray } from "../../util/unique-array.mjs";
 import { SpecificBonuses } from '../all-specific-bonuses.mjs';
@@ -45,7 +45,7 @@ registerItemHint((hintcls, _actor, item, _data) => {
     const has = item.hasItemBooleanFlag(key);
     const current = item.getFlag(MODULE_NAME, key);
     if (has && current) {
-        return hintcls.create(`${current}`, [], {});
+        return hintcls.create(`${current}`, [], { hint: localizeBonusTooltip(key) });
     }
 });
 

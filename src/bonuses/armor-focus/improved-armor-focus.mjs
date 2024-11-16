@@ -5,7 +5,7 @@ import { MODULE_NAME } from '../../consts.mjs';
 import { stringSelect } from "../../handlebars-handlers/bonus-inputs/string-select.mjs";
 import { intersects } from "../../util/array-intersects.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
-import { localizeBonusLabel } from "../../util/localize.mjs";
+import { localizeBonusLabel, localizeBonusTooltip } from "../../util/localize.mjs";
 import { LanguageSettings } from '../../util/settings.mjs';
 import { SpecificBonuses } from '../all-specific-bonuses.mjs';
 import { armorFocusKey, getFocusedArmor, getImprovedFocusedArmor, improvedArmorFocusKey as key } from './shared.mjs';
@@ -20,7 +20,7 @@ registerItemHint((hintcls, _actor, item, _data) => {
     const has = item.hasItemBooleanFlag(key);
     const current = item.getFlag(MODULE_NAME, key);
     if (has && current) {
-        return hintcls.create(`${current}`, [], {});
+        return hintcls.create(`${current}`, [], { hint: localizeBonusTooltip(key) });
     }
 });
 

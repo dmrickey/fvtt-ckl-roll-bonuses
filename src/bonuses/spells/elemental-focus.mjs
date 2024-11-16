@@ -5,7 +5,7 @@ import { intersects } from "../../util/array-intersects.mjs";
 import { getCachedBonuses } from '../../util/get-cached-bonuses.mjs';
 import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
-import { localize, localizeBonusLabel } from "../../util/localize.mjs";
+import { localize, localizeBonusLabel, localizeBonusTooltip } from "../../util/localize.mjs";
 import { LanguageSettings } from "../../util/settings.mjs";
 import { signed } from "../../util/to-signed-string.mjs";
 import { truthiness } from "../../util/truthiness.mjs";
@@ -152,8 +152,8 @@ registerItemHint((hintcls, _actor, item, _data) => {
     const label = pf1.registry.damageTypes.get(`${currentElement}`) ?? { name: currentElement };
 
     const hint = match
-        ? hintcls.create('', [match.css], { hint: label.name, icon: match.icon })
-        : hintcls.create(label.name, [], {});
+        ? hintcls.create('', [match.css], { hint: `${localizeBonusTooltip(key)} (${label.name})`, icon: match.icon })
+        : hintcls.create(label.name, [], { hint: localizeBonusTooltip(key) });
     return hint;
 });
 

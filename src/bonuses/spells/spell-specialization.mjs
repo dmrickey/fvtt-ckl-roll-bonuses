@@ -6,7 +6,7 @@ import { stringSelect } from "../../handlebars-handlers/bonus-inputs/string-sele
 import { getCachedBonuses } from '../../util/get-cached-bonuses.mjs';
 import { customGlobalHooks, LocalHookHandler, localHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
-import { localize, localizeBonusLabel } from "../../util/localize.mjs";
+import { localize, localizeBonusLabel, localizeBonusTooltip } from "../../util/localize.mjs";
 import { LanguageSettings } from "../../util/settings.mjs";
 import { truthiness } from "../../util/truthiness.mjs";
 import { uniqueArray } from "../../util/unique-array.mjs";
@@ -97,7 +97,7 @@ registerItemHint((hintcls, _actor, item, _data) => {
         return;
     }
 
-    const hint = hintcls.create(current, [], {});
+    const hint = hintcls.create(current, [], { hint: localizeBonusTooltip(key) });
     return hint;
 });
 

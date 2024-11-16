@@ -1,6 +1,6 @@
 import { MODULE_NAME } from "../consts.mjs";
 import { registerItemHint } from "../util/item-hints.mjs";
-import { localize } from "../util/localize.mjs";
+import { localize, localizeBonusTooltip } from "../util/localize.mjs";
 import { LanguageSettings } from "../util/settings.mjs";
 import { truthiness } from "../util/truthiness.mjs";
 import { SpecificBonuses } from './all-specific-bonuses.mjs';
@@ -63,7 +63,7 @@ registerItemHint((hintcls, actor, item, _data) => {
     }
 
     const skills = selectedSkills.map((id) => getSkillName(actor, id)).join(', ');
-    const hint = hintcls.create(localize('versatile-training.hint', { skills }), [], {});
+    const hint = hintcls.create(localize('versatile-training.hint', { skills }), [], { hint: localizeBonusTooltip(key) });
     return hint;
 });
 

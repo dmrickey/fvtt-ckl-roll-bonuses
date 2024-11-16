@@ -2,7 +2,8 @@ import { MODULE_NAME } from '../consts.mjs';
 import { showEnabledLabel } from '../handlebars-handlers/enabled-label.mjs';
 import { LocalHookHandler, customGlobalHooks, localHooks } from '../util/hooks.mjs';
 import { isActorInCombat } from '../util/is-actor-in-combat.mjs';
-import { localizeBonusLabel } from '../util/localize.mjs';
+import { registerItemHint } from '../util/item-hints.mjs';
+import { localizeBonusLabel, localizeBonusTooltip } from '../util/localize.mjs';
 import { LanguageSettings } from '../util/settings.mjs';
 import { SpecificBonuses } from './all-specific-bonuses.mjs';
 
@@ -20,6 +21,17 @@ class Settings {
         LanguageSettings.registerItemNameTranslation(furiousFocus);
     }
 }
+
+// register hint on source
+registerItemHint((hintcls, _actor, item, _data) => {
+    const has = !!item.hasItemBooleanFlag(furiousFocus);
+    if (!has) {
+        return;
+    }
+
+    const hint = hintcls.create('', [], { hint: localizeBonusTooltip(furiousFocus), icon: 'fas fa-burst' });
+    return hint;
+});
 
 /** @returns {string} */
 const label = () => { return localizeBonusLabel(furiousFocus); }

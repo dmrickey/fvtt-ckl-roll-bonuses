@@ -9,7 +9,7 @@ import { getActorItemsByTypes } from '../util/get-actor-items-by-type.mjs';
 import { getCachedBonuses } from '../util/get-cached-bonuses.mjs';
 import { customGlobalHooks } from "../util/hooks.mjs";
 import { registerItemHint } from "../util/item-hints.mjs";
-import { localize, localizeBonusLabel } from "../util/localize.mjs";
+import { localize, localizeBonusLabel, localizeBonusTooltip } from "../util/localize.mjs";
 import { LanguageSettings } from "../util/settings.mjs";
 import { truthiness } from "../util/truthiness.mjs";
 import { uniqueArray } from "../util/unique-array.mjs";
@@ -75,7 +75,7 @@ registerItemHint((hintcls, _actor, item, _data) => {
     const has = item.hasItemBooleanFlag(key);
     const current = /** @type {keyof WeaponGroups} */ (item.getFlag(MODULE_NAME, key));
     if (has && current) {
-        return hintcls.create(pf1.config.weaponGroups[current] ?? current, [], {});
+        return hintcls.create(pf1.config.weaponGroups[current] ?? current, [], { hint: localizeBonusTooltip(key) });
     }
 });
 

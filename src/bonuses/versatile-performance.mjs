@@ -4,7 +4,7 @@ import { MODULE_NAME } from "../consts.mjs";
 import { createTemplate, templates } from "../handlebars-handlers/templates.mjs";
 import { addNodeToRollBonus } from "../handlebars-handlers/add-bonus-to-item-sheet.mjs";
 import { registerItemHint } from "../util/item-hints.mjs";
-import { localize } from "../util/localize.mjs";
+import { localize, localizeBonusTooltip } from "../util/localize.mjs";
 import { LanguageSettings } from "../util/settings.mjs";
 import { SpecificBonuses } from './all-specific-bonuses.mjs';
 import { LocalHookHandler, localHooks } from '../util/hooks.mjs';
@@ -120,7 +120,7 @@ registerItemHint((hintcls, actor, item, _data) => {
 
         const baseName = getSkillName(actor, data.base);
         const skills = substitutes.map((id) => getSkillName(actor, id)).join(', ');
-        const hint = hintcls.create(localize('versatile-performance.hint', { base: baseName, skills }), [], {});
+        const hint = hintcls.create(localize('versatile-performance.hint', { base: baseName, skills }), [], { hint: localizeBonusTooltip(key) });
         return hint;
     });
     return hints;
@@ -372,7 +372,7 @@ Hooks.on('renderItemSheet', (
         label: localize('versatile-performance.header'),
         performs,
         readonly: !isEditable,
-        tooltip: localize('bonuses.tooltip.versatile-performance'),
+        tooltip: localizeBonusTooltip(key),
     };
 
     const div = createTemplate(templates.versatilePerformance, templateData);

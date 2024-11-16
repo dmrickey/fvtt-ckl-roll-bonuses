@@ -4,7 +4,7 @@ import { intersects } from '../../util/array-intersects.mjs';
 import { getCachedBonuses } from '../../util/get-cached-bonuses.mjs';
 import { LocalHookHandler, customGlobalHooks, localHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
-import { localize, localizeBonusLabel } from "../../util/localize.mjs";
+import { localize, localizeBonusLabel, localizeBonusTooltip } from "../../util/localize.mjs";
 import { LanguageSettings } from "../../util/settings.mjs";
 import { signed } from "../../util/to-signed-string.mjs";
 import { truthiness } from '../../util/truthiness.mjs';
@@ -119,7 +119,7 @@ registerItemHint((hintcls, _actor, item, _data) => {
 
     const label = pf1.config.spellSchools[currentSchool] ?? currentSchool;
 
-    const hint = hintcls.create(label, [], {});
+    const hint = hintcls.create(label, [], { hint: localizeBonusTooltip(key) });
     return hint;
 });
 

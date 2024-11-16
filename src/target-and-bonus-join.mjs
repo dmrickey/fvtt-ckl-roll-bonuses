@@ -173,9 +173,6 @@ function actionUseHandleConditionals(actionUse) {
         .filter(truthiness)
         .filter((c) => c.data.modifiers.length)
         .forEach((conditional) => conditionalCalculator(actionUse.shared, conditional));
-
-    // todo reduce attack bonus highest of each type
-    // todo increase luck bonus if actor has fate's favored flag
 }
 Hooks.on(customGlobalHooks.actionUseHandleConditionals, actionUseHandleConditionals);
 
