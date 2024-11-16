@@ -1,4 +1,15 @@
+## Roll Bonuses 2.17.0
+
+### New Bonuses
+- **Vital Strike**
+  - Added Specific Bonuses for Vital Strike (including Greater, Improved, and Mythic)
+
+### Misc
+- Added Item Hints with tooltips to all Specific Bonuses
+
 ## Roll Bonuses 2.16.2
+
+---
 
 ### Bugfixes
 - Fixed potential benign error thrown when checking global override in attack dialog
@@ -7,6 +18,7 @@
 - Updated documentation for target overrides
 
 ---
+
 ## Roll Bonuses 2.16.1
 
 ### Bugfixes

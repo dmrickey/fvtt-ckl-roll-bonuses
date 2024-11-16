@@ -1,7 +1,7 @@
 import { api } from '../util/api.mjs';
 import { BaseSource } from './base-source.mjs';
 import { BaseBonus } from './bonuses/base-bonus.mjs';
-import { registerBonuses } from './bonuses/init-bonuses.mjs';
+import { registerBonuses } from './bonuses/_init-bonuses.mjs';
 import { BaseTargetOverride } from './target-overides/_base-target-override.mjs';
 import { registerTargetOverrides } from './target-overides/_init-target-overrides.mjs';
 import { BaseTarget } from './targets/base-target.mjs';

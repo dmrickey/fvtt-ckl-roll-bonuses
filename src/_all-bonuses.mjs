@@ -12,6 +12,7 @@ import './bonuses/snake-sidewind.mjs';
 import './bonuses/spells/init.mjs';
 import './bonuses/versatile-performance.mjs';
 import './bonuses/versatile-training.mjs';
+import './bonuses/vital-strike.mjs';
 import './bonuses/weapon-focus/racial-weapon-focus.mjs';
 import './bonuses/weapon-focus/weapon-focus.mjs';
 import './bonuses/weapon-specialization/weapon-specialization.mjs';

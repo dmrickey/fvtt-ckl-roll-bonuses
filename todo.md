@@ -58,7 +58,7 @@
 - [Other Ideas](#other-ideas)
 - [PF1 v11](#pf1-v11)
 - [vnext](#vnext)
-- [v 2.16](#v-216)
+- [v2.17](#v217)
 
 # TODO
 - Figure out a way to support multiple target groups on a single Item (so I can add `Favored Enemy (Human) +4` and `Favored Enemy (goblin) +2` on a single Item)
@@ -246,6 +246,34 @@
   - See example [https://gitlab.com/mxzf/adventure-uninstaller/-/blob/master/adventure-uninstaller.mjs](here)
 
 - Add "Weapon Focus" hint hook so Weapon Focus, Weapon Specialization, and Martial Focus can all use the sword icon hint
-
-# v 2.16
 - Audit Specific Bonus "click to expand" rules and make sure they're concise enough (_specifically_ looking at you, Weapon Focus)
+- Specific Bonuses
+  - Inspiration
+    - Has a traits selector for various skills
+    - Expanded Inspiration
+      - Lets you pick more skills that automatically include inspiration
+    - Change Inspiration Die
+      - Allows you to change the base die from 1d6 to 1d8 or 2d8 (Amazing Inspiration talent)
+    - Inspiration "Fortune" 
+      - e.g. Empathy Talent, when rolling inspiration for sense motive, roll twice and take the higher
+- Add "ignore me" boolean flag to turn off auto configuration (stronger "hammer" for EitR-type stuff where it incorrectly makes assumptions)
+
+# v2.17
+- verify fortune handler for non-async maximize change
+- `Target Overrides` -> `Targetable Overrides`
+- Documentation
+  - Update override section even more to make it explicit that the override goes on the thing that needs the property
+  - Include a screenshot of the three basic places that can be clicked
+    - 1 - dice icon in sheet header takes you to the documentation
+    - 2 - slider icon in sheet header allows you to configure this item
+    - 3 - book icon 
+      - hover for detail
+      - click for specific documentation
+- Vital Strike
+  - Add documentation
+    - Add documentation for "enabled by default", why it's off by default, and how they'll have to uncheck it for attacks of opportunity
+  - Add mythic functionality
+  - Add "enabled by default" functionality
+  - Make it work only for single attacks or "attack action"
+- Fix
+  - Invisible tokens can't target adjacent tokens in melee

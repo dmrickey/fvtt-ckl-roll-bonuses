@@ -9,6 +9,7 @@ import {
 } from '../src/target-and-bonus-join.mjs';
 import { showBonusPicker } from '../src/handlebars-handlers/bonus-picker.mjs';
 import { BaseTargetOverride } from '../src/targeted/target-overides/_base-target-override.mjs';
+import { simplifyRollFormula } from '../src/util/simplify-roll-formula.mjs';
 
 export {};
 
@@ -102,6 +103,7 @@ declare global {
             handleBonusesFor: typeof handleBonusesFor;
             handleBonusTypeFor: typeof handleBonusTypeFor;
             array: Record<string, (...args) => any>;
+            simplifyRollFormula: typeof simplifyRollFormula;
             [key: string]: any;
         };
     }
@@ -139,5 +141,13 @@ declare global {
 
     declare type RecursivePartial<T> = {
         [P in keyof T]?: RecursivePartial<T[P]>;
+    };
+
+    declare type ActionTypeFilterFunc = {
+        (
+            item: ItemPF,
+            action?: ItemAction,
+            actionUse?: ActionUse | null
+        ): boolean;
     };
 }
