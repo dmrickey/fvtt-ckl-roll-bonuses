@@ -1,4 +1,5 @@
 import { MODULE_NAME } from '../consts.mjs';
+import { checkboxInput } from '../handlebars-handlers/bonus-inputs/chekbox-input.mjs';
 import { showEnabledLabel } from '../handlebars-handlers/enabled-label.mjs';
 import { isWeapon } from '../util/action-type-helpers.mjs';
 import { api } from '../util/api.mjs';
@@ -23,7 +24,7 @@ const vitalStrikeImprovedCompendiumId = 'DorPGQ2mifJbMKH8';
 const vitalStrikeGreaterCompendiumId = 'zKNk7a4XxXsygJ67';
 const vitalStrikeMythicCompendiumId = 'rYLOl3zfFt3by3CE';
 
-const vitalStrikeEnabled = 'vital-strike_enabled';
+const vitalStrikeEnabled = 'vital-strike-enabled';
 
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#vital-strike';
 
@@ -213,7 +214,7 @@ function actionUseHandleConditionals(actionUse) {
         return;
     }
 
-    if (actionUse.shared.fullAttack && actionUse.shared.attacks.length !== 1) {
+    if (actionUse.shared.attacks.length !== 1) {
         return;
     }
 
@@ -250,41 +251,52 @@ Hooks.on('renderItemSheet', (
 
     configureIfNecesary(item);
 
-    const hasVital = item.hasItemBooleanFlag(vitalStrike);
-    const hasImproved = item.hasItemBooleanFlag(vitalStrikeImproved);
-    const hasGreater = item.hasItemBooleanFlag(vitalStrikeGreater);
+    const isVital = item.hasItemBooleanFlag(vitalStrike);
+    const isImproved = item.hasItemBooleanFlag(vitalStrikeImproved);
+    const isGreater = item.hasItemBooleanFlag(vitalStrikeGreater);
+    const isMythic = item.hasItemBooleanFlag(vitalStrikeMythic);
 
-    if (hasGreater) {
+    /**
+     * @param {string} key
+     * @param {string} [tooltip]
+     */
+    const showVitalStrike = (key, tooltip) => {
         showEnabledLabel({
             item,
             journal,
-            key: vitalStrikeGreater,
+            key,
             parent: html,
+            tooltip: localizeBonusTooltip(tooltip || vitalStrike),
         }, {
             canEdit: isEditable,
             inputType: 'specific-bonus',
         });
     }
-    else if (hasImproved) {
-        showEnabledLabel({
-            item,
-            journal,
-            key: vitalStrikeImproved,
-            parent: html,
-        }, {
-            canEdit: isEditable,
-            inputType: 'specific-bonus',
-        });
+    vitalStrikeEnabled
+
+    if (isGreater) {
+        showVitalStrike(vitalStrikeGreater);
     }
-    else if (hasVital) {
-        showEnabledLabel({
+    if (isImproved) {
+        showVitalStrike(vitalStrikeImproved);
+    }
+    if (isVital) {
+        showVitalStrike(vitalStrike);
+    }
+    if (isMythic) {
+        showVitalStrike(vitalStrikeMythic, vitalStrikeMythic);
+    }
+
+    if (isVital || isImproved || isGreater) {
+        checkboxInput({
             item,
             journal,
-            key: vitalStrike,
+            key: vitalStrikeEnabled,
             parent: html,
         }, {
             canEdit: isEditable,
             inputType: 'specific-bonus',
+            isSubLabel: true,
         });
     }
 });
