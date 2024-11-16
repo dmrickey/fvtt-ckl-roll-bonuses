@@ -8,6 +8,7 @@
 
 ### Misc
 - Added Item Hints with tooltips to all Specific Bonuses
+- Small bit of future-proofing regarding async rolls
 
 ### Bugfixes
 - Invisible tokens can now correctly hit other tokens in melee
