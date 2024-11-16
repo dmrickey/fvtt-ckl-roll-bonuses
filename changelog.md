@@ -7,6 +7,9 @@
 ### Misc
 - Added Item Hints with tooltips to all Specific Bonuses
 
+### Bugfixes
+- Invisible tokens can now correctly hit other tokens in melee
+
 ## Roll Bonuses 2.16.2
 
 ---

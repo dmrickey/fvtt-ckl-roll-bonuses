@@ -118,7 +118,7 @@ export class PositionalHelper {
      * @returns {boolean}
      */
     static #threatens(attacker, target, specificAction = undefined) {
-        if (attacker.actor) {
+        if (attacker.actor instanceof pf1.documents.actor.ActorPF && target.actor instanceof pf1.documents.actor.ActorPF) {
             const { actor } = attacker;
 
             /** @type {Array<keyof Conditions>} */
@@ -147,8 +147,7 @@ export class PositionalHelper {
                 return false;
             }
 
-            if (attacker.actor instanceof pf1.documents.actor.ActorPF
-                && attacker.actor.hasCondition('invisible')
+            if (target.actor.hasCondition('invisible')
                 && !(senses.si || senses.ts)
             ) {
                 return false;
@@ -159,11 +158,10 @@ export class PositionalHelper {
         if (specificAction) {
             actions = [specificAction];
         } else {
-            const meleeAttacks = attacker.actor.items
+            actions = attacker.actor.items
                 .filter((item) => item.canUse && item.activeState)
                 .flatMap((item) => item.actions.contents)
                 .filter((action) => action.hasAttack && !action.isRanged);
-            actions = [...meleeAttacks];
         }
 
         return actions.some((action) => {
