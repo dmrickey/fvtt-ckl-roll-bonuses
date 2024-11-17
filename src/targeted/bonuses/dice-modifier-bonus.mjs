@@ -53,7 +53,7 @@ export class DiceModifierBonus extends BaseBonus {
         }, {
             canEdit: isEditable,
             inputType: 'specific-bonus',
-            isFormula: false,
+            // isFormula: false,
         });
         textInput({
             item,
@@ -65,6 +65,7 @@ export class DiceModifierBonus extends BaseBonus {
             canEdit: isEditable,
             inputType: 'specific-bonus',
             isFormula: false,
+            isSubLabel: true,
             // textInputType: 'number', // todo create number input hbs
         });
     }
@@ -116,7 +117,12 @@ export class DiceModifierBonus extends BaseBonus {
                 DiceModifierBonus,
                 (_bonusType, sourceItem) => sourceItems.push(sourceItem),
             );
-            // todo order these
+
+            sourceItems.sort((a, b) => {
+                const left = +a.getFlag(MODULE_NAME, DiceModifierBonus.#priorityKey) || 0;
+                const right = +b.getFlag(MODULE_NAME, DiceModifierBonus.#priorityKey) || 0;
+                return right - left;
+            });
 
             sourceItems.forEach((source) =>
                 DiceModifierBonus.transformDice(action, rollData, parts, changes, source));
