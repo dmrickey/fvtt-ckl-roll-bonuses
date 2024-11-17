@@ -22,6 +22,7 @@ export const localHooks = /** @type {const} */ ({
     chatAttackEffectNotes: `${MODULE_NAME}_chatAttackEffectNotes`,
     initItemActionRollData: `${MODULE_NAME}_initItemActionRollData`,
     itemActionCritRangeWrapper: `${MODULE_NAME}_itemActionCritRangeWrapper`,
+    itemAction_damageSources: `${MODULE_NAME}_itemAction_damageSources`,
     itemActionEnhancementBonus: `${MODULE_NAME}_itemActionEnhancementBonus`,
     itemActionRollAttack: `${MODULE_NAME}_itemActionRollAttack`,
     itemActionRollDamage: `${MODULE_NAME}_itemActionRollDamage`,
@@ -149,6 +150,13 @@ export class LocalHookHandler {
      * @overload
      * @param {typeof localHooks.modifyActionLabelDC} hook
      * @param {(action: ItemAction, seed: {dc: number}) => void} func
+     * @returns {void}
+     */
+
+    /**
+     * @overload
+     * @param {typeof localHooks.itemAction_damageSources} hook
+     * @param {(action: ItemAction, damageSources: ItemChange[]) => void} func
      * @returns {void}
      */
 
@@ -321,6 +329,14 @@ export class LocalHookHandler {
      * @param {typeof localHooks.prepareData} hook
      * @param {ItemPF} item
      * @param {RollData} rollData
+     * @returns {void}
+     */
+
+    /**
+     * @overload
+     * @param {typeof localHooks.itemAction_damageSources} hook
+     * @param {ItemAction} action
+     * @param {ItemChange[]} damageSources
      * @returns {void}
      */
 

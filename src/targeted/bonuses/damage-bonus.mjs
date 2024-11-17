@@ -251,12 +251,12 @@ export class DamageBonus extends BaseBonus {
     static {
         /**
          * @this {ItemAction}
-         * @param {() => ItemChange[]} wrapped
+         * @param {ItemAction} action
+         * @param {ItemChange[]} damageSources
          */
-        function itemAction_damageSources(wrapped) {
-            const damageSources = wrapped() || [];
+        function itemAction_damageSources(action, damageSources) {
             handleBonusTypeFor(
-                this,
+                action,
                 DamageBonus,
                 (bonusType, sourceItem) => {
                     const changes = bonusType.#getCachedDamageItemChange(sourceItem);
@@ -266,7 +266,7 @@ export class DamageBonus extends BaseBonus {
             return damageSources;
         };
         Hooks.once('init', () => {
-            libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.damageSources', itemAction_damageSources, libWrapper.WRAPPER);
+            LocalHookHandler.registerHandler(localHooks.itemAction_damageSources, itemAction_damageSources);
         });
     }
 }

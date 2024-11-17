@@ -291,6 +291,16 @@ function getDamageTooltipSources(wrapped, fullId, context) {
 
 /**
  * @this {ItemAction}
+ * @param {() => ItemChange[]} wrapped
+ */
+function itemAction_damageSources(wrapped) {
+    const damageSources = wrapped() || [];
+    LocalHookHandler.fireHookNoReturnSync(localHooks.itemAction_damageSources, this, damageSources);
+    return damageSources;
+};
+
+/**
+ * @this {ItemAction}
  * @param {() => number} wrapped
  * @returns {number}
  */
@@ -507,6 +517,7 @@ Hooks.once('init', () => {
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ChatAttack.prototype.setEffectNotesHTML', setEffectNotesHTMLWrapper, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.applications.actor.ActorSheetPF.prototype._getTooltipContext', getDamageTooltipSources, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.critRange', itemActionCritRangeWrapper, libWrapper.WRAPPER);
+    libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.damageSources', itemAction_damageSources, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.enhancementBonus', itemActionEnhancementBonus, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.getLabels', itemAction_getLabels, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.rollAttack', itemActionRollAttack, libWrapper.WRAPPER);
