@@ -238,6 +238,7 @@ export const loadConditionals = (item, key, { useCachedFormula = false } = {}) =
     const flags = deepClone(item.getFlag(MODULE_NAME, key) || []);
 
     flags.forEach((c) => {
+        if (!c.name) c.name = item.name;
         c.modifiers.forEach((m) => {
             if (useCachedFormula) {
                 const formula = item[MODULE_NAME][key]?.conditionals?.[c._id]?.[m._id];
