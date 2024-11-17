@@ -1366,6 +1366,7 @@ declare global {
         acp: boolean;
         changeBonus: number;
         cs: boolean;
+        id: string;
         fullName: string;
         mod: number;
         name: string;

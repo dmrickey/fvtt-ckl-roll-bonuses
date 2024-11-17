@@ -16,11 +16,11 @@ import { createTemplate, templates } from "../templates.mjs";
  * @param {HTMLElement} args.parent,
  * @param {object} options
  * @param {boolean} options.canEdit
- * @param {string} [options.placeholder]
- * @param {boolean} [options.isFormula]
  * @param {InputType} options.inputType
- * @param {true} [options.isModuleFlag] - true (default) if this is a data flag, false if this is a dictionary flag
+ * @param {boolean} [options.isFormula]
  * @param {boolean} [options.isSubLabel]
+ * @param {string} [options.placeholder]
+ * @param {string} [options.textInputType]
  */
 export function textInput({
     choices = [],
@@ -37,6 +37,7 @@ export function textInput({
     isFormula = true,
     isSubLabel = false,
     placeholder = '',
+    textInputType = 'text',
 }) {
     current ||= item.getFlag(MODULE_NAME, key);
     label ||= localizeBonusLabel(key);
@@ -54,6 +55,7 @@ export function textInput({
             label,
             placeholder,
             readonly: !canEdit,
+            textInputType,
             tooltip,
         },
     );
