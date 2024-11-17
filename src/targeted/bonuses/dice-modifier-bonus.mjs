@@ -34,37 +34,38 @@ export class DiceModifierBonus extends BaseBonus {
         });
     }
 
+    /**
+     * @param {ItemAction} action
+     * @param {RollData} rollData
+     * @param {PreDamageRollPart[]} parts
+     * @param {ItemChange[]} [_changes]
+     */
+    static async preDamageRoll(action, rollData, parts, _changes) {
+        /** @type {ItemPF[]} */
+        const sourceItems = [];
+        handleBonusTypeFor(
+            action,
+            DiceModifierBonus,
+            (_bonusType, sourceItem) => sourceItems.push(sourceItem),
+        );
+
+        sourceItems.sort((a, b) => {
+            const left = +a.getFlag(MODULE_NAME, DiceModifierBonus.#priorityKey) || 0;
+            const right = +b.getFlag(MODULE_NAME, DiceModifierBonus.#priorityKey) || 0;
+            return right - left;
+        });
+
+        sourceItems.forEach((source) => {
+            const formula = parts[0].base;
+            const transformed = DiceModifierBonus.transformFormula(rollData, formula, source);
+            if (transformed) {
+                parts[0].base = transformed;
+            }
+        });
+    }
+
     static {
-        /**
-         * @param {ItemAction} action
-         * @param {RollData} rollData
-         * @param {PreDamageRollPart[]} parts
-         * @param {ItemChange[]} changes
-         */
-        const preDamageRoll = async (action, rollData, parts, changes) => {
-            /** @type {ItemPF[]} */
-            const sourceItems = [];
-            handleBonusTypeFor(
-                action,
-                DiceModifierBonus,
-                (_bonusType, sourceItem) => sourceItems.push(sourceItem),
-            );
-
-            sourceItems.sort((a, b) => {
-                const left = +a.getFlag(MODULE_NAME, DiceModifierBonus.#priorityKey) || 0;
-                const right = +b.getFlag(MODULE_NAME, DiceModifierBonus.#priorityKey) || 0;
-                return right - left;
-            });
-
-            sourceItems.forEach((source) => {
-                const formula = parts[0].base;
-                const transformed = DiceModifierBonus.transformFormula(rollData, formula, source);
-                if (transformed) {
-                    parts[0].base = transformed;
-                }
-            });
-        }
-        Hooks.on('pf1PreDamageRoll', preDamageRoll);
+        Hooks.on('pf1PreDamageRoll', DiceModifierBonus.preDamageRoll);
     }
 
     /**

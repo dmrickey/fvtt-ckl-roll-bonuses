@@ -5,6 +5,7 @@ import { getGreaterWeaponSpecializaitonConditional } from '../bonuses/weapon-spe
 import { getWeaponSpecializaitonConditional } from '../bonuses/weapon-specialization/weapon-specialization.mjs';
 import { MODULE_NAME } from '../consts.mjs';
 import { handleBonusesFor } from '../target-and-bonus-join.mjs';
+import { DiceModifierBonus } from '../targeted/bonuses/dice-modifier-bonus.mjs';
 import { truthiness } from '../util/truthiness.mjs';
 
 /**
@@ -107,6 +108,13 @@ function actionDamage(action, { simplify = true, strict = true } = {}) {
 
     // Normal damage parts
     handleParts(actionData.damage.parts);
+    /** BEGIN OVERRIDE */
+    if (parts[0]) {
+        const fakeParts = [{ base: parts[0] }];
+        DiceModifierBonus.preDamageRoll(action, lazy.rollData, fakeParts);
+        parts[0] = fakeParts[0].base;
+    }
+    /** END OVERRIDE */
 
     const isNatural = action.item.subType === "natural";
 
