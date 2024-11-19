@@ -100,6 +100,7 @@ export class ConditionalModifiersBonus extends BaseBonus {
         const conditionals = this.getConditionals(target);
         const sources = conditionals
             .map((c) => c.data)
+            .filter((c) => c.default)
             .flatMap((cd) => cd.modifiers
                 .filter((mod) => mod.target === 'damage')
                 .map((mod) => conditionalModToItemChangeForDamageTooltip(cd, mod, { isDamage: true }))
@@ -123,6 +124,7 @@ export class ConditionalModifiersBonus extends BaseBonus {
         const conditionals = this.getConditionals(target);
         const sources = conditionals
             .map((c) => c.data)
+            .filter((c) => c.default)
             .flatMap((cd) => cd.modifiers
                 .filter((mod) => mod.target === 'attack')
                 .map((mod) => conditionalAttackTooltipModSource(cd, mod))
@@ -143,6 +145,7 @@ export class ConditionalModifiersBonus extends BaseBonus {
         const conditionals = this.loadConfiguredConditionals(source);
         const bonus = conditionals
             .map((c) => c.data)
+            .filter((c) => c.default)
             .flatMap((cd) => cd.modifiers
                 .filter((mod) => mod.target === 'effect' && mod.subTarget === 'dc')
                 .map((mod) => mod.formula?.trim())
