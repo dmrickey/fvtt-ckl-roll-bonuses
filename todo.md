@@ -261,7 +261,5 @@
 - Add "ignore me" boolean flag to turn off auto configuration (stronger "hammer" for EitR-type stuff where it incorrectly makes assumptions)
 
 # v2.17
-- Documentation
-  - Update override section even more to make it explicit that the override goes on the thing that needs the property
 - Dice Modifier
   - add item hint

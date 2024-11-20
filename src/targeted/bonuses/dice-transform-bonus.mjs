@@ -6,20 +6,20 @@ import { localizeBonusTooltip } from '../../util/localize.mjs';
 import { simplify } from '../../util/simplify-roll-formula.mjs';
 import { BaseBonus } from './base-bonus.mjs';
 
-export class DiceModifierBonus extends BaseBonus {
+export class DiceTransformBonus extends BaseBonus {
 
     /**
      * @override
      * @inheritdoc
      */
-    static get sourceKey() { return 'dice-modifier'; }
+    static get sourceKey() { return 'dice-transform'; }
     static get #priorityKey() { return `${this.key}-priority`; }
 
     /**
      * @override
      * @returns {string}
      */
-    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.PiyJbkTuzKHugPSk#dice-modifier'; }
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.PiyJbkTuzKHugPSk#dice-transform'; }
 
     /**
      * @override
@@ -45,19 +45,19 @@ export class DiceModifierBonus extends BaseBonus {
         const sourceItems = [];
         handleBonusTypeFor(
             action,
-            DiceModifierBonus,
+            DiceTransformBonus,
             (_bonusType, sourceItem) => sourceItems.push(sourceItem),
         );
 
         sourceItems.sort((a, b) => {
-            const left = +a.getFlag(MODULE_NAME, DiceModifierBonus.#priorityKey) || 0;
-            const right = +b.getFlag(MODULE_NAME, DiceModifierBonus.#priorityKey) || 0;
+            const left = +a.getFlag(MODULE_NAME, DiceTransformBonus.#priorityKey) || 0;
+            const right = +b.getFlag(MODULE_NAME, DiceTransformBonus.#priorityKey) || 0;
             return right - left;
         });
 
         sourceItems.forEach((source) => {
             const formula = parts[0].base;
-            const transformed = DiceModifierBonus.transformFormula(rollData, formula, source);
+            const transformed = DiceTransformBonus.transformFormula(rollData, formula, source);
             if (transformed) {
                 parts[0].base = transformed;
             }
@@ -65,7 +65,7 @@ export class DiceModifierBonus extends BaseBonus {
     }
 
     static {
-        Hooks.on('pf1PreDamageRoll', DiceModifierBonus.preDamageRoll);
+        Hooks.on('pf1PreDamageRoll', DiceTransformBonus.preDamageRoll);
     }
 
     /**

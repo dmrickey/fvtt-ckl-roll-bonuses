@@ -1,6 +1,5 @@
 import { MODULE_NAME } from './consts.mjs';
 import { BaseBonus } from './targeted/bonuses/base-bonus.mjs';
-import { conditionalCalculator } from "./util/conditional-helpers.mjs";
 import { LocalHookHandler, customGlobalHooks, localHooks } from "./util/hooks.mjs";
 import { registerItemHint } from "./util/item-hints.mjs";
 import { localize } from "./util/localize.mjs";

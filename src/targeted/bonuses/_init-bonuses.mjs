@@ -14,25 +14,25 @@ import { MaximizeDamageBonus } from './maximize-damage-bonus.mjs';
 import { MisfortuneBonus } from './misfortune-bonus.mjs';
 import { ConditionalModifiersBonus } from './conditional-modifiers-bonus.mjs';
 import { ScriptCallBonus } from './script-call-bonus.mjs';
-import { DiceModifierBonus } from './dice-modifier-bonus.mjs';
+import { DiceTransformBonus } from './dice-transform-bonus.mjs';
 
 export const registerBonuses = () => [
-    AgileBonus,
-    AttackBonus,
-    CasterLevelBonus,
-    ConditionalModifiersBonus,
-    CritBonus,
-    DamageBonus,
-    DCBonus,
-    DiceModifierBonus,
-    EffectiveSizeBonus,
-    EnhancementBonus,
-    FinesseBonus,
-    FootnoteBonus,
-    FortuneBonus,
-    MisfortuneBonus,
-    ScriptCallBonus,
+  AgileBonus,
+  AttackBonus,
+  CasterLevelBonus,
+  ConditionalModifiersBonus,
+  CritBonus,
+  DamageBonus,
+  DCBonus,
+  DiceTransformBonus,
+  EffectiveSizeBonus,
+  EnhancementBonus,
+  FinesseBonus,
+  FootnoteBonus,
+  FortuneBonus,
+  MisfortuneBonus,
+  ScriptCallBonus,
 
-    // Specifically last so it'll include other damage bonuses in its tooltip
-    MaximizeDamageBonus,
+  // Specifically last so it'll include other damage bonuses in its tooltip
+  MaximizeDamageBonus,
 ].forEach(Sources.registerSource);

@@ -4,7 +4,6 @@ import { showEnabledLabel } from '../handlebars-handlers/enabled-label.mjs';
 import { isWeapon } from '../util/action-type-helpers.mjs';
 import { api } from '../util/api.mjs';
 import { addCheckToAttackDialog, getFormData } from '../util/attack-dialog-helper.mjs';
-import { conditionalCalculator } from '../util/conditional-helpers.mjs';
 import { getCachedBonuses } from '../util/get-cached-bonuses.mjs';
 import { LocalHookHandler, customGlobalHooks, localHooks } from '../util/hooks.mjs';
 import { registerItemHint } from '../util/item-hints.mjs';
