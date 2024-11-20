@@ -7,12 +7,12 @@ export class SpecificBonuses {
      * @param {object} bonus
      * @param {string} bonus.journal
      * @param {string} bonus.key
-     * @param {Nullable<string>} [bonus.label]
-     * @param {Nullable<string>?} [bonus.tooltip]
+     * @param {Nullable<string>} [bonus.labelKey]
+     * @param {Nullable<string>?} [bonus.tooltipKey]
      * @param {Nullable<string>?} [bonus.parent]
      */
-    static registerSpecificBonus({ journal, label = null, key, tooltip = undefined, parent }) {
-        this.allBonuses[key] = new SpecificBonus(journal, key, label, parent, tooltip);
+    static registerSpecificBonus({ journal, labelKey = null, key, tooltipKey = undefined, parent }) {
+        this.allBonuses[key] = new SpecificBonus(journal, key, labelKey, parent, tooltipKey);
     }
 
     /**
@@ -32,28 +32,32 @@ class SpecificBonus {
     /**
      * @param {string} journal
      * @param {string} key
-     * @param {Nullable<string>} label
+     * @param {Nullable<string>} labelKey
      * @param {Nullable<string>} parent
-     * @param {Nullable<string>} tooltip
+     * @param {Nullable<string>} tooltipKey
      */
     constructor(
         journal,
         key,
-        label,
+        labelKey,
         parent,
-        tooltip,
+        tooltipKey,
     ) {
         this.journal = journal;
         this.key = key;
-        this._label = label;
+        this._labelKey = labelKey;
         this.parent = parent;
-        this._tooltip = tooltip;
+        this._tooltipKey = tooltipKey;
     }
 
     get label() {
-        return this._label || localizeBonusLabel(this.key);
+        return this._labelKey
+            ? localizeBonusLabel(this._labelKey)
+            : localizeBonusLabel(this.key);
     }
     get tooltip() {
-        return this._tooltip || localizeBonusTooltip(this.key);
+        return this._tooltipKey
+            ? localizeBonusTooltip(this._tooltipKey)
+            : localizeBonusTooltip(this.key);
     }
 }

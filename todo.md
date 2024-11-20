@@ -58,7 +58,6 @@
 - [Other Ideas](#other-ideas)
 - [PF1 v11](#pf1-v11)
 - [vnext](#vnext)
-- [v2.17](#v217)
 
 # TODO
 - Figure out a way to support multiple target groups on a single Item (so I can add `Favored Enemy (Human) +4` and `Favored Enemy (goblin) +2` on a single Item)
@@ -259,7 +258,3 @@
     - Inspiration "Fortune" 
       - e.g. Empathy Talent, when rolling inspiration for sense motive, roll twice and take the higher
 - Add "ignore me" boolean flag to turn off auto configuration (stronger "hammer" for EitR-type stuff where it incorrectly makes assumptions)
-
-# v2.17
-- Dice Modifier
-  - add item hint

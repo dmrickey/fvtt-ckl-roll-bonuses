@@ -2,10 +2,9 @@ import { MODULE_NAME } from '../consts.mjs';
 import { checkboxInput } from '../handlebars-handlers/bonus-inputs/chekbox-input.mjs';
 import { showEnabledLabel } from '../handlebars-handlers/enabled-label.mjs';
 import { isWeapon } from '../util/action-type-helpers.mjs';
-import { api } from '../util/api.mjs';
 import { addCheckToAttackDialog, getFormData } from '../util/attack-dialog-helper.mjs';
 import { getCachedBonuses } from '../util/get-cached-bonuses.mjs';
-import { LocalHookHandler, customGlobalHooks, localHooks } from '../util/hooks.mjs';
+import { LocalHookHandler, localHooks } from '../util/hooks.mjs';
 import { registerItemHint } from '../util/item-hints.mjs';
 import { localizeBonusLabel, localizeBonusTooltip } from '../util/localize.mjs';
 import { LanguageSettings } from '../util/settings.mjs';
@@ -28,8 +27,8 @@ const vitalStrikeEnabled = 'vital-strike-enabled';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#vital-strike';
 
 SpecificBonuses.registerSpecificBonus({ journal, key: vitalStrike });
-SpecificBonuses.registerSpecificBonus({ journal, key: vitalStrikeImproved, parent: vitalStrike });
-SpecificBonuses.registerSpecificBonus({ journal, key: vitalStrikeGreater, parent: vitalStrike });
+SpecificBonuses.registerSpecificBonus({ journal, key: vitalStrikeImproved, parent: vitalStrike, tooltipKey: vitalStrike });
+SpecificBonuses.registerSpecificBonus({ journal, key: vitalStrikeGreater, parent: vitalStrike, tooltipKey: vitalStrike });
 // SpecificBonuses.registerSpecificBonus({ journal, key: vitalStrikeMythic, parent: vitalStrike });
 
 const hintInfo = /** @type {const} */ ({
