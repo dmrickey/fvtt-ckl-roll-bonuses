@@ -217,6 +217,8 @@
   - Sad day. Not possible for basically the same reason custom changes aren't possible
 - Custom changes that effect only specific targets :(
   - changes are generated and applied too early and too broadly in the system prep. I can either create a change that applies to everything (pointless) or I can create a specific change that exists for the specified target, but it's created too late to both be reduced to the best bonus type and actually be added to the roll
+- Vital Strike (Mythic)
+  - Damage has already been stripped and added, I don't know which damage is crit only or not when I'm making my changes
 
 # Range/Positional ideas
 - Flank
@@ -259,14 +261,7 @@
 - Add "ignore me" boolean flag to turn off auto configuration (stronger "hammer" for EitR-type stuff where it incorrectly makes assumptions)
 
 # v2.17
-- verify fortune handler for non-async maximize change
-- `Target Overrides` -> `Targetable Overrides`
 - Documentation
   - Update override section even more to make it explicit that the override goes on the thing that needs the property
-- Vital Strike
-  - Add mythic functionality
-- Fix
-  - Invisible tokens can't target adjacent tokens in melee
 - Dice Modifier
-  - create number input
   - add item hint

@@ -517,6 +517,7 @@ declare global {
         img: string;
         static defaultDamageType: TraitSelectorValuePlural;
         hasAttack: boolean;
+        hasDamage: boolean;
         isCombatManeuver: boolean;
         isRanged: boolean;
         get enhancementBonus(): number;

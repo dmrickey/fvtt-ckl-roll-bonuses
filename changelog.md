@@ -2,7 +2,7 @@
 
 ### New Bonuses
 - **Dice Modification**
-  - Alter dice quantity or faces for the base damage of targeted attcks. This lets you do things like double dice, add two more of the kind of die already being used, or even just replace the targeted dice with a simple `1`.
+  - Alter dice quantity or faces for the base damage of targeted attcks. This lets you do things like double dice, add two more of the kind of die already being used, or even just replace the targeted dice with a simple `1` or any other formula you want. This is probably the most complex bonus I've created so please read the documentation (click the book icon next to the bonus name).
 - **Vital Strike**
   - Added Specific Bonuses for Vital Strike (including Improved and Greater)
 
@@ -14,6 +14,7 @@
 - Invisible tokens can now correctly hit other tokens in melee
 - Fixed some Spell DC bonuses being doubled on attack card "info"
 - Fixed multiplying Conditional Modifiers when multiple were configured on a single Roll Bonus
+- Made it so that "non crit" damage will apply to abilities that don't have attack rolls (i.e. like spells that force a save)
 
 ## Roll Bonuses 2.16.2
 

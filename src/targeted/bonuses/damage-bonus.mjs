@@ -130,9 +130,10 @@ export class DamageBonus extends BaseBonus {
      * @override
      * @inheritdoc
      * @param {ItemPF} source
+     * @param {ActionUse} _action
      * @returns {Nullable<ItemConditional[]>}
      */
-    static getConditionals(source) {
+    static getConditionals(source, _action) {
         const conditional = this.#getConditional(source);
         if (conditional) {
             return [conditional]

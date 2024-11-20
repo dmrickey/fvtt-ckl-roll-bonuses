@@ -240,7 +240,20 @@ function actionUse_handleConditionals(wrapped) {
     const conditionalData = [
         ...this.shared.conditionals.map((i) => this.shared.action.data.conditionals[i]),
         ...conditionals.map(x => x.data),
-    ]
+    ];
+
+    // spells/abilities that don't have attack rolls still need to accept "nonCrit" bonuses
+    // the system is hardcoded to only look at "normal" damage when no attack roll is configured
+    if (!this.action.hasAttack && this.action.hasDamage) {
+        conditionalData.forEach((c) => {
+            c.modifiers.forEach(m => {
+                if (m.critical === 'nonCrit') {
+                    m.critical = 'normal';
+                }
+            });
+        });
+    }
+
     handleConditionals(this, conditionalData);
 }
 
