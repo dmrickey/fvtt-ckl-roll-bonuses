@@ -3,7 +3,6 @@ import { MODULE_NAME } from "../consts.mjs";
 export const customGlobalHooks = /** @type {const} */ ({
     getDamageTooltipSources: `${MODULE_NAME}_getDamageTooltipSources`,
     actionUseAlterRollData: `${MODULE_NAME}_actionUseAlterRollData`,
-    actionUseHandleConditionals: `${MODULE_NAME}_actionUseHandleConditionals`,
     actionUseFootnotes: `${MODULE_NAME}_actionUseFootnotes`,
     d20Roll: `${MODULE_NAME}_d20Roll`,
     getActorInitiativeFormula: `${MODULE_NAME}_getActorInitiativeFormula`,
@@ -13,6 +12,7 @@ export const customGlobalHooks = /** @type {const} */ ({
 });
 
 export const localHooks = /** @type {const} */ ({
+    actionUse_handleConditionals: `${MODULE_NAME}_actionUse_handleConditionals`,
     actionUseProcess: `${MODULE_NAME}_actionUseProcess`,
     actorGetSkillInfo: `${MODULE_NAME}_actorGetSkillInfo`,
     actorRollSkill: `${MODULE_NAME}_actorRollSkill`,
@@ -40,6 +40,13 @@ export const localHooks = /** @type {const} */ ({
 const handlers = {};
 
 export class LocalHookHandler {
+
+    /**
+     * @overload
+     * @param {typeof localHooks.actionUse_handleConditionals} hook
+     * @param {(action: ActionUse, conditionals: ItemConditional[]) => void} func
+     * @returns {void}
+     */
 
     /**
      * @overload
@@ -337,6 +344,14 @@ export class LocalHookHandler {
      * @param {typeof localHooks.itemAction_damageSources} hook
      * @param {ItemAction} action
      * @param {ItemChange[]} damageSources
+     * @returns {void}
+     */
+
+    /**
+     * @overload
+     * @param {typeof localHooks.actionUse_handleConditionals} hook
+     * @param {ActionUse} action
+     * @param {ItemConditional[]} conditionals
      * @returns {void}
      */
 

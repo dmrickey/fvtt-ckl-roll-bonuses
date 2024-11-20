@@ -152,7 +152,7 @@ class VitalStrikeData {
                             this.isGreater ? `${firstDice}[${localizeBonusLabel(vitalStrike)}] + ${firstDice}[${localizeBonusLabel(vitalStrikeImproved)}] + ${firstDice}[${localizeBonusLabel(vitalStrikeGreater)}]`
                                 : this.isImproved ? `${firstDice}[${localizeBonusLabel(vitalStrike)}] + ${firstDice}[${localizeBonusLabel(vitalStrikeImproved)}]`
                                     : `${firstDice}[${localizeBonusLabel(vitalStrike)}]`;
-                        // this.formula = Array(amount).fill(`${firstDice}[${this.label}]`).join(' + ');
+
                         const formData = getFormData(actionUse, key);
                         this.enabled = typeof formData === 'boolean'
                             ? formData
@@ -174,10 +174,6 @@ class VitalStrikeData {
                         });
                         this.conditionals.push(conditional);
                     }
-                    // }
-                    // else {
-                    //     debugger;
-                    // }
                 }
                 return true;
             }
@@ -240,8 +236,9 @@ Hooks.on('renderApplication', addConditionalModifierToDialog);
  * Adds conditional to action being used
  *
  * @param {ActionUse} actionUse
+ * @param {ItemConditional[]} conditionals
  */
-function actionUseHandleConditionals(actionUse) {
+function actionUseHandleConditionals(actionUse, conditionals) {
     if (!isWeapon(actionUse?.item, actionUse.action)) {
         return;
     }
@@ -253,9 +250,9 @@ function actionUseHandleConditionals(actionUse) {
     const vital = new VitalStrikeData(actionUse.actor, { actionUse });
     if (!vital.hasVitalStrike || !vital.enabled) return;
 
-    vital.conditionals.forEach((c) => conditionalCalculator(actionUse.shared, c));
+    conditionals.push(...vital.conditionals);
 }
-Hooks.on(customGlobalHooks.actionUseHandleConditionals, actionUseHandleConditionals);
+LocalHookHandler.registerHandler(localHooks.actionUse_handleConditionals, actionUseHandleConditionals);
 
 Hooks.on('renderItemSheet', (
     /** @type {ItemSheetPF} */ { actor, isEditable, item },

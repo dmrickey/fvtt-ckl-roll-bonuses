@@ -158,23 +158,22 @@ api.utils.handleBonusTypeFor = handleBonusTypeFor;
  * Adds conditional to action being used
  *
  * @param {ActionUse} actionUse
+ * @param {ItemConditional[]} conditionals
  */
-function actionUseHandleConditionals(actionUse) {
+function actionUseHandleConditionals(actionUse, conditionals) {
     /** @type {Nullable<ItemConditional[]>[]} */
-    const conditionals = [];
+    const nestedConditionals = [];
     handleBonusesFor(
         actionUse,
-        (bonusType, sourceItem) => conditionals.push(bonusType.getConditionals(sourceItem, actionUse)),
+        (bonusType, sourceItem) => nestedConditionals.push(bonusType.getConditionals(sourceItem, actionUse)),
     );
-
-    conditionals
+    const _conditionals = nestedConditionals
         .filter(truthiness)
         .flatMap((x) => x)
-        .filter(truthiness)
-        .filter((c) => c.data.modifiers.length)
-        .forEach((conditional) => conditionalCalculator(actionUse.shared, conditional));
+        .filter(truthiness);
+    conditionals.push(..._conditionals);
 }
-Hooks.on(customGlobalHooks.actionUseHandleConditionals, actionUseHandleConditionals);
+LocalHookHandler.registerHandler(localHooks.actionUse_handleConditionals, actionUseHandleConditionals);
 
 /**
  * Alters roll data for attack rolls - for simple changes that don't need an ItemConditional/Modifier or ItemChange

@@ -15,6 +15,7 @@ import { registerSetting } from './util/settings.mjs';
 import { addNodeToRollBonus } from './handlebars-handlers/add-bonus-to-item-sheet.mjs';
 import { localize } from './util/localize.mjs';
 import { FinesseOverride } from './targeted/target-overides/finesse-override.mjs';
+import { handleConditionals } from './patch/action-use_handle-conditionals.mjs';
 
 Hooks.once('pf1PostReady', () => migrate());
 
@@ -228,9 +229,19 @@ function itemActionCritRangeWrapper(wrapped) {
  * @param {() => {}} wrapped
  * @this {ActionUse}
  */
-function actionUseHandleConditionals(wrapped) {
-    wrapped();
-    Hooks.call(customGlobalHooks.actionUseHandleConditionals, this);
+function actionUse_handleConditionals(wrapped) {
+    // shared.conditionals is an array of indexes to grab the conditional data for
+    this.shared.conditionals ||= [];
+
+    /** @type {ItemConditional[]} */
+    const conditionals = [];
+    LocalHookHandler.fireHookNoReturnSync(localHooks.actionUse_handleConditionals, this, conditionals);
+
+    const conditionalData = [
+        ...this.shared.conditionals.map((i) => this.shared.action.data.conditionals[i]),
+        ...conditionals.map(x => x.data),
+    ]
+    handleConditionals(this, conditionalData);
 }
 
 /**
@@ -333,7 +344,10 @@ function itemActionEnhancementBonus(wrapped) {
 function itemAction_getLabels(wrapped, { rollData } = {}) {
     const labels = wrapped({ rollData });
 
-    if (this.hasSave && rollData) {
+    // has been previously calculated if conditionals are already included
+    const shouldSkip = !!rollData?.conditionals;
+
+    if (this.hasSave && rollData && !shouldSkip) {
         const seed = { dc: 0 };
         LocalHookHandler.fireHookNoReturnSync(localHooks.modifyActionLabelDC, this, seed);
         const totalDC = rollData.dc + (rollData.dcBonus ?? 0) + seed.dc;
@@ -511,7 +525,7 @@ Hooks.once('init', () => {
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype._getConditionalParts', getConditionalParts, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype.addFootnotes', addFootnotes, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype.alterRollData', actionUseAlterRollData, libWrapper.WRAPPER);
-    libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype.handleConditionals', actionUseHandleConditionals, libWrapper.WRAPPER);
+    libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype.handleConditionals', actionUse_handleConditionals, libWrapper.OVERRIDE);
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype.process', actionUseProcess, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ChatAttack.prototype.addAttack', chatAttackAddAttack, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ChatAttack.prototype.setEffectNotesHTML', setEffectNotesHTMLWrapper, libWrapper.WRAPPER);

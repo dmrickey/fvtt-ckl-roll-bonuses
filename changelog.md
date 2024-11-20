@@ -12,6 +12,8 @@
 
 ### Bugfixes
 - Invisible tokens can now correctly hit other tokens in melee
+- Fixed some Spell DC bonuses being doubled on attack card "info"
+- Fixed multiplying Conditional Modifiers when multiple were configured on a single Roll Bonus
 
 ## Roll Bonuses 2.16.2
 

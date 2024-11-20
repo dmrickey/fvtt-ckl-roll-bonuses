@@ -269,7 +269,7 @@ declare global {
         chatMessage?: boolean;
         concentrationCheck?: undefined;
         conditionalPartsCommon: any;
-        conditionals: [];
+        conditionals: number[];
         cost?: null;
         damageBonus: string[];
         dice: string;
@@ -484,6 +484,7 @@ declare global {
         id: string;
         actor: ActorPF;
         data: {
+            conditionals: ItemConditionalData[];
             naturalAttack: {
                 primaryAttack: boolean;
                 secondary: {
@@ -1499,6 +1500,8 @@ declare global {
         attributes: AttributeRollData;
         classes: Record<string, ClassRollData>;
         conditions: { loseDexToAC: boolean };
+        /** Conditionals being used as part of this action */
+        conditionals?: { [key: string]: Record<number, string> };
         currency: CurrencyRollData;
         customSkills: Record<unknown, unknown>;
         dFlags: ItemDictionaryFlags;
@@ -1521,9 +1524,6 @@ declare global {
         spells: Record<string, SpellBookRollData>;
         traits: TraitsRollData;
         // [key: string]: any,
-
-        // TODO where does this come from?
-        conditionals?: any;
 
         // item roll data
         dFlags?: DictionaryFlags;
