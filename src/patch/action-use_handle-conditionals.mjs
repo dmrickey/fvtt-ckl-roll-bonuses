@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 /**
  * @param {ActionUse} actionUse
  * @param {ItemConditionalData[]} conditionals

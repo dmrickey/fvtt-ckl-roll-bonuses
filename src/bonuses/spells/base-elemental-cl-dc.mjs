@@ -11,13 +11,10 @@ import { truthiness } from "../../util/truthiness.mjs";
 import { uniqueArray } from '../../util/unique-array.mjs';
 import { SpecificBonuses } from '../all-specific-bonuses.mjs';
 
-/**
- * @type {{cl: keyof(RollData), dc: keyof(RollData)}}
- */
-const prop = {
+const prop = /** @type {const}*/ ({
     cl: 'cl',
     dc: 'dcBonus'
-}
+});
 
 const damageElements = [
     'acid',
@@ -196,6 +193,7 @@ export function createElementalClOrDc(t) {
         const found = getBonusesForItem(item, action);
         if (found?.offset) {
             rollData[prop[t]] ||= 0;
+            // @ts-expect-error
             rollData[prop[t]] += found.offset;
         }
     });
