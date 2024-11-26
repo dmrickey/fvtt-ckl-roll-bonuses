@@ -1,5 +1,5 @@
-import { showEnabledLabel } from '../../../handlebars-handlers/enabled-label.mjs';
-import { BaseTarget } from '../base-target.mjs';
+import { showEnabledLabel } from '../../handlebars-handlers/enabled-label.mjs';
+import { BaseTarget } from './base-target.mjs';
 
 /**
  * @abstract
@@ -29,12 +29,6 @@ export class AllTarget extends BaseTarget {
     static getHints(_source) {
         return [this.label];
     }
-
-    /**
-     * @override
-     * @inheritdoc
-     */
-    static get isConditionalTarget() { return true; }
 
     /**
      * @override

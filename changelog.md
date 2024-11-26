@@ -1,3 +1,7 @@
+## Roll Bonuses 2.18.0
+
+---
+
 ## Roll Bonuses 2.17.0
 
 ### New Bonuses
