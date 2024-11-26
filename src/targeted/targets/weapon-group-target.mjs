@@ -4,7 +4,7 @@ import { difference, intersects } from "../../util/array-intersects.mjs";
 import { getActorItemsByTypes } from '../../util/get-actor-items-by-type.mjs';
 import { truthiness } from "../../util/truthiness.mjs";
 import { uniqueArray } from "../../util/unique-array.mjs";
-import { BaseTarget } from "./base-target.mjs";
+import { BaseTarget } from "./_base-target.mjs";
 
 /**
  * @augments BaseTarget

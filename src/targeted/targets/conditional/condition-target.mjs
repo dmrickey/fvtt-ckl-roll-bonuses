@@ -2,7 +2,7 @@ import { MODULE_NAME } from '../../../consts.mjs';
 import { keyValueSelect } from '../../../handlebars-handlers/bonus-inputs/key-value-select.mjs';
 import { currentTargetedActors } from '../../../util/get-current-targets.mjs';
 import { localize } from '../../../util/localize.mjs';
-import { BaseTarget } from '../base-target.mjs';
+import { BaseTarget } from '../_base-target.mjs';
 
 const targetChoices =  /** @type {const} */ ({
     target: 'target-choice.target',

@@ -1,7 +1,7 @@
 import { MODULE_NAME } from '../../consts.mjs';
 import { showActionInput } from '../../handlebars-handlers/targeted/targets/action-input.mjs';
 import { truthiness } from '../../util/truthiness.mjs';
-import { BaseTarget } from "./base-target.mjs";
+import { BaseTarget } from "./_base-target.mjs";
 
 export class ActionTarget extends BaseTarget {
     /**

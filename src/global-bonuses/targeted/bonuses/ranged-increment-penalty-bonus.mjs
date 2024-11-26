@@ -1,5 +1,5 @@
 import { textInput } from '../../../handlebars-handlers/bonus-inputs/text-input.mjs';
-import { BaseBonus } from '../../../targeted/bonuses/base-bonus.mjs';
+import { BaseBonus } from '../../../targeted/bonuses/_base-bonus.mjs';
 import { FormulaCacheHelper } from '../../../util/flag-helpers.mjs';
 import { registerItemHint } from '../../../util/item-hints.mjs';
 import { localizeBonusLabel, localizeBonusTooltip } from '../../../util/localize.mjs';

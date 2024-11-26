@@ -2,7 +2,7 @@ import { textInput } from '../../../handlebars-handlers/bonus-inputs/text-input.
 import { PositionalHelper } from '../../../util/positional-helper.mjs';
 import { FormulaCacheHelper } from '../../../util/flag-helpers.mjs';
 import { localizeBonusLabel } from '../../../util/localize.mjs';
-import { BaseTarget } from '../base-target.mjs';
+import { BaseTarget } from '../_base-target.mjs';
 import { showLabel } from '../../../handlebars-handlers/bonus-inputs/show-label.mjs';
 
 export class WhenTargetInRange extends BaseTarget {

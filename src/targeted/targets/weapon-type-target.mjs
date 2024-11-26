@@ -5,7 +5,7 @@ import { getActorItemsByTypes } from '../../util/get-actor-items-by-type.mjs';
 import { truthiness } from "../../util/truthiness.mjs";
 import { uniqueArray } from "../../util/unique-array.mjs";
 import { WeaponBaseTypeOverride } from '../target-overides/weapon-type-override.mjs';
-import { BaseTarget } from "./base-target.mjs";
+import { BaseTarget } from "./_base-target.mjs";
 
 export class WeaponTypeTarget extends BaseTarget {
   /**

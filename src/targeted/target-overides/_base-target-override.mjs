@@ -1,5 +1,5 @@
 import { showInvalidLabel } from '../../handlebars-handlers/invalid-label.mjs';
-import { BaseSource } from '../base-source.mjs';
+import { BaseSource } from '../_base-source.mjs';
 
 /** @abstract */
 export class BaseTargetOverride extends BaseSource {

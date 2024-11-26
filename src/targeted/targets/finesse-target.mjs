@@ -1,6 +1,6 @@
 import { showEnabledLabel } from '../../handlebars-handlers/enabled-label.mjs';
 import { localizeBonusLabel, localizeBonusTooltip } from '../../util/localize.mjs';
-import { BaseTarget } from './base-target.mjs';
+import { BaseTarget } from './_base-target.mjs';
 
 export class FinesseTarget extends BaseTarget {
     /**

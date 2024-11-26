@@ -1,6 +1,6 @@
 import { showEnabledLabel } from '../../handlebars-handlers/enabled-label.mjs';
 import { localize } from '../../util/localize.mjs';
-import { BaseBonus } from './base-bonus.mjs';
+import { BaseBonus } from './_base-bonus.mjs';
 
 /** @extends {BaseBonus} */
 export class MaximizeDamageBonus extends BaseBonus {

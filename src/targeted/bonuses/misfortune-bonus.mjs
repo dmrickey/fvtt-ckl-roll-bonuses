@@ -1,6 +1,6 @@
 import { handleFortune } from '../../bonuses/fortune-handler.mjs';
 import { showEnabledLabel } from '../../handlebars-handlers/enabled-label.mjs';
-import { BaseBonus } from './base-bonus.mjs';
+import { BaseBonus } from './_base-bonus.mjs';
 
 /**
  * @extends {BaseBonus}

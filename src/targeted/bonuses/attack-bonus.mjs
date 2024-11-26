@@ -9,7 +9,7 @@ import { FormulaCacheHelper } from "../../util/flag-helpers.mjs";
 import { LocalHookHandler, localHooks } from '../../util/hooks.mjs';
 import { localize } from '../../util/localize.mjs';
 import { signed } from "../../util/to-signed-string.mjs";
-import { BaseBonus } from "./base-bonus.mjs";
+import { BaseBonus } from "./_base-bonus.mjs";
 
 /** @extends BaseBonus */
 export class AttackBonus extends BaseBonus {

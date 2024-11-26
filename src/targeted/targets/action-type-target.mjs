@@ -5,7 +5,7 @@ import { isMelee, isNatural, isNaturalSecondary, isPhysical, isRanged, isSpell, 
 import { listFormat } from '../../util/list-format.mjs';
 import { localize, localizeBonusLabel } from '../../util/localize.mjs';
 import { truthiness } from '../../util/truthiness.mjs';
-import { BaseTarget } from './base-target.mjs';
+import { BaseTarget } from './_base-target.mjs';
 
 /** @typedef {keyof typeof filterTypes} FilterType */
 
