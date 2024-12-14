@@ -563,6 +563,12 @@ declare global {
         ): InstanceType<T>;
     }
 
+    export type Evaluated<T extends Roll> = T & {
+        _evaluated: true;
+        _total: number;
+        get total(): number;
+    };
+
     class DiceTerm {
         /**
          * An Array of dice term modifiers which are applied

@@ -15,8 +15,9 @@ import { intersection } from '../util/array-intersects.mjs';
 const key = 'versatile-training';
 const selectedKey = 'versatile-training-selected';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#versatile-training';
+const compendiumId = 'ORQUp9lBAMxPhRVu';
 
-Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ journal, key, type: 'boolean' }));
+SpecificBonuses.registerSpecificBonus({ journal, key });
 
 class Settings {
     static get versatileTraining() { return LanguageSettings.getTranslation(key); }
@@ -26,7 +27,7 @@ class Settings {
     }
 }
 
-(() => {
+{
     /** @type {(keyof typeof pf1.config.skills)[]} */
     const allChoices = ['blf', 'int'];
     api.config.versatileTraining.default = allChoices;
@@ -50,10 +51,10 @@ class Settings {
         'thrown': sort([...allChoices, 'acr', 'per']),
         'tribal': sort([...allChoices, 'clm', 'sur']),
     };
-})();
+}
 
 registerItemHint((hintcls, actor, item, _data) => {
-    const selectedSkills = getDocFlags(item, selectedKey, { includeInactive: false })
+    const selectedSkills = getDocFlags(item, selectedKey)
         .flatMap(x => x)
         .filter(truthiness);
 
@@ -62,7 +63,7 @@ registerItemHint((hintcls, actor, item, _data) => {
     }
 
     const skills = selectedSkills.map((id) => getSkillName(actor, id)).join(', ');
-    const hint = hintcls.create(localize('versatile-training.hint', { skills }), [], {});
+    const hint = hintcls.create(localize('versatile-training.hint', { skills }), [], { hint: localizeBonusTooltip(key) });
     return hint;
 });
 
@@ -75,7 +76,7 @@ function createVTIcon(actor) {
     icon.classList.add('ra', 'ra-crossed-swords', 'ckl-skill-icon');
 
     const rollData = actor.getRollData();
-    const tip = localize('versatile-training.skillTip', { bab: rollData.attributes.bab.total });
+    const tip = localize('versatile-training.skill-tip', { bab: rollData.attributes.bab.total });
     icon.setAttribute('data-tooltip', tip);
     icon.setAttribute('data-tooltip-direction', 'UP');
 
@@ -87,7 +88,7 @@ Hooks.on('renderActorSheetPF', (
     /** @type {{ find: (arg0: string) => { (): any; new (): any; each: { (arg0: { (_: any, element: HTMLElement): void; }): void; new (): any; }; }; }} */ html,
     /** @type {{ actor: ActorPF; }} */ { actor }
 ) => {
-    const selectedSkills = getDocFlags(actor, selectedKey, { includeInactive: false })
+    const selectedSkills = getDocFlags(actor, selectedKey)
         .flatMap(x => x)
         .filter(truthiness);
 
@@ -118,7 +119,7 @@ Hooks.on('renderActorSheetPF', (
  * @returns {void}
  */
 function versatileRollSkill(seed, actor) {
-    const selectedSkills = getDocFlags(actor, selectedKey, { includeInactive: false })
+    const selectedSkills = getDocFlags(actor, selectedKey)
         .flatMap(x => x)
         .filter(truthiness);
 
@@ -144,7 +145,7 @@ function versatileRollSkill(seed, actor) {
  * @param {RollData} rollData
  */
 function getSkillInfo(skillInfo, actor, rollData) {
-    const selectedSkills = getDocFlags(actor, selectedKey, { includeInactive: false })
+    const selectedSkills = getDocFlags(actor, selectedKey)
         .flatMap(x => x)
         .filter(truthiness);
     if (selectedSkills.includes(skillInfo.id)) {
@@ -167,9 +168,13 @@ Hooks.on('renderItemSheet', (
 ) => {
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
-    const name = item?.name?.toLowerCase() ?? '';
-
-    if (!(name === Settings.versatileTraining || item.system.flags.boolean[key] !== undefined)) {
+    const hasKey = item.hasItemBooleanFlag(key);
+    if (!hasKey) {
+        const name = item?.name?.toLowerCase() ?? '';
+        const sourceId = item?.flags.core?.sourceId ?? '';
+        if (isEditable && (name === Settings.versatileTraining || sourceId.includes(compendiumId))) {
+            item.addItemBooleanFlag(key);
+        }
         return;
     }
 
@@ -182,6 +187,8 @@ Hooks.on('renderItemSheet', (
     if (isEditable && actor) {
         if (!currentGroup) {
             currentGroup =  /** @type {keyof typeof pf1.config.weaponGroups} */ (Object.keys(api.config.versatileTraining.mapping)[0]);
+            item.setFlag(MODULE_NAME, key, currentGroup);
+            return;
         }
 
         const getName = (/** @type {keyof typeof pf1.config.skills} */ skillId) => isDriver(skillId)
@@ -214,7 +221,7 @@ Hooks.on('renderItemSheet', (
         parent: html
     }, {
         canEdit: isEditable,
-        isModuleFlag: true,
+        inputType: 'specific-bonus',
     });
     showChecklist({
         description: localize('versatile-training.description'),
@@ -226,5 +233,28 @@ Hooks.on('renderItemSheet', (
         parent: html,
     }, {
         canEdit: isEditable,
+        inputType: 'specific-bonus',
     });
 });
+
+/**
+ * @param {ItemPF} item
+ * @param {object} data
+ * @param {{temporary: boolean}} param2
+ * @param {string} id
+ */
+const onCreate = (item, data, { temporary }, id) => {
+    if (!(item instanceof pf1.documents.item.ItemPF)) return;
+    if (temporary) return;
+
+    const name = item?.name?.toLowerCase() ?? '';
+    const sourceId = item?.flags.core?.sourceId ?? '';
+    const hasBonus = item.hasItemBooleanFlag(key);
+
+    if ((name === Settings.versatileTraining || sourceId.includes(compendiumId)) && !hasBonus) {
+        item.updateSource({
+            [`system.flags.boolean.${key}`]: true,
+        });
+    }
+};
+Hooks.on('preCreateItem', onCreate);

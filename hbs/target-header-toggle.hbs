@@ -1,0 +1,22 @@
+<div data-tooltip="{{localize 'ckl-roll-bonuses.target-toggle.tooltip'}}" class="target-toggle">
+    <label class="checkbox">
+        <input
+            type="radio"
+            name="flags.ckl-roll-bonuses.target-toggle"
+            value="all"
+            {{checked (eq current 'all')}}
+            {{#if readonly}}disabled{{/if}}
+        >
+        {{localize 'ckl-roll-bonuses.target-toggle.all'}}
+    </label>
+    <label class="checkbox">
+        <input
+            type="radio"
+            name="flags.ckl-roll-bonuses.target-toggle"
+            value="any"
+            {{checked (eq current 'any')}}
+            {{#if readonly}}disabled{{/if}}
+        >
+        {{localize 'ckl-roll-bonuses.target-toggle.any'}}
+    </label>
+</div>

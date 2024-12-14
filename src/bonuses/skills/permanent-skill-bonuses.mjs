@@ -64,10 +64,10 @@ Hooks.on('renderActorSheetPF', (
          * @returns {keyof typeof pf1.config.skills}
          */
         const getSkillId = () => {
-            const skillId = li.getAttribute('data-skill');
-            const mainId = li.getAttribute('data-main-skill');
-            const id = mainId
-                ? `${mainId}.${skillId}`
+            const skillId = li.dataset.skill;
+            const subSkillId = li.dataset.subSkill;
+            const id = subSkillId
+                ? `${skillId}.${subSkillId}`
                 : skillId;
             return /** @type {keyof typeof pf1.config.skills} */ (id);
         }

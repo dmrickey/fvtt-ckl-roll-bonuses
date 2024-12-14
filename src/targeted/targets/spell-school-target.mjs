@@ -1,5 +1,6 @@
 import { MODULE_NAME } from '../../consts.mjs';
 import { showChecklist } from '../../handlebars-handlers/targeted/targets/checklist-input.mjs';
+import { intersects } from '../../util/array-intersects.mjs';
 import { truthiness } from '../../util/truthiness.mjs';
 import { BaseTarget } from './base-target.mjs';
 
@@ -50,12 +51,9 @@ export class SpellSchoolTarget extends BaseTarget {
         const filteredSources = sources.filter((source) => {
             /** @type {string[]} */
             const targetedSchools = (source.getFlag(MODULE_NAME, this.key) || [])
-                .filter(truthiness);;
-            if (!targetedSchools.length) {
-                return false;
-            }
+                .filter(truthiness);
 
-            return targetedSchools.includes(spellSchool);
+            return intersects(targetedSchools, spellSchool);
         });
 
         return filteredSources;
@@ -82,6 +80,7 @@ export class SpellSchoolTarget extends BaseTarget {
             tooltip: this.tooltip,
         }, {
             canEdit: isEditable,
+            inputType: 'target',
         });
     }
 }

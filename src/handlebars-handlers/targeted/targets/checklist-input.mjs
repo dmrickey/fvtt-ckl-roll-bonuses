@@ -19,6 +19,7 @@ import { createTemplate, templates } from "../../templates.mjs";
  * @param {HTMLElement} args.parent
  * @param {object} options
  * @param {boolean} options.canEdit
+ * @param {InputType} options.inputType
  */
 export function showChecklist({
     description = '',
@@ -32,6 +33,7 @@ export function showChecklist({
     tooltip = '',
 }, {
     canEdit,
+    inputType,
 }) {
     label ||= localizeBonusLabel(key);
     tooltip ||= localizeBonusTooltip(key);
@@ -69,8 +71,8 @@ export function showChecklist({
                 });
             }
             const buttons = [
-                { label: localize('ok'), value: true, },
                 { label: localize('PF1.Cancel'), value: false },
+                { label: localize('ok'), value: true, },
             ];
 
             const results = await menu(
@@ -112,7 +114,7 @@ export function showChecklist({
         });
     });
 
-    addNodeToRollBonus(parent, div, item, canEdit);
+    addNodeToRollBonus(parent, div, item, canEdit, inputType);
 }
 
 api.inputs.showChecklist = showChecklist;

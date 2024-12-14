@@ -1,17 +1,16 @@
 import { showEnabledLabel } from '../handlebars-handlers/enabled-label.mjs';
-import { hasAnyBFlag } from '../util/flag-helpers.mjs';
 import { getSkillFormula } from '../util/get-skill-formula.mjs';
 import { LocalHookHandler, localHooks } from '../util/hooks.mjs';
-import { localizeBonusLabel } from '../util/localize.mjs';
+import { registerItemHint } from '../util/item-hints.mjs';
+import { localizeBonusLabel, localizeBonusTooltip } from '../util/localize.mjs';
 import { LanguageSettings } from '../util/settings.mjs';
 import { SpecificBonuses } from './all-specific-bonuses.mjs';
 
 const key = 'snake-sidewind';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#snake-sidewind';
+const compendiumId = '6HVdbIFcRuTq8o7p';
 
-Hooks.once('ready', () =>
-    SpecificBonuses.registerSpecificBonus({ journal, key, type: 'boolean' })
-);
+SpecificBonuses.registerSpecificBonus({ journal, key });
 
 class Settings {
     static get snakeSidewind() { return LanguageSettings.getTranslation(key); }
@@ -20,6 +19,17 @@ class Settings {
         LanguageSettings.registerItemNameTranslation(key);
     }
 }
+
+// register hint on source
+registerItemHint((hintcls, _actor, item, _data) => {
+    const has = !!item.hasItemBooleanFlag(key);
+    if (!has) {
+        return;
+    }
+
+    const hint = hintcls.create('', [], { hint: localizeBonusTooltip(key), icon: 'ra ra-snake' });
+    return hint;
+});
 
 /**
  * @param {string} formula
@@ -39,7 +49,7 @@ const getFormulaMax = (formula, rollData) => {
  * @returns {string | undefined}
  */
 const isSnakeSideWindCrit = (chatAttack) => {
-    const hasFlag = hasAnyBFlag(chatAttack.action?.actor, key);
+    const hasFlag = chatAttack.action?.actor.hasItemBooleanFlag(key);
     if (!hasFlag) {
         return;
     }
@@ -106,11 +116,12 @@ Hooks.on('renderItemSheet', (
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
     const name = item?.name?.toLowerCase() ?? '';
+    const sourceId = item?.flags.core?.sourceId ?? '';
 
-    const hasFlag = item.system.flags.boolean?.hasOwnProperty(key);
+    const hasFlag = item.hasItemBooleanFlag(key);
     if (!hasFlag) {
-        if (name === Settings.snakeSidewind) {
-            item.update({ [`system.flags.boolean.${key}`]: true });
+        if (isEditable && (name === Settings.snakeSidewind || sourceId.includes(compendiumId))) {
+            item.addItemBooleanFlag(key);
         }
         return;
     }
@@ -122,5 +133,28 @@ Hooks.on('renderItemSheet', (
         parent: html,
     }, {
         canEdit: isEditable,
+        inputType: 'specific-bonus',
     });
 });
+
+/**
+ * @param {ItemPF} item
+ * @param {object} data
+ * @param {{temporary: boolean}} param2
+ * @param {string} id
+ */
+const onCreate = (item, data, { temporary }, id) => {
+    if (!(item instanceof pf1.documents.item.ItemPF)) return;
+    if (temporary) return;
+
+    const name = item?.name?.toLowerCase() ?? '';
+    const sourceId = item?.flags.core?.sourceId ?? '';
+    const hasBonus = item.hasItemBooleanFlag(key);
+
+    if ((name === Settings.snakeSidewind || sourceId.includes(compendiumId)) && !hasBonus) {
+        item.updateSource({
+            [`system.flags.boolean.${key}`]: true,
+        });
+    }
+};
+Hooks.on('preCreateItem', onCreate);

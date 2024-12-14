@@ -2,6 +2,7 @@
 import { SpecificBonuses } from '../bonuses/all-specific-bonuses.mjs';
 import { api } from '../util/api.mjs';
 import { intersection } from '../util/array-intersects.mjs';
+import { handleJournalClick } from '../util/handle-journal-click.mjs';
 import { localize } from '../util/localize.mjs';
 import { templates } from './templates.mjs';
 
@@ -11,14 +12,14 @@ import { templates } from './templates.mjs';
  * @property {string} label
  * @property {string} tooltip
  * @property {boolean} value
- * @property {string[]} [extraKeys]
  */
 
 /**
  * @typedef {object} BonusPickerData
+ * @property {PickerItemData[]} bonuses
  * @property {PickerItemData[]} targets
  * @property {PickerItemData[]} conditionalTargets
- * @property {PickerItemData[]} bonuses
+ * @property {PickerItemData[]} targetOverrides
  * @property {(PickerItemData & {children?: PickerItemData[]})[]} specifics
  */
 
@@ -30,16 +31,18 @@ export function showBonusPicker({
     item
 }) {
     const currentBooleanKeys = Object.keys(item.system.flags.boolean);
-    const currentDictionaryKeys = Object.keys(item.system.flags.dictionary);
 
     const allBonuses = api.allBonusTypes
-        .filter((source) => !source.skipPicker)
+        .filter((source) => !source.gmOnlyForPicker || game.user.isGM)
         .sort((a, b) => a.label.localeCompare(b.label));
     const allTargets = api.allTargetTypes
-        .filter((source) => !source.skipPicker && !source.isConditionalTarget)
+        .filter((source) => (!source.gmOnlyForPicker || game.user.isGM) && !source.isConditionalTarget)
         .sort((a, b) => a.label.localeCompare(b.label));
     const allConditionalTargets = api.allTargetTypes
-        .filter((source) => !source.skipPicker && source.isConditionalTarget)
+        .filter((source) => (!source.gmOnlyForPicker || game.user.isGM) && source.isConditionalTarget)
+        .sort((a, b) => a.label.localeCompare(b.label));
+    const allTargetOverrides = api.allTargetOverrideTypes
+        .filter((source) => !source.gmOnlyForPicker || game.user.isGM)
         .sort((a, b) => a.label.localeCompare(b.label));
     const specifics = Object.values(SpecificBonuses.allBonuses)
         .sort((a, b) => a.label.localeCompare(b.label));
@@ -56,13 +59,22 @@ export function showBonusPicker({
         allTargets.map((source) => source.key),
         currentBooleanKeys,
     );
-    const currentSpecificBonuses = [
-        ...intersection(currentBooleanKeys, SpecificBonuses.booleanKeys),
-        ...intersection(currentDictionaryKeys, SpecificBonuses.dictionaryKeys),
-    ];
+    const currentTargetOverrideSources = intersection(
+        allTargetOverrides.map((source) => source.key),
+        currentBooleanKeys,
+    );
+    const currentSpecificBonuses = intersection(currentBooleanKeys, SpecificBonuses.allBonusKeys);
 
     /** @type {BonusPickerData} */
     const data = {
+        bonuses: allBonuses.map((source, i) => ({
+            journal: source.journal,
+            key: source.key,
+            label: source.label,
+            path: `bonuses.${i}`,
+            tooltip: source.tooltip,
+            value: currentBonusSources.includes(source.key),
+        })),
         targets: allTargets.map((source, i) => ({
             journal: source.journal,
             key: source.key,
@@ -79,18 +91,17 @@ export function showBonusPicker({
             tooltip: source.tooltip,
             value: currentConditionalTargetSources.includes(source.key),
         })),
-        bonuses: allBonuses.map((source, i) => ({
+        targetOverrides: allTargetOverrides.map((source, i) => ({
             journal: source.journal,
             key: source.key,
             label: source.label,
-            path: `bonuses.${i}`,
+            path: `targetOverrides.${i}`,
             tooltip: source.tooltip,
-            value: currentBonusSources.includes(source.key),
+            value: currentTargetOverrideSources.includes(source.key),
         })),
         specifics: specifics
             .filter((bonus) => !bonus.parent)
             .map((bonus, i) => ({
-                extraKeys: bonus.extraKeys,
                 journal: bonus.journal,
                 key: bonus.key,
                 label: bonus.label,
@@ -100,7 +111,6 @@ export function showBonusPicker({
                 children: specifics
                     .filter((child) => child.parent === bonus.key)
                     .map((child, ii) => ({
-                        extraKeys: child.extraKeys,
                         journal: child.journal,
                         key: child.key,
                         label: child.label,
@@ -114,6 +124,8 @@ export function showBonusPicker({
     const app = new BonusPickerApp(item, data);
     app.render(true);
 }
+
+api.showApplication.showBonusPicker = showBonusPicker;
 
 /** @ts-ignore */
 /** @extends {DocumentSheet<BonusPickerData, ItemPF>} */
@@ -134,6 +146,7 @@ class BonusPickerApp extends DocumentSheet {
         options.width = 800;
         options.template = templates.bonusPicker;
         options.title = localize('roll-bonuses');
+        options.classes = ['bonus-picker-app'];
 
         return options;
     }
@@ -143,11 +156,11 @@ class BonusPickerApp extends DocumentSheet {
 
     /** @override */
     async getData() {
-        return this.options;
+        return { ...this.options, item: this.document };
     }
 
     /** @type {(keyof BonusPickerData)[]} */
-    sources = ['bonuses', 'conditionalTargets', 'targets'];
+    sources = ['bonuses', 'conditionalTargets', 'targets', 'targetOverrides'];
 
     /**
      * @override
@@ -162,19 +175,49 @@ class BonusPickerApp extends DocumentSheet {
             'click',
             async (event) => {
                 event.preventDefault();
-                const journal = event.currentTarget.dataset.journal;
-                // @ts-ignore // TODO
-                const [uuid, header] = journal.split('#');
-                const doc = await fromUuid(uuid);
-
-                // @ts-ignore // TODO
-                if (doc instanceof JournalEntryPage) {
-                    doc.parent.sheet.render(true, { pageId: doc.id, anchor: header });
-                } else {
-                    doc.sheet.render(true);
-                }
+                await handleJournalClick(event.currentTarget);
             },
         );
+
+        const specificTab = html.find(`#specific-tab-button-${this.document.id}`);
+        const targetedTab = html.find(`#targeted-tab-button-${this.document.id}`);
+        if (!specificTab || !targetedTab) {
+            return;
+        }
+
+        const refreshApp = () => this.setPosition();
+
+        targetedTab.on(
+            'click',
+            (event) => {
+                targetedTab[0].classList.add('active');
+                specificTab[0].classList.remove('active');
+                event.preventDefault();
+                /** @type {HTMLElement} */
+                const specificBody = event.target.parentElement.parentElement.querySelector('.specific-body');
+                specificBody.classList.remove('active');
+                /** @type {HTMLElement} */
+                const targetedBody = event.target.parentElement.parentElement.querySelector('.targeted-body');
+                targetedBody.classList.add('active');
+                refreshApp();
+            }
+        )
+
+        specificTab.on(
+            'click',
+            (event) => {
+                specificTab[0].classList.add('active');
+                targetedTab[0].classList.remove('active');
+                event.preventDefault();
+                /** @type {HTMLElement} */
+                const specificBody = event.target.parentElement.parentElement.querySelector('.specific-body');
+                specificBody.classList.add('active');
+                /** @type {HTMLElement} */
+                const targetedBody = event.target.parentElement.parentElement.querySelector('.targeted-body');
+                targetedBody.classList.remove('active');
+                refreshApp();
+            }
+        )
     }
 
     /**
@@ -201,29 +244,19 @@ class BonusPickerApp extends DocumentSheet {
                 };
 
                 if (this.sources.includes(prop)
-                    || (prop === 'specifics' && SpecificBonuses.booleanKeys.includes(bonusData.key))
+                    || (prop === 'specifics' && SpecificBonuses.allBonusKeys.includes(bonusData.key))
                 ) {
                     // set to true if value is true, delete if value is false
                     // @ts-ignore
                     updateObj.system.flags.boolean[`${(value ? '' : '-=')}${bonusData.key}`] = true;
                 }
-                else if (prop === 'specifics'
-                    && SpecificBonuses.dictionaryKeys.includes(bonusData.key)
-                ) {
-                    // @ts-ignore
-                    updateObj.system.flags.dictionary[`${(value ? '' : '-=')}${bonusData.key}`] = '';
-                }
                 else {
                     throw new Error("should never happen");
                 }
-
-                (bonusData.extraKeys ?? []).forEach((key) =>
-                    // @ts-ignore
-                    updateObj.system.flags.dictionary[`${(value ? '' : '-=')}${key}`] = ''
-                );
             }
         });
 
         return updateObj || {};
     }
 }
+api.applications.BonusPickerApp = BonusPickerApp;

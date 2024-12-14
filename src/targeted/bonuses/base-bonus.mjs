@@ -1,8 +1,6 @@
 import { BaseSource } from '../base-source.mjs';
 
-/**
- * @abstract
- */
+/** @abstract */
 export class BaseBonus extends BaseSource {
 
     /**
@@ -18,9 +16,9 @@ export class BaseBonus extends BaseSource {
      * @abstract
      * @param {ItemPF} source
      * @param {ActionUse | ItemAction} [action] The thing for the source is being applied to for contextually aware bonuses
-     * @returns {Nullable<ItemConditional>}
+     * @returns {Nullable<ItemConditional[]>}
      */
-    static getConditional(source, action) { return null; }
+    static getConditionals(source, action) { return null; }
 
     /**
      * Add damage bonus to actor's Combat damage column tooltip
@@ -44,7 +42,7 @@ export class BaseBonus extends BaseSource {
 
     /**
      * Alters roll data for attack rolls - for simple changes that don't need an ItemConditional/Modifier or ItemChange
-     * use either this or @see {@link getConditional}
+     * use either this or @see {@link getConditionals}
      *
      * @abstract
      * @param {ItemPF} source
@@ -92,6 +90,20 @@ export class BaseBonus extends BaseSource {
     static itemActionRollDamage(_source, _seed, _action, _data, _index) { }
 
     /**
+     * Only use this when modifying Roll Data isn't sufficient as that covers a lot more cases.
+     *
+     * @abstract
+     * @param {ItemPF} _sourceItem
+     * @param {ItemAction} _action
+     * @param {{proficient: boolean, secondaryPenalty: boolean}} _config
+     * @param {RollData} _rollData
+     * @param {object} _rollOptions
+     * @param {string[]} _parts
+     * @param {ItemChange[]} _changes
+     */
+    static modifyPreRollAttack(_sourceItem, _action, _config, _rollData, _rollOptions, _parts, _changes) { }
+
+    /**
      * Returns true the targeting is too generic to show a hint on a specific item
      * - used for something like `crit` that needs to combine all hints in a single registration
      *
@@ -101,11 +113,20 @@ export class BaseBonus extends BaseSource {
     static get skipTargetedHint() { return false; }
 
     /**
+     * Get Critical parts for chat attack
+     *
      * @abstract
-      * @param {ItemPF} source
-      * @param {ItemAction} action
-      * @param {RollData} rollData
-      */
+     * @param {ItemPF} source
+     * @returns {Nullable<string | string[]>}
+     */
+    static getCritBonusParts(source) { return; }
+
+    /**
+     * @abstract
+     * @param {ItemPF} source
+     * @param {ItemAction} action
+     * @param {RollData} rollData
+     */
     static updateItemActionRollData(source, action, rollData) { }
 
     /**
@@ -116,6 +137,14 @@ export class BaseBonus extends BaseSource {
      * @param {ActionUse} actionUse
      */
     static actionUseProcess(source, actionUse) { }
+
+    /**
+     * @abstract
+     * @param {ItemPF} source
+     * @param {ItemAction} action
+     * @returns {number}
+     */
+    static modifyActionLabelDC(source, action) { return 0; }
 
     /**
      * @abstract

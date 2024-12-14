@@ -98,16 +98,17 @@ export class FinesseBonus extends BaseBonus {
             tooltip: this.tooltip,
         }, {
             canEdit: isEditable,
+            inputType: 'bonus',
         });
     }
 
     /**
      * @override
-     * @param {ItemPF} source The source of the bonus
-     * @param {(ActionUse | ItemPF | ItemAction)?} [thing] The thing receiving the bonus for contextually aware hints.
+     * @param {ItemPF} _source The source of the bonus
+     * @param {(ActionUse | ItemPF | ItemAction)?} [_thing] The thing receiving the bonus for contextually aware hints.
      * @returns {string[]}
      */
-    static getFootnotes(source, thing) { return [this.label]; }
+    static getFootnotes(_source, _thing) { return [this.label]; }
 
     /**
      * @override

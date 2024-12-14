@@ -15,10 +15,11 @@ import { createTemplate, templates } from "../templates.mjs";
  * @param {string} [args.tooltip]
  * @param {object} options
  * @param {boolean} options.canEdit
- * @param {boolean} [options.isModuleFlag] - false (default) if this is a dictionary flag, true if this is a data flag
+ * @param {InputType} options.inputType
+ * @param {boolean} [options.isSubLabel]
  */
 export function checkboxInput({
-    current = false,
+    current = undefined,
     item,
     journal,
     key,
@@ -27,12 +28,13 @@ export function checkboxInput({
     tooltip = '',
 }, {
     canEdit,
-    isModuleFlag = false,
+    inputType,
+    isSubLabel = false,
 }
 ) {
-    current ||= isModuleFlag
-        ? item.getFlag(MODULE_NAME, key)
-        : item.getItemDictionaryFlag(key);
+    if (current === undefined) {
+        current = !!item.getFlag(MODULE_NAME, key);
+    }
     label ||= localizeBonusLabel(key);
     tooltip ||= localizeBonusTooltip(key);
 
@@ -40,6 +42,7 @@ export function checkboxInput({
         templates.checkboxInput,
         {
             current,
+            isSubLabel,
             journal,
             key,
             label,
@@ -61,13 +64,11 @@ export function checkboxInput({
             // @ts-ignore
             const value = event.currentTarget.checked;
 
-            isModuleFlag
-                ? await item.setFlag(MODULE_NAME, key, value)
-                : await item.setItemDictionaryFlag(key, value);
+            await item.setFlag(MODULE_NAME, key, value);
         },
     );
 
-    addNodeToRollBonus(parent, div, item, canEdit);
+    addNodeToRollBonus(parent, div, item, canEdit, inputType);
 }
 
 api.inputs.checkboxInput = checkboxInput;

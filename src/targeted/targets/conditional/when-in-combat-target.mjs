@@ -1,8 +1,8 @@
 import { showEnabledLabel } from '../../../handlebars-handlers/enabled-label.mjs';
 import { isActorInCombat } from '../../../util/is-actor-in-combat.mjs';
-import { ItemTarget } from "../specific-item-target/item-target.mjs";
+import { BaseTarget } from '../base-target.mjs';
 
-export class WhenInCombatTarget extends ItemTarget {
+export class WhenInCombatTarget extends BaseTarget {
 
     /**
      * @override
@@ -71,6 +71,7 @@ export class WhenInCombatTarget extends ItemTarget {
             tooltip: this.tooltip,
         }, {
             canEdit: isEditable,
+            inputType: 'target',
         });
     }
 }

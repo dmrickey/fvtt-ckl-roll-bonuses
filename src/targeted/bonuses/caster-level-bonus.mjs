@@ -1,4 +1,5 @@
 import { textInput } from '../../handlebars-handlers/bonus-inputs/text-input.mjs';
+import { api } from '../../util/api.mjs';
 import { FormulaCacheHelper } from '../../util/flag-helpers.mjs';
 import { localize } from '../../util/localize.mjs';
 import { signed } from '../../util/to-signed-string.mjs';
@@ -24,6 +25,31 @@ export class CasterLevelBonus extends BaseBonus {
      */
     static init() {
         FormulaCacheHelper.registerModuleFlag(this.key);
+
+        /**
+         * @param {ActorPF} actor
+         * @param {{messageId?: string, parts?: string[]}} rollOptions
+         * @param {string} bookId
+         */
+        const onActorRollCL = (actor, rollOptions, bookId) => {
+            if (!rollOptions.messageId || !rollOptions.parts?.length) return;
+
+            const action = game.messages.get(rollOptions.messageId)?.actionSource;
+            if (!action) return;
+
+            api.utils.handleBonusTypeFor(
+                action,
+                CasterLevelBonus,
+                (_bonusType, sourceItem) => {
+                    const mod = FormulaCacheHelper.getModuleFlagValue(sourceItem, this.key);
+                    if (mod) {
+                        rollOptions.parts?.push(`${mod}[${sourceItem.name}]`);
+                    }
+                }
+            );
+
+        };
+        Hooks.on('pf1PreActorRollCl', onActorRollCL);
     }
 
     /**
@@ -64,7 +90,7 @@ export class CasterLevelBonus extends BaseBonus {
      * @param {boolean} options.isEditable
      * @param {ItemPF} options.item
      */
-    static showInputOnItemSheet({ html, isEditable, item },) {
+    static showInputOnItemSheet({ html, isEditable, item }) {
         textInput({
             item,
             journal: this.journal,
@@ -73,7 +99,7 @@ export class CasterLevelBonus extends BaseBonus {
             tooltip: this.tooltip,
         }, {
             canEdit: isEditable,
-            isModuleFlag: true,
+            inputType: 'bonus',
         });
     }
 

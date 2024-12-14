@@ -5,18 +5,21 @@
   - [Bonuses](#bonuses)
     - [Swap Ability for Damage Rolls](#swap-ability-for-damage-rolls)
     - [Swap Ability for Attack Rolls](#swap-ability-for-attack-rolls)
-    - [Crit Only Attack Bonus](#crit-only-attack-bonus)
-  - [AC bonus](#ac-bonus)
+    - [Add/Swap Damage Types](#addswap-damage-types)
+    - [AC bonus](#ac-bonus)
+    - [Alignment](#alignment)
+    - [Consume Item/Charge](#consume-itemcharge)
   - [Targets](#targets)
     - [Creature type/subtype](#creature-typesubtype)
     - [By Disposition](#by-disposition)
     - [All healing](#all-healing)
     - [Armor Target (useful for something like Magic Vestment)](#armor-target-useful-for-something-like-magic-vestment)
+    - [Die Result](#die-result)
+    - [Skill Target](#skill-target)
     - [Spellbook target](#spellbook-target)
     - [Spell preparation Qty](#spell-preparation-qty)
-    - [Skill Target](#skill-target)
-    - [Die Result](#die-result)
 - [Affect other tokens](#affect-other-tokens)
+- [Figure out how to embed buffs directly into a scene](#figure-out-how-to-embed-buffs-directly-into-a-scene)
 - [Class Features](#class-features)
   - [Cleric](#cleric)
     - [Healing Domain - Healer's Blessing](#healing-domain---healers-blessing)
@@ -26,7 +29,6 @@
     - [Favored Enemy](#favored-enemy)
     - [Favored Terrain](#favored-terrain)
 - [Feats](#feats)
-  - [Bomber's eye](#bombers-eye)
   - [Shared Remembrance](#shared-remembrance)
   - [Spell Perfection](#spell-perfection)
   - [Spirited Charge](#spirited-charge)
@@ -38,6 +40,7 @@
   - [I am targeted](#i-am-targeted)
   - [Magic](#magic)
   - [Misc](#misc-1)
+  - [Ammo](#ammo)
   - [UX](#ux)
   - [Bonuses](#bonuses-1)
   - [Bonus Improvements](#bonus-improvements)
@@ -48,13 +51,12 @@
 - [Add Quench Testings](#add-quench-testings)
 - [Add create hooks for initializing some items (like anything based off of name/id)](#add-create-hooks-for-initializing-some-items-like-anything-based-off-of-nameid)
 - [Add inpsiration checkbox to roll dialogs](#add-inpsiration-checkbox-to-roll-dialogs)
-- [Won't do](#wont-do)
-- [Refactor](#refactor)
 - [Skills](#skills)
 - [in pf1 V10](#in-pf1-v10)
 - [Not Possible](#not-possible)
 - [Range/Positional ideas](#rangepositional-ideas)
 - [Other Ideas](#other-ideas)
+- [PF1 v11](#pf1-v11)
 - [vnext](#vnext)
 
 # TODO
@@ -72,10 +74,15 @@
 ### Swap Ability for Attack Rolls
 - add <ability> to attack for other ability scores (like finesse but can be customized)
   - waiting on 10.5
-### Crit Only Attack Bonus
-- Attack bonus needs to give optional "crit only" attack bonuses
-## AC bonus
+### Add/Swap Damage Types
+- e.g. swap fire to acid
+### AC bonus
 - See armor focus for how I first implemented it
+### Alignment
+- Actually align the weapon/attack instead of just adding typed damage
+  - I can make it work but it won't do anything (the system doesn't show it in the attack, it's kinda pointless without extra functionality)
+### Consume Item/Charge
+- consume a charge from <pick Item> when used
 
 ## Targets
 ### Creature type/subtype
@@ -89,24 +96,28 @@
 ### All healing
 ### Armor Target (useful for something like Magic Vestment)
 - see Armor Focus for similar
-### Spellbook target
-### Spell preparation Qty
-- Don't see how it's possible with my framework
+### Die Result
+- When the die is (some value range)
+  - Would allow for "1s turn to 2s" (e.g. target die = 1; bonus + 1)
 ### Skill Target
 - Include "smart groups" that will give options e.g.
   - specific ability skills (e.g. all int skills)
   - The default layout will group subskills under the base skill and checking the base skill will automatically check all subskills
-### Die Result
-- When the die is (some value range)
-  - Would allow for "1s turn to 2s" (e.g. target die = 1; bonus + 1)
+### Spellbook target
+### Spell preparation Qty
+- Don't see how it's possible with my framework
 
 # Affect other tokens
 - add a way to affect other tokens (e.g. cavalier challenge which gives them -2 attack vs other targets) - this might just be a buff assi
+
+# Figure out how to embed buffs directly into a scene
 
 # Class Features
 ## Cleric
 ### Healing Domain - Healer's Blessing
 - Cure Spells are treated as if they're empowered (+50% healing)
+  - IsHealing target
+  - Empowered Bonus
 ## Psychic
 ### Phrenic Amplification
   - increases DC of `mind-affecting` spells by 1/2/3
@@ -118,9 +129,6 @@
   - Add a button to chat cards to increase the skill/initiative/whatever roll when applicable
 
 # Feats
-## Bomber's eye
-- Increase throwing range
-- Need "Thrown" target
 ## [Shared Remembrance](https://aonprd.com/FeatDisplay.aspx?ItemName=Shared%20Remembrance)
 ## [Spell Perfection](https://www.d20pfsrd.com/feats/general-feats/spell-perfection/)
 ## Spirited Charge
@@ -150,8 +158,12 @@
 - Alter bonus effect for crit confirmation only
   - https://www.aonprd.com/MonsterTemplates.aspx?ItemName=Commando%20Construct#:~:text=to%20this%20ability.-,Precision,-(Ex)%3A%20A
 
-## UX
+## Ammo
+- Try and refactor ammo so that it takes any "bonus" and then pumps that into the ranged weapon
+  - If not, add size bonus for ammo
 - Add item hints for ammo
+
+## UX
 - Add method for sources to say "I have a source key but no value" and show a broken item hint
 
 ## Bonuses
@@ -161,12 +173,9 @@
 ## Bonus Improvements
 - Enhancement Bonus
   - add checkbox for "applies for DR" (some spell buffs don't appy for DR (e.g. Greater Magic Weapon))
-- Change Offset
-  - add a "set" option (in addition to +/-)
 
 ## Targeting
 - show warning if target has an inappropriate bonus
-- add checkbox to toggle between union (current implementation) and intersection (item has to supply all targeting requirements)
 
 # Housekeeping
 - Consolidate weapon hints (Weapon Focus, Specialization, Martial) - find a way to make them more concise
@@ -181,13 +190,8 @@
 - Has tooltip
 
 # Deprecate
-- Weapon Focus (use bonus targets instead)
-- Martial Focus (use bonus targets instead)
-- Weapon Specialization (use bonus targets instead)
 - as of v9, PF1 now defers Roll Bonuses. So that means that the `Bonus` on the Skill settings can go away
 - It should create a new Feature with a change that includes the current formula as part of migration for deleting this
-- all specific DC/CL bonuses (after v10 once descriptor-based targeting is available)
-- specific crit bonuses
 
 # Add Quench Testings
 # Add create hooks for initializing some items (like anything based off of name/id)
@@ -195,22 +199,6 @@
 # Add inpsiration checkbox to roll dialogs
 - https://gitlab.com/foundryvtt_pathfinder1e/foundryvtt-pathfinder1/-/merge_requests/2758
   - > "So actionUse.formData for actions and overriding _getFormData() for d20rolls"
-
-# Won't do
-- Add specific inputs for Improved Crit.
-  - handling crit bonuses is already complicated enough without adding in a third option
-
-# Refactor
-- `BaseTarget`'s `getSourcesFor` because every single one of them follows this pattern
-  - ```js
-    const item = doc instanceof pf1.documents.item.ItemPF
-        ? doc
-        : doc.item;
-
-    if (!item?.actor) {
-        return [];
-    }
-    ```
 
 # Skills
 - Condtional Bonus when taking 10
@@ -228,6 +216,8 @@
   - Sad day. Not possible for basically the same reason custom changes aren't possible
 - Custom changes that effect only specific targets :(
   - changes are generated and applied too early and too broadly in the system prep. I can either create a change that applies to everything (pointless) or I can create a specific change that exists for the specified target, but it's created too late to both be reduced to the best bonus type and actually be added to the roll
+- Vital Strike (Mythic)
+  - Damage has already been stripped and added, I don't know which damage is crit only or not when I'm making my changes
 
 # Range/Positional ideas
 - Flank
@@ -236,23 +226,35 @@
   - Needs a "Target" so that I can give out extra bonuses when flanking
     - Dirty Fighter Trait
     - Outflank (would need extra info about flank target) 
-- Range Penalties
-    - checkbox to ignore range penalties
 - IsAdjacent
 - IsSharingSquare
-- TargetEngagedInMelee
-  - (for shooting into combat penalties)
-- Higher Ground with melee bonus
-- Make sure melee weapon can reach
 
 # Other Ideas
 - Add Concealment
   - This would allow me to automatically add effect notes for each roll to automatically roll for concealment
   - And would allow automating rerolls for abilities like Weapon of the Chosen
 
+# PF1 v11
+- Type/Subtype targets are now viable.
+
 # vnext
-- apply auto-config on create to all auto-config stuff (see Precise Shot)
-  - Try to come up with a more generic framework for this
-- Add more text to Token Target app
-  - Have a "gm only" text that says something like "you can see all tokens because you're the GM, players can only select tokens that are visible to them.
-  - Add more text at the bottom that says "any tokens that are targeted when this is open will be pre-selected, you can enable a setting to skip this dialog in those cases"
+- Create new "Roll Bonuses" section for attack dialog inputs
+- Replace "checklist-input" with a proper Item application instead of a warpgate menu
+- Add "Fortune configuration app" to help with configuring specific fortune abilities
+- Targeting
+  - Add a configuration error if "this target is not configured"
+- Roll Bonuses button in header that goes "show me a list of items with bonuses". This can also have a button to auto-populate any that it thinks should have bonuses added
+  - See example [https://gitlab.com/mxzf/adventure-uninstaller/-/blob/master/adventure-uninstaller.mjs](here)
+
+- Add "Weapon Focus" hint hook so Weapon Focus, Weapon Specialization, and Martial Focus can all use the sword icon hint
+- Audit Specific Bonus "click to expand" rules and make sure they're concise enough (_specifically_ looking at you, Weapon Focus)
+- Specific Bonuses
+  - Inspiration
+    - Has a traits selector for various skills
+    - Expanded Inspiration
+      - Lets you pick more skills that automatically include inspiration
+    - Change Inspiration Die
+      - Allows you to change the base die from 1d6 to 1d8 or 2d8 (Amazing Inspiration talent)
+    - Inspiration "Fortune" 
+      - e.g. Empathy Talent, when rolling inspiration for sense motive, roll twice and take the higher
+- Add "ignore me" boolean flag to turn off auto configuration (stronger "hammer" for EitR-type stuff where it incorrectly makes assumptions)

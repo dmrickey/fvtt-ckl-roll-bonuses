@@ -7,14 +7,12 @@ export class SpecificBonuses {
      * @param {object} bonus
      * @param {string} bonus.journal
      * @param {string} bonus.key
-     * @param {Nullable<string>} [bonus.label]
-     * @param {Nullable<string>?} [bonus.tooltip]
-     * @param {keyof SystemItemData['flags']} [bonus.type]
+     * @param {Nullable<string>} [bonus.labelKey]
+     * @param {Nullable<string>?} [bonus.tooltipKey]
      * @param {Nullable<string>?} [bonus.parent]
-     * @param  {...string} extraKeys
      */
-    static registerSpecificBonus({ journal, label = null, key, type = 'dictionary', tooltip = undefined, parent }, ...extraKeys) {
-        this.allBonuses[key] = new SpecificBonus(extraKeys, journal, key, label, parent, tooltip, type);
+    static registerSpecificBonus({ journal, labelKey = null, key, tooltipKey = undefined, parent }) {
+        this.allBonuses[key] = new SpecificBonus(journal, key, labelKey, parent, tooltipKey);
     }
 
     /**
@@ -22,15 +20,8 @@ export class SpecificBonuses {
      */
     static allBonuses = {};
 
-    static get dictionaryKeys() {
+    static get allBonusKeys() {
         return Object.values(this.allBonuses)
-            .filter((bonus) => bonus.type === 'dictionary')
-            .map((bonus) => bonus.key);
-    }
-
-    static get booleanKeys() {
-        return Object.values(this.allBonuses)
-            .filter((bonus) => bonus.type === 'boolean')
             .map((bonus) => bonus.key);
     }
 }
@@ -39,29 +30,34 @@ api.SpecificBonuses = SpecificBonuses;
 
 class SpecificBonus {
     /**
-     * @param {string[]} extraKeys
      * @param {string} journal
      * @param {string} key
-     * @param {Nullable<string>} label
+     * @param {Nullable<string>} labelKey
      * @param {Nullable<string>} parent
-     * @param {Nullable<string>} tooltip
-     * @param {keyof SystemItemData['flags']} type
+     * @param {Nullable<string>} tooltipKey
      */
     constructor(
-        extraKeys,
         journal,
         key,
-        label,
+        labelKey,
         parent,
-        tooltip,
-        type,
+        tooltipKey,
     ) {
-        this.extraKeys = extraKeys;
         this.journal = journal;
         this.key = key;
-        this.label = label || localizeBonusLabel(key);
+        this._labelKey = labelKey;
         this.parent = parent;
-        this.tooltip = tooltip || localizeBonusTooltip(key);
-        this.type = type;
+        this._tooltipKey = tooltipKey;
+    }
+
+    get label() {
+        return this._labelKey
+            ? localizeBonusLabel(this._labelKey)
+            : localizeBonusLabel(this.key);
+    }
+    get tooltip() {
+        return this._tooltipKey
+            ? localizeBonusTooltip(this._tooltipKey)
+            : localizeBonusTooltip(this.key);
     }
 }

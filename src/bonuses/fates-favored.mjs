@@ -1,16 +1,15 @@
 import { showEnabledLabel } from '../handlebars-handlers/enabled-label.mjs';
-import { hasAnyBFlag } from '../util/flag-helpers.mjs';
 import { LocalHookHandler, customGlobalHooks, localHooks } from '../util/hooks.mjs';
-import { localizeBonusLabel } from '../util/localize.mjs';
+import { registerItemHint } from '../util/item-hints.mjs';
+import { localizeBonusLabel, localizeBonusTooltip } from '../util/localize.mjs';
 import { LanguageSettings } from '../util/settings.mjs';
 import { SpecificBonuses } from './all-specific-bonuses.mjs';
 
 const fatesFavored = 'fates-favored';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#fates-favored';
+const compendiumId = 'Cvgd7Dehxxj6Muup';
 
-Hooks.once('ready', () =>
-    SpecificBonuses.registerSpecificBonus({ journal, key: fatesFavored, type: 'boolean' })
-);
+SpecificBonuses.registerSpecificBonus({ journal, key: fatesFavored });
 
 class Settings {
     static get fatesFavored() { return LanguageSettings.getTranslation(fatesFavored); }
@@ -22,17 +21,28 @@ class Settings {
 
 /**
  * @param {number | string} value
- * @param {ItemChange} itemChange
+ * @param {BonusTypes} type
+ * @param {Nullable<ActorPF>} actor
  * @returns {number | string}
  */
-function patchChangeValue(value, itemChange) {
-    const actor = itemChange.parent?.actor;
-    value = itemChange.type === 'luck' && hasAnyBFlag(actor, fatesFavored)
+function patchChangeValue(value, type, actor) {
+    value = type === 'luck' && actor?.hasItemBooleanFlag(fatesFavored)
         ? isNaN(+value) ? `${value} + 1` : (+value + 1)
         : value;
     return value;
 }
 LocalHookHandler.registerHandler(localHooks.patchChangeValue, patchChangeValue);
+
+// register hint on source
+registerItemHint((hintcls, _actor, item, _data) => {
+    const has = !!item.hasItemBooleanFlag(fatesFavored);
+    if (!has) {
+        return;
+    }
+
+    const hint = hintcls.create('', ['ckl-lucky-horseshoe'], { hint: localizeBonusTooltip(fatesFavored), icon: 'ra ra-horseshoe' });
+    return hint;
+});
 
 /**
  * Increase luck source modifier by 1 for tooltip
@@ -75,11 +85,12 @@ Hooks.on('renderItemSheet', (
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
     const name = item?.name?.toLowerCase() ?? '';
+    const sourceId = item?.flags.core?.sourceId ?? '';
 
-    const hasFlag = item.system.flags.boolean?.hasOwnProperty(fatesFavored);
+    const hasFlag = item.hasItemBooleanFlag(fatesFavored);
     if (!hasFlag) {
-        if (name === Settings.fatesFavored) {
-            item.update({ [`system.flags.boolean.${fatesFavored}`]: true });
+        if (isEditable && (name === Settings.fatesFavored || sourceId.includes(compendiumId))) {
+            item.addItemBooleanFlag(fatesFavored);
         }
         return;
     }
@@ -91,5 +102,28 @@ Hooks.on('renderItemSheet', (
         parent: html,
     }, {
         canEdit: isEditable,
+        inputType: 'specific-bonus',
     });
 });
+
+/**
+ * @param {ItemPF} item
+ * @param {object} data
+ * @param {{temporary: boolean}} param2
+ * @param {string} id
+ */
+const onCreate = (item, data, { temporary }, id) => {
+    if (!(item instanceof pf1.documents.item.ItemPF)) return;
+    if (temporary) return;
+
+    const name = item?.name?.toLowerCase() ?? '';
+    const sourceId = item?.flags.core?.sourceId ?? '';
+    const hasBonus = item.hasItemBooleanFlag(fatesFavored);
+
+    if ((name === Settings.fatesFavored || sourceId.includes(compendiumId)) && !hasBonus) {
+        item.updateSource({
+            [`system.flags.boolean.${fatesFavored}`]: true,
+        });
+    }
+};
+Hooks.on('preCreateItem', onCreate);

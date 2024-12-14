@@ -6,6 +6,7 @@ import { createTemplate, templates } from "../templates.mjs";
 
 /**
  * @param {object} args
+ * @param {string[]} [args.choices]
  * @param {FlagValue} [args.current]
  * @param {ItemPF} args.item
  * @param {string} args.journal
@@ -15,11 +16,14 @@ import { createTemplate, templates } from "../templates.mjs";
  * @param {HTMLElement} args.parent,
  * @param {object} options
  * @param {boolean} options.canEdit
- * @param {string} [options.placeholder]
+ * @param {InputType} options.inputType
  * @param {boolean} [options.isFormula]
- * @param {boolean} [options.isModuleFlag] - false (default) if this is a dictionary flag, true if this is a data flag
+ * @param {boolean} [options.isSubLabel]
+ * @param {string} [options.placeholder]
+ * @param {string} [options.textInputType]
  */
 export function textInput({
+    choices = [],
     current = '',
     item,
     journal,
@@ -29,26 +33,29 @@ export function textInput({
     tooltip = '',
 }, {
     canEdit,
+    inputType,
     isFormula = true,
-    isModuleFlag = false,
+    isSubLabel = false,
     placeholder = '',
+    textInputType = 'text',
 }) {
-    current ||= isModuleFlag
-        ? item.getFlag(MODULE_NAME, key)
-        : item.getItemDictionaryFlag(key);
+    current ||= item.getFlag(MODULE_NAME, key);
     label ||= localizeBonusLabel(key);
     tooltip ||= localizeBonusTooltip(key);
 
     const div = createTemplate(
         templates.textInput,
         {
+            choices,
             current,
             isFormula,
+            isSubLabel,
             journal,
             key,
             label,
             placeholder,
             readonly: !canEdit,
+            textInputType,
             tooltip,
         },
     );
@@ -60,14 +67,11 @@ export function textInput({
 
             // @ts-ignore - event.target is HTMLTextAreaElement
             const /** @type {HTMLTextAreaElement} */ target = event.target;
-
-            isModuleFlag
-                ? await item.setFlag(MODULE_NAME, key, target?.value)
-                : await item.setItemDictionaryFlag(key, target?.value);
+            await item.setFlag(MODULE_NAME, key, target?.value);
         },
     );
 
-    addNodeToRollBonus(parent, div, item, canEdit);
+    addNodeToRollBonus(parent, div, item, canEdit, inputType);
 }
 
 api.inputs.textInput = textInput;

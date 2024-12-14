@@ -1,6 +1,7 @@
 import { MODULE_NAME } from '../../../consts.mjs';
 import { textInput } from '../../../handlebars-handlers/bonus-inputs/text-input.mjs';
-import { hasAnyBFlag } from '../../../util/flag-helpers.mjs';
+import { api } from '../../../util/api.mjs';
+import { difference } from '../../../util/array-intersects.mjs';
 import { BaseTarget } from '../base-target.mjs';
 
 /**
@@ -42,7 +43,7 @@ export class HasBooleanFlagTarget extends BaseTarget {
     static _getSourcesFor(item, sources) {
         const filteredSources = sources.filter((source) => {
             const value = source.getFlag(MODULE_NAME, this.key);
-            return !!value && hasAnyBFlag(item.actor, value);
+            return !!value && item.actor.hasItemBooleanFlag(value);
         });
 
         return filteredSources;
@@ -70,16 +71,30 @@ export class HasBooleanFlagTarget extends BaseTarget {
      * @param {ItemPF} options.item
      */
     static showInputOnItemSheet({ html, isEditable, item }) {
+        const flags = Object.keys(item.actor?.itemFlags?.boolean ?? {});
+        const choices = difference(
+            flags,
+            [
+                ...api.SpecificBonuses.allBonusKeys,
+                ...api.allBonusTypesKeys,
+                ...api.allGlobalTypesKeys,
+                ...api.allTargetTypesKeys,
+                ...api.allTargetOverrideTypesKeys,
+            ]
+        );
+        choices.sort();
+
         textInput({
             item,
             journal: this.journal,
             key: this.key,
             parent: html,
             tooltip: this.tooltip,
+            choices,
         }, {
-            isFormula: false,
-            isModuleFlag: true,
             canEdit: isEditable,
+            inputType: 'target',
+            isFormula: false,
         });
     }
 }

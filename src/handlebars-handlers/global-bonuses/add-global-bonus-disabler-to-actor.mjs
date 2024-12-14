@@ -1,6 +1,5 @@
+import { handleJournalClick } from '../../util/handle-journal-click.mjs';
 import { createTemplate, templates } from '../templates.mjs';
-
-const combatBonusSectionSelector = '#ckl-roll-bonus-container'
 
 /**
  * @typedef {object} GlobalActorDisableSetting
@@ -22,6 +21,18 @@ export const addGlobalBonusDisablerToActor = (actorSheetHtml, settings, canEdit)
     }
 
     const template = createTemplate(templates.globalBonusActorDisabledContainer, { settings });
+
+    // @ts-ignore
+    const journals = /** @type {HTMLElement[]} */ (template.querySelectorAll('[data-journal]'));
+    journals.forEach((journal) => {
+        journal?.addEventListener(
+            'click',
+            async (event) => {
+                event.preventDefault();
+                await handleJournalClick(journal);
+            },
+        );
+    });
 
     tab.appendChild(template);
 }

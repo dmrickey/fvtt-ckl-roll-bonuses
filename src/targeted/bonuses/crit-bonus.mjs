@@ -1,6 +1,6 @@
-import { hasLegacyCritFlag } from '../../bonuses/critical.mjs';
 import { MODULE_NAME } from '../../consts.mjs';
 import { checkboxInput } from '../../handlebars-handlers/bonus-inputs/chekbox-input.mjs';
+import { showLabel } from '../../handlebars-handlers/bonus-inputs/show-label.mjs';
 import { textInput } from "../../handlebars-handlers/bonus-inputs/text-input.mjs";
 import { handleBonusTypeFor } from '../../target-and-bonus-join.mjs';
 import { FormulaCacheHelper } from "../../util/flag-helpers.mjs";
@@ -28,14 +28,6 @@ export class CritBonus extends BaseBonus {
     static get #critKeenKey() { return `${this.key}-keen`; }
     static get #critMultKey() { return `${this.key}-mult`; }
     static get #critOffsetKey() { return `${this.key}-offset`; }
-
-    /**
-     * If the item is providing this bonus
-     * @override
-     * @param {ItemPF} source
-     * @returns {boolean}
-     */
-    static isSource(source) { return super.isSource(source) && !hasLegacyCritFlag(source); };
 
     /**
      * If the item is providing keen
@@ -316,6 +308,14 @@ export class CritBonus extends BaseBonus {
      * @param {ItemPF} options.item
      */
     static showInputOnItemSheet({ html, item, isEditable }) {
+        showLabel({
+            item,
+            key: this.key,
+            journal: this.journal,
+            parent: html,
+        }, {
+            inputType: 'bonus',
+        });
         checkboxInput({
             item,
             journal: this.journal,
@@ -323,7 +323,8 @@ export class CritBonus extends BaseBonus {
             parent: html,
         }, {
             canEdit: isEditable,
-            isModuleFlag: true,
+            inputType: 'bonus',
+            isSubLabel: true,
         });
         textInput({
             item,
@@ -332,7 +333,8 @@ export class CritBonus extends BaseBonus {
             parent: html,
         }, {
             canEdit: isEditable,
-            isModuleFlag: true,
+            inputType: 'bonus',
+            isSubLabel: true,
         });
         textInput({
             item,
@@ -341,7 +343,8 @@ export class CritBonus extends BaseBonus {
             parent: html,
         }, {
             canEdit: isEditable,
-            isModuleFlag: true,
+            inputType: 'bonus',
+            isSubLabel: true,
         });
     }
 }

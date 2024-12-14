@@ -1,0 +1,17 @@
+<div class="form-group roll-bonuses">
+    {{> "modules/ckl-roll-bonuses/hbs/label-partial.hbs"}}
+    <div class="form-fields">
+        {{#each values}}
+        <label class="checkbox">
+            <input
+                type="radio"
+                name="{{../name}}"
+                value="{{id}}"
+                {{checked (eq ../current id)}}
+                {{#if readonly}}disabled{{/if}}
+            >
+            {{label}}
+        </label>
+        {{/each}}
+    </div>
+</div>

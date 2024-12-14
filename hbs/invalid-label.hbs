@@ -1,0 +1,9 @@
+<div class="form-group roll-bonuses">
+    {{> "modules/ckl-roll-bonuses/hbs/label-partial.hbs"}}
+    <div class="form-fields">
+        {{#if subLabel}}
+        <div>{{subLabel}}</div>
+        {{/if}}
+        <i class="label" {{#if for}}for={{for}}{{/if}}>{{localize "ckl-roll-bonuses.invalid-override"}}</i>
+    </div>
+</div>

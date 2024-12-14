@@ -1,6 +1,8 @@
 import { MODULE_NAME } from '../../consts.mjs';
+import { showLabel } from '../../handlebars-handlers/bonus-inputs/show-label.mjs';
 import { textInput } from '../../handlebars-handlers/bonus-inputs/text-input.mjs';
 import { showEnabledLabel } from '../../handlebars-handlers/enabled-label.mjs';
+import { localizeBonusTooltip } from '../../util/localize.mjs';
 import { BaseTarget } from './base-target.mjs';
 
 /**
@@ -76,16 +78,25 @@ export class FunctionTarget extends BaseTarget {
      */
     static showInputOnItemSheet({ html, isEditable, item }) {
         if (game.user.isGM) {
+            showLabel({
+                item,
+                journal: this.journal,
+                key: this.key,
+                parent: html,
+            }, {
+                inputType: 'target',
+            });
             textInput({
                 item,
                 journal: this.journal,
                 key: this.#playerLabelKey,
                 parent: html,
-                tooltip: this.tooltip,
+                tooltip: localizeBonusTooltip(this.#playerLabelKey),
             }, {
                 canEdit: isEditable,
+                inputType: 'target',
                 isFormula: false,
-                isModuleFlag: true,
+                isSubLabel: true,
             });
             textInput({
                 item,
@@ -95,8 +106,9 @@ export class FunctionTarget extends BaseTarget {
                 tooltip: this.tooltip,
             }, {
                 canEdit: isEditable,
+                inputType: 'target',
                 isFormula: false,
-                isModuleFlag: true,
+                isSubLabel: true,
             });
         }
         else {
@@ -109,10 +121,11 @@ export class FunctionTarget extends BaseTarget {
                 tooltip: this.tooltip,
             }, {
                 canEdit: isEditable,
+                inputType: 'target',
             });
         }
     }
 
     /** @override @returns { boolean } */
-    static get skipPicker() { return true; }
+    static get gmOnlyForPicker() { return true; }
 }

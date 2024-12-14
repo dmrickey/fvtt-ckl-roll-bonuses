@@ -1,9 +1,9 @@
 import { MODULE_NAME } from '../consts.mjs';
 import { showEnabledLabel } from '../handlebars-handlers/enabled-label.mjs';
-import { hasAnyBFlag } from '../util/flag-helpers.mjs';
 import { LocalHookHandler, customGlobalHooks, localHooks } from '../util/hooks.mjs';
 import { isActorInCombat } from '../util/is-actor-in-combat.mjs';
-import { localizeBonusLabel } from '../util/localize.mjs';
+import { registerItemHint } from '../util/item-hints.mjs';
+import { localizeBonusLabel, localizeBonusTooltip } from '../util/localize.mjs';
 import { LanguageSettings } from '../util/settings.mjs';
 import { SpecificBonuses } from './all-specific-bonuses.mjs';
 
@@ -12,13 +12,7 @@ const furiousFocusTimestamp = 'furious-focus-timestamp';
 const compendiumId = 'UcEIgufLJlIfhHmu';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#furious-focus';
 
-Hooks.once('ready', () =>
-    SpecificBonuses.registerSpecificBonus({
-        journal,
-        key: furiousFocus,
-        type: 'boolean',
-    })
-);
+SpecificBonuses.registerSpecificBonus({ journal, key: furiousFocus, });
 
 class Settings {
     static get furiousFocus() { return LanguageSettings.getTranslation(furiousFocus); }
@@ -27,6 +21,17 @@ class Settings {
         LanguageSettings.registerItemNameTranslation(furiousFocus);
     }
 }
+
+// register hint on source
+registerItemHint((hintcls, _actor, item, _data) => {
+    const has = !!item.hasItemBooleanFlag(furiousFocus);
+    if (!has) {
+        return;
+    }
+
+    const hint = hintcls.create('', [], { hint: localizeBonusTooltip(furiousFocus), icon: 'fas fa-burst' });
+    return hint;
+});
 
 /** @returns {string} */
 const label = () => { return localizeBonusLabel(furiousFocus); }
@@ -43,10 +48,10 @@ function getConditionalParts(actionUse, result, atk, index) {
         return;
     }
 
-    const hasFocus = () => hasAnyBFlag(actor, furiousFocus);
+    const hasFocus = actor.hasItemBooleanFlag(furiousFocus);
     const penalty = shared.rollData.powerAttackPenalty || 0;
     const hasUsed = hasUsedFF(actor);
-    if (shared.powerAttack && hasFocus() && penalty && !hasUsed) {
+    if (shared.powerAttack && hasFocus && penalty && !hasUsed) {
         result['attack.normal'].push(`${penalty * -1}[${label()}]`);
         setUsedFF(actor);
     }
@@ -71,12 +76,12 @@ Hooks.on('renderItemSheet', (
 ) => {
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
-    const hasFlag = item.system.flags.boolean?.hasOwnProperty(furiousFocus);
-    const name = item?.name?.toLowerCase() ?? '';
-    const sourceId = item?.flags.core?.sourceId ?? '';
+    const hasFlag = item.hasItemBooleanFlag(furiousFocus);
     if (!hasFlag) {
-        if (name === Settings.furiousFocus || sourceId.includes(compendiumId)) {
-            item.update({ [`system.flags.boolean.${furiousFocus}`]: true });
+        const name = item?.name?.toLowerCase() ?? '';
+        const sourceId = item?.flags.core?.sourceId ?? '';
+        if (isEditable && (name === Settings.furiousFocus || sourceId.includes(compendiumId))) {
+            item.addItemBooleanFlag(furiousFocus);
         }
         return;
     }
@@ -88,6 +93,7 @@ Hooks.on('renderItemSheet', (
         parent: html,
     }, {
         canEdit: isEditable,
+        inputType: 'specific-bonus',
     });
 });
 
@@ -97,3 +103,25 @@ const hasUsedFF = (actor) => isActorInCombat(actor) && actor.getFlag(MODULE_NAME
 const setUsedFF = (actor) => isActorInCombat(actor)
     ? actor.setFlag(MODULE_NAME, furiousFocusTimestamp, game.time.worldTime)
     : actor.setFlag(MODULE_NAME, furiousFocusTimestamp, null);
+
+/**
+ * @param {ItemPF} item
+ * @param {object} data
+ * @param {{temporary: boolean}} param2
+ * @param {string} id
+ */
+const onCreate = (item, data, { temporary }, id) => {
+    if (!(item instanceof pf1.documents.item.ItemPF)) return;
+    if (temporary) return;
+
+    const name = item?.name?.toLowerCase() ?? '';
+    const sourceId = item?.flags.core?.sourceId ?? '';
+    const hasBonus = item.hasItemBooleanFlag(furiousFocus);
+
+    if ((name === Settings.furiousFocus || sourceId.includes(compendiumId)) && !hasBonus) {
+        item.updateSource({
+            [`system.flags.boolean.${furiousFocus}`]: true,
+        });
+    }
+};
+Hooks.on('preCreateItem', onCreate);

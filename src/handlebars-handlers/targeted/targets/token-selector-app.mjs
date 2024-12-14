@@ -5,6 +5,12 @@ import { truthiness } from "../../../util/truthiness.mjs";
 import { uniqueArray } from "../../../util/unique-array.mjs";
 import { templates } from "../../templates.mjs";
 
+/**
+ * @typedef {object} TokenActorSelectorOptions
+ * @property {string} key
+*/
+
+// @ts-ignore
 /** @extends {DocumentSheet<TokenActorSelectorOptions, ItemPF>} */
 export class TokenSelectorApp extends DocumentSheet {
     /** @override */
@@ -26,6 +32,17 @@ export class TokenSelectorApp extends DocumentSheet {
     activateListeners(html) {
         super.activateListeners(html);
         html.find('button[type=reset]')?.click(this.close.bind(this));
+
+        html.find('.individual-token').each(
+            /** @this {HTMLElement} */
+            function () {
+                const uuid = this.dataset.tokenUuid || '';
+                const token = fromUuidSync(uuid)?.object;
+                if (!token) return;
+
+                this.addEventListener('pointerenter', (e) => token._onHoverIn(e, { hoverOutOthers: false }));
+                this.addEventListener('pointerleave', (e) => token._onHoverOut(e));
+            });
     }
 
     /** @override */
@@ -34,6 +51,7 @@ export class TokenSelectorApp extends DocumentSheet {
         const templateData = {
             item,
             path: this.path,
+            isGm: game.user.isGM,
             groupedTokens: {},
         };
 

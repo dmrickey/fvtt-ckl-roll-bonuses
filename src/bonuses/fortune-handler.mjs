@@ -1,5 +1,4 @@
 import { MODULE_NAME } from '../consts.mjs';
-import { countBFlags } from '../util/flag-helpers.mjs';
 import { LocalHookHandler, customGlobalHooks, localHooks } from '../util/hooks.mjs';
 import { registerItemHint } from '../util/item-hints.mjs';
 import { localize } from '../util/localize.mjs';
@@ -34,6 +33,28 @@ const skillMisfortune = 'misfortune-skill';
  * @type {{[key: string]: (key?: string, actor?: ActorPF) => string}}
  */
 let fortuneHintLookup = {};
+
+/**
+ * Counts the amount of items that have a given boolean flags
+ * @param {EmbeddedCollection<ItemPF>} items
+ * @param {string[]} flags
+ * @returns {{[key: string]: number}} - the count of items that have the given boolean flags
+ */
+const countBFlags = (items, ...flags) => {
+    const count = Object.fromEntries(flags.map((flag) => [flag, 0]));
+
+    (items || []).forEach((/** @type {ItemPF} */item) => {
+        if (!item.isActive) return;
+
+        flags.forEach((flag) => {
+            if (item.hasItemBooleanFlag(flag)) {
+                count[flag]++;
+            }
+        });
+    });
+
+    return count;
+}
 
 Hooks.once('ready', () => {
     fortuneHintLookup = {
@@ -121,7 +142,7 @@ export const handleFortune = (options) => {
     options.fortuneCount ||= 0;
     options.misfortuneCount ||= 0;
 
-    const roll = RollPF.safeRollSync(options.dice);
+    const roll = RollPF.create(options.dice).evaluate({ async: false, maximize: true });
     const dice = roll.dice[0];
     if (!dice) {
         // no actual roll, a static number was probably given
@@ -205,6 +226,7 @@ function handleInitiative(formula) {
         defaultParts.push(`(@attributes.init.total / 100)[${game.i18n.localize("PF1.Tiebreaker")}]`);
     const parts = CONFIG.Combat.initiative.formula ? CONFIG.Combat.initiative.formula.split(/\s*\+\s*/) : defaultParts;
     if (!actor) return parts[0] || "0";
+    // @ts-ignore
     return parts.filter((p) => p !== null).join(" + ");
 };
 

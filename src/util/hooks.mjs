@@ -3,7 +3,6 @@ import { MODULE_NAME } from "../consts.mjs";
 export const customGlobalHooks = /** @type {const} */ ({
     getDamageTooltipSources: `${MODULE_NAME}_getDamageTooltipSources`,
     actionUseAlterRollData: `${MODULE_NAME}_actionUseAlterRollData`,
-    actionUseHandleConditionals: `${MODULE_NAME}_actionUseHandleConditionals`,
     actionUseFootnotes: `${MODULE_NAME}_actionUseFootnotes`,
     d20Roll: `${MODULE_NAME}_d20Roll`,
     getActorInitiativeFormula: `${MODULE_NAME}_getActorInitiativeFormula`,
@@ -13,18 +12,22 @@ export const customGlobalHooks = /** @type {const} */ ({
 });
 
 export const localHooks = /** @type {const} */ ({
+    actionUse_handleConditionals: `${MODULE_NAME}_actionUse_handleConditionals`,
     actionUseProcess: `${MODULE_NAME}_actionUseProcess`,
     actorGetSkillInfo: `${MODULE_NAME}_actorGetSkillInfo`,
     actorRollSkill: `${MODULE_NAME}_actorRollSkill`,
+    cacheBonusTypeOnActor: `${MODULE_NAME}_cacheBonusTypeOnActor`,
     chatAttackAddAttack: `${MODULE_NAME}_chatAttackAddAttack`,
+    preRollChatAttackAddAttack: `${MODULE_NAME}_preRollChatAttackAddAttack`,
     chatAttackEffectNotes: `${MODULE_NAME}_chatAttackEffectNotes`,
     initItemActionRollData: `${MODULE_NAME}_initItemActionRollData`,
     itemActionCritRangeWrapper: `${MODULE_NAME}_itemActionCritRangeWrapper`,
+    itemAction_damageSources: `${MODULE_NAME}_itemAction_damageSources`,
     itemActionEnhancementBonus: `${MODULE_NAME}_itemActionEnhancementBonus`,
     itemActionRollAttack: `${MODULE_NAME}_itemActionRollAttack`,
     itemActionRollDamage: `${MODULE_NAME}_itemActionRollDamage`,
+    modifyActionLabelDC: `${MODULE_NAME}_modifyActionLabelDC`,
     patchChangeValue: `${MODULE_NAME}_patchChangeValue`,
-    postPrepareActorDerivedData: `${MODULE_NAME}_postPrepareActorDerivedData`,
     prepareData: `${MODULE_NAME}_prepareData`,
     updateItemActionRollData: `${MODULE_NAME}_updateItemActionRollData`,
 });
@@ -37,6 +40,13 @@ export const localHooks = /** @type {const} */ ({
 const handlers = {};
 
 export class LocalHookHandler {
+
+    /**
+     * @overload
+     * @param {typeof localHooks.actionUse_handleConditionals} hook
+     * @param {(action: ActionUse, conditionals: ItemConditional[]) => void} func
+     * @returns {void}
+     */
 
     /**
      * @overload
@@ -69,7 +79,14 @@ export class LocalHookHandler {
     /**
      * @overload
      * @param {typeof localHooks.chatAttackAddAttack} hook
-     * @param {(chatAttack: ChatAttack,  args: { noAttack: boolean, bonus: unknown, extraParts: unknown[], critical: boolean, conditionalParts: object }) => Promise<void>} func
+     * @param {(chatAttack: ChatAttack,  args: { noAttack: boolean, bonus: unknown, extraParts: string[], critical: boolean, conditionalParts: object }) => Promise<void>} func
+     * @returns {void}
+     */
+
+    /**
+     * @overload
+     * @param {typeof localHooks.preRollChatAttackAddAttack} hook
+     * @param {(chatAttack: ChatAttack,  args: { noAttack: boolean, bonus: unknown, extraParts: string[], critical: boolean, conditionalParts: object }) => Promise<void>} func
      * @returns {void}
      */
 
@@ -77,13 +94,6 @@ export class LocalHookHandler {
      * @overload
      * @param {typeof localHooks.chatAttackEffectNotes} hook
      * @param {(chatAttack: ChatAttack) => Promise<void>} func
-     * @returns {void}
-     */
-
-    /**
-     * @overload
-     * @param {typeof localHooks.postPrepareActorDerivedData} hook
-     * @param {(actor: ActorPF) => void} func
      * @returns {void}
      */
 
@@ -111,7 +121,14 @@ export class LocalHookHandler {
     /**
      * @overload
      * @param {typeof localHooks.patchChangeValue} hook
-     * @param {(value: number | string, itemChange: ItemChange) => number | string} func
+     * @param {(value: number | string, type: BonusTypes, actor: Nullable<ActorPF>) => number | string} func
+     * @returns {void}
+     */
+
+    /**
+     * @overload
+     * @param {typeof localHooks.cacheBonusTypeOnActor} hook
+     * @param {(item: ItemPF) => void} func
      * @returns {void}
      */
 
@@ -133,6 +150,20 @@ export class LocalHookHandler {
      * @overload
      * @param {typeof localHooks.itemActionRollDamage} hook
      * @param {(seed: ItemActionRollAttackHookArgs, action: ItemAction, data: RollData, index: number) => void} func
+     * @returns {void}
+     */
+
+    /**
+     * @overload
+     * @param {typeof localHooks.modifyActionLabelDC} hook
+     * @param {(action: ItemAction, seed: {dc: number}) => void} func
+     * @returns {void}
+     */
+
+    /**
+     * @overload
+     * @param {typeof localHooks.itemAction_damageSources} hook
+     * @param {(action: ItemAction, damageSources: ItemChange[]) => void} func
      * @returns {void}
      */
 
@@ -166,7 +197,8 @@ export class LocalHookHandler {
      * @overload
      * @param {typeof localHooks.patchChangeValue} hook
      * @param {number | string} seed
-     * @param {ItemChange} itemChange
+     * @param {BonusTypes} type
+     * @param {Nullable<ActorPF>} actor
      * @returns {number | string}
      */
 
@@ -198,9 +230,17 @@ export class LocalHookHandler {
 
     /**
      * @overload
+     * @param {typeof localHooks.preRollChatAttackAddAttack} hook
+     * @param {ChatAttack} chatAttack
+     * @param {{ noAttack: boolean, bonus: unknown, extraParts: string[], critical: boolean, conditionalParts: object }} args
+     * @returns {Promise<void>}
+     */
+
+    /**
+     * @overload
      * @param {typeof localHooks.chatAttackAddAttack} hook
      * @param {ChatAttack} chatAttack
-     * @param {{ noAttack: boolean, bonus: unknown, extraParts: unknown[], critical: boolean, conditionalParts: object }} args
+     * @param {{ noAttack: boolean, bonus: unknown, extraParts: string[], critical: boolean, conditionalParts: object }} args
      * @returns {Promise<void>}
      */
 
@@ -262,13 +302,6 @@ export class LocalHookHandler {
 
     /**
      * @overload
-     * @param {typeof localHooks.postPrepareActorDerivedData} hook
-     * @param {ActorPF} actor
-     * @returns {void}
-     */
-
-    /**
-     * @overload
      * @param {typeof localHooks.initItemActionRollData} hook
      * @param {ItemAction} action
      * @param {RollData} rollData
@@ -285,9 +318,40 @@ export class LocalHookHandler {
 
     /**
      * @overload
+     * @param {typeof localHooks.cacheBonusTypeOnActor} hook
+     * @param {ItemPF} item
+     * @returns {void}
+     */
+
+    /**
+     * @overload
+     * @param {typeof localHooks.modifyActionLabelDC} hook
+     * @param {ItemAction} action
+     * @param {{ dc: number}} seed
+     * @returns {void}
+     */
+
+    /**
+     * @overload
      * @param {typeof localHooks.prepareData} hook
      * @param {ItemPF} item
      * @param {RollData} rollData
+     * @returns {void}
+     */
+
+    /**
+     * @overload
+     * @param {typeof localHooks.itemAction_damageSources} hook
+     * @param {ItemAction} action
+     * @param {ItemChange[]} damageSources
+     * @returns {void}
+     */
+
+    /**
+     * @overload
+     * @param {typeof localHooks.actionUse_handleConditionals} hook
+     * @param {ActionUse} action
+     * @param {ItemConditional[]} conditionals
      * @returns {void}
      */
 

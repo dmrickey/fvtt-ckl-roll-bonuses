@@ -2,9 +2,9 @@ import { FRIENDLY_MODULE_NAME, MODULE_NAME } from './consts.mjs';
 import { LocalHookHandler, customGlobalHooks, localHooks } from './util/hooks.mjs';
 import './handlebars-handlers/init.mjs';
 import './util/item-hints.mjs';
-import './bonuses.mjs';
+import './_all-bonuses.mjs';
 import './patch/init.mjs';
-import { FormulaCacheHelper, hasAnyBFlag } from './util/flag-helpers.mjs';
+import { FormulaCacheHelper } from './util/flag-helpers.mjs';
 import { simplifyRollFormula } from './util/simplify-roll-formula.mjs';
 import './auto-recognition/init.mjs';
 import { api } from './util/api.mjs';
@@ -14,6 +14,8 @@ import { emptyObject } from './util/empty-object.mjs';
 import { registerSetting } from './util/settings.mjs';
 import { addNodeToRollBonus } from './handlebars-handlers/add-bonus-to-item-sheet.mjs';
 import { localize } from './util/localize.mjs';
+import { FinesseOverride } from './targeted/target-overides/finesse-override.mjs';
+import { handleConditionals } from './patch/action-use_handle-conditionals.mjs';
 
 Hooks.once('pf1PostReady', () => migrate());
 
@@ -51,11 +53,12 @@ async function setEffectNotesHTMLWrapper(wrapped) {
  * @param {object} obj
  * @param {boolean} [obj.noAttack]
  * @param {unknown} [obj.bonus]
- * @param {unknown[]} [obj.extraParts]
+ * @param {string[]} [obj.extraParts]
  * @param {boolean} [obj.critical] Whether or not this roll is a for a critical confirmation
  * @param {object} [obj.conditionalParts]
  */
 async function chatAttackAddAttack(wrapped, { noAttack = false, bonus = null, extraParts = [], critical = false, conditionalParts = {} }) {
+    await LocalHookHandler.fireHookNoReturnAsync(localHooks.preRollChatAttackAddAttack, this, { noAttack, bonus, extraParts, critical, conditionalParts });
     await wrapped({ noAttack, bonus, extraParts, critical, conditionalParts });
     await LocalHookHandler.fireHookNoReturnAsync(localHooks.chatAttackAddAttack, this, { noAttack, bonus, extraParts, critical, conditionalParts });
 }
@@ -121,6 +124,24 @@ function d20RollWrapper(wrapped, options = {}) {
 // Hooks.on('pf1PreDamageRoll', preDamageRoll);
 
 /**
+ * @this {ActorPF}
+ */
+function actor_prepareEmbeddedDocuments() {
+    /** BEGIN MY CODE */
+    this.items.forEach((item) => {
+        item.system.flags ||= { boolean: {}, dictionary: {} };
+        item.system.flags.boolean ||= {};
+    });
+    /** END MY CODE */
+
+    // super.prepareEmbeddedDocuments(); // ← original code --- ↓ libwrapper equivalent
+    Object.getPrototypeOf(pf1.documents.actor.ActorBasePF).prototype.prepareEmbeddedDocuments.apply(this);
+
+    // @ts-ignore
+    this.applyActiveEffects();
+}
+
+/**
  * @this {ItemPF}
  * @param {*} wrapped
  * @param {boolean} final
@@ -136,7 +157,10 @@ function prepareItemData(wrapped, final) {
     FormulaCacheHelper.cacheFormulas(item, rollData);
     LocalHookHandler.fireHookNoReturnSync(localHooks.prepareData, item, rollData);
     ifDebug(() => {
-        if (!foundry.utils.objectsEqual({ bonuses: [], targets: [] }, item[MODULE_NAME])) {
+        if (!foundry.utils.objectsEqual(
+            { bonuses: [], targets: [] },
+            { bonuses: item[MODULE_NAME].bonuses, targets: item[MODULE_NAME].targets },
+        )) {
             console.debug(`Cached info for '${item.name}':`, item[MODULE_NAME]);
         }
     });
@@ -205,9 +229,32 @@ function itemActionCritRangeWrapper(wrapped) {
  * @param {() => {}} wrapped
  * @this {ActionUse}
  */
-function actionUseHandleConditionals(wrapped) {
-    wrapped();
-    Hooks.call(customGlobalHooks.actionUseHandleConditionals, this);
+function actionUse_handleConditionals(wrapped) {
+    // shared.conditionals is an array of indexes to grab the conditional data for
+    this.shared.conditionals ||= [];
+
+    /** @type {ItemConditional[]} */
+    const conditionals = [];
+    LocalHookHandler.fireHookNoReturnSync(localHooks.actionUse_handleConditionals, this, conditionals);
+
+    const conditionalData = [
+        ...this.shared.conditionals.map((i) => this.shared.action.data.conditionals[i]),
+        ...conditionals.map(x => x.data),
+    ];
+
+    // spells/abilities that don't have attack rolls still need to accept "nonCrit" bonuses
+    // the system is hardcoded to only look at "normal" damage when no attack roll is configured
+    if (!this.action.hasAttack && this.action.hasDamage) {
+        conditionalData.forEach((c) => {
+            c.modifiers.forEach(m => {
+                if (m.critical === 'nonCrit') {
+                    m.critical = 'normal';
+                }
+            });
+        });
+    }
+
+    handleConditionals(this, conditionalData);
 }
 
 /**
@@ -268,6 +315,16 @@ function getDamageTooltipSources(wrapped, fullId, context) {
 
 /**
  * @this {ItemAction}
+ * @param {() => ItemChange[]} wrapped
+ */
+function itemAction_damageSources(wrapped) {
+    const damageSources = wrapped() || [];
+    LocalHookHandler.fireHookNoReturnSync(localHooks.itemAction_damageSources, this, damageSources);
+    return damageSources;
+};
+
+/**
+ * @this {ItemAction}
  * @param {() => number} wrapped
  * @returns {number}
  */
@@ -291,6 +348,29 @@ function itemActionEnhancementBonus(wrapped) {
 }
 
 /**
+ * @this {ItemAction}
+ * @param {(args: { rollData?: RollData}) => Record<string, string>} wrapped
+ * @param {object} [options]
+ * @param {RollData} [options.rollData] - Pre-determined roll data. If not provided, finds the action's own roll data.
+ * @returns {Record<string, string>} This action's labels
+ */
+function itemAction_getLabels(wrapped, { rollData } = {}) {
+    const labels = wrapped({ rollData });
+
+    // has been previously calculated if conditionals are already included
+    const shouldSkip = !!rollData?.conditionals;
+
+    if (this.hasSave && rollData && !shouldSkip) {
+        const seed = { dc: 0 };
+        LocalHookHandler.fireHookNoReturnSync(localHooks.modifyActionLabelDC, this, seed);
+        const totalDC = rollData.dc + (rollData.dcBonus ?? 0) + seed.dc;
+        labels.save = game.i18n.format("PF1.DCThreshold", { threshold: totalDC });
+    }
+
+    return labels;
+}
+
+/**
  * Safely get the result of a roll, returns 0 if unsafe.
  * @param {string | number} formula - The string that should resolve to a number
  * @param {Nullable<RollData>} data - The roll data used for resolving any variables in the formula
@@ -300,17 +380,7 @@ function safeTotal(
     formula,
     data,
 ) {
-    return (isNaN(+formula) ? RollPF.safeRollSync(formula, data).total : +formula) || 0;
-}
-
-/**
- * @param {() => any} wrapped
- * @this {ActorPF}
- */
-function prepareActorDerivedData(wrapped) {
-    wrapped();
-    this[MODULE_NAME] ||= {};
-    LocalHookHandler.fireHookNoReturnSync(localHooks.postPrepareActorDerivedData, this);
+    return (isNaN(+formula) ? RollPF.create(formula + '', data).evaluate({ async: false }).total : +formula) || 0;
 }
 
 /**
@@ -359,7 +429,7 @@ async function itemActionRollAttack(
     LocalHookHandler.fireHookNoReturnSync(localHooks.itemActionRollAttack, seed, this, rollData);
 
     if (formula !== seed.formula || !foundry.utils.objectsEqual(options, seed.options)) {
-        const replaced = await new pf1.dice.D20RollPF(seed.formula, rollData, seed.options).evaluate();
+        const replaced = await new pf1.dice.D20RollPF(seed.formula, rollData, seed.options).evaluate({ async: true });
         return replaced;
     }
     return roll;
@@ -375,13 +445,14 @@ async function itemActionRollDamage(wrapped, ...args) {
     let i = 0;
     for (const roll of rolls) {
         const formula = roll.formula;
-        const options = roll.options;
+        const options = { ...roll.options };
         const rollData = roll.data;
         const seed = { formula, options };
         LocalHookHandler.fireHookNoReturnSync(localHooks.itemActionRollDamage, seed, this, rollData, i);
 
-        if (formula !== seed.formula || !foundry.utils.objectsEqual(options, seed.options)) {
-            const replaced = await new pf1.dice.DamageRoll(seed.formula, rollData, seed.options).evaluate();
+        if (formula !== seed.formula || !foundry.utils.objectsEqual(roll.options, seed.options)) {
+            const replaced = await new pf1.dice.DamageRoll(seed.formula, rollData, seed.options)
+                .evaluate({ async: true, maximize: !!seed.options.maximize, minimize: !!seed.options.minimize });
             rolls[i] = replaced;
         }
         i++;
@@ -448,7 +519,7 @@ function itemAttackFromItem(wrapped, item) {
 
         if (item instanceof pf1.documents.item.ItemWeaponPF && item.system.properties.fin) {
             data.system.flags.boolean ||= {};
-            data.system.flags.boolean['finesse-override'] = true;
+            data.system.flags.boolean[FinesseOverride.key] = true;
         }
 
         const flags = item.flags?.[MODULE_NAME] || {};
@@ -467,18 +538,20 @@ Hooks.once('init', () => {
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype._getConditionalParts', getConditionalParts, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype.addFootnotes', addFootnotes, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype.alterRollData', actionUseAlterRollData, libWrapper.WRAPPER);
-    libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype.handleConditionals', actionUseHandleConditionals, libWrapper.WRAPPER);
+    libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype.handleConditionals', actionUse_handleConditionals, libWrapper.OVERRIDE);
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype.process', actionUseProcess, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ChatAttack.prototype.addAttack', chatAttackAddAttack, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ChatAttack.prototype.setEffectNotesHTML', setEffectNotesHTMLWrapper, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.applications.actor.ActorSheetPF.prototype._getTooltipContext', getDamageTooltipSources, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.critRange', itemActionCritRangeWrapper, libWrapper.WRAPPER);
+    libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.damageSources', itemAction_damageSources, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.enhancementBonus', itemActionEnhancementBonus, libWrapper.WRAPPER);
+    libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.getLabels', itemAction_getLabels, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.rollAttack', itemActionRollAttack, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.rollDamage', itemActionRollDamage, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.dice.d20Roll', d20RollWrapper, libWrapper.WRAPPER);
+    libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorBasePF.prototype.prepareEmbeddedDocuments', actor_prepareEmbeddedDocuments, libWrapper.OVERRIDE);
     libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorPF.prototype.getSkillInfo', actorGetSkillInfo, libWrapper.WRAPPER);
-    libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorPF.prototype.prepareSpecificDerivedData', prepareActorDerivedData, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorPF.prototype.rollSkill', actorRollSkill, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemAttackPF.fromItem', itemAttackFromItem, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype._prepareDependentData', prepareItemData, libWrapper.WRAPPER);
@@ -514,6 +587,26 @@ Hooks.once('init', () => {
     Hooks.callAll(`${MODULE_NAME}.ready`)
 });
 
+/**
+ * Whether or not the document has any of the given boolean flags
+ *
+ * @param {Nullable<ItemPF>} doc
+ * @param  {...string} flags
+ * @returns {boolean} True if the actor has any of the boolean flags.
+ */
+const hasAnyBFlag = (
+    doc,
+    ...flags
+) => {
+    if (!doc) return false;
+
+    if (doc instanceof pf1.documents.item.ItemPF) {
+        return flags.some((flag) => doc.hasItemBooleanFlag(flag));
+    }
+
+    return false;
+}
+
 // specifically at end so it's registered last
 Hooks.on('renderItemSheet', (
     /** @type {ItemSheetPF} */ { actor, isEditable, item },
@@ -533,10 +626,10 @@ Hooks.on('renderItemSheet', (
     }
 
     if (hasBonus && !hasTarget) {
-        addNodeToRollBonus(html, label(localize('hint-missing-target')), item, isEditable);
+        addNodeToRollBonus(html, label(localize('hint-missing-target')), item, isEditable, 'target');
     }
     else if (!hasBonus && hasTarget) {
-        addNodeToRollBonus(html, label(localize('hint-missing-bonus')), item, isEditable);
+        addNodeToRollBonus(html, label(localize('hint-missing-bonus')), item, isEditable, 'bonus');
     }
 });
 // NOTHING BELOW THIS BLOCK

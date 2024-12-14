@@ -1,12 +1,21 @@
-import { textInput } from "../../handlebars-handlers/bonus-inputs/text-input.mjs";
+import { MODULE_NAME } from '../../consts.mjs';
+import { checkboxInput } from '../../handlebars-handlers/bonus-inputs/chekbox-input.mjs';
+import { textInputAndKeyValueSelect } from '../../handlebars-handlers/bonus-inputs/text-input-and-key-value-select.mjs';
+import { textInput } from '../../handlebars-handlers/bonus-inputs/text-input.mjs';
+import { handleBonusTypeFor } from '../../target-and-bonus-join.mjs';
+import { changeTypeLabel } from '../../util/change-type-label.mjs';
+import { createChange } from '../../util/conditional-helpers.mjs';
 import { FormulaCacheHelper } from "../../util/flag-helpers.mjs";
+import { LocalHookHandler, localHooks } from '../../util/hooks.mjs';
+import { localize } from '../../util/localize.mjs';
 import { signed } from "../../util/to-signed-string.mjs";
 import { BaseBonus } from "./base-bonus.mjs";
 
-/**
- * @extends BaseBonus
- */
+/** @extends BaseBonus */
 export class AttackBonus extends BaseBonus {
+    static get #typeKey() { return `${this.key}-type`; }
+    static get #critOnlyKey() { return `${this.key}-crit-only`; }
+
     /**
      * @override
      * @inheritdoc
@@ -14,11 +23,58 @@ export class AttackBonus extends BaseBonus {
     static get sourceKey() { return 'attack'; }
 
     /**
-     * @inheritdoc
      * @override
+     * @inheritdoc
      * @returns {string}
      */
     static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.PiyJbkTuzKHugPSk#attack'; }
+
+    static {
+        /**
+         * @this {ItemAction}
+         * @param {() => ItemChange[]} wrapped
+         */
+        function itemAction_attackSources(wrapped) {
+            const attackSources = wrapped() || [];
+            handleBonusTypeFor(
+                this,
+                AttackBonus,
+                (bonusType, sourceItem) => {
+                    const critOnly = !!sourceItem.getFlag(MODULE_NAME, bonusType.#critOnlyKey);
+                    if (critOnly) return;
+
+                    const type = bonusType.#getAttackBonusType(sourceItem);
+                    /** @type { string | number } */
+                    let value = bonusType.#getAttackBonus(sourceItem);
+                    value = LocalHookHandler.fireHookWithReturnSync(localHooks.patchChangeValue, value, type, sourceItem.actor);
+                    if (value) {
+                        const typeName = pf1.config.bonusTypes[type] || type;
+                        const name = `${sourceItem.name} (${typeName})`
+                        const change = createChange({
+                            value,
+                            target: 'attack',
+                            type,
+                            name,
+                        });
+                        attackSources.push(change);
+                    }
+                }
+            );
+            return attackSources;
+        };
+
+        Hooks.once('init', () => {
+            libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.attackSources', itemAction_attackSources, libWrapper.WRAPPER);
+        });
+    }
+
+    /**
+     * @override
+     * @inheritdoc
+     */
+    static init() {
+        FormulaCacheHelper.registerModuleFlag(this.key);
+    }
 
     /**
      * @override
@@ -28,46 +84,43 @@ export class AttackBonus extends BaseBonus {
      */
     static getHints(source) {
         const formula = FormulaCacheHelper.getModuleFlagFormula(source, this.key)[this.key];
-        const roll = RollPF.safeRollSync(formula);
+        const value = this.#getAttackBonus(source);
+        if (!value && !formula) return;
 
-        return roll.isNumber && roll.total
-            ? [`${signed(roll.total)}`]
-            : [`${formula}`];
+        const critOnly = !!source.getFlag(MODULE_NAME, this.#critOnlyKey);
+        const type = this.#getAttackBonusType(source);
+        const typeLabel = changeTypeLabel(type);
+
+        const roll = RollPF.create((formula + '') || '0');
+
+        const hint = roll.isDeterministic
+            ? `${signed(value)}`
+            : `${formula}`;
+        return critOnly
+            ? [`${hint} (${localize('PF1.CriticalConfirmBonus')})`]
+            : [`${hint}[${typeLabel}]`];
     }
 
     /**
      * @override
      * @inheritdoc
      * @param {ItemPF} source
-     * @returns {ModifierSource[]}
+     * @returns {Nullable<string | string[]>}
      */
-    static getAttackSourcesForTooltip(source) {
-        const /** @type {ModifierSource[]} */ sources = [];
+    static getCritBonusParts(source) {
+        const critOnly = !!source.getFlag(MODULE_NAME, this.#critOnlyKey);
+        if (!critOnly) return;
 
+        const formula = FormulaCacheHelper.getModuleFlagFormula(source, this.key)[this.key];
         const value = this.#getAttackBonus(source);
-        if (value) {
-            sources.push({
-                value,
-                name: source.name,
-                modifier: 'untyped',
-                sort: -100,
-            });
-        }
+        if (!value && !formula) return;
 
-        return sources;
-    }
+        const roll = RollPF.create((formula + '') || '0');
 
-    /**
-     * @override
-     * @inheritdoc
-     * @param {ItemPF} targetSource
-     * @param {ActionUseShared} shared
-     */
-    static actionUseAlterRollData(targetSource, shared) {
-        const value = this.#getAttackBonus(targetSource);
-        if (value) {
-            shared.attackBonus.push(`${value}[${targetSource.name}]`);
-        }
+        const part = roll.isDeterministic
+            ? `(${signed(value)})`
+            : `(${formula})`;
+        return `${part}[${source.name}]`;
     }
 
     /**
@@ -80,15 +133,44 @@ export class AttackBonus extends BaseBonus {
      * @param {ItemPF} options.item
      */
     static showInputOnItemSheet({ html, isEditable, item }) {
-        textInput({
+        const critOnly = !!item.getFlag(MODULE_NAME, this.#critOnlyKey);
+
+        if (critOnly) {
+            textInput({
+                item,
+                label: this.label,
+                journal: this.journal,
+                key: this.key,
+                parent: html,
+                tooltip: this.tooltip,
+            }, {
+                canEdit: isEditable,
+                inputType: 'bonus',
+            });
+        }
+        else {
+            textInputAndKeyValueSelect({
+                item,
+                label: this.label,
+                journal: this.journal,
+                text: { key: this.key },
+                select: { key: this.#typeKey, choices: pf1.config.bonusTypes },
+                parent: html,
+                tooltip: this.tooltip,
+            }, {
+                canEdit: isEditable,
+                inputType: 'bonus',
+            });
+        }
+        checkboxInput({
             item,
             journal: this.journal,
-            key: this.key,
+            key: this.#critOnlyKey,
             parent: html,
-            tooltip: this.tooltip,
         }, {
             canEdit: isEditable,
-            isModuleFlag: true,
+            inputType: 'bonus',
+            isSubLabel: true,
         });
     }
 
@@ -102,10 +184,11 @@ export class AttackBonus extends BaseBonus {
     }
 
     /**
-     * @override
-     * @inheritdoc
+     * @param {ItemPF} item
+     * @return {BonusTypes}
      */
-    static init() {
-        FormulaCacheHelper.registerModuleFlag(this.key);
+    static #getAttackBonusType(item) {
+        const t = item.getFlag(MODULE_NAME, this.#typeKey);
+        return t || 'untyped';
     }
 }

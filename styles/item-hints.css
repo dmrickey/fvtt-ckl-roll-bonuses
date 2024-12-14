@@ -17,3 +17,7 @@
 .sheet .koboldworks.item-hints .hint.ckl-missing-source {
     color: #dd0000;
 }
+
+.sheet .koboldworks.item-hints .hint.ckl-lucky-horseshoe {
+    transform: rotate(180deg);
+}

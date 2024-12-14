@@ -1,8 +1,9 @@
 import { MODULE_NAME } from "../consts.mjs";
 
-export const templates =/** @type {const} */ ({
+export const templates = /** @type {const} */ ({
     /** bonus container for item sheets */
     rollBonusesContainer: `modules/${MODULE_NAME}/hbs/roll-bonuses-container.hbs`,
+    targetHeaderToggle: `modules/${MODULE_NAME}/hbs/target-header-toggle.hbs`,
 
     /** container for turning off global bonuses on actors */
     globalBonusActorDisabledContainer: `modules/${MODULE_NAME}/hbs/global-bonus-actor-disabled-container.hbs`,
@@ -10,7 +11,9 @@ export const templates =/** @type {const} */ ({
     // generic shortcuts
     checkboxInput: `modules/${MODULE_NAME}/hbs/checkbox-input.hbs`,
     enabledLabel: `modules/${MODULE_NAME}/hbs/enabled-label.hbs`,
+    invalidLabel: `modules/${MODULE_NAME}/hbs/invalid-label.hbs`,
     keyValueSelect: `modules/${MODULE_NAME}/hbs/labeled-key-value-dropdown-select.hbs`,
+    radioInput: `modules/${MODULE_NAME}/hbs/radio-input.hbs`,
     stringSelect: `modules/${MODULE_NAME}/hbs/labeled-string-dropdown-select.hbs`,
     textInput: `modules/${MODULE_NAME}/hbs/text-input.hbs`,
     textInputAndKeyValueSelect: `modules/${MODULE_NAME}/hbs/text-input-and-key-value-select.hbs`,
@@ -18,13 +21,13 @@ export const templates =/** @type {const} */ ({
     /** versatile performance picker used on item sheets */
     versatilePerformance: `modules/${MODULE_NAME}/hbs/versatile-performance-selector.hbs`,
 
-    /** damage input used on item sheets */
+    // targeted - bonuses
+    conditionalsInput: `modules/${MODULE_NAME}/hbs/targeted/bonuses/conditionals-input.hbs`,
     damageInput: `modules/${MODULE_NAME}/hbs/targeted/bonuses/damage-input.hbs`,
-
-    /** not used */
-    conditionals: 'systems/pf1/templates/apps/item-action/conditionals.hbs', // (targeted but belongs to pf1) belongs to pf1
+    scriptCallBonus: `modules/${MODULE_NAME}/hbs/targeted/bonuses/script-call-bonus-input.hbs`,
 
     // targeted - targets
+    actionsApp: `modules/${MODULE_NAME}/hbs/targeted/targets/actions-input-application.hbs`,
     checklist: `modules/${MODULE_NAME}/hbs/targeted/targets/checklist.hbs`,
     editableIcons: `modules/${MODULE_NAME}/hbs/targeted/targets/editable-icons.hbs`,
     itemsApp: `modules/${MODULE_NAME}/hbs/targeted/targets/items-input-application.hbs`,
@@ -38,6 +41,7 @@ export const templates =/** @type {const} */ ({
 
     /** label used for all bonuses that shows label, tooltip, and journal */
     label: `modules/${MODULE_NAME}/hbs/label.hbs`,
+    labelPartial: `modules/${MODULE_NAME}/hbs/label-partial.hbs`,
 
     /** item name translation app for auto-recognition */
     itemNameTranslationConfigApp: `modules/${MODULE_NAME}/hbs/item-name-translation-config.hbs`,

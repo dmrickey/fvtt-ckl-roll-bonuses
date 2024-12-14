@@ -4,6 +4,10 @@ import { currentTargets } from '../util/get-current-targets.mjs';
 import { customGlobalHooks } from '../util/hooks.mjs'
 import { BaseGlobalBonus } from './base-global-bonus.mjs';
 import { RangedIncrementPenaltyBonus } from './targeted/bonuses/ranged-increment-penalty-bonus.mjs';
+import { addCheckToAttackDialog, getFormData } from '../util/attack-dialog-helper.mjs';
+
+/** @type {ActionType[]} */
+const rangedTypes = ['rcman', 'rwak', 'twak', 'rsak'];
 
 /** @extends {BaseGlobalBonus} */
 export class RangedIncrementPenaltyGlobalBonus extends BaseGlobalBonus {
@@ -17,6 +21,13 @@ export class RangedIncrementPenaltyGlobalBonus extends BaseGlobalBonus {
     /**
      * @inheritdoc
      * @override
+     * @returns {string}
+     */
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.4A4bCh8VsQVbTsAY#ranged-increment-penalty'; }
+
+    /**
+     * @inheritdoc
+     * @override
      * @param {ItemAction} action
      * @param {RollData} rollData
      */
@@ -25,7 +36,7 @@ export class RangedIncrementPenaltyGlobalBonus extends BaseGlobalBonus {
             return;
         }
 
-        const isRangedAttack = ['rcman', 'rwak', 'twak'].includes(action.data.actionType);
+        const isRangedAttack = rangedTypes.includes(action.data.actionType);
         if (!isRangedAttack) {
             return;
         }
@@ -62,11 +73,39 @@ export class RangedIncrementPenaltyGlobalBonus extends BaseGlobalBonus {
     }
 
     /**
+     * @param {AttackDialog} dialog
+     * @param {[HTMLElement]} html
+     * @param {AttackDialogData} data
+     */
+    static addSkipRangeToDialog(dialog, [html], data) {
+        if (!(dialog instanceof pf1.applications.AttackDialog)) {
+            return;
+        }
+        if (RangedIncrementPenaltyGlobalBonus.isDisabled() || RangedIncrementPenaltyGlobalBonus.isDisabledForActor(data.item?.actor)) {
+            return;
+        }
+
+        const { rangePenalty } = dialog.rollData.rb;
+        if (!rangePenalty) {
+            return;
+        }
+
+        addCheckToAttackDialog(
+            html,
+            RangedIncrementPenaltyGlobalBonus.dialogDisableKey,
+            dialog,
+        );
+    }
+
+    /**
      * @param {ActionUse} actionUse
      */
     static addRangedPenalty(actionUse) {
         const { actor, shared } = actionUse;
         if (RangedIncrementPenaltyGlobalBonus.isDisabled() || RangedIncrementPenaltyGlobalBonus.isDisabledForActor(actor)) {
+            return;
+        }
+        if (getFormData(actionUse, RangedIncrementPenaltyGlobalBonus.dialogDisableKey)) {
             return;
         }
         if (!actor || !shared?.rollData?.rb) {
@@ -119,7 +158,19 @@ export class RangedIncrementPenaltyGlobalBonus extends BaseGlobalBonus {
         }
     }
 
+    /**
+     * @param {ActionUse} actionUse
+     * @param {string[]} notes
+     */
+    static addSkipFootnote(actionUse, notes) {
+        if (getFormData(actionUse, RangedIncrementPenaltyGlobalBonus.dialogDisableKey)) {
+            notes.push(RangedIncrementPenaltyGlobalBonus.disabledFootnote);
+        }
+    }
+
     static {
+        Hooks.on('renderApplication', RangedIncrementPenaltyGlobalBonus.addSkipRangeToDialog);
         Hooks.on(customGlobalHooks.actionUseAlterRollData, RangedIncrementPenaltyGlobalBonus.addRangedPenalty);
+        Hooks.on(customGlobalHooks.actionUseFootnotes, RangedIncrementPenaltyGlobalBonus.addSkipFootnote)
     }
 }

@@ -3,6 +3,7 @@ import { PositionalHelper } from '../../../util/positional-helper.mjs';
 import { FormulaCacheHelper } from '../../../util/flag-helpers.mjs';
 import { localizeBonusLabel } from '../../../util/localize.mjs';
 import { BaseTarget } from '../base-target.mjs';
+import { showLabel } from '../../../handlebars-handlers/bonus-inputs/show-label.mjs';
 
 export class WhenTargetInRange extends BaseTarget {
 
@@ -81,7 +82,7 @@ export class WhenTargetInRange extends BaseTarget {
 
         const filtered = sources.filter((source) => {
             // pf1 system believe "minRange" is not inclusive, so it reports "minRange" as "squares one closer".
-            // The distance logic is now set up for that so reducing this by infintessimly small amount accounts for their error
+            // The distance logic is now set up for that so reducing this by Infinitesimally small amount accounts for their error
             const min = (this.#min(source) || 0) - .0001;
             const max = this.#max(source);
             return targets.every((target) => new PositionalHelper(token, target).isWithinRange(min, max));
@@ -111,6 +112,14 @@ export class WhenTargetInRange extends BaseTarget {
      * @param {ItemPF} options.item
      */
     static showInputOnItemSheet({ html, isEditable, item }) {
+        showLabel({
+            item,
+            journal: this.journal,
+            key: this.key,
+            parent: html,
+        }, {
+            inputType: 'target',
+        });
         textInput({
             item,
             journal: this.journal,
@@ -119,8 +128,9 @@ export class WhenTargetInRange extends BaseTarget {
             parent: html,
         }, {
             canEdit: isEditable,
-            isModuleFlag: true,
+            inputType: 'target',
             placeholder: '0',
+            isSubLabel: true,
         });
         textInput({
             item,
@@ -130,8 +140,9 @@ export class WhenTargetInRange extends BaseTarget {
             parent: html,
         }, {
             canEdit: isEditable,
-            isModuleFlag: true,
-            placeholder: `${Number.POSITIVE_INFINITY}`
+            inputType: 'target',
+            placeholder: `${Number.POSITIVE_INFINITY}`,
+            isSubLabel: true,
         });
     }
 }

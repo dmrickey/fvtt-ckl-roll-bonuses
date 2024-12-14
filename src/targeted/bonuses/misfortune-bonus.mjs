@@ -46,6 +46,7 @@ export class MisfortuneBonus extends BaseBonus {
             tooltip: this.tooltip,
         }, {
             canEdit: isEditable,
+            inputType: 'bonus',
         });
     }
 

@@ -134,7 +134,8 @@ export class TokenTarget extends BaseTarget {
             parent: html,
         }, {
             canEdit: isEditable,
-            isModuleFlag: true,
+            inputType: 'target',
+            isSubLabel: true,
         });
     }
 

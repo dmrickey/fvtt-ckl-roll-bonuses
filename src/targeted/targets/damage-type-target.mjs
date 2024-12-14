@@ -109,6 +109,7 @@ export class DamageTypeTarget extends BaseTarget {
             tooltip: this.tooltip,
         }, {
             canEdit: isEditable,
+            inputType: 'target',
         });
     }
 }

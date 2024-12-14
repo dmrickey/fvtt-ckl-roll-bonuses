@@ -9,6 +9,7 @@ Supports PF1 v9+
 ### Table of contents
 
 - [This documentation is no longer kept up to date. All documentation can be found in the in-game compendium included with this mod.](#this-documentation-is-no-longer-kept-up-to-date-all-documentation-can-be-found-in-the-in-game-compendium-included-with-this-mod)
+    - [Table of contents](#table-of-contents)
 - [Class Features](#class-features)
   - [Versatile Performance](#versatile-performance)
 - [Generic Targets](#generic-targets)
@@ -32,25 +33,52 @@ Supports PF1 v9+
   - [Finesse](#finesse-1)
   - [Fortune/Misfortune](#fortunemisfortune)
 - [Targeted Bonus Examples](#targeted-bonus-examples)
+    - [Fighter Weapon Training](#fighter-weapon-training)
+    - [Gunslinginer Gun Training](#gunslinginer-gun-training)
+    - [Lead Blades, Gravity Bow, Strong Jaw, and Impact Weapon](#lead-blades-gravity-bow-strong-jaw-and-impact-weapon)
+    - [Magus Arcane Weapon Enhcancement](#magus-arcane-weapon-enhcancement)
+    - [Paladin Smite](#paladin-smite)
+    - [Slayer's Studied Target](#slayers-studied-target)
+    - [Unchained Rogue's Finesse Training](#unchained-rogues-finesse-training)
 - [Feats](#feats)
   - [Armor Focus](#armor-focus)
+    - [Armor Focus](#armor-focus-1)
+    - [Improved Armor Focus](#improved-armor-focus)
   - [Elemental Focus](#elemental-focus)
   - [Furious Focus](#furious-focus)
   - [Martial Focus](#martial-focus)
   - [Spell Focus](#spell-focus)
   - [Spell Specialization](#spell-specialization)
   - [Weapon Focus](#weapon-focus)
+    - [Weapon Focus](#weapon-focus-1)
+    - [Greater Weapon Focus](#greater-weapon-focus)
+    - [Mythic Weapon Focus](#mythic-weapon-focus)
+    - [Racial Weapon Focus](#racial-weapon-focus)
   - [Weapon Specialization](#weapon-specialization)
+    - [Weapon Specialization](#weapon-specialization-1)
+    - [Greater Weapon Specialization](#greater-weapon-specialization)
 - [Misc](#misc)
   - [Ammunition](#ammunition)
   - [Change Offset](#change-offset)
-  - [Critical Helpers](#critical-helpers)
   - [Fate's Favored](#fates-favored)
   - [Fortune and Misfortune](#fortune-and-misfortune)
+    - [Everything](#everything)
+    - [Only for the Item that has the flag](#only-for-the-item-that-has-the-flag)
+    - [Ability Checks](#ability-checks)
+    - [Attacks](#attacks)
+    - [Base Attack Bonus](#base-attack-bonus)
+    - [Caster Level Checks](#caster-level-checks)
+    - [Combat Maneuver Checks](#combat-maneuver-checks)
+    - [Concentration Checks](#concentration-checks)
+    - [Initiative Checks](#initiative-checks)
+    - [Saving Throws](#saving-throws)
+    - [Skill Checks](#skill-checks)
   - [Skill Bonuses (Almost entirely uneccesary because of v9 updates. May be removed at some point)](#skill-bonuses-almost-entirely-uneccesary-because-of-v9-updates-may-be-removed-at-some-point)
 - [Spells](#spells)
-  - [Modify Spell Caster Level (all spells, specific school, or specific element)](#modify-spell-caster-level-all-spells-specific-school-or-specific-element)
-  - [Modify Spell DC (all spells, specific school, or specific element)](#modify-spell-dc-all-spells-specific-school-or-specific-element)
+  - [Modify Spell Caster Level for specific element](#modify-spell-caster-level-for-specific-element)
+    - [For Specific Element](#for-specific-element)
+  - [Modify Spell DC for specific element](#modify-spell-dc-for-specific-element)
+    - [For Specific Element](#for-specific-element-1)
 
 ---
 
@@ -439,6 +467,8 @@ Automatically add +2 damage to chosen weapons types for `Weapon Specialization` 
 ## Ammunition
 Ammunition now has inputs for masterwork, enhancement, attack, and damage bonuses. You can find these on the item's advanced tab.
 
+---
+
 ## Change Offset
 Modify the results of any `change` type. This is essentially a very generic form of [Fate's Favored](#fates-favored) -- but this will allow you to increase or decrease any `change` type instead of only modifying luck bonuses by +1.
 
@@ -448,44 +478,6 @@ Modify the results of any `change` type. This is essentially a very generic form
   - Add dictionary flag `change-type-offset` to your buff/feature/etc.
     - Text input will appear for your formula
     - Dropdown selector will show up with options for your chosen change type
-
-</details>
-
-## Critical Helpers
-Attack's critical variables can now be dynamically adjusted. Crit can be modified with keen. It can also be modified by a static amount to account for certain 3.5 classes or other homebrew. The critical multipler can also be adjusted--this is useful for a Swashbuckler's capstone ability (and any homebrew that needs it).
-
-<details>
-  <summary>How to customize crit range or multiplier (click to expand)</summary>
-
-  ### Keen - boolean flag
-  * `keen-self`
-    * place this flag on an attack/weapon/item/spell/etc. Any action for this Item will have its crit range doubled.
-  * `keen-all`
-    * place this flag on anything in your character to double the crit range of any action
-  * `keen_<id>`
-    * e.g. `keen_7hAXCo6sYfpIqeli`
-    * Place this flag on anything, then when you use either the Item or Action associated with the id, it will be keen
-      * You can find the id for a specific thing by opening its sheet, then clicking the dictionary icon in the header next to its name
-    * This is useful for when you have a temporary buff (e.g. Magus, Warpriest, Occultist,...) that grants a specific weapon Keen
-
-  ### Crit target modifications (dictionary flag)
-  Positive numbers are good, so having a `3` will mean your "crits only on a 20" weapon will now crit on "17 or higher". Adding any of these will give you a formula input.
-  * `crit-offset-self`
-  * `crit-offset-all`
-  * `crit-offset_<id>`
-    * e.g. `crit-offset_7hAXCo6sYfpIqeli`
-    * Place this flag on anything, then when you use either the Item or Action associated with the id, it will be modified by the value
-      * You can find the id for a specific thing by opening its sheet, then clicking the dictionary icon in the header next to its name
-    * individual descriptions same as keen described above
-    * The value of the dictionary flags can be either a number or a formula
-    * if something is effect by both crit-offset and keen, then keen is applied first before an extra crit-offset is applied
-
-  ### Crit multipliers (dictionary flag)
-  * `crit-mult-offset-self`
-  * `crit-mult-offset-all`
-  * `crit-mult-offset_<id>`
-    * e.g. `crit-mult-offset_7hAXCo6sYfpIqeli`
-    * Excact same as above but has a formula for variable crit mult modifications
 
 </details>
 
@@ -622,16 +614,11 @@ Various bonuses to skills. You can add Inspiration, change the base die, or add 
 
 # Spells
 
-## Modify Spell Caster Level (all spells, specific school, or specific element)
+## Modify Spell Caster Level for specific element
   For buffs, abilities, or banes (or anything else) that modify spell Caster Levels.
 
 <details>
   <summary>How to configure spell Caster Level modifications (click to expand)</summary>
-
-  ### ~~For All Spells~~ Deprecated
-  - ~~Add dictionary flag `all-spell-cl` to your buff/feature/etc.~~
-    - ~~Text input will appear for your formula~~
-  - The system now has its own CL change target
 
   ### For Specific Element
   Useful for specific abilities such as [Gnome's Pyromaniac alternate racial trait](https://www.aonprd.com/RacesDisplay.aspx?ItemName=Gnome#:~:text=and%20illusion%20resistance.-,Pyromaniac,-Source%20Advanced%20Race).
@@ -639,34 +626,20 @@ Various bonuses to skills. You can add Inspiration, change the base die, or add 
     - Text input will appear for your formula
     - Dropdown selector will show up with options for `acid`, `cold`, `electric`, or `fire`
 
-  ### For Specific School
-  - Add dictionary flag `schoolClOffset` to your buff/feature/etc.
-    - Text input will appear for your formula
-    - Dropdown selector will show up with options for your chosen school
-
 </details>
 
 ---
 
-## Modify Spell DC (all spells, specific school, or specific element)
+## Modify Spell DC for specific element
   For buffs, abilities, or banes (or anything else) that modify spell DCs.
 
 <details>
   <summary>How to configure spell DC modifications (click to expand)</summary>
 
-  ### For All Spells
-  - Add dictionary flag `genericSpellDC` to your buff/feature/etc.
-    - Text input will appear for your formula
-
   ### For Specific Element
   - Add dictionary flag `elemental-dc` to your buff/feature/etc.
     - Text input will appear for your formula
     - Dropdown selector will show up with options for `acid`, `cold`, `electric`, or `fire`
-
-  ### For Specific School
-  - Add dictionary flag `school-dc` to your buff/feature/etc.
-    - Text input will appear for your formula
-    - Dropdown selector will show up with options for your chosen school
   
 </details>
 

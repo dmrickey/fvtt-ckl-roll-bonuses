@@ -46,6 +46,7 @@ export class FortuneBonus extends BaseBonus {
             tooltip: this.tooltip,
         }, {
             canEdit: isEditable,
+            inputType: 'bonus',
         });
     }
 

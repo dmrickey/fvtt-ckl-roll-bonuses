@@ -49,6 +49,7 @@ export class SelfTarget extends BaseTarget {
             tooltip: this.tooltip,
         }, {
             canEdit: isEditable,
+            inputType: 'target',
         });
     }
 

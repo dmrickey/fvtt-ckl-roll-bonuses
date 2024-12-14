@@ -16,7 +16,8 @@ import { createTemplate, templates } from "../templates.mjs";
  * @param {HTMLElement} args.parent,
  * @param {object} options
  * @param {boolean} options.canEdit
- * @param {boolean} [options.isModuleFlag] - false (default) if this is a dictionary flag, true if this is a data flag
+ * @param {InputType} options.inputType
+ * @param {boolean} [options.isSubLabel]
  */
 export function keyValueSelect({
     choices,
@@ -29,23 +30,25 @@ export function keyValueSelect({
     tooltip = '',
 }, {
     canEdit,
-    isModuleFlag = false,
+    inputType,
+    isSubLabel = false,
 }) {
     label ||= localizeBonusLabel(key);
     tooltip ||= localizeBonusTooltip(key);
-    current ||= isModuleFlag
-        ? item.getFlag(MODULE_NAME, key)
-        : item.getItemDictionaryFlag(key);
+    current ||= item.getFlag(MODULE_NAME, key);
 
     if (!Array.isArray(choices)) {
         choices = Object.entries(choices).map(([k, v]) => ({ key: k, label: v }));
     }
 
     if (canEdit) {
-        if ((choices.length && (!current || !choices.some((c) => c.key === current))) || (choices.length === 1 && current !== choices[0].key)) {
-            isModuleFlag
-                ? item.setFlag(MODULE_NAME, key, choices[0].key)
-                : item.setItemDictionaryFlag(key, choices[0].key);
+        if ((choices.length && (!current || !choices.some((c) => c.key === current)))
+            || (choices.length === 1 && current !== choices[0].key)
+        ) {
+            item.setFlag(MODULE_NAME, key, choices[0].key);
+        }
+        else if (!choices.length && current) {
+            item.setFlag(MODULE_NAME, key, '');
         }
     }
 
@@ -54,6 +57,7 @@ export function keyValueSelect({
         {
             choices,
             current,
+            isSubLabel,
             journal,
             key,
             label,
@@ -69,13 +73,11 @@ export function keyValueSelect({
 
             // @ts-ignore - event.target is HTMLTextAreaElement
             const /** @type {HTMLTextAreaElement} */ target = event.target;
-            isModuleFlag
-                ? await item.setFlag(MODULE_NAME, key, target?.value)
-                : await item.setItemDictionaryFlag(key, target?.value);
+            await item.setFlag(MODULE_NAME, key, target?.value);
         },
     );
 
-    addNodeToRollBonus(parent, div, item, canEdit);
+    addNodeToRollBonus(parent, div, item, canEdit, inputType);
 }
 
 api.inputs.keyValueSelect = keyValueSelect;

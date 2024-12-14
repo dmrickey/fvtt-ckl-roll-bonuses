@@ -36,7 +36,7 @@ export class FootnoteBonus extends BaseBonus {
 
         // const simplified = [];
         matches.forEach(([_, match]) => {
-            const roll = RollPF.safeRollSync(match, rollData);
+            const roll = RollPF.create(match, rollData);
             note = note.replace(match, roll.simplifiedFormula);
         });
 
@@ -85,8 +85,8 @@ export class FootnoteBonus extends BaseBonus {
             tooltip: this.tooltip,
         }, {
             canEdit: isEditable,
+            inputType: 'bonus',
             isFormula: false,
-            isModuleFlag: true,
         });
     }
 }

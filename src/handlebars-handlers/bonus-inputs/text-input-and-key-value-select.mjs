@@ -2,11 +2,12 @@ import { addNodeToRollBonus } from "../add-bonus-to-item-sheet.mjs";
 import { api } from '../../util/api.mjs';
 import { createTemplate, templates } from "../templates.mjs";
 import { localize, localizeBonusLabel, localizeBonusTooltip } from "../../util/localize.mjs";
+import { MODULE_NAME } from '../../consts.mjs';
 
 /**
  * @param {object} args
- * @param {{current: FlagValue, key: string, placeholder?: string}} args.text
- * @param {{current: FlagValue, key: string, choices: {key: string, label: string}[]}} args.select
+ * @param {{current?: FlagValue, key: string, placeholder?: string}} args.text
+ * @param {{current?: FlagValue, key: string, choices: {key: string, label: string}[] | Record<string, string>}} args.select
  * @param {ItemPF} args.item
  * @param {string} args.journal
  * @param {string} [args.label]
@@ -14,6 +15,7 @@ import { localize, localizeBonusLabel, localizeBonusTooltip } from "../../util/l
  * @param {string} [args.tooltip]
  * @param {object} options
  * @param {boolean} options.canEdit
+ * @param {InputType} options.inputType
  */
 export function textInputAndKeyValueSelect({
     item,
@@ -25,20 +27,32 @@ export function textInputAndKeyValueSelect({
     tooltip = '',
 }, {
     canEdit,
+    inputType,
 }) {
     label ||= localizeBonusLabel(select.key);
     tooltip ||= localizeBonusTooltip(select.key);
 
+    const choices = Array.isArray(select.choices)
+        ? select.choices
+        : Object.entries(select.choices).map(([key, label]) => ({ key, label }));
+
+    if (text.current === undefined) {
+        text.current = item.getFlag(MODULE_NAME, text.key);
+    }
+    if (select.current === undefined) {
+        select.current = item.getFlag(MODULE_NAME, select.key);
+    }
+
     if (canEdit) {
-        if ((!select.current && select.choices.length) || (select.choices.length === 1 && select.current !== select.choices[0].key)) {
-            item.setItemDictionaryFlag(select.key, select.choices[0].key);
+        if ((!select.current && choices.length) || (choices.length === 1 && select.current !== choices[0].key)) {
+            item.setFlag(MODULE_NAME, select.key, choices[0].key);
         }
     }
 
     const div = createTemplate(
         templates.textInputAndKeyValueSelect,
         {
-            choices: select.choices,
+            choices,
             current: select.current,
             formula: text.current,
             journal,
@@ -57,7 +71,7 @@ export function textInputAndKeyValueSelect({
         async (event) => {
             // @ts-ignore - event.target is HTMLTextAreaElement
             const /** @type {HTMLTextAreaElement} */ target = event.target;
-            await item.setItemDictionaryFlag(text.key, target?.value);
+            await item.setFlag(MODULE_NAME, text.key, target?.value);
         },
     );
 
@@ -67,11 +81,11 @@ export function textInputAndKeyValueSelect({
         async (event) => {
             // @ts-ignore - event.target is HTMLTextAreaElement
             const /** @type {HTMLTextAreaElement} */ target = event.target;
-            await item.setItemDictionaryFlag(select.key, target?.value);
+            await item.setFlag(MODULE_NAME, select.key, target?.value);
         },
     );
 
-    addNodeToRollBonus(parent, div, item, canEdit);
+    addNodeToRollBonus(parent, div, item, canEdit, inputType);
 }
 
 api.inputs.textInputAndKeyValueSelect = textInputAndKeyValueSelect;

@@ -1,23 +1,24 @@
 // +2 CL to chosen spell from school with Spell Focus
 // https://www.d20pfsrd.com/feats/general-feats/spell-specialization/
 
+import { MODULE_NAME } from '../../consts.mjs';
 import { stringSelect } from "../../handlebars-handlers/bonus-inputs/string-select.mjs";
-import { getDocDFlags, KeyedDFlagHelper } from "../../util/flag-helpers.mjs";
-import { customGlobalHooks } from "../../util/hooks.mjs";
+import { getCachedBonuses } from '../../util/get-cached-bonuses.mjs';
+import { customGlobalHooks, LocalHookHandler, localHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
-import { localize, localizeBonusLabel } from "../../util/localize.mjs";
+import { localize, localizeBonusLabel, localizeBonusTooltip } from "../../util/localize.mjs";
 import { LanguageSettings } from "../../util/settings.mjs";
 import { truthiness } from "../../util/truthiness.mjs";
 import { uniqueArray } from "../../util/unique-array.mjs";
 import { SpecificBonuses } from '../all-specific-bonuses.mjs';
-import { spellFocusKey } from "./spell-focus.mjs";
+import { getFocusedSchools } from "./spell-focus.mjs";
 
 const key = 'spell-specialization';
 const exclusionKey = 'spell-specialization-exclusions';
 const compendiumId = 'CO2Qmj0aj76zJsew';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#spell-specialization';
 
-Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ journal, key }));
+SpecificBonuses.registerSpecificBonus({ journal, key });
 
 class Settings {
     static get spellSpecialization() { return LanguageSettings.getTranslation(key); }
@@ -29,32 +30,34 @@ class Settings {
 
 /**
  * @param {Nullable<ActorPF>} actor
- * @param {ItemSpellPF} item
+ * @param {ItemSpellPF} spell
  * @returns {boolean}
  */
-function isSpecializedSpell(actor, item) {
+function isSpecializedSpell(actor, spell) {
     if (!actor) return false;
 
-    const name = item.name?.toLowerCase() ?? '';
-    const helper = new KeyedDFlagHelper(
-        actor,
-        {
-            mustHave: {
-                [key]: (spec) => name.includes(`${spec || ''}`.toLowerCase()),
-                [exclusionKey]: (exclusions) => {
-                    const exceptions = `${exclusions || ''}`.toLowerCase()
-                        .split(';')
-                        .filter(truthiness)
-                        .map((x) => x.trim());
-                    return !exceptions.find((except) => name.includes(except));
-                }
-            }
-        },
-        key,
-        exclusionKey
-    );
+    const spellName = spell.name?.toLowerCase() ?? '';
+    const sources = getCachedBonuses(actor, key);
 
-    return !!helper.hasAnyFlags();
+    /** @param { string } value */
+    const matches = (value) => {
+        const match = actor.items.get(value) || fromUuidSync(value);
+        return match
+            ? spell.id === match.id
+            : spellName.includes(`${value || ''}`.toLowerCase());
+    }
+
+    const isSpecialized = sources.some((source) => {
+        const value = source.getFlag(MODULE_NAME, key);
+        const exceptions = (/** @type {string } */ (source.system.flags.dictionary[exclusionKey]) || '')
+            .split(';')
+            .filter(truthiness)
+            .map((x) => x.trim());
+        const result = matches(value) && !exceptions.some(matches);
+        return result;
+    });
+
+    return isSpecialized;
 }
 
 // add info to spell card
@@ -88,12 +91,13 @@ registerItemHint((hintcls, actor, item, _data) => {
 
 // register hint on Spell Specialization
 registerItemHint((hintcls, _actor, item, _data) => {
-    const current = getDocDFlags(item, key)[0]?.toString();
-    if (!current) {
+    const has = item.hasItemBooleanFlag(key);
+    const current = item.getFlag(MODULE_NAME, key);
+    if (!has || !current) {
         return;
     }
 
-    const hint = hintcls.create(current, [], {});
+    const hint = hintcls.create(current, [], { hint: localizeBonusTooltip(key) });
     return hint;
 });
 
@@ -131,18 +135,20 @@ Hooks.on('renderItemSheet', (
 ) => {
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
-    const hasKey = item.system.flags.dictionary[key] !== undefined;
-    const hasName = item.name?.toLowerCase() === Settings.spellSpecialization;
-    const hasId = !!item?.flags?.core?.sourceId?.includes(compendiumId);
-    if (!(hasKey || hasName || hasId)) {
+    const hasKey = item.hasItemBooleanFlag(key);
+    if (!hasKey) {
+        const hasName = item.name?.toLowerCase() === Settings.spellSpecialization;
+        const hasId = !!item?.flags?.core?.sourceId?.includes(compendiumId);
+        if (isEditable && (hasName || hasId)) {
+            item.addItemBooleanFlag(key);
+        }
         return;
     }
 
     /** @type {string[]} */
     let choices = [];
     if (actor && isEditable) {
-        const helper = new KeyedDFlagHelper(actor, {}, spellFocusKey);
-        const focuses = helper.stringValuesForFlag(spellFocusKey);
+        const focuses = getFocusedSchools(actor);
 
         const spellChoices = actor?.items
             .filter(
@@ -161,5 +167,50 @@ Hooks.on('renderItemSheet', (
         parent: html
     }, {
         canEdit: isEditable,
+        inputType: 'specific-bonus',
     });
 });
+
+/**
+ * @param {ItemPF} item
+ * @param {object} data
+ * @param {{temporary: boolean}} param2
+ * @param {string} id
+ */
+const onCreate = (item, data, { temporary }, id) => {
+    if (!(item instanceof pf1.documents.item.ItemPF)) return;
+    if (temporary) return;
+
+    const name = item?.name?.toLowerCase() ?? '';
+    const sourceId = item?.flags.core?.sourceId ?? '';
+    const hasBonus = item.hasItemBooleanFlag(key);
+
+    let choice = '';
+    if (item.actor) {
+        const focuses = getFocusedSchools(item.actor);
+
+        const spellChoices = item.actor?.items
+            .filter(
+                /** @returns {spell is ItemSpellPF} */
+                (spell) => spell instanceof pf1.documents.item.ItemSpellPF
+                    && focuses.includes(spell.system.school))
+            ?? [];
+        const choices = uniqueArray(spellChoices.map(({ name }) => name)).sort();
+        choice = choices[0] || '';
+    }
+
+    let updated = false;
+    if ((name === Settings.spellSpecialization || sourceId.includes(compendiumId)) && !hasBonus) {
+        item.updateSource({
+            [`system.flags.boolean.${key}`]: true,
+        });
+        updated = true;
+    }
+
+    if ((hasBonus || updated) && choice && !item.flags[MODULE_NAME]?.[key]) {
+        item.updateSource({
+            [`flags.${MODULE_NAME}.${key}`]: choice,
+        });
+    }
+};
+Hooks.on('preCreateItem', onCreate);

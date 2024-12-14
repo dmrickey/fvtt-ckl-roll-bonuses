@@ -1,5 +1,5 @@
 import { registerItemHint } from "../util/item-hints.mjs";
-import { localize, localizeBonusLabel, localizeBonusTooltip, localizeItemHint } from "../util/localize.mjs";
+import { localize, localizeItemHint } from "../util/localize.mjs";
 import { truthiness } from "../util/truthiness.mjs";
 import { SpecificBonuses } from './all-specific-bonuses.mjs';
 import { showChecklist } from '../handlebars-handlers/targeted/targets/checklist-input.mjs';
@@ -14,14 +14,14 @@ const formulaKey = 'skill-rank-override-formula';
 const selectedKey = 'skill-rank-override-selected';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#skill-rank-override';
 
-Hooks.once('ready', () => SpecificBonuses.registerSpecificBonus({ journal, key, type: 'boolean' }));
+SpecificBonuses.registerSpecificBonus({ journal, key });
 FormulaCacheHelper.registerModuleFlag(formulaKey);
 
 registerItemHint((hintcls, actor, item, _data) => {
     const hasOverride = item.hasItemBooleanFlag(key);
     if (!hasOverride) return;
 
-    const overrides = getDocFlags(item, selectedKey, { includeInactive: false })
+    const overrides = getDocFlags(item, selectedKey)
         .flatMap(x => x)
         .filter(truthiness);
 
@@ -142,7 +142,7 @@ Hooks.on('renderItemSheet', (
 ) => {
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
-    const hasFlag = item.system.flags.boolean?.hasOwnProperty(key);
+    const hasFlag = item.hasItemBooleanFlag(key);
     if (!hasFlag) {
         return;
     }
@@ -164,7 +164,7 @@ Hooks.on('renderItemSheet', (
         parent: html,
     }, {
         canEdit: isEditable,
-        isModuleFlag: true,
+        inputType: 'specific-bonus',
     })
     showChecklist({
         item,
@@ -174,5 +174,6 @@ Hooks.on('renderItemSheet', (
         parent: html,
     }, {
         canEdit: isEditable,
+        inputType: 'specific-bonus',
     });
 });

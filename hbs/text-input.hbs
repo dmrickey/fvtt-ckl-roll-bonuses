@@ -1,13 +1,21 @@
 <div class="form-group roll-bonuses">
-    {{> "modules/ckl-roll-bonuses/hbs/label.hbs"}}
+    {{> "modules/ckl-roll-bonuses/hbs/label-partial.hbs"}}
     <div class="form-fields">
         <input
-            type="text"
+            type="{{textInputType}}"
             {{#if isFormula}}class="formula"{{/if}}
             {{#if readonly}}readonly{{/if}}
             value="{{current}}"
             id="text-input-{{key}}"
+            {{#if choices.length}}list="text-input-{{key}}-list"{{/if}}
             placeholder="{{placeholder}}"
         />
+        {{#if choices.length}}
+        <datalist id="text-input-{{key}}-list">
+            {{#each choices}}
+            <option value="{{this}}">
+            {{/each}}
+        </datalist>
+        {{/if}}
     </div>
 </div>
