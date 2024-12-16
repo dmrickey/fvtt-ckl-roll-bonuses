@@ -191,7 +191,17 @@
                 "skill-rank-override": "Fija el rango de habilidad para la habilidad elegida en un valor específico. Esto es útil para objetos como Diadema de vasta inteligencia.",
                 "skill-rank-override-formula": "Fórmula para fijar en un valor específico el rango de habilidad para las habilidades elegidas. Esto es útil para objetos como Diadema de vasta inteligencia.",
                 "skill-rank-override-selected": "Las habilidades a sobrescribir con la fórmula dada.",
-                "snake-sidewind": "Usa Averiguar intenciones para las confirmaciones de crítico cuando el resultado de este sea mayor que tirada máxima de ataque."
+                "snake-sidewind": "Usa Averiguar intenciones para las confirmaciones de crítico cuando el resultado de este sea mayor que tirada máxima de ataque.",
+                "spell-school": "Aplica los bonificadores a los conjuros de las escuelas elegidas.",
+                "spell-specialization": "Incrementa en 2 el Nivel de lanzador para conjuro elegido de una escuela con la que tenga Soltura con los conjuros.",
+                "spell": "Aplica los bonificadores para las acciones de estos conjuros específicos.",
+                "spell-focus": "+1 a la CD para las escuelas de conjuros escogidas.",
+                "spell-focus-greater": "Aumenta en +1 la CD de la escuela de conjuros elegida en Soltura con los conjuros.",
+                "spell-focus-mythic": "Duplica los bonificadores de Soltura con los conjuros.",
+                "spell-descriptor": "Aplica los bonificadores a los conjuros con los descriptores elegidos.",
+                "token": "Aplica los bonificadores para las acciones mientras las fichas específicas son objetivo. Cuando se activa este potenciador (buff), un modal te permitirá elegir entre las fichas de la escena.",
+                "token-invert": "Invertir la selección, haciendo que los bonificadores se apliquen cuando las fichas objetivo no sea las seleccionadas.",
+                "versatile-performance": "Reemplaza dos habilidades con una habilidad de interpretar."
             }
         },
         "all-spells": "Todos los conjuros",
