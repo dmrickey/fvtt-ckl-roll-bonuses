@@ -215,7 +215,12 @@
                 "weapon-specialization": "+2 a las tiradas de daño para el tipo de arma elegida. Los ataques y las armas deben tener los Tipos de equipamiento base correctamente configurados.",
                 "weapon-specialization-greater": "Aumenta en +2 el daño para el tipo de arma elegida con Especialización con arma.",
                 "weapon-focus-mythic": "Duplica los bonificadores al ataque de Soltura con un arma.",
-                "weapon-focus-racial": "Bonificador +1 al ataque para las armas raciales elegidas. El arma debe estar etiquetada con la raza para poder aplicar el bonificador."
+                "weapon-focus-racial": "Bonificador +1 al ataque para las armas raciales elegidas. El arma debe estar etiquetada con la raza para poder aplicar el bonificador.",
+                "weapon-type": "Aplica los bonificadores cuando se use el arma elegida. Los ataques y las armas deben tener los Tipos de equipamiento base correctamente configurados.",
+                "weapon-type-override": "Añade un tipo de arma a un Artículo que normalmente no tendría. Esto es equivalente al Tipo de equipamiento base de un arma.",
+                "weapon": "Elegir ataques y armas específicas para los bonificadores.",
+                "when-active": "Aplica los bonificadores cuando el Potenciador (Buff)/Arma/Dote/Aptitud/etc esté activo.",
+                "when-in-combat": "Activo cuando este actor esté en combate."
             }
         },
         "all-spells": "Todos los conjuros",
@@ -231,6 +236,83 @@
             "target-override": "Sobrescritura de objetivos",
             "specific-bonus": "Bonificadores específicos",
             "ammo": "Bonificadores a la munición"
+        },
+        "cancel": "Cancelar",
+        "cl-mod": "{mod} NL",
+        "cl-label": "NL ({label})",
+        "cl-label-mod": "{mod} NL ({label})",
+        "crit-damage-label": {
+            "crit": " (Solo crítico)",
+            "nonCrit": " (Solo no críticos)"
+        },
+        "crit-mult-mod": "Multiplicador de crítico ({mod})",
+        "crit-mult-offset-all": "Intervalo de multiplicador de crítico (todo)",
+        "crit-mult-offset-targeted": "Intervalo de multiplicador de crítico ({id})",
+        "crit-mult-offset-self": "Intervalo de multiplicador de crítico (a sí mismo)",
+        "crit-mult": "Multiplicador de crítico",
+        "crit-offset-all": "Intervalo de crítico (todo)",
+        "crit-offset-mod": "Amenaza de crítico ({mod})",
+        "crit-offset-self": "Intervalo de crítico (a sí mismo)",
+        "crit-offset-targeted": "Intervalo de crítico ({id})",
+        "crit-offset": "Intervalo de crítico",
+        "damage-app": {
+            "add-effect-damage": "Añadir daño de efecto",
+            "add-typed-damage": "Añadir daño de tipo",
+            "effect-formula": "Fórmula de daño de efecto",
+            "typed-formula": "Fórmula de daño de tipo"
+        },
+        "dc-label-mod": "{mod} CD ({label})",
+        "dc-mod": "{mod} CD",
+        "driver": "Profesión (Conductor)",
+        "enh-mod-stacks": "{mod} Bonificador por mejora (se apila)",
+        "enh-mod": "Bonificador por mejora -> {mod}",
+        "effective-size": {
+            "hint": "Tamaño: {mod}"
+        },
+        "fortune": "Fortuna",
+        "global-bonus": {
+            "actor": {
+                "description": "Los bonificadores globales que el DJ ha activado para este mundo. Cada configuración puede ser desactivada individualmente aquí si no es apropiada para este actor en particular.",
+                "disable": "Desactivar bonificadores globales para este actor"
+            },
+            "attack-label": {
+                "higher-ground": "Posición elevada",
+                "range-increment-penalty": "Penalizador de alcance ({range}{units})",
+                "shoot-into-melee": "Combate cuerpo a cuerpo"
+            },
+            "dialog-disable": {
+                "range-increment-penalty": "Omitir pruebas de incremento de alcance",
+                "require-melee-threaten": "Ignorar el rango cuerpo a cuerpo"
+            },
+            "disabled-footnote": {
+                "range-increment-penalty": "Pruebas de incremento de rango omitidas",
+                "require-melee-threaten": "Omitido el requerimiento de rango cuerpo a cuerpo"
+            },
+            "label": {
+                "higher-ground": "Bonificador por posición elevada",
+                "range-increment-penalty": "Penalizador de incremento de rango",
+                "shoot-into-melee": "Disparo en cuerpo a cuerpo",
+                "require-melee-threaten": "Requiere amenaza cuerpo a cuerpo"
+            },
+            "warning": {
+                "range-increment-error-plural": "El objetivo más alejado ({distance}{units}) está fuera de tu rango máximo ({max}{units}).",
+                "range-increment-error-singular": "El objetivo ({distance}{units}) está fuera de tu rango máximo ({max}{units}).",
+                "require-melee-threaten-plural": "No amenazas a, al menos, uno de los objetivos.",
+                "require-melee-threaten-singular": "No amenazas al objetivo."
+            }
+        },
+        "global-settings": {
+            "application": {
+                "description": "Esto intenta automatizar los bonificadores globales que son tediosos de hacer manualmente. Algunos de estos son el mejor de los esfuerzos y deberían funcionar en la mayoría de las circunstancias, pero debido a su naturaleza algunos tendrán peculiaridades que pueden ser inevitables.",
+                "hint": "Configura bonificadores de combate específicos que se puedan automatizar. Se trata de opciones de combate globales que no están pensadas para ser configuradas para dotes o habilidades específicas, sino que se aplican a todo el mundo.",
+                "label": "Configurar bonificadores globales",
+                "title": "Bonificadores globables",
+                "section": {
+                    "higher-ground": {
+                        "description": "Añade +1 a los ataques cuerpo a cuerpo realizados desde una posición elevada."
+                    }
+                }
+            }
         }
     }
 }
