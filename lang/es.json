@@ -201,7 +201,21 @@
                 "spell-descriptor": "Aplica los bonificadores a los conjuros con los descriptores elegidos.",
                 "token": "Aplica los bonificadores para las acciones mientras las fichas específicas son objetivo. Cuando se activa este potenciador (buff), un modal te permitirá elegir entre las fichas de la escena.",
                 "token-invert": "Invertir la selección, haciendo que los bonificadores se apliquen cuando las fichas objetivo no sea las seleccionadas.",
-                "versatile-performance": "Reemplaza dos habilidades con una habilidad de interpretar."
+                "versatile-performance": "Reemplaza dos habilidades con una habilidad de interpretar.",
+                "versatile-performance-expanded": "Selecciona una tercer habilidad para asociar con la habilidad de Interpretar elegida.",
+                "versatile-training": "Usa At. Base en lugar de rangos para dos habilidades asociadas con un grupo de armas.",
+                "versatile-training-selected": "Estas habilidades usarán tu At. Base en lugar de los rangos.",
+                "vital-strike": "Daño extra en las acciones de ataque basadas en el daño del arma.",
+                "vital-strike-mythic": "Cuando se use la dote Golpe vital, además incluye cualquier otro bonificador que sería multiplicado normalmente en un golpe crítico.",
+                "vital-strike-enabled": "Si Golpe vital debería o no aparecer como marcado en los modales de ataque.",
+                "weapon-focus": "Bonificador +1 a las tiradas de ataque para el tipo de arma elegida. Los ataques y las armas deben tener los Tipos de equipamiento base correctamente configurados.",
+                "weapon-focus-greater": "Aumenta en +1 la tirada de ataque del tipo de arma elegida por Soltura con un arma.",
+                "weapon-group": "Aplica los bonificadores cuando se usen armas de los grupos de armas elegidos. Los ataques y las armas deben tener los Grupos de armas correctamente configurados.",
+                "weapon-group-override": "Añade un Grupo de armas a un Artículo que normalmente no tendría.",
+                "weapon-specialization": "+2 a las tiradas de daño para el tipo de arma elegida. Los ataques y las armas deben tener los Tipos de equipamiento base correctamente configurados.",
+                "weapon-specialization-greater": "Aumenta en +2 el daño para el tipo de arma elegida con Especialización con arma.",
+                "weapon-focus-mythic": "Duplica los bonificadores al ataque de Soltura con un arma.",
+                "weapon-focus-racial": "Bonificador +1 al ataque para las armas raciales elegidas. El arma debe estar etiquetada con la raza para poder aplicar el bonificador."
             }
         },
         "all-spells": "Todos los conjuros",
