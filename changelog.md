@@ -1,3 +1,8 @@
+## Roll Bonuses 2.17.1
+
+### New Language
+Thanks to LeCuay (Chechu on discord) there's now a Spanish translation!
+
 ## Roll Bonuses 2.17.0
 
 ### New Bonuses
