@@ -310,9 +310,110 @@
                 "section": {
                     "higher-ground": {
                         "description": "Añade +1 a los ataques cuerpo a cuerpo realizados desde una posición elevada."
+                    },
+                    "range-increment-penalty": {
+                        "description": "Añadir penalizadores a los incrementos de ataque a distancia. Activar esta opción también habilita los bonificadores para modificar los penalizadores de ataque a distancia y los incrementos de alcance.",
+                        "issues": "Esto debería funcionar completamente en la mayoría de las circunstancias. El único caso que he encontrado en el que podría añadir una penalización incorrecta es si una ficha grande (o mayor) está parcialmente oculta por un muro. Puede ser que la parte visible esté más lejos que la parte más cercana. El módulo sólo calcula en base a la parte más cercana del objetivo, independientemente de las paredes."
+                    },
+                    "shoot-into-melee": {
+                        "description": "Añade penalizadores por disparar en combate cuerpo a cuerpo. Esto requiere que tengas un aliado adyacente a tu objetivo, que tu objetivo tenga una disposición diferente a la tuya y la de tu aliado, y que al menos tu objetivo o tu aliado amenacen al otro (amenazar requiere un arma cuerpo a cuerpo equipada o un ataque natural). Esto también añade un bonificador específico para Disparo Preciso. Asegúrate de abrir la dote Disparo Preciso para que esté configurada. Esto toma en cuenta correctamente las diferencias de tamaño.",
+                        "issues": "Normalmente puedes ignorar este penalizador (sin tener en cuenta Disparo Preciso) si estás disparando a una criatura que está involucrada en combate cuerpo a cuerpo y que es lo suficientemente grande como para que apuntes a un punto en ella a al menos 10 pies (3 m) de distancia de tus aliados. No puedo tener en cuenta si esos \"puntos a los que disparar\" de alguna manera no están dentro del alcance o no son visibles; si la criatura es lo suficientemente grande, el penalizador se anula automáticamente."
+                    },
+                    "require-melee-threaten": {
+                        "description": "Rechaza un ataque cuerpo a cuerpo si el atacante no amenaza al objetivo. Al usar una acción cuerpo a cuerpo, esta rechazará la acción si el objetivo está fuera de alcance.",
+                        "issues": "Puede haber circunstancias en las que el DJ permita un ataque cuerpo a cuerpo contra un objetivo aunque no esté a su alcance. Para evitarlo, simplemente no apuntes a la ficha deseada. Si tienes alguna sugerencia, házmelo saber."
                     }
                 }
             }
+        },
+        "hint-missing-bonus": "Faltan bonificadores, haz click para añadirlos",
+        "hint-missing-target": "Faltan objetivos, haz click para añadirlos",
+        "invalid-override": "El tipo de Artículo ya incluye esta propiedad.",
+        "item-app": {
+            "description": "Cada elemento seleccionado recibirá los bonificadores asociados. Haz clic derecho en cualquier fila para abrir la hoja y realizar más comprobaciones.",
+            "title": "Selector de Artículos"
+        },
+        "item-hints": {
+            "skill-rank-override": "{skills} (->{rank})"
+        },
+        "item-name-app": {
+            "description": "Varias dotes y habilidades intentan autoconfigurarse cuando se usan por primera vez. Esto se basa en cosas como su ID interno o su nombre. Dependiendo de cómo estén configuradas las cosas, puede que no tenga un ID interno que coincida. En ese caso, utilizará el nombre para intentar establecer una coincidencia y ver qué valores deben inicializarse. Como este módulo sólo está disponible en inglés, estos ajustes te permiten (al DJ) proporcionar nombres traducidos que se usarán automáticamente para configurar esas dotes y habilidades.",
+            "english-name": "Nombre en inglés",
+            "hint": "Proporcionar traducciones para las aptitudes que <b>Roll Bonuses</b> intenta configurar automáticamente cuando se juega en idiomas distintos al inglés.",
+            "label": "Abrir configuración",
+            "title": "Configuración de traducción del Artículo",
+            "translation": "Traducción"
+        },
+        "keen": "Afilado",
+        "keen-all": "Afilado (todo)",
+        "keen-id": "afilado ({id})",
+        "keen-self": "Afilado (a sí mismo)",
+        "maximized": "Maximizado",
+        "maximized-total": "Maximizado: {total}",
+        "misfortune": "Infortunio",
+        "missing-bonuses": "No hay bonificadores configurados.",
+        "missing-targets": "No hay objetivos configurados.",
+        "modifiers": "Modificadores",
+        "ok": "OK",
+        "picker": {
+            "tabs": {
+                "specific": "Bonificadores específicos",
+                "specific-description": "Son para bonificaciones demasiado específicos o demasiado amplios para ser un bonificador objetivo. La mayoría son para habilidades o dotes únicas, o bien son muy amplias y afectan a algo más global que no encaja en el sistema \"Objetivo\".",
+                "targeted": "Bonificadores objetivo",
+                "targeted-description": "Los bonificadores objetivo requieren al menos un bonificador y un objetivo."
+            },
+            "bonuses": {
+                "label": "Bonificadores",
+                "tooltip": "Estas son los distintos bonificadores que se pueden aplicar a tus aptitudes."
+            },
+            "conditional-targets": {
+                "label": "Objetivos condicionales",
+                "tooltip": "Los objetivos condicionales aplicarán bonificadores a todas las aptitudes aplicables si se cumplen sus condiciones específicas."
+            },
+            "specific-bonuses": {
+                "label": "Bonificadores específicos",
+                "tooltip": "Los bonificadores específicos son bonificadores más específicos que son menos configurables que los bonificadores genéricos. Reciben el nombre de la aptitud específica que implementan."
+            },
+            "target-overrides": {
+                "label": "Sobrescrituras de objetivos",
+                "tooltip": "Esto añade datos a tipos de Artículos que normalmente no tienen esos datos para que funcionen con otros objetivos. Por ejemplo, añadir un tipo de arma \"Rayo\" a los conjuros para que funcionen con Soltura con un arma o añadir la propiedad de arma Sutil a un ataque para que funcione con Sutileza con las armas."
+            },
+            "targets": {
+                "label": "Objetivos",
+                "tooltip": "Los objetivos determinan exactamente qué aptitudes se verán afectadas por los bonificadores."
+            }
+        },
+        "roll-bonuses": "Roll Bonuses",
+        "script-call-default-name": "Llamada de script",
+        "script-call-dialog": {
+            "delete-script-message": "Una vez se borre este script no podrá ser recuperado.<br>¿Estás seguro/a de que quieres borrar este script?",
+            "delete-script-title": "Borrar script - {name}",
+            "edit-macro-message": "Está intentando editar un macro referenciado que no pertenece a este Artículo.<br><br>Modificar este macro significa que estarás editando directamente el macro del mundo. Cualquier uso de este macro será modificado.<br><br>¿Estás seguro de que quieres editar este macro?",
+            "edit-macro-title": "Editar macro - {name}"
+        },
+        "skills": {
+            "inspiration": "Inspiración",
+            "config": "Configuración de habilidad"
+        },
+        "string-select.no-choices": "Sin opciones válidas.",
+        "skill-rank-override": {
+            "skill-card-name": "{skillName} - ({sourceName} rangos: {rank})",
+            "skill-sheet-tip": "{itemName}\nFijar los rangos de habilidad a {rank}."
+        },
+        "target-choice": {
+            "self": "A sí mismo",
+            "target": "Fichas objetivo"
+        },
+        "target-toggle": {
+            "all": "Todo",
+            "any": "Cualquiera",
+            "tooltip": "Selecciona si los bonificadores serán evaluados como un grupo o individualmente.<br><br>All: los bonificadores se aplicarán solo si se cumplen todos los objetivos.<br><br>Cualquiera: los bonificadores se aplicarán si se cumple cualquier objetivo."
+        },
+        "targets": "Objetivos",
+        "to-hit-mod": "{mod} para golpear",
+        "versatile-performance": {
+            "add": "Añadir interpretación versátil",
+            "delete": "Borrar interpretación versátil"
         }
     }
 }
