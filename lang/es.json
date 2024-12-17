@@ -94,7 +94,7 @@
                 "spell-focus-greater": "Soltura con los conjuros mayor",
                 "spell-focus-mythic": "Soltura con los conjuros Mítica",
                 "spell-school": "Escuelas de conjuro",
-                "spell-specialization": "Especialización con los conjuros",
+                "spell-specialization": "Especialización con un conjuro",
                 "token": "Fichas marcadas como objetivo",
                 "token-invert": "Invertir fichas objetivo",
                 "versatile-performance": "Interpretación versátil",
@@ -413,7 +413,156 @@
         "to-hit-mod": "{mod} para golpear",
         "versatile-performance": {
             "add": "Añadir interpretación versátil",
-            "delete": "Borrar interpretación versátil"
+            "delete": "Borrar interpretación versátil",
+            "error": "Interpretación versátil - IDs de habilidades inválidos",
+            "header": "Interpretación versátil",
+            "hint": "{base} -> {skills}",
+            "label": {
+                "expanded": "Expandida",
+                "perform": "Interpretación",
+                "skill1": "Habilidad 1",
+                "skill2": "Habilidad 2"
+            },
+            "replace-label": "{skill} (Reemplazada por {base})",
+            "skill-tip": "Puede ser usada con Interpretación versátil - {base} ({enabled})",
+            "title": "{skill} - Interpretación versátil"
+        },
+        "versatile-training": {
+            "description": "Elige dos habilidades con las que usar At. Base en lugar de los rangos.",
+            "header": "Entrenamiento versátil",
+            "hint": "{skills}",
+            "skill-tip": "Entrenamiento versátil - usa At. Base ({bab}) en lugar de los rangos",
+            "title": "{skill} - Entrenamiento versátil"
+        },
+        "item-name-translations": {
+            "improved": {
+                "name": "Mejorado",
+                "default": "Mejorado"
+            },
+            "greater": {
+                "name": "Mayor",
+                "default": "Mayor"
+            },
+            "mythic": {
+                "name": "Mítica",
+                "default": "Mítica"
+            },
+            "armor-focus": {
+                "name": "Soltura con una armadura",
+                "default": "Soltura con una armadura"
+            },
+            "elemental-focus": {
+                "name": "Soltura elemental",
+                "default": "Soltura elemental"
+            },
+            "extreme-mood-swings": {
+                "name": "Cambios bruscos de humor",
+                "default": "Cambios bruscos de humor"
+            },
+            "fates-favored": {
+                "name": "Favorecido por el destino",
+                "default": "Favorecido por el destino"
+            },
+            "furious-focus": {
+                "name": "Furia centrada",
+                "default": "Furia centrada"
+            },
+            "martial-focus": {
+                "name": "Soltura marcial",
+                "default": "Soltura marcial"
+            },
+            "precise-shot": {
+                "name": "Disparo preciso",
+                "default": "Disparo preciso"
+            },
+            "snake-sidewind": {
+                "name": "Colmillo de la serpiente",
+                "default": "Colmillo de la serpiente"
+            },
+            "spell-focus": {
+                "name": "Soltura con los conjuros",
+                "default": "Soltura con los conjuros"
+            },
+            "spell-specialization": {
+                "default": "Especialización con un conjuro",
+                "name": "Especialización con un conjuro"
+            },
+            "versatile-performance": {
+                "name": "Interpretación versátil",
+                "default": "Interpretación versátil"
+            },
+            "versatile-training": {
+                "name": "Entrenamiento versátil",
+                "default": "Entrenamiento versátil"
+            },
+            "vital-strike": {
+                "name": "Golpe vital",
+                "default": "Golpe vital"
+            },
+            "weapon-finesse": {
+                "name": "Sutileza con las armas",
+                "default": "Sutileza con las armas"
+            },
+            "weapon-focus": {
+                "name": "Soltura con un arma",
+                "default": "Soltura con un arma"
+            },
+            "weapon-focus-racial": {
+                "name": "Soltura racial con un arma",
+                "default": "Soltura con armas de gnomo"
+            },
+            "weapon-focus-racial-default-race": {
+                "default": "Gnoma",
+                "name": "Soltura racial con un arma (raza por defecto)"
+            },
+            "weapon-specialization": {
+                "name": "Especialización con un arma",
+                "default": "Especialización con un arma"
+            }
+        },
+        "settings": {
+            "debug": {
+                "name": "Modo depuración (debug)",
+                "hint": "Activa esto para mostrar registros (logs) extra, lo cuales pueden ayudar a encontrar ciertos problemas. Por defecto `false`."
+            },
+            "elephant-in-the-room": {
+                "name": "El elefante en la habitación",
+                "hint": "Activa esta opción (desactivada por defecto) si usas las reglas caseras opcionales conocidas como el Elefante en la habitación. Esto desactivará la configuración automática que obliga a algunas dotes y aptitudes a usar las reglas normales de Pathfinder (por ejemplo, Soltura con un arma y Especialización con un arma) y te permitirá personalizarlas manualmente con Objetivos y Bonificadores."
+            },
+            "fortuneStacks": {
+                "name": "Fortuna se apila",
+                "hint": "Si esta opción está activada (por defecto), múltiples fortunas/ infortunios de diferentes fuentes se acumularán. Así que potencialmente podrías acabar con 4d20kh. Si está desactivado, entonces múltiples fortunas/ infortunios sólo llegarán a un máximo de dos dados. Múltiples infortunios y fortunas que afecten a la misma tirada se anularán (por ejemplo, 3 fortunas diferentes frente a 2 infortunios diferentes significa que eres \"más afortunado\" y tirarás con una bonificación. Si tienes el mismo número de fortuna vs infortunio, entonces \"quedas empatado\" y tiras normalmente)."
+            },
+            "weapon-focus-racial": {
+                "name": "Soltura racial con un arma",
+                "hint": "El nombre de tu dote \"Soltura racial con los conjuros\". Oficialmente sólo existe 'Soltura con armas de gnomo', pero esto permite otras variaciones raciales. Esto es para soportar traducciones sin tener que traducir el módulo.",
+                "default": "Soltura con armas de gnomo"
+            },
+            "weapon-focus-racial-default-race": {
+                "name": "Soltura racial con un arma (raza por defecto)",
+                "hint": "La raza por defecto por la que buscar. Esto dar soporte a traducciones sin tener que traducir el módulo.",
+                "default": "Gnoma"
+            },
+            "should-auto-target-tokens": {
+                "name": "Automáticamente marcar fichas como objetivo",
+                "hint": "Cuando se ajusta como activado y se utiliza el \"Fichas (tokens) objetivo\" genérico, cuando la aptitud está activada, el diálogo se omitirá si tienes fichas ya seleccionadas y se seleccionarán automáticamente esas fichas. Por defecto (desactivado), el diálogo de objetivo se abre con las fichas (tokens) preseleccionadas y debes verificar que son las que realmente quieres."
+            },
+            "should-copy-flags": {
+                "name": "Copiar las banderas (flags) de los Artículos al crear ataques",
+                "hint": "Cuando se crea un Ataque desde un Arma (a través del botón \"Crear Ataque\" para añadir un Ataque a tu pestaña de Combate), el sistema no copia ninguna bandera del Arma. Esto significa que por defecto cualquier bonificador creado en el arma no existe en los Ataques creados desde esa Arma. Activando esta opción se copiarán esas banderas al crear un Ataque. Esto sólo ocurre en la creación, no sincronizará ninguna bandera modificada después. Por defecto está desactivado."
+            }
+        },
+        "applications": {
+            "token": {
+                "gm-hint": "Puedes ver todas la fichas porque eres el/la DJ. Los jugadores solo serán capaces de ver las fichas que sean visibles para ellos/as.",
+                "no-tokens": "No hay fichas en esta escena",
+                "player-hint": "Cualquier ficha ya marcada como objetivo está pre-seleccionada. Puede activar la configuración para saltarte este modal y usar los objetivo automáticamente."
+            }
+        },
+        "inputs": {
+            "icon-input": {
+                "no-selection": "No hay objetivos"
+            }
         }
     }
 }
