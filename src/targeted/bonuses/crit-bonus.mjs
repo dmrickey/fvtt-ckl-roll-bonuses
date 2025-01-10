@@ -7,7 +7,7 @@ import { FormulaCacheHelper } from "../../util/flag-helpers.mjs";
 import { LocalHookHandler, customGlobalHooks, localHooks } from '../../util/hooks.mjs';
 import { registerItemHint } from '../../util/item-hints.mjs';
 import { SelfTarget } from '../targets/self-target.mjs';
-import { BaseBonus } from "./base-bonus.mjs";
+import { BaseBonus } from "./_base-bonus.mjs";
 
 /**
  * @extends BaseBonus

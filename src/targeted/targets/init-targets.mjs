@@ -1,6 +1,6 @@
 import { ActionTarget } from "./action-target.mjs";
 import { AlignmentTarget } from './conditional/alignment-target.mjs';
-import { AllTarget } from './conditional/all-target.mjs';
+import { AllTarget } from './all-target.mjs';
 import { ConditionTarget } from './conditional/condition-target.mjs';
 import { DamageTypeTarget } from "./damage-type-target.mjs";
 import { FinesseTarget } from './finesse-target.mjs';

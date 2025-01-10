@@ -24,9 +24,9 @@ import { greaterWeaponSpecializationKey } from '../../src/bonuses/weapon-special
 import { weaponSpecializationKey } from '../../src/bonuses/weapon-specialization/weapon-specialization.mjs';
 import { MODULE_NAME } from '../../src/consts.mjs';
 import { RangedIncrementPenaltyGlobalBonus } from '../../src/global-bonuses/attack-dialog-helper.mjs';
-import { BaseBonus } from '../../src/targeted/bonuses/base-bonus.mjs';
+import { BaseBonus } from '../../src/targeted/bonuses/_base-bonus.mjs';
 import { BaseTargetOverride } from '../../src/targeted/target-overides/_base-target-override.mjs';
-import { BaseTarget } from '../../src/targeted/targets/base-target.mjs';
+import { BaseTarget } from '../../src/targeted/targets/_base-target.mjs';
 import Document from '../foundry/common/abstract/document.mjs';
 
 export {};

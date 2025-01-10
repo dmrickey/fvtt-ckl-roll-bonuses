@@ -2,7 +2,7 @@ import { MODULE_NAME } from '../../consts.mjs';
 import { showChecklist } from '../../handlebars-handlers/targeted/targets/checklist-input.mjs';
 import { intersects } from '../../util/array-intersects.mjs';
 import { truthiness } from '../../util/truthiness.mjs';
-import { BaseTarget } from './base-target.mjs';
+import { BaseTarget } from './_base-target.mjs';
 
 export class SpellSchoolTarget extends BaseTarget {
     /**

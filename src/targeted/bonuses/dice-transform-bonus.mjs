@@ -4,7 +4,7 @@ import { handleBonusTypeFor } from '../../target-and-bonus-join.mjs';
 import { LocalHookHandler, localHooks } from '../../util/hooks.mjs';
 import { localizeBonusTooltip } from '../../util/localize.mjs';
 import { simplify } from '../../util/simplify-roll-formula.mjs';
-import { BaseBonus } from './base-bonus.mjs';
+import { BaseBonus } from './_base-bonus.mjs';
 
 export class DiceTransformBonus extends BaseBonus {
 

@@ -6,7 +6,7 @@ import { conditionalAttackTooltipModSource, conditionalModToItemChangeForDamageT
 import { LocalHookHandler, localHooks } from '../../util/hooks.mjs';
 import { truthiness } from "../../util/truthiness.mjs";
 import { uniqueArray } from '../../util/unique-array.mjs';
-import { BaseBonus } from "./base-bonus.mjs";
+import { BaseBonus } from "./_base-bonus.mjs";
 
 /**
  * @extends BaseBonus

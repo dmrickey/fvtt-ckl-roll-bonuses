@@ -3,7 +3,7 @@ import { api } from '../../util/api.mjs';
 import { FormulaCacheHelper } from '../../util/flag-helpers.mjs';
 import { localize } from '../../util/localize.mjs';
 import { signed } from '../../util/to-signed-string.mjs';
-import { BaseBonus } from './base-bonus.mjs';
+import { BaseBonus } from './_base-bonus.mjs';
 
 export class CasterLevelBonus extends BaseBonus {
 

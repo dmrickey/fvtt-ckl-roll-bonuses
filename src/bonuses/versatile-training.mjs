@@ -228,12 +228,12 @@ Hooks.on('renderItemSheet', (
         item,
         journal,
         key: selectedKey,
-        limit: 2,
         options: skillChoices,
         parent: html,
     }, {
         canEdit: isEditable,
         inputType: 'specific-bonus',
+        limit: 2,
     });
 });
 

@@ -6,7 +6,7 @@ import { difference, intersection, intersects } from "../../../util/array-inters
 import { localize } from '../../../util/localize.mjs';
 import { registerSetting } from "../../../util/settings.mjs";
 import { truthiness } from "../../../util/truthiness.mjs";
-import { BaseTarget } from "../base-target.mjs";
+import { BaseTarget } from "../_base-target.mjs";
 
 class Settings {
     static get #tokenSettingKey() { return 'should-auto-target-tokens'; }

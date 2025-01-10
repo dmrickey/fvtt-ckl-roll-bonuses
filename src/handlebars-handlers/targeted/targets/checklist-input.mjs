@@ -13,13 +13,13 @@ import { createTemplate, templates } from "../../templates.mjs";
  * @param {string} args.key
  * @param {ItemPF} args.item
  * @param {string} [args.label]
- * @param {number} [args.limit] Maximum number of items that can be checked.
  * @param {string} [args.tooltip]
  * @param {string[] | {[key: string]: string}} args.options
  * @param {HTMLElement} args.parent
  * @param {object} options
  * @param {boolean} options.canEdit
  * @param {InputType} options.inputType
+ * @param {number} [options.limit] Maximum number of items that can be checked.
  */
 export function showChecklist({
     description = '',
@@ -27,13 +27,13 @@ export function showChecklist({
     journal,
     key,
     label = '',
-    limit = 0,
     options,
     parent,
     tooltip = '',
 }, {
     canEdit,
     inputType,
+    limit = 0,
 }) {
     label ||= localizeBonusLabel(key);
     tooltip ||= localizeBonusTooltip(key);

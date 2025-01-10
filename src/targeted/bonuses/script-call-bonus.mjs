@@ -3,7 +3,7 @@ import { MODULE_NAME } from '../../consts.mjs';
 import { showScriptBonusEditor } from '../../handlebars-handlers/targeted/bonuses/script-call-bonus-input.mjs';
 import { handleBonusTypeFor } from '../../target-and-bonus-join.mjs';
 import { truthiness } from '../../util/truthiness.mjs';
-import { BaseBonus } from './base-bonus.mjs';
+import { BaseBonus } from './_base-bonus.mjs';
 
 /** @extends {BaseBonus} */
 export class ScriptCallBonus extends BaseBonus {

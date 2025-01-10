@@ -2,7 +2,7 @@
 import { MODULE_NAME } from '../../consts.mjs';
 import { showEnabledLabel } from '../../handlebars-handlers/enabled-label.mjs';
 import { localizeBonusLabel, localizeBonusTooltip } from '../../util/localize.mjs';
-import { BaseBonus } from './base-bonus.mjs';
+import { BaseBonus } from './_base-bonus.mjs';
 
 export class FinesseBonus extends BaseBonus {
 

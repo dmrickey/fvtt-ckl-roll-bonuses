@@ -1,5 +1,5 @@
 import { showEnabledLabel } from '../../handlebars-handlers/enabled-label.mjs';
-import { BaseTarget } from './base-target.mjs';
+import { BaseTarget } from './_base-target.mjs';
 
 export class SelfTarget extends BaseTarget {
 

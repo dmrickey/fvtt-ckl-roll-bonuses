@@ -2,7 +2,7 @@ import { MODULE_NAME } from '../../../consts.mjs';
 import { textInput } from '../../../handlebars-handlers/bonus-inputs/text-input.mjs';
 import { api } from '../../../util/api.mjs';
 import { difference } from '../../../util/array-intersects.mjs';
-import { BaseTarget } from '../base-target.mjs';
+import { BaseTarget } from '../_base-target.mjs';
 
 /**
  * @extends {BaseTarget}

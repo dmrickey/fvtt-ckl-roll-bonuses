@@ -1,6 +1,6 @@
 import { MODULE_NAME } from '../../consts.mjs';
 import { textInput } from '../../handlebars-handlers/bonus-inputs/text-input.mjs';
-import { BaseBonus } from './base-bonus.mjs';
+import { BaseBonus } from './_base-bonus.mjs';
 
 /**
  * @extends BaseBonus
