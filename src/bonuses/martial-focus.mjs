@@ -35,7 +35,7 @@ class Settings {
  * @returns {boolean}
  */
 const isItemFocused = (actor, item) => {
-    const weaponGroups = [...(item.system.weaponGroups?.value ?? []), ...(item.system.weaponGroups?.custom ?? [])].map(x => x.trim()).filter(truthiness);
+    const weaponGroups = item.system.weaponGroups?.total ?? new Set();
     const focuses = getCachedBonuses(actor, key)
         .flatMap(x => x.getFlag(MODULE_NAME, key))
         .filter(truthiness);
@@ -193,7 +193,7 @@ Hooks.on('renderItemSheet', (
             ? []
             : uniqueArray(
                 getActorItemsByTypes(actor, 'attack', 'weapon')
-                    .flatMap((i) => (i.system.weaponGroups?.custom ?? []))
+                    .flatMap((i) => ([...(i.system.weaponGroups?.custom ?? [])]))
                     .filter(truthiness)
             ).map((i) => ({ key: i, label: i }));
 

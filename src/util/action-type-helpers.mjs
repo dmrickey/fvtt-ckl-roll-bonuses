@@ -7,7 +7,7 @@ export const isMelee = (_item, action) => ['mwak', 'msak', 'mcman'].includes(act
 export const isNatural = (item) => {
     const isAttack = item instanceof pf1.documents.item.ItemAttackPF;
     return (isAttack && item.subType === 'natural')
-        || !!item.system.weaponGroups?.value?.includes("natural");
+        || !!item.system.weaponGroups?.total?.has("natural");
 }
 
 /** @type {ActionTypeFilterFunc} */

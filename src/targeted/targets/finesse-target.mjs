@@ -70,7 +70,7 @@ export class FinesseTarget extends BaseTarget {
      * @returns {Nullable<ItemPF[]>}
      */
     static _getSourcesFor(item, sources) {
-        const isNatural = !!item.system.weaponGroups?.value?.includes('natural') || item.system.subType === 'natural';
+        const isNatural = !!item.system.weaponGroups?.total?.has('natural') || item.system.subType === 'natural';
         const isFinesse = !!item.system.properties?.fin;
 
         if (isNatural || isFinesse) {

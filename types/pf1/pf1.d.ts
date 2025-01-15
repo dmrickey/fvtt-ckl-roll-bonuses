@@ -537,8 +537,13 @@ declare global {
 
     /** used for weapons and attacks */
     interface TraitSelector<T extends string = string> {
-        custom: string[];
-        value: T[];
+        /** @deprecated I have no idea what this is */
+        base: T[];
+        /** Traits added by the user */
+        custom: Set<string>;
+        names: Array<string>;
+        /** Traits defined by the system*/
+        standard: Set<T>;
         total: Set<string>;
     }
 
@@ -743,6 +748,7 @@ declare global {
             class: { [key: string]: number };
             domain: { [key: string]: number };
         };
+        subschool: TraitSelector<keyof SpellSubschools>;
 
         /** @deprecated Spells don't have tags */
         tag: string;
@@ -1139,11 +1145,7 @@ declare global {
     }
     class SystemItemDataRacePF extends SystemItemData {}
     class SystemItemDataSpellPF extends SystemItemData {
-        descriptors: {
-            value: Array<keyof SpellDescriptors>;
-            custom: string[];
-            total: string[];
-        };
+        descriptors: TraitSelector<keyof SpellDescriptors>;
         school: keyof typeof pf1.config.spellSchools;
 
         /** @deprecated use until v10 (then use @see {descriptors} ) */
@@ -2189,6 +2191,7 @@ declare global {
                 trs: 'Transmutation';
                 uni: 'Universal';
             };
+            spellSubschools: SpellSubschools;
             weaponGroups: WeaponGroups;
         };
         documents: {
@@ -2247,6 +2250,24 @@ declare global {
         fort: 'Fortitude';
         ref: 'Reflex';
         will: 'Will';
+    };
+
+    type SpellSubschools = {
+        calling: 'Calling';
+        charm: 'Charm';
+        compulsion: 'Compulsion';
+        creation: 'Creation';
+        figment: 'Figment';
+        glamer: 'Glamer';
+        haunted: 'Haunted';
+        healing: 'Healing';
+        pattern: 'Pattern';
+        phantasm: 'Phantasm';
+        polymorph: 'Polymorph';
+        scrying: 'Scrying';
+        shadow: 'Shadow';
+        summoning: 'Summoning';
+        teleportation: 'Teleportation';
     };
 
     type WeaponGroups = {

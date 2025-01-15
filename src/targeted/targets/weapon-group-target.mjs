@@ -45,7 +45,7 @@ export class WeaponGroupTarget extends BaseTarget {
             return [];
         }
 
-        const groupsOnItem = [...(item.system.weaponGroups.value ?? []), ...(item.system.weaponGroups.custom ?? [])]
+        const groupsOnItem = [...(item.system.weaponGroups.total ?? [])]
             .map(x => x.trim())
             .filter(truthiness);
 

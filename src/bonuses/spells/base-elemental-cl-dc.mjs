@@ -29,23 +29,17 @@ const regex = /([A-Za-z\- ])+/g;
  * @param {ItemSpellPF} item
  * @returns {string[]}
  */
-const getSpellDescriptors = (item) => {
-    return uniqueArray([
-        ...(item?.system?.descriptors.value || []),
-        ...(item?.system?.descriptors.custom || [])
-            .flatMap((c) =>
-                c?.split(/,|\bor\b/).map((type) => {
-                    /** @type {string} */
-                    let typeString = type.trim();
-                    if (typeString.includes("see text")) return "see text";
-                    // @ts-ignore
-                    if (typeString.startsWith("or")) typeString = typeString.replace("or").trim();
-                    return typeString;
-                })
-            )
-            .filter(truthiness)
-    ]);
-}
+const getSpellDescriptors = (item) =>
+    uniqueArray([...(item?.system.descriptors?.total ?? [])].flatMap((c) =>
+        c?.split(/,|\bor\b/).map((type) => {
+            /** @type {string} */
+            let typeString = type.trim();
+            if (typeString.includes("see text")) return "see text";
+            // @ts-ignore
+            if (typeString.startsWith("or")) typeString = typeString.replace("or").trim();
+            return typeString;
+        })
+    ));
 
 /**
  * @param {'cl' | 'dc'} t

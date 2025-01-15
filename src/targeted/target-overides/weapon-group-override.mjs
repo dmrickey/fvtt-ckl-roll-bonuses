@@ -48,25 +48,20 @@ export class WeaponGroupOverride extends BaseTargetOverride {
      * @param {RollData} _rollData
      */
     static prepareSourceData(item, _rollData) {
+        item.system.weaponGroups ||= {};
+
         const groups = item.getFlag(MODULE_NAME, this.key) || [];
         /** @type {(keyof WeaponGroups)[]} */
-        const value = groups.filter((/** @type {keyof WeaponGroups} */ group) => !!pf1.config.weaponGroups[group]);
-        /** @type {string[]} */
-        const custom = difference(groups, value);
-        if (value.length || custom.length) {
-            item.system.weaponGroups ||= {};
-            item.system.weaponGroups.custom ||= [];
-            item.system.weaponGroups.value ||= [];
-            item.system.weaponGroups.custom.push(...custom);
-            item.system.weaponGroups.value.push(...value);
+        const standard = groups.filter((/** @type {keyof WeaponGroups} */ group) => !!pf1.config.weaponGroups[group]);
+        if (standard.length) {
+            item.system.weaponGroups.standard ||= new Set();
+            item.system.weaponGroups.standard = item.system.weaponGroups.standard.union(new Set(standard));
+        }
 
-            const total = [
-                ...item.system.weaponGroups.custom,
-                ...item.system.weaponGroups.value
-                    .map((group) => pf1.config.weaponGroups[group] || group),
-            ];
-            total.sort();
-            item.system.weaponGroups.total = new Set(total);
+        const custom = difference(groups, standard);
+        if (custom.length) {
+            item.system.weaponGroups.custom ||= new Set();
+            item.system.weaponGroups.custom = item.system.weaponGroups.custom.union(new Set(custom));
         }
     }
 

@@ -215,7 +215,7 @@ export class DamageBonus extends BaseBonus {
                 subTarget: 'allDamage',
                 target: 'damage',
                 type: damagesTypeToString(bonus.type),
-            }) ?? []),
+            })) ?? [],
         };
     }
 
