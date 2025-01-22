@@ -4,7 +4,7 @@ import { MODULE_NAME } from '../consts.mjs';
  * "ItemChange" is used in damage tooltip source
  *
  * @param {{ name: string }} conditional
- * @param {ItemConditionalModifierData} modifier
+ * @param {ItemConditionalModifierSourceData} modifier
  * @param {object} [options]
  * @param {boolean} [options.isDamage]
  * @returns {Nullable<ItemChange>}
@@ -111,7 +111,7 @@ export function createChangeForTooltip({
 /**
  *
  * @param {{ name: string }} conditional
- * @param {ItemConditionalModifierData} modifier
+ * @param {ItemConditionalModifierSourceData} modifier
  * @returns {Nullable<ModifierSource>}
  */
 export function conditionalAttackTooltipModSource(conditional, modifier) {
@@ -172,7 +172,7 @@ export function damagesTypeToString(types) {
  * @return {ItemConditional[]}
  */
 export const loadConditionals = (item, key, { useCachedFormula = false } = {}) => {
-    /** @type {ItemConditionalData[]} */
+    /** @type {ItemConditionalSourceData[]} */
     const flags = deepClone(item.getFlag(MODULE_NAME, key) || []);
 
     flags.forEach((c) => {
@@ -189,8 +189,6 @@ export const loadConditionals = (item, key, { useCachedFormula = false } = {}) =
             }
         });
     });
-
-
 
     const conditionals = flags.map((d) => new pf1.components.ItemConditional(d));
     return conditionals;

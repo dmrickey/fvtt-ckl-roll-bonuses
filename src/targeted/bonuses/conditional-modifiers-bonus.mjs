@@ -31,10 +31,10 @@ export class ConditionalModifiersBonus extends BaseBonus {
      */
     static init() {
         LocalHookHandler.registerHandler(localHooks.prepareData, (item, rollData) => {
-            const conditionals = loadConditionals(item, this.key)
-                .filter(x => x.data.modifiers.length && x.data.modifiers.find((m) => !!m.formula && !!m.target));
+            let conditionals = loadConditionals(item, this.key);
+            conditionals = conditionals.filter(x => x._source.modifiers.length && x._source.modifiers.find((m) => !!m.formula && !!m.target));
             conditionals.forEach((c) => {
-                c.data.modifiers.forEach((m) => {
+                c._source.modifiers.forEach((m) => {
                     item[MODULE_NAME][this.key] ||= [];
                     item[MODULE_NAME][this.key].conditionals ||= {};
                     item[MODULE_NAME][this.key].conditionals[c.id] ||= {};
@@ -64,7 +64,7 @@ export class ConditionalModifiersBonus extends BaseBonus {
      */
     static loadConfiguredConditionals(item) {
         const conditionals = loadConditionals(item, this.key, { useCachedFormula: true })
-            .filter(x => x.data.modifiers.length && x.data.modifiers.find((m) => !!m.formula && !!m.target));
+            .filter(x => x._source.modifiers.length && x._source.modifiers.find((m) => !!m.formula && !!m.target));
         return conditionals;
     }
 
@@ -84,7 +84,7 @@ export class ConditionalModifiersBonus extends BaseBonus {
                         return formData;
                     }
                 }
-                return c.data.default;
+                return c._source.default;
             });
 
         return conditionals;
@@ -99,7 +99,7 @@ export class ConditionalModifiersBonus extends BaseBonus {
     static getDamageSourcesForTooltip(target) {
         const conditionals = this.getConditionals(target);
         const sources = conditionals
-            .map((c) => c.data)
+            .map((c) => c._source)
             .filter((c) => c.default)
             .flatMap((cd) => cd.modifiers
                 .filter((mod) => mod.target === 'damage')
@@ -123,7 +123,7 @@ export class ConditionalModifiersBonus extends BaseBonus {
 
         const conditionals = this.getConditionals(target);
         const sources = conditionals
-            .map((c) => c.data)
+            .map((c) => c._source)
             .filter((c) => c.default)
             .flatMap((cd) => cd.modifiers
                 .filter((mod) => mod.target === 'attack')
@@ -144,7 +144,7 @@ export class ConditionalModifiersBonus extends BaseBonus {
     static modifyActionLabelDC(source, action) {
         const conditionals = this.loadConfiguredConditionals(source);
         const bonus = conditionals
-            .map((c) => c.data)
+            .map((c) => c._source)
             .filter((c) => c.default)
             .flatMap((cd) => cd.modifiers
                 .filter((mod) => mod.target === 'effect' && mod.subTarget === 'dc')
@@ -196,7 +196,7 @@ export class ConditionalModifiersBonus extends BaseBonus {
                         c.id,
                         dialog,
                         {
-                            checked: c.data.default,
+                            checked: c._source.default,
                             isConditional: true,
                             label: uniqueArray([sourceItem.name, c.name].filter(truthiness)).join(' - '),
                         }

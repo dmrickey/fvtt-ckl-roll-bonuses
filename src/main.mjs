@@ -238,8 +238,8 @@ function actionUse_handleConditionals(wrapped) {
     LocalHookHandler.fireHookNoReturnSync(localHooks.actionUse_handleConditionals, this, conditionals);
 
     const conditionalData = [
-        ...this.shared.conditionals.map((i) => this.shared.action.data.conditionals[i]),
-        ...conditionals.map(x => x.data),
+        ...this.shared.conditionals.map((i) => this.shared.action.data.conditionals[i]._source),
+        ...conditionals.map(x => x._source),
     ];
 
     // spells/abilities that don't have attack rolls still need to accept "nonCrit" bonuses

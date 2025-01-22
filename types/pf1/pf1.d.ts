@@ -484,7 +484,7 @@ declare global {
         id: string;
         actor: ActorPF;
         data: {
-            conditionals: ItemConditionalData[];
+            conditionals: ItemConditional[];
             naturalAttack: {
                 primaryAttack: boolean;
                 secondary: {
@@ -610,7 +610,7 @@ declare global {
             bonuses: (typeof BaseBonus)[];
             targets: (typeof BaseTarget)[];
             targetOverrides: (typeof BaseTargetOverride)[];
-            conditionals?: ItemConditionalModifierData[];
+            conditionals?: ItemConditionalModifierSourceData[];
             [key: string]: number | string | object | array;
         };
 
@@ -1806,16 +1806,13 @@ declare global {
         toObject(): object;
     }
 
-    class ItemConditionalData {
+    class ItemConditionalSourceData {
         default: boolean;
-        modifiers: ItemConditionalModifierData[];
+        modifiers: ItemConditionalModifierSourceData[];
         name: string;
         _id: string;
     }
     class ItemConditional {
-        // _id: string;
-        data: ItemConditionalData;
-
         get id(): string;
         get modifiers(): Readonly<Collection<ItemConditionalModifier>>;
         get name(): string;
@@ -1823,24 +1820,26 @@ declare global {
         static get defaultData(): {
             _id: string;
             default: false;
-            modifiers: ItemConditionalModifierData[];
+            modifiers: ItemConditionalModifierSourceData[];
             name: '';
         };
 
+        get _source(): ItemConditionalSourceData;
+
         constructor(
-            obj: ItemConditionalData,
+            obj: ItemConditionalSourceData,
             parent?: ItemAction
         ): ItemConditional;
         /** @deprecated do not use within this mod */
         static async create(
-            data: ItemConditionalData[],
+            data: ItemConditionalSourceData[],
             options: {
                 parent: ItemAction;
             }
         ): Promise<Array<ItemConditional>>;
     }
 
-    class ItemConditionalModifierData {
+    class ItemConditionalModifierSourceData {
         critical: Nullable<'crit' | 'nonCrit' | 'normal' | ''>; // all for 'damage', 'crit' and 'normal' also for attack
         damageType: Nullable<TraitSelectorValuePlural>;
         formula: string;
@@ -1859,29 +1858,32 @@ declare global {
         target: 'attack' | 'damage' | 'effect' | 'misc' | 'size';
         type: Nullable<BonusTypes | DamageTypes | string>;
         _id: string;
-
-        /** PREPPED DATA FOR SHEET */
-        targets?: {
+    }
+    /** Includes fields that are prepped when showing the action sheet */
+    class ItemConditionalModifierSourceDataPrepped extends ItemConditionalModifier {
+        targets: {
             attack: string;
+            critMult: string;
             damage: string;
-            size: string;
+            dc: string;
             effect: string;
             misc?: string;
-        };
-        subTargets?: { [x: string]: string };
-        conditionalModifierTypes?: { [x: string]: string };
-        conditionalCritical?: {
+            size: string;
+        }?;
+        targetEntry: string;
+        subTargets: { [x: string]: string }?;
+        conditionalModifierTypes: { [x: string]: string }?;
+        conditionalCritical: {
             normal?: 'PF1.Normal';
             crit?: 'PF1.OnCritBonusFormula';
             nonCrit?: 'PF1.NonMultBonusFormula';
-        };
-        /** END PREPPED DATA FOR SHEET */
+        }?;
     }
     class ItemConditionalModifier {
         get id(): string;
         set id(value: string);
 
-        data: ItemConditionalModifierData;
+        get _source(): ItemConditionalModifierSourceData;
         parent: ItemConditional;
 
         constructor(any);
@@ -2100,6 +2102,9 @@ declare global {
                     allAttack: 'All';
                     hasteAttack: 'Haste';
                     rapidShotAttack: 'Rapid Shot';
+                };
+                critMult: {
+                    _label: 'Attack Rolls';
                 };
                 damage: {
                     _label: 'Damage';

@@ -95,7 +95,7 @@ function actionDamage(action, { simplify = true, strict = true } = {}) {
   };
 
   /** BEGIN OVERRIDE */
-  /** @type {ItemConditionalModifierData['subTarget'][]} */
+  /** @type {ItemConditionalModifierSourceData['subTarget'][]} */
   const subTargets = ['allDamage', 'attack_0'];
   const allDamageParts = conditionals
     .filter((x) => x.target === 'damage' && subTargets.includes(x.subTarget) && x.critical === 'normal' && !!x.formula)

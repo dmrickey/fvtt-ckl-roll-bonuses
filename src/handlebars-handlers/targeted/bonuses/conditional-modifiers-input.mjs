@@ -5,12 +5,14 @@ import { api } from '../../../util/api.mjs';
 import { localizeBonusLabel, localizeBonusTooltip } from '../../../util/localize.mjs';
 import { loadConditionals } from '../../../util/conditional-helpers.mjs';
 
-/** @returns {ItemConditionalModifierData['targets']} */
+/** @returns {ItemConditionalModifierSourceDataPrepped['targets']} */
 function getConditionalTargets() {
-    /** @type {ItemConditionalModifierData['targets']} */
+    /** @type {ItemConditionalModifierSourceDataPrepped['targets']} */
     const result = {
         attack: pf1.config.conditionalTargets.attack._label,
+        critMult: pf1.config.conditionalTargets.critMult._label,
         damage: pf1.config.conditionalTargets.damage._label,
+        dc: game.i18n.localize("PF1.DC"),
         size: pf1.config.conditionalTargets.size._label,
         effect: pf1.config.conditionalTargets.effect._label,
     };
@@ -144,14 +146,14 @@ export function modifiersInput({
     // Prepare stuff for actions with conditionals
 
     const createConditionalTemplateData = () => {
-        /** @type {ItemConditionalData[]} */
-        const conditionalData = deepClone(conditionals.map((c) => c.data));
+        /** @type {ItemConditionalSourceData[]} */
+        const conditionalData = deepClone(conditionals.map((c) => c._source));
         for (const conditional of conditionalData) {
             for (const modifier of conditional.modifiers) {
-                modifier.targets = getConditionalTargets();
-                modifier.subTargets = getConditionalSubTargets(modifier.target);
-                modifier.conditionalModifierTypes = getConditionalModifierTypes(modifier.target);
-                modifier.conditionalCritical = getConditionalCritical(modifier.target);
+                (/** @type {ItemConditionalModifierSourceDataPrepped} */ (/** @type {unknown} */ (modifier))).targets = getConditionalTargets();
+                (/** @type {ItemConditionalModifierSourceDataPrepped} */ (/** @type {unknown} */ (modifier))).subTargets = getConditionalSubTargets(modifier.target);
+                (/** @type {ItemConditionalModifierSourceDataPrepped} */ (/** @type {unknown} */ (modifier))).conditionalModifierTypes = getConditionalModifierTypes(modifier.target);
+                (/** @type {ItemConditionalModifierSourceDataPrepped} */ (/** @type {unknown} */ (modifier))).conditionalCritical = getConditionalCritical(modifier.target);
             }
         }
         return conditionalData;
@@ -189,7 +191,7 @@ export function modifiersInput({
     });
 
     async function updateItem() {
-        const sanitized = conditionals.map((c) => c.data);
+        const sanitized = conditionals.map((c) => c._source);
         await item.setFlag(MODULE_NAME, key, sanitized);
         // can't do this without rehooking up bindings and adding
         // await item.update({ flags: { [MODULE_NAME]: { [key]: sanitized } } }, { render: false });
@@ -202,7 +204,7 @@ export function modifiersInput({
     div.addEventListener('drop', async (event) => {
         event.preventDefault();
 
-        /** @type {ItemConditionalData} */ // @ts-ignore
+        /** @type {ItemConditionalSourceData} */ // @ts-ignore
         const data = JSON.parse(event.dataTransfer.getData("text/plain"));
         if (!data) return;
 
@@ -245,7 +247,7 @@ export function modifiersInput({
                 if (!conditional) return;
 
                 const checkbox = /** @type {HTMLInputElement} */ (a);
-                conditional.data.default = checkbox.checked;
+                conditional._source.default = checkbox.checked;
                 await updateItem();
             }
         });
@@ -285,7 +287,7 @@ export function modifiersInput({
                 const conditional = conditionals.find((c) => c.id === li?.dataset.conditional);
 
                 const modifier = new pf1.components.ItemConditionalModifier(pf1.components.ItemConditionalModifier.defaultData);
-                conditional?.data.modifiers.push(modifier.data);
+                conditional?._source.modifiers.push(modifier._source);
                 await updateItem();
             }
 
@@ -295,13 +297,13 @@ export function modifiersInput({
                 if (!(li instanceof Element)) return;
                 const conditional = conditionals.find((c) => c.id === li?.dataset.conditional);
                 if (!conditional) return;
-                conditional.data.modifiers = conditional.data.modifiers.filter((m) => m._id !== li?.dataset.modifier);
+                conditional._source.modifiers = conditional._source.modifiers.filter((m) => m._id !== li?.dataset.modifier);
                 await updateItem();
             }
         });
     });
 
-    /** @type {{ [key in ItemConditionalModifierData['target']]: { subTarget: ItemConditionalModifierData['subTarget'], critical: ItemConditionalModifierData['critical'], damageType: ItemConditionalModifierData['damageType'], type: ItemConditionalModifierData['type'],} }} */
+    /** @type {{ [key in ItemConditionalModifierSourceData['target']]: { subTarget: ItemConditionalModifierSourceData['subTarget'], critical: ItemConditionalModifierSourceData['critical'], damageType: ItemConditionalModifierSourceData['damageType'], type: ItemConditionalModifierSourceData['type'],} }} */
     const modDefaults = {
         attack: { subTarget: 'allAttack', critical: 'normal', damageType: undefined, type: 'untyped', },
         damage: { subTarget: 'allDamage', critical: 'normal', damageType: pf1.components.ItemAction.defaultDamageType, type: 'untyped', },
@@ -328,11 +330,11 @@ export function modifiersInput({
 
                 const conditional = conditionals.find((c) => c.id === li?.dataset.conditional);
                 if (!conditional) return;
-                const modifier = conditional.data.modifiers.find((m) => m._id === li?.dataset.modifier);
+                const modifier = conditional._source.modifiers.find((m) => m._id === li?.dataset.modifier);
                 if (!modifier) return;
 
                 // @ts-ignore
-                const /** @type {ItemConditionalModifierData['target']} */ value = event.target?.value || 'attack';
+                const /** @type {ItemConditionalModifierSourceData['target']} */ value = event.target?.value || 'attack';
 
                 if (element.classList.contains('conditional-target')) {
                     modifier.subTarget = modDefaults[value].subTarget;
@@ -377,7 +379,7 @@ export function modifiersInput({
 
                 const conditional = conditionals.find((c) => c.id === li?.dataset.conditional);
                 if (!conditional) return;
-                const modifier = conditional.data.modifiers.find((m) => m._id === li?.dataset.modifier);
+                const modifier = conditional._source.modifiers.find((m) => m._id === li?.dataset.modifier);
                 if (!modifier) return;
 
                 // @ts-ignore
@@ -411,7 +413,7 @@ export function modifiersInput({
 
                 // @ts-ignore
                 const value = event.target?.value;
-                conditional.data.name = value;
+                conditional._source.name = value;
 
                 await updateItem();
             },
@@ -433,7 +435,7 @@ export function modifiersInput({
 
                 const conditional = conditionals.find((c) => c.id === li?.dataset.conditional);
                 if (!conditional) return;
-                const modifier = conditional.data.modifiers.find((m) => m._id === li?.dataset.modifier);
+                const modifier = conditional._source.modifiers.find((m) => m._id === li?.dataset.modifier);
                 if (!modifier) return;
 
 

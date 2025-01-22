@@ -152,7 +152,7 @@ export class DamageBonus extends BaseBonus {
             return [];
         }
 
-        const sources = (conditional.data.modifiers ?? [])
+        const sources = (conditional._source.modifiers ?? [])
             .filter((mod) => mod.target === 'damage')
             .map((mod) => conditionalModToItemChangeForDamageTooltip(conditional, mod, { isDamage: true }))
             .filter(truthiness);
@@ -200,14 +200,14 @@ export class DamageBonus extends BaseBonus {
     /**
      * @param {DamageInputModel[]} damageBonuses
      * @param {string} name
-     * @returns {ItemConditionalData}
+     * @returns {ItemConditionalSourceData}
      */
     static #createConditionalData(damageBonuses, name) {
         return {
             _id: foundry.utils.randomID(),
             default: true,
             name,
-            modifiers: damageBonuses?.map( /** @return {ItemConditionalModifierData} */(bonus) => ({
+            modifiers: damageBonuses?.map( /** @return {ItemConditionalModifierSourceData} */(bonus) => ({
                 _id: foundry.utils.randomID(),
                 critical: bonus.crit || 'normal', // normal | crit | nonCrit
                 damageType: bonus.type,

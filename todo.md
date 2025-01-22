@@ -262,3 +262,4 @@
 
 # v2.18.0
 - Move "all targets" documentation out of conditional targets
+- make common "has source compendium id" function and make sure it reads from new place in addition to old
