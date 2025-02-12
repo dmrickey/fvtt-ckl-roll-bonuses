@@ -405,7 +405,7 @@ function onGetRollData(thing, rollData) {
 }
 
 /**
- * @typedef {{data: RollData?, extraParts: unknown[], bonus:unknown, primaryAttack: boolean}} RollAttackArgs
+ * @typedef {{data: RollData?, extraParts: unknown[], bonus:unknown, primary: boolean}} RollAttackArgs
  */ /**
 * Place an attack roll using an item (weapon, feat, spell, or equipment)
 *
@@ -415,13 +415,13 @@ function onGetRollData(thing, rollData) {
 * @param {RollData?} [args.data]
 * @param {unknown[]} [args.extraParts]
 * @param {unknown} [args.bonus]
-* @param {boolean} [args.primaryAttack]
+* @param {boolean} [args.primary]
 */
 async function itemActionRollAttack(
     wrapped,
-    { data = null, extraParts = [], bonus = null, primaryAttack = true } = {}
+    { data = null, extraParts = [], bonus = null, primary = true } = {}
 ) {
-    const roll = await wrapped({ data, extraParts, bonus, primaryAttack });
+    const roll = await wrapped({ data, extraParts, bonus, primary });
 
     const formula = roll.formula;
     const options = roll.options;
