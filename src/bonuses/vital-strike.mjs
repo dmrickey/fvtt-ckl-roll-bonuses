@@ -141,7 +141,7 @@ class VitalStrikeData {
 
                 if (actionUse) {
                     // if (!this.mythic) {
-                    const part = actionUse.action.data.damage?.parts[0];
+                    const part = actionUse.action.damage?.parts[0];
                     const partFormula = part.formula || '';
                     const firstDice = getFirstTermFormula(partFormula);
 
@@ -167,7 +167,7 @@ class VitalStrikeData {
                                 subTarget: 'attack_0',
                                 target: 'damage',
                                 type: '',
-                                damageType: part.type,
+                                damageType: [...part.types],
                             }],
                         });
                         this.conditionals.push(conditional);

@@ -34,7 +34,7 @@ export class RequireMeleeThreatenGlobalBonus extends BaseGlobalBonus {
             return;
         }
 
-        const isMelee = ['mcman', 'mwak', 'msak'].includes(data.action.data.actionType);
+        const isMelee = ['mcman', 'mwak', 'msak'].includes(data.action.actionType);
         if (!isMelee) {
             return;
         }
@@ -61,7 +61,7 @@ export class RequireMeleeThreatenGlobalBonus extends BaseGlobalBonus {
             return;
         }
 
-        const isMelee = ['mcman', 'mwak', 'msak'].includes(action.data.actionType);
+        const isMelee = ['mcman', 'mwak', 'msak'].includes(action.actionType);
         if (!isMelee) {
             return;
         }

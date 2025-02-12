@@ -147,7 +147,7 @@ export function modifiersInput({
 
     const createConditionalTemplateData = () => {
         /** @type {ItemConditionalSourceData[]} */
-        const conditionalData = deepClone(conditionals.map((c) => c._source));
+        const conditionalData = foundry.utils.deepClone(conditionals.map((c) => c._source));
         for (const conditional of conditionalData) {
             for (const modifier of conditional.modifiers) {
                 (/** @type {ItemConditionalModifierSourceDataPrepped} */ (/** @type {unknown} */ (modifier))).targets = getConditionalTargets();
@@ -305,11 +305,11 @@ export function modifiersInput({
 
     /** @type {{ [key in ItemConditionalModifierSourceData['target']]: { subTarget: ItemConditionalModifierSourceData['subTarget'], critical: ItemConditionalModifierSourceData['critical'], damageType: ItemConditionalModifierSourceData['damageType'], type: ItemConditionalModifierSourceData['type'],} }} */
     const modDefaults = {
-        attack: { subTarget: 'allAttack', critical: 'normal', damageType: undefined, type: 'untyped', },
-        damage: { subTarget: 'allDamage', critical: 'normal', damageType: pf1.components.ItemAction.defaultDamageType, type: 'untyped', },
-        effect: { subTarget: 'dc', critical: undefined, damageType: undefined, type: undefined, },
-        misc: { subTarget: 'charges', critical: undefined, damageType: undefined, type: undefined, },
-        size: { subTarget: undefined, critical: undefined, damageType: undefined, type: undefined, },
+        attack: { subTarget: 'allAttack', critical: 'normal', damageType: [], type: 'untyped', },
+        damage: { subTarget: 'allDamage', critical: 'normal', damageType: [], type: 'untyped', },
+        effect: { subTarget: 'dc', critical: undefined, damageType: [], type: undefined, },
+        misc: { subTarget: 'charges', critical: undefined, damageType: [], type: undefined, },
+        size: { subTarget: undefined, critical: undefined, damageType: [], type: undefined, },
     };
 
     div.querySelectorAll('.conditionals select').forEach((element) => {
@@ -421,7 +421,7 @@ export function modifiersInput({
     });
 
     div.querySelectorAll('.damage-type-visual').forEach((element) => {
-        if (!(element instanceof Element) || !canEdit) return;
+        if (!(element instanceof HTMLElement) || !canEdit) return;
         element?.addEventListener(
             'click',
             async (event) => {
@@ -439,9 +439,10 @@ export function modifiersInput({
                 if (!modifier) return;
 
 
-                async function update( /** @type {{ [key: string]: TraitSelectorValuePlural }} */arg) {
+                async function update(/** @type {ItemConditionalModifierSourceData['damageType']} */ types) {
                     if (!modifier) return;
-                    modifier.damageType = arg[modifier._id];
+
+                    modifier.damageType = types;
                     await updateItem();
                 }
                 const app = new pf1.applications.DamageTypeSelector(
@@ -450,7 +451,7 @@ export function modifiersInput({
                         update,
                     },
                     modifier._id,
-                    modifier.damageType || { custom: '', values: [] },
+                    modifier.damageType || [],
                 );
                 return app.render(true);
             },

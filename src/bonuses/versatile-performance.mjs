@@ -288,7 +288,7 @@ Hooks.once('init', () => {
         const skills = [];
         const perform = actor.getSkillInfo('prf');
         for (const [subId, subS] of Object.entries(perform.subSkills ?? {})) {
-            const subSkill = deepClone(subS);
+            const subSkill = foundry.utils.deepClone(subS);
             subSkill.id = `prf.${subId}`;
             skills.push(subSkill);
         }

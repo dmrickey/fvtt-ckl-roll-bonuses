@@ -238,7 +238,7 @@ function actionUse_handleConditionals(wrapped) {
     LocalHookHandler.fireHookNoReturnSync(localHooks.actionUse_handleConditionals, this, conditionals);
 
     const conditionalData = [
-        ...this.shared.conditionals.map((i) => this.shared.action.data.conditionals[i]._source),
+        ...this.shared.conditionals.map((i) => this.shared.action.conditionals[i]._source),
         ...conditionals.map(x => x._source),
     ];
 
@@ -380,7 +380,8 @@ function safeTotal(
     formula,
     data,
 ) {
-    return (isNaN(+formula) ? RollPF.create(formula + '', data).evaluate({ async: false }).total : +formula) || 0;
+    // todo fix typing here
+    return (isNaN(+formula) ? RollPF.create(formula + '', data).evaluate({ forceSync: true }).total : +formula) || 0;
 }
 
 /**

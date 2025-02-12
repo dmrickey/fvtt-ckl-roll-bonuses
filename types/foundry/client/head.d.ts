@@ -32,6 +32,7 @@ declare global {
             };
         };
         utils: {
+            deepClone<T>(arg0: T): T;
             objectsEqual<T>(a: T, b: T): boolean;
             expandObject(_: object, depth?: number): Record<string, unknown>;
             randomID(): string;

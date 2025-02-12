@@ -9,6 +9,7 @@
     - [AC bonus](#ac-bonus)
     - [Alignment](#alignment)
     - [Consume Item/Charge](#consume-itemcharge)
+    - [Maximized Critical](#maximized-critical)
   - [Targets](#targets)
     - [Creature type/subtype](#creature-typesubtype)
     - [By Disposition](#by-disposition)
@@ -59,6 +60,8 @@
 - [PF1 v11](#pf1-v11)
 - [vnext](#vnext)
 - [v2.18.0](#v2180)
+- [v2.17.x bugs](#v217x-bugs)
+- [pf1 v11 update](#pf1-v11-update)
 
 # TODO
 - Figure out a way to support multiple target groups on a single Item (so I can add `Favored Enemy (Human) +4` and `Favored Enemy (goblin) +2` on a single Item)
@@ -84,6 +87,8 @@
   - I can make it work but it won't do anything (the system doesn't show it in the attack, it's kinda pointless without extra functionality)
 ### Consume Item/Charge
 - consume a charge from <pick Item> when used
+### Maximized Critical
+- [link](https://www.d20pfsrd.com/alternative-rule-systems/mythic/mythic-heroes/mythic-paths-paizo-inc/champion/champion-path-abilities/maximized-critical-ex/)
 
 ## Targets
 ### Creature type/subtype
@@ -263,3 +268,8 @@
 # v2.18.0
 - Move "all targets" documentation out of conditional targets
 - make common "has source compendium id" function and make sure it reads from new place in addition to old
+
+# v2.17.x bugs
+- magic +1 arrows are adding their attack bonus when used with a mw bow
+
+# pf1 v11 update

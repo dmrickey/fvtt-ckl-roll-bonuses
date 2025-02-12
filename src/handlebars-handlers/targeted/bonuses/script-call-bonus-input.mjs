@@ -211,7 +211,7 @@ export function showScriptBonusEditor({
             const index = +(row.dataset.index || 0);
             const script = scripts[index];
             if (script) {
-                const copy = deepClone(script);
+                const copy = foundry.utils.deepClone(script);
                 copy.name = `${copy.name} ${localize('PF1.Copy')}`;
                 scripts.push(copy);
                 await item.setFlag(MODULE_NAME, key, scripts);
@@ -232,7 +232,7 @@ export function showScriptBonusEditor({
                 const script = scripts[index];
                 if (script) {
                     const deleteScript = async () => {
-                        const clonedScripts = deepClone(scripts);
+                        const clonedScripts = foundry.utils.deepClone(scripts);
                         clonedScripts.splice(index, 1);
                         await item.setFlag(MODULE_NAME, key, clonedScripts);
                     }

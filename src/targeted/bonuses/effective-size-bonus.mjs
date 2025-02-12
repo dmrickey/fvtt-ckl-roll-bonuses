@@ -114,7 +114,7 @@ export class EffectiveSizeBonus extends BaseBonus {
             modifiers: [{
                 _id: foundry.utils.randomID(),
                 critical: '',
-                damageType: { values: [], custom: '' },
+                damageType: ['untyped'],
                 formula: `${bonus}`,
                 subTarget: '',
                 target: 'size',

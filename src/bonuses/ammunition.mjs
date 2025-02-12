@@ -60,7 +60,7 @@ function getConditionalParts(actionUse, result, atk, index) {
             if (diff > 0) {
                 const label = `${localize('PF1.AmmunitionAbbr')} ${localize('PF1.EnhancementBonus')}`;
                 result['attack.normal'].push(`${diff}[${label} (${totalWithAmmo})]`);
-                result['damage.normal'].push([`${diff}[${label} (${totalWithAmmo})]`, { values: [], custom: `${label}` }, false]);
+                result['damage.normal'].push([`${diff}[${label} (${totalWithAmmo})]`, [label], false]);
             }
         }
 
@@ -77,7 +77,7 @@ function getConditionalParts(actionUse, result, atk, index) {
                 /** @type {ConditionalPart} */
                 const damageResult = [
                     `${damage.formula}${label}`,
-                    damage.type,
+                    [...damage.types],
                     false,
                 ];
                 switch (damage.crit) {
@@ -204,7 +204,7 @@ LocalHookHandler.registerHandler(localHooks.prepareData, (item, rollData) => {
 
 /**
  * @param {ItemPF} item
- * @return {DamageInputModel[]}
+ * @return {(Pick<DamageInputModel, 'crit' | 'types' | 'formula'>)[]}
  */
 function getCachedDamageBonuses(item) {
     /** @type {DamageInputModel[]} */

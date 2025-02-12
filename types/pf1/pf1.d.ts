@@ -151,7 +151,11 @@ declare global {
 
     type ArmorType = 'lgt' | 'med' | 'hvy' | 'shl' | 'twr';
 
-    type ConditionalPart = [number | string, TraitSelectorValuePlural, false];
+    type ConditionalPart = [
+        number | string,
+        ItemConditionalModifierSourceData['damageType'],
+        false
+    ];
     class ConditionalPartsResults {
         'attack.crit': string[];
         'attack.normal': string[];
@@ -454,25 +458,34 @@ declare global {
         [key: string]: DictionaryFlags;
     }
 
-    type FlagValue = string | number;
-    interface DamagePart {
+    class DamagePartModelData {
         formula: string;
-        type: TraitSelectorValuePlural;
+        types: Set<string>;
+    }
+
+    type FlagValue = string | number;
+    class DamagePartModel extends DamagePartModelData {
+        get custom(): Set<string>;
+        get standard(): Set<unknown>;
+
+        constructor(args?: {
+            formula?: string;
+            types?: Array<GenericDamageType>;
+        });
+    }
+    interface DamagePartRollData {
+        formula: string;
+        types: Array<string>;
     }
 
     interface PreDamageRollPart {
         base: string;
-        damageType: TraitSelectorValuePlural;
+        damageType: ItemConditionalModifierSourceData['damageType'];
         extra: Array;
         type: 'crit' | 'nonCrit' | 'normal';
     }
 
     class ItemAction {
-        getRollData(): RollData;
-        getRange({
-            type: string = 'single' | 'min' | 'max',
-            rollData: RollData = null,
-        } = {}): number;
         [MODULE_NAME]: {
             enhancement?: {
                 base: number;
@@ -481,58 +494,59 @@ declare global {
             };
             [key: string]: number | string | object | array;
         };
-        id: string;
-        actor: ActorPF;
-        data: {
-            conditionals: ItemConditional[];
-            naturalAttack: {
-                primaryAttack: boolean;
-                secondary: {
-                    attackBonus: string;
-                    damageMult: number;
-                };
-            };
-            ability: {
-                attack: string;
-                critMult: number;
-                critRange: number;
-                damage: keyof Abilities;
-                damageMult: number;
-            };
-            actionType: ActionType;
-            damage: {
-                critParts: DamagePart[];
-                nonCritParts: DamagePart[];
-                parts: DamagePart[];
-            };
-            range: {
-                maxIncrements: number;
-                minUnits: '';
-                minValue: null;
-                units: 'ft' | 'm' | 'reach';
-                value: string;
-            };
+
+        ability: {
+            attack: undefined | string;
+            critMult: null | number;
+            critRange: null | number;
+            damage: undefined | keyof Abilities;
+            damageMult: null | number;
+            max: null | number;
         };
-        item: ItemPF;
-        img: string;
-        static defaultDamageType: TraitSelectorValuePlural;
+        actionType: ActionType;
+        actor: ActorPF;
+        allDamageSources: Array<ActionDamageSource>;
+        conditionals: ItemConditional[];
+        damage: {
+            critParts: DamagePartModel[];
+            nonCritParts: DamagePartModel[];
+            parts: DamagePartModel[];
+        };
+        held?: keyof pf1['config']['abilityDamageHeldMultipliers'];
+        id: string;
         hasAttack: boolean;
         hasDamage: boolean;
+        img: string;
         isCombatManeuver: boolean;
         isRanged: boolean;
-        get enhancementBonus(): number;
+        item: ItemPF;
         maxRange: number;
         minRange: number;
         name: string;
-        range: number;
+        naturalAttack: {
+            primary: boolean;
+            secondary: {
+                attackBonus: string;
+                damageMult: number;
+            };
+        };
+        range: {
+            maxIncrements: number;
+            minUnits: '' | undefined;
+            minValue: null | undefined;
+            units: 'ft' | 'm' | 'reach' | 'close' | 'medium' | 'long';
+            value: undefined | string;
+        };
         sheet: ItemActionSheet;
 
-        defaultDamageType: {
-            values: string[];
-            custom: '';
-        };
-
+        get enhancementBonus(): number;
         get hasSave(): boolean;
+
+        getRollData(): RollData;
+        getRange({
+            type: string = 'single' | 'min' | 'max',
+            rollData: RollData = null,
+        } = {}): number;
     }
 
     /** used for weapons and attacks */
@@ -545,13 +559,6 @@ declare global {
         /** Traits defined by the system*/
         standard: Set<T>;
         total: Set<string>;
-    }
-
-    /** used for damage parts */
-    interface TraitSelectorValuePlural {
-        /** custom entries split by ; */
-        custom: string;
-        values: string[];
     }
 
     /** @see {CONST.TOKEN_DISPOSITIONS} */
@@ -1115,6 +1122,7 @@ declare global {
         weaponGroups?: Partial<TraitSelector<keyof WeaponGroups>>;
         /** attack, equipment, weapon */
         proficient: boolean;
+        held?: keyof pf1['config']['abilityDamageHeldMultipliers'];
     }
     class SystemItemDataAttackPF extends SystemItemData {
         baseTypes: string[];
@@ -1552,9 +1560,9 @@ declare global {
                 damageMult: number;
             };
             damage: {
-                critParts: DamagePart[];
-                nonCritParts: DamagePart[];
-                parts: DamagePart[];
+                critParts: DamagePartRollData[];
+                nonCritParts: DamagePartRollData[];
+                parts: DamagePartRollData[];
             };
             range: {
                 maxIncrements: number;
@@ -1634,11 +1642,11 @@ declare global {
         ): RollPF;
 
         evaluate(
-            options: InexactPartial<Options & { async: false }>
+            options?: InexactPartial<Options> & { forceSync: true }
         ): Evaluated<this>;
-        evaluate(
-            options?: InexactPartial<Options> & { async: true }
-        ): Promise<Evaluated<this>>;
+        evaluate(options?: InexactPartial<Options>): Promise<Evaluated<this>>;
+
+        evaluateSync(options?: InexactPartial<Option>): Evaluated<this>;
     }
 
     interface DamageRoll extends RollPF {}
@@ -1748,21 +1756,7 @@ declare global {
         isModifier: boolean;
         name: string;
         namepsace: 'pf1' | string;
-        get id():
-            | 'untyped'
-            | 'slashing'
-            | 'piercing'
-            | 'bludgeoning'
-            | 'fire'
-            | 'cold'
-            | 'electric'
-            | 'acid'
-            | 'sonic'
-            | 'force'
-            | 'negative'
-            | 'positive'
-            | 'precision'
-            | 'nonlethal';
+        get id(): keyof DamageTypes;
     }
 
     interface ItemChangeArgs {
@@ -1839,9 +1833,11 @@ declare global {
         ): Promise<Array<ItemConditional>>;
     }
 
+    type GenericDamageType = Nullable<BonusTypes | keyof DamageTypes | string>;
+
     class ItemConditionalModifierSourceData {
         critical: Nullable<'crit' | 'nonCrit' | 'normal' | ''>; // all for 'damage', 'crit' and 'normal' also for attack
-        damageType: Nullable<TraitSelectorValuePlural>;
+        damageType: (keyof DamageTypes | string)[];
         formula: string;
         subTarget:
             | 'hasteAttack'
@@ -1856,7 +1852,7 @@ declare global {
             | '' // size
             | undefined; // no subtarget for 'size'
         target: 'attack' | 'damage' | 'effect' | 'misc' | 'size';
-        type: Nullable<BonusTypes | DamageTypes | string>;
+        type: GenericDamageType;
         _id: string;
     }
     /** Includes fields that are prepped when showing the action sheet */
@@ -1889,7 +1885,7 @@ declare global {
         constructor(any);
         static get defaultData(): {
             critical: '';
-            damageType: ItemAction['defaultDamageType'];
+            damageType: string[];
             formula: '';
             subTarget: '';
             target: '';
@@ -2043,6 +2039,14 @@ declare global {
         id: string;
     }
 
+    interface ActionDamageSource {
+        flavor: string;
+        formula: string;
+        modifier: unknown;
+        type: unknown;
+        value: string | number;
+    }
+
     class DamageTypes {
         untyped: 'Untyped';
         slashing: 'Slashing';
@@ -2056,11 +2060,17 @@ declare global {
         force: 'Force';
         negative: 'Negative';
         positive: 'Positive';
+        areaOfEffect: 'Area of Effect';
         precision: 'Precision';
         nonlethal: 'Nonlethal';
     }
 
     interface pf1 {
+        models: {
+            action: {
+                DamagePartModel: typeof DamagePartModel;
+            };
+        };
         dice: {
             DamageRoll: typeof DamageRoll;
             D20RollPF: typeof D20RollPF;
@@ -2081,7 +2091,7 @@ declare global {
                 new (
                     object: { id: string; update({ [dataPath]: object }) },
                     dataPath: string,
-                    data: TraitSelectorValuePlural,
+                    data: ItemConditionalModifierSourceData['damageType'],
                     options = {}
                 ): DamageTypeSelector;
             };
@@ -2094,6 +2104,7 @@ declare global {
             ItemScriptCall: typeof ItemScriptCall;
         };
         config: {
+            abilityDamageHeldMultipliers: { oh: 0.5; '1h': 1; '2h': 1.5 };
             backgroundOnlySkills: (keyof typeof pf1.config.skills)[];
             conditions: Conditions;
             conditionalTargets: {
@@ -2233,7 +2244,12 @@ declare global {
         };
         utils: {
             formula: {
-                simplify(formula: string, rollData?: RollData): string;
+                compress(arg0: string): string;
+                simplify(
+                    formula: string,
+                    rollData?: RollData,
+                    options?: { strict?: boolean }
+                ): string;
             };
             getDistanceSystem(): 'metric' | 'imperial';
             createTag(name: string): string;

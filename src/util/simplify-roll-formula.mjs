@@ -1,4 +1,4 @@
-// @ts-nocheck
+//// @ts-nocheck
 /** copied from 5e */
 
 import { api } from './api.mjs';
@@ -32,7 +32,7 @@ export function simplifyRollFormula(formula, { preserveFlavor = false, determini
             const deterministic = term.isDeterministic;
             if (deterministic) terms.unshift(term);
             term = roll.terms[--i];
-            while (term instanceof OperatorTerm) {
+            while (term instanceof foundry.dice.terms.OperatorTerm) {
                 if (deterministic) terms.unshift(term);
                 term = roll.terms[--i];
             }
@@ -82,10 +82,10 @@ function _simplifyOperatorTerms(terms) {
         if (ops.has(undefined)) acc.push(term);
 
         // Replace consecutive "+ -" operators with a "-" operator.
-        else if ((ops.has("+")) && (ops.has("-"))) acc.splice(-1, 1, new OperatorTerm({ operator: "-" }));
+        else if ((ops.has("+")) && (ops.has("-"))) acc.splice(-1, 1, new foundry.dice.terms.OperatorTerm({ operator: "-" }));
 
         // Replace double "-" operators with a "+" operator.
-        else if ((ops.has("-")) && (ops.size === 1)) acc.splice(-1, 1, new OperatorTerm({ operator: "+" }));
+        else if ((ops.has("-")) && (ops.size === 1)) acc.splice(-1, 1, new foundry.dice.terms.OperatorTerm({ operator: "+" }));
 
         // Don't include "+" operators that directly follow "+", "*", or "/". Otherwise, add the term as is.
         else if (!ops.has("+")) acc.push(term);
@@ -111,8 +111,8 @@ function _simplifyNumericTerms(terms) {
         if (staticBonus === 0) return [...annotated];
 
         // If the staticBonus is greater than 0, add a "+" operator so the formula remains valid.
-        if (staticBonus > 0) simplified.push(new OperatorTerm({ operator: "+" }));
-        simplified.push(new NumericTerm({ number: staticBonus }));
+        if (staticBonus > 0) simplified.push(new foundry.dice.terms.OperatorTerm({ operator: "+" }));
+        simplified.push(new foundry.dice.terms.NumericTerm({ number: staticBonus }));
     }
     return [...simplified, ...annotated];
 }
@@ -129,7 +129,7 @@ function _simplifyDiceTerms(terms) {
 
     // Split the unannotated terms into different die sizes and signs
     const diceQuantities = unannotated.reduce((obj, curr, i) => {
-        if (curr instanceof OperatorTerm) return obj;
+        if (curr instanceof foundry.dice.terms.OperatorTerm) return obj;
         const face = curr.constructor?.name === "Coin" ? "c" : curr.faces;
         const key = `${unannotated[i - 1].operator}${face}`;
         obj[key] = (obj[key] ?? 0) + curr.number;
@@ -138,7 +138,7 @@ function _simplifyDiceTerms(terms) {
 
     // Add new die and operator terms to simplified for each die size and sign
     const simplified = Object.entries(diceQuantities).flatMap(([key, number]) => ([
-        new OperatorTerm({ operator: key.charAt(0) }),
+        new foundry.dice.terms.OperatorTerm({ operator: key.charAt(0) }),
         key.slice(1) === "c"
             ? new Coin({ number: number })
             : new Die({ number, faces: parseInt(key.slice(1)) })
@@ -155,8 +155,8 @@ function _simplifyDiceTerms(terms) {
  */
 function _expandParentheticalTerms(terms) {
     terms = terms.reduce((acc, term) => {
-        if (term instanceof ParentheticalTerm) {
-            if (term.isDeterministic) term = new NumericTerm({ number: Roll.safeEval(term.term) });
+        if (term instanceof foundry.dice.terms.ParentheticalTerm) {
+            if (term.isDeterministic) term = new foundry.dice.terms.NumericTerm({ number: Roll.safeEval(term.term) });
             else {
                 const subterms = new Roll(term.term).terms;
                 term = _expandParentheticalTerms(subterms);
@@ -178,12 +178,12 @@ function _expandParentheticalTerms(terms) {
  */
 function _groupTermsByType(terms) {
     // Add an initial operator so that terms can be rearranged arbitrarily.
-    if (!(terms[0] instanceof OperatorTerm)) terms.unshift(new OperatorTerm({ operator: "+" }));
+    if (!(terms[0] instanceof foundry.dice.terms.OperatorTerm)) terms.unshift(new foundry.dice.terms.OperatorTerm({ operator: "+" }));
 
     return terms.reduce((obj, term, i) => {
         let type;
-        if (term instanceof DiceTerm) type = DiceTerm;
-        else if ((term instanceof MathTerm) && (term.isDeterministic)) type = NumericTerm;
+        if (term instanceof foundry.dice.terms.DiceTerm) type = foundry.dice.terms.DiceTerm;
+        else if ((term instanceof foundry.dice.terms.FunctionTerm) && (term.isDeterministic)) type = foundry.dice.terms.NumericTerm;
         else type = term.constructor;
         const key = `${type.name.charAt(0).toLowerCase()}${type.name.substring(1)}s`;
 
@@ -202,7 +202,7 @@ function _groupTermsByType(terms) {
  */
 function _separateAnnotatedTerms(terms) {
     return terms.reduce((obj, curr, i) => {
-        if (curr instanceof OperatorTerm) return obj;
+        if (curr instanceof foundry.dice.terms.OperatorTerm) return obj;
         obj[curr.flavor ? "annotated" : "unannotated"].push(terms[i - 1], curr);
         return obj;
     }, { annotated: [], unannotated: [] });
@@ -240,7 +240,7 @@ export const compress = (formula) =>
  * @param {AnyTerm} t
  * @returns {boolean}
  */
-const isSimpleTerm = (t) => t instanceof NumericTerm || t?.simple || false;
+const isSimpleTerm = (t) => t instanceof foundry.dice.terms.NumericTerm || t?.simple || false;
 
 class FormulaPart {
     /** @type {AnyChunk[]} */
@@ -268,13 +268,13 @@ class FormulaPart {
             .join("");
 
         const roll = Roll.create(f);
-        if (roll.isDeterministic) return roll.evaluate({ async: false }).total.toString();
+        if (roll.isDeterministic) return roll.evaluateSync().total.toString();
         else return f;
     }
 
     get total() {
         const roll = Roll.create(this.formula);
-        roll.evaluate({ async: false });
+        roll.evaluateSync({ forceSync: true });
         return roll.total;
     }
 }
@@ -288,11 +288,11 @@ function negativeTerms(terms) {
     const nterms = [];
     while (terms.length) {
         const term = terms.shift();
-        if (term instanceof OperatorTerm && term.operator === "-") {
+        if (term instanceof foundry.dice.terms.OperatorTerm && term.operator === "-") {
             // Add preceding + if operators are fully consumed
-            if (!(nterms.at(-1) instanceof OperatorTerm)) {
-                const nt = new OperatorTerm({ operator: "+" });
-                nt.evaluate({ async: false });
+            if (!(nterms.at(-1) instanceof foundry.dice.terms.OperatorTerm)) {
+                const nt = new foundry.dice.terms.OperatorTerm({ operator: "+" });
+                nt.evaluate({ forceSync: true });
                 nterms.push(nt);
             }
             nterms.push(new FormulaPart([term, terms.shift()], true));
@@ -337,7 +337,7 @@ function triTermOps(terms, operators, { preserveFlavor, simpleOnly = false }) {
     const eterms = [];
     while (terms.length) {
         const term = terms.shift();
-        if (term instanceof OperatorTerm && operators.includes(term.operator)) {
+        if (term instanceof foundry.dice.terms.OperatorTerm && operators.includes(term.operator)) {
             // Only combine simple terms
             if (simpleOnly && !(isSimpleTerm(eterms.at(-1)) && isSimpleTerm(terms[0]))) {
                 // Fall through
@@ -397,7 +397,7 @@ class TernaryTerm {
     }
 
     get total() {
-        return Roll.create(this.formula).evaluate({ async: false }).total;
+        return Roll.create(this.formula).evaluate({ forceSync: true }).total;
     }
 }
 
@@ -411,12 +411,12 @@ function ternaryTerms(terms) {
     const tterms = [];
     while (terms.length) {
         let term = terms.shift();
-        if (term instanceof OperatorTerm && term.operator === "?") {
+        if (term instanceof foundry.dice.terms.OperatorTerm && term.operator === "?") {
             const cond = tterms.pop();
             const ifTrue = [];
             while (terms.length) {
                 term = terms.shift();
-                const endTern = term instanceof OperatorTerm && term.operator === ":";
+                const endTern = term instanceof foundry.dice.terms.OperatorTerm && term.operator === ":";
                 if (endTern) break;
                 ifTrue.push(term);
             }
@@ -446,7 +446,7 @@ export function simplify(formula, rollData = {}, { strict = true, preserveFlavor
     formula = Roll.defaultImplementation
         .parse(formula)
         .map((t) => {
-            if (t instanceof ParentheticalTerm) {
+            if (t instanceof foundry.dice.terms.ParentheticalTerm) {
                 t.evaluate();
                 const v = t.total;
                 return v >= 0 ? `${t.total}` : `(${t.total})`;
@@ -460,13 +460,13 @@ export function simplify(formula, rollData = {}, { strict = true, preserveFlavor
     // Evaluate
     // TODO: v12 this needs to call .evaluateSync()
     try {
-        roll.evaluate({ async: false, minimize: true });
+        roll.evaluate({ minimize: true });
     } catch (err) {
         if (strict) throw err;
         else return compress(formula);
     }
     // Old evaluation, fails with parenthetical terms followed by d6 or the like
-    //terms.forEach((term) => term.evaluate({ async: false, minimize: true }));
+    //terms.forEach((term) => term.evaluate({ minimize: true }));
     let terms = roll.terms;
 
     // Negatives (combine - with the following term)

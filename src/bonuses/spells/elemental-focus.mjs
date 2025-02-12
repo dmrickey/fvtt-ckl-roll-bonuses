@@ -3,6 +3,7 @@ import { keyValueSelect } from "../../handlebars-handlers/bonus-inputs/key-value
 import { api } from '../../util/api.mjs';
 import { intersects } from "../../util/array-intersects.mjs";
 import { getCachedBonuses } from '../../util/get-cached-bonuses.mjs';
+import { getActionDamageTypes } from '../../util/get-damage-types.mjs';
 import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize, localizeBonusLabel, localizeBonusTooltip } from "../../util/localize.mjs";
@@ -69,16 +70,6 @@ const getFocusedElements = (actor, key) =>
         .flatMap(x => x.getFlag(MODULE_NAME, key))
         .filter(truthiness)
     );
-
-/**
- *
- * @param {ItemAction} action
- * @returns {string[]}
- */
-const getActionDamageTypes = (action) => uniqueArray(action.data.damage.parts
-    .map(({ type }) => type)
-    .flatMap(({ custom, values }) => ([...custom.split(';').map(x => x.trim()), ...values]))
-    .filter(truthiness));
 
 // add Info to chat card
 Hooks.on(customGlobalHooks.itemGetTypeChatData, (

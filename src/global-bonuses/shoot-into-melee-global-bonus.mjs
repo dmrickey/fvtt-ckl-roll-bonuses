@@ -43,7 +43,7 @@ export class ShootIntoMeleeGlobalBonus extends BaseGlobalBonus {
             return;
         }
 
-        const isRanged = rangedTypes.includes(action.data.actionType);
+        const isRanged = rangedTypes.includes(action.actionType);
         if (!isRanged) {
             return;
         }

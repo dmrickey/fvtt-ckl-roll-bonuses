@@ -141,13 +141,14 @@ export function conditionalAttackTooltipModSource(conditional, modifier) {
 }
 
 /**
- * @param {Nullable<TraitSelectorValuePlural>} types
+ * @param {string[] | Set<string>} types
  * @returns {string}
  */
-export function damagesTypeToString(types) {
+export function damageTypesToString(types) {
     if (!types) return '';
+    types = [...types];
 
-    if (!types.custom?.trim() && !types.values?.length) {
+    if (!types.length) {
         const untyped = pf1.registry.damageTypes.get('untyped')?.name;
         if (!untyped) {
             throw new Error("There's no `untyped` damage type in the pf1 config.");
@@ -155,13 +156,8 @@ export function damagesTypeToString(types) {
         return untyped;
     }
 
-    const valueLookup = ( /** @type {DamageType['id']} */ t) => pf1.registry.damageTypes.getLabels()[t] || t;
-    /**
-     * @param {TraitSelectorValuePlural} t
-     */
-    // @ts-ignore
-    const typeToString = (t) => `${t.custom?.trim() ? `${t.custom.trim()}, ` : ''}${t.values.map(valueLookup).join(', ')}`;
-    return typeToString(types);
+    const valueLookup = ( /** @type {string} */ t) => pf1.registry.damageTypes.getLabels()[t] || t;
+    return types.map(valueLookup).join(', ');
 }
 
 /**
@@ -173,7 +169,7 @@ export function damagesTypeToString(types) {
  */
 export const loadConditionals = (item, key, { useCachedFormula = false } = {}) => {
     /** @type {ItemConditionalSourceData[]} */
-    const flags = deepClone(item.getFlag(MODULE_NAME, key) || []);
+    const flags = foundry.utils.deepClone(item.getFlag(MODULE_NAME, key) || []);
 
     flags.forEach((c) => {
         if (!c.name) c.name = item.name;
@@ -185,7 +181,7 @@ export const loadConditionals = (item, key, { useCachedFormula = false } = {}) =
                 }
             }
             if (m.target === 'damage') {
-                m.type = damagesTypeToString(m.damageType)
+                m.type = damageTypesToString(m.damageType)
             }
         });
     });

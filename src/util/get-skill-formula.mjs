@@ -4,9 +4,12 @@
  * @param {ActorPF} actor
  * @param {RollData} rollData
  * @param {keyof typeof pf1.config.skills} skillId
+ * @param {object} [options]
+ * @param {boolean} [options.includeD20]
  */
-export const getSkillFormula = (actor, rollData, skillId) => {
-
+export const getSkillFormula = (actor, rollData, skillId, {
+    includeD20 = false,
+} = {}) => {
     const skillIdParts = skillId.split(".");
     const mainSkillId = skillIdParts[0],
         subSkillId = skillIdParts.length > 1 ? skillIdParts.at(-1) : null;
@@ -77,7 +80,7 @@ export const getSkillFormula = (actor, rollData, skillId) => {
     //
     //     const token = options.token ?? actor.token;
 
-    const formula = ['1d20', ...parts].join("+");
-    const roll = new pf1.dice.D20RollPF(formula, rollData, { async: false });
+    const formula = ['1d20', ...parts].slice(includeD20 ? 0 : 1).join("+");
+    const roll = new pf1.dice.D20RollPF(formula, rollData);
     return roll.formula;
 }

@@ -96,7 +96,7 @@ export class CritBonus extends BaseBonus {
                 : current;
 
             range -= offset;
-            range = Math.clamped(range, 2, 20);
+            range = Math.clamp(range, 2, 20);
             return range;
         }
         LocalHookHandler.registerHandler(localHooks.itemActionCritRangeWrapper, handleItemActionCritRangeWrapper);
@@ -134,7 +134,7 @@ export class CritBonus extends BaseBonus {
                 ? current * 2 - 21
                 : current;
             range -= offset;
-            range = Math.clamped(range, 2, 20);
+            range = Math.clamp(range, 2, 20);
             rollData.action.ability.critRange = isBroken ? 20 : range;
         };
         LocalHookHandler.registerHandler(localHooks.updateItemActionRollData, updateItemActionRollData);
@@ -147,8 +147,8 @@ export class CritBonus extends BaseBonus {
 
             let hasKeen = false;
             let offset = 0;
-            const currentRange = action.data.ability.critRange || 20;
-            let mult = action.data.ability?.critMult || 2;
+            const currentRange = action.ability.critRange || 20;
+            let mult = action.ability?.critMult || 2;
 
             /** @type {string[]} */
             const sources = [];
@@ -168,12 +168,12 @@ export class CritBonus extends BaseBonus {
                 ? currentRange * 2 - 21
                 : currentRange;
             range -= offset;
-            range = Math.clamped(range, 2, 20);
+            range = Math.clamp(range, 2, 20);
             range = isBroken ? 20 : range;
             mult = isBroken ? 2 : mult;
 
-            if (mult === action.data.ability.critMult
-                && range === action.data.ability.critRange
+            if (mult === action.ability.critMult
+                && range === action.ability.critRange
             ) return;
 
             const rangeFormat = range === 20 ? '20' : `${range}-20`;
@@ -187,7 +187,7 @@ export class CritBonus extends BaseBonus {
          * @param {string[]} notes
          */
         function addFootnotes({ action }, notes) {
-            if (!action?.data?.ability) {
+            if (!action?.ability) {
                 return;
             }
 
@@ -196,7 +196,7 @@ export class CritBonus extends BaseBonus {
 
             let hasKeen = false;
             let offset = 0;
-            const originalMult = +action.data.ability.critMult || 2;
+            const originalMult = +(action.ability.critMult || 2) || 2;
             let mult = originalMult;
 
             handleBonusTypeFor(
@@ -211,12 +211,12 @@ export class CritBonus extends BaseBonus {
 
             mult = isBroken ? 2 : mult;
 
-            const originalRange = action.data.ability.critRange || 20;
+            const originalRange = action.ability.critRange || 20;
             let range = hasKeen
                 ? originalRange * 2 - 21
                 : originalRange;
             range -= offset;
-            range = Math.clamped(range, 2, 20);
+            range = Math.clamp(range, 2, 20);
             range = isBroken ? 20 : range;
 
             if (mult !== originalMult || range !== originalRange) {
@@ -254,9 +254,9 @@ export class CritBonus extends BaseBonus {
         /** @type {number} */ let originalCritMult;
         /** @type {number} */ let originalCritRange;
         /** @type {boolean} */ let isBroken;
-        if (itemAction && itemAction.data.ability?.critMult > 1) {
-            originalCritMult = +(itemAction.data.ability?.critMult) || 2;
-            originalCritRange = itemAction.data.ability?.critRange || 20;
+        if (itemAction && (itemAction.ability?.critMult || 1) > 1) {
+            originalCritMult = +(itemAction.ability?.critMult || 1) || 2;
+            originalCritRange = itemAction.ability?.critRange || 20;
             isBroken = source.system.broken;
         } else {
             originalCritMult = 2;
@@ -283,7 +283,7 @@ export class CritBonus extends BaseBonus {
             const value = FormulaCacheHelper.getModuleFlagValue(source, this.#critMultKey);
 
             range -= value;
-            range = Math.clamped(range, 2, 20);
+            range = Math.clamp(range, 2, 20);
             return range;
         }
 

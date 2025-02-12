@@ -36,7 +36,7 @@ export class RangedIncrementPenaltyGlobalBonus extends BaseGlobalBonus {
             return;
         }
 
-        const isRangedAttack = rangedTypes.includes(action.data.actionType);
+        const isRangedAttack = rangedTypes.includes(action.actionType);
         if (!isRangedAttack) {
             return;
         }
@@ -142,7 +142,7 @@ export class RangedIncrementPenaltyGlobalBonus extends BaseGlobalBonus {
             const args = {
                 distance: distance.toFixed(1),
                 max: maxIncrements * range,
-                units: actionUse.action.data.range.units
+                units: actionUse.action.range.units
             };
             ui.notifications.warn(RangedIncrementPenaltyGlobalBonus._warning(message, args));
             return;
@@ -152,7 +152,7 @@ export class RangedIncrementPenaltyGlobalBonus extends BaseGlobalBonus {
         if (total < 0) {
             const args = {
                 range: distance.toFixed(1),
-                units: actionUse.action.data.range.units,
+                units: actionUse.action.range.units,
             };
             shared.attackBonus.push(`${total}[${RangedIncrementPenaltyGlobalBonus._attackLabel(RangedIncrementPenaltyGlobalBonus.bonusKey, args)}]`);
         }

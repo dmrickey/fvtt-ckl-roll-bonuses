@@ -2,12 +2,14 @@ import { MODULE_NAME } from "../../consts.mjs";
 import { damageInput } from "../../handlebars-handlers/targeted/bonuses/damage.mjs";
 import { handleBonusTypeFor } from '../../target-and-bonus-join.mjs';
 import { changeTypeLabel } from '../../util/change-type-label.mjs';
-import { conditionalModToItemChangeForDamageTooltip, createChange, damagesTypeToString } from "../../util/conditional-helpers.mjs";
+import { conditionalModToItemChangeForDamageTooltip, createChange, damageTypesToString } from "../../util/conditional-helpers.mjs";
 import { LocalHookHandler, localHooks } from "../../util/hooks.mjs";
 import { localize } from "../../util/localize.mjs";
 import { signed } from '../../util/to-signed-string.mjs';
 import { truthiness } from "../../util/truthiness.mjs";
 import { BaseBonus } from "./_base-bonus.mjs";
+
+
 
 /** @extends BaseBonus */
 export class DamageBonus extends BaseBonus {
@@ -67,11 +69,11 @@ export class DamageBonus extends BaseBonus {
 
         /**
          *
-         * @param {TraitSelectorValuePlural} types
+         * @param {string[] | Set<string>} types
          * @returns
          */
         const typeLabel = (types) => {
-            const label = damagesTypeToString(types);
+            const label = damageTypesToString(types);
             return `[${label}]`;
         }
 
@@ -83,17 +85,17 @@ export class DamageBonus extends BaseBonus {
 
         const damageHints = damages
             .filter((d) => !!d.formula?.trim())
-            .map(({ formula, type, crit }) => ({
-                type,
+            .map(({ formula, types, crit }) => ({
+                types,
                 crit,
                 formula: (() => {
                     const roll = RollPF.create(formula);
                     return roll.isDeterministic
-                        ? signed(roll.evaluate({ async: false }).total)
+                        ? signed(roll.evaluateSync().total)
                         : `(${formula})`;
                 })(),
             }))
-            .map((d) => `${d.formula}${typeLabel(d.type)}${critLabel(d.crit)}`);
+            .map((d) => `${d.formula}${typeLabel(d.types)}${critLabel(d.crit)}`);
 
         /**
          * @param {string | number} value
@@ -210,11 +212,11 @@ export class DamageBonus extends BaseBonus {
             modifiers: damageBonuses?.map( /** @return {ItemConditionalModifierSourceData} */(bonus) => ({
                 _id: foundry.utils.randomID(),
                 critical: bonus.crit || 'normal', // normal | crit | nonCrit
-                damageType: bonus.type,
+                damageType: [...bonus.types],
                 formula: bonus.formula,
                 subTarget: 'allDamage',
                 target: 'damage',
-                type: damagesTypeToString(bonus.type),
+                type: damageTypesToString(bonus.types),
             })) ?? [],
         };
     }

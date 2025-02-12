@@ -1,7 +1,7 @@
 import { api } from './api.mjs';
 
 /** @type {ActionTypeFilterFunc} */
-export const isMelee = (_item, action) => ['mwak', 'msak', 'mcman'].includes(action?.data.actionType ?? '');
+export const isMelee = (_item, action) => ['mwak', 'msak', 'mcman'].includes(action?.actionType ?? '');
 
 /** @type {ActionTypeFilterFunc} */
 export const isNatural = (item) => {
@@ -13,7 +13,7 @@ export const isNatural = (item) => {
 /** @type {ActionTypeFilterFunc} */
 export const isNaturalSecondary = (item, action, actionUse) => {
     const _isNatural = isNatural(item);
-    const isPrimary = action?.data.naturalAttack.primaryAttack;
+    const isPrimary = !!action?.naturalAttack.primary;
     return _isNatural && !isPrimary;
 }
 
@@ -21,19 +21,19 @@ export const isNaturalSecondary = (item, action, actionUse) => {
 export const isPhysical = (item, action) => !!item?.isPhysical;
 
 /**@type {ActionTypeFilterFunc}*/
-export const isRanged = (_item, action) => ['rcman', 'rwak', 'rsak', 'twak'].includes(action?.data.actionType ?? '');
+export const isRanged = (_item, action) => ['rcman', 'rwak', 'rsak', 'twak'].includes(action?.actionType ?? '');
 
 /** @type {ActionTypeFilterFunc} */
 export const isSpell = (item, action) => {
     const isSpell = item instanceof pf1.documents.item.ItemSpellPF;
-    return isSpell || ['msak', 'rsak', 'spellsave'].includes(action?.data.actionType ?? '');
+    return isSpell || ['msak', 'rsak', 'spellsave'].includes(action?.actionType ?? '');
 }
 
 /**@type {ActionTypeFilterFunc}*/
-export const isThrown = (_item, action) => action?.data.actionType === 'twak';
+export const isThrown = (_item, action) => action?.actionType === 'twak';
 
 /**@type {ActionTypeFilterFunc}*/
-export const isWeapon = (item, action) => ['mwak', 'rwak', 'twak'].includes(action?.data.actionType ?? '') || isNatural(item);
+export const isWeapon = (item, action) => ['mwak', 'rwak', 'twak'].includes(action?.actionType ?? '') || isNatural(item);
 
 api.utils.actionTypeHelpers = {
     isMelee,

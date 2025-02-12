@@ -3,6 +3,7 @@ import { api } from '../../../util/api.mjs';
 import { createTemplate, templates } from "../../templates.mjs";
 import { addNodeToRollBonus } from "../../add-bonus-to-item-sheet.mjs";
 import { localize, localizeBonusLabel, localizeBonusTooltip } from "../../../util/localize.mjs";
+import { uniqueArray } from '../../../util/unique-array.mjs';
 
 /**
  * @param {object} args
@@ -40,7 +41,8 @@ export function damageInput({
 
     /** @type {DamageInputModel[]} */
     const parts = item.getFlag(MODULE_NAME, key) ?? [];
-    const partsLabels = parts.map((part) => part.type.values.map((x) => damageTypes[x].name).join('; ') + (part.type.custom ? `; ${part.type.custom}` : ''));
+    const types = uniqueArray(parts.flatMap((part) => [...part.types]));
+    const partsLabels = types.map(type => damageTypes[type]?.name || type).join(';');
 
     /** @type {{ formula: string, type: BonusTypes}[]} */
     let changes = [];
@@ -98,7 +100,7 @@ export function damageInput({
                 /** @type {HTMLDataListElement | null} */
                 const li = a.closest(".damage-part");
                 if (!li) return;
-                const clonedParts = deepClone(parts);
+                const clonedParts = foundry.utils.deepClone(parts);
                 clonedParts.splice(Number(li.dataset.damagePart), 1);
                 await item.setFlag(MODULE_NAME, key, clonedParts);
                 return;
@@ -127,7 +129,7 @@ export function damageInput({
                     const li = a.closest(".damage-part");
                     const index = li?.dataset.changeIndex;
                     if (!index) return;
-                    const clonedChanges = deepClone(changes);
+                    const clonedChanges = foundry.utils.deepClone(changes);
                     clonedChanges.splice(Number(index), 1);
                     await item.setFlag(MODULE_NAME, changeKey, clonedChanges);
                     return;

@@ -3,6 +3,7 @@ import { textInputAndKeyValueSelect } from "../../handlebars-handlers/bonus-inpu
 import { intersection } from "../../util/array-intersects.mjs";
 import { FormulaCacheHelper } from "../../util/flag-helpers.mjs";
 import { getCachedBonuses } from '../../util/get-cached-bonuses.mjs';
+import { getActionDamageTypes } from '../../util/get-damage-types.mjs';
 import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize, localizeBonusLabel } from "../../util/localize.mjs";
@@ -83,11 +84,7 @@ export function createElementalClOrDc(t) {
             return;
         }
 
-        const damageTypes = action.data.damage.parts
-            .map(({ type }) => type)
-            .flatMap(({ custom, values }) => ([...custom.split(';').map(x => x.trim()), ...values]))
-            .filter(truthiness)
-            .map((x) => x.toLowerCase());
+        const damageTypes = getActionDamageTypes(action);
         const types = getSpellDescriptors(item);
         const domains = Object.keys(item.learnedAt?.domain || []).map((x) => x.toLowerCase());
 

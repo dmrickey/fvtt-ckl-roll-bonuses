@@ -39,7 +39,7 @@ registerItemHint((hintcls, _actor, item, _data) => {
 const getFormulaMax = (formula, rollData) => {
     const mods = formula.substring(formula.indexOf(' ') + 1);
     const safeFormula = `0 + ${mods}`;
-    const roll = new pf1.dice.D20RollPF(safeFormula, rollData, { skipDialog: true }).evaluate({ maximize: true, async: false });
+    const roll = new pf1.dice.D20RollPF(safeFormula, rollData, { skipDialog: true }).evaluateSync({ maximize: true });
     const max = roll.total;
     return max;
 }
@@ -54,6 +54,12 @@ const isSnakeSideWindCrit = (chatAttack) => {
         return;
     }
 
+    // TODO check if this action is `Unarmed Strike`
+    // TODO add item warning if no `Unarmed Strike` detected on this actor
+    // if (!isUnarmed) {
+    //     return;
+    // }
+
     const { critConfirm } = chatAttack;
     if (!critConfirm) {
         return;
@@ -67,7 +73,7 @@ const isSnakeSideWindCrit = (chatAttack) => {
     const maxAttack = getFormulaMax(critConfirm.simplifiedFormula, chatAttack.rollData);
 
     const skillFormula = getSkillFormula(actor, chatAttack.rollData, 'sen');
-    const skillMax = getFormulaMax(skillFormula, chatAttack.rollData);
+    const skillMax = getFormulaMax('1d20 + ' + skillFormula, chatAttack.rollData);
 
     if (skillMax >= maxAttack) {
         return skillFormula;
@@ -89,8 +95,12 @@ const chatAttackAddAttack = async (chatAttack, args) => {
     }
 
     const formula = isSnakeSideWindCrit(chatAttack)
-    if (formula) {
-        chatAttack.critConfirm = new pf1.dice.D20RollPF(formula, chatAttack.rollData, { skipDialog: true }).evaluate({ async: false });
+    if (formula && chatAttack.critConfirm) {
+        // TODO find proper index
+        const index = chatAttack.critConfirm.terms.findIndex(x => x);
+        // TODO try to swap out the confirm attack roll instead of re-rolling
+        // see here https://discord.com/channels/170995199584108546/722559135371231352/1331699422563668090
+        chatAttack.critConfirm = new pf1.dice.D20RollPF(formula, chatAttack.rollData, { skipDialog: true }).evaluateSync({ forceSync: true });
     }
 }
 LocalHookHandler.registerHandler(localHooks.chatAttackAddAttack, chatAttackAddAttack);

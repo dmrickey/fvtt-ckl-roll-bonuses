@@ -135,7 +135,7 @@ declare global {
 
     type Nullable<T> = T | null | undefined;
 
-    declare type DamageInputModel = DamagePart & {
+    declare type DamageInputModel = DamagePartModelData & {
         crit: Nullable<'crit' | 'nonCrit' | 'normal'>;
     };
 

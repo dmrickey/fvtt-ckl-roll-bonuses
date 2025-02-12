@@ -7,7 +7,6 @@ declare global {
     let RollPF: typeof RollPF;
     interface RollPF extends RollPF {}
     let pf1: pf1;
-    function deepClone<T>(arg0: T): T;
 
     function mergeObject<
         T extends object,
