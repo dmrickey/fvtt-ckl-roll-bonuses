@@ -11,7 +11,7 @@ import { truthiness } from "./truthiness.mjs";
  * @param {string} key
  * @returns {any[]}
  */
-const getDocFlags = (doc, key) => {
+export const getDocFlags = (doc, key) => {
     // if doc is an actor
     if (doc instanceof pf1.documents.actor.ActorPF) {
         const flags = doc.items
@@ -27,10 +27,6 @@ const getDocFlags = (doc, key) => {
     }
 
     return [];
-}
-
-export {
-    getDocFlags,
 }
 
 api.utils.getDocFlags = getDocFlags;
