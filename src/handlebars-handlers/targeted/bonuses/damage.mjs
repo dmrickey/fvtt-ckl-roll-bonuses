@@ -35,14 +35,19 @@ export function damageInput({
     };
 
     const hasChanges = !!changeKey;
-    const damageTypes = pf1.registry.damageTypes.toObject();
+    // const damageTypes = pf1.registry.damageTypes.toObject();
     const label = localizeBonusLabel(key);
     tooltip ||= localizeBonusTooltip(key);
 
     /** @type {DamageInputModel[]} */
-    const parts = item.getFlag(MODULE_NAME, key) ?? [];
-    const types = uniqueArray(parts.flatMap((part) => [...part.types]));
-    const partsLabels = types.map(type => damageTypes[type]?.name || type).join(';');
+    const savedParts = item.getFlag(MODULE_NAME, key) ?? [];
+    const typedParts = savedParts.map((p) => {
+        /** @type { DamagePartModel & { crit?: Nullable<string>, label?: string } } */
+        const part = new pf1.models.action.DamagePartModel({ ...p });
+        part.crit = p.crit;
+        part.label = part.names.join('; ');
+        return part;
+    });
 
     /** @type {{ formula: string, type: BonusTypes}[]} */
     let changes = [];
@@ -54,15 +59,13 @@ export function damageInput({
         bonusTypes: pf1.config.bonusTypes,
         changes,
         critChoices,
-        damageTypes,
         hasChanges,
         item,
         journal,
         label,
-        parts,
-        partsLabels,
         readonly: !canEdit,
         tooltip,
+        typedParts,
     };
 
     const div = createTemplate(
@@ -77,37 +80,35 @@ export function damageInput({
             const a = /** @type {HTMLElement} */ (event.currentTarget);
             if (!a) return;
 
-            // Add new damage component
+            // Add new effect damage
             if (a.classList.contains("add-damage")) {
-                // Get initial data
-                /** @type {TraitSelectorValuePlural} */
-                const damageTypeBase = pf1.components.ItemAction.defaultDamageType;
+                var defaultDamage = new pf1.models.action.DamagePartModel().toObject(true, false);
                 /** @type {DamageInputModel} */
                 const initialData = {
-                    formula: "",
-                    type: damageTypeBase,
+                    formula: defaultDamage.formula || '',
+                    types: defaultDamage.types,
                     crit: 'normal',
                 };
 
                 // Add data
-                parts.push(initialData);
-                await item.setFlag(MODULE_NAME, key, parts);
+                savedParts.push(initialData);
+                await item.setFlag(MODULE_NAME, key, savedParts);
                 return;
             }
 
-            // Remove a damage component
+            // Remove a specific effect damage
             if (a.classList.contains("delete-damage")) {
                 /** @type {HTMLDataListElement | null} */
                 const li = a.closest(".damage-part");
                 if (!li) return;
-                const clonedParts = foundry.utils.deepClone(parts);
+                const clonedParts = foundry.utils.deepClone(savedParts);
                 clonedParts.splice(Number(li.dataset.damagePart), 1);
                 await item.setFlag(MODULE_NAME, key, clonedParts);
                 return;
             }
 
             if (hasChanges) {
-                // Add new damage component
+                // Add change damage
                 if (a.classList.contains("add-change")) {
                     // Get initial data
                     /** @type {BonusTypes} */
@@ -123,7 +124,7 @@ export function damageInput({
                     return;
                 }
 
-                // Remove a damage component
+                // Remove specific change damage
                 if (a.classList.contains("delete-change")) {
                     /** @type {HTMLDataListElement | null} */
                     const li = a.closest(".damage-part");
@@ -147,20 +148,21 @@ export function damageInput({
 
             const damageIndex = data?.dataset.damagePart;
             if (damageIndex !== null && damageIndex !== undefined) {
-                const path = `${damageIndex}.type`;
+                const path = `${damageIndex}.types`;
 
                 /**
                  * @param {{ [key: string]: object }} arg
                  */
-                async function update(arg) {
-                    setProperty(parts, path, arg[path]);
-                    await item.setFlag(MODULE_NAME, key, parts);
+                async function updateCallback(arg) {
+                    setProperty(savedParts, path, arg);
+                    await item.setFlag(MODULE_NAME, key, savedParts);
                 };
 
                 const app = new pf1.applications.DamageTypeSelector(
-                    { id: key, update },
+                    { id: key },
                     path,
-                    parts[+damageIndex].type,
+                    savedParts[+damageIndex].types,
+                    { updateCallback },
                 );
                 return app.render(true);
             }
@@ -179,8 +181,8 @@ export function damageInput({
             if (damageIndex !== null && damageIndex !== undefined) {
                 const path = `${damageIndex}.formula`;
 
-                setProperty(parts, path, updatedFormula);
-                await item.setFlag(MODULE_NAME, key, parts);
+                setProperty(savedParts, path, updatedFormula);
+                await item.setFlag(MODULE_NAME, key, savedParts);
             }
         });
     });
@@ -197,8 +199,8 @@ export function damageInput({
             if (damageIndex !== null) {
                 const path = `${damageIndex}.crit`;
 
-                setProperty(parts, path, critValue);
-                await item.setFlag(MODULE_NAME, key, parts);
+                setProperty(savedParts, path, critValue);
+                await item.setFlag(MODULE_NAME, key, savedParts);
             }
         });
     });

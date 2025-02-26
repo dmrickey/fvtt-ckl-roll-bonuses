@@ -135,8 +135,10 @@ declare global {
 
     type Nullable<T> = T | null | undefined;
 
-    declare type DamageInputModel = DamagePartModelData & {
+    declare type DamageInputModel = {
         crit: Nullable<'crit' | 'nonCrit' | 'normal'>;
+        formula: string;
+        types: Array<string>;
     };
 
     declare type RecursivePartial<T> = {

@@ -380,7 +380,6 @@ function safeTotal(
     formula,
     data,
 ) {
-    // todo fix typing here
     return (isNaN(+formula) ? RollPF.create(formula + '', data).evaluate({ forceSync: true }).total : +formula) || 0;
 }
 

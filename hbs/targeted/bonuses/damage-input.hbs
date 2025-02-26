@@ -1,7 +1,7 @@
 <div class="damage roll-bonuses">
     <div class="form-group">{{> "modules/ckl-roll-bonuses/hbs/label-partial.hbs"}}</div>
     <ol class="damage-parts form-group tooltip">
-        {{#each parts as |part i| }}
+        {{#each typedParts as |part i| }}
         <li class="damage-part flexrow" data-damage-part="{{i}}">
             <input
                 class="damage-formula formula"
@@ -15,7 +15,7 @@
             <input
                 class="damage-formula formula"
                 type="text"
-                value="{{lookup ../partsLabels i}}"
+                value="{{label}}"
                 readonly
             />
             <input
@@ -25,7 +25,7 @@
                 readonly
             />
             {{else}}
-            {{> "systems/pf1/templates/internal/damage-type-visual.hbs" data=type name="{{i}}.type" damageTypes=@root.damageTypes}}
+            {{> "systems/pf1/templates/internal/damage-type-visual.hbs" damage=this name=label}}
             <select name="crit-selector" class="damage-crit">
                 {{ selectOptions ../critChoices selected=crit }}
             </select>

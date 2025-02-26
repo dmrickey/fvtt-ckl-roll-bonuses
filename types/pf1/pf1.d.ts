@@ -465,7 +465,22 @@ declare global {
 
     type FlagValue = string | number;
     class DamagePartModel extends DamagePartModelData {
+        /**
+         * Copy and transform the DataModel into a plain object.
+         * Draw the values of the extracted object from the data source (by default) otherwise from its transformed values.
+         * @param {boolean} [source=true]     Draw values from the underlying data source rather than transformed values
+         * @param {boolean} [clean=true]      Whether or not to prune default data
+         * @returns {object}                  The extracted primitive object
+         */
+        toObject(
+            arg0: boolean,
+            arg1: boolean
+        ): {
+            formula?: string;
+            types: Array<string>;
+        };
         get custom(): Set<string>;
+        get names(): string[];
         get standard(): Set<unknown>;
 
         constructor(args?: {
@@ -2089,10 +2104,10 @@ declare global {
             };
             DamageTypeSelector: {
                 new (
-                    object: { id: string; update({ [dataPath]: object }) },
+                    object: { id: string },
                     dataPath: string,
                     data: ItemConditionalModifierSourceData['damageType'],
-                    options = {}
+                    options = { updateCallback({ [dataPath]: object }) },
                 ): DamageTypeSelector;
             };
         };
