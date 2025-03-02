@@ -63,9 +63,6 @@ export class DamageBonus extends BaseBonus {
     static getHints(source) {
         const changes = this.#getCachedDamageItemChange(source);
         const damages = this.#getCachedDamageBonuses(source);
-        if (!changes.length || !damages.length) {
-            return;
-        }
 
         /**
          *

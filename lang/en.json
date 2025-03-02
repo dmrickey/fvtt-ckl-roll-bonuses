@@ -175,7 +175,7 @@
                 "enh-stacks": "Modify an attack or weapon's enhancement bonus.",
                 "fates-favored": "Incrase all luck bonuses by 1.",
                 "finesse-bonus": "Use dex for attack rolls instead of strength.",
-                "finesse-override": "Add the finesse weapon property to an Item that doesn't norally have weapon properties.",
+                "finesse-override": "Add the finesse weapon property to an Item that doesn't normally have weapon properties.",
                 "finesse-target": "Activate bonuses for all finesse-able targets. This requires the weapon/attack to have the Finesse weapon property, be in the Natural Attack weapon group, or have the `finesse-override` boolean flag.",
                 "footnote": "Targeted attacks will include this footnote.",
                 "fortune": "Roll twice and take the better. Multiple bonuses stack.",
