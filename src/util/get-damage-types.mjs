@@ -1,3 +1,4 @@
+import { api } from './api.mjs';
 import { truthiness } from './truthiness.mjs';
 import { uniqueArray } from './unique-array.mjs';
 
@@ -30,3 +31,5 @@ const _getActionDamageTypes = (action) => uniqueArray(
         .flatMap(({ types }) => ([...types]))
         .filter(truthiness)
 );
+
+api.utils.getActionDamageTypes = getActionDamageTypes;

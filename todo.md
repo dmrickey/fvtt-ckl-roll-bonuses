@@ -59,8 +59,6 @@
 - [Other Ideas](#other-ideas)
 - [PF1 v11](#pf1-v11)
 - [vnext](#vnext)
-- [v2.18.0](#v2180)
-- [v2.17.x bugs](#v217x-bugs)
 - [pf1 v11 update](#pf1-v11-update)
 
 # TODO
@@ -264,12 +262,12 @@
     - Inspiration "Fortune" 
       - e.g. Empathy Talent, when rolling inspiration for sense motive, roll twice and take the higher
 - Add "ignore me" boolean flag to turn off auto configuration (stronger "hammer" for EitR-type stuff where it incorrectly makes assumptions)
-
-# v2.18.0
-- Move "all targets" documentation out of conditional targets
-- make common "has source compendium id" function and make sure it reads from new place in addition to old
-
-# v2.17.x bugs
-- magic +1 arrows are adding their attack bonus when used with a mw bow
+- Add "self or target" to "has bFlag" just like "has condition" conditional target
 
 # pf1 v11 update
+- make "This item type natively includes this property." more of an error message so it's obvious it's not doing anything
+- Move "all targets" documentation out of conditional targets
+  - And make sure "All" shows up under conditional
+- make common "has source compendium id" function and make sure it reads from new place in addition to old
+- BUG REPORT - magic +1 arrows are adding their attack bonus when used with a mw bow
+- Automatically check high ground on the attack dialog when applicable

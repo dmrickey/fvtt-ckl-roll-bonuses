@@ -51,7 +51,7 @@
                 "change-modification-formula": "Change Mod. Formula",
                 "change-modification-set-type": "Change Mod. Type",
                 "cl": "Caster Level",
-                "condition": "Target Has Condition",
+                "condition": "Has Condition",
                 "condition-target": "Target for Condition",
                 "conditional-modifiers": "Conditional Modifiers",
                 "crit-keen": "Keen",
@@ -320,7 +320,7 @@
                     },
                     "require-melee-threaten": {
                         "description": "Reject a melee attack if the attacker does not threaten the target. When using a melee action, this will reject the action if the target is out of range.",
-                        "issues": "There may be circumstances where the GM is allowing a melee attack against a target even though it isn't in range. To work around this, simply don't target the desired token. If you have suggestions on a different way around this, let me know."
+                        "issues": "There may be circumstances where the GM is allowing a melee attack against a target even though it isn't in range. To bypass this, you can either skip targeting a token or check the \"Ignore Melee Range\" Miscellaneous checkbox in the attack dialog."
                     }
                 }
             }

@@ -68,4 +68,16 @@ declare global {
         }) {}
         render(boolean): void;
     }
+
+    interface Set<T> {
+        union<T, U>(set: Set<U>): Set<T|U>;
+
+        /**
+         * Create a new Set where every element is modified by a provided transformation function.
+         * @see {@link Array#map}
+         * @param transform - The transformation function to apply.Positional arguments are the value, the index of iteration, and the set being transformed.
+         * @returns A new Set of equal size containing transformed elements.
+         */
+        map<V>(transform: (value: T, index: number, set: Set<T>) => V): Set<V>;
+    }
 }

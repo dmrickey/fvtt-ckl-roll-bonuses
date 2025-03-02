@@ -1,5 +1,7 @@
 // @ts-nocheck
 
+import { api } from './api.mjs';
+
 /**
  * @param {ActorPF} actor
  * @param {RollData} rollData
@@ -84,3 +86,5 @@ export const getSkillFormula = (actor, rollData, skillId, {
     const roll = new pf1.dice.D20RollPF(formula, rollData);
     return roll.formula;
 }
+
+api.utils.getSkillFormula = getSkillFormula;

@@ -48,9 +48,26 @@ export class WeaponGroupOverride extends BaseTargetOverride {
      * @param {RollData} _rollData
      */
     static prepareSourceData(item, _rollData) {
-        item.system.weaponGroups ||= {};
-
         const groups = item.getFlag(MODULE_NAME, this.key) || [];
+        if (!groups.length) return;
+
+        const trait = {
+            base: groups,
+            /** @type {Set<string>} */
+            custom: new Set(),
+            /** @type {Set<keyof WeaponGroups>} */
+            standard: new Set(),
+            /** @type {Set<keyof WeaponGroups | string>} */
+            get total() {
+                return this.standard.union(this.custom);
+            },
+            get names() {
+                return [...this.standard.map((t) => pf1.config.weaponGroups[t] || t), ...this.custom];
+            },
+        };
+
+        item.system.weaponGroups ||= trait;
+
         /** @type {(keyof WeaponGroups)[]} */
         const standard = groups.filter((/** @type {keyof WeaponGroups} */ group) => !!pf1.config.weaponGroups[group]);
         if (standard.length) {
@@ -76,7 +93,7 @@ export class WeaponGroupOverride extends BaseTargetOverride {
      */
     static showInputOnItemSheet({ actor, html, isEditable, item }) {
         const actorGroups = getActorItemsByTypes(actor, 'attack', 'weapon')
-            .flatMap((i) => (i.system.weaponGroups.custom))
+            .flatMap((i) => [...i.system.weaponGroups.custom])
             .filter(truthiness);
         const targetedGroups = item.getFlag(MODULE_NAME, this.key) || [];
         const custom = difference(

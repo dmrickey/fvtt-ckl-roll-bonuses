@@ -62,7 +62,7 @@ export class DamageTypeTarget extends BaseTarget {
         const custom = uniqueArray(
             uniqueArray([...(actor?.items ?? [])]
                 .flatMap((item) => getActionDamageTypes(item)))
-                .filter(type => !!pf1.registry.damageTypes.get(type))
+                .filter(type => !pf1.registry.damageTypes.get(type))
         );
         custom.sort();
 

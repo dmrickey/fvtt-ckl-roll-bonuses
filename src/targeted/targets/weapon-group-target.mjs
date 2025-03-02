@@ -68,7 +68,7 @@ export class WeaponGroupTarget extends BaseTarget {
      */
     static showInputOnItemSheet({ actor, html, isEditable, item }) {
         const actorGroups = getActorItemsByTypes(actor, 'attack', 'weapon')
-            .flatMap((i) => (i.system.weaponGroups.custom))
+            .flatMap((i) => [...i.system.weaponGroups.custom])
             .filter(truthiness);
         const targetedGroups = item.getFlag(MODULE_NAME, this.key) || [];
         const custom = difference(

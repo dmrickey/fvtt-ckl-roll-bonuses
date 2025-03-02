@@ -305,17 +305,14 @@ export class PositionalHelper {
         }
 
         // @ts-ignore
-        const ray = new Ray({ x: x1, y: y1 }, { x: x2, y: y2 });
-        // @ts-ignore
-        const distance = canvas.grid.grid.measureDistances([{ ray }], { gridSpaces: true })[0];
+        const { distance } = canvas.grid.measurePath([token1, token2]);
         if (z1 === z2) {
             return distance;
         }
 
+        const spots = [{ x: 0, y: z1 }, { x: 0, y: z2 }];
         // @ts-ignore
-        const zRay = new Ray({ x: 0, y: z1 }, { x: 0, y: z2 });
-        // @ts-ignore
-        const zDistance = canvas.grid.grid.measureDistances([{ ray: zRay }], { gridSpaces: true })[0];
+        const zDistance = canvas.grid.measurePath(spots).distance;
         const d = Math.round(Math.sqrt(distance * distance + zDistance * zDistance) * 10) / 10;
         return grid.type === foundry.CONST.GRID_TYPES.GRIDLESS
             ? d
