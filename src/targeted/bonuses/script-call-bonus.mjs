@@ -41,11 +41,10 @@ export class ScriptCallBonus extends BaseBonus {
                     shared.action,
                     ScriptCallBonus,
                     (bonusType, sourceItem) => {
-                        const scriptCalls = bonusType.getScriptCalls(sourceItem);
+                        const scriptCalls = bonusType.getScriptCalls(sourceItem, this);
                         scriptCalls
                             .filter((s) => s.category === category)
                             .forEach((s) => {
-                                s.parent = this;
                                 scripts.push(s);
                             });
                     },
@@ -93,9 +92,10 @@ export class ScriptCallBonus extends BaseBonus {
      * Get script from the source
      *
      * @param {ItemPF} source
+     * @param {ItemPF} parent The item to add the script call to
      * @return {ItemScriptCall[]}
      */
-    static getScriptCalls(source) {
+    static getScriptCalls(source, parent) {
         /** @type {ItemScriptCallData[]} */
         const scriptData = (source.getFlag(MODULE_NAME, this.key) || []);
 
@@ -108,6 +108,8 @@ export class ScriptCallBonus extends BaseBonus {
                 name: script.name,
                 type: script.type,
                 value: script.value,
+            }, {
+                parent
             }));
         scripts.forEach(x => x.rollBonus = true);
         return scripts;

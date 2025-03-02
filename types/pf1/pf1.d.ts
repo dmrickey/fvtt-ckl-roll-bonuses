@@ -1920,13 +1920,13 @@ declare global {
     }
     class ItemScriptCall {
         id: string;
-        parent: ItemPF<SystemItemData>;
+        get parent(): ItemPF<SystemItemData>;
         /** in-memory value to determine if this mod created this */
         rollBonus: boolean;
         get hide(): boolean;
         get category(): string;
 
-        constructor(data: Partial<ItemScriptCallData>);
+        constructor(data: Partial<ItemScriptCallData>, options: { parent: ItemPF});
         execute(
             shared: Partial<ActionUseShared<SystemItemData>>,
             extraParams: { [x: string]: object } = {}

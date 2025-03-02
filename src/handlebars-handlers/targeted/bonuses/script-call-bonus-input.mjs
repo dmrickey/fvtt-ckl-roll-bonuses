@@ -132,7 +132,7 @@ export function showScriptBonusEditor({
             const current = scripts[index];
 
             if (current.type === 'script') {
-                const scriptEditor = new pf1.applications.ScriptEditor({
+                const scriptEditor = await new pf1.applications.ScriptEditor({
                     command: current.value,
                     name: current.name,
                     parent: { uuid: foundry.utils.randomID(), isOwner: !!canEdit },
