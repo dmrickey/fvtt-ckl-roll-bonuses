@@ -273,7 +273,7 @@ declare global {
         chatMessage?: boolean;
         concentrationCheck?: undefined;
         conditionalPartsCommon: any;
-        conditionals: number[];
+        conditionals: string[];
         cost?: null;
         damageBonus: string[];
         dice: string;
@@ -521,7 +521,7 @@ declare global {
         actionType: ActionType;
         actor: ActorPF;
         allDamageSources: Array<ActionDamageSource>;
-        conditionals: ItemConditional[];
+        conditionals: Collection<ItemConditional>;
         damage: {
             critParts: DamagePartModel[];
             nonCritParts: DamagePartModel[];
@@ -1138,6 +1138,7 @@ declare global {
         /** attack, equipment, weapon */
         proficient: boolean;
         held?: keyof pf1['config']['abilityDamageHeldMultipliers'];
+        size: number;
     }
     class SystemItemDataAttackPF extends SystemItemData {
         baseTypes: string[];
@@ -1499,6 +1500,7 @@ declare global {
      * Roll Data used for resolving formulas
      */
     interface RollData<T extends SystemItemData = SystemItemData> {
+        critMultBonus: number;
         rb: {
             rangePenalty?: {
                 maxIncrements: number;
@@ -1866,7 +1868,7 @@ declare global {
             | 'charges' // when target is 'misc'
             | '' // size
             | undefined; // no subtarget for 'size'
-        target: 'attack' | 'damage' | 'effect' | 'misc' | 'size';
+        target: 'attack' | 'damage' | 'effect' | 'misc' | 'size' | 'dc' | 'cl' | 'critMult';
         type: GenericDamageType;
         _id: string;
     }

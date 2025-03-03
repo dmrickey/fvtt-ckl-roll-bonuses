@@ -16,6 +16,7 @@ import { addNodeToRollBonus } from './handlebars-handlers/add-bonus-to-item-shee
 import { localize } from './util/localize.mjs';
 import { FinesseOverride } from './targeted/target-overides/finesse-override.mjs';
 import { handleConditionals } from './patch/action-use_handle-conditionals.mjs';
+import { truthiness } from './util/truthiness.mjs';
 
 Hooks.once('pf1PostReady', () => migrate());
 
@@ -238,9 +239,9 @@ function actionUse_handleConditionals(wrapped) {
     LocalHookHandler.fireHookNoReturnSync(localHooks.actionUse_handleConditionals, this, conditionals);
 
     const conditionalData = [
-        ...this.shared.conditionals.map((i) => this.shared.action.conditionals[i]._source),
-        ...conditionals.map(x => x._source),
-    ];
+        ...this.shared.conditionals.map((id) => this.shared.action.conditionals.get(id)),
+        ...conditionals,
+    ].filter(truthiness);
 
     // spells/abilities that don't have attack rolls still need to accept "nonCrit" bonuses
     // the system is hardcoded to only look at "normal" damage when no attack roll is configured
@@ -380,7 +381,7 @@ function safeTotal(
     formula,
     data,
 ) {
-    return (isNaN(+formula) ? RollPF.create(formula + '', data).evaluate({ forceSync: true }).total : +formula) || 0;
+    return (isNaN(+formula) ? RollPF.create(formula + '', data).evaluateSync({ forceSync: true }).total : +formula) || 0;
 }
 
 /**
