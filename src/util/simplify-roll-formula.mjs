@@ -292,7 +292,7 @@ function negativeTerms(terms) {
             // Add preceding + if operators are fully consumed
             if (!(nterms.at(-1) instanceof foundry.dice.terms.OperatorTerm)) {
                 const nt = new foundry.dice.terms.OperatorTerm({ operator: "+" });
-                nt.evaluate({ forceSync: true });
+                nt.evaluateSync({ forceSync: true });
                 nterms.push(nt);
             }
             nterms.push(new FormulaPart([term, terms.shift()], true));
@@ -397,7 +397,7 @@ class TernaryTerm {
     }
 
     get total() {
-        return Roll.create(this.formula).evaluate({ forceSync: true }).total;
+        return Roll.create(this.formula).evaluateSync({ forceSync: true }).total;
     }
 }
 
@@ -447,7 +447,7 @@ export function simplify(formula, rollData = {}, { strict = true, preserveFlavor
         .parse(formula)
         .map((t) => {
             if (t instanceof foundry.dice.terms.ParentheticalTerm) {
-                t.evaluate();
+                t.evaluateSync({ forceSync: true });
                 const v = t.total;
                 return v >= 0 ? `${t.total}` : `(${t.total})`;
             }
