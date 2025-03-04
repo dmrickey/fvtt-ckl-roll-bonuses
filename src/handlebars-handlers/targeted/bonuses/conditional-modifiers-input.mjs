@@ -442,20 +442,19 @@ export function modifiersInput({
                 const modifier = conditional._source.modifiers.find((m) => m._id === li?.dataset.modifier);
                 if (!modifier) return;
 
-
-                async function update(/** @type {ItemConditionalModifierSourceData['damageType']} */ types) {
+                // TODO - make sure this works
+                /** @param {{ [key: string]: object }} types */
+                async function updateCallback(types) {
                     if (!modifier) return;
 
                     modifier.damageType = types;
                     await updateItem();
-                }
+                };
                 const app = new pf1.applications.DamageTypeSelector(
-                    {
-                        id: key,
-                        update,
-                    },
+                    { id: key },
                     modifier._id,
                     modifier.damageType || [],
+                    { updateCallback }
                 );
                 return app.render(true);
             },
