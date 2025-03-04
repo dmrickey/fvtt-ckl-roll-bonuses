@@ -263,12 +263,13 @@
     - Inspiration "Fortune" 
       - e.g. Empathy Talent, when rolling inspiration for sense motive, roll twice and take the higher
 - Add "ignore me" boolean flag to turn off auto configuration (stronger "hammer" for EitR-type stuff where it incorrectly makes assumptions)
-- Add "self or target" to "has bFlag" just like "has condition" conditional target
 
 # pf1 v11 update
 - make "This item type natively includes this property." more of an error message so it's obvious it's not doing anything
 - make common "has source compendium id" function and make sure it reads from new place in addition to old
 - Automatically check high ground on the attack dialog when applicable
+- Add documentation into "Has BFlag" to include toggle (copy from "has condition")
   
 # Verify
 - mw bow with magic ammo now works correctly
+- "Has Condition" and "Has BFlag" both need to be verified for targeting self vs. actor

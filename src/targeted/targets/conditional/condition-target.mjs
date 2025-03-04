@@ -14,7 +14,7 @@ const targetChoices =  /** @type {const} */ ({
  */
 
 /**
- * @augments BaseTarget
+ * @extends BaseTarget
  */
 export class ConditionTarget extends BaseTarget {
     /**
@@ -60,8 +60,7 @@ export class ConditionTarget extends BaseTarget {
      */
     static getHints(source) {
         const condition = source.getFlag(MODULE_NAME, this.key);
-        /** @type {TargetOptions} */
-        const targetOrSelf = source.getFlag(MODULE_NAME, this.#targetKey);
+        const targetOrSelf = this.#getTargetType(source);
         if (condition) {
             const name = pf1.registry.conditions.get(condition)?.name;
             if (name) {
@@ -87,8 +86,7 @@ export class ConditionTarget extends BaseTarget {
             const condition = source.getFlag(MODULE_NAME, this.key);
             if (!condition) return false;
 
-            /** @type {TargetOptions} */
-            const targetOrSelf = source.getFlag(MODULE_NAME, this.#targetKey);
+            const targetOrSelf = this.#getTargetType(source);
             if (targetOrSelf === 'self') {
                 return actor.hasCondition(condition);
             }
@@ -137,5 +135,13 @@ export class ConditionTarget extends BaseTarget {
             inputType: 'target',
             isSubLabel: true,
         });
+    }
+
+    /**
+     * @param {ItemPF} source
+     * @returns {TargetOptions}
+     */
+    static #getTargetType(source) {
+        return source.getFlag(MODULE_NAME, this.#targetKey) || 'target';
     }
 }

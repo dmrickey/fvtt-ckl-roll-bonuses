@@ -2,6 +2,7 @@
 
 ### Misc
 - Moved "All" Target to Conditional Targets since it does not target based on specific criteria
+- Has Boolean Flag Conditional Target now has an option to be enabled based on whether or not your current targets have the flag, in addition to the previous functionality of it being based off of "just you"
 
 ### Bugfixes
 - Fixed Damage Bonus item hint so that it's visible when either type of bonus is enabled instead of only when both types of damage bonuses are enabled
