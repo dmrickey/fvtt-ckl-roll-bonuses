@@ -34,9 +34,13 @@
   - [Spell Perfection](#spell-perfection)
   - [Spirited Charge](#spirited-charge)
   - [Scarred by War](#scarred-by-war)
+- [Buffs](#buffs)
+  - [Bane](#bane)
 - [Racial Features](#racial-features)
   - [Sylph](#sylph)
     - [Air Affinity](#air-affinity)
+- [Weapon Abilities](#weapon-abilities)
+  - [Bane](#bane-1)
 - [Misc](#misc)
   - [I am targeted](#i-am-targeted)
   - [Magic](#magic)
@@ -91,7 +95,8 @@
 
 ## Targets
 ### Creature type/subtype
-- would support [Ranger](#ranger)'s Favored Enemy
+- Is possible now with v11 now that creature types/subtypes are hard data points
+  - would support [Ranger](#ranger)'s Favored Enemy and [Bane](https://www.d20pfsrd.com/magic-items/magic-weapons/magic-weapon-special-abilities/bane/)
 ### By Disposition
 - Ally/Hostile/Neutral multiselect
   - multi select
@@ -141,12 +146,47 @@
 ## [Scarred by War](https://www.aonprd.com/TraitDisplay.aspx?ItemName=Scarred%20by%20War)
  - (used to grant diplomacy bonus while not in combat)
 
+# Buffs
+## Bane
+- use the new [Bane][#bane] feature - add an action on the Buff that when used, prompts a script to change the creature type
+- when activated, prompt for creature type and targeted weapon
+
 # Racial Features
 ## Sylph
 ### Air Affinity
 - sorcerers with the elemental (air) bloodline treat their Charisma scores as 2 points higher for the purposes of all sorcerer spells and class abilities
   - Specifically just "treat <ability score> higher/lower for <spell book>"
   - maybe also "treat <ability score> higher/lower for <class ability>" -- would need to be based off of class key and ability that has a parent as that class
+
+# Weapon Abilities
+## Bane
+- choose one of the following types, humanoids and outsiders also require a subtype
+  > Aberrations
+  >
+  > Animals
+  >
+  > Constructs
+  >
+  > Dragons
+  >
+  > Fey
+  >
+  > Humanoids (pick one subtype)
+  >
+  > Magical beasts
+  >
+  > Monstrous humanoids
+  >
+  > Oozes
+  >
+  > Outsiders (pick one subtype)
+  >
+  > Plants
+  >
+  > Undead
+  >
+  > Vermin
+- +2 to existing enhancement bonus and 2d6 against chosen type
 
 # Misc
 ## I am targeted
