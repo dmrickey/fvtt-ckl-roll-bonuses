@@ -1,5 +1,12 @@
 ## Roll Bonuses 2.18.0
 
+### Misc
+- Moved "All" Target to Conditional Targets since it does not target based on specific criteria
+
+### Bugfixes
+- Fixed Damage Bonus item hint so that it's visible when either type of bonus is enabled instead of only when both types of damage bonuses are enabled
+- Using ammo with enhancement bonuses with a masterwork weapon now correctly accounts for the weapons MW when totalling the bonuses.
+
 ---
 
 ## Roll Bonuses 2.17.1

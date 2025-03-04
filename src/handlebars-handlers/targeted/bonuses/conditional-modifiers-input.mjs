@@ -311,8 +311,8 @@ export function modifiersInput({
         effect: { subTarget: 'dc', critical: undefined, damageType: [], type: undefined, },
         misc: { subTarget: 'charges', critical: undefined, damageType: [], type: undefined, },
         size: { subTarget: undefined, critical: undefined, damageType: [], type: undefined, },
-        dc: { subTarget: undefined, critical: undefined, damageType: [], type: undefined, },
-        cl: { subTarget: undefined, critical: undefined, damageType: [], type: undefined, },
+        // dc: { subTarget: undefined, critical: undefined, damageType: [], type: undefined, },
+        // cl: { subTarget: undefined, critical: undefined, damageType: [], type: undefined, },
         critMult: { subTarget: undefined, critical: undefined, damageType: [], type: undefined, },
     };
 

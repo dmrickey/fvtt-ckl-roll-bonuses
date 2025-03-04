@@ -56,10 +56,14 @@ function getConditionalParts(actionUse, result, atk, index) {
         }
         else {
             const { total: totalWithAmmo } = getEnhancementBonusForAction({ action: actionUse.action, ammo });
+            let mwOffset = 0;
+            if (itemMw && !itemEnh && (ammoEnhBonus || ammoEnhStacksBonus)) {
+                mwOffset = 1;
+            }
             const diff = totalWithAmmo - actionTotal;
             if (diff > 0) {
                 const label = `${localize('PF1.AmmunitionAbbr')} ${localize('PF1.EnhancementBonus')}`;
-                result['attack.normal'].push(`${diff}[${label} (${totalWithAmmo})]`);
+                result['attack.normal'].push(`${diff}[${label} (${totalWithAmmo - mwOffset})]`);
                 result['damage.normal'].push([`${diff}[${label} (${totalWithAmmo})]`, [label], false]);
             }
         }

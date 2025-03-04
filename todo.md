@@ -60,6 +60,7 @@
 - [PF1 v11](#pf1-v11)
 - [vnext](#vnext)
 - [pf1 v11 update](#pf1-v11-update)
+- [Verify](#verify)
 
 # TODO
 - Figure out a way to support multiple target groups on a single Item (so I can add `Favored Enemy (Human) +4` and `Favored Enemy (goblin) +2` on a single Item)
@@ -266,8 +267,8 @@
 
 # pf1 v11 update
 - make "This item type natively includes this property." more of an error message so it's obvious it's not doing anything
-- Move "all targets" documentation out of conditional targets
-  - And make sure "All" shows up under conditional
 - make common "has source compendium id" function and make sure it reads from new place in addition to old
-- BUG REPORT - magic +1 arrows are adding their attack bonus when used with a mw bow
 - Automatically check high ground on the attack dialog when applicable
+  
+# Verify
+- mw bow with magic ammo now works correctly
