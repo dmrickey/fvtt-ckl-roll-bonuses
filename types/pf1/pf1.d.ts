@@ -167,6 +167,7 @@ declare global {
     interface Conditions {
         bleed: 'Bleed';
         blind: 'Blind';
+        burrow: 'Burrowing';
         confused: 'Confused';
         cowering: 'Cowering';
         dazed: 'Dazed';
@@ -179,9 +180,11 @@ declare global {
         exhausted: 'Exhausted';
         fatigued: 'Fatigued';
         flatFooted: 'Flat-Footed';
+        fly: 'Flying';
         frightened: 'Frightened';
         grappled: 'Grappled';
         helpless: 'Helpless';
+        hover: 'Hovering';
         incorporeal: 'Incorporeal';
         invisible: 'Invisible';
         nauseated: 'Nauseated';
@@ -197,6 +200,7 @@ declare global {
         stable: 'Stable';
         staggered: 'Staggered';
         stunned: 'Stunned';
+        swim: 'Swiming';
         unconscious: 'Unconscious';
 
         // Nevela's PF1 Improved Conditions
@@ -493,11 +497,13 @@ declare global {
         types: Array<string>;
     }
 
+    type CritType = 'crit' | 'nonCrit' | 'normal';
+
     interface PreDamageRollPart {
         base: string;
         damageType: ItemConditionalModifierSourceData['damageType'];
         extra: Array;
-        type: 'crit' | 'nonCrit' | 'normal';
+        type: CritType;
     }
 
     class ItemAction {
@@ -627,6 +633,7 @@ declare global {
         SystemData extends SystemItemData = SystemItemData
     > extends ItemDocument {
         scriptCalls: Collection<ItemScriptCall>;
+        _stats: { compendiumSource: UUID };
         _prepareDependentData(final: boolean): void;
         [MODULE_NAME]: {
             bonuses: (typeof BaseBonus)[];
@@ -646,7 +653,7 @@ declare global {
         canUse: boolean;
         defaultAction: ItemAction;
         flags: {
-            core?: { sourceId: string };
+            core?: { sourceId: UUID };
             [key: string]: any;
         };
         _id: string;
@@ -1527,9 +1534,9 @@ declare global {
         };
         attributes: AttributeRollData;
         classes: Record<string, ClassRollData>;
-        conditions: { loseDexToAC: boolean };
+        conditions: { loseDexToAC: boolean, [string: keyof Conditions]: boolean };
         /** Conditionals being used as part of this action */
-        conditionals?: { [key: string]: Record<number, string> };
+        conditionals?: { [key: string]: Record<string, number> };
         currency: CurrencyRollData;
         customSkills: Record<unknown, unknown>;
         dFlags: ItemDictionaryFlags;
@@ -1620,7 +1627,7 @@ declare global {
     > extends RollPF<T> {
         get damageType(): string;
         get isCritical(): boolean;
-        get type(): 'crit' | 'nonCrit' | 'normal';
+        get type(): CritType;;
     }
 
     export class RollPF<
@@ -1853,7 +1860,7 @@ declare global {
     type GenericDamageType = Nullable<BonusTypes | keyof DamageTypes | string>;
 
     class ItemConditionalModifierSourceData {
-        critical: Nullable<'crit' | 'nonCrit' | 'normal' | ''>; // all for 'damage', 'crit' and 'normal' also for attack
+        critical: Nullable<CritType | ''>; // all for 'damage', 'crit' and 'normal' also for attack
         damageType: (keyof DamageTypes | string)[];
         formula: string;
         subTarget:
@@ -1893,13 +1900,22 @@ declare global {
         }?;
     }
     class ItemConditionalModifier {
+        critical: undefined | CritType;
+        damageType: Set<string>;
+        formula: string | number;
+        subTarget: undefined;
+        target: ItemConditionalModifierSourceData['target'];
+        type: BonusTypes | DamageTypes;
+
         get id(): string;
-        set id(value: string);
+        get partID(): string;
 
         get _source(): ItemConditionalModifierSourceData;
         parent: ItemConditional;
 
         constructor(any);
+
+        /** @deprecated */
         static get defaultData(): {
             critical: '';
             damageType: string[];

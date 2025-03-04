@@ -303,6 +303,7 @@ export function modifiersInput({
         });
     });
 
+    // target: 'attack' | 'damage' | 'effect' | 'misc' | 'size' | 'dc' | 'cl' | 'critMult';
     /** @type {{ [key in ItemConditionalModifierSourceData['target']]: { subTarget: ItemConditionalModifierSourceData['subTarget'], critical: ItemConditionalModifierSourceData['critical'], damageType: ItemConditionalModifierSourceData['damageType'], type: ItemConditionalModifierSourceData['type'],} }} */
     const modDefaults = {
         attack: { subTarget: 'allAttack', critical: 'normal', damageType: [], type: 'untyped', },
@@ -310,6 +311,9 @@ export function modifiersInput({
         effect: { subTarget: 'dc', critical: undefined, damageType: [], type: undefined, },
         misc: { subTarget: 'charges', critical: undefined, damageType: [], type: undefined, },
         size: { subTarget: undefined, critical: undefined, damageType: [], type: undefined, },
+        dc: { subTarget: undefined, critical: undefined, damageType: [], type: undefined, },
+        cl: { subTarget: undefined, critical: undefined, damageType: [], type: undefined, },
+        critMult: { subTarget: undefined, critical: undefined, damageType: [], type: undefined, },
     };
 
     div.querySelectorAll('.conditionals select').forEach((element) => {

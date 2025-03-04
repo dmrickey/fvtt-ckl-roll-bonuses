@@ -1,5 +1,6 @@
 import { showEnabledLabel } from '../handlebars-handlers/enabled-label.mjs';
 import { getSkillFormula } from '../util/get-skill-formula.mjs';
+import { itemHasCompendiumId } from '../util/has-compendium-id.mjs';
 import { LocalHookHandler, localHooks } from '../util/hooks.mjs';
 import { registerItemHint } from '../util/item-hints.mjs';
 import { localizeBonusLabel, localizeBonusTooltip } from '../util/localize.mjs';
@@ -126,11 +127,11 @@ Hooks.on('renderItemSheet', (
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
     const name = item?.name?.toLowerCase() ?? '';
-    const sourceId = item?.flags.core?.sourceId ?? '';
+    const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
 
     const hasFlag = item.hasItemBooleanFlag(key);
     if (!hasFlag) {
-        if (isEditable && (name === Settings.snakeSidewind || sourceId.includes(compendiumId))) {
+        if (isEditable && (name === Settings.snakeSidewind || hasCompendiumId)) {
             item.addItemBooleanFlag(key);
         }
         return;
@@ -158,10 +159,10 @@ const onCreate = (item, data, { temporary }, id) => {
     if (temporary) return;
 
     const name = item?.name?.toLowerCase() ?? '';
-    const sourceId = item?.flags.core?.sourceId ?? '';
+    const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
     const hasBonus = item.hasItemBooleanFlag(key);
 
-    if ((name === Settings.snakeSidewind || sourceId.includes(compendiumId)) && !hasBonus) {
+    if ((name === Settings.snakeSidewind || hasCompendiumId) && !hasBonus) {
         item.updateSource({
             [`system.flags.boolean.${key}`]: true,
         });

@@ -4,6 +4,7 @@ import { showEnabledLabel } from '../handlebars-handlers/enabled-label.mjs';
 import { isWeapon } from '../util/action-type-helpers.mjs';
 import { addCheckToAttackDialog, getFormData } from '../util/attack-dialog-helper.mjs';
 import { getCachedBonuses } from '../util/get-cached-bonuses.mjs';
+import { itemHasCompendiumId } from '../util/has-compendium-id.mjs';
 import { LocalHookHandler, localHooks } from '../util/hooks.mjs';
 import { registerItemHint } from '../util/item-hints.mjs';
 import { localizeBonusLabel, localizeBonusTooltip } from '../util/localize.mjs';
@@ -332,15 +333,14 @@ Hooks.on('preCreateItem', onCreate);
  */
 const configureIfNecesary = (item, { onCreate = false } = {}) => {
     const name = item?.name?.toLowerCase() ?? '';
-    const sourceId = item?.flags.core?.sourceId ?? '';
     const isRegular = name === Settings.vitalStrike
-        || sourceId.includes(vitalStrikeCompendiumId);
+        || itemHasCompendiumId(item, vitalStrikeCompendiumId);
     const isImproved = (name.includes(Settings.vitalStrike) && name.includes(LanguageSettings.improved))
-        || sourceId.includes(vitalStrikeImprovedCompendiumId);
+        || itemHasCompendiumId(item, vitalStrikeImprovedCompendiumId);
     const isGreater = (name.includes(Settings.vitalStrike) && name.includes(LanguageSettings.greater))
-        || sourceId.includes(vitalStrikeGreaterCompendiumId);
+        || itemHasCompendiumId(item, vitalStrikeGreaterCompendiumId);
     const isMythic = (name.includes(Settings.vitalStrike) && name.includes(LanguageSettings.mythic))
-        || sourceId.includes(vitalStrikeMythicCompendiumId);
+        || itemHasCompendiumId(item, vitalStrikeMythicCompendiumId);
 
     const addFlag = (/** @type {string} */flag) =>
         onCreate

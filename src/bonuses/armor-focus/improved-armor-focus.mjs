@@ -4,6 +4,7 @@
 import { MODULE_NAME } from '../../consts.mjs';
 import { stringSelect } from "../../handlebars-handlers/bonus-inputs/string-select.mjs";
 import { intersects } from "../../util/array-intersects.mjs";
+import { itemHasCompendiumId } from '../../util/has-compendium-id.mjs';
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localizeBonusLabel, localizeBonusTooltip } from "../../util/localize.mjs";
 import { LanguageSettings } from '../../util/settings.mjs';
@@ -96,10 +97,10 @@ Hooks.on('renderItemSheet', (
     const hasKey = item.hasItemBooleanFlag(key);
     if (!hasKey) {
         const name = item?.name?.toLowerCase() ?? '';
-        const sourceId = item?.flags.core?.sourceId ?? '';
+        const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
         if (isEditable &&
             ((name.includes(LanguageSettings.getTranslation(armorFocusKey)) && name.includes(LanguageSettings.improved))
-                || sourceId.includes(compendiumId))
+                || hasCompendiumId)
         ) {
             item.addItemBooleanFlag(key);
         }
@@ -133,7 +134,7 @@ const onCreate = (item, data, { temporary }, id) => {
     if (temporary) return;
 
     const name = item?.name?.toLowerCase() ?? '';
-    const sourceId = item?.flags.core?.sourceId ?? '';
+    const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
     const hasBonus = item.hasItemBooleanFlag(key);
 
     let focused = '';
@@ -142,7 +143,7 @@ const onCreate = (item, data, { temporary }, id) => {
     }
 
     let updated = false;
-    if (((name.includes(LanguageSettings.getTranslation(armorFocusKey)) && name.includes(LanguageSettings.improved)) || sourceId.includes(compendiumId)) && !hasBonus) {
+    if (((name.includes(LanguageSettings.getTranslation(armorFocusKey)) && name.includes(LanguageSettings.improved)) || hasCompendiumId) && !hasBonus) {
         item.updateSource({
             [`system.flags.boolean.${key}`]: true,
         });

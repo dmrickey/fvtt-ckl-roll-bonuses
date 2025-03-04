@@ -70,8 +70,8 @@ declare global {
     }
 
     interface Set<T> {
-        union<T, U>(set: Set<U>): Set<T|U>;
-
+        difference<T>(set: Set<T>): Set<T>;
+        intersection<T>(set: Set<T>): Set<T>;
         /**
          * Create a new Set where every element is modified by a provided transformation function.
          * @see {@link Array#map}
@@ -79,5 +79,7 @@ declare global {
          * @returns A new Set of equal size containing transformed elements.
          */
         map<V>(transform: (value: T, index: number, set: Set<T>) => V): Set<V>;
+
+        union<T, U>(set: Set<U>): Set<T|U>;
     }
 }

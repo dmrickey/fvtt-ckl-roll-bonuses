@@ -7,6 +7,7 @@ import { intersects } from "../util/array-intersects.mjs";
 import { createChangeForTooltip } from '../util/conditional-helpers.mjs';
 import { getActorItemsByTypes } from '../util/get-actor-items-by-type.mjs';
 import { getCachedBonuses } from '../util/get-cached-bonuses.mjs';
+import { itemHasCompendiumId } from '../util/has-compendium-id.mjs';
 import { customGlobalHooks } from "../util/hooks.mjs";
 import { registerItemHint } from "../util/item-hints.mjs";
 import { localize, localizeBonusLabel, localizeBonusTooltip } from "../util/localize.mjs";
@@ -179,8 +180,8 @@ Hooks.on('renderItemSheet', (
     const hasKey = item.hasItemBooleanFlag(key);
     if (!hasKey) {
         const name = item?.name?.toLowerCase() ?? '';
-        const sourceId = item?.flags.core?.sourceId ?? '';
-        if (isEditable && (name === Settings.martialFocus || sourceId.includes(compendiumId))) {
+        const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
+        if (isEditable && (name === Settings.martialFocus || hasCompendiumId)) {
             item.addItemBooleanFlag(key);
         }
         return;

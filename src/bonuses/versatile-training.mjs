@@ -11,6 +11,7 @@ import { getDocFlags } from '../util/flag-helpers.mjs';
 import { LocalHookHandler, localHooks } from '../util/hooks.mjs';
 import { getSkillName } from '../util/get-skill-name.mjs';
 import { intersection } from '../util/array-intersects.mjs';
+import { itemHasCompendiumId } from '../util/has-compendium-id.mjs';
 
 const key = 'versatile-training';
 const selectedKey = 'versatile-training-selected';
@@ -171,8 +172,8 @@ Hooks.on('renderItemSheet', (
     const hasKey = item.hasItemBooleanFlag(key);
     if (!hasKey) {
         const name = item?.name?.toLowerCase() ?? '';
-        const sourceId = item?.flags.core?.sourceId ?? '';
-        if (isEditable && (name === Settings.versatileTraining || sourceId.includes(compendiumId))) {
+        const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
+        if (isEditable && (name === Settings.versatileTraining || hasCompendiumId)) {
             item.addItemBooleanFlag(key);
         }
         return;
@@ -248,10 +249,10 @@ const onCreate = (item, data, { temporary }, id) => {
     if (temporary) return;
 
     const name = item?.name?.toLowerCase() ?? '';
-    const sourceId = item?.flags.core?.sourceId ?? '';
+    const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
     const hasBonus = item.hasItemBooleanFlag(key);
 
-    if ((name === Settings.versatileTraining || sourceId.includes(compendiumId)) && !hasBonus) {
+    if ((name === Settings.versatileTraining || hasCompendiumId) && !hasBonus) {
         item.updateSource({
             [`system.flags.boolean.${key}`]: true,
         });

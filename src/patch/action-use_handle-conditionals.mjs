@@ -5,6 +5,7 @@
 export const handleConditionals = (actionUse, conditionals) => {
     if (!conditionals?.length) return;
 
+    /** @type {RollData['conditionals']} */
     const rollDataConds = {};
 
     conditionals.forEach((conditional) => {
@@ -45,7 +46,7 @@ export const handleConditionals = (actionUse, conditionals) => {
                 case "misc":
                 case "dc":
                 case "cl": {
-                    const hasFlavor = /\[.*\]/.test(modifier.formula);
+                    const hasFlavor = /\[.*\]/.test(modifier.formula + '');
                     const flavoredFormula = hasFlavor ? modifier.formula : `(${modifier.formula})[${conditional.name}]`;
                     actionUse.shared.conditionalPartsCommon[partString] = [
                         ...(actionUse.shared.conditionalPartsCommon[partString] ?? []),
@@ -88,12 +89,15 @@ export const handleConditionals = (actionUse, conditionals) => {
             const roll = RollPF.create(formula, actionUse.shared.rollData).evaluateSync({ forceSync: true });
             switch (target) {
                 case "cl":
+                    actionUse.shared.rollData.cl ||= 0;
                     actionUse.shared.rollData.cl += roll.total;
                     break;
                 case "dc":
+                    actionUse.shared.rollData.dcBonus ||= 0;
                     actionUse.shared.rollData.dcBonus += roll.total;
                     break;
                 case "charges":
+                    actionUse.shared.rollData.chargeCostBonus ||= 0;
                     actionUse.shared.rollData.chargeCostBonus += roll.total;
                     break;
             }

@@ -13,6 +13,7 @@ import { truthiness } from '../util/truthiness.mjs';
 import { api } from '../util/api.mjs';
 import { isNotEmptyObject } from '../util/is-empty-object.mjs';
 import { getCachedBonuses } from '../util/get-cached-bonuses.mjs';
+import { itemHasCompendiumId } from '../util/has-compendium-id.mjs';
 
 const key = 'versatile-performance';
 export { key as versatilePerformanceKey };
@@ -308,10 +309,9 @@ Hooks.on('renderItemSheet', (
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
     const name = item?.name?.toLowerCase() ?? '';
-    const sourceId = item?.flags.core?.sourceId ?? '';
     const hasFlag = item.hasItemBooleanFlag(key);
     if (!hasFlag) {
-        if (isEditable && (name === Settings.versatilePerformance || compendiumIds.some(x => sourceId.includes(x)))) {
+        if (isEditable && (name === Settings.versatilePerformance || compendiumIds.some(x => itemHasCompendiumId(item, x)))) {
             item.addItemBooleanFlag(key);
         }
         return;
@@ -431,10 +431,9 @@ const onCreate = (item, data, { temporary }, id) => {
     if (temporary) return;
 
     const name = item?.name?.toLowerCase() ?? '';
-    const sourceId = item?.flags.core?.sourceId ?? '';
     const hasBonus = item.hasItemBooleanFlag(key);
 
-    if ((name === Settings.versatilePerformance || compendiumIds.some(x => sourceId.includes(x))) && !hasBonus) {
+    if ((name === Settings.versatilePerformance || compendiumIds.some(x => itemHasCompendiumId(item, x))) && !hasBonus) {
         item.updateSource({
             [`system.flags.boolean.${key}`]: true,
         });

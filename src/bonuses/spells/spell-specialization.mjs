@@ -4,6 +4,7 @@
 import { MODULE_NAME } from '../../consts.mjs';
 import { stringSelect } from "../../handlebars-handlers/bonus-inputs/string-select.mjs";
 import { getCachedBonuses } from '../../util/get-cached-bonuses.mjs';
+import { itemHasCompendiumId } from '../../util/has-compendium-id.mjs';
 import { customGlobalHooks, LocalHookHandler, localHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize, localizeBonusLabel, localizeBonusTooltip } from "../../util/localize.mjs";
@@ -182,7 +183,7 @@ const onCreate = (item, data, { temporary }, id) => {
     if (temporary) return;
 
     const name = item?.name?.toLowerCase() ?? '';
-    const sourceId = item?.flags.core?.sourceId ?? '';
+    const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
     const hasBonus = item.hasItemBooleanFlag(key);
 
     let choice = '';
@@ -200,7 +201,7 @@ const onCreate = (item, data, { temporary }, id) => {
     }
 
     let updated = false;
-    if ((name === Settings.spellSpecialization || sourceId.includes(compendiumId)) && !hasBonus) {
+    if ((name === Settings.spellSpecialization || hasCompendiumId) && !hasBonus) {
         item.updateSource({
             [`system.flags.boolean.${key}`]: true,
         });

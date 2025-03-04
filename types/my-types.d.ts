@@ -108,6 +108,8 @@ declare global {
         };
     }
 
+    type UUID = string;
+
     type InputType =
         | 'bonus'
         | 'target'

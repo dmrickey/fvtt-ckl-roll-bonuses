@@ -1,5 +1,6 @@
 import { MODULE_NAME } from '../consts.mjs';
 import { showEnabledLabel } from '../handlebars-handlers/enabled-label.mjs';
+import { itemHasCompendiumId } from '../util/has-compendium-id.mjs';
 import { LocalHookHandler, customGlobalHooks, localHooks } from '../util/hooks.mjs';
 import { isActorInCombat } from '../util/is-actor-in-combat.mjs';
 import { registerItemHint } from '../util/item-hints.mjs';
@@ -79,8 +80,8 @@ Hooks.on('renderItemSheet', (
     const hasFlag = item.hasItemBooleanFlag(furiousFocus);
     if (!hasFlag) {
         const name = item?.name?.toLowerCase() ?? '';
-        const sourceId = item?.flags.core?.sourceId ?? '';
-        if (isEditable && (name === Settings.furiousFocus || sourceId.includes(compendiumId))) {
+        const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
+        if (isEditable && (name === Settings.furiousFocus || hasCompendiumId)) {
             item.addItemBooleanFlag(furiousFocus);
         }
         return;
@@ -115,10 +116,10 @@ const onCreate = (item, data, { temporary }, id) => {
     if (temporary) return;
 
     const name = item?.name?.toLowerCase() ?? '';
-    const sourceId = item?.flags.core?.sourceId ?? '';
+    const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
     const hasBonus = item.hasItemBooleanFlag(furiousFocus);
 
-    if ((name === Settings.furiousFocus || sourceId.includes(compendiumId)) && !hasBonus) {
+    if ((name === Settings.furiousFocus || hasCompendiumId) && !hasBonus) {
         item.updateSource({
             [`system.flags.boolean.${furiousFocus}`]: true,
         });

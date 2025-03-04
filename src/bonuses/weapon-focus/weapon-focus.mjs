@@ -2,6 +2,7 @@ import { MODULE_NAME } from '../../consts.mjs';
 import { stringSelect } from "../../handlebars-handlers/bonus-inputs/string-select.mjs";
 import { intersects } from "../../util/array-intersects.mjs";
 import { getCachedBonuses } from '../../util/get-cached-bonuses.mjs';
+import { itemHasCompendiumId } from '../../util/has-compendium-id.mjs';
 import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize, localizeBonusLabel, localizeBonusTooltip } from "../../util/localize.mjs";
@@ -174,15 +175,14 @@ Hooks.on('renderItemSheet', (
     let choices = [];
 
     const name = item?.name?.toLowerCase() ?? '';
-    const sourceId = item?.flags.core?.sourceId ?? '';
     const isGreater = item.hasItemBooleanFlag(greaterWeaponFocusKey)
         || (name.includes(Settings.weaponFocus) && name.includes(LanguageSettings.greater))
-        || sourceId.includes(greaterWeaponFocusCompendiumId);
+        || itemHasCompendiumId(item, greaterWeaponFocusCompendiumId);
     const isMythic = item.hasItemBooleanFlag(mythicWeaponFocusKey)
         || (name.includes(Settings.weaponFocus) && name.includes(LanguageSettings.mythic))
-        || sourceId.includes(mythicWeaponFocusCompendiumId);
+        || itemHasCompendiumId(item, mythicWeaponFocusCompendiumId);
     const isRacial = item.hasItemBooleanFlag(racialWeaponFocusKey)
-        || sourceId.includes(gnomeWeaponFocusCompendiumId);
+        || itemHasCompendiumId(item, gnomeWeaponFocusCompendiumId);
 
     if (isGreater || isMythic) {
         key = isGreater ? greaterWeaponFocusKey : mythicWeaponFocusKey;
@@ -197,7 +197,7 @@ Hooks.on('renderItemSheet', (
     }
     else if (item.hasItemBooleanFlag(weaponFocusKey)
         || (name.includes(Settings.weaponFocus) && !isRacial)
-        || sourceId.includes(weaponFocusCompendiumId)
+        || itemHasCompendiumId(item, weaponFocusCompendiumId)
     ) {
         key = weaponFocusKey;
         choices = uniqueArray([...(actor?.items ?? [])]
@@ -234,13 +234,12 @@ const onCreate = (item, data, { temporary }, id) => {
     if (temporary) return;
 
     const name = item?.name?.toLowerCase() ?? '';
-    const sourceId = item?.flags.core?.sourceId ?? '';
     const isRegular = name === Settings.weaponFocus
-        || sourceId.includes(weaponFocusCompendiumId);
+        || itemHasCompendiumId(item, weaponFocusCompendiumId);
     const isGreater = (name.includes(Settings.weaponFocus) && name.includes(LanguageSettings.greater))
-        || sourceId.includes(greaterWeaponFocusCompendiumId);
+        || itemHasCompendiumId(item, greaterWeaponFocusCompendiumId);
     const isMythic = (name.includes(Settings.weaponFocus) && name.includes(LanguageSettings.mythic))
-        || sourceId.includes(mythicWeaponFocusCompendiumId);
+        || itemHasCompendiumId(item, mythicWeaponFocusCompendiumId);
 
     let focused = '';
     if (item.actor) {

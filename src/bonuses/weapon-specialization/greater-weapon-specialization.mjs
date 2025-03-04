@@ -6,6 +6,7 @@ import { stringSelect } from "../../handlebars-handlers/bonus-inputs/string-sele
 import { intersection, intersects } from "../../util/array-intersects.mjs";
 import { createChangeForTooltip } from '../../util/conditional-helpers.mjs';
 import { getCachedBonuses } from '../../util/get-cached-bonuses.mjs';
+import { itemHasCompendiumId } from '../../util/has-compendium-id.mjs';
 import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize, localizeBonusLabel, localizeBonusTooltip } from "../../util/localize.mjs";
@@ -137,10 +138,10 @@ Hooks.on('renderItemSheet', (
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
     const name = item?.name?.toLowerCase() ?? '';
-    const sourceId = item?.flags.core?.sourceId ?? '';
+    const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
     if (!((name.includes(WeaponSpecializationSettings.weaponSpecialization) && name.includes(LanguageSettings.greater))
         || item.hasItemBooleanFlag(key)
-        || sourceId.includes(compendiumId))
+        || hasCompendiumId)
     ) {
         return;
     }
@@ -180,11 +181,11 @@ const onCreate = (item, data, { temporary }, id) => {
     if (temporary) return;
 
     const name = item?.name?.toLowerCase() ?? '';
-    const sourceId = item?.flags.core?.sourceId ?? '';
+    const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
     const hasBonus = item.hasItemBooleanFlag(key);
 
     let updated = false;
-    if (((name.includes(WeaponSpecializationSettings.weaponSpecialization) && name.includes(LanguageSettings.greater)) || sourceId.includes(compendiumId)) && !hasBonus) {
+    if (((name.includes(WeaponSpecializationSettings.weaponSpecialization) && name.includes(LanguageSettings.greater)) || hasCompendiumId) && !hasBonus) {
         item.updateSource({
             [`system.flags.boolean.${key}`]: true,
         });

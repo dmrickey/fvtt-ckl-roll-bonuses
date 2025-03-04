@@ -1,4 +1,4 @@
-//// @ts-nocheck
+// @ts-nocheck
 /** copied from 5e */
 
 import { api } from './api.mjs';

@@ -4,6 +4,7 @@ import { api } from '../../util/api.mjs';
 import { intersects } from "../../util/array-intersects.mjs";
 import { getCachedBonuses } from '../../util/get-cached-bonuses.mjs';
 import { getActionDamageTypes } from '../../util/get-damage-types.mjs';
+import { itemHasCompendiumId } from '../../util/has-compendium-id.mjs';
 import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize, localizeBonusLabel, localizeBonusTooltip } from "../../util/localize.mjs";
@@ -205,17 +206,17 @@ Hooks.on('renderItemSheet', (
 
     const name = item?.name?.toLowerCase() ?? '';
     const isElementalFocusFeat = item.hasItemBooleanFlag(elementalFocusKey) || (name.includes(Settings.elementalFocus) && item.type === 'feat' && item.subType !== 'classFeat');
-    const sourceId = item?.flags.core?.sourceId ?? '';
-    if (isElementalFocusFeat || sourceId.includes(elementalFocusCompendiumId)) {
+    const hasCompendiumId = itemHasCompendiumId(item, elementalFocusCompendiumId);
+    if (isElementalFocusFeat || hasCompendiumId) {
         key = elementalFocusKey;
     }
 
     const isGreater = item.hasItemBooleanFlag(greaterElementalFocusKey)
         || (isElementalFocusFeat && name.includes(LanguageSettings.greater))
-        || sourceId.includes(greaterElementalFocusCompendiumId);
+        || itemHasCompendiumId(item, greaterElementalFocusCompendiumId);
     const isMythic = item.hasItemBooleanFlag(mythicElementalFocusKey)
         || (isElementalFocusFeat && name.includes(LanguageSettings.mythic))
-        || sourceId.includes(mythicElementalFocusCompendiumId);
+        || itemHasCompendiumId(item, mythicElementalFocusCompendiumId);
 
     if (isGreater || isMythic) {
         key = isGreater ? greaterElementalFocusKey : mythicElementalFocusKey;
@@ -263,14 +264,13 @@ const onCreate = (item, data, { temporary }, id) => {
     if (temporary) return;
 
     const name = item?.name?.toLowerCase() ?? '';
-    const sourceId = item?.flags.core?.sourceId ?? '';
 
     const isRegular = (name.includes(Settings.elementalFocus) && item.type === 'feat' && item.subType !== 'classFeat')
-        || sourceId.includes(elementalFocusCompendiumId);
+        || itemHasCompendiumId(item, elementalFocusCompendiumId);
     const isGreater = (name.includes(Settings.elementalFocus) && name.includes(LanguageSettings.greater))
-        || sourceId.includes(greaterElementalFocusCompendiumId);
+        || itemHasCompendiumId(item, greaterElementalFocusCompendiumId);
     const isMythic = (name.includes(Settings.elementalFocus) && name.includes(LanguageSettings.mythic))
-        || sourceId.includes(mythicElementalFocusCompendiumId);
+        || itemHasCompendiumId(item, mythicElementalFocusCompendiumId);
 
     /** @type {damageElements[number]} */
     let focused = damageElements[0];
