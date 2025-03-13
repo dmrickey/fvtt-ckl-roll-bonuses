@@ -1,6 +1,3 @@
-// TODO have to check all of this
-// @ts-nocheck
-
 import { getMartialFocusCondtional } from '../bonuses/martial-focus.mjs';
 import { getGreaterWeaponSpecializaitonConditional } from '../bonuses/weapon-specialization/greater-weapon-specialization.mjs';
 import { getWeaponSpecializaitonConditional } from '../bonuses/weapon-specialization/weapon-specialization.mjs';
@@ -25,7 +22,7 @@ function actionDamage(action, { simplify = true, strict = true } = {}) {
         actorData = actor?.system;
 
     /** BEGIN OVERRIDE */
-    const actionData = foundry.utils.deepClone(action.data);
+    const actionData = foundry.utils.deepClone(action);
     /** END OVERRIDE */
 
     /** @type {(number | string)[]} */
@@ -68,7 +65,6 @@ function actionDamage(action, { simplify = true, strict = true } = {}) {
     /** END OVERRIDE */
 
     /**
-     *
      * @param {string | number} formula
      * @param {*} [change]
      */
@@ -87,9 +83,9 @@ function actionDamage(action, { simplify = true, strict = true } = {}) {
                             .reduce((acc, x) => acc + x, 0);
                         /** END OVERRIDE */
                     }
-                    if (formula != 0) {
+                    if (!!formula) {
                         const newformula = pf1.utils.formula.simplify(formula, rd, { strict });
-                        if (newformula != 0) parts.push(newformula);
+                        if (!!newformula) parts.push(newformula);
                     }
                     break;
                 }
@@ -120,7 +116,8 @@ function actionDamage(action, { simplify = true, strict = true } = {}) {
     handleParts(actionData.damage.parts);
     /** BEGIN OVERRIDE */
     if (parts[0]) {
-        const fakeParts = [{ base: parts[0] }];
+        /** @type {PreDamageRollPart[]} */
+        const fakeParts = [{ base: parts[0] + '' }];
         DiceTransformBonus.preDamageRoll(action, lazy.rollData, fakeParts);
         parts[0] = fakeParts[0].base;
     }
@@ -133,7 +130,7 @@ function actionDamage(action, { simplify = true, strict = true } = {}) {
     if (dmgAbl) {
         const ablMax = actionData.ability?.max ?? Infinity;
         const dmgAblBaseMod = Math.min(actorData?.abilities?.[dmgAbl]?.mod ?? 0, ablMax);
-        const held = action.data?.held || item?.system.held || "1h";
+        const held = actionData?.held || item?.system.held || "1h";
         let ablDmgMult =
             actionData.ability.damageMult ?? (isNatural ? null : pf1.config.abilityDamageHeldMultipliers[held]) ?? 1;
         if (isNatural && !(actionData.naturalAttack?.primary ?? true)) {

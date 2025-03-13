@@ -237,9 +237,16 @@
 - Add Concealment
   - This would allow me to automatically add effect notes for each roll to automatically roll for concealment
   - And would allow automating rerolls for abilities like Weapon of the Chosen
+- Add bonuses to attacker based on a "when targets me" buff defined on an actor
+  - Could include options like
+    - when targeted by ally
+    - when targeted by any enemy
+      - or when targeted by specific enemy
+      - or when targeted by any enemy except specified enemy
 
 # PF1 v11
-- Type/Subtype targets are now viable.
+- Actor Type/Subtype targets are now viable.
+- spell subtype target is now viable
 
 # vnext
 - Create new "Roll Bonuses" section for attack dialog inputs
@@ -270,4 +277,5 @@
   - And make sure "All" shows up under conditional
 - make common "has source compendium id" function and make sure it reads from new place in addition to old
 - BUG REPORT - magic +1 arrows are adding their attack bonus when used with a mw bow
+- BUG REPORT - Vital Strike breaks attacks with no damage (i.e. Melee/Ranged basic attacks from the combat tab)
 - Automatically check high ground on the attack dialog when applicable

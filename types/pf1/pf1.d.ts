@@ -501,9 +501,9 @@ declare global {
 
     interface PreDamageRollPart {
         base: string;
-        damageType: ItemConditionalModifierSourceData['damageType'];
-        extra: Array;
-        type: CritType;
+        damageType?: ItemConditionalModifierSourceData['damageType'];
+        extra?: Array;
+        type?: CritType;
     }
 
     class ItemAction {
@@ -2277,6 +2277,10 @@ declare global {
         };
         utils: {
             formula: {
+                actionDamage: (action: ItemAction, { simplify, strict }?: {
+                    simplify?: boolean | undefined;
+                    strict?: boolean | undefined;
+                }) => string;
                 compress(arg0: string): string;
                 simplify(
                     formula: string,
