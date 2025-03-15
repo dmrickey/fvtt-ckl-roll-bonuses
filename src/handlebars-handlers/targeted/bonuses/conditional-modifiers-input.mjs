@@ -164,9 +164,7 @@ export function modifiersInput({
         journal,
         tooltip,
         damageTypes: pf1.registry.damageTypes.toObject(),
-        data: {
-            conditionals: createConditionalTemplateData(),
-        }
+        conditionals: createConditionalTemplateData(),
     };
 
     const div = createTemplate(templates.conditionalsInput, templateData);
@@ -311,8 +309,8 @@ export function modifiersInput({
         effect: { subTarget: 'dc', critical: undefined, damageType: [], type: undefined, },
         misc: { subTarget: 'charges', critical: undefined, damageType: [], type: undefined, },
         size: { subTarget: undefined, critical: undefined, damageType: [], type: undefined, },
-        dc: { subTarget: undefined, critical: undefined, damageType: [], type: undefined, },
-        cl: { subTarget: undefined, critical: undefined, damageType: [], type: undefined, },
+        // dc: { subTarget: undefined, critical: undefined, damageType: [], type: undefined, },
+        // cl: { subTarget: undefined, critical: undefined, damageType: [], type: undefined, },
         critMult: { subTarget: undefined, critical: undefined, damageType: [], type: undefined, },
     };
 
@@ -442,20 +440,18 @@ export function modifiersInput({
                 const modifier = conditional._source.modifiers.find((m) => m._id === li?.dataset.modifier);
                 if (!modifier) return;
 
-
-                async function update(/** @type {ItemConditionalModifierSourceData['damageType']} */ types) {
+                /** @param {Array<string>} types */
+                async function updateCallback(types) {
                     if (!modifier) return;
 
                     modifier.damageType = types;
                     await updateItem();
-                }
+                };
                 const app = new pf1.applications.DamageTypeSelector(
-                    {
-                        id: key,
-                        update,
-                    },
+                    { id: key },
                     modifier._id,
                     modifier.damageType || [],
+                    { updateCallback }
                 );
                 return app.render(true);
             },

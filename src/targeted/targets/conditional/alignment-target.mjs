@@ -16,7 +16,7 @@ const choices =  /** @type {const} */ ({
  */
 
 /**
- * @augments BaseTarget
+ * @extends BaseTarget
  */
 export class AlignmentTarget extends BaseTarget {
     /**

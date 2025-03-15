@@ -7,7 +7,7 @@ import { uniqueArray } from "../../util/unique-array.mjs";
 import { BaseTarget } from "./_base-target.mjs";
 
 /**
- * @augments BaseTarget
+ * @extends BaseTarget
  */
 export class WeaponGroupTarget extends BaseTarget {
     /**

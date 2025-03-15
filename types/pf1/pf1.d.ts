@@ -1875,7 +1875,7 @@ declare global {
             | 'charges' // when target is 'misc'
             | '' // size
             | undefined; // no subtarget for 'size'
-        target: 'attack' | 'damage' | 'effect' | 'misc' | 'size' | 'dc' | 'cl' | 'critMult';
+        target: 'attack' | 'damage' | 'effect' | 'misc' | 'size' | 'critMult';
         type: GenericDamageType;
         _id: string;
     }

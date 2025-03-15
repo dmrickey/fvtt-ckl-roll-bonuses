@@ -150,9 +150,7 @@ export function damageInput({
             if (damageIndex !== null && damageIndex !== undefined) {
                 const path = `${damageIndex}.types`;
 
-                /**
-                 * @param {{ [key: string]: object }} arg
-                 */
+                /** @param {{ [key: string]: object }} arg */
                 async function updateCallback(arg) {
                     setProperty(savedParts, path, arg);
                     await item.setFlag(MODULE_NAME, key, savedParts);

@@ -327,7 +327,7 @@
         },
         "hint-missing-bonus": "Missing Bonus, click to add",
         "hint-missing-target": "Missing Target, click to add",
-        "invalid-override": "This item type natively includes this property.",
+        "invalid-override": "This does nothing for this item type—edit the item's details directly.",
         "item-app": {
             "description": "Each item selected will receive the associated bonuses. Right click on any row to open the sheet for further verification.",
             "title": "Item Selector"
