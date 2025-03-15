@@ -317,6 +317,9 @@
 - BUG REPORT - Vital Strike breaks attacks with no damage (i.e. Melee/Ranged basic attacks from the combat tab)
 - Automatically check high ground on the attack dialog when applicable
 - Add documentation into "Has BFlag" to include toggle (copy from "has condition")
+- look at action-sheet._onDrop and update my logic for drop handlers
+  - my location conditional-modifiers-input.modifiersInput--div.addEventListener('drop'...
+- Make sure all conditional bonuses work
   
 # Verify
 - mw bow with magic ammo now works correctly

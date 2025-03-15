@@ -1879,18 +1879,29 @@ declare global {
         type: GenericDamageType;
         _id: string;
     }
+
+    interface ConditionalTarget {
+        id: string;
+        sort: number;
+        label: string;
+        simple?: boolean;
+        disabled?: boolean;
+        choices?: Record<string, any>;
+    }
     /** Includes fields that are prepped when showing the action sheet */
     class ItemConditionalModifierSourceDataPrepped extends ItemConditionalModifier {
         targets: {
-            attack: string;
-            critMult: string;
-            damage: string;
-            dc: string;
-            effect: string;
-            misc?: string;
-            size: string;
+            attack: ConditionalTarget;
+            critMult: ConditionalTarget;
+            damage: ConditionalTarget;
+            size: ConditionalTarget;
+            dc: ConditionalTarget;
+            cl: ConditionalTarget;
+            effect: ConditionalTarget;
+            misc: ConditionalTarget;
+            charges?: ConditionalTarget;
         }?;
-        targetEntry: string;
+        targetEntry?: ConditionalTarget;
         subTargets: { [x: string]: string }?;
         conditionalModifierTypes: { [x: string]: string }?;
         conditionalCritical: {
@@ -1898,6 +1909,7 @@ declare global {
             crit?: 'PF1.OnCritBonusFormula';
             nonCrit?: 'PF1.NonMultBonusFormula';
         }?;
+        damage: DamagePartModel;
     }
     class ItemConditionalModifier {
         critical: undefined | CritType;
