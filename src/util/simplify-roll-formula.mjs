@@ -140,8 +140,8 @@ function _simplifyDiceTerms(terms) {
     const simplified = Object.entries(diceQuantities).flatMap(([key, number]) => ([
         new foundry.dice.terms.OperatorTerm({ operator: key.charAt(0) }),
         key.slice(1) === "c"
-            ? new Coin({ number: number })
-            : new Die({ number, faces: parseInt(key.slice(1)) })
+            ? new foundry.dice.terms.Coin({ number: number })
+            : new foundry.dice.terms.Die({ number, faces: parseInt(key.slice(1)) })
     ]));
     return [...simplified, ...annotated];
 }
