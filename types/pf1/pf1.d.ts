@@ -119,7 +119,8 @@ declare global {
         };
         getActiveTokens(): Array<TokenPF>;
         getSkillInfo(skillId: string): SkillInfo;
-        hasCondition(key: keyof Conditions): boolean;
+
+        statuses: { has(key: keyof Conditions): boolean; }
 
         /**
          * Gets the actor's roll data.

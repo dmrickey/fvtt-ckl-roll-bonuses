@@ -309,7 +309,7 @@ function stringTerms(terms) {
     const nterms = [];
     while (terms.length) {
         const term = terms.shift();
-        if (term instanceof StringTerm) {
+        if (term instanceof foundry.dice.terms.StringTerm) {
             // Partial dice terms combine left
             if (/^d\d/.test(term.expression)) {
                 nterms.push(new FormulaPart([nterms.pop(), term]));

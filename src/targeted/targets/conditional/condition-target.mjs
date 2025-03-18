@@ -88,11 +88,11 @@ export class ConditionTarget extends BaseTarget {
 
             const targetOrSelf = this.#getTargetType(source);
             if (targetOrSelf === 'self') {
-                return actor.hasCondition(condition);
+                return actor.statuses.has(condition);
             }
             else {
                 if (!currentTargets.length) return false;
-                return currentTargets.every((a) => a.hasCondition(condition));
+                return currentTargets.every((a) => a.statuses.has(condition));
             }
         });
 

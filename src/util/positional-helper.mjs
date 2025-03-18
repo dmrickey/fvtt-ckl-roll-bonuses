@@ -138,16 +138,16 @@ export class PositionalHelper {
                 'stunned',
                 'unconscious',
             ];
-            if (conditions.some((c) => actor.hasCondition(c))) {
+            if (conditions.some((c) => actor.statuses.has(c))) {
                 return false;
             }
 
             const senses = actor.system.traits.senses;
-            if (actor.hasCondition('blind') && !(senses.bs || senses.ts)) {
+            if (actor.statuses.has('blind') && !(senses.bs || senses.ts)) {
                 return false;
             }
 
-            if (target.actor.hasCondition('invisible')
+            if (target.actor.statuses.has('invisible')
                 && !(senses.si || senses.ts)
             ) {
                 return false;

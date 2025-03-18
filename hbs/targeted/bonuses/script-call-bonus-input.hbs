@@ -10,7 +10,7 @@
             <input type="text" readonly value="{{category.label}}" />
             {{else}}
             <select class="category-select">
-                {{selectOptions ../categories selected=category nameAttr="key" labelAttr="label"}}
+                {{selectOptions ../categories selected=category valueAttr="key" labelAttr="label"}}
             </select>
             {{/if}}
             {{#unless readonly}}
