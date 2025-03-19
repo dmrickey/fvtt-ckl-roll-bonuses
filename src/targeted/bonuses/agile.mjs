@@ -110,10 +110,10 @@ export class AgileBonus extends BaseBonus {
      * @override
      * @inheritdoc
      * @param {ItemPF} source The source of the bonus
-     * @param {(ActionUse | ItemPF | ItemAction)?} [item] The item receiving the bonus for contextually aware hints.
-     * @returns {string[]}
+     * @param {(ActionUse | ItemPF | ItemAction)?} [_item] The item receiving the bonus for contextually aware hints.
+     * @returns {ParsedContextNoteEntry[]}
      */
-    static getFootnotes(source, item) { return [this.label]; }
+    static getFootnotes(source, _item) { return [{ text: this.label, source: source.name }]; }
 
     /**
      * @override

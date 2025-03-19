@@ -1,7 +1,7 @@
 import { Sources } from '../targeted/source-registration.mjs';
 import { PositionalHelper } from '../util/positional-helper.mjs';
 import { currentTargets } from '../util/get-current-targets.mjs';
-import { customGlobalHooks } from '../util/hooks.mjs'
+import { customGlobalHooks, LocalHookHandler, localHooks } from '../util/hooks.mjs'
 import { BaseGlobalBonus } from './base-global-bonus.mjs';
 import { RangedIncrementPenaltyBonus } from './targeted/bonuses/ranged-increment-penalty-bonus.mjs';
 import { addCheckToAttackDialog, getFormData } from '../util/attack-dialog-helper.mjs';
@@ -160,7 +160,7 @@ export class RangedIncrementPenaltyGlobalBonus extends BaseGlobalBonus {
 
     /**
      * @param {ActionUse} actionUse
-     * @param {string[]} notes
+     * @param {ParsedContextNoteEntry[]} notes
      */
     static addSkipFootnote(actionUse, notes) {
         if (getFormData(actionUse, RangedIncrementPenaltyGlobalBonus.dialogDisableKey)) {
@@ -171,6 +171,6 @@ export class RangedIncrementPenaltyGlobalBonus extends BaseGlobalBonus {
     static {
         Hooks.on('renderApplication', RangedIncrementPenaltyGlobalBonus.addSkipRangeToDialog);
         Hooks.on(customGlobalHooks.actionUseAlterRollData, RangedIncrementPenaltyGlobalBonus.addRangedPenalty);
-        Hooks.on(customGlobalHooks.actionUseFootnotes, RangedIncrementPenaltyGlobalBonus.addSkipFootnote)
+        LocalHookHandler.registerHandler(localHooks.actionUseFootnotes, RangedIncrementPenaltyGlobalBonus.addSkipFootnote)
     }
 }

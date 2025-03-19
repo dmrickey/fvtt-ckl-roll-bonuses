@@ -320,7 +320,7 @@
 - look at action-sheet._onDrop and update my logic for drop handlers
   - my location conditional-modifiers-input.modifiersInput--div.addEventListener('drop'...
 - Make sure all conditional bonuses work
-- Footnotes targeted bonus doesn't work
+- investigate "action damage" and see if I need that at all
   
 # Verify
 - mw bow with magic ammo now works correctly

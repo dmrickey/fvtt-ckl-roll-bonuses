@@ -193,17 +193,16 @@ function actionUseAlterRollData(actionUse) {
 Hooks.on(customGlobalHooks.actionUseAlterRollData, actionUseAlterRollData);
 
 /**
- * @param {ChatAttack} chatAttack
- * @param {string[]} notes
+ * @param {ActionUse} action
+ * @param {ParsedContextNoteEntry[]} notes
  */
-function addFootnotes(chatAttack, notes) {
-    const { action } = chatAttack;
+function addFootnotes(action, notes) {
     handleBonusesFor(
         action,
         (bonusType, sourceItem) => notes.push(...(bonusType.getFootnotes(sourceItem, action) ?? []))
     );
 }
-Hooks.on(customGlobalHooks.actionUseFootnotes, addFootnotes);
+LocalHookHandler.registerHandler(localHooks.actionUseFootnotes, addFootnotes);
 
 /**
  * @param {ItemAction} action

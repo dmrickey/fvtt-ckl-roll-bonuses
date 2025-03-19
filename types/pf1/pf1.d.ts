@@ -296,7 +296,7 @@ declare global {
         templateData: {
             action?: ItemAction;
             item?: ItemPF;
-            footnotes?: string[];
+            footnotes?: ParsedContextNoteEntry[];
         };
         token?: TokenDocumentPF;
         useMeasureTemplate?: boolean;
@@ -2385,4 +2385,12 @@ declare global {
         thr: 'Thrown';
         trp: 'Trip';
     };
+
+    interface ParsedContextNoteEntry  {
+        /** Source label if any */
+        source?: string;
+
+        /** Enriched note text */
+        text: string;
+    }
 }

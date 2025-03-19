@@ -1,6 +1,6 @@
 import { PositionalHelper } from '../util/positional-helper.mjs';
 import { currentTargets } from '../util/get-current-targets.mjs';
-import { customGlobalHooks } from '../util/hooks.mjs'
+import { customGlobalHooks, LocalHookHandler, localHooks } from '../util/hooks.mjs'
 import { BaseGlobalBonus } from './base-global-bonus.mjs';
 import { addCheckToAttackDialog, getFormData } from '../util/attack-dialog-helper.mjs';
 
@@ -90,7 +90,7 @@ export class RequireMeleeThreatenGlobalBonus extends BaseGlobalBonus {
 
     /**
      * @param {ActionUse} actionUse
-     * @param {string[]} notes
+     * @param {ParsedContextNoteEntry[]} notes
      */
     static addSkipFootnote(actionUse, notes) {
         if (getFormData(actionUse, RequireMeleeThreatenGlobalBonus.dialogDisableKey)) {
@@ -101,6 +101,6 @@ export class RequireMeleeThreatenGlobalBonus extends BaseGlobalBonus {
     static {
         Hooks.on('renderApplication', RequireMeleeThreatenGlobalBonus.addSkipMeleeThreatenToDialog);
         Hooks.on(customGlobalHooks.actionUseAlterRollData, RequireMeleeThreatenGlobalBonus.requireMelee);
-        Hooks.on(customGlobalHooks.actionUseFootnotes, RequireMeleeThreatenGlobalBonus.addSkipFootnote)
+        LocalHookHandler.registerHandler(localHooks.actionUseFootnotes, RequireMeleeThreatenGlobalBonus.addSkipFootnote)
     }
 }

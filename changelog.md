@@ -1,12 +1,13 @@
 ## Roll Bonuses 2.18.0
 
 ### Misc
+- Footnote Bonuses make use of the system's new source feature - meaning when you hover over a footnote provided by RB, it will show the source of the note
 - Moved "All" Target to Conditional Targets since it does not target based on specific criteria
 - Has Boolean Flag Conditional Target now has an option to be enabled based on whether or not your current targets have the flag, in addition to the previous functionality of it being based off of "just you"
 
 ### Bugfixes
 - Fixed Damage Bonus item hint so that it's visible when either type of bonus is enabled instead of only when both types of damage bonuses are enabled
-- Using ammo with enhancement bonuses with a masterwork weapon now correctly accounts for the weapons MW when totalling the bonuses.
+- Using ammo with enhancement bonuses with a masterwork ranged weapon now correctly accounts for the weapon's MW bonus when totalling the bonuses.
 
 ---
 

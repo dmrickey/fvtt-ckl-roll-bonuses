@@ -183,8 +183,8 @@ export class CritBonus extends BaseBonus {
         });
 
         /**
-         * @param {ChatAttack} chatAttack
-         * @param {string[]} notes
+         * @param {ActionUse} action
+         * @param {ParsedContextNoteEntry[]} notes
          */
         function addFootnotes({ action }, notes) {
             if (!action?.ability) {
@@ -222,10 +222,10 @@ export class CritBonus extends BaseBonus {
             if (mult !== originalMult || range !== originalRange) {
                 const rangeFormat = range === 20 ? '20' : `${range}-20`;
                 const hint = `${rangeFormat}/x${mult}`;
-                notes.push(hint);
+                notes.push({ text: hint });
             }
         }
-        Hooks.on(customGlobalHooks.actionUseFootnotes, addFootnotes);
+        LocalHookHandler.registerHandler(localHooks.actionUseFootnotes, addFootnotes);
     }
 
     /**

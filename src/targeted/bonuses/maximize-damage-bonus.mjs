@@ -19,11 +19,11 @@ export class MaximizeDamageBonus extends BaseBonus {
 
     /**
      * @override
-     * @param {ItemPF} _source The source of the bonus
+     * @param {ItemPF} source The source of the bonus
      * @param {(ActionUse | ItemPF | ItemAction)?} [_thing] The thing receiving the bonus for contextually aware hints.
-     * @returns {string[]}
+     * @returns {ParsedContextNoteEntry[]}
      */
-    static getFootnotes(_source, _thing) { return [localize('maximized')]; }
+    static getFootnotes(source, _thing) { return [{ text: localize('maximized'), source: source.name }]; }
 
     /**
      * @override

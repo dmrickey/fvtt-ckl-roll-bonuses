@@ -29,9 +29,8 @@ Hooks.once('pf1PostReady', () => migrate());
 function addFootnotes(wrapped) {
     wrapped();
 
-    /** @type {string[]} */
     const notes = this.shared.templateData.footnotes ?? [];
-    Hooks.call(customGlobalHooks.actionUseFootnotes, this, notes);
+    LocalHookHandler.fireHookNoReturnSync(localHooks.actionUseFootnotes, this, notes)
     this.shared.templateData.footnotes = notes;
 }
 
