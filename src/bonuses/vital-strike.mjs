@@ -143,7 +143,7 @@ class VitalStrikeData {
                 if (actionUse) {
                     // if (!this.mythic) {
                     const part = actionUse.action.damage?.parts[0];
-                    const partFormula = part.formula || '';
+                    const partFormula = part?.formula || '';
                     const firstDice = getFirstTermFormula(partFormula);
 
                     if (firstDice) {

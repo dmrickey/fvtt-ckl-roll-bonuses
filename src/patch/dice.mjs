@@ -91,9 +91,8 @@ function _DiceTerm_evaluateSync(options = {}) {
         if (options.minimize) roll.result = Math.min(1, this.faces);
         else if (options.maximize) roll.result = this.faces;
         else if (options.forceSync) {
-            // debugger;
             roll.result = this.randomFace();
-            if (this instanceof FateDie) {
+            if (this instanceof foundry.dice.terms.FateDie) {
                 if (roll.result === -1) roll.failure = true;
                 if (roll.result === 1) roll.success = true;
             }
