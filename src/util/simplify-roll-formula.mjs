@@ -17,7 +17,7 @@ const {
  *
  * @returns {string}  The resulting simplified formula.
  */
-export function simplifyRollFormula(formula, { preserveFlavor = false, deterministic = false, rollData = {} } = {}) {
+export function simplifyRollFormula(formula, rollData = {}, { preserveFlavor = false, deterministic = false } = {}) {
     // Create a new roll and verify that the formula is valid before attempting simplification.
     let roll;
     try { roll = new Roll(formula, rollData); }
@@ -447,11 +447,13 @@ function replaceZeroDice(terms) {
  * @param {object} [rollData={}] - Roll data
  * @param {object} [options] - Additional options
  * @param {boolean} [options.strict] - Attempt to return something even slightly valid even with bad formulas
+ * @param {boolean} [options.preserveFlavor] - Only combine terms with matching flavor
  * @returns {string} - Simpler formula
  * @throws {Error} - On invalid formula
  */
 export function simplify(formula, rollData = {}, { strict = true } = {}) {
-    formula = compress(Roll.replaceFormulaData(unflair(formula), rollData, { missing: 0 }));
+    formula = preserveFlavor ? formula : unflair(formula);
+    formula = compress(Roll.replaceFormulaData(formula, rollData, { missing: 0 }));
 
     // Produce nicer formula
     formula = Roll.defaultImplementation
