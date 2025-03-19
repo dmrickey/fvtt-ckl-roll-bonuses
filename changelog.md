@@ -8,6 +8,7 @@
 ### Bugfixes
 - Fixed Damage Bonus item hint so that it's visible when either type of bonus is enabled instead of only when both types of damage bonuses are enabled
 - Using ammo with enhancement bonuses with a masterwork ranged weapon now correctly accounts for the weapon's MW bonus when totalling the bonuses.
+- Vital Strike no longer errors when enabled by default and rolling non-damage attacks
 
 ---
 
