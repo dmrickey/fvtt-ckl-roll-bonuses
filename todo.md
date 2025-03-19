@@ -320,7 +320,7 @@
 - look at action-sheet._onDrop and update my logic for drop handlers
   - my location conditional-modifiers-input.modifiersInput--div.addEventListener('drop'...
 - Make sure all conditional bonuses work
-- Simplfy formula is not simplifying all formulas (specifically sizeRoll)
+- Footnotes targeted bonus doesn't work
   
 # Verify
 - mw bow with magic ammo now works correctly
