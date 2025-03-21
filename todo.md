@@ -312,15 +312,17 @@
 - Add "ignore me" boolean flag to turn off auto configuration (stronger "hammer" for EitR-type stuff where it incorrectly makes assumptions)
 
 # pf1 v11 update
-- make "This item type natively includes this property." more of an error message so it's obvious it's not doing anything
-- make common "has source compendium id" function and make sure it reads from new place in addition to old
-- BUG REPORT - Vital Strike breaks attacks with no damage (i.e. Melee/Ranged basic attacks from the combat tab)
-- Automatically check high ground on the attack dialog when applicable
+- Target overrides
+  - make "This item type natively includes this property." more of an error message so it's obvious it's not doing anything (i.e. turn it red)
+- Higher Ground
+  - Automatically check the system's new "high ground" tick on the attack dialog when applicable
+  - Or disable the system's checkbox as this mod already accounts for it
+    - but also add an "ignore" checkbox
 - Add documentation into "Has BFlag" to include toggle (copy from "has condition")
 - look at action-sheet._onDrop and update my logic for drop handlers
   - my location conditional-modifiers-input.modifiersInput--div.addEventListener('drop'...
 - Make sure all conditional bonuses work
-- investigate "action damage" and see if I need that at all
+- investigate "action damage" and see if I need that at all (talking about the helper function that builds the formula in the system)
   
 # Verify
 - mw bow with magic ammo now works correctly

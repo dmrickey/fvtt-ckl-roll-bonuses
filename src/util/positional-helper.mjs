@@ -46,9 +46,9 @@ export class PositionalHelper {
             .map((x) => new PositionalHelper(this.token2, x));
 
         /** @param {PositionalHelper} d @returns {boolean} */
-        const targetIsUnderThreeSizesLarger = (d) => sizes[d.token1.actor.system.traits.size] - sizes[d.token2.actor.system.traits.size] < 3;
+        const targetIsUnderThreeSizesLarger = (d) => d.token1.actor.system.traits.size.value - d.token2.actor.system.traits.size.value < 3;
         /** @param {PositionalHelper} d @returns {boolean} */
-        const isExactlyTwoSizesLarger = (d) => sizes[d.token1.actor.system.traits.size] - sizes[d.token2.actor.system.traits.size] === 2;
+        const isExactlyTwoSizesLarger = (d) => d.token1.actor.system.traits.size.value - d.token2.actor.system.traits.size.value === 2;
 
         const engaged = potentials
             .filter((d) => d.isAdjacent())
@@ -62,7 +62,7 @@ export class PositionalHelper {
         const penalties = engaged
             .map((e) => {
                 // assume creature is large enough to shoot at without penalty (huge or larger, i.e. can aim at spot 10' away from friendly)
-                if (sizes[e.token1.actor.system.traits.size] >= 2) {
+                if (e.token1.actor.system.traits.size.value >= 6) {
                     return 0;
                 }
                 if (isExactlyTwoSizesLarger(e)) {
@@ -370,19 +370,6 @@ export class PositionalHelper {
         const units = size / distance;
         return token.document.elevation * units;
     }
-}
-
-/** @type {Record<ActorSize, number>} */
-const sizes = {
-    fine: -4,
-    dim: -3,
-    tiny: -2,
-    sm: -1,
-    med: 0,
-    lg: 1,
-    huge: 2,
-    grg: 3,
-    col: 4,
 }
 
 api.utils.PositionalHelper = PositionalHelper;

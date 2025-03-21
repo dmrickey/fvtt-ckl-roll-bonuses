@@ -1109,7 +1109,7 @@ declare global {
                 tr: boolean;
                 ts: number;
             };
-            size: ActorSize;
+            size: { base: ActorSize, value: number};
             stature: ActorStature;
             type: 'humanoid';
             weaponProf: {
@@ -2125,8 +2125,6 @@ declare global {
             ActionUse: typeof ActionUse;
             ChatAttack: typeof ChatAttack;
         };
-        actorSizes: Record<ActorSize, string>;
-        actorStatures: Record<ActorStature, string>;
         applications: {
             ScriptEditor: any;
             AttackDialog: { new (): AttackDialog };
@@ -2151,6 +2149,8 @@ declare global {
         };
         config: {
             abilityDamageHeldMultipliers: { oh: 0.5; '1h': 1; '2h': 1.5 };
+            actorSizes: Record<ActorSize, string>;
+            actorStatures: Record<ActorStature, string>;
             backgroundOnlySkills: (keyof typeof pf1.config.skills)[];
             conditions: Conditions;
             conditionalTargets: {
