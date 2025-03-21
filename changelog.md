@@ -1,4 +1,4 @@
-## Roll Bonuses 2.18.0
+## Roll Bonuses 2.18.0 - pf1 v12 release
 
 ### Misc
 - Footnote Bonuses make use of the system's new source feature - meaning when you hover over a footnote provided by RB, it will show the source of the note

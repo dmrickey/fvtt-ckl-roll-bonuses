@@ -322,6 +322,9 @@
 - look at action-sheet._onDrop and update my logic for drop handlers
   - my location conditional-modifiers-input.modifiersInput--div.addEventListener('drop'...
 - Make sure all conditional bonuses work
+- Improved Armor Focus
+  - isn't adding (subtracting) ACP
+  - also shows the choice for Armor Focus
 - investigate "action damage" and see if I need that at all (talking about the helper function that builds the formula in the system)
   
 # Verify

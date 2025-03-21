@@ -50,7 +50,7 @@ export function stringSelect({
     const div = createTemplate(
         templates.stringSelect,
         {
-            choices,
+            choices: choices.map(c => ({ value: c, label: c })),
             current,
             errorMsg,
             journal,
