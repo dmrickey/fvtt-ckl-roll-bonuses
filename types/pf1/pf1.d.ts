@@ -1165,6 +1165,12 @@ declare global {
             dex: number | null;
             enh: number;
             value: number;
+            material : {
+                addon: Array<unknown>
+                base: {value: string, custom: boolean}
+                normal: {value: string, custom: boolean}
+            }
+            total : number;
         };
         baseTypes: string[];
         // links: { children: { name: string; id: string }[] };

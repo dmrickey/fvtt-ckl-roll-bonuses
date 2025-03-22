@@ -310,6 +310,12 @@
     - Inspiration "Fortune" 
       - e.g. Empathy Talent, when rolling inspiration for sense motive, roll twice and take the higher
 - Add "ignore me" boolean flag to turn off auto configuration (stronger "hammer" for EitR-type stuff where it incorrectly makes assumptions)
+- Look into changing a lot of my older bonuses into the system's newer changes - will hopefully be less processing if I'm not manually injecting stuff
+  - e.g. (Improved) Armor Focus
+    - AF - `+1` untyped Armor AC
+    - IAF - `-1` untyped ACP (Armor)
+  - CL
+  - DC
 
 # pf1 v11 update
 - Target overrides
@@ -322,9 +328,6 @@
 - look at action-sheet._onDrop and update my logic for drop handlers
   - my location conditional-modifiers-input.modifiersInput--div.addEventListener('drop'...
 - Make sure all conditional bonuses work
-- Improved Armor Focus
-  - isn't adding (subtracting) ACP
-  - also shows the choice for Armor Focus
 - investigate "action damage" and see if I need that at all (talking about the helper function that builds the formula in the system)
   
 # Verify

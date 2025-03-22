@@ -167,6 +167,10 @@ const onCreate = (item, data, { temporary }, id) => {
     const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
     const hasBonus = item.hasItemBooleanFlag(key);
 
+    if (name.includes(LanguageSettings.improved)) {
+        return;
+    }
+
     let focused = '';
     if (item.actor) {
         focused = uniqueArray(item.actor.items

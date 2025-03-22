@@ -49,7 +49,11 @@ function handleArmorFocusRollData(doc, rollData) {
     const isFocused = intersects(armorFocuses, baseTypes);
     if (isFocused) {
         const current = rollData.item.armor.acp || 0;
-        rollData.item.armor.acp = Math.max(current - 1, 0);
+        const updated = Math.max(current - 1, 0);
+        if (current !== updated) {
+            rollData.item.armor.acp = updated;
+            rollData.item.armor.total--;
+        }
     }
 }
 Hooks.on('pf1GetRollData', handleArmorFocusRollData);
