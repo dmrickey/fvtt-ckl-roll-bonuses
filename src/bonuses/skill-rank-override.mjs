@@ -149,7 +149,7 @@ function prepareData(item, rollData) {
             const formula = item.getFlag(MODULE_NAME, formulaKey);
             const rank = FormulaCacheHelper.getModuleFlagValue(item, formulaKey);
             const change = createChange({
-                name: item.name,
+                name: `${game.i18n.localize("PF1.SkillRankPlural")} (${item.name})`,
                 value: rank,
                 formula,
                 type: 'base',
