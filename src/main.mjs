@@ -286,13 +286,14 @@ function itemGetTypeChatData(wrapped, data, labels, props, rollData) {
 
 /**
  * Modify damage sources for actor's combat tooltips
- * @param {(fullId: string, context: { sources: Array<any>}) => void} wrapped
+ * @param {(fullId: string, context: { sources: Array<any>}) => Promise<void>} wrapped
  * @param {string} fullId
  * @param {{sources: Array<any>}} context
  * @this {ActorSheetPF}
+ * @returns {Promise<void>}
  */
-function getDamageTooltipSources(wrapped, fullId, context) {
-    wrapped(fullId, context);
+async function getDamageTooltipSources(wrapped, fullId, context) {
+    await wrapped(fullId, context);
 
     const re = /^(?<id>[\w-]+)(?:\.(?<detail>.*))?$/.exec(fullId);
     const { id, detail } = re?.groups ?? {};
