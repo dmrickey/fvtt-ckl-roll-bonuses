@@ -2161,6 +2161,7 @@ declare global {
             ItemScriptCall: typeof ItemScriptCall;
         };
         config: {
+            classSkillBonus: number;
             abilityDamageHeldMultipliers: { oh: 0.5; '1h': 1; '2h': 1.5 };
             actorSizes: Record<ActorSize, string>;
             actorStatures: Record<ActorStature, string>;

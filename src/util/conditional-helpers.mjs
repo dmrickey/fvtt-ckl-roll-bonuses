@@ -50,7 +50,7 @@ export function conditionalModToItemChangeForDamageTooltip(conditional, modifier
  * @param {number | string} args.value
  * @param {BuffTarget} [args.target]
  * @param {BonusTypes} [args.type]
- * @param {string} [args.formula]
+ * @param {number | string} [args.formula]
  * @param {'add' | 'set'} [args.operator]
  * @param {string} [args.id]
  * @param {ItemChangeOptions} [options]
