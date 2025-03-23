@@ -333,3 +333,4 @@
 # Verify
 - mw bow with magic ammo now works correctly
 - "Has Condition" and "Has BFlag" both need to be verified for targeting self vs. actor
+- Make sure "skill rank override" works with formulas

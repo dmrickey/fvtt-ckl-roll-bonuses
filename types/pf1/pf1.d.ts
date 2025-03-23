@@ -113,6 +113,7 @@ declare global {
         hasItemBooleanFlag(key: string): boolean;
         hasWeaponProficiency(item: ItemPF, { override = true } = {}): boolean;
         allSkills: Array<keyof typeof pf1.config.skills>;
+        changes?: Collection<ItemChange>;
         get isOwner(): boolean;
         itemTypes!: {
             [T in Item as T['type']]: T[];
@@ -635,6 +636,7 @@ declare global {
     > extends ItemDocument {
         scriptCalls: Collection<ItemScriptCall>;
         _stats: { compendiumSource: UUID };
+        changes?: Collection<ItemChange>;
         _prepareDependentData(final: boolean): void;
         [MODULE_NAME]: {
             bonuses: (typeof BaseBonus)[];
@@ -1776,7 +1778,9 @@ declare global {
         | 'wisChecks'
         | 'wisMod'
         | 'wisSkills'
-        | 'wounds';
+        | 'wounds'
+        | `skill.${keyof typeof pf1.config.skills}`
+        | `skill.~${keyof typeof pf1.config.skills}`;
 
     interface DamageType {
         abbr: string;
@@ -1798,6 +1802,7 @@ declare global {
         target: BuffTarget;
         type: BonusTypes | string;
         value?: string | number;
+        _id?: string,
     }
     interface ItemChangeOptions {
         parent?: ItemPF | ActorPF;
@@ -1816,6 +1821,8 @@ declare global {
         target: string;
         type?: Nullable<BonusTypes | DamageTypes | string>;
         value: number | string;
+
+        get id(): string;
 
         data: {
             flavor: string;

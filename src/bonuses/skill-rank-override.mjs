@@ -8,6 +8,7 @@ import { LocalHookHandler, localHooks } from '../util/hooks.mjs';
 import { textInput } from '../handlebars-handlers/bonus-inputs/text-input.mjs';
 import { getSkillName } from '../util/get-skill-name.mjs';
 import { MODULE_NAME } from '../consts.mjs';
+import { createChange } from '../util/conditional-helpers.mjs';
 
 const key = 'skill-rank-override';
 const formulaKey = 'skill-rank-override-formula';
@@ -118,6 +119,7 @@ function rollSkill(seed, actor) {
         doc.updateSource({ content: doc.content.replace(name, title) });
     });
 }
+
 /**
  * @param {SkillInfo} skillInfo
  * @param {ActorPF} actor
@@ -130,9 +132,43 @@ function getSkillInfo(skillInfo, actor, _rollData) {
 
     skillInfo.rank = source.rank;
 }
+
+/**
+ * @param {ItemPF} item
+ * @param {RollData} rollData
+ */
+function prepareData(item, rollData) {
+    if (!item.isActive) return;
+
+    /** @type {Array<keyof typeof pf1.config.skills>} */
+    const keys = item.getFlag(MODULE_NAME, selectedKey) ?? [];
+    if (keys.length && item.actor) {
+        keys.forEach((skillKey) => {
+            item.actor?.getSkillInfo(skillKey);
+
+            const formula = item.getFlag(MODULE_NAME, formulaKey);
+            const rank = FormulaCacheHelper.getModuleFlagValue(item, formulaKey);
+            const change = createChange({
+                name: item.name,
+                value: rank,
+                formula,
+                type: 'base',
+                target: `skill.~${skillKey}`,
+                id: `${item.id}_${key}`,
+            });
+
+            if (!item.actor) return;
+
+            item.actor.changes ||= new Collection();
+            item.actor.changes.set(change.id, change);
+        });
+    }
+}
+
 Hooks.once('init', () => {
     LocalHookHandler.registerHandler(localHooks.actorRollSkill, rollSkill);
     LocalHookHandler.registerHandler(localHooks.actorGetSkillInfo, getSkillInfo);
+    LocalHookHandler.registerHandler(localHooks.prepareData, prepareData);
 });
 
 Hooks.on('renderItemSheet', (

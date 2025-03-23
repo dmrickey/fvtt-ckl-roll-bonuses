@@ -119,8 +119,8 @@ Hooks.on('renderActorSheetPF', (
 
 /**
  * @param {ActorPF} actor
- * @param {{ bonus: string, dice: string, }} options
- * @param {string} skillId
+ * @param {{ bonus: string, dice: string, rollData: RollData}} options
+ * @param {keyof typeof pf1.config.skills} skillId
  * @returns
  */
 const handleSkillBonus = (
