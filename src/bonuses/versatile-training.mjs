@@ -12,6 +12,7 @@ import { LocalHookHandler, localHooks } from '../util/hooks.mjs';
 import { getSkillName } from '../util/get-skill-name.mjs';
 import { intersection } from '../util/array-intersects.mjs';
 import { itemHasCompendiumId } from '../util/has-compendium-id.mjs';
+import { createChange } from '../util/conditional-helpers.mjs';
 
 const key = 'versatile-training';
 const selectedKey = 'versatile-training-selected';
@@ -140,6 +141,7 @@ function versatileRollSkill(seed, actor) {
         });
     }
 }
+
 /**
  * @param {SkillInfo} skillInfo
  * @param {ActorPF} actor
@@ -154,9 +156,64 @@ function getSkillInfo(skillInfo, actor, rollData) {
         skillInfo.cs = true;
     }
 }
+
+
+/**
+ * @param {ItemPF} item
+ * @param {RollData} rollData
+ */
+function prepareData(item, rollData) {
+    if (!item.isActive || !item.actor) return;
+
+    /** @type {Array<keyof typeof pf1.config.skills>} */
+    const keys = item.getFlag(MODULE_NAME, selectedKey) ?? [];
+    if (keys.length && item.actor) {
+        keys.forEach((skillKey) => {
+            const rank = rollData.attributes.bab.total;
+            const change = createChange({
+                name: `${game.i18n.localize("PF1.SkillRankPlural")} (${item.name})`,
+                value: rank,
+                formula: rank,
+                type: 'base',
+                target: `skill.~${skillKey}`,
+                id: `${item.id}_${key}_${skillKey}`,
+                operator: 'set',
+            });
+
+            // not null, but type safety is complaining about it here for some reason
+            if (!item.actor) return;
+
+            item.actor.changes ||= new Collection();
+            item.actor.changes.set(change.id, change);
+
+            const ori = { ...rollData.skills[skillKey] };
+            if ((!ori.rank || !ori.cs) && rank) {
+                rollData.skills[skillKey].mod += 3;
+
+                const csChange = createChange({
+                    formula: pf1.config.classSkillBonus,
+                    value: pf1.config.classSkillBonus,
+                    target: `skill.~${skillKey}`,
+                    type: "untyped",
+                    operator: "add",
+                    name: game.i18n.localize("PF1.CSTooltip"),
+                    id: `${item.id}_${key}_${skillKey}_cs`,
+                });
+                item.actor.changes.set(csChange.id, csChange);
+            }
+
+            if (ori.rank < rank) {
+                rollData.skills[skillKey].mod += (rank - ori.rank);
+                rollData.skills[skillKey].rank = rank;
+            }
+        });
+    }
+}
+
 Hooks.once('init', () => {
     LocalHookHandler.registerHandler(localHooks.actorRollSkill, versatileRollSkill);
     LocalHookHandler.registerHandler(localHooks.actorGetSkillInfo, getSkillInfo);
+    LocalHookHandler.registerHandler(localHooks.prepareData, prepareData);
 });
 
 /** @param {string} id  @returns {boolean} */

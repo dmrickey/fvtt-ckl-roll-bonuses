@@ -244,7 +244,7 @@ function versatileRollSkill(seed, actor) {
         const linkProp = journal
             ? `<a data-tooltip="PF1.OpenAssociatedCompendiumEntry" data-action="open-compendium-entry" data-compendium-entry="${journal}" data-document-type="JournalEntry"><i class="fas fa-book"></i></a>`
             : '';
-        const label = localize('PF1.SkillCheck', { skill: skillInfo.name });
+        const label = localize('PF1.Check', { type: skillInfo.name });
         const vpTitle = localize('versatile-performance.title', { skill: label });
         return `
 <span class="flavor-text">

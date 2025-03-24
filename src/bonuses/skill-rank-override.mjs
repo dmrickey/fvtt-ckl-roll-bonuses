@@ -144,8 +144,6 @@ function prepareData(item, rollData) {
     const keys = item.getFlag(MODULE_NAME, selectedKey) ?? [];
     if (keys.length && item.actor) {
         keys.forEach((skillKey) => {
-            item.actor?.getSkillInfo(skillKey);
-
             const formula = item.getFlag(MODULE_NAME, formulaKey);
             const rank = FormulaCacheHelper.getModuleFlagValue(item, formulaKey);
             const change = createChange({
@@ -154,7 +152,7 @@ function prepareData(item, rollData) {
                 formula,
                 type: 'base',
                 target: `skill.~${skillKey}`,
-                id: `${item.id}_${key}`,
+                id: `${item.id}_${key}_${skillKey}`,
                 operator: 'set',
             });
 
@@ -175,7 +173,7 @@ function prepareData(item, rollData) {
                     type: "untyped",
                     operator: "add",
                     name: game.i18n.localize("PF1.CSTooltip"),
-                    id: `${item.id}_${key}_cs`,
+                    id: `${item.id}_${key}_${skillKey}_cs`,
                 });
                 item.actor.changes.set(csChange.id, csChange);
             }
