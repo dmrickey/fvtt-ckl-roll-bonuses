@@ -10,6 +10,7 @@
 - Using ammo with enhancement bonuses with a masterwork ranged weapon now correctly accounts for the weapon's MW bonus when totalling the bonuses.
 - Vital Strike no longer errors when enabled by default and rolling attacks without damage
 - Improved Armor Focus no longer also shows the input for Armor Focus
+- Versatile Performance and Versatile Training no longer provide bonuses when the provding Feature is disabled
 
 ---
 
