@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import { api } from './api.mjs';
 
 /**
@@ -15,56 +13,34 @@ export const getSkillFormula = (actor, rollData, skillId, {
     const skillIdParts = skillId.split(".");
     const mainSkillId = skillIdParts[0],
         subSkillId = skillIdParts.length > 1 ? skillIdParts.at(-1) : null;
+    // @ts-expect-error Reconstruct skill ID to ensure it is valid for everything else.
+    skillId = subSkillId ? `${mainSkillId}.${subSkillId}` : mainSkillId;
 
     const skl = actor.getSkillInfo(skillId);
-    const haveParentSkill = !!subSkillId;
 
-    //     // Add contextual attack string
-    //     const noteObjects = actor.getContextNotes(`skill.${skillId}`);
-    //     if (haveParentSkill) noteObjects.push(...actor.getContextNotes(`skill.${mainSkillId}`, false));
-    //     const notes = actor.formatContextNotes(noteObjects, rollData);
-    //
-    //     // Add untrained note
-    //     if (skl.rt && !skl.rank) {
-    //         notes.push(game.i18n.localize("PF1.Untrained"));
-    //     }
-
-    // Gather changes
+    // Add parts
     const parts = [];
-    const changes = pf1.documents.actor.changes.getHighestChanges(
-        actor.changes.filter((c) => {
-            const cf = c.getTargets(actor);
 
-            if (haveParentSkill && cf.includes(`system.skills.${mainSkillId}.mod`)) return true;
-            return cf.includes(`system.skills.${skillId}.mod`);
-        }),
-        { ignoreTarget: true }
-    );
-
-    // Add ability modifier
-    if (skl.ability) {
-        parts.push(`@abilities.${skl.ability}.mod[${pf1.config.abilities[skl.ability]}]`);
-    }
-
-    // Add rank
-    if (skl.rank > 0) {
-        parts.push(`${skl.rank}[${game.i18n.localize("PF1.SkillRankPlural")}]`);
-        if (skl.cs) {
-            parts.push(`${pf1.config.classSkillBonus}[${game.i18n.localize("PF1.CSTooltip")}]`);
-        }
-    }
-
-    // Add armor check penalty
-    if (skl.acp && rollData.attributes.acp.skill !== 0) {
-        parts.push(`-@attributes.acp.skill[${game.i18n.localize("PF1.ACPLong")}]`);
+    // Base parts
+    // Ability damage and penalty are not part of change system
+    const details = actor.getSourceDetails(`system.abilities.${skl.ability}.mod`);
+    for (const { value, name } of details) {
+        parts.push(`${value}[${name}]`);
     }
 
     // Add Wound Thresholds info
     if (rollData.attributes.woundThresholds?.penalty > 0) {
         const label = pf1.config.woundThresholdConditions[rollData.attributes.woundThresholds.level];
-        // notes.push(label);
         parts.push(`- @attributes.woundThresholds.penalty[${label}]`);
     }
+
+    // Gather changes
+    const skillDataPathPart = subSkillId ? `${mainSkillId}.subSkills.${subSkillId}` : mainSkillId;
+
+    const validChanges = actor.changes?.filter((/** @type {ItemChange} */ c) =>
+        c.getTargets(actor).includes(`system.skills.${skillDataPathPart}.mod`)
+    ) ?? [];
+    const changes = pf1.documents.actor.changes.getHighestChanges(validChanges, { ignoreTarget: true });
 
     // Add changes
     for (const c of changes) {
@@ -77,13 +53,9 @@ export const getSkillFormula = (actor, rollData, skillId, {
         }
     }
 
-    //     const props = [];
-    //     if (notes.length > 0) props.push({ header: game.i18n.localize("PF1.Notes"), value: notes });
-    //
-    //     const token = options.token ?? actor.token;
 
-    const formula = ['1d20', ...parts].slice(includeD20 ? 0 : 1).join("+");
-    const roll = new pf1.dice.D20RollPF(formula, rollData);
+    const formula = [pf1.dice.D20RollPF.standardRoll, ...parts].slice(includeD20 ? 0 : 1).join(" + ");
+    const roll = new Roll(formula, rollData);
     return roll.formula;
 }
 

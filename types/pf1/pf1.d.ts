@@ -147,6 +147,19 @@ declare global {
             type: 'Item',
             updates: RecursivePartial<ItemPF<SystemItemData>>[]
         );
+
+        /**
+         * Retrieve source details regarding a change target.
+         *
+         * @example
+         * ```js
+         * actor.getSourceDetails("system.attributes.hp.max");
+         * ```
+         * @todo - Merge `sourceInfo` into the change system to reduce underlying system complexity
+         * @param {string} path - Change target path
+         * @returns {SourceInfo[]}
+         */
+        getSourceDetails(path: string): SourceInfo;
     }
 
     class ActorCharacterPF extends ActorPF {}
@@ -429,6 +442,7 @@ declare global {
         T extends RollData = RollData<SystemItemData>
     > extends RollPF<T> {
         isCrit: boolean;
+        static standardRoll: '1d20';
     }
 
     class ChatMessagePF extends BaseDocument {
@@ -1346,7 +1360,7 @@ declare global {
             value: number;
         };
         woundThresholds: {
-            level: number;
+            level: keyof pf1['config']['woundThresholdConditions'];
             mod: number;
             override: number;
             penaltyBase: number;
@@ -1835,6 +1849,8 @@ declare global {
             value: number;
         };
 
+        getTargets(actor: ActorPF): Array<string>;
+
         toObject(): object;
     }
 
@@ -2161,6 +2177,12 @@ declare global {
             ItemScriptCall: typeof ItemScriptCall;
         };
         config: {
+            woundThresholdConditions: {
+                0: "Healthy Condition"
+                1: "Grazed Condition"
+                2: "Wounded Condition"
+                3: "Critical Condition"
+            };
             classSkillBonus: number;
             abilityDamageHeldMultipliers: { oh: 0.5; '1h': 1; '2h': 1.5 };
             actorSizes: Record<ActorSize, string>;
@@ -2275,6 +2297,15 @@ declare global {
                 getSkipActionPrompt(): boolean;
             };
             actor: {
+                changes: {
+                    /**
+                     * @param {ItemChange[]} changes - An array containing all changes to check. Must be called after they received a value (by ItemChange.applyChange)
+                     * @param {object} [options] - Additional options
+                     * @param {boolean} [options.ignoreTarget] - Whether to only check for modifiers such as enhancement, insight (true) or whether the target (AC, weapon damage) is also important (false)
+                     * @returns {ItemChange[]} - A list of processed changes, excluding the lower-valued ones inserted (if they don't stack)
+                     */
+                    getHighestChanges(changes, options = { ignoreTarget: false }): ItemChange[];
+                }
                 ActorBasePF: { new (): ActorBasePF };
                 ActorPF: { new (): ActorPF };
             };

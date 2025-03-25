@@ -9,6 +9,7 @@ import { textInput } from '../handlebars-handlers/bonus-inputs/text-input.mjs';
 import { getSkillName } from '../util/get-skill-name.mjs';
 import { MODULE_NAME } from '../consts.mjs';
 import { createChange } from '../util/conditional-helpers.mjs';
+import { getCachedBonuses } from '../util/get-cached-bonuses.mjs';
 
 const key = 'skill-rank-override';
 const formulaKey = 'skill-rank-override-formula';
@@ -58,7 +59,7 @@ function createRankIcon(itemName, rank) {
  * @param {ActorPF} actor
  * @return {Array<{name: string, rank: number, skills: Array<keyof typeof pf1.config.skills>}>}
  */
-const getSources = (actor) => (actor.itemFlags?.boolean?.[key]?.sources ?? [])
+const getSources = (actor) => getCachedBonuses(actor, key)
     .map((source) => ({
         name: source.name,
         rank: FormulaCacheHelper.getModuleFlagValue(source, formulaKey),
@@ -138,7 +139,7 @@ function getSkillInfo(skillInfo, actor, _rollData) {
  * @param {RollData} rollData
  */
 function prepareData(item, rollData) {
-    if (!item.isActive) return;
+    if (!item.isActive || !item.getFlag(MODULE_NAME, key)) return;
 
     /** @type {Array<keyof typeof pf1.config.skills>} */
     const keys = item.getFlag(MODULE_NAME, selectedKey) ?? [];

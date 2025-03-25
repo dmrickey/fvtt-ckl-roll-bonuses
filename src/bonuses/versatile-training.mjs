@@ -13,6 +13,7 @@ import { getSkillName } from '../util/get-skill-name.mjs';
 import { intersection } from '../util/array-intersects.mjs';
 import { itemHasCompendiumId } from '../util/has-compendium-id.mjs';
 import { createChange } from '../util/conditional-helpers.mjs';
+import { getCachedBonuses } from '../util/get-cached-bonuses.mjs';
 
 const key = 'versatile-training';
 const selectedKey = 'versatile-training-selected';
@@ -55,6 +56,17 @@ class Settings {
     };
 }
 
+/**
+ *
+ * @param {ActorPF} actor
+ */
+const getActorVTSkills = (actor) => {
+    const sources = getCachedBonuses(actor, key);
+    const selectedSkills = sources.flatMap((source) => getDocFlags(source, selectedKey))
+        .filter(truthiness);
+    return selectedSkills;
+}
+
 registerItemHint((hintcls, actor, item, _data) => {
     const selectedSkills = getDocFlags(item, selectedKey)
         .flatMap(x => x)
@@ -90,9 +102,7 @@ Hooks.on('renderActorSheetPF', (
     /** @type {{ find: (arg0: string) => { (): any; new (): any; each: { (arg0: { (_: any, element: HTMLElement): void; }): void; new (): any; }; }; }} */ html,
     /** @type {{ actor: ActorPF; }} */ { actor }
 ) => {
-    const selectedSkills = getDocFlags(actor, selectedKey)
-        .flatMap(x => x)
-        .filter(truthiness);
+    const selectedSkills = getActorVTSkills(actor);
 
     if (!selectedSkills?.length) return;
 
@@ -121,9 +131,7 @@ Hooks.on('renderActorSheetPF', (
  * @returns {void}
  */
 function versatileRollSkill(seed, actor) {
-    const selectedSkills = getDocFlags(actor, selectedKey)
-        .flatMap(x => x)
-        .filter(truthiness);
+    const selectedSkills = getActorVTSkills(actor);
 
     if (selectedSkills.includes(seed.skillId)) {
         Hooks.once('preCreateChatMessage', (
@@ -148,9 +156,7 @@ function versatileRollSkill(seed, actor) {
  * @param {RollData} rollData
  */
 function getSkillInfo(skillInfo, actor, rollData) {
-    const selectedSkills = getDocFlags(actor, selectedKey)
-        .flatMap(x => x)
-        .filter(truthiness);
+    const selectedSkills = getActorVTSkills(actor);
     if (selectedSkills.includes(skillInfo.id)) {
         skillInfo.rank = rollData.attributes.bab.total;
         skillInfo.cs = true;
@@ -163,7 +169,7 @@ function getSkillInfo(skillInfo, actor, rollData) {
  * @param {RollData} rollData
  */
 function prepareData(item, rollData) {
-    if (!item.isActive || !item.actor) return;
+    if (!item.isActive || !item.actor || !item.hasItemBooleanFlag(key)) return;
 
     /** @type {Array<keyof typeof pf1.config.skills>} */
     const keys = item.getFlag(MODULE_NAME, selectedKey) ?? [];

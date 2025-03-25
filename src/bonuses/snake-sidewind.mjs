@@ -1,4 +1,5 @@
 import { showEnabledLabel } from '../handlebars-handlers/enabled-label.mjs';
+import { getCachedBonuses } from '../util/get-cached-bonuses.mjs';
 import { getSkillFormula } from '../util/get-skill-formula.mjs';
 import { itemHasCompendiumId } from '../util/has-compendium-id.mjs';
 import { LocalHookHandler, localHooks } from '../util/hooks.mjs';
@@ -38,9 +39,7 @@ registerItemHint((hintcls, _actor, item, _data) => {
  * @returns {number}
  */
 const getFormulaMax = (formula, rollData) => {
-    const mods = formula.substring(formula.indexOf(' ') + 1);
-    const safeFormula = `0 + ${mods}`;
-    const roll = new pf1.dice.D20RollPF(safeFormula, rollData, { skipDialog: true }).evaluateSync({ maximize: true });
+    const roll = new pf1.dice.D20RollPF(formula, rollData, { skipDialog: true }).evaluateSync({ maximize: true });
     const max = roll.total;
     return max;
 }
@@ -71,10 +70,11 @@ const isSnakeSideWindCrit = (chatAttack) => {
         return;
     }
 
-    const maxAttack = getFormulaMax(critConfirm.simplifiedFormula, chatAttack.rollData);
+    const critFormula = critConfirm.terms.map(x => x.formula).join(' ');
+    const maxAttack = getFormulaMax(critFormula, chatAttack.rollData);
 
-    const skillFormula = getSkillFormula(actor, chatAttack.rollData, 'sen');
-    const skillMax = getFormulaMax('1d20 + ' + skillFormula, chatAttack.rollData);
+    const skillFormula = getSkillFormula(actor, chatAttack.rollData, 'sen', { includeD20: true });
+    const skillMax = getFormulaMax(skillFormula, chatAttack.rollData);
 
     if (skillMax >= maxAttack) {
         return skillFormula;
