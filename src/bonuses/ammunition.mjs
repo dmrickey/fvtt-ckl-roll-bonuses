@@ -109,7 +109,7 @@ async function addEffectNotes(chatAttack) {
             const note = ammo[MODULE_NAME][ammoEffectKey];
             if (note) {
                 const enriched = await TextEditor.enrichHTML(`<div>${note}</div>`, { async: true });
-                chatAttack.effectNotes.push(enriched);
+                chatAttack.effectNotes.push({ text: enriched, source: ammo.name });
             }
         }
     }

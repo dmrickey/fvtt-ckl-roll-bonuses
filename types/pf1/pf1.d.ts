@@ -393,7 +393,7 @@ declare global {
         critConfirm: D20RollPF;
         d20: Die;
         dice: Die[];
-        effectNotes: string[];
+        effectNotes: ParsedContextNoteEntry[];
         effectNotesHTML: string;
         flavor: string;
         formula: string;

@@ -1,5 +1,6 @@
 import { MODULE_NAME } from '../consts.mjs';
 import { showEnabledLabel } from '../handlebars-handlers/enabled-label.mjs';
+import { getCachedBonuses } from '../util/get-cached-bonuses.mjs';
 import { itemHasCompendiumId } from '../util/has-compendium-id.mjs';
 import { LocalHookHandler, customGlobalHooks, localHooks } from '../util/hooks.mjs';
 import { isActorInCombat } from '../util/is-actor-in-combat.mjs';
@@ -63,9 +64,9 @@ Hooks.on(customGlobalHooks.getConditionalParts, getConditionalParts);
  * @param {ChatAttack} chatAttack
  */
 async function addEffectNotes(chatAttack) {
-    const { attack, effectNotes } = chatAttack;
+    const { actor, attack, effectNotes } = chatAttack;
     if (attack?.terms.some((x) => x.options?.flavor === label())) {
-        effectNotes.push(label());
+        effectNotes.push({ text: label(), source: getCachedBonuses(actor, furiousFocus)[0]?.name });
     }
 }
 LocalHookHandler.registerHandler(localHooks.chatAttackEffectNotes, addEffectNotes);
