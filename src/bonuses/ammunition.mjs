@@ -41,29 +41,25 @@ function getConditionalParts(actionUse, result, atk, index) {
 
         const { base: actionBaseEnh, stacks: actionStacksEnh, total: actionTotal } = getEnhancementBonusForAction({ action: actionUse.action });
 
-        const ammoMw = !!ammo.getFlag(MODULE_NAME, ammoMasterworkKey);
+        const ammoMw = !!ammo.getFlag(MODULE_NAME, ammoMasterworkKey) || ammo.system.masterwork;
         const ammoEnhBonus = FormulaCacheHelper.getModuleFlagValue(ammo, ammoEnhancementKey);
         const ammoEnhStacksBonus = FormulaCacheHelper.getModuleFlagValue(ammo, ammoEnhancementStacksKey);
-        if (ammoMw
-            && !itemMw
-            && !itemEnh
-            && !actionBaseEnh
-            && !actionStacksEnh
-            && !ammoEnhBonus
-            && !ammoEnhStacksBonus
-        ) {
+        const hasEnhBonus = itemEnh || actionBaseEnh || actionStacksEnh || ammoEnhBonus || ammoEnhStacksBonus;
+        if (ammoMw && !hasEnhBonus && !itemMw) {
             result['attack.normal'].push(`1[${localize('PF1.AmmunitionAbbr')} - ${localize('PF1.Masterwork')}]`)
         }
         else {
             const { total: totalWithAmmo } = getEnhancementBonusForAction({ action: actionUse.action, ammo });
-            let mwOffset = 0;
+            let itemMwOffset = 0;
             if (itemMw && !itemEnh && (ammoEnhBonus || ammoEnhStacksBonus)) {
-                mwOffset = 1;
+                itemMwOffset = 1;
             }
             const diff = totalWithAmmo - actionTotal;
             if (diff > 0) {
                 const label = `${localize('PF1.AmmunitionAbbr')} ${localize('PF1.EnhancementBonus')}`;
-                result['attack.normal'].push(`${diff}[${label} (${totalWithAmmo - mwOffset})]`);
+                if (totalWithAmmo - itemMwOffset) {
+                    result['attack.normal'].push(`${diff - itemMwOffset}[${label} (${totalWithAmmo})]`);
+                }
                 result['damage.normal'].push([`${diff}[${label} (${totalWithAmmo})]`, [label], false]);
             }
         }

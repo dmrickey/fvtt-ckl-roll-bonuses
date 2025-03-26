@@ -1147,6 +1147,7 @@ declare global {
             boolean: Record<string, boolean>;
             dictionary: DictionaryFlags;
         };
+        masterwork: boolean;
         subType: 'natural';
         tag: string;
         tags: string[];
