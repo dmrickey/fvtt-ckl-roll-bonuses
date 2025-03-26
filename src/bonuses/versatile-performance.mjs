@@ -385,7 +385,7 @@ Hooks.on('renderItemSheet', (
                 const value = target?.value;
                 const path = target.dataset.path;
                 if (!path) return;
-                setProperty(currentVPs, path, value);
+                foundry.utils.setProperty(currentVPs, path, value);
                 await item.setFlag(MODULE_NAME, key, currentVPs);
             });
         });

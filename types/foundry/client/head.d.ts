@@ -32,6 +32,15 @@ declare global {
             };
         };
         utils: {
+            /**
+             * A helper function which searches through an object to assign a value using a string key
+             * This string key supports the notation a.b.c which would target object[a][b][c]
+             * @param object - The object to update
+             * @param path   - The string key
+             * @param value  - The value to be assigned
+             * @returns Whether the value was changed from its previous value
+             */
+            setProperty(object: object, path: string, value: any): unknown;
             deepClone<T>(arg0: T): T;
             objectsEqual<T>(a: T, b: T): boolean;
             expandObject(_: object, depth?: number): Record<string, unknown>;

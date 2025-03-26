@@ -152,7 +152,7 @@ export function damageInput({
 
                 /** @param {{ [key: string]: object }} arg */
                 async function updateCallback(arg) {
-                    setProperty(savedParts, path, arg);
+                    foundry.utils.setProperty(savedParts, path, arg);
                     await item.setFlag(MODULE_NAME, key, savedParts);
                 };
 
@@ -179,7 +179,7 @@ export function damageInput({
             if (damageIndex !== null && damageIndex !== undefined) {
                 const path = `${damageIndex}.formula`;
 
-                setProperty(savedParts, path, updatedFormula);
+                foundry.utils.setProperty(savedParts, path, updatedFormula);
                 await item.setFlag(MODULE_NAME, key, savedParts);
             }
         });
@@ -197,7 +197,7 @@ export function damageInput({
             if (damageIndex !== null) {
                 const path = `${damageIndex}.crit`;
 
-                setProperty(savedParts, path, critValue);
+                foundry.utils.setProperty(savedParts, path, critValue);
                 await item.setFlag(MODULE_NAME, key, savedParts);
             }
         });
@@ -216,7 +216,7 @@ export function damageInput({
                 if (index !== null && index !== undefined) {
                     const path = `${index}.formula`;
 
-                    setProperty(changes, path, updatedFormula);
+                    foundry.utils.setProperty(changes, path, updatedFormula);
                     await item.setFlag(MODULE_NAME, changeKey, changes);
                 }
             });
@@ -234,7 +234,7 @@ export function damageInput({
                 if (index !== null && index !== undefined) {
                     const path = `${index}.type`;
 
-                    setProperty(changes, path, critValue);
+                    foundry.utils.setProperty(changes, path, critValue);
                     await item.setFlag(MODULE_NAME, changeKey, changes);
                 }
             });
