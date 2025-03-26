@@ -68,6 +68,8 @@ const getActorVTSkills = (actor) => {
 }
 
 registerItemHint((hintcls, actor, item, _data) => {
+    if (!item.hasItemBooleanFlag(key)) return;
+
     const selectedSkills = getDocFlags(item, selectedKey)
         .flatMap(x => x)
         .filter(truthiness);
