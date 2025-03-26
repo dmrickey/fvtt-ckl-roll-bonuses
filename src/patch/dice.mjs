@@ -108,8 +108,8 @@ Hooks.once('init', () => {
     // make sure options are passed through
     libWrapper.register(MODULE_NAME, 'Roll.prototype.evaluateSync', Roll_evaluateSync, libWrapper.OVERRIDE);
     libWrapper.register(MODULE_NAME, 'Roll.prototype._evaluateASTSync', _Roll_evaluateASTSync, libWrapper.OVERRIDE);
-    libWrapper.register(MODULE_NAME, 'RollTerm.isDeterministic', RollTerm_isDeterministic, libWrapper.MIXED);
+    libWrapper.register(MODULE_NAME, 'foundry.dice.terms.RollTerm.isDeterministic', RollTerm_isDeterministic, libWrapper.MIXED);
 
     // force rolling in sync cases
-    libWrapper.register(MODULE_NAME, 'DiceTerm.prototype._evaluateSync', _DiceTerm_evaluateSync, libWrapper.OVERRIDE);
+    libWrapper.register(MODULE_NAME, 'foundry.dice.terms.DiceTerm.prototype._evaluateSync', _DiceTerm_evaluateSync, libWrapper.OVERRIDE);
 });
