@@ -1902,11 +1902,17 @@ declare global {
             | 'rapidShotDamage'
             | 'attack_0'
             | 'allDamage' // when target is 'damage'
-            | 'dc' // when target is 'effect'
             | 'charges' // when target is 'misc'
             | '' // size
             | undefined; // no subtarget for 'size'
-        target: 'attack' | 'damage' | 'effect' | 'misc' | 'size' | 'critMult';
+        target:
+        | 'attack'
+        | 'charges'
+        | 'cl'
+        | 'critMult'
+        | 'damage'
+        | 'dc'
+        | 'size';
         type: GenericDamageType;
         _id: string;
     }
@@ -1923,14 +1929,12 @@ declare global {
     class ItemConditionalModifierSourceDataPrepped extends ItemConditionalModifier {
         targets: {
             attack: ConditionalTarget;
+            charges?: ConditionalTarget;
+            cl: ConditionalTarget;
             critMult: ConditionalTarget;
             damage: ConditionalTarget;
-            size: ConditionalTarget;
             dc: ConditionalTarget;
-            cl: ConditionalTarget;
-            effect: ConditionalTarget;
-            misc: ConditionalTarget;
-            charges?: ConditionalTarget;
+            size: ConditionalTarget;
         }?;
         targetEntry?: ConditionalTarget;
         subTargets: { [x: string]: string }?;
@@ -2206,14 +2210,11 @@ declare global {
                     hasteDamage: 'Haste';
                     rapidShotDamage: 'Rapid Shot';
                 };
-                size: {
-                    _label: 'Size';
-                };
                 effect: {
                     _label: 'Effects';
                 };
-                misc: {
-                    _label: 'Misc';
+                size: {
+                    _label: 'Size';
                 };
             };
             abilities: Abilities;

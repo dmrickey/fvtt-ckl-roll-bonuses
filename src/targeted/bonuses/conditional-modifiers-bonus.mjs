@@ -147,7 +147,7 @@ export class ConditionalModifiersBonus extends BaseBonus {
             .map((c) => c._source)
             .filter((c) => c.default)
             .flatMap((cd) => cd.modifiers
-                .filter((mod) => mod.target === 'effect' && mod.subTarget === 'dc')
+                .filter((mod) => mod.target === 'dc')
                 .map((mod) => mod.formula?.trim())
             )
             .filter(truthiness)

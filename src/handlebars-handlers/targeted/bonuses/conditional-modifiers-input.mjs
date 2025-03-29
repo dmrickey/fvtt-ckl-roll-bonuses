@@ -14,8 +14,6 @@ function getConditionalTargets() {
         size: { id: 'size', sort: 4_000, label: pf1.config.conditionalTargets.size._label, disabled: false, simple: true },
         dc: { id: 'dc', sort: 5_000, label: game.i18n.localize('PF1.DC'), disabled: false, simple: true },
         cl: { id: 'cl', label: game.i18n.localize('PF1.CasterLevel'), simple: true, sort: 5_001 },
-        effect: { id: 'effect', sort: 6_000, label: pf1.config.conditionalTargets.effect._label, choices: {}, disabled: false },
-        misc: { id: 'misc', sort: 7_000, label: pf1.config.conditionalTargets.misc._label, choices: {}, disabled: false },
         charges: { id: 'charges', sort: 8_000, label: game.i18n.localize('PF1.ChargeCost'), disabled: false, simple: true },
     };
 
@@ -37,7 +35,7 @@ function getConditionalSubTargets(entry) {
 
     const targetId = /** @type {ItemConditionalModifierSourceData['target']} */ (/** @type {unknown} */ entry.id);
 
-    // Add static targets
+    // @ts-ignore Add static targets
     const subTargets = pf1.config.conditionalTargets[targetId];
     if (subTargets) {
         for (const [key, label] of Object.entries(subTargets)) {
@@ -58,46 +56,8 @@ function getConditionalSubTargets(entry) {
         // }
     }
 
-    // this.item.getConditionalSubTargets?.(entry);
-
     return entry;
 }
-
-// /**
-//  * Generates lists of conditional subtargets this attack can have.
-//  *
-//  * @param {keyof typeof pf1.config.conditionalTargets} target - The target key, as defined in PF1.conditionTargets.
-//  * @returns {{[key: string]: string}} A list of conditionals
-//  */
-// function getConditionalSubTargets(target) {
-//     /** @type {{[key: string]: string}} */
-//     const result = {};
-//     // Add static targets
-//     if (hasProperty(pf1.config.conditionalTargets, target)) {
-//         for (const [k, v] of Object.entries(pf1.config.conditionalTargets[target])) {
-//             if (!k.startsWith("_") && !k.startsWith("~")) result[k] = v;
-//         }
-//     }
-//     // Add subtargets depending on attacks
-//     if (["attack", "damage"].includes(target)) {
-//         // Add specific attacks
-//         result["attack_0"] = `${game.i18n.localize("PF1.Attack")} 1`;
-//         // for (const [k, v] of Object.entries(this.data.attackParts)) {
-//         //   result[`attack_${Number(k) + 1}`] = v[1];
-//         // }
-//     }
-//     // Add subtargets affecting effects
-//     if (target === "effect") {
-//         result["dc"] = game.i18n.localize("PF1.DC");
-//         result["cl"] = game.i18n.localize("PF1.CasterLevelAbbr");
-//     }
-//     // Add misc subtargets
-//     if (target === "misc") {
-//         // Add charges subTarget with specific label
-//         result["charges"] = game.i18n.localize("PF1.ChargeCost");
-//     }
-//     return result;
-// }
 
 /**
  * Generates lists of conditional modifier bonus types applicable to a formula.
@@ -353,13 +313,12 @@ export function modifiersInput({
     /** @type {{ [key in ItemConditionalModifierSourceData['target']]: { subTarget: ItemConditionalModifierSourceData['subTarget'], critical: ItemConditionalModifierSourceData['critical'], damageType: ItemConditionalModifierSourceData['damageType'], type: ItemConditionalModifierSourceData['type'],} }} */
     const modDefaults = {
         attack: { subTarget: 'allAttack', critical: 'normal', damageType: [], type: 'untyped', },
-        damage: { subTarget: 'allDamage', critical: 'normal', damageType: [], type: 'untyped', },
-        effect: { subTarget: 'dc', critical: undefined, damageType: [], type: undefined, },
-        misc: { subTarget: 'charges', critical: undefined, damageType: [], type: undefined, },
-        size: { subTarget: undefined, critical: undefined, damageType: [], type: undefined, },
-        // dc: { subTarget: undefined, critical: undefined, damageType: [], type: undefined, },
-        // cl: { subTarget: undefined, critical: undefined, damageType: [], type: undefined, },
+        charges: { subTarget: undefined, critical: undefined, damageType: [], type: undefined, },
+        cl: { subTarget: undefined, critical: undefined, damageType: [], type: undefined, },
         critMult: { subTarget: undefined, critical: undefined, damageType: [], type: undefined, },
+        damage: { subTarget: 'allDamage', critical: 'normal', damageType: [], type: 'untyped', },
+        dc: { subTarget: undefined, critical: undefined, damageType: [], type: undefined, },
+        size: { subTarget: undefined, critical: undefined, damageType: [], type: undefined, },
     };
 
     div.querySelectorAll('.conditionals select').forEach((element) => {

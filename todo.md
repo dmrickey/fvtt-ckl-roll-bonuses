@@ -331,8 +331,6 @@
 - investigate "action damage" and see if I need that at all (talking about the helper function that builds the formula in the system)
 - Figure out a way to make Versatile Performance and Snake Sidewind work together
 - Transfer ammo's masterwork to `system.masterwork`
-  
+
 # Verify
-- mw bow with magic ammo now works correctly
 - "Has Condition" and "Has BFlag" both need to be verified for targeting self vs. actor
-- Make sure "skill rank override" works with formulas

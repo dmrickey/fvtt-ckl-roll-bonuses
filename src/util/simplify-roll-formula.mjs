@@ -451,7 +451,7 @@ function replaceZeroDice(terms) {
  * @returns {string} - Simpler formula
  * @throws {Error} - On invalid formula
  */
-export function simplify(formula, rollData = {}, { strict = true } = {}) {
+export function simplify(formula, rollData = {}, { preserveFlavor = false, strict = true } = {}) {
     formula = preserveFlavor ? formula : unflair(formula);
     formula = compress(Roll.replaceFormulaData(formula, rollData, { missing: 0 }));
 
