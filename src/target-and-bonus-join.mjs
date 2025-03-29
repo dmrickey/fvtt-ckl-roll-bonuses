@@ -132,11 +132,11 @@ export const handleBonusesFor = (thing, func, { skipGenericTarget = false } = {}
  * @param {boolean} [options.skipGenericTarget]
  */
 export const handleBonusTypeFor = (thing, specificBonusType, func, { skipGenericTarget = false } = {}) => {
-    api.allTargetTypes
-        .filter((targetType) => !skipGenericTarget || !targetType.isGenericTarget)
-        .flatMap((targetType) => targetType.getSourcesFor(thing))
-        // filter down to unique items in case one source item is affecting this target item through multiple "targets"
-        .filter((sourceItem, i, self) => self.findIndex((nestedTarget) => sourceItem.id === nestedTarget.id) === i)
+    const actor = thing.actor;
+    if (!actor) return;
+
+    const items = actor.itemFlags?.boolean[specificBonusType.key]?.sources || [];
+    items
         .filter((sourceItem) => {
             const targets = sourceItem[MODULE_NAME].targets
                 .filter((sourceTarget) => !skipGenericTarget || !sourceTarget.isGenericTarget)
