@@ -274,7 +274,7 @@
                 "disable": "Disable Global Bonuses for this Actor"
             },
             "attack-label": {
-                "higher-ground": "Higher Ground",
+                "higher-ground": "High Ground",
                 "range-increment-penalty": "Ranged Penalty ({range}{units})",
                 "shoot-into-melee": "Into Melee"
             },
@@ -287,7 +287,7 @@
                 "require-melee-threaten": "Skipped Melee Requiremnt"
             },
             "label": {
-                "higher-ground": "Higher Ground Melee Bonus",
+                "higher-ground": "High Ground Melee Bonus",
                 "range-increment-penalty": "Ranged Increment Penalty",
                 "shoot-into-melee": "Shooting into Melee",
                 "require-melee-threaten": "Require Melee Threatens"
