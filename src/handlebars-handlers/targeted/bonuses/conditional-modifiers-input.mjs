@@ -209,10 +209,11 @@ export function modifiersInput({
 
     div.addEventListener('drop', async (event) => {
         event.preventDefault();
+        event.stopPropagation();
 
         /** @type {ItemConditionalSourceData} */ // @ts-ignore
-        const data = JSON.parse(event.dataTransfer.getData("text/plain"));
-        if (!data) return;
+        const { data, type } = JSON.parse(event.dataTransfer.getData("text/plain"));
+        if (type !== 'pf1Conditional') return;
 
         if (data.modifiers) {
             data._id = foundry.utils.randomID();
@@ -229,7 +230,10 @@ export function modifiersInput({
                 const conditional = conditionals.find(x => x.id === id);
                 if (conditional) {
                     // @ts-ignore
-                    event.dataTransfer.setData("text/plain", JSON.stringify(conditional.data));
+                    event.dataTransfer.setData("text/plain", JSON.stringify({
+                        data: conditional.toObject(),
+                        type: 'pf1Conditional',
+                    }));
                     return;
                 }
             }

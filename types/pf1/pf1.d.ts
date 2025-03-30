@@ -1886,6 +1886,7 @@ declare global {
                 parent: ItemAction;
             }
         ): Promise<Array<ItemConditional>>;
+        toObject(): object;
     }
 
     type GenericDamageType = Nullable<BonusTypes | keyof DamageTypes | string>;

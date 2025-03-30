@@ -9,11 +9,6 @@ export const handleConditionals = (actionUse, conditionals) => {
     const rollDataConds = {};
 
     conditionals.forEach((conditional) => {
-        if (!conditional.name) {
-            console.warn("Ignored unnamed conditional", { conditional, actionUse: this });
-            return;
-        }
-
         const tag = pf1.utils.createTag(conditional.name);
         for (const [modKey, modifier] of conditional.modifiers.entries()) {
             // Ignore modifiers with nonexisting formula or formulas that equal to zero
@@ -42,10 +37,9 @@ export const handleConditionals = (actionUse, conditionals) => {
             // Add formula in simple format
             switch (modifier.target) {
                 case "attack":
-                case "effect":
-                case "misc":
-                case "dc":
-                case "cl": {
+                case "charges":
+                case "cl":
+                case "dc": {
                     const hasFlavor = /\[.*\]/.test(modifier.formula + '');
                     const flavoredFormula = hasFlavor ? modifier.formula : `(${modifier.formula})[${conditional.name}]`;
                     actionUse.shared.conditionalPartsCommon[partString] = [
