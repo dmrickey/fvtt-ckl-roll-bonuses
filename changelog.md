@@ -11,6 +11,7 @@
 - Vital Strike no longer errors when enabled by default and rolling attacks without damage
 - Improved Armor Focus no longer also shows the input for Armor Focus
 - Versatile Performance and Versatile Training no longer provide bonuses when the provding Feature is disabled
+- Dice Transform Bonus no longer shows up under "Specific Bonus" header
 
 ---
 

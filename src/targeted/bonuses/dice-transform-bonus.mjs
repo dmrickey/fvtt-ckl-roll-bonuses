@@ -127,7 +127,7 @@ export class DiceTransformBonus extends BaseBonus {
             parent: html,
         }, {
             canEdit: isEditable,
-            inputType: 'specific-bonus',
+            inputType: 'bonus',
             placeholder: '(@quantity)d(@faces)',
         });
         textInput({
@@ -138,7 +138,7 @@ export class DiceTransformBonus extends BaseBonus {
             tooltip: localizeBonusTooltip(this.#priorityKey),
         }, {
             canEdit: isEditable,
-            inputType: 'specific-bonus',
+            inputType: 'bonus',
             isFormula: false,
             isSubLabel: true,
             placeholder: '0',
