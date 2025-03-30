@@ -387,7 +387,7 @@
         "script-call-dialog": {
             "delete-script-message": "Once this script is deleted it cannot be recovered.<br>Are you sure you want to delete this script?",
             "delete-script-title": "Delete Script - {name}",
-            "edit-macro-message": "You are attempting to edit a referenced macro which is not owned by this item.<br><br>Modifying this macro means that you'll be editing the world's macro directly. Any usage of this macro will be modified.<br><br>Are you sure you want to edit this macro?",
+            "edit-macro-message": "You are attempting to edit a referenced macro which is not owned by this item.<br><br>Modifying this macro means that you'll be editing the world's macro directly. Every other usage of this macro will be modified.<br><br>Are you sure you want to edit this macro?",
             "edit-macro-title": "Edit Macro - {name}"
         },
         "skill-rank-override": {

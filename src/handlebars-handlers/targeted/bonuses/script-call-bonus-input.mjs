@@ -99,6 +99,7 @@ export function showScriptBonusEditor({
 
     div.addEventListener('drop', async (event) => {
         event.preventDefault();
+        event.stopPropagation();
 
         /** @type {{ type: string, uuid: string }} */ //@ts-ignore
         const data = JSON.parse(event.dataTransfer.getData("text/plain"));
