@@ -103,55 +103,69 @@ registerItemHint((hintcls, actor, item, _data) => {
 });
 
 /**
+ * @overload
  * @param {ActionUse | ItemPF | ItemAction} thing
  * @param {(bonusType: typeof BaseBonus, sourceItem: ItemPF) => void} func The type providing the bonus, and the Item providing the bonus
  * @param {object} [options]
  * @param {boolean} [options.skipGenericTarget]
+ * @param {never} [options.specificBonusType]
+ * @returns {void}
  */
-export const handleBonusesFor = (thing, func, { skipGenericTarget = false } = {}) => {
-    api.allTargetTypes
-        .filter((targetType) => !skipGenericTarget || !targetType.isGenericTarget)
-        .flatMap((targetType) => targetType.getSourcesFor(thing))
-        // filter down to unique items in case one source item is affecting this target item through multiple "targets"
-        .filter((sourceItem, i, self) => self.findIndex((nestedTarget) => sourceItem.id === nestedTarget.id) === i)
-        .filter((sourceItem) => {
-            const targets = sourceItem[MODULE_NAME].targets
-                .filter((sourceTarget) => !skipGenericTarget || !sourceTarget.isGenericTarget);
-            const func = sourceItem.getFlag(MODULE_NAME, 'target-toggle') === 'all' ? 'every' : 'some';
-            return targets[func]((sourceTarget) => sourceTarget.doesTargetInclude(sourceItem, thing));
-        })
-        .forEach((sourceItem) => sourceItem[MODULE_NAME].bonuses.forEach((bonusType) => func(bonusType, sourceItem)));
-}
+
+/**
+ * @template {typeof BaseBonus} T
+ * @overload
+ * @param {ActionUse | ItemPF | ItemAction} thing
+ * @param {(bonusType: T, sourceItem: ItemPF) => void} func The type providing the bonus, and the Item providing the bonus
+ * @param {object} [options]
+ * @param {boolean} [options.skipGenericTarget]
+ * @param {T} [options.specificBonusType]
+ * @returns {void}
+ */
 
 /**
  * @template {typeof BaseBonus} T
  * @param {ActionUse | ItemPF | ItemAction} thing
- * @param {T} specificBonusType
- * @param {(bonusType: T, sourceItem: ItemPF) => void} func
+ * @param {(bonusType: T | typeof BaseBonus, sourceItem: ItemPF) => void} func The type providing the bonus, and the Item providing the bonus
  * @param {object} [options]
  * @param {boolean} [options.skipGenericTarget]
+ * @param {T | never} [options.specificBonusType]
  */
-export const handleBonusTypeFor = (thing, specificBonusType, func, { skipGenericTarget = false } = {}) => {
+export const handleBonusesFor = (thing, func, { skipGenericTarget = false, specificBonusType = undefined } = {}) => {
     const actor = thing.actor;
-    if (!actor) return;
+    if (!actor || !actor.itemFlags?.boolean) return;
 
-    const items = actor.itemFlags?.boolean[specificBonusType.key]?.sources || [];
-    items
+    let sources = [];
+    if (specificBonusType) {
+        sources = actor.itemFlags?.boolean[specificBonusType.key]?.sources || [];
+    } else {
+        const targetKeys = api.allTargetTypes
+            .filter((targetType) => !skipGenericTarget || !targetType.isGenericTarget)
+            .map((targetType) => targetType.key);
+
+        sources = Object.keys(actor.itemFlags.boolean)
+            .filter((key) => key.startsWith('target_') && targetKeys.includes(key))
+            .flatMap((key) => actor.itemFlags?.boolean[key].sources)
+            .filter(truthiness)
+            // filter down to unique items in case one source item is affecting this target item through multiple "targets"
+            .filter((sourceItem, i, self) => self.findIndex((nestedTarget) => sourceItem.id === nestedTarget.id) === i);
+    }
+
+    sources
         .filter((sourceItem) => {
             const targets = sourceItem[MODULE_NAME].targets
-                .filter((sourceTarget) => !skipGenericTarget || !sourceTarget.isGenericTarget)
+                .filter((targetType) => !skipGenericTarget || !targetType.isGenericTarget);
             const func = sourceItem.getFlag(MODULE_NAME, 'target-toggle') === 'all' ? 'every' : 'some';
-            return targets[func]((sourceTarget) => sourceTarget.doesTargetInclude(sourceItem, thing));
+            return !!targets.length && targets[func]((sourceTarget) => sourceTarget.doesTargetInclude(sourceItem, thing));
         })
         .forEach((sourceItem) => sourceItem[MODULE_NAME].bonuses.forEach((bonusType) => {
-            if (bonusType === specificBonusType) {
-                func(specificBonusType, sourceItem);
+            if (!specificBonusType || bonusType === specificBonusType) {
+                func(bonusType, sourceItem);
             }
         }));
 }
 
 api.utils.handleBonusesFor = handleBonusesFor;
-api.utils.handleBonusTypeFor = handleBonusTypeFor;
 
 /**
  * Adds conditional to action being used

@@ -1,6 +1,6 @@
 import { MODULE_NAME } from "../../consts.mjs";
 import { damageInput } from "../../handlebars-handlers/targeted/bonuses/damage.mjs";
-import { handleBonusTypeFor } from '../../target-and-bonus-join.mjs';
+import { handleBonusesFor } from '../../target-and-bonus-join.mjs';
 import { changeTypeLabel } from '../../util/change-type-label.mjs';
 import { conditionalModToItemChangeForDamageTooltip, createChange, damageTypesToString } from "../../util/conditional-helpers.mjs";
 import { LocalHookHandler, localHooks } from "../../util/hooks.mjs";
@@ -255,13 +255,13 @@ export class DamageBonus extends BaseBonus {
          * @param {ItemChange[]} damageSources
          */
         function itemAction_damageSources(action, damageSources) {
-            handleBonusTypeFor(
+            handleBonusesFor(
                 action,
-                DamageBonus,
                 (bonusType, sourceItem) => {
                     const changes = bonusType.#getCachedDamageItemChange(sourceItem);
                     damageSources.push(...changes);
-                }
+                },
+                { specificBonusType: DamageBonus }
             );
             return damageSources;
         };

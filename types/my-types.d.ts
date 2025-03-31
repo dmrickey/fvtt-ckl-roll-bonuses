@@ -3,10 +3,7 @@ import { BaseBonus } from '../src/targeted/bonuses/_base-bonus.mjs';
 import { BaseTarget } from '../src/targeted/targets/_base-target.mjs';
 import { SpecificBonuses } from '../src/bonuses/all-specific-bonuses.mjs';
 import { BaseGlobalBonus } from '../src/global-bonuses/base-global-bonus.mjs';
-import {
-    handleBonusesFor,
-    handleBonusTypeFor,
-} from '../src/target-and-bonus-join.mjs';
+import { handleBonusesFor } from '../src/target-and-bonus-join.mjs';
 import { showBonusPicker } from '../src/handlebars-handlers/bonus-picker.mjs';
 import { BaseTargetOverride } from '../src/targeted/target-overides/_base-target-override.mjs';
 import { simplifyRollFormula } from '../src/util/simplify-roll-formula.mjs';
@@ -101,7 +98,6 @@ declare global {
         /** various utility helper methods and classes used throughout the mod */
         utils: {
             handleBonusesFor: typeof handleBonusesFor;
-            handleBonusTypeFor: typeof handleBonusTypeFor;
             array: Record<string, (...args) => any>;
             simplifyRollFormula: typeof simplifyRollFormula;
             [key: string]: any;

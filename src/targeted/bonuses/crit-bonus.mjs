@@ -2,9 +2,9 @@ import { MODULE_NAME } from '../../consts.mjs';
 import { checkboxInput } from '../../handlebars-handlers/bonus-inputs/chekbox-input.mjs';
 import { showLabel } from '../../handlebars-handlers/bonus-inputs/show-label.mjs';
 import { textInput } from "../../handlebars-handlers/bonus-inputs/text-input.mjs";
-import { handleBonusTypeFor } from '../../target-and-bonus-join.mjs';
+import { handleBonusesFor } from '../../target-and-bonus-join.mjs';
 import { FormulaCacheHelper } from "../../util/flag-helpers.mjs";
-import { LocalHookHandler, customGlobalHooks, localHooks } from '../../util/hooks.mjs';
+import { LocalHookHandler, localHooks } from '../../util/hooks.mjs';
 import { registerItemHint } from '../../util/item-hints.mjs';
 import { SelfTarget } from '../targets/self-target.mjs';
 import { BaseBonus } from "./_base-bonus.mjs";
@@ -78,13 +78,13 @@ export class CritBonus extends BaseBonus {
             let hasKeen = false;
             let offset = 0;
 
-            handleBonusTypeFor(
+            handleBonusesFor(
                 action,
-                CritBonus,
                 (bonusType, sourceItem) => {
                     hasKeen ||= bonusType.hasKeen(sourceItem);
                     offset += bonusType.getOffsetValue(sourceItem);
-                }
+                },
+                { specificBonusType: CritBonus }
             );
 
             if (!offset && !hasKeen) {
@@ -117,14 +117,14 @@ export class CritBonus extends BaseBonus {
             let offset = 0;
             let mult = +rollData.action.ability.critMult || 2;
 
-            handleBonusTypeFor(
+            handleBonusesFor(
                 action,
-                CritBonus,
                 (bonusType, sourceItem) => {
                     hasKeen ||= bonusType.hasKeen(sourceItem);
                     offset += bonusType.getOffsetValue(sourceItem);
                     mult += bonusType.getMultValue(sourceItem);
-                }
+                },
+                { specificBonusType: CritBonus },
             );
 
             rollData.action.ability.critMult = isBroken ? 2 : mult;
@@ -153,15 +153,15 @@ export class CritBonus extends BaseBonus {
             /** @type {string[]} */
             const sources = [];
 
-            handleBonusTypeFor(
+            handleBonusesFor(
                 action,
-                CritBonus,
                 (bonusType, sourceItem) => {
                     sources.push(sourceItem.name);
                     hasKeen ||= bonusType.hasKeen(sourceItem);
                     offset += bonusType.getOffsetValue(sourceItem);
                     mult += bonusType.getMultValue(sourceItem);
-                }
+                },
+                { specificBonusType: CritBonus },
             );
 
             let range = hasKeen
@@ -199,14 +199,14 @@ export class CritBonus extends BaseBonus {
             const originalMult = +(action.ability.critMult || 2) || 2;
             let mult = originalMult;
 
-            handleBonusTypeFor(
+            handleBonusesFor(
                 action,
-                CritBonus,
                 (bonusType, sourceItem) => {
                     hasKeen ||= bonusType.hasKeen(sourceItem);
                     offset += bonusType.getOffsetValue(sourceItem);
                     mult += bonusType.getMultValue(sourceItem);
-                }
+                },
+                { specificBonusType: CritBonus },
             );
 
             mult = isBroken ? 2 : mult;

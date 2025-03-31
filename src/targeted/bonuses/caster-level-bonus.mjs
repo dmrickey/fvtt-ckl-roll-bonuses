@@ -37,15 +37,15 @@ export class CasterLevelBonus extends BaseBonus {
             const action = game.messages.get(rollOptions.messageId)?.actionSource;
             if (!action) return;
 
-            api.utils.handleBonusTypeFor(
+            api.utils.handleBonusesFor(
                 action,
-                CasterLevelBonus,
                 (_bonusType, sourceItem) => {
                     const mod = FormulaCacheHelper.getModuleFlagValue(sourceItem, this.key);
                     if (mod) {
                         rollOptions.parts?.push(`${mod}[${sourceItem.name}]`);
                     }
-                }
+                },
+                { specificBonusType: CasterLevelBonus },
             );
 
         };

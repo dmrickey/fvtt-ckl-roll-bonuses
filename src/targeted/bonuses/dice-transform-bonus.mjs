@@ -1,6 +1,6 @@
 import { MODULE_NAME } from '../../consts.mjs';
 import { textInput } from '../../handlebars-handlers/bonus-inputs/text-input.mjs';
-import { handleBonusTypeFor } from '../../target-and-bonus-join.mjs';
+import { handleBonusesFor } from '../../target-and-bonus-join.mjs';
 import { LocalHookHandler, localHooks } from '../../util/hooks.mjs';
 import { localizeBonusTooltip } from '../../util/localize.mjs';
 import { simplify } from '../../util/simplify-roll-formula.mjs';
@@ -43,10 +43,10 @@ export class DiceTransformBonus extends BaseBonus {
     static async preDamageRoll(action, rollData, parts, _changes) {
         /** @type {ItemPF[]} */
         const sourceItems = [];
-        handleBonusTypeFor(
+        handleBonusesFor(
             action,
-            DiceTransformBonus,
             (_bonusType, sourceItem) => sourceItems.push(sourceItem),
+            { specificBonusType: DiceTransformBonus },
         );
 
         sourceItems.sort((a, b) => {

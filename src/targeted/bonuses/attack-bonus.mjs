@@ -1,8 +1,9 @@
+import { SpecificBonuses } from '../../bonuses/all-specific-bonuses.mjs';
 import { MODULE_NAME } from '../../consts.mjs';
 import { checkboxInput } from '../../handlebars-handlers/bonus-inputs/chekbox-input.mjs';
 import { textInputAndKeyValueSelect } from '../../handlebars-handlers/bonus-inputs/text-input-and-key-value-select.mjs';
 import { textInput } from '../../handlebars-handlers/bonus-inputs/text-input.mjs';
-import { handleBonusTypeFor } from '../../target-and-bonus-join.mjs';
+import { handleBonusesFor } from '../../target-and-bonus-join.mjs';
 import { changeTypeLabel } from '../../util/change-type-label.mjs';
 import { createChange } from '../../util/conditional-helpers.mjs';
 import { FormulaCacheHelper } from "../../util/flag-helpers.mjs";
@@ -36,9 +37,8 @@ export class AttackBonus extends BaseBonus {
          */
         function itemAction_attackSources(wrapped) {
             const attackSources = wrapped() || [];
-            handleBonusTypeFor(
+            handleBonusesFor(
                 this,
-                AttackBonus,
                 (bonusType, sourceItem) => {
                     const critOnly = !!sourceItem.getFlag(MODULE_NAME, bonusType.#critOnlyKey);
                     if (critOnly) return;
@@ -58,7 +58,8 @@ export class AttackBonus extends BaseBonus {
                         });
                         attackSources.push(change);
                     }
-                }
+                },
+                { specificBonusType: AttackBonus, }
             );
             return attackSources;
         };

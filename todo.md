@@ -325,12 +325,12 @@
   - Or disable the system's checkbox as this mod already accounts for it
     - but also add an "ignore" checkbox
 - Add documentation into "Has BFlag" to include toggle (copy from "has condition")
-- look at action-sheet._onDrop and update my logic for drop handlers
-  - my location conditional-modifiers-input.modifiersInput--div.addEventListener('drop'...
-- Make sure all conditional bonuses work
 - investigate "action damage" and see if I need that at all (talking about the helper function that builds the formula in the system)
 - Figure out a way to make Versatile Performance and Snake Sidewind work together
 - Transfer ammo's masterwork to `system.masterwork`
+- Conditional Modifiers input
+  - Fix CSS for conditional inputs (specifically damage type button)
+- Damage Conditional bonus (from both Damage Bonus and Conditional Modifier (Damage) bonus) are being added to damage twice (only when rolled, tooltip is fine)
 
 # Verify
 - "Has Condition" and "Has BFlag" both need to be verified for targeting self vs. actor

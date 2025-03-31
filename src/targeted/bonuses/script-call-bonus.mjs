@@ -1,7 +1,7 @@
 
 import { MODULE_NAME } from '../../consts.mjs';
 import { showScriptBonusEditor } from '../../handlebars-handlers/targeted/bonuses/script-call-bonus-input.mjs';
-import { handleBonusTypeFor } from '../../target-and-bonus-join.mjs';
+import { handleBonusesFor } from '../../target-and-bonus-join.mjs';
 import { truthiness } from '../../util/truthiness.mjs';
 import { BaseBonus } from './_base-bonus.mjs';
 
@@ -37,9 +37,8 @@ export class ScriptCallBonus extends BaseBonus {
 
             // BEGIN MY OVERRIDE
             if (shared.action) {
-                handleBonusTypeFor(
+                handleBonusesFor(
                     shared.action,
-                    ScriptCallBonus,
                     (bonusType, sourceItem) => {
                         const scriptCalls = bonusType.getScriptCalls(sourceItem, this);
                         scriptCalls
@@ -48,6 +47,7 @@ export class ScriptCallBonus extends BaseBonus {
                                 scripts.push(s);
                             });
                     },
+                    { specificBonusType: ScriptCallBonus },
                 );
             }
             // END MY OVERRIDE

@@ -1,6 +1,6 @@
 import { MODULE_NAME } from "../../consts.mjs";
 import { modifiersInput } from "../../handlebars-handlers/targeted/bonuses/conditional-modifiers-input.mjs";
-import { handleBonusTypeFor } from '../../target-and-bonus-join.mjs';
+import { handleBonusesFor } from '../../target-and-bonus-join.mjs';
 import { addCheckToAttackDialog, getFormData } from '../../util/attack-dialog-helper.mjs';
 import { conditionalAttackTooltipModSource, conditionalModToItemChangeForDamageTooltip, loadConditionals } from "../../util/conditional-helpers.mjs";
 import { LocalHookHandler, localHooks } from '../../util/hooks.mjs';
@@ -185,9 +185,8 @@ export class ConditionalModifiersBonus extends BaseBonus {
             return;
         }
 
-        handleBonusTypeFor(
+        handleBonusesFor(
             dialog.action,
-            ConditionalModifiersBonus,
             (bonusType, sourceItem) => {
                 const conditionals = bonusType.loadConfiguredConditionals(sourceItem);
                 conditionals.forEach((c) => {
@@ -202,7 +201,8 @@ export class ConditionalModifiersBonus extends BaseBonus {
                         }
                     )
                 })
-            }
+            },
+            { specificBonusType: ConditionalModifiersBonus },
         );
     }
 
