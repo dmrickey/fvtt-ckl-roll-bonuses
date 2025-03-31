@@ -226,10 +226,9 @@ function itemActionCritRangeWrapper(wrapped) {
 /**
  * Determines conditional parts used in an attack.
  *
- * @param {() => {}} wrapped
  * @this {ActionUse}
  */
-function actionUse_handleConditionals(wrapped) {
+async function actionUse_handleConditionals() {
     // shared.conditionals is an array of indexes to grab the conditional data for
     this.shared.conditionals ||= [];
 
