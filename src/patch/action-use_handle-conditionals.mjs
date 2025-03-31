@@ -13,7 +13,7 @@ export const handleConditionals = (actionUse, conditionals) => {
         for (const [modKey, modifier] of conditional.modifiers.entries()) {
             // Ignore modifiers with nonexisting formula or formulas that equal to zero
             if (modifier.formula == 0) {
-                console.warn("Ignored ineffective conditional modifier", { modifier, actionUse: this });
+                console.warn("Ignored ineffective conditional modifier", { modifier, actionUse });
                 return;
             }
 
