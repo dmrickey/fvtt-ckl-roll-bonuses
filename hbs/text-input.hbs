@@ -1,6 +1,15 @@
 <div class="form-group roll-bonuses">
     {{> "modules/ckl-roll-bonuses/hbs/label-partial.hbs"}}
     <div class="form-fields">
+        {{#if isTextArea}}
+        <textarea
+            style="resize: auto; field-sizing: content;"
+            {{#if readonly}}readonly{{/if}}
+            value="{{current}}"
+            id="text-input-{{key}}"
+            placeholder="{{placeholder}}"
+        >{{current}}</textarea>
+        {{else}}
         <input
             type="{{textInputType}}"
             {{#if isFormula}}class="formula"{{/if}}
@@ -16,6 +25,7 @@
             <option value="{{this}}">
             {{/each}}
         </datalist>
+        {{/if}}
         {{/if}}
     </div>
 </div>
