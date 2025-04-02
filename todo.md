@@ -331,7 +331,9 @@
 - Furious Focus needs to work only for 2h attacks
 - Conditional Modifiers input
   - Fix CSS for conditional inputs (specifically damage type button)
-- Damage Conditional bonus (from both Damage Bonus and Conditional Modifier (Damage) bonus) are being added to damage twice (only when rolled, tooltip is fine)
+- size bonus is not being accounted for actor tooltip. See where I can fix that
+  - maybe in wrapping ActorSheet._getTooltipContext
+  - or "renderPF1ExtendedTooltip" hook
 
 # Verify
 - "Has Condition" and "Has BFlag" both need to be verified for targeting self vs. actor

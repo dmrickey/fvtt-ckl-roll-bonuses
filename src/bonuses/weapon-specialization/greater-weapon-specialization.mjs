@@ -80,12 +80,12 @@ Hooks.on(customGlobalHooks.actionUseAlterRollData, addWeaponSpecialization);
  */
 export function getGreaterWeaponSpecializaitonConditional(item) {
     const actor = item.actor;
-    if (!actor || !item.system.baseTypes?.length) {
+    const baseTypes = item.system.baseTypes;
+    if (!actor || !baseTypes?.length) {
         return;
     }
 
-    const baseTypes = item.system.baseTypes;
-    const specializations = getSpecializedWeapons(actor);
+    const specializations = getGreaterSpecializedWeapons(actor);
     const overlap = intersection(baseTypes, specializations)
     if (overlap.length) {
         const source = actor.itemFlags?.boolean[key]?.sources?.find((s) => overlap.includes(s.flags[MODULE_NAME]?.[key]));

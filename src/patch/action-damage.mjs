@@ -23,6 +23,8 @@ function actionDamage(action, { simplify = true, strict = true } = {}) {
 
     /** BEGIN OVERRIDE */
     const actionData = foundry.utils.deepClone(action);
+    const actionDamageParts = [...actionData.damage.parts];
+    const actionDamageNonCritParts = [...actionData.damage.nonCritParts];
     /** END OVERRIDE */
 
     /** @type {(number | string)[]} */
@@ -41,7 +43,7 @@ function actionDamage(action, { simplify = true, strict = true } = {}) {
     /** BEGIN OVERRIDE */
     if (!action[MODULE_NAME]?.conditionals) {
         // item[MODULE_NAME] ||= {};
-        item[MODULE_NAME].conditionals ||= [];
+        action[MODULE_NAME].conditionals ||= [];
         handleBonusesFor(
             action,
             (bonusType, sourceItem) => {
@@ -50,7 +52,7 @@ function actionDamage(action, { simplify = true, strict = true } = {}) {
                     .flatMap(x => x)
                     .filter(truthiness)
                     .flatMap(x => x.modifiers.map(y => y._source)));
-                item[MODULE_NAME].conditionals?.push(...conditionals);
+                action[MODULE_NAME].conditionals?.push(...conditionals);
             }
         );
         const extras = [
@@ -58,10 +60,10 @@ function actionDamage(action, { simplify = true, strict = true } = {}) {
             getGreaterWeaponSpecializaitonConditional(item)?.modifiers.find(x => !!x)?._source,
             getMartialFocusCondtional(item)?.modifiers.find(x => !!x)?._source,
         ].filter(truthiness);
-        item[MODULE_NAME].conditionals.push(...extras);
+        action[MODULE_NAME].conditionals.push(...extras);
     }
 
-    const conditionals = item[MODULE_NAME]?.conditionals || [];
+    const conditionals = action[MODULE_NAME]?.conditionals || [];
     /** END OVERRIDE */
 
     /**
@@ -106,14 +108,14 @@ function actionDamage(action, { simplify = true, strict = true } = {}) {
         .filter((x) => x.target === 'damage' && subTargets.includes(x.subTarget) && x.critical === 'normal' && !!x.formula)
         .map(x => (new pf1.models.action.DamagePartModel({ formula: x.formula, types: x.damageType })));
 
-    actionData.damage.parts.push(...allDamageParts);
+    actionDamageParts.push(...allDamageParts);
     /** END OVERRIDE */
 
     /** @param {DamagePartModel[]} _parts */
     const handleParts = (_parts) => _parts.forEach(({ formula }) => handleFormula(formula));
 
     // Normal damage parts
-    handleParts(actionData.damage.parts);
+    handleParts(actionDamageParts);
     /** BEGIN OVERRIDE */
     if (parts[0]) {
         /** @type {PreDamageRollPart[]} */
@@ -146,11 +148,11 @@ function actionDamage(action, { simplify = true, strict = true } = {}) {
         .filter((x) => x.target === 'damage' && subTargets.includes(x.subTarget) && x.critical === 'nonCrit' && !!x.formula)
         .map(x => (new pf1.models.action.DamagePartModel({ formula: x.formula, types: x.type ? [x.type] : [] })));
 
-    actionData.damage.nonCritParts.push(...nonCritDamageParts);
+    actionDamageNonCritParts.push(...nonCritDamageParts);
     /** END OVERRIDE */
 
     // Include damage parts that don't happen on crits
-    handleParts(actionData.damage.nonCritParts);
+    handleParts(actionDamageNonCritParts);
 
     // Include general sources. Item enhancement bonus is among these.
     action.allDamageSources.forEach((s) => handleFormula(s.formula, s));

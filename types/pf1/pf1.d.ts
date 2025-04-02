@@ -529,6 +529,7 @@ declare global {
                 stacks: number;
                 total: number;
             };
+            conditionals?: ItemConditionalModifierSourceData[];
             [key: string]: number | string | object | array;
         };
 
@@ -656,7 +657,6 @@ declare global {
             bonuses: (typeof BaseBonus)[];
             targets: (typeof BaseTarget)[];
             targetOverrides: (typeof BaseTargetOverride)[];
-            conditionals?: ItemConditionalModifierSourceData[];
             [key: string]: number | string | object | array;
         };
 

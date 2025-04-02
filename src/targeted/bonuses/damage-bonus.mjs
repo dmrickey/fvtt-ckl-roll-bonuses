@@ -9,8 +9,6 @@ import { signed } from '../../util/to-signed-string.mjs';
 import { truthiness } from "../../util/truthiness.mjs";
 import { BaseBonus } from "./_base-bonus.mjs";
 
-
-
 /** @extends BaseBonus */
 export class DamageBonus extends BaseBonus {
     static get #changeKey() { return `${this.key}-change`; }
