@@ -17,6 +17,8 @@ import { truthiness } from '../util/truthiness.mjs';
  * @returns {string}
  */
 function actionDamage(action, { simplify = true, strict = true } = {}) {
+    if (action[MODULE_NAME].formula) return action[MODULE_NAME].formula;
+
     const actor = action.actor,
         item = action.item,
         actorData = actor?.system;
@@ -41,9 +43,8 @@ function actionDamage(action, { simplify = true, strict = true } = {}) {
     };
 
     /** BEGIN OVERRIDE */
-    if (!action[MODULE_NAME]?.conditionals) {
-        action[MODULE_NAME] ||= {};
-        action[MODULE_NAME].conditionals ||= [];
+    if (!action[MODULE_NAME].conditionals) {
+        action[MODULE_NAME].conditionals = [];
         handleBonusesFor(
             action,
             (bonusType, sourceItem) => {
@@ -164,18 +165,21 @@ function actionDamage(action, { simplify = true, strict = true } = {}) {
         return "NaN";
     }
 
-    const semiFinal = pf1.utils.formula.compress(parts.join("+"));
-    if (!simplify) return semiFinal;
-
-    // Simplification turns 1d12+1d8+6-8+3-2 into 1d12+1d8-1
-    try {
-        const rollData = semiFinal.indexOf("@") >= 0 ? lazy.rollData : undefined;
-        const final = pf1.utils.formula.simplify(semiFinal, rollData, { strict });
-        return pf1.utils.formula.compress(final);
-    } catch (err) {
-        console.error("Invalid action damage formula:", parts.join(" + "), action, err);
-        return "NaN";
+    let formula = pf1.utils.formula.compress(parts.join("+"));
+    if (simplify) {
+        // Simplification turns 1d12+1d8+6-8+3-2 into 1d12+1d8-1
+        try {
+            const rollData = formula.indexOf("@") >= 0 ? lazy.rollData : undefined;
+            const final = pf1.utils.formula.simplify(formula, rollData, { strict });
+            formula = pf1.utils.formula.compress(final);
+        } catch (err) {
+            console.error("Invalid action damage formula:", parts.join(" + "), action, err);
+            return "NaN";
+        }
     }
+
+    action[MODULE_NAME].formula = formula;
+    return formula;
 }
 
 Hooks.once('init', () => {

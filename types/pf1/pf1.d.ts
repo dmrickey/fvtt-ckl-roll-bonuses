@@ -530,6 +530,8 @@ declare global {
                 total: number;
             };
             conditionals?: ItemConditionalModifierSourceData[];
+            /** Cached damage formula for actor sheet */
+            formula?: string;
             [key: string]: number | string | object | array;
         };
 
