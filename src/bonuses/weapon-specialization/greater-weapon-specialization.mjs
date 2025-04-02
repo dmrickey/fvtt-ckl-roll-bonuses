@@ -94,7 +94,6 @@ export function getGreaterWeaponSpecializaitonConditional(item) {
             default: true,
             name: source?.name ?? '',
             modifiers: [{
-                ...pf1.components.ItemConditionalModifier.defaultData,
                 _id: foundry.utils.randomID(),
                 critical: 'normal',
                 formula: '+2',

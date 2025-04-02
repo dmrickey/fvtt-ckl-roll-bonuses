@@ -97,7 +97,6 @@ export function getWeaponSpecializaitonConditional(item) {
             default: true,
             name: Settings.weaponSpecialization,
             modifiers: [{
-                ...pf1.components.ItemConditionalModifier.defaultData,
                 _id: foundry.utils.randomID(),
                 critical: 'normal',
                 formula: '+2',

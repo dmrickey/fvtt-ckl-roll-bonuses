@@ -1866,17 +1866,11 @@ declare global {
         get modifiers(): Readonly<Collection<ItemConditionalModifier>>;
         get name(): string;
         get parent(): undefined | ItemPF;
-        static get defaultData(): {
-            _id: string;
-            default: false;
-            modifiers: ItemConditionalModifierSourceData[];
-            name: '';
-        };
 
         get _source(): ItemConditionalSourceData;
 
         constructor(
-            obj: ItemConditionalSourceData,
+            obj?: Partial<Omit<ItemConditionalSourceData, 'modifiers'> & { modifiers: Partial<ItemConditionalModifierSourceData>[] }>,
             parent?: ItemAction
         ): ItemConditional;
         /** @deprecated do not use within this mod */
@@ -1961,18 +1955,7 @@ declare global {
         get _source(): ItemConditionalModifierSourceData;
         parent: ItemConditional;
 
-        constructor(any);
-
-        /** @deprecated */
-        static get defaultData(): {
-            critical: '';
-            damageType: string[];
-            formula: '';
-            subTarget: '';
-            target: '';
-            type: '';
-            _id: string;
-        };
+        constructor(arg?: Partial<ItemConditionalModifierSourceData>);
     }
 
     class ItemScriptCallData {

@@ -161,7 +161,6 @@ class VitalStrikeData {
                             default: true,
                             name: this.label,
                             modifiers: [{
-                                ...pf1.components.ItemConditionalModifier.defaultData,
                                 _id: foundry.utils.randomID(),
                                 critical: 'nonCrit',
                                 formula: formula,

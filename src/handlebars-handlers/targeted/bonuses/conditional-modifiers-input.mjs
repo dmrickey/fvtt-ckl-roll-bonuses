@@ -275,7 +275,7 @@ export function modifiersInput({
 
             // Add new conditional
             if (a.classList.contains("add-conditional")) {
-                conditionals.push(new pf1.components.ItemConditional(pf1.components.ItemConditional.defaultData));
+                conditionals.push(new pf1.components.ItemConditional());
                 await updateItem();
             }
 
@@ -296,7 +296,7 @@ export function modifiersInput({
                 if (!(li instanceof Element)) return;
                 const conditional = conditionals.find((c) => c.id === li?.dataset.conditional);
 
-                const modifier = new pf1.components.ItemConditionalModifier(pf1.components.ItemConditionalModifier.defaultData);
+                const modifier = new pf1.components.ItemConditionalModifier();
                 conditional?._source.modifiers.push(modifier._source);
                 await updateItem();
             }

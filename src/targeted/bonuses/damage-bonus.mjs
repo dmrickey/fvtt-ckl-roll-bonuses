@@ -224,7 +224,7 @@ export class DamageBonus extends BaseBonus {
      */
     static #getCachedDamageItemChange(source) {
         /** @type {{formula: string, type: BonusTypes}[]} */
-        const flags = (source.getFlag(MODULE_NAME, this.#changeKey) || [])
+        const flags = (source.getFlag(MODULE_NAME, this.#changeKey) || []);
         const changes = flags
             .map(({ type }, i) => ({
                 type: type || 'untyped',
