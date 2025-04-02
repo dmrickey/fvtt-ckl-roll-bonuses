@@ -42,7 +42,7 @@ function actionDamage(action, { simplify = true, strict = true } = {}) {
 
     /** BEGIN OVERRIDE */
     if (!action[MODULE_NAME]?.conditionals) {
-        // item[MODULE_NAME] ||= {};
+        action[MODULE_NAME] ||= {};
         action[MODULE_NAME].conditionals ||= [];
         handleBonusesFor(
             action,
