@@ -325,20 +325,11 @@
   - Or disable the system's checkbox as this mod already accounts for it
     - but also add an "ignore" checkbox
 - Add documentation into "Has BFlag" to include toggle (copy from "has condition")
-- investigate "action damage" and see if I need that at all (talking about the helper function that builds the formula in the system)
 - Figure out a way to make Versatile Performance and Snake Sidewind work together
 - Transfer ammo's masterwork to `system.masterwork`
 - Furious Focus needs to work only for 2h attacks
 - Conditional Modifiers input
   - Fix CSS for conditional inputs (specifically damage type button)
-- size bonus is not being accounted for actor tooltip. See where I can fix that
-  - maybe in wrapping ActorSheet._getTooltipContext
-  - or "renderPF1ExtendedTooltip" hook
 
 # Verify
 - "Has Condition" and "Has BFlag" both need to be verified for targeting self vs. actor
-- verify conditionals that are no longer using defaultData
-  - (Greater) Weapon Specialization
-  - Martial Focus
-  - Vital Strike
-  - Conditional Input (specifically the "create new" buttons for conditional and modifier)
