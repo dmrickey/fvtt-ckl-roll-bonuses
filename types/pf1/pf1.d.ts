@@ -1872,7 +1872,7 @@ declare global {
         get _source(): ItemConditionalSourceData;
 
         constructor(
-            obj?: Partial<Omit<ItemConditionalSourceData, 'modifiers'> & { modifiers: Partial<ItemConditionalModifierSourceData>[] }>,
+            obj?: RecursivePartial<ItemConditionalSourceData>,
             parent?: ItemAction
         ): ItemConditional;
         /** @deprecated do not use within this mod */

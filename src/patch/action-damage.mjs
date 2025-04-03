@@ -77,6 +77,7 @@ function actionDamage(action, { simplify = true, strict = true } = {}) {
                 case "string": {
                     // Ensure @item.level and similar gets parsed correctly
                     /** BEGIN OVERRIDE */
+                    /** @type {RollData} */
                     const _rd = formula.indexOf("@") >= 0 ? (change?.parent?.getRollData() ?? lazy.rollData) : {};
                     const rd = { ..._rd };
                     if (!isNaN(rd.size)) {

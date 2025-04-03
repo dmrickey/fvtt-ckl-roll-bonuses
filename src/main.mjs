@@ -5,7 +5,7 @@ import './util/item-hints.mjs';
 import './_all-bonuses.mjs';
 import './patch/init.mjs';
 import { FormulaCacheHelper } from './util/flag-helpers.mjs';
-import { simplifyRollFormula } from './util/simplify-roll-formula.mjs';
+import { simplify, simplifyRollFormula } from './util/simplify-roll-formula.mjs';
 import './auto-recognition/init.mjs';
 import { api } from './util/api.mjs';
 import migrate from './migration/index.mjs';
@@ -531,8 +531,58 @@ function itemAttackFromItem(wrapped, item) {
     return data;
 }
 
+/**
+ * @param {ActorSheetPF} actorSheet
+ * @param {string} identifier
+ * @param {HTMLTemplateElement} template
+ */
+function onRenderPF1ExtendedTooltip(actorSheet, identifier, template) {
+    const [itemType, id, type] = identifier.split('.');
+    if (itemType === 'item' && type === 'damage') {
+        const item = actorSheet.actor.items.get(id);
+        const action = item?.defaultAction;
+        if (!action) return;
+
+        const conditionals = action[MODULE_NAME]?.conditionals || [];
+        if (!conditionals.length) return;
+
+        if (!template.content.textContent?.includes('sizeRoll')) return;
+
+        const rd = foundry.utils.deepClone(action.getRollData());
+        if (rd.size && isNaN(rd.size)) return;
+
+        const sizeBonus = conditionals
+            .filter((x) => x.target === 'size')
+            .map((x) => RollPF.safeTotal(x.formula))
+            .reduce((acc, x) => acc + x, 0);
+
+        if (!sizeBonus) return;
+        rd.size = (rd.size || 0) + sizeBonus;
+
+        const children = Array.from(template.content.childNodes).filter(x => !(x instanceof Text));
+
+        let nextFormulaReplacement = '';
+        for (const child of children) {
+            if (!(child instanceof HTMLElement)) continue;
+
+            if (nextFormulaReplacement) {
+                // child.innerText = child.innerText.replace(/\d+d\d+/, nextFormulaReplacement);
+                child.innerText = nextFormulaReplacement;
+            }
+            if (child.innerText.includes('sizeRoll')) {
+                const formula = child.innerText;
+                nextFormulaReplacement = simplify(formula, rd);
+            }
+            else {
+                nextFormulaReplacement = '';
+            }
+        }
+    }
+}
+
 Hooks.on('pf1CreateActionUse', onCreateActionUse);
 Hooks.on('pf1GetRollData', onGetRollData);
+Hooks.on('renderPF1ExtendedTooltip', onRenderPF1ExtendedTooltip);
 Hooks.once('init', () => {
     // change.mjs also fires a local hook for re-calculating changes (e.g. Fate's Favored).
 

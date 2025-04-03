@@ -150,4 +150,8 @@ declare global {
             actionUse?: ActionUse | null
         ): boolean;
     };
+
+    declare type RecursivePartial<T> = {
+        [P in keyof T]?: RecursivePartial<T[P]>;
+    };
 }
