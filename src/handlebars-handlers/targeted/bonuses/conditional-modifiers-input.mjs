@@ -176,7 +176,6 @@ export function modifiersInput({
     };
 
     const div = createTemplate(templates.conditionalsInput, templateData);
-    // div.classList.add('pf1', 'sheet', 'action');
     div.setAttribute('id', createId(item, key));
 
     if (!canEdit) {
@@ -199,8 +198,6 @@ export function modifiersInput({
     async function updateItem() {
         const sanitized = conditionals.map((c) => c._source);
         await item.setFlag(MODULE_NAME, key, sanitized);
-        // can't do this without rehooking up bindings and adding
-        // await item.update({ flags: { [MODULE_NAME]: { [key]: sanitized } } }, { render: false });
     }
 
     // remove system's name property so it doesn't save automatically

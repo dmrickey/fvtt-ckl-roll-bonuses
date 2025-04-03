@@ -328,8 +328,6 @@
 - Figure out a way to make Versatile Performance and Snake Sidewind work together
 - Transfer ammo's masterwork to `system.masterwork`
 - Furious Focus needs to work only for 2h attacks
-- Conditional Modifiers input
-  - Fix CSS for conditional inputs (specifically damage type button)
 
 # Verify
 - "Has Condition" and "Has BFlag" both need to be verified for targeting self vs. actor
