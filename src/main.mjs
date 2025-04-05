@@ -155,8 +155,6 @@ function prepareItemData(wrapped, final) {
     item[MODULE_NAME] = emptyObject();
     item.actions.forEach((action) => action[MODULE_NAME] = emptyObject());
 
-    if (!this.actor) return;
-
     const rollData = item.getRollData();
     FormulaCacheHelper.cacheFormulas(item, rollData);
     LocalHookHandler.fireHookNoReturnSync(localHooks.prepareData, item, rollData);
