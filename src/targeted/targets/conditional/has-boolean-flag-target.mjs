@@ -4,6 +4,7 @@ import { textInput } from '../../../handlebars-handlers/bonus-inputs/text-input.
 import { api } from '../../../util/api.mjs';
 import { difference } from '../../../util/array-intersects.mjs';
 import { currentTargetedActors } from '../../../util/get-current-targets.mjs';
+import { localize } from '../../../util/localize.mjs';
 import { BaseTarget } from '../_base-target.mjs';
 
 const targetChoices =  /** @type {const} */ ({
@@ -32,6 +33,16 @@ export class HasBooleanFlagTarget extends BaseTarget {
      */
     static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.IpRhJqZEX2TUarSX#has-boolean-flag'; }
 
+    /**
+     * @inheritdoc
+     * @override
+     */
+    static init() {
+        Hooks.once('ready', () =>
+            // @ts-ignore
+            Object.entries(targetChoices).forEach(([key, value]) => targetChoices[key] = localize(value))
+        );
+    }
     /**
      * @override
      * @inheritdoc

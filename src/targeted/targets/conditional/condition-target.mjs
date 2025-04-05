@@ -5,8 +5,8 @@ import { localize } from '../../../util/localize.mjs';
 import { BaseTarget } from '../_base-target.mjs';
 
 const targetChoices =  /** @type {const} */ ({
-    target: 'target-choice.target',
     self: 'target-choice.self',
+    target: 'target-choice.target',
 });
 
 /**

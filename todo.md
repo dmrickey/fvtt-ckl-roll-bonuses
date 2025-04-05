@@ -63,8 +63,6 @@
 - [Other Ideas](#other-ideas)
 - [PF1 v11](#pf1-v11)
 - [vnext](#vnext)
-- [pf1 v11 update](#pf1-v11-update)
-- [Verify](#verify)
 
 # TODO
 - Figure out a way to support multiple target groups on a single Item (so I can add `Favored Enemy (Human) +4` and `Favored Enemy (goblin) +2` on a single Item)
@@ -323,9 +321,3 @@
 - Figure out a way to make Versatile Performance and Snake Sidewind work together
 - Transfer ammo's masterwork to `system.masterwork`
 - Furious Focus needs to work only for 2h attacks
-
-# pf1 v11 update
-- Add documentation into "Has BFlag" to include toggle (copy from "has condition")
-
-# Verify
-- "Has Condition" and "Has BFlag" both need to be verified for targeting self vs. actor
