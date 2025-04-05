@@ -327,44 +327,67 @@ form .versatile-performance-selector .form-fields {
 /* copied from pf1 */ }
 
 /* copied from pf1 */#ckl-roll-bonus-container .conditional-modifier-inputs .damage-type-visual {
-/* copied from pf1 */    display: flex;
-/* copied from pf1 */    flex-flow: row nowrap;
-/* copied from pf1 */    justify-content: center;
-/* copied from pf1 */    align-content: center;
-/* copied from pf1 */    border: 1px solid var(--pf1-tan);
-/* copied from pf1 */    border-radius: 3px;
-/* copied from pf1 */    background-color: var(--pf1-bg-dark-0);
-/* copied from pf1 */    vertical-align: middle;
-/* copied from pf1 */    line-height: 1.7;
-/* copied from pf1 */    white-space: nowrap;
-/* copied from pf1 */    overflow: hidden;
-/* copied from pf1 */  }
-/* copied from pf1 */  #ckl-roll-bonus-container .conditional-modifier-inputs .damage-type-visual.empty {
-/* copied from pf1 */    display: flex;
-/* copied from pf1 */    white-space: nowrap;
-/* copied from pf1 */  }
-/* copied from pf1 */  #ckl-roll-bonus-container .conditional-modifier-inputs .damage-type-visual:hover:not(.disabled) {
-/* copied from pf1 */    cursor: pointer;
-/* copied from pf1 */    box-shadow: 0 0 8px red;
-/* copied from pf1 */  }
-/* copied from pf1 */  #ckl-roll-bonus-container .conditional-modifier-inputs .damage-type-visual > span {
-/* copied from pf1 */    text-align: center;
-/* copied from pf1 */    word-break: keep-all;
-/* copied from pf1 */  }
-/* copied from pf1 */  #ckl-roll-bonus-container .conditional-modifier-inputs .damage-type-visual .damage-type {
-/* copied from pf1 */    display: flex;
-/* copied from pf1 */    flex-flow: row nowrap;
-/* copied from pf1 */    align-items: center;
-/* copied from pf1 */  }
-/* copied from pf1 */  #ckl-roll-bonus-container .conditional-modifier-inputs .damage-type-visual .damage-type .icon-pf {
-/* copied from pf1 */    background: none;
-/* copied from pf1 */    border: none;
-/* copied from pf1 */    font-size: var(--font-size-16);
-/* copied from pf1 */    text-shadow: 0 0 1px black;
-/* copied from pf1 */    width: 16px;
-/* copied from pf1 */    height: 16px;
-/* copied from pf1 */  }
-
+/* copied from pf1 */     display: flex;
+/* copied from pf1 */     flex-flow: row nowrap;
+/* copied from pf1 */     justify-content: center;
+/* copied from pf1 */     align-content: center;
+/* copied from pf1 */     border: 1px solid var(--pf1-tan);
+/* copied from pf1 */     border-radius: 3px;
+/* copied from pf1 */     background-color: var(--pf1-bg-dark-0);
+/* copied from pf1 */     vertical-align: middle;
+/* copied from pf1 */     line-height: 1.7;
+/* copied from pf1 */     white-space: nowrap;
+/* copied from pf1 */     overflow: hidden;
+/* copied from pf1 */ }
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs .damage-type-visual.empty {
+/* copied from pf1 */   display: flex;
+/* copied from pf1 */   white-space: nowrap;
+/* copied from pf1 */ }
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs .damage-type-visual:hover:not(.disabled) {
+/* copied from pf1 */   cursor: pointer;
+/* copied from pf1 */   box-shadow: 0 0 8px red;
+/* copied from pf1 */ }
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs .damage-type-visual > span {
+/* copied from pf1 */   text-align: center;
+/* copied from pf1 */   word-break: keep-all;
+/* copied from pf1 */ }
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs .damage-type-visual .damage-type {
+/* copied from pf1 */   display: flex;
+/* copied from pf1 */   flex-flow: row nowrap;
+/* copied from pf1 */   align-items: center;
+/* copied from pf1 */ }
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs .damage-type-visual .damage-type .icon-pf {
+/* copied from pf1 */   background: none;
+/* copied from pf1 */   border: none;
+/* copied from pf1 */   font-size: var(--font-size-16);
+/* copied from pf1 */   text-shadow: 0 0 1px black;
+/* copied from pf1 */   width: 16px;
+/* copied from pf1 */   height: 16px;
+/* copied from pf1 */ }
+/* copied from pf1 */ #ckl-roll-bonus-container .damage-parts,
+/* copied from pf1 */ #ckl-roll-bonus-container .attack-parts {
+/* copied from pf1 */   list-style: none;
+/* copied from pf1 */   margin: 0;
+/* copied from pf1 */   padding: 0;
+/* copied from pf1 */ }
+/* copied from pf1 */ #ckl-roll-bonus-container .damage-parts .damage-part,
+/* copied from pf1 */ #ckl-roll-bonus-container .attack-parts .damage-part,
+/* copied from pf1 */ #ckl-roll-bonus-container .damage-parts .attack-part,
+/* copied from pf1 */ #ckl-roll-bonus-container .attack-parts .attack-part {
+/* copied from pf1 */   flex: 0 0 100%;
+/* copied from pf1 */ }
+/* copied from pf1 */ #ckl-roll-bonus-container .damage-parts .damage-part input,
+/* copied from pf1 */ #ckl-roll-bonus-container .attack-parts .damage-part input,
+/* copied from pf1 */ #ckl-roll-bonus-container .damage-parts .attack-part input,
+/* copied from pf1 */ #ckl-roll-bonus-container .attack-parts .attack-part input {
+/* copied from pf1 */   flex: 3;
+/* copied from pf1 */ }
+/* copied from pf1 */ #ckl-roll-bonus-container .damage-parts .damage-part select,
+/* copied from pf1 */ #ckl-roll-bonus-container .attack-parts .damage-part select,
+/* copied from pf1 */ #ckl-roll-bonus-container .damage-parts .attack-part select,
+/* copied from pf1 */ #ckl-roll-bonus-container .attack-parts .attack-part select {
+/* copied from pf1 */   flex: 1;
+/* copied from pf1 */ }
 
 #ckl-roll-bonus-container .conditional-modifier-inputs {
     flex-direction: column;
