@@ -81,6 +81,7 @@
                 "function-player-label": "Function label for player view",
                 "furious-focus": "Furious Focus",
                 "has-boolean-flag": "Has Boolean Flag",
+                "has-boolean-flag-target": "Target for Boolean Flag",
                 "is-target-within-range": "Target within Range",
                 "is-target-within-range-max": "Maximum Range ({unit})",
                 "is-target-within-range-min": "Minimum Range ({unit})",
