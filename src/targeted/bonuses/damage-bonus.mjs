@@ -63,8 +63,7 @@ export class DamageBonus extends BaseBonus {
         const damages = this.#getCachedDamageBonuses(source);
 
         /**
-         *
-         * @param {string[] | Set<string>} types
+         * @param {string[]} types
          * @returns
          */
         const typeLabel = (types) => {
@@ -207,7 +206,7 @@ export class DamageBonus extends BaseBonus {
             modifiers: damageBonuses?.map( /** @return {ItemConditionalModifierSourceData} */(bonus) => ({
                 _id: foundry.utils.randomID(),
                 critical: bonus.crit || 'normal', // normal | crit | nonCrit
-                damageType: [...bonus.types],
+                damageType: bonus.types,
                 formula: bonus.formula,
                 subTarget: 'allDamage',
                 target: 'damage',

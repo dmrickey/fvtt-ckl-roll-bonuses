@@ -316,18 +316,16 @@
     - IAF - `-1` untyped ACP (Armor)
   - CL
   - DC
-
-# pf1 v11 update
-- Target overrides
-  - make "This item type natively includes this property." more of an error message so it's obvious it's not doing anything (i.e. turn it red)
 - Higher Ground
   - Automatically check the system's new "high ground" tick on the attack dialog when applicable
   - Or disable the system's checkbox as this mod already accounts for it
     - but also add an "ignore" checkbox
-- Add documentation into "Has BFlag" to include toggle (copy from "has condition")
 - Figure out a way to make Versatile Performance and Snake Sidewind work together
 - Transfer ammo's masterwork to `system.masterwork`
 - Furious Focus needs to work only for 2h attacks
+
+# pf1 v11 update
+- Add documentation into "Has BFlag" to include toggle (copy from "has condition")
 
 # Verify
 - "Has Condition" and "Has BFlag" both need to be verified for targeting self vs. actor

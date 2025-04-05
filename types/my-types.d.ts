@@ -81,6 +81,7 @@ declare global {
             v1: {};
             v2: {};
             v3: {};
+            v4: {};
         };
 
         /** Base source classes for extending */
@@ -149,9 +150,5 @@ declare global {
             action?: ItemAction,
             actionUse?: ActionUse | null
         ): boolean;
-    };
-
-    declare type RecursivePartial<T> = {
-        [P in keyof T]?: RecursivePartial<T[P]>;
     };
 }

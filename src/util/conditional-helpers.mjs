@@ -148,14 +148,13 @@ export function conditionalAttackTooltipModSource(conditional, modifier) {
 }
 
 /**
- * @param {string[] | Set<string>} types
+ * @param {DamageInputModel['types']} types
  * @returns {string}
  */
 export function damageTypesToString(types) {
-    if (!types) return '';
-    types = [...types];
+    const { names } = new pf1.models.action.DamagePartModel({ types });
 
-    if (!types.length) {
+    if (!names.length) {
         const untyped = pf1.registry.damageTypes.get('untyped')?.name;
         if (!untyped) {
             throw new Error("There's no `untyped` damage type in the pf1 config.");
@@ -163,8 +162,7 @@ export function damageTypesToString(types) {
         return untyped;
     }
 
-    const valueLookup = ( /** @type {string} */ t) => pf1.registry.damageTypes.getLabels()[t] || t;
-    return types.map(valueLookup).join(', ');
+    return names.join(', ');
 }
 
 /**
@@ -187,9 +185,9 @@ export const loadConditionals = (item, key, { useCachedFormula = false } = {}) =
                     m.formula = formula;
                 }
             }
-            if (m.target === 'damage') {
-                m.type = damageTypesToString(m.damageType)
-            }
+            // if (m.target === 'damage') {
+            //     m.type = damageTypesToString(m.damageType)
+            // }
         });
     });
 

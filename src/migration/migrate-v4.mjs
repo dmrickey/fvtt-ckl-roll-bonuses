@@ -1,38 +1,6 @@
 import { log } from './migration-log.mjs';
 import { MODULE_NAME } from '../consts.mjs';
 import { truthiness } from '../util/truthiness.mjs';
-import { isNotEmptyObject } from '../util/is-empty-object.mjs';
-
-const legacyActionFlags = [
-    'target_is-melee',
-    'target_is-natural',
-    'target_is-natural-secondary',
-    'target_is-ranged',
-    'target_is-spell',
-    'target_is-thrown',
-    'target_is-weapon',
-];
-
-const booleanFlagMigrations = [
-    ['finesse-override', 'target-override_finesse-override'],
-];
-
-/**
- * Whether or not the document has any of the given boolean flags
- *
- * @param {Nullable<ItemPF>} doc
- * @returns {string[]} Retruns the b.flags on the item
- */
-const getCurrentLegacyActionFlags = (
-    doc,
-) => {
-    if (!doc) return [];
-    return legacyActionFlags.filter((flag) => doc.hasItemBooleanFlag(flag));
-}
-
-const newActionTypeTargetKey = 'target_action-type';
-const newActionTypeTargetRadioKey = 'target_action-type-radio';
-const newActionTypeTargetTypesKey = 'target_action-type-types';
 
 /**
  * @param {ItemPF} item
@@ -40,44 +8,71 @@ const newActionTypeTargetTypesKey = 'target_action-type-types';
  */
 const getItemUpdateData = (item) => {
 
-    /** @type {Record<string, boolean>} */
-    const boolean = {};
     /** @type {Record<string, any>} */
-    const moduleFlags = {};
+    const updatedFlags = {};
 
-    booleanFlagMigrations.forEach(([legacy, updated]) => {
-        if (item.hasItemBooleanFlag(legacy)) {
-            boolean[legacy] = false;
-            boolean[updated] = true;
-        }
-    });
+    let hasUpdate = false;
 
-    const current = getCurrentLegacyActionFlags(item);
+    /**
+     * @typedef {{ custom: string, values: string[] }} LegacyDamageTypes
+     */
 
-    if (current.length) {
-        current.forEach((flag) => boolean[`-=${flag}`] = false);
-        boolean[newActionTypeTargetKey] = true;
+    /**
+     * @param {LegacyDamageTypes} t
+     * @returns {string[]}
+     */
+    const updateTypes = (t) => Array.isArray(t)
+        ? t
+        : [...(t?.custom?.split(';') ?? ''), ...(t?.values ?? [])].filter(truthiness);
 
-        const isAll = item.getFlag(MODULE_NAME, 'target-toggle') === 'all';
+    {
+        const basicDamages = ['bonus_damage', 'ammo-damage'];
 
-        const newProps = current.map(x => x.split('_')[1]);
-        moduleFlags[newActionTypeTargetTypesKey] = newProps;
-        moduleFlags[newActionTypeTargetRadioKey] = isAll ? 'all' : 'any';
+        basicDamages.forEach((key) => {
+            /** @type {{ crit: any, formula: any, type: LegacyDamageTypes }[]} */
+            const damages = item.getFlag(MODULE_NAME, key);
+            if (damages?.length) {
+                hasUpdate = true;
+                updatedFlags[key] = damages.map(({ crit, formula, type }) => ({
+                    crit,
+                    formula,
+                    types: updateTypes(type),
+                }));
+            }
+        });
     }
 
-    if (isNotEmptyObject(moduleFlags)
-        || isNotEmptyObject(boolean)
-    ) {
+    {
+        /**
+         * @typedef {object} LegacyConditionalModifier
+         * @property {'attack' | 'damage'} target
+         * @property {LegacyDamageTypes} damageType
+         *
+         * @typedef {object} LegacyConditional
+         * @property {LegacyConditionalModifier[]} modifiers
+         */
+        /** @type {LegacyConditional[]} */
+        const conditionals = item.getFlag(MODULE_NAME, 'bonus_conditional-modifiers');
+        if (conditionals?.length && conditionals.some((c) => c?.modifiers?.some((m) => m?.target === 'damage'))) {
+            hasUpdate = true;
+            updatedFlags['bonus_conditional-modifiers'] = conditionals.map((c) => ({
+                ...c,
+                modifiers: c.modifiers.map((m) => m.target !== 'damage'
+                    ? m
+                    : {
+                        ...m,
+                        damageType: updateTypes(m.damageType)
+                    })
+            }));
+        }
+    }
+
+    if (hasUpdate) {
         /** @type {RecursivePartial<ItemPF>} */
         const update = {
             _id: item.id,
-            system: {
-                flags: {
-                    boolean,
-                }
-            },
             flags: {
-                [MODULE_NAME]: moduleFlags,
+                [MODULE_NAME]: updatedFlags,
             },
         };
         return update;
@@ -166,7 +161,7 @@ export const migrateSyntheticActors = async () => {
     log('...finished migrating synthetic actors');
 };
 
-export const migrateWorldV3 = async () => {
+export const migrateWorldV4 = async () => {
     await migrateWorldItems();
     await migratePacks();
     await migrateWorldActors();
