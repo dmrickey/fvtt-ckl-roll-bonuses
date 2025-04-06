@@ -39,7 +39,7 @@
                 "change-modification-set-type": "Tipo de Mod. de Cambios",
                 "cl": "Nivel de lanzador",
                 "condition-target": "Objetivo del estado",
-                "condition": "El objetivo tiene el estado",
+                "condition": "Tiene el estado",
                 "conditional-modifiers": "Modificadores condicionales",
                 "crit-keen": "Afilado",
                 "crit-mult": "Multiplicador de crít.",
@@ -120,7 +120,8 @@
                 "when-active": "Cuando el artículo esté activo",
                 "when-in-combat": "Cuando esté en combate",
                 "action-type-radio": "Unión de tipos de acción",
-                "change-modification": "Modificador de Cambios"
+                "change-modification": "Modificador de Cambios",
+                "has-boolean-flag-target": "Objetivo para la etiqueta (flag) booleana"
             },
             "tooltip": {
                 "action": "Otorga bonificadores a acciones específicas.",
@@ -276,7 +277,7 @@
                 "disable": "Desactivar bonificadores globales para este actor"
             },
             "attack-label": {
-                "higher-ground": "Posición elevada",
+                "higher-ground": "Terreno elevado",
                 "range-increment-penalty": "Penalizador de alcance ({range}{units})",
                 "shoot-into-melee": "Combate cuerpo a cuerpo"
             },
@@ -289,7 +290,7 @@
                 "require-melee-threaten": "Omitido el requerimiento de rango cuerpo a cuerpo"
             },
             "label": {
-                "higher-ground": "Bonificador por posición elevada",
+                "higher-ground": "Bonificador por terreno elevado",
                 "range-increment-penalty": "Penalizador de incremento de rango",
                 "shoot-into-melee": "Disparo en cuerpo a cuerpo",
                 "require-melee-threaten": "Requiere amenaza cuerpo a cuerpo"
@@ -328,7 +329,7 @@
         },
         "hint-missing-bonus": "Faltan bonificadores, haz click para añadirlos",
         "hint-missing-target": "Faltan objetivos, haz click para añadirlos",
-        "invalid-override": "El tipo de Artículo ya incluye esta propiedad.",
+        "invalid-override": "Esto no hace nada para este tipo de artículo: edita los detalles del artículo directamente.",
         "item-app": {
             "description": "Cada elemento seleccionado recibirá los bonificadores asociados. Haz clic derecho en cualquier fila para abrir la hoja y realizar más comprobaciones.",
             "title": "Selector de Artículos"
