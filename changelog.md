@@ -7,10 +7,10 @@
 
 ### Bugfixes
 - Fixed Damage Bonus item hint so that it's visible when either type of bonus is enabled instead of only when both types of damage bonuses are enabled
-- Using ammo with enhancement bonuses with a masterwork ranged weapon now correctly accounts for the weapon's MW bonus when totalling the bonuses.
+- Using ammo with enhancement bonuses with a masterwork ranged weapon now correctly accounts for the weapon's MW bonus when totaling the bonuses.
 - Vital Strike no longer errors when enabled by default and rolling attacks without damage
 - Improved Armor Focus no longer also shows the input for Armor Focus
-- Versatile Performance and Versatile Training no longer provide bonuses when the provding Feature is disabled
+- Versatile Performance and Versatile Training no longer provide bonuses when the providing Feature is disabled
 - Dice Transform Bonus no longer shows up under "Specific Bonus" header on the Item Sheet
 
 ---
