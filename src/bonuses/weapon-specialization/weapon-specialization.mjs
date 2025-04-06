@@ -6,6 +6,7 @@ import { stringSelect } from "../../handlebars-handlers/bonus-inputs/string-sele
 import { intersects } from "../../util/array-intersects.mjs";
 import { createChangeForTooltip } from '../../util/conditional-helpers.mjs';
 import { getCachedBonuses } from '../../util/get-cached-bonuses.mjs';
+import { itemHasCompendiumId } from '../../util/has-compendium-id.mjs';
 import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize, localizeBonusLabel, localizeBonusTooltip } from "../../util/localize.mjs";
@@ -96,7 +97,6 @@ export function getWeaponSpecializaitonConditional(item) {
             default: true,
             name: Settings.weaponSpecialization,
             modifiers: [{
-                ...pf1.components.ItemConditionalModifier.defaultData,
                 _id: foundry.utils.randomID(),
                 critical: 'normal',
                 formula: '+2',
@@ -141,8 +141,8 @@ Hooks.on('renderItemSheet', (
     const hasKey = item.hasItemBooleanFlag(key);
     if (!hasKey) {
         const name = item?.name?.toLowerCase() ?? '';
-        const sourceId = item?.flags.core?.sourceId ?? '';
-        if (isEditable && (name === Settings.weaponSpecialization || sourceId.includes(compendiumId))) {
+        const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
+        if (isEditable && (name === Settings.weaponSpecialization || hasCompendiumId)) {
             item.addItemBooleanFlag(key);
         }
         return;
@@ -175,7 +175,7 @@ const onCreate = (item, data, { temporary }, id) => {
     if (temporary) return;
 
     const name = item?.name?.toLowerCase() ?? '';
-    const sourceId = item?.flags.core?.sourceId ?? '';
+    const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
     const hasBonus = item.hasItemBooleanFlag(key);
 
     let choice = '';
@@ -184,7 +184,7 @@ const onCreate = (item, data, { temporary }, id) => {
     }
 
     let updated = false;
-    if ((name === Settings.weaponSpecialization || sourceId.includes(compendiumId)) && !hasBonus) {
+    if ((name === Settings.weaponSpecialization || hasCompendiumId) && !hasBonus) {
         item.updateSource({
             [`system.flags.boolean.${key}`]: true,
         });

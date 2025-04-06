@@ -34,6 +34,11 @@ declare global {
         constructor(formula: string, data?: D, options?: Roll['options']);
 
         /**
+         * Exists when there's an error.
+         */
+        err: unknown;
+
+        /**
          * The original provided data object which substitutes into attributes of the roll formula
          */
         data: D;

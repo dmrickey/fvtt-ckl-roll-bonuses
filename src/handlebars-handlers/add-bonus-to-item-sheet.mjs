@@ -22,7 +22,8 @@ const openDocumenation = async () => {
  * @param {InputType?} [inputType]
 */
 const addNodeToRollBonus = (itemSheetHtml, child, item, canEdit, inputType) => {
-    const flagsContainer = itemSheetHtml.querySelector('.tab[data-tab="advanced"] .tags');
+    const flagsContainer = itemSheetHtml.querySelector('.tab[data-tab="advanced"] .tags')
+        || itemSheetHtml.querySelector('.tab[data-tab="advanced"] .flags');
     if (!flagsContainer || !item) {
         return;
     }

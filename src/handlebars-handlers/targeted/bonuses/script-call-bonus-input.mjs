@@ -99,6 +99,7 @@ export function showScriptBonusEditor({
 
     div.addEventListener('drop', async (event) => {
         event.preventDefault();
+        event.stopPropagation();
 
         /** @type {{ type: string, uuid: string }} */ //@ts-ignore
         const data = JSON.parse(event.dataTransfer.getData("text/plain"));
@@ -132,7 +133,7 @@ export function showScriptBonusEditor({
             const current = scripts[index];
 
             if (current.type === 'script') {
-                const scriptEditor = new pf1.applications.ScriptEditor({
+                const scriptEditor = await new pf1.applications.ScriptEditor({
                     command: current.value,
                     name: current.name,
                     parent: { uuid: foundry.utils.randomID(), isOwner: !!canEdit },
@@ -211,7 +212,7 @@ export function showScriptBonusEditor({
             const index = +(row.dataset.index || 0);
             const script = scripts[index];
             if (script) {
-                const copy = deepClone(script);
+                const copy = foundry.utils.deepClone(script);
                 copy.name = `${copy.name} ${localize('PF1.Copy')}`;
                 scripts.push(copy);
                 await item.setFlag(MODULE_NAME, key, scripts);
@@ -232,7 +233,7 @@ export function showScriptBonusEditor({
                 const script = scripts[index];
                 if (script) {
                     const deleteScript = async () => {
-                        const clonedScripts = deepClone(scripts);
+                        const clonedScripts = foundry.utils.deepClone(scripts);
                         clonedScripts.splice(index, 1);
                         await item.setFlag(MODULE_NAME, key, clonedScripts);
                     }

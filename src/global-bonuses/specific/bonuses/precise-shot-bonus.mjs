@@ -1,5 +1,6 @@
 import { SpecificBonuses } from '../../../bonuses/all-specific-bonuses.mjs';
 import { showEnabledLabel } from '../../../handlebars-handlers/enabled-label.mjs';
+import { itemHasCompendiumId } from '../../../util/has-compendium-id.mjs';
 import { LanguageSettings } from '../../../util/settings.mjs';
 
 const compendiumId = '53urYIbYYpQuoSLd';
@@ -27,10 +28,10 @@ Hooks.on('renderItemSheet', (
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
     const name = item?.name?.toLowerCase() ?? '';
-    const sourceId = item?.flags.core?.sourceId ?? '';
+    const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
     const hasBonus = item.hasItemBooleanFlag(key);
 
-    if ((name === Settings.name || sourceId.includes(compendiumId)) && !hasBonus) {
+    if ((name === Settings.name || hasCompendiumId) && !hasBonus) {
         item.addItemBooleanFlag(key);
     }
 
@@ -58,10 +59,10 @@ const onCreate = (item, data, { temporary }, id) => {
     if (temporary) return;
 
     const name = item?.name?.toLowerCase() ?? '';
-    const sourceId = item?.flags.core?.sourceId ?? '';
+    const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
     const hasBonus = item.hasItemBooleanFlag(key);
 
-    if ((name === Settings.name || sourceId.includes(compendiumId)) && !hasBonus) {
+    if ((name === Settings.name || hasCompendiumId) && !hasBonus) {
         item.updateSource({
             [`system.flags.boolean.${key}`]: true,
         });

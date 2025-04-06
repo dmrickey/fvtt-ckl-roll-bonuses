@@ -11,6 +11,9 @@ import { getDocFlags } from '../util/flag-helpers.mjs';
 import { LocalHookHandler, localHooks } from '../util/hooks.mjs';
 import { getSkillName } from '../util/get-skill-name.mjs';
 import { intersection } from '../util/array-intersects.mjs';
+import { itemHasCompendiumId } from '../util/has-compendium-id.mjs';
+import { createChange } from '../util/conditional-helpers.mjs';
+import { getCachedBonuses } from '../util/get-cached-bonuses.mjs';
 
 const key = 'versatile-training';
 const selectedKey = 'versatile-training-selected';
@@ -53,7 +56,20 @@ class Settings {
     };
 }
 
+/**
+ *
+ * @param {ActorPF} actor
+ */
+const getActorVTSkills = (actor) => {
+    const sources = getCachedBonuses(actor, key);
+    const selectedSkills = sources.flatMap((source) => getDocFlags(source, selectedKey))
+        .filter(truthiness);
+    return selectedSkills;
+}
+
 registerItemHint((hintcls, actor, item, _data) => {
+    if (!item.hasItemBooleanFlag(key)) return;
+
     const selectedSkills = getDocFlags(item, selectedKey)
         .flatMap(x => x)
         .filter(truthiness);
@@ -88,9 +104,7 @@ Hooks.on('renderActorSheetPF', (
     /** @type {{ find: (arg0: string) => { (): any; new (): any; each: { (arg0: { (_: any, element: HTMLElement): void; }): void; new (): any; }; }; }} */ html,
     /** @type {{ actor: ActorPF; }} */ { actor }
 ) => {
-    const selectedSkills = getDocFlags(actor, selectedKey)
-        .flatMap(x => x)
-        .filter(truthiness);
+    const selectedSkills = getActorVTSkills(actor);
 
     if (!selectedSkills?.length) return;
 
@@ -119,9 +133,7 @@ Hooks.on('renderActorSheetPF', (
  * @returns {void}
  */
 function versatileRollSkill(seed, actor) {
-    const selectedSkills = getDocFlags(actor, selectedKey)
-        .flatMap(x => x)
-        .filter(truthiness);
+    const selectedSkills = getActorVTSkills(actor);
 
     if (selectedSkills.includes(seed.skillId)) {
         Hooks.once('preCreateChatMessage', (
@@ -139,23 +151,77 @@ function versatileRollSkill(seed, actor) {
         });
     }
 }
+
 /**
  * @param {SkillInfo} skillInfo
  * @param {ActorPF} actor
  * @param {RollData} rollData
  */
 function getSkillInfo(skillInfo, actor, rollData) {
-    const selectedSkills = getDocFlags(actor, selectedKey)
-        .flatMap(x => x)
-        .filter(truthiness);
+    const selectedSkills = getActorVTSkills(actor);
     if (selectedSkills.includes(skillInfo.id)) {
         skillInfo.rank = rollData.attributes.bab.total;
         skillInfo.cs = true;
     }
 }
+
+
+/**
+ * @param {ItemPF} item
+ * @param {RollData} rollData
+ */
+function prepareData(item, rollData) {
+    if (!item.isActive || !item.actor || !item.hasItemBooleanFlag(key)) return;
+
+    /** @type {Array<keyof typeof pf1.config.skills>} */
+    const keys = item.getFlag(MODULE_NAME, selectedKey) ?? [];
+    if (keys.length && item.actor) {
+        keys.forEach((skillKey) => {
+            const rank = rollData.attributes.bab.total;
+            const change = createChange({
+                name: `${game.i18n.localize("PF1.SkillRankPlural")} (${item.name})`,
+                value: rank,
+                formula: rank,
+                type: 'base',
+                target: `skill.~${skillKey}`,
+                id: `${item.id}_${key}_${skillKey}`,
+                operator: 'set',
+            });
+
+            // not null, but type safety is complaining about it here for some reason
+            if (!item.actor) return;
+
+            item.actor.changes ||= new Collection();
+            item.actor.changes.set(change.id, change);
+
+            const ori = { ...rollData.skills[skillKey] };
+            if ((!ori.rank || !ori.cs) && rank) {
+                rollData.skills[skillKey].mod += 3;
+
+                const csChange = createChange({
+                    formula: pf1.config.classSkillBonus,
+                    value: pf1.config.classSkillBonus,
+                    target: `skill.~${skillKey}`,
+                    type: "untyped",
+                    operator: "add",
+                    name: game.i18n.localize("PF1.CSTooltip"),
+                    id: `${item.id}_${key}_${skillKey}_cs`,
+                });
+                item.actor.changes.set(csChange.id, csChange);
+            }
+
+            if (ori.rank < rank) {
+                rollData.skills[skillKey].mod += (rank - ori.rank);
+                rollData.skills[skillKey].rank = rank;
+            }
+        });
+    }
+}
+
 Hooks.once('init', () => {
     LocalHookHandler.registerHandler(localHooks.actorRollSkill, versatileRollSkill);
     LocalHookHandler.registerHandler(localHooks.actorGetSkillInfo, getSkillInfo);
+    LocalHookHandler.registerHandler(localHooks.prepareData, prepareData);
 });
 
 /** @param {string} id  @returns {boolean} */
@@ -171,8 +237,8 @@ Hooks.on('renderItemSheet', (
     const hasKey = item.hasItemBooleanFlag(key);
     if (!hasKey) {
         const name = item?.name?.toLowerCase() ?? '';
-        const sourceId = item?.flags.core?.sourceId ?? '';
-        if (isEditable && (name === Settings.versatileTraining || sourceId.includes(compendiumId))) {
+        const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
+        if (isEditable && (name === Settings.versatileTraining || hasCompendiumId)) {
             item.addItemBooleanFlag(key);
         }
         return;
@@ -248,10 +314,10 @@ const onCreate = (item, data, { temporary }, id) => {
     if (temporary) return;
 
     const name = item?.name?.toLowerCase() ?? '';
-    const sourceId = item?.flags.core?.sourceId ?? '';
+    const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
     const hasBonus = item.hasItemBooleanFlag(key);
 
-    if ((name === Settings.versatileTraining || sourceId.includes(compendiumId)) && !hasBonus) {
+    if ((name === Settings.versatileTraining || hasCompendiumId) && !hasBonus) {
         item.updateSource({
             [`system.flags.boolean.${key}`]: true,
         });

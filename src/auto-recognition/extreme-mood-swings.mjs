@@ -1,5 +1,6 @@
 import { changeKey, changeTypeOffsetFormulaKey, changeTypeKey } from '../bonuses/change-type-modification.mjs';
 import { MODULE_NAME } from '../consts.mjs';
+import { itemHasCompendiumId } from '../util/has-compendium-id.mjs';
 import { LanguageSettings } from '../util/settings.mjs';
 
 const compendiumId = 'WSRZEwNGpQUNcvI9';
@@ -25,8 +26,8 @@ Hooks.on('renderItemSheet', (
 
     if (!hasBonus) {
         const name = item?.name?.toLowerCase() ?? '';
-        const sourceId = item?.flags.core?.sourceId ?? '';
-        if (name === Settings.name || sourceId.includes(compendiumId)) {
+        const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
+        if (name === Settings.name || hasCompendiumId) {
             item.update({
                 [`system.flags.boolean.${changeKey}`]: true,
                 [`flags.${MODULE_NAME}.${changeTypeKey}`]: 'morale',
@@ -47,9 +48,9 @@ const onCreate = (item, data, { temporary }, id) => {
     if (temporary) return;
 
     const name = item?.name?.toLowerCase() ?? '';
-    const sourceId = item?.flags.core?.sourceId ?? '';
+    const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
 
-    if (name === Settings.name || sourceId.includes(compendiumId)) {
+    if (name === Settings.name || hasCompendiumId) {
         item.updateSource({
             [`system.flags.boolean.${changeKey}`]: true,
             [`flags.${MODULE_NAME}.${changeTypeKey}`]: 'morale',

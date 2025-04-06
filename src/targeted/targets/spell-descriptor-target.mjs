@@ -44,10 +44,7 @@ export class SpellDescriptorTarget extends BaseTarget {
             return [];
         }
 
-        const descriptors = [
-            ...(item.system.descriptors?.value ?? []),
-            ...(item.system.descriptors?.custom ?? []),
-        ];
+        const descriptors = [...item.system.descriptors?.total ?? []];
         if (!descriptors.length) {
             return [];
         }
@@ -79,7 +76,7 @@ export class SpellDescriptorTarget extends BaseTarget {
         /** @type {string[]} */
         let custom = [];
         if (item.actor) {
-            custom = uniqueArray(item.actor.itemTypes.spell.flatMap(x => x.system.descriptors.custom));
+            custom = uniqueArray(item.actor.itemTypes.spell.flatMap(x => [...x.system.descriptors.custom]));
         }
         const options = {
             ...pf1.config.spellDescriptors,

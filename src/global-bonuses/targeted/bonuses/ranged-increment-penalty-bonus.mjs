@@ -2,7 +2,7 @@ import { textInput } from '../../../handlebars-handlers/bonus-inputs/text-input.
 import { BaseBonus } from '../../../targeted/bonuses/_base-bonus.mjs';
 import { FormulaCacheHelper } from '../../../util/flag-helpers.mjs';
 import { registerItemHint } from '../../../util/item-hints.mjs';
-import { localizeBonusLabel, localizeBonusTooltip } from '../../../util/localize.mjs';
+import { localizeBonusTooltip } from '../../../util/localize.mjs';
 
 /**
  * @extends BaseBonus
@@ -30,10 +30,10 @@ export class RangedIncrementPenaltyBonus extends BaseBonus {
      * @override
      * @inheritdoc
      * @param {ItemPF} source
-     * @param {ItemAction} action
+     * @param {ItemAction} _action
      * @param {RollData} rollData
      */
-    static updateItemActionRollData(source, action, rollData) {
+    static updateItemActionRollData(source, _action, rollData) {
         if (!rollData.rb.rangePenalty) {
             return;
         }

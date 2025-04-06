@@ -2,6 +2,7 @@ import { MODULE_NAME } from "../../consts.mjs";
 import { textInput } from "../../handlebars-handlers/bonus-inputs/text-input.mjs";
 import { intersects } from '../../util/array-intersects.mjs';
 import { getCachedBonuses } from '../../util/get-cached-bonuses.mjs';
+import { itemHasCompendiumId } from '../../util/has-compendium-id.mjs';
 import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize, localizeBonusLabel, localizeBonusTooltip } from "../../util/localize.mjs";
@@ -113,8 +114,7 @@ Hooks.on('renderItemSheet', (
     const hasKey = item.hasItemBooleanFlag(key);
     if (!hasKey) {
         const name = item?.name?.toLowerCase() ?? '';
-        const sourceId = item?.flags.core?.sourceId ?? '';
-        const isRacial = sourceId.includes(gnomeWeaponFocusCompendiumId) || name === Settings.racialWeaponFocus;
+        const isRacial = itemHasCompendiumId(item, gnomeWeaponFocusCompendiumId) || name === Settings.racialWeaponFocus;
         if (isEditable && isRacial) {
             item.addItemBooleanFlag(key);
         }
@@ -150,11 +150,10 @@ const onCreate = (item, data, { temporary }, id) => {
     if (temporary) return;
 
     const name = item?.name?.toLowerCase() ?? '';
-    const sourceId = item?.flags.core?.sourceId ?? '';
     const hasBonus = item.hasItemBooleanFlag(key);
 
     let updated = false;
-    if ((name === Settings.racialWeaponFocus || sourceId.includes(gnomeWeaponFocusCompendiumId)) && !hasBonus) {
+    if ((name === Settings.racialWeaponFocus || itemHasCompendiumId(item, gnomeWeaponFocusCompendiumId)) && !hasBonus) {
         item.updateSource({
             [`system.flags.boolean.${key}`]: true,
         });

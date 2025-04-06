@@ -2,6 +2,7 @@ import { MODULE_NAME } from "../consts.mjs";
 import { api } from './api.mjs';
 import { difference } from './array-intersects.mjs';
 import { ifDebug } from './if-debug.mjs';
+import { signed } from './to-signed-string.mjs';
 import { truthiness } from "./truthiness.mjs";
 
 /**
@@ -11,7 +12,7 @@ import { truthiness } from "./truthiness.mjs";
  * @param {string} key
  * @returns {any[]}
  */
-const getDocFlags = (doc, key) => {
+export const getDocFlags = (doc, key) => {
     // if doc is an actor
     if (doc instanceof pf1.documents.actor.ActorPF) {
         const flags = doc.items
@@ -27,10 +28,6 @@ const getDocFlags = (doc, key) => {
     }
 
     return [];
-}
-
-export {
-    getDocFlags,
 }
 
 api.utils.getDocFlags = getDocFlags;
@@ -76,6 +73,26 @@ export class FormulaCacheHelper {
             const exactFormula = item.flags?.[MODULE_NAME]?.[flag] + '';
             cacheFormula(exactFormula, flag);
         });
+    }
+
+    /**
+     * Combines multiple flags into a single sum
+     * @param {ItemPF} item
+     * @param {string} key
+     * @param {(total: string | number) => string} format
+     * @returns {string | undefined}
+     */
+    static getHint(item, key, format) {
+        const formula = this.getModuleFlagFormula(item, key)[key];
+        if (formula === '') return;
+
+        const roll = RollPF.create(formula + '');
+        if (roll.isDeterministic) {
+            const total = roll.evaluateSync({ forceSync: true }).total;
+            const mod = signed(total);
+            return format(mod);
+        }
+        return format(formula);
     }
 
     /**

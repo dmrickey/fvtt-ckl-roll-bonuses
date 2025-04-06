@@ -1,4 +1,5 @@
 import { showEnabledLabel } from '../handlebars-handlers/enabled-label.mjs';
+import { itemHasCompendiumId } from '../util/has-compendium-id.mjs';
 import { LocalHookHandler, customGlobalHooks, localHooks } from '../util/hooks.mjs';
 import { registerItemHint } from '../util/item-hints.mjs';
 import { localizeBonusLabel, localizeBonusTooltip } from '../util/localize.mjs';
@@ -85,11 +86,11 @@ Hooks.on('renderItemSheet', (
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
     const name = item?.name?.toLowerCase() ?? '';
-    const sourceId = item?.flags.core?.sourceId ?? '';
+    const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
 
     const hasFlag = item.hasItemBooleanFlag(fatesFavored);
     if (!hasFlag) {
-        if (isEditable && (name === Settings.fatesFavored || sourceId.includes(compendiumId))) {
+        if (isEditable && (name === Settings.fatesFavored || hasCompendiumId)) {
             item.addItemBooleanFlag(fatesFavored);
         }
         return;
@@ -117,10 +118,10 @@ const onCreate = (item, data, { temporary }, id) => {
     if (temporary) return;
 
     const name = item?.name?.toLowerCase() ?? '';
-    const sourceId = item?.flags.core?.sourceId ?? '';
+    const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
     const hasBonus = item.hasItemBooleanFlag(fatesFavored);
 
-    if ((name === Settings.fatesFavored || sourceId.includes(compendiumId)) && !hasBonus) {
+    if ((name === Settings.fatesFavored || hasCompendiumId) && !hasBonus) {
         item.updateSource({
             [`system.flags.boolean.${fatesFavored}`]: true,
         });

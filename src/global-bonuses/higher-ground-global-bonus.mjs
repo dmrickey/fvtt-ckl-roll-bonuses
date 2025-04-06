@@ -23,15 +23,16 @@ export class HigherGroundGlobalBonus extends BaseGlobalBonus {
      * @param {ActionUse} actionUse
      */
     static addHigherGroundBonus(actionUse) {
-        const { action, actor, item, shared } = actionUse;
-        if (HigherGroundGlobalBonus.isDisabled() || HigherGroundGlobalBonus.isDisabledForActor(actor)) {
-            return;
-        }
+        const { action, actor, shared } = actionUse;
         if (!actor) {
             return;
         }
 
-        const isMelee = ['mcman', 'mwak', 'msak'].includes(action.data.actionType);
+        if (HigherGroundGlobalBonus.isDisabled() || HigherGroundGlobalBonus.isDisabledForActor(actor)) {
+            return;
+        }
+
+        const isMelee = ['mcman', 'mwak', 'msak'].includes(action.actionType);
         if (!isMelee) {
             return;
         }

@@ -9,11 +9,7 @@
         <div class="error-text">{{errorMsg}}</div>
         {{else}}
         <select name="string-selector" id="string-selector-{{key}}">
-            {{#select current}}
-            {{#each choices}}
-            <option value="{{this}}">{{this}}</option>
-            {{/each}}
-            {{/select}}
+            {{selectOptions choices selected=current}}
         </select>
         {{/if}}
     </div>

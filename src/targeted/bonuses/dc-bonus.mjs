@@ -33,10 +33,9 @@ export class DCBonus extends BaseBonus {
      * @returns {Nullable<string[]>}
      */
     static getHints(source) {
-        const value = FormulaCacheHelper.getModuleFlagValue(source, this.key);
-        if (value) {
-            const mod = signed(value);
-            return [localize('dc-mod', { mod })];
+        const hint = FormulaCacheHelper.getHint(source, this.key, (mod) => localize('dc-mod', { mod }));
+        if (hint) {
+            return [hint];
         }
     }
 

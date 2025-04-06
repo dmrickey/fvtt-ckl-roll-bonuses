@@ -5,7 +5,7 @@ import './util/item-hints.mjs';
 import './_all-bonuses.mjs';
 import './patch/init.mjs';
 import { FormulaCacheHelper } from './util/flag-helpers.mjs';
-import { simplifyRollFormula } from './util/simplify-roll-formula.mjs';
+import { simplify, simplifyRollFormula } from './util/simplify-roll-formula.mjs';
 import './auto-recognition/init.mjs';
 import { api } from './util/api.mjs';
 import migrate from './migration/index.mjs';
@@ -16,6 +16,7 @@ import { addNodeToRollBonus } from './handlebars-handlers/add-bonus-to-item-shee
 import { localize } from './util/localize.mjs';
 import { FinesseOverride } from './targeted/target-overides/finesse-override.mjs';
 import { handleConditionals } from './patch/action-use_handle-conditionals.mjs';
+import { truthiness } from './util/truthiness.mjs';
 
 Hooks.once('pf1PostReady', () => migrate());
 
@@ -28,9 +29,8 @@ Hooks.once('pf1PostReady', () => migrate());
 function addFootnotes(wrapped) {
     wrapped();
 
-    /** @type {string[]} */
     const notes = this.shared.templateData.footnotes ?? [];
-    Hooks.call(customGlobalHooks.actionUseFootnotes, this, notes);
+    LocalHookHandler.fireHookNoReturnSync(localHooks.actionUseFootnotes, this, notes)
     this.shared.templateData.footnotes = notes;
 }
 
@@ -153,6 +153,8 @@ function prepareItemData(wrapped, final) {
 
     const item = this;
     item[MODULE_NAME] = emptyObject();
+    item.actions.forEach((action) => action[MODULE_NAME] = emptyObject());
+
     const rollData = item.getRollData();
     FormulaCacheHelper.cacheFormulas(item, rollData);
     LocalHookHandler.fireHookNoReturnSync(localHooks.prepareData, item, rollData);
@@ -178,11 +180,11 @@ async function actionUseProcess(wrapped, options) {
 
 /**
  * @this {ActionUse}
- * @param {(arg: object) => any} wrapped
+ * @param {(arg: object) => Promise<void>} wrapped
  * @param {object} formData - The attack dialog's JQuery form data or FormData object
  */
-function actionUseAlterRollData(wrapped, formData) {
-    wrapped(formData);
+async function actionUseAlterRollData(wrapped, formData) {
+    await wrapped(formData);
     Hooks.call(customGlobalHooks.actionUseAlterRollData, this);
 }
 
@@ -226,10 +228,9 @@ function itemActionCritRangeWrapper(wrapped) {
 /**
  * Determines conditional parts used in an attack.
  *
- * @param {() => {}} wrapped
  * @this {ActionUse}
  */
-function actionUse_handleConditionals(wrapped) {
+async function actionUse_handleConditionals() {
     // shared.conditionals is an array of indexes to grab the conditional data for
     this.shared.conditionals ||= [];
 
@@ -238,9 +239,9 @@ function actionUse_handleConditionals(wrapped) {
     LocalHookHandler.fireHookNoReturnSync(localHooks.actionUse_handleConditionals, this, conditionals);
 
     const conditionalData = [
-        ...this.shared.conditionals.map((i) => this.shared.action.data.conditionals[i]),
-        ...conditionals.map(x => x.data),
-    ];
+        ...this.shared.conditionals.map((id) => this.shared.action.conditionals.get(id)),
+        ...conditionals,
+    ].filter(truthiness);
 
     // spells/abilities that don't have attack rolls still need to accept "nonCrit" bonuses
     // the system is hardcoded to only look at "normal" damage when no attack roll is configured
@@ -286,13 +287,14 @@ function itemGetTypeChatData(wrapped, data, labels, props, rollData) {
 
 /**
  * Modify damage sources for actor's combat tooltips
- * @param {(fullId: string, context: { sources: Array<any>}) => void} wrapped
+ * @param {(fullId: string, context: { sources: Array<any>}) => Promise<void>} wrapped
  * @param {string} fullId
  * @param {{sources: Array<any>}} context
  * @this {ActorSheetPF}
+ * @returns {Promise<void>}
  */
-function getDamageTooltipSources(wrapped, fullId, context) {
-    wrapped(fullId, context);
+async function getDamageTooltipSources(wrapped, fullId, context) {
+    await wrapped(fullId, context);
 
     const re = /^(?<id>[\w-]+)(?:\.(?<detail>.*))?$/.exec(fullId);
     const { id, detail } = re?.groups ?? {};
@@ -380,7 +382,7 @@ function safeTotal(
     formula,
     data,
 ) {
-    return (isNaN(+formula) ? RollPF.create(formula + '', data).evaluate({ async: false }).total : +formula) || 0;
+    return (isNaN(+formula) ? RollPF.create(formula + '', data).evaluateSync({ forceSync: true }).total : +formula) || 0;
 }
 
 /**
@@ -404,7 +406,7 @@ function onGetRollData(thing, rollData) {
 }
 
 /**
- * @typedef {{data: RollData?, extraParts: unknown[], bonus:unknown, primaryAttack: boolean}} RollAttackArgs
+ * @typedef {{data: RollData?, extraParts: unknown[], bonus:unknown, primary: boolean}} RollAttackArgs
  */ /**
 * Place an attack roll using an item (weapon, feat, spell, or equipment)
 *
@@ -414,13 +416,13 @@ function onGetRollData(thing, rollData) {
 * @param {RollData?} [args.data]
 * @param {unknown[]} [args.extraParts]
 * @param {unknown} [args.bonus]
-* @param {boolean} [args.primaryAttack]
+* @param {boolean} [args.primary]
 */
 async function itemActionRollAttack(
     wrapped,
-    { data = null, extraParts = [], bonus = null, primaryAttack = true } = {}
+    { data = null, extraParts = [], bonus = null, primary = true } = {}
 ) {
-    const roll = await wrapped({ data, extraParts, bonus, primaryAttack });
+    const roll = await wrapped({ data, extraParts, bonus, primary });
 
     const formula = roll.formula;
     const options = roll.options;
@@ -429,7 +431,7 @@ async function itemActionRollAttack(
     LocalHookHandler.fireHookNoReturnSync(localHooks.itemActionRollAttack, seed, this, rollData);
 
     if (formula !== seed.formula || !foundry.utils.objectsEqual(options, seed.options)) {
-        const replaced = await new pf1.dice.D20RollPF(seed.formula, rollData, seed.options).evaluate({ async: true });
+        const replaced = await new pf1.dice.D20RollPF(seed.formula, rollData, seed.options).evaluate();
         return replaced;
     }
     return roll;
@@ -452,7 +454,7 @@ async function itemActionRollDamage(wrapped, ...args) {
 
         if (formula !== seed.formula || !foundry.utils.objectsEqual(roll.options, seed.options)) {
             const replaced = await new pf1.dice.DamageRoll(seed.formula, rollData, seed.options)
-                .evaluate({ async: true, maximize: !!seed.options.maximize, minimize: !!seed.options.minimize });
+                .evaluate({ maximize: !!seed.options.maximize, minimize: !!seed.options.minimize });
             rolls[i] = replaced;
         }
         i++;
@@ -530,8 +532,58 @@ function itemAttackFromItem(wrapped, item) {
     return data;
 }
 
+/**
+ * @param {ActorSheetPF} actorSheet
+ * @param {string} identifier
+ * @param {HTMLTemplateElement} template
+ */
+function onRenderPF1ExtendedTooltip(actorSheet, identifier, template) {
+    const [itemType, id, type] = identifier.split('.');
+    if (itemType === 'item' && type === 'damage') {
+        const item = actorSheet.actor.items.get(id);
+        const action = item?.defaultAction;
+        if (!action) return;
+
+        const conditionals = action[MODULE_NAME]?.conditionals || [];
+        if (!conditionals.length) return;
+
+        if (!template.content.textContent?.includes('sizeRoll')) return;
+
+        const rd = foundry.utils.deepClone(action.getRollData());
+        if (rd.size && isNaN(rd.size)) return;
+
+        const sizeBonus = conditionals
+            .filter((x) => x.target === 'size')
+            .map((x) => RollPF.safeTotal(x.formula))
+            .reduce((acc, x) => acc + x, 0);
+
+        if (!sizeBonus) return;
+        rd.size = (rd.size || 0) + sizeBonus;
+
+        const children = Array.from(template.content.childNodes).filter(x => !(x instanceof Text));
+
+        let nextFormulaReplacement = '';
+        for (const child of children) {
+            if (!(child instanceof HTMLElement)) continue;
+
+            if (nextFormulaReplacement) {
+                // child.innerText = child.innerText.replace(/\d+d\d+/, nextFormulaReplacement);
+                child.innerText = nextFormulaReplacement;
+            }
+            if (child.innerText.includes('sizeRoll')) {
+                const formula = child.innerText;
+                nextFormulaReplacement = simplify(formula, rd);
+            }
+            else {
+                nextFormulaReplacement = '';
+            }
+        }
+    }
+}
+
 Hooks.on('pf1CreateActionUse', onCreateActionUse);
 Hooks.on('pf1GetRollData', onGetRollData);
+Hooks.on('renderPF1ExtendedTooltip', onRenderPF1ExtendedTooltip);
 Hooks.once('init', () => {
     // change.mjs also fires a local hook for re-calculating changes (e.g. Fate's Favored).
 

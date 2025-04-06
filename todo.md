@@ -9,6 +9,7 @@
     - [AC bonus](#ac-bonus)
     - [Alignment](#alignment)
     - [Consume Item/Charge](#consume-itemcharge)
+    - [Maximized Critical](#maximized-critical)
   - [Targets](#targets)
     - [Creature type/subtype](#creature-typesubtype)
     - [By Disposition](#by-disposition)
@@ -33,9 +34,13 @@
   - [Spell Perfection](#spell-perfection)
   - [Spirited Charge](#spirited-charge)
   - [Scarred by War](#scarred-by-war)
+- [Buffs](#buffs)
+  - [Bane](#bane)
 - [Racial Features](#racial-features)
   - [Sylph](#sylph)
     - [Air Affinity](#air-affinity)
+- [Weapon Abilities](#weapon-abilities)
+  - [Bane](#bane-1)
 - [Misc](#misc)
   - [I am targeted](#i-am-targeted)
   - [Magic](#magic)
@@ -58,7 +63,6 @@
 - [Other Ideas](#other-ideas)
 - [PF1 v11](#pf1-v11)
 - [vnext](#vnext)
-- [v2.18.0](#v2180)
 
 # TODO
 - Figure out a way to support multiple target groups on a single Item (so I can add `Favored Enemy (Human) +4` and `Favored Enemy (goblin) +2` on a single Item)
@@ -84,10 +88,13 @@
   - I can make it work but it won't do anything (the system doesn't show it in the attack, it's kinda pointless without extra functionality)
 ### Consume Item/Charge
 - consume a charge from <pick Item> when used
+### Maximized Critical
+- [link](https://www.d20pfsrd.com/alternative-rule-systems/mythic/mythic-heroes/mythic-paths-paizo-inc/champion/champion-path-abilities/maximized-critical-ex/)
 
 ## Targets
 ### Creature type/subtype
-- would support [Ranger](#ranger)'s Favored Enemy
+- Is possible now with v11 now that creature types/subtypes are hard data points
+  - would support [Ranger](#ranger)'s Favored Enemy and [Bane](https://www.d20pfsrd.com/magic-items/magic-weapons/magic-weapon-special-abilities/bane/)
 ### By Disposition
 - Ally/Hostile/Neutral multiselect
   - multi select
@@ -137,12 +144,47 @@
 ## [Scarred by War](https://www.aonprd.com/TraitDisplay.aspx?ItemName=Scarred%20by%20War)
  - (used to grant diplomacy bonus while not in combat)
 
+# Buffs
+## Bane
+- use the new [Bane][#bane] feature - add an action on the Buff that when used, prompts a script to change the creature type
+- when activated, prompt for creature type and targeted weapon
+
 # Racial Features
 ## Sylph
 ### Air Affinity
 - sorcerers with the elemental (air) bloodline treat their Charisma scores as 2 points higher for the purposes of all sorcerer spells and class abilities
   - Specifically just "treat <ability score> higher/lower for <spell book>"
   - maybe also "treat <ability score> higher/lower for <class ability>" -- would need to be based off of class key and ability that has a parent as that class
+
+# Weapon Abilities
+## Bane
+- choose one of the following types, humanoids and outsiders also require a subtype
+  > Aberrations
+  >
+  > Animals
+  >
+  > Constructs
+  >
+  > Dragons
+  >
+  > Fey
+  >
+  > Humanoids (pick one subtype)
+  >
+  > Magical beasts
+  >
+  > Monstrous humanoids
+  >
+  > Oozes
+  >
+  > Outsiders (pick one subtype)
+  >
+  > Plants
+  >
+  > Undead
+  >
+  > Vermin
+- +2 to existing enhancement bonus and 2d6 against chosen type
 
 # Misc
 ## I am targeted
@@ -234,9 +276,16 @@
 - Add Concealment
   - This would allow me to automatically add effect notes for each roll to automatically roll for concealment
   - And would allow automating rerolls for abilities like Weapon of the Chosen
+- Add bonuses to attacker based on a "when targets me" buff defined on an actor
+  - Could include options like
+    - when targeted by ally
+    - when targeted by any enemy
+      - or when targeted by specific enemy
+      - or when targeted by any enemy except specified enemy
 
 # PF1 v11
-- Type/Subtype targets are now viable.
+- Actor Type/Subtype targets are now viable.
+- spell subtype target is now viable
 
 # vnext
 - Create new "Roll Bonuses" section for attack dialog inputs
@@ -259,6 +308,16 @@
     - Inspiration "Fortune" 
       - e.g. Empathy Talent, when rolling inspiration for sense motive, roll twice and take the higher
 - Add "ignore me" boolean flag to turn off auto configuration (stronger "hammer" for EitR-type stuff where it incorrectly makes assumptions)
-
-# v2.18.0
-- Move "all targets" documentation out of conditional targets
+- Look into changing a lot of my older bonuses into the system's newer changes - will hopefully be less processing if I'm not manually injecting stuff
+  - e.g. (Improved) Armor Focus
+    - AF - `+1` untyped Armor AC
+    - IAF - `-1` untyped ACP (Armor)
+  - CL
+  - DC
+- Higher Ground
+  - Automatically check the system's new "high ground" tick on the attack dialog when applicable
+  - Or disable the system's checkbox as this mod already accounts for it
+    - but also add an "ignore" checkbox
+- Figure out a way to make Versatile Performance and Snake Sidewind work together
+- Transfer ammo's masterwork to `system.masterwork`
+- Furious Focus needs to work only for 2h attacks

@@ -166,7 +166,7 @@ export const migrateSyntheticActors = async () => {
     log('...finished migrating synthetic actors');
 };
 
-export const migrateWorldV2 = async () => {
+export const migrateWorldV3 = async () => {
     await migrateWorldItems();
     await migratePacks();
     await migrateWorldActors();

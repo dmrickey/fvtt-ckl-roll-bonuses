@@ -8,6 +8,8 @@ import { LocalHookHandler, localHooks } from '../util/hooks.mjs';
 import { textInput } from '../handlebars-handlers/bonus-inputs/text-input.mjs';
 import { getSkillName } from '../util/get-skill-name.mjs';
 import { MODULE_NAME } from '../consts.mjs';
+import { createChange } from '../util/conditional-helpers.mjs';
+import { getCachedBonuses } from '../util/get-cached-bonuses.mjs';
 
 const key = 'skill-rank-override';
 const formulaKey = 'skill-rank-override-formula';
@@ -57,7 +59,7 @@ function createRankIcon(itemName, rank) {
  * @param {ActorPF} actor
  * @return {Array<{name: string, rank: number, skills: Array<keyof typeof pf1.config.skills>}>}
  */
-const getSources = (actor) => (actor.itemFlags?.boolean?.[key]?.sources ?? [])
+const getSources = (actor) => getCachedBonuses(actor, key)
     .map((source) => ({
         name: source.name,
         rank: FormulaCacheHelper.getModuleFlagValue(source, formulaKey),
@@ -118,6 +120,7 @@ function rollSkill(seed, actor) {
         doc.updateSource({ content: doc.content.replace(name, title) });
     });
 }
+
 /**
  * @param {SkillInfo} skillInfo
  * @param {ActorPF} actor
@@ -130,9 +133,64 @@ function getSkillInfo(skillInfo, actor, _rollData) {
 
     skillInfo.rank = source.rank;
 }
+
+/**
+ * @param {ItemPF} item
+ * @param {RollData} rollData
+ */
+function prepareData(item, rollData) {
+    if (!item.isActive || !item.getFlag(MODULE_NAME, key)) return;
+
+    /** @type {Array<keyof typeof pf1.config.skills>} */
+    const keys = item.getFlag(MODULE_NAME, selectedKey) ?? [];
+    if (keys.length && item.actor) {
+        keys.forEach((skillKey) => {
+            const formula = item.getFlag(MODULE_NAME, formulaKey);
+            const rank = FormulaCacheHelper.getModuleFlagValue(item, formulaKey);
+            const change = createChange({
+                name: `${game.i18n.localize("PF1.SkillRankPlural")} (${item.name})`,
+                value: rank,
+                formula,
+                type: 'base',
+                target: `skill.~${skillKey}`,
+                id: `${item.id}_${key}_${skillKey}`,
+                operator: 'set',
+            });
+
+            // not null, but type safety is complaining about it here for some reason
+            if (!item.actor) return;
+
+            item.actor.changes ||= new Collection();
+            item.actor.changes.set(change.id, change);
+
+            const ori = { ...rollData.skills[skillKey] };
+            if (!ori.rank && rank && ori.cs) {
+                rollData.skills[skillKey].mod += 3;
+
+                const csChange = createChange({
+                    formula: pf1.config.classSkillBonus,
+                    value: pf1.config.classSkillBonus,
+                    target: `skill.~${skillKey}`,
+                    type: "untyped",
+                    operator: "add",
+                    name: game.i18n.localize("PF1.CSTooltip"),
+                    id: `${item.id}_${key}_${skillKey}_cs`,
+                });
+                item.actor.changes.set(csChange.id, csChange);
+            }
+
+            if (ori.rank < rank) {
+                rollData.skills[skillKey].mod += (rank - ori.rank);
+                rollData.skills[skillKey].rank = rank;
+            }
+        });
+    }
+}
+
 Hooks.once('init', () => {
     LocalHookHandler.registerHandler(localHooks.actorRollSkill, rollSkill);
     LocalHookHandler.registerHandler(localHooks.actorGetSkillInfo, getSkillInfo);
+    LocalHookHandler.registerHandler(localHooks.prepareData, prepareData);
 });
 
 Hooks.on('renderItemSheet', (

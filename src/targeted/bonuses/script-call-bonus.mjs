@@ -1,7 +1,7 @@
 
 import { MODULE_NAME } from '../../consts.mjs';
 import { showScriptBonusEditor } from '../../handlebars-handlers/targeted/bonuses/script-call-bonus-input.mjs';
-import { handleBonusTypeFor } from '../../target-and-bonus-join.mjs';
+import { handleBonusesFor } from '../../target-and-bonus-join.mjs';
 import { truthiness } from '../../util/truthiness.mjs';
 import { BaseBonus } from './_base-bonus.mjs';
 
@@ -37,18 +37,17 @@ export class ScriptCallBonus extends BaseBonus {
 
             // BEGIN MY OVERRIDE
             if (shared.action) {
-                handleBonusTypeFor(
+                handleBonusesFor(
                     shared.action,
-                    ScriptCallBonus,
                     (bonusType, sourceItem) => {
-                        const scriptCalls = bonusType.getScriptCalls(sourceItem);
+                        const scriptCalls = bonusType.getScriptCalls(sourceItem, this);
                         scriptCalls
                             .filter((s) => s.category === category)
                             .forEach((s) => {
-                                s.parent = this;
                                 scripts.push(s);
                             });
                     },
+                    { specificBonusType: ScriptCallBonus },
                 );
             }
             // END MY OVERRIDE
@@ -93,9 +92,10 @@ export class ScriptCallBonus extends BaseBonus {
      * Get script from the source
      *
      * @param {ItemPF} source
+     * @param {ItemPF} parent The item to add the script call to
      * @return {ItemScriptCall[]}
      */
-    static getScriptCalls(source) {
+    static getScriptCalls(source, parent) {
         /** @type {ItemScriptCallData[]} */
         const scriptData = (source.getFlag(MODULE_NAME, this.key) || []);
 
@@ -108,6 +108,8 @@ export class ScriptCallBonus extends BaseBonus {
                 name: script.name,
                 type: script.type,
                 value: script.value,
+            }, {
+                parent
             }));
         scripts.forEach(x => x.rollBonus = true);
         return scripts;

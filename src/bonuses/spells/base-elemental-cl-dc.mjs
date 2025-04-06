@@ -3,6 +3,7 @@ import { textInputAndKeyValueSelect } from "../../handlebars-handlers/bonus-inpu
 import { intersection } from "../../util/array-intersects.mjs";
 import { FormulaCacheHelper } from "../../util/flag-helpers.mjs";
 import { getCachedBonuses } from '../../util/get-cached-bonuses.mjs';
+import { getActionDamageTypes } from '../../util/get-damage-types.mjs';
 import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize, localizeBonusLabel } from "../../util/localize.mjs";
@@ -29,23 +30,17 @@ const regex = /([A-Za-z\- ])+/g;
  * @param {ItemSpellPF} item
  * @returns {string[]}
  */
-const getSpellDescriptors = (item) => {
-    return uniqueArray([
-        ...(item?.system?.descriptors.value || []),
-        ...(item?.system?.descriptors.custom || [])
-            .flatMap((c) =>
-                c?.split(/,|\bor\b/).map((type) => {
-                    /** @type {string} */
-                    let typeString = type.trim();
-                    if (typeString.includes("see text")) return "see text";
-                    // @ts-ignore
-                    if (typeString.startsWith("or")) typeString = typeString.replace("or").trim();
-                    return typeString;
-                })
-            )
-            .filter(truthiness)
-    ]);
-}
+const getSpellDescriptors = (item) =>
+    uniqueArray([...(item?.system.descriptors?.total ?? [])].flatMap((c) =>
+        c?.split(/,|\bor\b/).map((type) => {
+            /** @type {string} */
+            let typeString = type.trim();
+            if (typeString.includes("see text")) return "see text";
+            // @ts-ignore
+            if (typeString.startsWith("or")) typeString = typeString.replace("or").trim();
+            return typeString;
+        })
+    ));
 
 /**
  * @param {'cl' | 'dc'} t
@@ -89,11 +84,7 @@ export function createElementalClOrDc(t) {
             return;
         }
 
-        const damageTypes = action.data.damage.parts
-            .map(({ type }) => type)
-            .flatMap(({ custom, values }) => ([...custom.split(';').map(x => x.trim()), ...values]))
-            .filter(truthiness)
-            .map((x) => x.toLowerCase());
+        const damageTypes = getActionDamageTypes(action);
         const types = getSpellDescriptors(item);
         const domains = Object.keys(item.learnedAt?.domain || []).map((x) => x.toLowerCase());
 

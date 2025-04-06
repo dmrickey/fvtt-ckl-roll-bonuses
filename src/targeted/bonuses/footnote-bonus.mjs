@@ -49,20 +49,21 @@ export class FootnoteBonus extends BaseBonus {
      * @returns {Nullable<string[]>}
      */
     static getHints(source) {
-        return this.getFootnotes(source);
+        return this.getFootnotes(source)?.map(x => x.text);
     }
 
     /**
      * @inheritdoc
      * @override
      * @param {ItemPF} source The source of the bonus
-     * @param {(ActionUse | ItemPF | ItemAction)?} [item] The item receiving the bonus for contextually aware hints.
-     * @returns {string[] | undefined}
+     * @param {(ActionUse | ItemPF | ItemAction)?} [_item] The item receiving the bonus for contextually aware hints.
+     * @returns {ParsedContextNoteEntry[] | undefined}
      */
-    static getFootnotes(source, item) {
+    static getFootnotes(source, _item) {
+        /** @type { string } */
         const enriched = source[MODULE_NAME][this.key];
         if (enriched) {
-            return [enriched];
+            return [{ text: enriched, source: source.name }];
         }
     }
 

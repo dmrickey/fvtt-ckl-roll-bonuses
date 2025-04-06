@@ -19,11 +19,11 @@ export class MaximizeDamageBonus extends BaseBonus {
 
     /**
      * @override
-     * @param {ItemPF} _source The source of the bonus
+     * @param {ItemPF} source The source of the bonus
      * @param {(ActionUse | ItemPF | ItemAction)?} [_thing] The thing receiving the bonus for contextually aware hints.
-     * @returns {string[]}
+     * @returns {ParsedContextNoteEntry[]}
      */
-    static getFootnotes(_source, _thing) { return [localize('maximized')]; }
+    static getFootnotes(source, _thing) { return [{ text: localize('maximized'), source: source.name }]; }
 
     /**
      * @override
@@ -44,11 +44,11 @@ export class MaximizeDamageBonus extends BaseBonus {
         if (!action) return;
 
         /** @param {'parts' | 'nonCritParts'} path */
-        const getFormula = (path) => action.data.damage[path].flatMap(x => x.formula);
+        const getFormula = (path) => action.damage[path].flatMap(x => x.formula);
         const damage = [...getFormula('parts'), ...getFormula('nonCritParts')];
         const formula = damage.join(' + ');
         if (!formula) return;
-        const total = RollPF.create(formula, action.getRollData()).evaluate({ async: false, maximize: true }).total;
+        const total = RollPF.create(formula, action.getRollData()).evaluateSync({ maximize: true }).total;
         if (total) {
             return [localize('maximized-total', { total })];
         }

@@ -5,6 +5,7 @@ import { addNodeToRollBonus } from "../add-bonus-to-item-sheet.mjs";
 import { createTemplate, templates } from "../templates.mjs";
 
 /**
+ * @overload
  * @param {object} args
  * @param {string[]} [args.choices]
  * @param {FlagValue} [args.current]
@@ -20,7 +21,48 @@ import { createTemplate, templates } from "../templates.mjs";
  * @param {boolean} [options.isFormula]
  * @param {boolean} [options.isSubLabel]
  * @param {string} [options.placeholder]
- * @param {string} [options.textInputType]
+ * @param {'text' | 'number'} [options.textInputType]
+ * @returns {void}
+ */
+
+/**
+ * @overload
+ * @param {object} args
+ * @param {never} [args.choices]
+ * @param {FlagValue} [args.current]
+ * @param {ItemPF} args.item
+ * @param {string} args.journal
+ * @param {string} args.key
+ * @param {string} [args.label]
+ * @param {string} [args.tooltip]
+ * @param {HTMLElement} args.parent,
+ * @param {object} options
+ * @param {boolean} options.canEdit
+ * @param {InputType} options.inputType
+ * @param {false} options.isFormula
+ * @param {boolean} [options.isSubLabel]
+ * @param {string} [options.placeholder]
+ * @param {'textarea'} [options.textInputType]
+ * @returns {void}
+ */
+
+/**
+ * @param {object} args
+ * @param {string[]} [args.choices]
+ * @param {FlagValue} [args.current]
+ * @param {ItemPF} args.item
+ * @param {string} args.journal
+ * @param {string} args.key
+ * @param {string} [args.label]
+ * @param {string} [args.tooltip]
+ * @param {HTMLElement} args.parent,
+ * @param {object} options
+ * @param {boolean} options.canEdit
+ * @param {InputType} options.inputType
+ * @param {boolean} [options.isFormula]
+ * @param {boolean} [options.isSubLabel]
+ * @param {string} [options.placeholder]
+ * @param {'text' | 'number' | 'textarea'} [options.textInputType]
  */
 export function textInput({
     choices = [],
@@ -50,6 +92,7 @@ export function textInput({
             current,
             isFormula,
             isSubLabel,
+            isTextArea: textInputType === 'textarea',
             journal,
             key,
             label,

@@ -5,7 +5,7 @@
             <input type="text" readonly value="{{current.label}}" />
         {{else}}
         <select id="key-value-selector-{{key}}">
-            {{selectOptions choices selected=current nameAttr="key" labelAttr="label"}}
+            {{selectOptions choices selected=current valueAttr="key" labelAttr="label"}}
         </select>
         {{/if}}
     </div>

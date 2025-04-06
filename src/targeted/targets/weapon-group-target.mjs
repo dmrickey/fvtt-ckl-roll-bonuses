@@ -7,7 +7,7 @@ import { uniqueArray } from "../../util/unique-array.mjs";
 import { BaseTarget } from "./_base-target.mjs";
 
 /**
- * @augments BaseTarget
+ * @extends BaseTarget
  */
 export class WeaponGroupTarget extends BaseTarget {
     /**
@@ -45,7 +45,7 @@ export class WeaponGroupTarget extends BaseTarget {
             return [];
         }
 
-        const groupsOnItem = [...(item.system.weaponGroups.value ?? []), ...(item.system.weaponGroups.custom ?? [])]
+        const groupsOnItem = [...(item.system.weaponGroups.total ?? [])]
             .map(x => x.trim())
             .filter(truthiness);
 
@@ -68,7 +68,7 @@ export class WeaponGroupTarget extends BaseTarget {
      */
     static showInputOnItemSheet({ actor, html, isEditable, item }) {
         const actorGroups = getActorItemsByTypes(actor, 'attack', 'weapon')
-            .flatMap((i) => (i.system.weaponGroups.custom))
+            .flatMap((i) => [...i.system.weaponGroups.custom])
             .filter(truthiness);
         const targetedGroups = item.getFlag(MODULE_NAME, this.key) || [];
         const custom = difference(

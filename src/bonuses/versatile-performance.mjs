@@ -13,6 +13,7 @@ import { truthiness } from '../util/truthiness.mjs';
 import { api } from '../util/api.mjs';
 import { isNotEmptyObject } from '../util/is-empty-object.mjs';
 import { getCachedBonuses } from '../util/get-cached-bonuses.mjs';
+import { itemHasCompendiumId } from '../util/has-compendium-id.mjs';
 
 const key = 'versatile-performance';
 export { key as versatilePerformanceKey };
@@ -243,7 +244,7 @@ function versatileRollSkill(seed, actor) {
         const linkProp = journal
             ? `<a data-tooltip="PF1.OpenAssociatedCompendiumEntry" data-action="open-compendium-entry" data-compendium-entry="${journal}" data-document-type="JournalEntry"><i class="fas fa-book"></i></a>`
             : '';
-        const label = localize('PF1.SkillCheck', { skill: skillInfo.name });
+        const label = localize('PF1.Check', { type: skillInfo.name });
         const vpTitle = localize('versatile-performance.title', { skill: label });
         return `
 <span class="flavor-text">
@@ -288,7 +289,7 @@ Hooks.once('init', () => {
         const skills = [];
         const perform = actor.getSkillInfo('prf');
         for (const [subId, subS] of Object.entries(perform.subSkills ?? {})) {
-            const subSkill = deepClone(subS);
+            const subSkill = foundry.utils.deepClone(subS);
             subSkill.id = `prf.${subId}`;
             skills.push(subSkill);
         }
@@ -308,10 +309,9 @@ Hooks.on('renderItemSheet', (
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
     const name = item?.name?.toLowerCase() ?? '';
-    const sourceId = item?.flags.core?.sourceId ?? '';
     const hasFlag = item.hasItemBooleanFlag(key);
     if (!hasFlag) {
-        if (isEditable && (name === Settings.versatilePerformance || compendiumIds.some(x => sourceId.includes(x)))) {
+        if (isEditable && (name === Settings.versatilePerformance || compendiumIds.some(x => itemHasCompendiumId(item, x)))) {
             item.addItemBooleanFlag(key);
         }
         return;
@@ -385,7 +385,7 @@ Hooks.on('renderItemSheet', (
                 const value = target?.value;
                 const path = target.dataset.path;
                 if (!path) return;
-                setProperty(currentVPs, path, value);
+                foundry.utils.setProperty(currentVPs, path, value);
                 await item.setFlag(MODULE_NAME, key, currentVPs);
             });
         });
@@ -431,10 +431,9 @@ const onCreate = (item, data, { temporary }, id) => {
     if (temporary) return;
 
     const name = item?.name?.toLowerCase() ?? '';
-    const sourceId = item?.flags.core?.sourceId ?? '';
     const hasBonus = item.hasItemBooleanFlag(key);
 
-    if ((name === Settings.versatilePerformance || compendiumIds.some(x => sourceId.includes(x))) && !hasBonus) {
+    if ((name === Settings.versatilePerformance || compendiumIds.some(x => itemHasCompendiumId(item, x))) && !hasBonus) {
         item.updateSource({
             [`system.flags.boolean.${key}`]: true,
         });

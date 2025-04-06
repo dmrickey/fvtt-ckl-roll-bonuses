@@ -10,6 +10,7 @@ import { uniqueArray } from "../../util/unique-array.mjs";
 import { stringSelect } from "../../handlebars-handlers/bonus-inputs/string-select.mjs";
 import { SpecificBonuses } from '../all-specific-bonuses.mjs';
 import { MODULE_NAME } from '../../consts.mjs';
+import { itemHasCompendiumId } from '../../util/has-compendium-id.mjs';
 
 const compendiumId = 'zBrrZynIB0EXagds';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#armor-focus';
@@ -123,8 +124,8 @@ Hooks.on('renderItemSheet', (
     const hasKey = item.hasItemBooleanFlag(key);
     if (!hasKey) {
         const name = item?.name?.toLowerCase() ?? '';
-        const sourceId = item?.flags.core?.sourceId ?? '';
-        if (isEditable && (name === Settings.armorFocus || sourceId.includes(compendiumId))) {
+        const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
+        if (isEditable && (name === Settings.armorFocus || hasCompendiumId)) {
             item.addItemBooleanFlag(key);
         }
         return;
@@ -163,8 +164,12 @@ const onCreate = (item, data, { temporary }, id) => {
     if (temporary) return;
 
     const name = item?.name?.toLowerCase() ?? '';
-    const sourceId = item?.flags.core?.sourceId ?? '';
+    const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
     const hasBonus = item.hasItemBooleanFlag(key);
+
+    if (name.includes(LanguageSettings.improved)) {
+        return;
+    }
 
     let focused = '';
     if (item.actor) {
@@ -178,7 +183,7 @@ const onCreate = (item, data, { temporary }, id) => {
     }
 
     let updated = false;
-    if ((name === Settings.armorFocus || sourceId.includes(compendiumId)) && !hasBonus) {
+    if ((name === Settings.armorFocus || hasCompendiumId) && !hasBonus) {
         item.updateSource({
             [`system.flags.boolean.${key}`]: true,
         });

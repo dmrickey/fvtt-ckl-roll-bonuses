@@ -1,8 +1,20 @@
 import { MODULE_NAME } from '../../../consts.mjs';
+import { keyValueSelect } from '../../../handlebars-handlers/bonus-inputs/key-value-select.mjs';
 import { textInput } from '../../../handlebars-handlers/bonus-inputs/text-input.mjs';
 import { api } from '../../../util/api.mjs';
 import { difference } from '../../../util/array-intersects.mjs';
+import { currentTargetedActors } from '../../../util/get-current-targets.mjs';
+import { localize } from '../../../util/localize.mjs';
 import { BaseTarget } from '../_base-target.mjs';
+
+const targetChoices =  /** @type {const} */ ({
+    self: 'target-choice.self',
+    target: 'target-choice.target',
+});
+
+/**
+ * @typedef {keyof typeof targetChoices} TargetOptions
+ */
 
 /**
  * @extends {BaseTarget}
@@ -13,6 +25,7 @@ export class HasBooleanFlagTarget extends BaseTarget {
      * @inheritdoc
      */
     static get sourceKey() { return 'has-boolean-flag'; }
+    static get #targetKey() { return `${this.key}-target`; }
 
     /**
      * @override
@@ -21,6 +34,16 @@ export class HasBooleanFlagTarget extends BaseTarget {
     static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.IpRhJqZEX2TUarSX#has-boolean-flag'; }
 
     /**
+     * @inheritdoc
+     * @override
+     */
+    static init() {
+        Hooks.once('ready', () =>
+            // @ts-ignore
+            Object.entries(targetChoices).forEach(([key, value]) => targetChoices[key] = localize(value))
+        );
+    }
+    /**
      * @override
      * @inheritdoc
      * @param {ItemPF} source
@@ -28,8 +51,9 @@ export class HasBooleanFlagTarget extends BaseTarget {
     */
     static getHints(source) {
         const value = source.getFlag(MODULE_NAME, this.key);
+        const targetOrSelf = this.#getTargetType(source);
         if (value) {
-            return value;
+            return [`${value} - ${targetChoices[targetOrSelf]}`];
         }
     }
 
@@ -41,9 +65,22 @@ export class HasBooleanFlagTarget extends BaseTarget {
      * @returns {ItemPF[]}
      */
     static _getSourcesFor(item, sources) {
+        const currentTargets = currentTargetedActors();
+
         const filteredSources = sources.filter((source) => {
+            const targetOrSelf = this.#getTargetType(source);
             const value = source.getFlag(MODULE_NAME, this.key);
-            return !!value && item.actor.hasItemBooleanFlag(value);
+
+            if (!value) {
+                return false;
+            }
+            else if (targetOrSelf === 'self') {
+                return item.actor.hasItemBooleanFlag(value);
+            }
+            else {
+                return currentTargets.length
+                    && currentTargets.every((a) => a.hasItemBooleanFlag(value));
+            }
         });
 
         return filteredSources;
@@ -96,5 +133,26 @@ export class HasBooleanFlagTarget extends BaseTarget {
             inputType: 'target',
             isFormula: false,
         });
+
+        keyValueSelect({
+            choices: targetChoices,
+            item,
+            journal: this.journal,
+            key: this.#targetKey,
+            parent: html,
+            tooltip: this.tooltip,
+        }, {
+            canEdit: isEditable,
+            inputType: 'target',
+            isSubLabel: true,
+        });
+    }
+
+    /**
+     * @param {ItemPF} source
+     * @returns {TargetOptions}
+     */
+    static #getTargetType(source) {
+        return source.getFlag(MODULE_NAME, this.#targetKey) || 'self';
     }
 }

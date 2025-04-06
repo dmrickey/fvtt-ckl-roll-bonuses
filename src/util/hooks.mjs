@@ -3,7 +3,6 @@ import { MODULE_NAME } from "../consts.mjs";
 export const customGlobalHooks = /** @type {const} */ ({
     getDamageTooltipSources: `${MODULE_NAME}_getDamageTooltipSources`,
     actionUseAlterRollData: `${MODULE_NAME}_actionUseAlterRollData`,
-    actionUseFootnotes: `${MODULE_NAME}_actionUseFootnotes`,
     d20Roll: `${MODULE_NAME}_d20Roll`,
     getActorInitiativeFormula: `${MODULE_NAME}_getActorInitiativeFormula`,
     getConditionalParts: `${MODULE_NAME}_getConditionalParts`,
@@ -12,6 +11,7 @@ export const customGlobalHooks = /** @type {const} */ ({
 });
 
 export const localHooks = /** @type {const} */ ({
+    actionUseFootnotes: `${MODULE_NAME}_actionUseFootnotes`,
     actionUse_handleConditionals: `${MODULE_NAME}_actionUse_handleConditionals`,
     actionUseProcess: `${MODULE_NAME}_actionUseProcess`,
     actorGetSkillInfo: `${MODULE_NAME}_actorGetSkillInfo`,
@@ -168,6 +168,13 @@ export class LocalHookHandler {
      */
 
     /**
+     * @overload
+     * @param {typeof localHooks.actionUseFootnotes} hook
+     * @param {(action: ActionUse, conditionals: ParsedContextNoteEntry[]) => void} func
+     * @returns {void}
+     */
+
+    /**
      * @param {Hook} hook
      * @param {*} func
      * @returns {void}
@@ -256,6 +263,14 @@ export class LocalHookHandler {
             await func(...args);
         }
     }
+
+    /**
+     * @overload
+     * @param {typeof localHooks.actionUseFootnotes} hook
+     * @param {ActionUse} action
+     * @param {ParsedContextNoteEntry[]} actor
+     * @returns {void}
+     */
 
     /**
      * @overload

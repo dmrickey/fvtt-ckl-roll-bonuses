@@ -4,11 +4,11 @@ import { api } from './api.mjs';
 import { FormulaCacheHelper } from './flag-helpers.mjs';
 
 class EnhData {
-    constructor({base = 0, stacks = 0}) {
+    constructor({ base = 0, stacks = 0 }) {
         this.base = base;
         this.stacks = stacks;
     }
-    get total() {return (this.base || 0) + (this.stacks || 0); }
+    get total() { return (this.base || 0) + (this.stacks || 0); }
 }
 
 class EnhBonusResult {
@@ -37,7 +37,7 @@ class EnhBonusResult {
  * @param {ItemLootPF} [args.ammo]
  * @returns {EnhBonusResult}
  */
-const getEnhancementBonusForAction = ({action, ammo}) => {
+const getEnhancementBonusForAction = ({ action, ammo }) => {
     const enhData = new EnhBonusResult();
 
     if (action) {

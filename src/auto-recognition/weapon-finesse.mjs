@@ -1,6 +1,7 @@
 import { LanguageSettings } from '../util/settings.mjs';
 import { FinesseBonus } from '../targeted/bonuses/finesse-bonus.mjs';
 import { FinesseTarget } from '../targeted/targets/finesse-target.mjs';
+import { itemHasCompendiumId } from '../util/has-compendium-id.mjs';
 
 const compendiumId = 'vWiTqHC4Y3Xn1Pme';
 const bonusKey = FinesseBonus.key;
@@ -24,11 +25,11 @@ Hooks.on('renderItemSheet', (
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
     const name = item?.name?.toLowerCase() ?? '';
-    const sourceId = item?.flags.core?.sourceId ?? '';
+    const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
     const hasBonus = item.hasItemBooleanFlag(bonusKey);
     const hasBonusFormula = item.hasItemBooleanFlag(targetKey);
 
-    if ((name === Settings.name || sourceId.includes(compendiumId)) && !hasBonus && !hasBonusFormula) {
+    if ((name === Settings.name || hasCompendiumId) && !hasBonus && !hasBonusFormula) {
         item.update({
             [`system.flags.boolean.${bonusKey}`]: true,
             [`system.flags.boolean.${targetKey}`]: true,
@@ -47,9 +48,9 @@ const onCreate = (item, data, { temporary }, id) => {
     if (temporary) return;
 
     const name = item?.name?.toLowerCase() ?? '';
-    const sourceId = item?.flags.core?.sourceId ?? '';
+    const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
 
-    if (name === Settings.name || sourceId.includes(compendiumId)) {
+    if (name === Settings.name || hasCompendiumId) {
         item.updateSource({
             [`system.flags.boolean.${bonusKey}`]: true,
             [`system.flags.boolean.${targetKey}`]: true,

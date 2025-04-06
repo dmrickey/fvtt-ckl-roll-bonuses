@@ -7,6 +7,7 @@ import { intersects } from "../util/array-intersects.mjs";
 import { createChangeForTooltip } from '../util/conditional-helpers.mjs';
 import { getActorItemsByTypes } from '../util/get-actor-items-by-type.mjs';
 import { getCachedBonuses } from '../util/get-cached-bonuses.mjs';
+import { itemHasCompendiumId } from '../util/has-compendium-id.mjs';
 import { customGlobalHooks } from "../util/hooks.mjs";
 import { registerItemHint } from "../util/item-hints.mjs";
 import { localize, localizeBonusLabel, localizeBonusTooltip } from "../util/localize.mjs";
@@ -35,7 +36,7 @@ class Settings {
  * @returns {boolean}
  */
 const isItemFocused = (actor, item) => {
-    const weaponGroups = [...(item.system.weaponGroups?.value ?? []), ...(item.system.weaponGroups?.custom ?? [])].map(x => x.trim()).filter(truthiness);
+    const weaponGroups = item.system.weaponGroups?.total ?? new Set();
     const focuses = getCachedBonuses(actor, key)
         .flatMap(x => x.getFlag(MODULE_NAME, key))
         .filter(truthiness);
@@ -58,7 +59,6 @@ export function getMartialFocusCondtional(item) {
             default: true,
             name: Settings.martialFocus,
             modifiers: [{
-                ...pf1.components.ItemConditionalModifier.defaultData,
                 _id: foundry.utils.randomID(),
                 critical: 'normal',
                 formula: '+1',
@@ -179,8 +179,8 @@ Hooks.on('renderItemSheet', (
     const hasKey = item.hasItemBooleanFlag(key);
     if (!hasKey) {
         const name = item?.name?.toLowerCase() ?? '';
-        const sourceId = item?.flags.core?.sourceId ?? '';
-        if (isEditable && (name === Settings.martialFocus || sourceId.includes(compendiumId))) {
+        const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
+        if (isEditable && (name === Settings.martialFocus || hasCompendiumId)) {
             item.addItemBooleanFlag(key);
         }
         return;
@@ -193,7 +193,7 @@ Hooks.on('renderItemSheet', (
             ? []
             : uniqueArray(
                 getActorItemsByTypes(actor, 'attack', 'weapon')
-                    .flatMap((i) => (i.system.weaponGroups?.custom ?? []))
+                    .flatMap((i) => ([...(i.system.weaponGroups?.custom ?? [])]))
                     .filter(truthiness)
             ).map((i) => ({ key: i, label: i }));
 

@@ -41,26 +41,26 @@ function getConditionalParts(actionUse, result, atk, index) {
 
         const { base: actionBaseEnh, stacks: actionStacksEnh, total: actionTotal } = getEnhancementBonusForAction({ action: actionUse.action });
 
-        const ammoMw = !!ammo.getFlag(MODULE_NAME, ammoMasterworkKey);
+        const ammoMw = !!ammo.getFlag(MODULE_NAME, ammoMasterworkKey) || ammo.system.masterwork;
         const ammoEnhBonus = FormulaCacheHelper.getModuleFlagValue(ammo, ammoEnhancementKey);
         const ammoEnhStacksBonus = FormulaCacheHelper.getModuleFlagValue(ammo, ammoEnhancementStacksKey);
-        if (ammoMw
-            && !itemMw
-            && !itemEnh
-            && !actionBaseEnh
-            && !actionStacksEnh
-            && !ammoEnhBonus
-            && !ammoEnhStacksBonus
-        ) {
+        const hasEnhBonus = itemEnh || actionBaseEnh || actionStacksEnh || ammoEnhBonus || ammoEnhStacksBonus;
+        if (ammoMw && !hasEnhBonus && !itemMw) {
             result['attack.normal'].push(`1[${localize('PF1.AmmunitionAbbr')} - ${localize('PF1.Masterwork')}]`)
         }
         else {
             const { total: totalWithAmmo } = getEnhancementBonusForAction({ action: actionUse.action, ammo });
+            let itemMwOffset = 0;
+            if (itemMw && !itemEnh && (ammoEnhBonus || ammoEnhStacksBonus)) {
+                itemMwOffset = 1;
+            }
             const diff = totalWithAmmo - actionTotal;
             if (diff > 0) {
                 const label = `${localize('PF1.AmmunitionAbbr')} ${localize('PF1.EnhancementBonus')}`;
-                result['attack.normal'].push(`${diff}[${label} (${totalWithAmmo})]`);
-                result['damage.normal'].push([`${diff}[${label} (${totalWithAmmo})]`, { values: [], custom: `${label}` }, false]);
+                if (totalWithAmmo - itemMwOffset) {
+                    result['attack.normal'].push(`${diff - itemMwOffset}[${label} (${totalWithAmmo})]`);
+                }
+                result['damage.normal'].push([`${diff}[${label} (${totalWithAmmo})]`, [label], false]);
             }
         }
 
@@ -77,7 +77,7 @@ function getConditionalParts(actionUse, result, atk, index) {
                 /** @type {ConditionalPart} */
                 const damageResult = [
                     `${damage.formula}${label}`,
-                    damage.type,
+                    [...damage.types],
                     false,
                 ];
                 switch (damage.crit) {
@@ -105,7 +105,7 @@ async function addEffectNotes(chatAttack) {
             const note = ammo[MODULE_NAME][ammoEffectKey];
             if (note) {
                 const enriched = await TextEditor.enrichHTML(`<div>${note}</div>`, { async: true });
-                chatAttack.effectNotes.push(enriched);
+                chatAttack.effectNotes.push({ text: enriched, source: ammo.name });
             }
         }
     }
@@ -204,7 +204,7 @@ LocalHookHandler.registerHandler(localHooks.prepareData, (item, rollData) => {
 
 /**
  * @param {ItemPF} item
- * @return {DamageInputModel[]}
+ * @return {(Pick<DamageInputModel, 'crit' | 'types' | 'formula'>)[]}
  */
 function getCachedDamageBonuses(item) {
     /** @type {DamageInputModel[]} */

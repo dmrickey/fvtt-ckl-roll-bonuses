@@ -1,5 +1,7 @@
 import { showEnabledLabel } from '../handlebars-handlers/enabled-label.mjs';
+import { getCachedBonuses } from '../util/get-cached-bonuses.mjs';
 import { getSkillFormula } from '../util/get-skill-formula.mjs';
+import { itemHasCompendiumId } from '../util/has-compendium-id.mjs';
 import { LocalHookHandler, localHooks } from '../util/hooks.mjs';
 import { registerItemHint } from '../util/item-hints.mjs';
 import { localizeBonusLabel, localizeBonusTooltip } from '../util/localize.mjs';
@@ -37,9 +39,7 @@ registerItemHint((hintcls, _actor, item, _data) => {
  * @returns {number}
  */
 const getFormulaMax = (formula, rollData) => {
-    const mods = formula.substring(formula.indexOf(' ') + 1);
-    const safeFormula = `0 + ${mods}`;
-    const roll = new pf1.dice.D20RollPF(safeFormula, rollData, { skipDialog: true }).evaluate({ maximize: true, async: false });
+    const roll = new pf1.dice.D20RollPF(formula, rollData, { skipDialog: true }).evaluateSync({ maximize: true });
     const max = roll.total;
     return max;
 }
@@ -54,6 +54,12 @@ const isSnakeSideWindCrit = (chatAttack) => {
         return;
     }
 
+    // TODO check if this action is `Unarmed Strike`
+    // TODO add item warning if no `Unarmed Strike` detected on this actor
+    // if (!isUnarmed) {
+    //     return;
+    // }
+
     const { critConfirm } = chatAttack;
     if (!critConfirm) {
         return;
@@ -64,9 +70,10 @@ const isSnakeSideWindCrit = (chatAttack) => {
         return;
     }
 
-    const maxAttack = getFormulaMax(critConfirm.simplifiedFormula, chatAttack.rollData);
+    const critFormula = critConfirm.terms.map(x => x.formula).join(' ');
+    const maxAttack = getFormulaMax(critFormula, chatAttack.rollData);
 
-    const skillFormula = getSkillFormula(actor, chatAttack.rollData, 'sen');
+    const skillFormula = getSkillFormula(actor, chatAttack.rollData, 'sen', { includeD20: true });
     const skillMax = getFormulaMax(skillFormula, chatAttack.rollData);
 
     if (skillMax >= maxAttack) {
@@ -89,8 +96,12 @@ const chatAttackAddAttack = async (chatAttack, args) => {
     }
 
     const formula = isSnakeSideWindCrit(chatAttack)
-    if (formula) {
-        chatAttack.critConfirm = new pf1.dice.D20RollPF(formula, chatAttack.rollData, { skipDialog: true }).evaluate({ async: false });
+    if (formula && chatAttack.critConfirm) {
+        // TODO find proper index
+        const index = chatAttack.critConfirm.terms.findIndex(x => x);
+        // TODO try to swap out the confirm attack roll instead of re-rolling
+        // see here https://discord.com/channels/170995199584108546/722559135371231352/1331699422563668090
+        chatAttack.critConfirm = new pf1.dice.D20RollPF(formula, chatAttack.rollData, { skipDialog: true }).evaluateSync({ forceSync: true });
     }
 }
 LocalHookHandler.registerHandler(localHooks.chatAttackAddAttack, chatAttackAddAttack);
@@ -99,10 +110,10 @@ LocalHookHandler.registerHandler(localHooks.chatAttackAddAttack, chatAttackAddAt
  * @param {ChatAttack} chatAttack
  */
 async function addEffectNotes(chatAttack) {
-    const { attack, effectNotes } = chatAttack;
+    const { actor, attack, effectNotes } = chatAttack;
     if (attack?.isCrit) {
         if (isSnakeSideWindCrit(chatAttack)) {
-            effectNotes.push(localizeBonusLabel(key));
+            effectNotes.push({ text: localizeBonusLabel(key), source: getCachedBonuses(actor, key)[0]?.name });
         }
     }
 }
@@ -116,11 +127,11 @@ Hooks.on('renderItemSheet', (
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
     const name = item?.name?.toLowerCase() ?? '';
-    const sourceId = item?.flags.core?.sourceId ?? '';
+    const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
 
     const hasFlag = item.hasItemBooleanFlag(key);
     if (!hasFlag) {
-        if (isEditable && (name === Settings.snakeSidewind || sourceId.includes(compendiumId))) {
+        if (isEditable && (name === Settings.snakeSidewind || hasCompendiumId)) {
             item.addItemBooleanFlag(key);
         }
         return;
@@ -148,10 +159,10 @@ const onCreate = (item, data, { temporary }, id) => {
     if (temporary) return;
 
     const name = item?.name?.toLowerCase() ?? '';
-    const sourceId = item?.flags.core?.sourceId ?? '';
+    const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
     const hasBonus = item.hasItemBooleanFlag(key);
 
-    if ((name === Settings.snakeSidewind || sourceId.includes(compendiumId)) && !hasBonus) {
+    if ((name === Settings.snakeSidewind || hasCompendiumId) && !hasBonus) {
         item.updateSource({
             [`system.flags.boolean.${key}`]: true,
         });

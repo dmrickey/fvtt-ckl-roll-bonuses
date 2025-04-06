@@ -51,7 +51,7 @@
                 "change-modification-formula": "Change Mod. Formula",
                 "change-modification-set-type": "Change Mod. Type",
                 "cl": "Caster Level",
-                "condition": "Target Has Condition",
+                "condition": "Has Condition",
                 "condition-target": "Target for Condition",
                 "conditional-modifiers": "Conditional Modifiers",
                 "crit-keen": "Keen",
@@ -81,6 +81,7 @@
                 "function-player-label": "Function label for player view",
                 "furious-focus": "Furious Focus",
                 "has-boolean-flag": "Has Boolean Flag",
+                "has-boolean-flag-target": "Target for Boolean Flag",
                 "is-target-within-range": "Target within Range",
                 "is-target-within-range-max": "Maximum Range ({unit})",
                 "is-target-within-range-min": "Minimum Range ({unit})",
@@ -173,9 +174,9 @@
                 "elemental-focus-mythic": "Double Elemental Focus bonuses.",
                 "enh": "Modify an attack's or weapon's enhancement bonus.",
                 "enh-stacks": "Modify an attack or weapon's enhancement bonus.",
-                "fates-favored": "Incrase all luck bonuses by 1.",
+                "fates-favored": "Increase all luck bonuses by 1.",
                 "finesse-bonus": "Use dex for attack rolls instead of strength.",
-                "finesse-override": "Add the finesse weapon property to an Item that doesn't norally have weapon properties.",
+                "finesse-override": "Add the finesse weapon property to an Item that doesn't normally have weapon properties.",
                 "finesse-target": "Activate bonuses for all finesse-able targets. This requires the weapon/attack to have the Finesse weapon property, be in the Natural Attack weapon group, or have the `finesse-override` boolean flag.",
                 "footnote": "Targeted attacks will include this footnote.",
                 "fortune": "Roll twice and take the better. Multiple bonuses stack.",
@@ -274,7 +275,7 @@
                 "disable": "Disable Global Bonuses for this Actor"
             },
             "attack-label": {
-                "higher-ground": "Higher Ground",
+                "higher-ground": "High Ground",
                 "range-increment-penalty": "Ranged Penalty ({range}{units})",
                 "shoot-into-melee": "Into Melee"
             },
@@ -287,7 +288,7 @@
                 "require-melee-threaten": "Skipped Melee Requiremnt"
             },
             "label": {
-                "higher-ground": "Higher Ground Melee Bonus",
+                "higher-ground": "High Ground Melee Bonus",
                 "range-increment-penalty": "Ranged Increment Penalty",
                 "shoot-into-melee": "Shooting into Melee",
                 "require-melee-threaten": "Require Melee Threatens"
@@ -320,14 +321,14 @@
                     },
                     "require-melee-threaten": {
                         "description": "Reject a melee attack if the attacker does not threaten the target. When using a melee action, this will reject the action if the target is out of range.",
-                        "issues": "There may be circumstances where the GM is allowing a melee attack against a target even though it isn't in range. To work around this, simply don't target the desired token. If you have suggestions on a different way around this, let me know."
+                        "issues": "There may be circumstances where the GM is allowing a melee attack against a target even though it isn't in range. To bypass this, you can either skip targeting a token or check the \"Ignore Melee Range\" Miscellaneous checkbox in the attack dialog."
                     }
                 }
             }
         },
         "hint-missing-bonus": "Missing Bonus, click to add",
         "hint-missing-target": "Missing Target, click to add",
-        "invalid-override": "This item type natively includes this property.",
+        "invalid-override": "This does nothing for this item type—edit the item's details directly.",
         "item-app": {
             "description": "Each item selected will receive the associated bonuses. Right click on any row to open the sheet for further verification.",
             "title": "Item Selector"
@@ -387,7 +388,7 @@
         "script-call-dialog": {
             "delete-script-message": "Once this script is deleted it cannot be recovered.<br>Are you sure you want to delete this script?",
             "delete-script-title": "Delete Script - {name}",
-            "edit-macro-message": "You are attempting to edit a referenced macro which is not owned by this item.<br><br>Modifying this macro means that you'll be editing the world's macro directly. Any usage of this macro will be modified.<br><br>Are you sure you want to edit this macro?",
+            "edit-macro-message": "You are attempting to edit a referenced macro which is not owned by this item.<br><br>Modifying this macro means that you'll be editing the world's macro directly. Every other usage of this macro will be modified.<br><br>Are you sure you want to edit this macro?",
             "edit-macro-title": "Edit Macro - {name}"
         },
         "skill-rank-override": {

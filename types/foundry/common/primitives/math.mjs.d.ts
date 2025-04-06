@@ -1,4 +1,4 @@
-export { }
+export {};
 
 declare global {
     interface Math {
@@ -9,6 +9,6 @@ declare global {
          * @param max - The maximum allowed value
          * @returns The clamped number
          */
-        clamped(num: number, min: number, max: number): number;
+        clamp(num: number, min: number, max: number): number;
     }
 }

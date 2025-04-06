@@ -1,75 +1,100 @@
-// @ts-nocheck
-
 /**
  * @param {ActionUse} actionUse
- * @param {ItemConditionalData[]} conditionals
+ * @param {ItemConditional[]} conditionals
  */
 export const handleConditionals = (actionUse, conditionals) => {
-    if (conditionals.length) {
-        const conditionalData = {};
-        conditionals.forEach((conditional, i) => {
-            const tag = pf1.utils.createTag(conditional.name);
-            for (const [i, modifier] of conditional.modifiers.entries()) {
-                // Adds a formula's result to rollData to allow referencing it.
-                // Due to being its own roll, this will only correctly work for static formulae.
-                const conditionalRoll = RollPF.safeRollAsync(modifier.formula, actionUse.shared.rollData);
-                if (conditionalRoll.err) {
-                    ui.notifications.warn(
-                        game.i18n.format("PF1.Warning.ConditionalRoll", { number: i + 1, name: conditional.name })
-                    );
-                    // Skip modifier to avoid multiple errors from one non-evaluating entry
-                    continue;
-                } else
-                    conditionalData[[tag, i].join(".")] = RollPF.safeRollAsync(modifier.formula, actionUse.shared.rollData).total;
+    if (!conditionals?.length) return;
 
-                // Create a key string for the formula array
-                const partString = `${modifier.target}.${modifier.subTarget}${modifier.critical ? "." + modifier.critical : ""
-                    }`;
-                // Add formula in simple format
-                if (["attack", "effect", "misc"].includes(modifier.target)) {
-                    const hasFlavor = /\[.*\]/.test(modifier.formula);
+    /** @type {RollData['conditionals']} */
+    const rollDataConds = {};
+
+    conditionals.forEach((conditional) => {
+        const tag = pf1.utils.createTag(conditional.name);
+        for (const [modKey, modifier] of conditional.modifiers.entries()) {
+            // Ignore modifiers with nonexisting formula or formulas that equal to zero
+            if (modifier.formula == 0) {
+                console.warn("Ignored ineffective conditional modifier", { modifier, actionUse });
+                return;
+            }
+
+            // Adds a formula's result to rollData to allow referencing it.
+            // Due to being its own roll, this will only correctly work for static formulae.
+            const conditionalRoll = RollPF.create(modifier.formula + '', actionUse.shared.rollData).evaluateSync({ forceSync: true });
+            if (conditionalRoll.err) {
+                ui.notifications.warn(
+                    game.i18n.format("PF1.Warning.ConditionalRoll", { number: modKey + 1, name: conditional.name })
+                );
+                // Skip modifier to avoid multiple errors from one non-evaluating entry
+                return;
+            }
+
+            rollDataConds[tag] ??= {};
+            rollDataConds[tag][modKey] = conditionalRoll.total;
+
+            // Create a key string for the formula array
+            const partString = modifier.partID;
+
+            // Add formula in simple format
+            switch (modifier.target) {
+                case "attack":
+                case "charges":
+                case "cl":
+                case "dc": {
+                    const hasFlavor = /\[.*\]/.test(modifier.formula + '');
                     const flavoredFormula = hasFlavor ? modifier.formula : `(${modifier.formula})[${conditional.name}]`;
                     actionUse.shared.conditionalPartsCommon[partString] = [
                         ...(actionUse.shared.conditionalPartsCommon[partString] ?? []),
                         flavoredFormula,
                     ];
+                    break;
                 }
                 // Add formula as array for damage
-                else if (modifier.target === "damage") {
+                case "damage":
                     actionUse.shared.conditionalPartsCommon[partString] = [
                         ...(actionUse.shared.conditionalPartsCommon[partString] ?? []),
                         [modifier.formula, modifier.damageType, false],
                     ];
-                }
+                    break;
                 // Add formula to the size property
-                else if (modifier.target === "size") {
+                case "size":
                     actionUse.shared.rollData.size += conditionalRoll.total;
-                } else if (modifier.target === "critMult") {
+                    if (actionUse.shared.rollData.item) {
+                        actionUse.shared.rollData.item.size += conditionalRoll.total;
+                    }
+                    break;
+                case "critMult":
                     actionUse.shared.rollData.critMultBonus += conditionalRoll.total;
-                }
-            }
-        });
-
-        // Expand data into rollData to enable referencing in formulae
-        actionUse.shared.rollData.conditionals = foundry.utils.expandObject(conditionalData, 5);
-
-        // Add specific pre-rolled rollData entries
-        for (const target of ["effect.cl", "effect.dc", "misc.charges"]) {
-            if (actionUse.shared.conditionalPartsCommon[target] != null) {
-                const formula = actionUse.shared.conditionalPartsCommon[target].join("+");
-                const roll = RollPF.safeRollAsync(formula, actionUse.shared.rollData, [target, formula]).total;
-                switch (target) {
-                    case "effect.cl":
-                        actionUse.shared.rollData.cl += roll;
-                        break;
-                    case "effect.dc":
-                        actionUse.shared.rollData.dcBonus += roll;
-                        break;
-                    case "misc.charges":
-                        actionUse.shared.rollData.chargeCostBonus += roll;
-                        break;
-                }
+                    break;
+                default:
+                    console.warn("Invalid conditional target:", modifier.target);
+                    break;
             }
         }
-    }
-}
+
+        // Expand data into rollData to enable referencing in formulae
+        actionUse.shared.rollData.conditionals = rollDataConds;
+
+        // Add specific pre-rolled rollData entries
+        for (const target of ["cl", "dc", "charges"]) {
+            const cond = actionUse.shared.conditionalPartsCommon[target];
+            if (!cond) continue;
+            const formula = cond.join(" + ");
+
+            const roll = RollPF.create(formula, actionUse.shared.rollData).evaluateSync({ forceSync: true });
+            switch (target) {
+                case "cl":
+                    actionUse.shared.rollData.cl ||= 0;
+                    actionUse.shared.rollData.cl += roll.total;
+                    break;
+                case "dc":
+                    actionUse.shared.rollData.dcBonus ||= 0;
+                    actionUse.shared.rollData.dcBonus += roll.total;
+                    break;
+                case "charges":
+                    actionUse.shared.rollData.chargeCostBonus ||= 0;
+                    actionUse.shared.rollData.chargeCostBonus += roll.total;
+                    break;
+            }
+        }
+    });
+};

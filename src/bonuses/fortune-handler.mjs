@@ -142,7 +142,7 @@ export const handleFortune = (options) => {
     options.fortuneCount ||= 0;
     options.misfortuneCount ||= 0;
 
-    const roll = RollPF.create(options.dice).evaluate({ async: false, maximize: true });
+    const roll = RollPF.create(options.dice).evaluateSync({ maximize: true });
     const dice = roll.dice[0];
     if (!dice) {
         // no actual roll, a static number was probably given
@@ -259,7 +259,7 @@ const actionUseProcessFortune = (
     const fortunesToFind = [fortune, attackFortune];
     const misfortunesToFind = [misfortune, attackMisfortune];
 
-    switch (action.data.actionType) {
+    switch (action.actionType) {
         case 'msak':
         case 'mwak':
             fortunesToFind.push(`${attackFortune}_melee`);

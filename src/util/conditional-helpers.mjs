@@ -4,7 +4,7 @@ import { MODULE_NAME } from '../consts.mjs';
  * "ItemChange" is used in damage tooltip source
  *
  * @param {{ name: string }} conditional
- * @param {ItemConditionalModifierData} modifier
+ * @param {ItemConditionalModifierSourceData} modifier
  * @param {object} [options]
  * @param {boolean} [options.isDamage]
  * @returns {Nullable<ItemChange>}
@@ -50,6 +50,9 @@ export function conditionalModToItemChangeForDamageTooltip(conditional, modifier
  * @param {number | string} args.value
  * @param {BuffTarget} [args.target]
  * @param {BonusTypes} [args.type]
+ * @param {number | string} [args.formula]
+ * @param {'add' | 'set'} [args.operator]
+ * @param {string} [args.id]
  * @param {ItemChangeOptions} [options]
  * @return {ItemChange}
  */
@@ -58,16 +61,20 @@ export function createChange({
     type = 'untypedPerm',
     value,
     target = 'damage',
+    formula = '',
+    operator = 'add',
+    id = '',
 }, {
     parent,
 } = { parent: undefined }) {
     const change = new pf1.components.ItemChange({
         flavor: name,
-        formula: value,
+        formula: formula || value,
         type,
-        operator: 'add',
+        operator,
         priority: 0,
         target,
+        _id: id,
     }, {
         parent
     });
@@ -111,7 +118,7 @@ export function createChangeForTooltip({
 /**
  *
  * @param {{ name: string }} conditional
- * @param {ItemConditionalModifierData} modifier
+ * @param {ItemConditionalModifierSourceData} modifier
  * @returns {Nullable<ModifierSource>}
  */
 export function conditionalAttackTooltipModSource(conditional, modifier) {
@@ -141,13 +148,13 @@ export function conditionalAttackTooltipModSource(conditional, modifier) {
 }
 
 /**
- * @param {Nullable<TraitSelectorValuePlural>} types
+ * @param {DamageInputModel['types']} types
  * @returns {string}
  */
-export function damagesTypeToString(types) {
-    if (!types) return '';
+export function damageTypesToString(types) {
+    const { names } = new pf1.models.action.DamagePartModel({ types });
 
-    if (!types.custom?.trim() && !types.values?.length) {
+    if (!names.length) {
         const untyped = pf1.registry.damageTypes.get('untyped')?.name;
         if (!untyped) {
             throw new Error("There's no `untyped` damage type in the pf1 config.");
@@ -155,13 +162,7 @@ export function damagesTypeToString(types) {
         return untyped;
     }
 
-    const valueLookup = ( /** @type {DamageType['id']} */ t) => pf1.registry.damageTypes.getLabels()[t] || t;
-    /**
-     * @param {TraitSelectorValuePlural} t
-     */
-    // @ts-ignore
-    const typeToString = (t) => `${t.custom?.trim() ? `${t.custom.trim()}, ` : ''}${t.values.map(valueLookup).join(', ')}`;
-    return typeToString(types);
+    return names.join(', ');
 }
 
 /**
@@ -172,8 +173,8 @@ export function damagesTypeToString(types) {
  * @return {ItemConditional[]}
  */
 export const loadConditionals = (item, key, { useCachedFormula = false } = {}) => {
-    /** @type {ItemConditionalData[]} */
-    const flags = deepClone(item.getFlag(MODULE_NAME, key) || []);
+    /** @type {ItemConditionalSourceData[]} */
+    const flags = foundry.utils.deepClone(item.getFlag(MODULE_NAME, key) || []);
 
     flags.forEach((c) => {
         if (!c.name) c.name = item.name;
@@ -184,13 +185,11 @@ export const loadConditionals = (item, key, { useCachedFormula = false } = {}) =
                     m.formula = formula;
                 }
             }
-            if (m.target === 'damage') {
-                m.type = damagesTypeToString(m.damageType)
-            }
+            // if (m.target === 'damage') {
+            //     m.type = damageTypesToString(m.damageType)
+            // }
         });
     });
-
-
 
     const conditionals = flags.map((d) => new pf1.components.ItemConditional(d));
     return conditionals;

@@ -1,8 +1,8 @@
 import { MODULE_NAME } from "../../consts.mjs";
 import { damageInput } from "../../handlebars-handlers/targeted/bonuses/damage.mjs";
-import { handleBonusTypeFor } from '../../target-and-bonus-join.mjs';
+import { handleBonusesFor } from '../../target-and-bonus-join.mjs';
 import { changeTypeLabel } from '../../util/change-type-label.mjs';
-import { conditionalModToItemChangeForDamageTooltip, createChange, damagesTypeToString } from "../../util/conditional-helpers.mjs";
+import { conditionalModToItemChangeForDamageTooltip, createChange, damageTypesToString } from "../../util/conditional-helpers.mjs";
 import { LocalHookHandler, localHooks } from "../../util/hooks.mjs";
 import { localize } from "../../util/localize.mjs";
 import { signed } from '../../util/to-signed-string.mjs';
@@ -61,17 +61,13 @@ export class DamageBonus extends BaseBonus {
     static getHints(source) {
         const changes = this.#getCachedDamageItemChange(source);
         const damages = this.#getCachedDamageBonuses(source);
-        if (!changes.length || !damages.length) {
-            return;
-        }
 
         /**
-         *
-         * @param {TraitSelectorValuePlural} types
+         * @param {string[]} types
          * @returns
          */
         const typeLabel = (types) => {
-            const label = damagesTypeToString(types);
+            const label = damageTypesToString(types);
             return `[${label}]`;
         }
 
@@ -83,17 +79,17 @@ export class DamageBonus extends BaseBonus {
 
         const damageHints = damages
             .filter((d) => !!d.formula?.trim())
-            .map(({ formula, type, crit }) => ({
-                type,
+            .map(({ formula, types, crit }) => ({
+                types,
                 crit,
                 formula: (() => {
                     const roll = RollPF.create(formula);
                     return roll.isDeterministic
-                        ? signed(roll.evaluate({ async: false }).total)
+                        ? signed(roll.evaluateSync().total)
                         : `(${formula})`;
                 })(),
             }))
-            .map((d) => `${d.formula}${typeLabel(d.type)}${critLabel(d.crit)}`);
+            .map((d) => `${d.formula}${typeLabel(d.types)}${critLabel(d.crit)}`);
 
         /**
          * @param {string | number} value
@@ -152,7 +148,7 @@ export class DamageBonus extends BaseBonus {
             return [];
         }
 
-        const sources = (conditional.data.modifiers ?? [])
+        const sources = (conditional._source.modifiers ?? [])
             .filter((mod) => mod.target === 'damage')
             .map((mod) => conditionalModToItemChangeForDamageTooltip(conditional, mod, { isDamage: true }))
             .filter(truthiness);
@@ -200,22 +196,22 @@ export class DamageBonus extends BaseBonus {
     /**
      * @param {DamageInputModel[]} damageBonuses
      * @param {string} name
-     * @returns {ItemConditionalData}
+     * @returns {ItemConditionalSourceData}
      */
     static #createConditionalData(damageBonuses, name) {
         return {
             _id: foundry.utils.randomID(),
             default: true,
             name,
-            modifiers: damageBonuses?.map( /** @return {ItemConditionalModifierData} */(bonus) => ({
+            modifiers: damageBonuses?.map( /** @return {ItemConditionalModifierSourceData} */(bonus) => ({
                 _id: foundry.utils.randomID(),
                 critical: bonus.crit || 'normal', // normal | crit | nonCrit
-                damageType: bonus.type,
+                damageType: bonus.types,
                 formula: bonus.formula,
                 subTarget: 'allDamage',
                 target: 'damage',
-                type: damagesTypeToString(bonus.type),
-            }) ?? []),
+                type: damageTypesToString(bonus.types),
+            })) ?? [],
         };
     }
 
@@ -225,7 +221,7 @@ export class DamageBonus extends BaseBonus {
      */
     static #getCachedDamageItemChange(source) {
         /** @type {{formula: string, type: BonusTypes}[]} */
-        const flags = (source.getFlag(MODULE_NAME, this.#changeKey) || [])
+        const flags = (source.getFlag(MODULE_NAME, this.#changeKey) || []);
         const changes = flags
             .map(({ type }, i) => ({
                 type: type || 'untyped',
@@ -256,13 +252,13 @@ export class DamageBonus extends BaseBonus {
          * @param {ItemChange[]} damageSources
          */
         function itemAction_damageSources(action, damageSources) {
-            handleBonusTypeFor(
+            handleBonusesFor(
                 action,
-                DamageBonus,
                 (bonusType, sourceItem) => {
                     const changes = bonusType.#getCachedDamageItemChange(sourceItem);
                     damageSources.push(...changes);
-                }
+                },
+                { specificBonusType: DamageBonus }
             );
             return damageSources;
         };

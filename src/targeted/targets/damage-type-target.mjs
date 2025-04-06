@@ -1,6 +1,7 @@
 import { MODULE_NAME } from '../../consts.mjs';
 import { showChecklist } from '../../handlebars-handlers/targeted/targets/checklist-input.mjs';
 import { intersects } from "../../util/array-intersects.mjs";
+import { getActionDamageTypes } from '../../util/get-damage-types.mjs';
 import { truthiness } from "../../util/truthiness.mjs";
 import { uniqueArray } from "../../util/unique-array.mjs";
 import { BaseTarget } from "./_base-target.mjs";
@@ -41,33 +42,8 @@ export class DamageTypeTarget extends BaseTarget {
     static _getSourcesFor(_item, sources, doc) {
         const filteredSources = sources.filter((source) => {
             const targetedTypes = source.getFlag(MODULE_NAME, this.key);
-
-            const action = doc instanceof pf1.components.ItemAction
-                ? doc
-                : doc instanceof pf1.actionUse.ActionUse
-                    ? doc.action
-                    : null;
-            if (action) {
-                const actionDamageTypes = uniqueArray(
-                    action.data.damage.parts
-                        .flatMap((part) => [...part.type.custom.split(';'), ...part.type.values])
-                        .map(x => x.trim())
-                        .filter(truthiness)
-                );
-                return intersects(actionDamageTypes, targetedTypes);
-            }
-
-            if (doc instanceof pf1.documents.item.ItemPF) {
-                const itemDamageTypes = uniqueArray(
-                    [...(doc.actions ?? [])]
-                        .flatMap((action) => action.data.damage.parts.flatMap((part) => [...part.type.custom.split(';'), ...part.type.values]))
-                        .map(x => x.trim())
-                        .filter(truthiness)
-                );
-                return intersects(itemDamageTypes, targetedTypes);
-            }
-
-            return false;
+            const actionDamageTypes = getActionDamageTypes(doc);
+            return intersects(actionDamageTypes, targetedTypes);
         });
 
         return filteredSources;
@@ -84,14 +60,9 @@ export class DamageTypeTarget extends BaseTarget {
      */
     static showInputOnItemSheet({ actor, html, isEditable, item }) {
         const custom = uniqueArray(
-            [...(actor?.items ?? [])]
-                .flatMap((i) => [...(i?.actions ?? [])])
-                .filter(truthiness)
-                .flatMap((action) => action.data.damage)
-                .flatMap((damagePart) => damagePart.parts)
-                .flatMap((part) => (part.type?.custom ?? '').split(';'))
-                .filter(truthiness)
-            ?? []
+            uniqueArray([...(actor?.items ?? [])]
+                .flatMap((item) => getActionDamageTypes(item)))
+                .filter(type => !pf1.registry.damageTypes.get(type))
         );
         custom.sort();
 

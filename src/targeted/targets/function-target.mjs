@@ -109,6 +109,7 @@ export class FunctionTarget extends BaseTarget {
                 inputType: 'target',
                 isFormula: false,
                 isSubLabel: true,
+                textInputType: 'textarea',
             });
         }
         else {

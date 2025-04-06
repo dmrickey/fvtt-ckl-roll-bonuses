@@ -2,6 +2,7 @@ import { MODULE_NAME } from '../../consts.mjs';
 import { keyValueSelect } from "../../handlebars-handlers/bonus-inputs/key-value-select.mjs";
 import { intersects } from '../../util/array-intersects.mjs';
 import { getCachedBonuses } from '../../util/get-cached-bonuses.mjs';
+import { itemHasCompendiumId } from '../../util/has-compendium-id.mjs';
 import { LocalHookHandler, customGlobalHooks, localHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize, localizeBonusLabel, localizeBonusTooltip } from "../../util/localize.mjs";
@@ -180,21 +181,20 @@ Hooks.on('renderItemSheet', (
     let { spellSchools } = pf1.config;
 
     const name = item?.name?.toLowerCase() ?? '';
-    const sourceId = item?.flags.core?.sourceId ?? '';
     if (
         item.hasItemBooleanFlag(spellFocusKey)
         || name.includes(Settings.spellFocus)
-        || sourceId.includes(spellFocusCompendiumId)
+        || itemHasCompendiumId(item, spellFocusCompendiumId)
     ) {
         key = spellFocusKey;
     }
 
     const isGreater = item.hasItemBooleanFlag(greaterSpellFocusKey)
         || (name.includes(Settings.spellFocus) && name.includes(LanguageSettings.greater))
-        || sourceId.includes(greaterSpellFocusCompendiumId);
+        || itemHasCompendiumId(item, greaterSpellFocusCompendiumId);
     const isMythic = item.hasItemBooleanFlag(mythicSpellFocusKey)
         || (name.includes(Settings.spellFocus) && name.includes(LanguageSettings.mythic))
-        || sourceId.includes(mythicSpellFocusCompendiumId);
+        || itemHasCompendiumId(item, mythicSpellFocusCompendiumId);
 
     if (isGreater || isMythic) {
         key = isGreater ? greaterSpellFocusKey : mythicSpellFocusKey;
@@ -245,14 +245,13 @@ const onCreate = (item, data, { temporary }, id) => {
     if (temporary) return;
 
     const name = item?.name?.toLowerCase() ?? '';
-    const sourceId = item?.flags.core?.sourceId ?? '';
 
     const isRegular = name === Settings.spellFocus
-        || sourceId.includes(spellFocusCompendiumId);
+        || itemHasCompendiumId(item, spellFocusCompendiumId);
     const isGreater = (name.includes(Settings.spellFocus) && name.includes(LanguageSettings.greater))
-        || sourceId.includes(greaterSpellFocusCompendiumId);
+        || itemHasCompendiumId(item, greaterSpellFocusCompendiumId);
     const isMythic = (name.includes(Settings.spellFocus) && name.includes(LanguageSettings.mythic))
-        || sourceId.includes(mythicSpellFocusCompendiumId);
+        || itemHasCompendiumId(item, mythicSpellFocusCompendiumId);
 
     let focused = Object.keys(pf1.config.spellSchools)[0];
     if (item.actor && (isGreater || isMythic)) {
