@@ -58,25 +58,24 @@ export class FormulaCacheHelper {
         if (!item) return;
 
         /**
-         *
-         * @param {string} exactFormula
+         * @param {string} formula
          * @param {string} flag
          */
-        const cacheFormula = (exactFormula, flag) => {
-            if (exactFormula) {
-                const roll = RollPF.create(exactFormula + '', rollData);
+        const cacheFormula = (formula, flag) => {
+            if (formula) {
+                const roll = RollPF.create(formula + '', rollData);
                 item[MODULE_NAME][flag] = roll.formula;
             }
         }
 
         this.#moduleFlags.forEach((flag) => {
-            const exactFormula = item.flags?.[MODULE_NAME]?.[flag] + '';
+            const exactFormula = item.flags?.[MODULE_NAME]?.[flag];
             cacheFormula(exactFormula, flag);
         });
     }
 
     /**
-     * Combines multiple flags into a single sum
+     * Builds item hint for given key
      * @param {ItemPF} item
      * @param {string} key
      * @param {(total: string | number) => string} format
