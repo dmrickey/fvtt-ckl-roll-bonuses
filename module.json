@@ -11,6 +11,10 @@
             "flags": {}
         }
     ],
+    "compatibility": {
+        "minimum": "12",
+        "verified": "12"
+    },
     "esmodules": [
         "src/main.mjs"
     ],

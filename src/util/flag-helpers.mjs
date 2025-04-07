@@ -65,7 +65,7 @@ export class FormulaCacheHelper {
         const cacheFormula = (exactFormula, flag) => {
             if (exactFormula) {
                 const roll = RollPF.create(exactFormula + '', rollData);
-                item[MODULE_NAME][flag] = roll.simplifiedFormula;
+                item[MODULE_NAME][flag] = roll.formula;
             }
         }
 

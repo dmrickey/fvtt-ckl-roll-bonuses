@@ -1,3 +1,9 @@
+## Roll Bonuses 2.18.1
+
+### Bugfixes
+- Added back in compatibility into module.json
+- Fixed formula caching as it no longer worked in a lot of cases due to changes in roll parsing in foundry v12
+
 ## Roll Bonuses 2.18.0 - pf1 v11 / foundry v12 release
 
 ### Misc
