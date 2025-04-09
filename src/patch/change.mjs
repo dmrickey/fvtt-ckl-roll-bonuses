@@ -45,7 +45,7 @@ function applyChange(actor, targets = null, { applySourceInfo = true, rollData }
                 value = RollPF.safeRollSync(
                     this.formula,
                     rollData,
-                    [t, this, rollData],
+                    { formula: this.formula, target: t, change: this, rollData },
                     { suppressError: this.parent && !this.parent.isOwner },
                     { maximize: true }
                 ).total;

@@ -125,20 +125,15 @@ function d20RollWrapper(wrapped, options = {}) {
 
 /**
  * @this {ActorPF}
+ * @param {() => any} wrapped
  */
-function actor_prepareEmbeddedDocuments() {
-    /** BEGIN MY CODE */
+function actor_prepareEmbeddedDocuments(wrapped) {
     this.items.forEach((item) => {
         item.system.flags ||= { boolean: {}, dictionary: {} };
         item.system.flags.boolean ||= {};
     });
-    /** END MY CODE */
 
-    // super.prepareEmbeddedDocuments(); // ← original code --- ↓ libwrapper equivalent
-    Object.getPrototypeOf(pf1.documents.actor.ActorBasePF).prototype.prepareEmbeddedDocuments.apply(this);
-
-    // @ts-ignore
-    this.applyActiveEffects();
+    wrapped();
 }
 
 /**
@@ -585,8 +580,10 @@ Hooks.on('pf1CreateActionUse', onCreateActionUse);
 Hooks.on('pf1GetRollData', onGetRollData);
 Hooks.on('renderPF1ExtendedTooltip', onRenderPF1ExtendedTooltip);
 Hooks.once('init', () => {
-    // change.mjs also fires a local hook for re-calculating changes (e.g. Fate's Favored).
+    libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorBasePF.prototype.prepareEmbeddedDocuments', actor_prepareEmbeddedDocuments, libWrapper.WRAPPER);
+    libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype._prepareDependentData', prepareItemData, libWrapper.WRAPPER);
 
+    // change.mjs also fires a local hook for re-calculating changes (e.g. Fate's Favored).
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype._getConditionalParts', getConditionalParts, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype.addFootnotes', addFootnotes, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.actionUse.ActionUse.prototype.alterRollData', actionUseAlterRollData, libWrapper.WRAPPER);
@@ -602,11 +599,9 @@ Hooks.once('init', () => {
     libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.rollAttack', itemActionRollAttack, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.rollDamage', itemActionRollDamage, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.dice.d20Roll', d20RollWrapper, libWrapper.WRAPPER);
-    libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorBasePF.prototype.prepareEmbeddedDocuments', actor_prepareEmbeddedDocuments, libWrapper.OVERRIDE);
     libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorPF.prototype.getSkillInfo', actorGetSkillInfo, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorPF.prototype.rollSkill', actorRollSkill, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemAttackPF.fromItem', itemAttackFromItem, libWrapper.WRAPPER);
-    libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype._prepareDependentData', prepareItemData, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype.getAttackSources', itemGetAttackSources, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype.getTypeChatData', itemGetTypeChatData, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemSpellPF.prototype.getTypeChatData', itemGetTypeChatData, libWrapper.WRAPPER);

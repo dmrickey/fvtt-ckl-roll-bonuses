@@ -1,7 +1,21 @@
+## Roll Bonuses 2.18.3
+
+### Bugfixes
+- Fixed duplicated active effects
+
+---
+
+## Roll Bonuses 2.18.2
+
+### Bugfixes
+- Another fix for roll caching to prevent `undefined` from getting put it in there
+
+---
+
 ## Roll Bonuses 2.18.1
 
 ### Bugfixes
-- Added back in compatibility into module.json
+- Added compatibility back into module.json
 - Fixed formula caching as it no longer worked in a lot of cases due to changes in roll parsing in foundry v12
 
 ---
