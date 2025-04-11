@@ -74,7 +74,7 @@ export function simplifyRollFormula(formula, rollData = {}, { preserveFlavor = f
     // If the formula contains multiplication or division we cannot easily simplify
     if (/[*/]/.test(roll.formula)) {
         if (roll.isDeterministic && !/d\(/.test(roll.formula) && (!/\[/.test(roll.formula) || !preserveFlavor)) {
-            return String(new Roll(roll.formula).evaluateSync().total);
+            return String(new Roll(roll.formula).evaluateSync({ forceSync: true }).total);
         }
         else return roll.constructor.getFormula(roll.terms);
     }
@@ -135,7 +135,7 @@ function _simplifyNumericTerms(terms) {
 
     // Combine the unannotated numerical bonuses into a single new NumericTerm.
     if (unannotated.length) {
-        const staticBonus = Roll.safeEval(Roll.getFormula(unannotated));
+        const staticBonus = RollPF.create(Roll.getFormula(unannotated)).evaluateSync({ forceSync: true }).total;
         if (staticBonus === 0) return [...annotated];
 
         // If the staticBonus is greater than 0, add a "+" operator so the formula remains valid.
@@ -163,7 +163,7 @@ function _simplifyDiceTerms(terms) {
         const modifiers = isCoin ? "" : curr.modifiers.filterJoin("");
         const key = `${unannotated[i - 1].operator}${face}${modifiers}`;
         obj[key] ??= {};
-        if ((curr._number instanceof Roll) && (curr._number.isDeterministic)) curr._number.evaluateSync();
+        if ((curr._number instanceof Roll) && (curr._number.isDeterministic)) curr._number.evaluateSync({ forceSync: true });
         obj[key].number = (obj[key].number ?? 0) + curr.number;
         if (!isCoin) obj[key].modifiers = (obj[key].modifiers ?? []).concat(curr.modifiers);
         return obj;
@@ -191,7 +191,7 @@ function _expandParentheticalTerms(terms) {
         if (term instanceof ParentheticalTerm) {
             if (term.isDeterministic) {
                 const roll = new Roll(term.term);
-                term = new NumericTerm({ number: roll.evaluateSync().total });
+                term = new NumericTerm({ number: roll.evaluateSync({ forceSync: true }).total });
             } else {
                 const subterms = new Roll(term.term).terms;
                 term = _expandParentheticalTerms(subterms);

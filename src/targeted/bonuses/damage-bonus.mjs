@@ -85,7 +85,7 @@ export class DamageBonus extends BaseBonus {
                 formula: (() => {
                     const roll = RollPF.create(formula);
                     return roll.isDeterministic
-                        ? signed(roll.evaluateSync().total)
+                        ? signed(roll.evaluateSync({ forceSync: true }).total)
                         : `(${formula})`;
                 })(),
             }))

@@ -1696,7 +1696,7 @@ declare global {
         ): Evaluated<this>;
         evaluate(options?: InexactPartial<Options>): Promise<Evaluated<this>>;
 
-        evaluateSync(options?: InexactPartial<Option>): Evaluated<this>;
+        evaluateSync(options: (RecursivePartial<Option> & { forceSync: true } | { maximize: true } | { minimize: true })): Evaluated<this>;
     }
 
     interface DamageRoll extends RollPF {}

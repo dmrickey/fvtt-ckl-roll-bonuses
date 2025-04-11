@@ -1,3 +1,10 @@
+## Roll Bonuses 2.18.4
+
+### Bugfixes
+- Fixed damage bonus caching when using dice within the formula and more roll caching to keep from using Foundry's faulty `safeEval`
+
+---
+
 ## Roll Bonuses 2.18.3
 
 ### Bugfixes
