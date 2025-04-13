@@ -36,19 +36,32 @@ export class DamageBonus extends BaseBonus {
      * @inheritdoc
      */
     static init() {
+        // cache damages on the item
         LocalHookHandler.registerHandler(localHooks.prepareData, (item, rollData) => {
             const damages = item.getFlag(MODULE_NAME, this.key) || [];
             damages.forEach((/** @type {DamageInputModel}*/ damage) => {
                 item[MODULE_NAME][this.key] ||= [];
-                const roll = RollPF.create(damage.formula, rollData);
-                item[MODULE_NAME][this.key].push(roll.simplifiedFormula);
+                try {
+                    const roll = RollPF.create(damage.formula, rollData);
+                    item[MODULE_NAME][this.key].push(roll.simplifiedFormula);
+                }
+                catch {
+                    console.error('Problem with formula', damage.formula, this.key, item);
+                    item[MODULE_NAME][this.key].push('0');
+                }
             });
 
             const changes = item.getFlag(MODULE_NAME, this.#changeKey) || [];
             changes.forEach((/** @type {{formula: string, type: BonusTypes}}*/ change) => {
                 item[MODULE_NAME][this.#changeKey] ||= [];
-                const roll = RollPF.create(change.formula, rollData);
-                item[MODULE_NAME][this.#changeKey].push(roll.simplifiedFormula);
+                try {
+                    const roll = RollPF.create(change.formula, rollData);
+                    item[MODULE_NAME][this.#changeKey].push(roll.simplifiedFormula);
+                }
+                catch {
+                    console.error('Problem with formula', change.formula, this.#changeKey, item);
+                    item[MODULE_NAME][this.#changeKey].push('0');
+                }
             });
         });
     }

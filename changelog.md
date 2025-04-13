@@ -1,3 +1,10 @@
+## Roll Bonuses 2.18.5
+
+### Bugfixes
+- Safely handle broken formulas so that they can still be edited. When a broken formula is found, an error is logged to the console and no bonus will be calculated for that formula.
+
+---
+
 ## Roll Bonuses 2.18.4
 
 ### Bugfixes

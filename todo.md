@@ -282,6 +282,8 @@
     - when targeted by any enemy
       - or when targeted by specific enemy
       - or when targeted by any enemy except specified enemy
+- Initial popup with brief tutorial/explanation 
+  - Specifically include "automatic" things like Global Bonuses
 
 # PF1 v11
 - Actor Type/Subtype targets are now viable.

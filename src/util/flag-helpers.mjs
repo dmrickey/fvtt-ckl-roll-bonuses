@@ -63,8 +63,14 @@ export class FormulaCacheHelper {
          */
         const cacheFormula = (formula, flag) => {
             if (formula) {
-                const roll = RollPF.create(formula + '', rollData);
-                item[MODULE_NAME][flag] = roll.formula;
+                try {
+                    const roll = RollPF.create(formula + '', rollData);
+                    item[MODULE_NAME][flag] = roll.formula;
+                }
+                catch {
+                    console.error('Problem with formula', formula, flag, item);
+                    item[MODULE_NAME][flag] = '0';
+                }
             }
         }
 
