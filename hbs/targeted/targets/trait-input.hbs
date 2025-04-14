@@ -1,0 +1,11 @@
+<div class="form-group weapon-groups weapon-type-input roll-bonuses">
+  <div class="form-group">{{> "modules/ckl-roll-bonuses/hbs/label-partial.hbs"}}</div>
+  <ul class="traits-list tag-list">
+    {{#each current}}
+      <li class="tag {{@key}}">{{this}}</li>
+    {{/each}}
+  </ul>
+  {{#unless readonly}}
+  <a class="trait-selector"><i class="fas fa-edit"></i></a>
+  {{/unless}}
+</div>

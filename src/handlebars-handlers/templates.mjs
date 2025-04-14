@@ -33,6 +33,7 @@ export const templates = /** @type {const} */ ({
     itemsApp: `modules/${MODULE_NAME}/hbs/targeted/targets/items-input-application.hbs`,
     targetWeaponGroup: `modules/${MODULE_NAME}/hbs/targeted/targets/weapon-group-input.hbs`,
     tokenApp: `modules/${MODULE_NAME}/hbs/targeted/targets/token-application.hbs`,
+    traitInput: `modules/${MODULE_NAME}/hbs/targeted/targets/trait-input.hbs`,
 
     /** bonus picker application */
     bonusPicker: `modules/${MODULE_NAME}/hbs/bonus-picker.hbs`,

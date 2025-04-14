@@ -9,11 +9,14 @@ const toSet = (a) => a instanceof Set ? a : Array.isArray(a) ? new Set(a) : new 
 
 /**
  * @template T
- * @param {T | T[] | Set<T>} a
- * @param {T | T[] | Set<T>} b
+ * @param {Nullable<T | T[] | Set<T>>} a
+ * @param {Nullable<T | T[] | Set<T>>} b
  * @returns {boolean} True if both arrays share a common element
  */
 export const intersects = (a, b) => {
+    if (!a && !b) return true;
+    if (!a || !b) return false;
+
     const setA = toSet(a);
     const setB = toSet(b);
 

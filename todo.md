@@ -63,6 +63,7 @@
 - [Other Ideas](#other-ideas)
 - [PF1 v11](#pf1-v11)
 - [vnext](#vnext)
+- [Todo](#todo-1)
 
 # TODO
 - Figure out a way to support multiple target groups on a single Item (so I can add `Favored Enemy (Human) +4` and `Favored Enemy (goblin) +2` on a single Item)
@@ -310,6 +311,7 @@
     - Inspiration "Fortune" 
       - e.g. Empathy Talent, when rolling inspiration for sense motive, roll twice and take the higher
 - Add "ignore me" boolean flag to turn off auto configuration (stronger "hammer" for EitR-type stuff where it incorrectly makes assumptions)
+  - Or possibly just add a flag that says "this has already been configured" and then don't do it again
 - Look into changing a lot of my older bonuses into the system's newer changes - will hopefully be less processing if I'm not manually injecting stuff
   - e.g. (Improved) Armor Focus
     - AF - `+1` untyped Armor AC
@@ -323,3 +325,6 @@
 - Figure out a way to make Versatile Performance and Snake Sidewind work together
 - Transfer ammo's masterwork to `system.masterwork`
 - Furious Focus needs to work only for 2h attacks
+
+# Todo
+- add journal entries for race and subtype targets

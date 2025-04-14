@@ -5,7 +5,7 @@ import { registerBonuses } from './bonuses/_init-bonuses.mjs';
 import { BaseTargetOverride } from './target-overides/_base-target-override.mjs';
 import { registerTargetOverrides } from './target-overides/_init-target-overrides.mjs';
 import { BaseTarget } from './targets/_base-target.mjs';
-import { registerTargets } from './targets/init-targets.mjs';
+import { registerTargets } from './targets/_init-targets.mjs';
 
 export const initSources = () => {
     api.sources.BaseBonus = BaseBonus;

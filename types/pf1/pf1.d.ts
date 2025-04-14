@@ -110,6 +110,7 @@ declare global {
 
     class ActorPF extends ActorBasePF {
         allItems: ItemPF[];
+        race: ItemRacePF | null;
         hasItemBooleanFlag(key: string): boolean;
         hasWeaponProficiency(item: ItemPF, { override = true } = {}): boolean;
         allSkills: Array<keyof typeof pf1.config.skills>;
@@ -591,7 +592,7 @@ declare global {
 
     /** used for weapons and attacks */
     interface TraitSelector<T extends string = string> {
-        /** @deprecated I have no idea what this is */
+        /** Raw value saved on the actor/item */
         base: T[];
         /** Traits added by the user */
         custom: Set<string>;
@@ -651,6 +652,7 @@ declare global {
     class ItemPF<
         SystemData extends SystemItemData = SystemItemData
     > extends ItemDocument {
+        apps: EmbeddedCollection<Application>;
         scriptCalls: Collection<ItemScriptCall>;
         _stats: { compendiumSource: UUID };
         changes?: Collection<ItemChange>;
@@ -790,6 +792,8 @@ declare global {
     }
     class ItemRacePF extends ItemPF<SystemItemDataRacePF> {
         type = 'race' as const;
+        creatureSubtypes: TraitSelector;
+        creatureTypes: TraitSelector;
     }
     class ItemSpellPF extends ItemPF<SystemItemDataSpellPF> {
         learnedAt: {
@@ -2087,10 +2091,15 @@ declare global {
         get title(): string;
     }
 
-    interface ActorTraitSelector {
-        setPosition(position?: Position);
-        get position(): Position;
-        render(show: boolean);
+    type ActorTraitSelectorOptions = ApplicationOptions & {
+        choices: Record<string, string>;
+        document: ActorPF | ItemPF;
+        hasCustom: boolean,
+        name: string;
+        subject: string;
+    };
+    class ActorTraitSelector extends Application {
+        options: ActorTraitSelectorOptions;
     }
 
     class Condition {
@@ -2149,7 +2158,7 @@ declare global {
             ScriptEditor: any;
             AttackDialog: { new (): AttackDialog };
             ActorTraitSelector: {
-                new (doc: BaseDocument, options: object): ActorTraitSelector;
+                new (options: Partial<ActorTraitSelectorOptions>): ActorTraitSelector;
             };
             DamageTypeSelector: {
                 new (
@@ -2203,6 +2212,8 @@ declare global {
                     _label: 'Size';
                 };
             };
+            creatureSubtypes: Record<string, string>;
+            creatureTypes: Record<string, string>;
             abilities: Abilities;
             bonusTypes: { [key in BonusTypes]: string };
             damageResistances: {
@@ -2322,6 +2333,17 @@ declare global {
             type: SpellcastingType;
         };
         utils: {
+            i18n: {
+                /**
+                 * Convert string array into joined string according to current language.
+                 *
+                 * @param {Array<string>} strings - Array of strings to join
+                 * @param {"c"|"d"|"u"} [type] - conjunction = and, disjunction = or, unit = neither. Only the first letter matters.
+                 * @param {boolean} [short] - If true, effectively same as type being set to "u"
+                 * @returns {string} - Formatted string of all traits.
+                 */
+                join(strings, type = "u", short = true): string;
+            };
             formula: {
                 actionDamage: (action: ItemAction, { simplify, strict }?: {
                     simplify?: boolean | undefined;
