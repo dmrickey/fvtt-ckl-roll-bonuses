@@ -299,7 +299,6 @@ declare global {
         dice: string;
         fullAttack?: boolean;
         item: ItemPF;
-        powerAttack?: boolean;
         reject: boolean;
         rollData: RollData<T>;
         rollMode?: string;
@@ -316,6 +315,12 @@ declare global {
         token?: TokenDocumentPF;
         useMeasureTemplate?: boolean;
         useOptions: unknown;
+
+        // chat attack dialog checkboxes
+        charge?: boolean;
+        flanking?: boolean;
+        highGround?: boolean;
+        powerAttack?: boolean;
 
         get attackData(): unknown;
 
@@ -1619,6 +1624,7 @@ declare global {
                 nonCritParts: DamagePartRollData[];
                 parts: DamagePartRollData[];
             };
+            held: '1h' | '2h' | 'oh';
             range: {
                 maxIncrements: number;
                 minUnites: string;

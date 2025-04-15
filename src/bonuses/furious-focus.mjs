@@ -1,5 +1,6 @@
 import { MODULE_NAME } from '../consts.mjs';
 import { showEnabledLabel } from '../handlebars-handlers/enabled-label.mjs';
+import { isMelee } from '../util/action-type-helpers.mjs';
 import { getCachedBonuses } from '../util/get-cached-bonuses.mjs';
 import { itemHasCompendiumId } from '../util/has-compendium-id.mjs';
 import { LocalHookHandler, customGlobalHooks, localHooks } from '../util/hooks.mjs';
@@ -53,7 +54,9 @@ function getConditionalParts(actionUse, result, atk, index) {
     const hasFocus = actor.hasItemBooleanFlag(furiousFocus);
     const penalty = shared.rollData.powerAttackPenalty || 0;
     const hasUsed = hasUsedFF(actor);
-    if (shared.powerAttack && hasFocus && penalty && !hasUsed) {
+    const isMeleeAttack = isMelee(shared.item, shared.action);
+    const is2h = shared.rollData.action?.held === '2h';
+    if (shared.powerAttack && isMeleeAttack && is2h && hasFocus && penalty && !hasUsed) {
         result['attack.normal'].push(`${penalty * -1}[${label()}]`);
         setUsedFF(actor);
     }
