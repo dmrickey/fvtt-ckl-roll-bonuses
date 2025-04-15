@@ -28,10 +28,11 @@ export function damageInput({
     canEdit,
     inputType,
 }) {
+    // order of these determines the order in the UI, so don't alphabetize them
     const critChoices = {
+        normal: localize('damage-formula'),
         crit: localize('PF1.OnCritBonusFormula'),
         nonCrit: localize('PF1.NonMultBonusFormula'),
-        normal: localize('PF1.DamageFormula'),
     };
 
     const hasChanges = !!changeKey;

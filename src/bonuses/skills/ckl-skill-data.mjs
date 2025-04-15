@@ -52,7 +52,7 @@ export class CklSkillData {
     static async showSkillDataDialog(actor, skillId) {
         const data = this.getSkillData(actor, skillId);
         const buttons = [
-            { label: localize('PF1.Cancel'), value: false },
+            { label: localize('Cancel'), value: false },
             { label: localize('ok'), value: true },
         ];
         const inputs = [{

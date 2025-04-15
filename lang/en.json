@@ -263,6 +263,7 @@
             "effect-formula": "Effect Damage Formula",
             "typed-formula": "Typed Damage Formula"
         },
+        "damage-formula": "Damage Bonus Formula",
         "dc-label-mod": "{mod} DC ({label})",
         "dc-mod": "{mod} DC",
         "driver": "Profession (Driver)",

@@ -14,7 +14,7 @@ const localize = (key, opts = {}) => {
         : (game.i18n.format(myKey, opts) === myKey ? game.i18n.format(key, opts) : game.i18n.format(myKey, opts));
 
     ifDebug(() => {
-        if (str === key) {
+        if (str === key && key.includes('.')) {
             console.error(`${MODULE_NAME} - Missing translation for ${key}`);
             str = `*** ${str} ***`;
         }

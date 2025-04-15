@@ -38,7 +38,7 @@ export const confirmationDialog = ({
         `,
         buttons: {
             cancel: {
-                label: localize('PF1.Cancel'),
+                label: localize('Cancel'),
             },
             submit: {
                 label: localize('PF1.Confirm'),
