@@ -20,7 +20,7 @@ export class RaceSubtypeTarget extends BaseTarget {
      * @override
      * @returns {string}
      */
-    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.IpRhJqZEX2TUarSX#race-subtype'; }
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.IpRhJqZEX2TUarSX#race'; }
 
     /**
      * @override
@@ -69,11 +69,12 @@ export class RaceSubtypeTarget extends BaseTarget {
         const { actor } = item;
 
         const currentTargets = currentTargetedActors();
+        if (!currentTargets.length) return [];
 
         const flaggedSources = actor.itemFlags?.boolean[this.key]?.sources ?? [];
         const bonusSources = flaggedSources.filter((source) => {
-            const races = this.#getRaceSubtypesTraits(source);
-            return currentTargets.every((a) => intersects(races.total, a.race?.creatureSubtypes.total));
+            const subtypes = this.#getRaceSubtypesTraits(source);
+            return currentTargets.every((a) => intersects(subtypes.total, a.race?.system.creatureSubtypes.total));
         });
 
         return bonusSources;
@@ -89,7 +90,7 @@ export class RaceSubtypeTarget extends BaseTarget {
      * @param {ItemPF} options.item
      */
     static showInputOnItemSheet({ html, isEditable, item }) {
-        const choices = pf1.config.creatureTypes;
+        const choices = pf1.config.creatureSubtypes;
         traitInput({
             choices,
             item,

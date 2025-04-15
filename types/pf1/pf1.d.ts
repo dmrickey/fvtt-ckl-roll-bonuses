@@ -792,8 +792,6 @@ declare global {
     }
     class ItemRacePF extends ItemPF<SystemItemDataRacePF> {
         type = 'race' as const;
-        creatureSubtypes: TraitSelector;
-        creatureTypes: TraitSelector;
     }
     class ItemSpellPF extends ItemPF<SystemItemDataSpellPF> {
         learnedAt: {
@@ -1204,7 +1202,10 @@ declare global {
         implanted: boolean;
         slot: string;
     }
-    class SystemItemDataRacePF extends SystemItemData {}
+    class SystemItemDataRacePF extends SystemItemData {
+        creatureSubtypes: TraitSelector;
+        creatureTypes: TraitSelector;
+    }
     class SystemItemDataSpellPF extends SystemItemData {
         descriptors: TraitSelector<keyof SpellDescriptors>;
         school: keyof typeof pf1.config.spellSchools;

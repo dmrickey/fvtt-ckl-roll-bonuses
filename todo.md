@@ -327,4 +327,3 @@
 - Furious Focus needs to work only for 2h attacks
 
 # Todo
-- add journal entries for race and subtype targets

@@ -76,11 +76,12 @@ export class RaceTarget extends BaseTarget {
         const { actor } = item;
 
         const currentTargets = currentTargetedActors();
+        if (!currentTargets.length) return [];
 
         const flaggedSources = actor.itemFlags?.boolean[this.key]?.sources ?? [];
         const bonusSources = flaggedSources.filter((source) => {
             const races = this.#getRaceTraits(source);
-            return currentTargets.every((a) => intersects(races.total, a.race?.creatureTypes.total));
+            return currentTargets.every((a) => intersects(races.total, a.race?.system.creatureTypes.total));
         });
 
         return bonusSources;
