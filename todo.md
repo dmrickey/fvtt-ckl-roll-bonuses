@@ -47,9 +47,9 @@
   - [Misc](#misc-1)
   - [Ammo](#ammo)
   - [UX](#ux)
+    - [Targeting](#targeting)
   - [Bonuses](#bonuses-1)
   - [Bonus Improvements](#bonus-improvements)
-  - [Targeting](#targeting)
 - [Housekeeping](#housekeeping)
 - [Checklist for new (and existing features)](#checklist-for-new-and-existing-features)
 - [Deprecate](#deprecate)
@@ -61,7 +61,6 @@
 - [Not Possible](#not-possible)
 - [Range/Positional ideas](#rangepositional-ideas)
 - [Other Ideas](#other-ideas)
-- [PF1 v11](#pf1-v11)
 - [vnext](#vnext)
 - [Todo](#todo-1)
 
@@ -209,17 +208,15 @@
 
 ## UX
 - Add method for sources to say "I have a source key but no value" and show a broken item hint
+### Targeting
+- show warning if target has an inappropriate bonus
 
 ## Bonuses
-- "x per dice"
 - Extra Attacks
 
 ## Bonus Improvements
 - Enhancement Bonus
   - add checkbox for "applies for DR" (some spell buffs don't appy for DR (e.g. Greater Magic Weapon))
-
-## Targeting
-- show warning if target has an inappropriate bonus
 
 # Housekeeping
 - Consolidate weapon hints (Weapon Focus, Specialization, Martial) - find a way to make them more concise
@@ -286,10 +283,6 @@
 - Initial popup with brief tutorial/explanation 
   - Specifically include "automatic" things like Global Bonuses
 
-# PF1 v11
-- Actor Type/Subtype targets are now viable.
-- spell subtype target is now viable
-
 # vnext
 - Create new "Roll Bonuses" section for attack dialog inputs
 - Replace "checklist-input" with a proper Item application instead of a warpgate menu
@@ -327,3 +320,5 @@
 - Furious Focus needs to work only for 2h attacks
 
 # Todo
+- Audit current checklists and swap over any that can be to the current trait selector
+  - Versatile Training can't because trait selector doesn't have any notion of having a limit on what can be checked.

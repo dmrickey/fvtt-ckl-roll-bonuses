@@ -1,21 +1,32 @@
 import { MODULE_NAME } from '../../consts.mjs';
 import { traitInput } from '../../handlebars-handlers/trait-selector.mjs';
 import { intersects } from '../../util/array-intersects.mjs';
-import { truthiness } from '../../util/truthiness.mjs';
+import { Trait } from '../../util/trait-builder.mjs';
 import { BaseTarget } from './_base-target.mjs';
 
-export class SpellSchoolTarget extends BaseTarget {
+export class SpellSubschoolTarget extends BaseTarget {
     /**
      * @override
      * @inheritdoc
      */
-    static get sourceKey() { return 'spell-school'; }
+    static get sourceKey() { return 'spell-subschool'; }
 
     /**
      * @override
      * @returns {string}
      */
-    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.iurMG1TBoX3auh5z#spell-school'; }
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.iurMG1TBoX3auh5z#spell-subschool'; }
+
+    /**
+     * @param {ItemPF} source
+     * @returns {Trait}
+     */
+    static #getSubschoolTraits(source) {
+        const choices = pf1.config.spellSubschools;
+        const flag = source.getFlag(MODULE_NAME, this.key);
+        const subtypes = new Trait(choices, flag);
+        return subtypes;
+    }
 
     /**
      * @override
@@ -24,11 +35,8 @@ export class SpellSchoolTarget extends BaseTarget {
      * @returns {Nullable<string[]>}
     */
     static getHints(source) {
-        const groups = source.getFlag(MODULE_NAME, this.key) || [];
-        const schools = groups
-            .filter(truthiness)
-            .map((/** @type {keyof typeof pf1.config.spellSchools} */ school) => pf1.config.spellSchools[school] || school);
-        return schools;
+        const subschools = this.#getSubschoolTraits(source);
+        return subschools.names;
     }
 
     /**
@@ -43,17 +51,14 @@ export class SpellSchoolTarget extends BaseTarget {
             return [];
         }
 
-        const spellSchool = item.system.school;
-        if (!spellSchool) {
+        const subschools = item.system.subschool;
+        if (!subschools.total.size) {
             return [];
         }
 
         const filteredSources = sources.filter((source) => {
-            /** @type {string[]} */
-            const targetedSchools = (source.getFlag(MODULE_NAME, this.key) || [])
-                .filter(truthiness);
-
-            return intersects(targetedSchools, spellSchool);
+            const targetedSubschools = this.#getSubschoolTraits(source);
+            return intersects(subschools.total, targetedSubschools.total);
         });
 
         return filteredSources;
@@ -69,7 +74,7 @@ export class SpellSchoolTarget extends BaseTarget {
      * @param {ItemPF} options.item
      */
     static showInputOnItemSheet({ html, isEditable, item }) {
-        const choices = pf1.config.spellSchools;
+        const choices = pf1.config.spellSubschools;
 
         traitInput({
             choices,

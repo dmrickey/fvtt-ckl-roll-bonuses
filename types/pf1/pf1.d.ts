@@ -1214,6 +1214,7 @@ declare global {
     class SystemItemDataSpellPF extends SystemItemData {
         descriptors: TraitSelector<keyof SpellDescriptors>;
         school: keyof typeof pf1.config.spellSchools;
+        subschool: TraitSelector<keyof pf1['config']['spellSubschools']>;
 
         /** @deprecated use until v10 (then use @see {descriptors} ) */
         types: string;

@@ -11,6 +11,7 @@ import { createTemplate, templates } from './templates.mjs';
  * @param {ItemPF} args.item
  * @param {string} args.journal
  * @param {string} args.key
+ * @param {boolean} [args.hasCustom]
  * @param {string} [args.label]
  * @param {string} [args.tooltip]
  * @param {HTMLElement} args.parent,
@@ -21,6 +22,7 @@ import { createTemplate, templates } from './templates.mjs';
  */
 export function traitInput({
     choices = {},
+    hasCustom = true,
     item,
     journal,
     key,
@@ -63,7 +65,7 @@ export function traitInput({
                 name: `flags.${MODULE_NAME}.${key}`,
                 title: label,
                 subject: key,
-                hasCustom: true,
+                hasCustom,
                 choices,
             };
 
@@ -74,7 +76,9 @@ export function traitInput({
             if (app) {
                 app.render({ force: true });
                 app.bringToFront();
-            } else new pf1.applications.ActorTraitSelector(options).render({ force: true });
+            } else {
+                new pf1.applications.ActorTraitSelector(options).render({ force: true });
+            }
         });
     });
 }

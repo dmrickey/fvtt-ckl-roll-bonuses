@@ -14,6 +14,7 @@ import { Sources } from '../source-registration.mjs';
 import { SpecificItemTarget } from "./specific-item-target/specific-item-target.mjs";
 import { SpellDescriptorTarget } from './spell-descriptor-target.mjs';
 import { SpellSchoolTarget } from './spell-school-target.mjs';
+import { SpellSubschoolTarget } from './spell-subschool-target.mjs';
 import { SpellTarget } from "./specific-item-target/spell-target.mjs";
 import { TokenTarget } from "./conditional/token-target.mjs";
 import { WeaponGroupTarget } from "./weapon-group-target.mjs";
@@ -39,6 +40,7 @@ export const registerTargets = () => [
     SpecificItemTarget,
     SpellDescriptorTarget,
     SpellSchoolTarget,
+    SpellSubschoolTarget,
     SpellTarget,
     TokenTarget,
     WeaponGroupTarget,
