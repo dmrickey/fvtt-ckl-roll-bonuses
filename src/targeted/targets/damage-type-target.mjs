@@ -1,5 +1,5 @@
 import { MODULE_NAME } from '../../consts.mjs';
-import { showChecklist } from '../../handlebars-handlers/targeted/targets/checklist-input.mjs';
+import { traitInput } from '../../handlebars-handlers/trait-input.mjs';
 import { intersects } from "../../util/array-intersects.mjs";
 import { getActionDamageTypes } from '../../util/get-damage-types.mjs';
 import { truthiness } from "../../util/truthiness.mjs";
@@ -66,16 +66,16 @@ export class DamageTypeTarget extends BaseTarget {
         );
         custom.sort();
 
-        const options = {
+        const choices = {
             ...pf1.registry.damageTypes.getLabels(),
             ...custom.reduce((acc, curr) => ({ ...acc, [curr]: curr, }), {})
         };
 
-        showChecklist({
+        traitInput({
+            choices,
             item,
             journal: this.journal,
             key: this.key,
-            options,
             parent: html,
             tooltip: this.tooltip,
         }, {

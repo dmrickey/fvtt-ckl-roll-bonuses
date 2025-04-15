@@ -1,4 +1,5 @@
 import { MODULE_NAME } from '../consts.mjs';
+import { api } from '../util/api.mjs';
 import { localizeBonusLabel, localizeBonusTooltip } from '../util/localize.mjs';
 import { Trait } from '../util/trait-builder.mjs';
 import { addNodeToRollBonus } from './add-bonus-to-item-sheet.mjs';
@@ -6,13 +7,15 @@ import { createTemplate, templates } from './templates.mjs';
 
 /**
  * @param {object} args
- * @param {Record<string, string>} [args.choices]
+ * @param {Record<string, string> | string[]} [args.choices]
  * @param {FlagValue} [args.current]
  * @param {ItemPF} args.item
  * @param {string} args.journal
  * @param {string} args.key
+ * @param {string} [args.description]
  * @param {boolean} [args.hasCustom]
  * @param {string} [args.label]
+ * @param {number} [args.limit]
  * @param {string} [args.tooltip]
  * @param {HTMLElement} args.parent,
  * @param {object} options
@@ -22,6 +25,7 @@ import { createTemplate, templates } from './templates.mjs';
  */
 export function traitInput({
     choices = {},
+    description = '',
     hasCustom = true,
     item,
     journal,
@@ -29,6 +33,7 @@ export function traitInput({
     label = '',
     parent,
     tooltip = '',
+    limit = 0,
 }, {
     canEdit,
     inputType,
@@ -36,6 +41,10 @@ export function traitInput({
 }) {
     label ||= localizeBonusLabel(key);
     tooltip ||= localizeBonusTooltip(key);
+
+    if (Array.isArray(choices)) {
+        choices = choices.reduce((acc, curr) => ({ ...acc, [curr]: curr }), {});
+    }
 
     let current = item.getFlag(MODULE_NAME, key) || [];
     const traits = new Trait(choices, current);
@@ -61,12 +70,14 @@ export function traitInput({
 
             /** @type {Partial<ActorTraitSelectorOptions>} */
             const options = {
+                description,
                 document: item,
                 name: `flags.${MODULE_NAME}.${key}`,
                 title: label,
                 subject: key,
                 hasCustom,
                 choices,
+                limit,
             };
 
             /** @type {ActorTraitSelector} */
@@ -77,8 +88,42 @@ export function traitInput({
                 app.render({ force: true });
                 app.bringToFront();
             } else {
-                new pf1.applications.ActorTraitSelector(options).render({ force: true });
+                var created = new pf1.applications.ActorTraitSelector(options);
+                await created.render({ force: true });
             }
         });
     });
 }
+
+api.inputs.traitInput = traitInput;
+
+/**
+ * @param {ActorTraitSelector} app
+ * @param {HTMLElement} element
+ */
+const onRender = (app, element) => {
+    const { description, limit } = app.options;
+
+    if (description) {
+        const form = element.querySelector('section.form-body');
+        if (form) {
+            const div = document.createElement('div');
+            div.innerHTML = description;
+            div.setAttribute('style', 'margin-inline: 2rem; margin-block-end: 0.5rem; text-align: center;')
+            form.prepend(div);
+        }
+    }
+
+    if (limit) {
+        const checked = element.querySelectorAll(`input[type="checkbox"]:checked`);
+        if (checked.length >= limit) {
+            const unchecked = element.querySelectorAll(`input[type="checkbox"]:not(:checked)`);
+            unchecked.forEach((node) => node.setAttribute('disabled', ''));
+        }
+        else {
+            const all = element.querySelectorAll(`input[type="checkbox"]`);
+            all.forEach((node) => node.removeAttribute('disabled'));
+        }
+    }
+};
+Hooks.on('renderActorTraitSelector', onRender);

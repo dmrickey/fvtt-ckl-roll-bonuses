@@ -1,5 +1,5 @@
 import { MODULE_NAME } from "../../consts.mjs";
-import { showChecklist } from "../../handlebars-handlers/targeted/targets/checklist-input.mjs";
+import { traitInput } from '../../handlebars-handlers/trait-input.mjs';
 import { difference, intersects } from "../../util/array-intersects.mjs";
 import { getActorItemsByTypes } from '../../util/get-actor-items-by-type.mjs';
 import { truthiness } from "../../util/truthiness.mjs";
@@ -80,16 +80,16 @@ export class WeaponGroupTarget extends BaseTarget {
         );
         custom.sort();
 
-        const options = {
+        const choices = {
             ...pf1.config.weaponGroups,
             ...custom.reduce((acc, curr) => ({ ...acc, [curr]: curr, }), {}),
         };
 
-        showChecklist({
+        traitInput({
+            choices,
             item,
             journal: this.journal,
             key: this.key,
-            options,
             parent: html,
             tooltip: this.tooltip,
         }, {

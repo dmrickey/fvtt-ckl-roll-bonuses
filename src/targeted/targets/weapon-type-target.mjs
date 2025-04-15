@@ -1,5 +1,5 @@
 import { MODULE_NAME } from "../../consts.mjs";
-import { showChecklist } from "../../handlebars-handlers/targeted/targets/checklist-input.mjs";
+import { traitInput } from '../../handlebars-handlers/trait-input.mjs';
 import { intersects } from "../../util/array-intersects.mjs";
 import { getActorItemsByTypes } from '../../util/get-actor-items-by-type.mjs';
 import { truthiness } from "../../util/truthiness.mjs";
@@ -8,90 +8,90 @@ import { WeaponBaseTypeOverride } from '../target-overides/weapon-type-override.
 import { BaseTarget } from "./_base-target.mjs";
 
 export class WeaponTypeTarget extends BaseTarget {
-  /**
-   * @override
-   * @inheritdoc
-   */
-  static get sourceKey() { return 'weapon-type'; }
+    /**
+     * @override
+     * @inheritdoc
+     */
+    static get sourceKey() { return 'weapon-type'; }
 
-  /**
-   * @override
-   * @returns {string}
-   */
-  static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.iurMG1TBoX3auh5z#weapon-type'; }
+    /**
+     * @override
+     * @returns {string}
+     */
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.iurMG1TBoX3auh5z#weapon-type'; }
 
-  /**
-   * @param {ItemPF} source
-   * @returns {string[]}
-   */
-  static #getTypes(source) {
-    const types = source.getFlag(MODULE_NAME, this.key) ?? [];
-    return types.filter(truthiness);
-  }
-
-  /**
-   * @override
-   * @inheritdoc
-   * @param {ItemPF} source
-   * @returns {Nullable<string[]>}
-   */
-  static getHints(source) {
-    return this.#getTypes(source);
-  }
-
-  /**
-   * @override
-   * @inheritdoc
-   * @param {ItemPF & {actor: ActorPF}} item
-   * @param {ItemPF[]} sources
-   * @returns {ItemPF[]}
-   */
-  static _getSourcesFor(item, sources) {
-    const typesOnItem = item.system.baseTypes;
-    if (!typesOnItem?.length) {
-      return [];
+    /**
+     * @param {ItemPF} source
+     * @returns {string[]}
+     */
+    static #getTypes(source) {
+        const types = source.getFlag(MODULE_NAME, this.key) ?? [];
+        return types.filter(truthiness);
     }
 
-    const bonusSources = sources.filter((sources) => {
-      const targetedTypes = this.#getTypes(sources);
-      return intersects(typesOnItem, targetedTypes);
-    });
+    /**
+     * @override
+     * @inheritdoc
+     * @param {ItemPF} source
+     * @returns {Nullable<string[]>}
+     */
+    static getHints(source) {
+        return this.#getTypes(source);
+    }
 
-    return bonusSources;
-  }
+    /**
+     * @override
+     * @inheritdoc
+     * @param {ItemPF & {actor: ActorPF}} item
+     * @param {ItemPF[]} sources
+     * @returns {ItemPF[]}
+     */
+    static _getSourcesFor(item, sources) {
+        const typesOnItem = item.system.baseTypes;
+        if (!typesOnItem?.length) {
+            return [];
+        }
 
-  /**
-   * @override
-   * @inheritdoc
-   * @param {object} options
-   * @param {ActorPF | null | undefined} options.actor
-   * @param {HTMLElement} options.html
-   * @param {boolean} options.isEditable
-   * @param {ItemPF} options.item
-   */
-  static showInputOnItemSheet({ html, isEditable, item }) {
-    const actorItems = getActorItemsByTypes(item?.actor, 'attack', 'weapon');
-    const typesOnActor = actorItems
-      .flatMap((_item) => _item.system.baseTypes ?? [])
-      ?? [];
-    const currentTypes = this.#getTypes(item);
-    // TODO fetch override types
-    const overrides = (item?.actor?.itemFlags?.boolean[WeaponBaseTypeOverride.key]?.sources ?? [])
-      .flatMap((_item) => _item.system.baseTypes ?? [])
-      ?? [];
-    const options = uniqueArray([...typesOnActor, ...currentTypes, ...overrides]);
-    options.sort();
+        const bonusSources = sources.filter((sources) => {
+            const targetedTypes = this.#getTypes(sources);
+            return intersects(typesOnItem, targetedTypes);
+        });
 
-    showChecklist({
-      item,
-      journal: this.journal,
-      key: this.key,
-      options,
-      parent: html,
-      tooltip: this.tooltip,
-    }, {
-      canEdit: isEditable,
-      inputType: 'target',
-    });
-  }
+        return bonusSources;
+    }
+
+    /**
+     * @override
+     * @inheritdoc
+     * @param {object} options
+     * @param {ActorPF | null | undefined} options.actor
+     * @param {HTMLElement} options.html
+     * @param {boolean} options.isEditable
+     * @param {ItemPF} options.item
+     */
+    static showInputOnItemSheet({ html, isEditable, item }) {
+        const actorItems = getActorItemsByTypes(item?.actor, 'attack', 'weapon');
+        const typesOnActor = actorItems
+            .flatMap((_item) => _item.system.baseTypes ?? [])
+            ?? [];
+        const currentTypes = this.#getTypes(item);
+        // TODO fetch override types
+        const overrides = (item?.actor?.itemFlags?.boolean[WeaponBaseTypeOverride.key]?.sources ?? [])
+            .flatMap((_item) => _item.system.baseTypes ?? [])
+            ?? [];
+        const choices = uniqueArray([...typesOnActor, ...currentTypes, ...overrides]);
+        choices.sort();
+
+        traitInput({
+            choices,
+            item,
+            journal: this.journal,
+            key: this.key,
+            parent: html,
+            tooltip: this.tooltip,
+        }, {
+            canEdit: isEditable,
+            inputType: 'target',
+        });
+    }
 }

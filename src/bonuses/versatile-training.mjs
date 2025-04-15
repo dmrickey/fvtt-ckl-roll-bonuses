@@ -6,7 +6,6 @@ import { truthiness } from "../util/truthiness.mjs";
 import { SpecificBonuses } from './all-specific-bonuses.mjs';
 import { api } from '../util/api.mjs';
 import { keyValueSelect } from '../handlebars-handlers/bonus-inputs/key-value-select.mjs';
-import { showChecklist } from '../handlebars-handlers/targeted/targets/checklist-input.mjs';
 import { getDocFlags } from '../util/flag-helpers.mjs';
 import { LocalHookHandler, localHooks } from '../util/hooks.mjs';
 import { getSkillName } from '../util/get-skill-name.mjs';
@@ -14,6 +13,7 @@ import { intersection } from '../util/array-intersects.mjs';
 import { itemHasCompendiumId } from '../util/has-compendium-id.mjs';
 import { createChange } from '../util/conditional-helpers.mjs';
 import { getCachedBonuses } from '../util/get-cached-bonuses.mjs';
+import { traitInput } from '../handlebars-handlers/trait-input.mjs';
 
 const key = 'versatile-training';
 const selectedKey = 'versatile-training-selected';
@@ -289,17 +289,18 @@ Hooks.on('renderItemSheet', (
         canEdit: isEditable,
         inputType: 'specific-bonus',
     });
-    showChecklist({
+    traitInput({
+        choices: skillChoices,
         description: localize('versatile-training.description'),
+        hasCustom: false,
         item,
         journal,
         key: selectedKey,
-        options: skillChoices,
+        limit: 2,
         parent: html,
     }, {
         canEdit: isEditable,
         inputType: 'specific-bonus',
-        limit: 2,
     });
 });
 

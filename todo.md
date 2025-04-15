@@ -320,5 +320,12 @@
 - Furious Focus needs to work only for 2h attacks
 
 # Todo
-- Audit current checklists and swap over any that can be to the current trait selector
-  - Versatile Training can't because trait selector doesn't have any notion of having a limit on what can be checked.
+- Sanity check that these still work as trait selectors
+  - Action Type Target
+  - Damage Type Target
+  - Skill Rank Override
+  - Spell Descriptor Target
+  - Weapon Group Override
+  - Weapon Group Target
+  - Weapon Type Target
+  - Versatile Training

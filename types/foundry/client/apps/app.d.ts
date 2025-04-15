@@ -250,7 +250,7 @@ declare global {
         /**
          * Return the active application element, if it currently exists in the DOM
          */
-        get element(): JQuery;
+        get element(): HTMLElement;
 
         /**
          * The path to the HTML template file which should be used to render the inner content of the app

@@ -1,5 +1,5 @@
 import { MODULE_NAME } from '../../../consts.mjs';
-import { traitInput } from '../../../handlebars-handlers/trait-selector.mjs';
+import { traitInput } from '../../../handlebars-handlers/trait-input.mjs';
 import { intersects } from '../../../util/array-intersects.mjs';
 import { currentTargetedActors } from '../../../util/get-current-targets.mjs';
 import { localize } from '../../../util/localize.mjs';

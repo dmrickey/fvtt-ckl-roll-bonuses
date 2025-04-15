@@ -2,7 +2,6 @@ import { registerItemHint } from "../util/item-hints.mjs";
 import { localize, localizeItemHint } from "../util/localize.mjs";
 import { truthiness } from "../util/truthiness.mjs";
 import { SpecificBonuses } from './all-specific-bonuses.mjs';
-import { showChecklist } from '../handlebars-handlers/targeted/targets/checklist-input.mjs';
 import { FormulaCacheHelper, getDocFlags } from '../util/flag-helpers.mjs';
 import { LocalHookHandler, localHooks } from '../util/hooks.mjs';
 import { textInput } from '../handlebars-handlers/bonus-inputs/text-input.mjs';
@@ -10,6 +9,7 @@ import { getSkillName } from '../util/get-skill-name.mjs';
 import { MODULE_NAME } from '../consts.mjs';
 import { createChange } from '../util/conditional-helpers.mjs';
 import { getCachedBonuses } from '../util/get-cached-bonuses.mjs';
+import { traitInput } from '../handlebars-handlers/trait-input.mjs';
 
 const key = 'skill-rank-override';
 const formulaKey = 'skill-rank-override-formula';
@@ -205,13 +205,13 @@ Hooks.on('renderItemSheet', (
         return;
     }
     /** @type {{[key: string]: string}} */
-    let skillChoices = {};
+    let choices = {};
     if (isEditable) {
         if (actor) {
-            skillChoices = actor.allSkills
+            choices = actor.allSkills
                 .reduce((acc, skillId) => ({ ...acc, [skillId]: getSkillName(actor, skillId) }), {});
         } else {
-            skillChoices = pf1.config.skills;
+            choices = pf1.config.skills;
         }
     }
 
@@ -224,11 +224,11 @@ Hooks.on('renderItemSheet', (
         canEdit: isEditable,
         inputType: 'specific-bonus',
     })
-    showChecklist({
+    traitInput({
+        choices,
         item,
         journal,
         key: selectedKey,
-        options: skillChoices,
         parent: html,
     }, {
         canEdit: isEditable,

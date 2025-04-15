@@ -2101,8 +2101,12 @@ declare global {
 
     type ActorTraitSelectorOptions = ApplicationOptions & {
         choices: Record<string, string>;
+        /** This is my custom data */
+        description: string;
         document: ActorPF | ItemPF;
         hasCustom: boolean,
+        /** This is my custom data */
+        limit: number;
         name: string;
         subject: string;
     };

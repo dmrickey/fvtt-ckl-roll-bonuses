@@ -1,5 +1,5 @@
 import { MODULE_NAME } from '../../consts.mjs';
-import { traitInput } from '../../handlebars-handlers/trait-selector.mjs';
+import { traitInput } from '../../handlebars-handlers/trait-input.mjs';
 import { intersects } from '../../util/array-intersects.mjs';
 import { truthiness } from '../../util/truthiness.mjs';
 import { BaseTarget } from './_base-target.mjs';

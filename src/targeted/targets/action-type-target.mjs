@@ -1,6 +1,6 @@
 import { MODULE_NAME } from '../../consts.mjs';
 import { radioInput } from '../../handlebars-handlers/bonus-inputs/radio-input.mjs';
-import { showChecklist } from '../../handlebars-handlers/targeted/targets/checklist-input.mjs';
+import { traitInput } from '../../handlebars-handlers/trait-input.mjs';
 import { isMelee, isNatural, isNaturalSecondary, isPhysical, isRanged, isSpell, isThrown, isWeapon } from '../../util/action-type-helpers.mjs';
 import { listFormat } from '../../util/list-format.mjs';
 import { localize, localizeBonusLabel } from '../../util/localize.mjs';
@@ -125,10 +125,10 @@ export class ActionTypeTarget extends BaseTarget {
      */
     static showInputOnItemSheet({ html, isEditable, item }) {
         /** @type {{[key: string]: string}} */
-        const options = {};
+        const choices = {};
         Object.keys(filterTypes).forEach((f) => {
             const key = /** @type {FilterType} */ (f);
-            options[key] = filterTypes[key].label;
+            choices[key] = filterTypes[key].label;
         });
 
         const radioValues = [
@@ -136,11 +136,11 @@ export class ActionTypeTarget extends BaseTarget {
             { id: any, label: localize(`target-toggle.${any}`) },
         ];
 
-        showChecklist({
+        traitInput({
+            choices,
             item,
             journal: this.journal,
             key: this.#typesKey,
-            options,
             parent: html,
             tooltip: this.tooltip,
         }, {
