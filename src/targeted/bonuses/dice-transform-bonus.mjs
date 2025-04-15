@@ -105,7 +105,7 @@ export class DiceTransformBonus extends BaseBonus {
             const quantity = +match[1];
             const faces = +match[2];
 
-            const final = Roll.replaceFormulaData(modification, { ...rollData, quantity, faces });
+            const final = Roll.replaceFormulaData(modification, { ...rollData, quantity, faces, base: `${quantity}d${faces}` });
 
             return simplified.replace(/^(\d+)d(\d+)/, final);
         }
