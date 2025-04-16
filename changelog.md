@@ -18,6 +18,8 @@
 - Targeting Tokens with the target token bonus once again works for players
 - Footnotes didn't work for actors with lots of data
 
+---
+
 ## Roll Bonuses 2.18.5
 
 ### Bugfixes
