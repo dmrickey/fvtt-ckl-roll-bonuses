@@ -60,8 +60,16 @@ export class FunctionTarget extends BaseTarget {
         const sources = item.actor.itemFlags?.boolean[this.key]?.sources ?? [];
         const filtered = sources.filter((source) => {
             const custom = source.getFlag(MODULE_NAME, this.key);
-            const func = eval(custom);
-            return !!custom && func(doc);
+            if (custom) {
+                try {
+                    const func = eval(custom);
+                    return !!func(doc);
+                }
+                catch {
+                    console.error('invalid function target', source);
+                    return false;
+                }
+            }
         });
 
         return filtered;
