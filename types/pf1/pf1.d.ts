@@ -1704,10 +1704,10 @@ declare global {
             rollData?: Nullable<RollData>
         ): RollPF;
 
+        evaluate(options?: InexactPartial<Options>): Promise<Evaluated<this>>;
         evaluate(
             options?: InexactPartial<Options> & { forceSync: true }
         ): Evaluated<this>;
-        evaluate(options?: InexactPartial<Options>): Promise<Evaluated<this>>;
 
         evaluateSync(options: (RecursivePartial<Option> & { forceSync: true } | { maximize: true } | { minimize: true })): Evaluated<this>;
     }

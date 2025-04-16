@@ -93,7 +93,7 @@ export class FormulaCacheHelper {
 
         const roll = RollPF.create(formula + '');
         if (roll.isDeterministic) {
-            const total = roll.evaluateSync({ forceSync: true }).total;
+            const total = roll.evaluateSync({ maximize: true }).total;
             const mod = signed(total);
             return format(mod);
         }
