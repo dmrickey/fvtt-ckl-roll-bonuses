@@ -10,6 +10,7 @@
 - Dice Transform now also adds a new `@base` roll variable when using it--this is includes the whole "base dice" E.g. if you want to repeat `2d6` instead of having to do `(@quantity)d(@faces)` you can now do something like `@base + @quantity` to get `2d6 + 2`. See the in game documentation for more examples.
 - Replaced a few checkbox dialogs with the system's traits selector.
 - Updated hint text for action/item selection dialogs
+- Masterwork checkbox has been removed from ammo in favor of using the system's own masterwork option
 
 ### Bugfixes
 - Furious Focus will now only trigger for melee attacks (i.e. no more triggering with Deadly Aim) and only with two-handed attacks.

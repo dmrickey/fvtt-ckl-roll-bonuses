@@ -82,6 +82,7 @@ declare global {
             v2: {};
             v3: {};
             v4: {};
+            v5: {};
         };
 
         /** Base source classes for extending */

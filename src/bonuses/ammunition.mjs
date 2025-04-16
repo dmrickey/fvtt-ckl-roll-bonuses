@@ -1,5 +1,4 @@
 import { MODULE_NAME } from "../consts.mjs";
-import { checkboxInput } from '../handlebars-handlers/bonus-inputs/chekbox-input.mjs';
 import { textInput } from "../handlebars-handlers/bonus-inputs/text-input.mjs";
 import { damageInput } from "../handlebars-handlers/targeted/bonuses/damage.mjs";
 import { getEnhancementBonusForAction } from '../util/enhancement-bonus-helper.mjs';
@@ -11,7 +10,6 @@ import { ammoEnhancementKey, ammoEnhancementStacksKey } from './ammunition-share
 const ammoAttackKey = 'ammo-attack';
 const ammoDamageKey = 'ammo-damage';
 const ammoEffectKey = 'ammo-effect';
-const ammoMasterworkKey = 'ammo-mw';
 
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#ammunition';
 
@@ -41,7 +39,7 @@ function getConditionalParts(actionUse, result, atk, index) {
 
         const { base: actionBaseEnh, stacks: actionStacksEnh, total: actionTotal } = getEnhancementBonusForAction({ action: actionUse.action });
 
-        const ammoMw = !!ammo.getFlag(MODULE_NAME, ammoMasterworkKey) || ammo.system.masterwork;
+        const ammoMw = ammo.system.masterwork;
         const ammoEnhBonus = FormulaCacheHelper.getModuleFlagValue(ammo, ammoEnhancementKey);
         const ammoEnhStacksBonus = FormulaCacheHelper.getModuleFlagValue(ammo, ammoEnhancementStacksKey);
         const hasEnhBonus = itemEnh || actionBaseEnh || actionStacksEnh || ammoEnhBonus || ammoEnhStacksBonus;
@@ -121,16 +119,6 @@ Hooks.on('renderItemSheet', (
         return;
     }
 
-    checkboxInput({
-        item,
-        journal,
-        key: ammoMasterworkKey,
-        label: localize('PF1.Masterwork'),
-        parent: html,
-    }, {
-        canEdit: isEditable,
-        inputType: 'ammo',
-    });
     textInput({
         item,
         journal,

@@ -3,6 +3,7 @@ import * as v1 from './migrate-v1.mjs';
 import * as v2 from './migrate-v2.mjs';
 import * as v3 from './migrate-v3.mjs';
 import * as v4 from './migrate-v4.mjs';
+import * as v5 from './migrate-v5.mjs';
 import { MODULE_NAME } from '../consts.mjs';
 import { api } from '../util/api.mjs';
 import { registerSetting } from '../util/settings.mjs';
@@ -63,6 +64,9 @@ const migrations = [
 
     //  2.18 (pf1 v11 // foundry v12 update)
     { label: 'duergar', migrate: v4.migrateWorldV4 },
+
+    //  2.19 (ammo mw)
+    { label: 'ettin', migrate: v5.migrateWorldV5 },
 ];
 
 // should always be one more than the
@@ -122,4 +126,5 @@ api.migrate = {
     v2,
     v3,
     v4,
+    v5,
 };

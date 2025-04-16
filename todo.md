@@ -315,8 +315,6 @@
   - Or disable the system's checkbox as this mod already accounts for it
     - but also add an "ignore" checkbox
 - Figure out a way to make Versatile Performance and Snake Sidewind work together
-- Transfer ammo's masterwork to `system.masterwork`
-- Furious Focus needs to work only for 2h attacks
 
 # Todo
 - Sanity check that these still work as trait selectors
@@ -328,4 +326,4 @@
   - Weapon Group Target
   - Weapon Type Target
   - Versatile Training
-- Fix description on Item Selector when using "When Active" - it is way too incorrect right now because it's assuming "item selector"
+- Footnote not showing up when system is providing one already [here](https://discord.com/channels/852297995907366922/1134212644392423515/1362070108129853731)
