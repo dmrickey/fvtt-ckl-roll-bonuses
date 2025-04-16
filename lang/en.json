@@ -148,7 +148,6 @@
                 "ammo-effect": "When attacking with this arrow, also show this effect note.",
                 "ammo-enhancement": "The ammo's base enhancement bonus.",
                 "ammo-enhancement-stacks": "For enhancement Bonuses that stack, such as Bane.",
-                "ammo-mw": "Will add a +1 masterwork bonus when using this ammo. This is correctly ignored if the ammo/weapon already has an enhancement bonus or if the weapon is already masterwork.",
                 "armor-focus": "Increase AC by 1 for chosen armor. Armor must be properly configured with Equipment Base Types.",
                 "armor-focus-improved": "Decrease ACP by 1 for chosen armor. Armor must be properly configured with Equipment Base Types.",
                 "attack": "Formula input for increasing attack.",
