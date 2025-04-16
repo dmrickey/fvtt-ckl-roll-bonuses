@@ -2110,7 +2110,7 @@ declare global {
         name: string;
         subject: string;
     };
-    class ActorTraitSelector extends Application {
+    class ActorTraitSelector extends ApplicationV2 {
         options: ActorTraitSelectorOptions;
     }
 
