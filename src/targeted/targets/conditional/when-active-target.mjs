@@ -9,6 +9,12 @@ export class WhenActiveTarget extends SpecificItemTarget {
 
     /**
      * @override
+     * @returns {string}
+     */
+    static get _description() { return 'item-app.description-when-active'; }
+
+    /**
+     * @override
      * @param {ActorPF} actor
      * @returns {ItemPF[]}
      */

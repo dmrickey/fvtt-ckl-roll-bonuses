@@ -6,6 +6,12 @@ import { BaseTarget } from "../_base-target.mjs";
 export class SpecificItemTarget extends BaseTarget {
 
     /**
+     * @abstract
+     * @returns {string}
+     */
+    static get _description() { return ''; }
+
+    /**
      * @override
      */
     static get sourceKey() { return 'item'; }
@@ -76,6 +82,7 @@ export class SpecificItemTarget extends BaseTarget {
      */
     static showInputOnItemSheet({ html, isEditable, item }) {
         showItemInput({
+            description: this._description,
             itemsFromActorFunc: this.getItemsFromActor,
             item,
             journal: this.journal,

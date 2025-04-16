@@ -9,6 +9,7 @@ import { createTemplate, templates } from "../../templates.mjs";
 /**
  * @typedef {object} ItemSelectorOptions
  * @property {ItemTemplateData[]} items
+ * @property {string} description
  * @property {string} path
  */
 
@@ -27,6 +28,7 @@ import { createTemplate, templates } from "../../templates.mjs";
  * @param {ItemPF} args.item,
  * @param {string} args.journal,
  * @param {string} args.key,
+ * @param {string} [args.description]
  * @param {string} [args.label]
  * @param {HTMLElement} args.parent
  * @param {string} [args.tooltip]
@@ -34,6 +36,7 @@ import { createTemplate, templates } from "../../templates.mjs";
  * @param {boolean} options.canEdit
  */
 export function showItemInput({
+    description = '',
     itemsFromActorFunc,
     item,
     journal,
@@ -46,6 +49,7 @@ export function showItemInput({
 }) {
     if (!item?.actor) return;
 
+    description ||= 'item-app.description';
     label ||= localizeBonusLabel(key);
     tooltip ||= localizeBonusTooltip(key);
 
@@ -81,6 +85,7 @@ export function showItemInput({
                 event.preventDefault();
                 /** @type {ItemSelectorOptions} */
                 const options = {
+                    description: localize(description),
                     items,
                     path: `flags.${MODULE_NAME}.${key}`,
                 };
@@ -198,8 +203,9 @@ class ItemSelector extends DocumentSheet {
 
     /** @override */
     async getData() {
-        /** @type {{ item: ItemPF, path: string, groupedItems: {[key: string]: ItemSelectorOptions['items'][]} }} */
+        /** @type {{ description: string, item: ItemPF, path: string, groupedItems: {[key: string]: ItemSelectorOptions['items'][]} }} */
         const templateData = {
+            description: this.options.description,
             item: this.object,
             path: this.options.path,
             groupedItems: {},
