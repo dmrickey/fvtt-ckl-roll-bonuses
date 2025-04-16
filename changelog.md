@@ -16,6 +16,7 @@
 - Furious Focus will now only trigger for melee attacks (i.e. no more triggering with Deadly Aim) and only with two-handed attacks.
 - Replaced a few missing untranslated strings
 - Targeting Tokens with the target token bonus once again works for players
+- Footnotes didn't work for actors with lots of data
 
 ## Roll Bonuses 2.18.5
 

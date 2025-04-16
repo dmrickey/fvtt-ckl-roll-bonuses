@@ -62,7 +62,6 @@
 - [Range/Positional ideas](#rangepositional-ideas)
 - [Other Ideas](#other-ideas)
 - [vnext](#vnext)
-- [Todo](#todo-1)
 
 # TODO
 - Figure out a way to support multiple target groups on a single Item (so I can add `Favored Enemy (Human) +4` and `Favored Enemy (goblin) +2` on a single Item)
@@ -292,7 +291,6 @@
   - See example [https://gitlab.com/mxzf/adventure-uninstaller/-/blob/master/adventure-uninstaller.mjs](here)
 
 - Add "Weapon Focus" hint hook so Weapon Focus, Weapon Specialization, and Martial Focus can all use the sword icon hint
-- Audit Specific Bonus "click to expand" rules and make sure they're concise enough (_specifically_ looking at you, Weapon Focus)
 - Specific Bonuses
   - Inspiration
     - Has a traits selector for various skills
@@ -315,15 +313,3 @@
   - Or disable the system's checkbox as this mod already accounts for it
     - but also add an "ignore" checkbox
 - Figure out a way to make Versatile Performance and Snake Sidewind work together
-
-# Todo
-- Sanity check that these still work as trait selectors
-  - Action Type Target
-  - Damage Type Target
-  - Skill Rank Override
-  - Spell Descriptor Target
-  - Weapon Group Override
-  - Weapon Group Target
-  - Weapon Type Target
-  - Versatile Training
-- Footnote not showing up when system is providing one already [here](https://discord.com/channels/852297995907366922/1134212644392423515/1362070108129853731)

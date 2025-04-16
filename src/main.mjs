@@ -26,8 +26,8 @@ Hooks.once('pf1PostReady', () => migrate());
  * @param {() => any} wrapped
  * @this {ActionUse}
 */
-function addFootnotes(wrapped) {
-    wrapped();
+async function addFootnotes(wrapped) {
+    await wrapped();
 
     const notes = this.shared.templateData.footnotes ?? [];
     LocalHookHandler.fireHookNoReturnSync(localHooks.actionUseFootnotes, this, notes)
