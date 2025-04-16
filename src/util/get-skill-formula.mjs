@@ -3,7 +3,7 @@ import { api } from './api.mjs';
 /**
  * @param {ActorPF} actor
  * @param {RollData} rollData
- * @param {keyof typeof pf1.config.skills} skillId
+ * @param {SkillId} skillId
  * @param {object} [options]
  * @param {boolean} [options.includeD20]
  */

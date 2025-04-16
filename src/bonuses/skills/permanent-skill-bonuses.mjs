@@ -61,7 +61,7 @@ Hooks.on('renderActorSheetPF', (
         ['.skill-mod', '.skill-rank', '.skill-cs', '.skill-acp', '.skill-rt', '.skill-ability'].forEach(addMissingForSpacing);
 
         /**
-         * @returns {keyof typeof pf1.config.skills}
+         * @returns {SkillId}
          */
         const getSkillId = () => {
             const skillId = li.dataset.skill;
@@ -69,7 +69,7 @@ Hooks.on('renderActorSheetPF', (
             const id = subSkillId
                 ? `${skillId}.${subSkillId}`
                 : skillId;
-            return /** @type {keyof typeof pf1.config.skills} */ (id);
+            return /** @type {SkillId} */ (id);
         }
 
         const skillId = getSkillId();
@@ -120,7 +120,7 @@ Hooks.on('renderActorSheetPF', (
 /**
  * @param {ActorPF} actor
  * @param {{ bonus: string, dice: string, rollData: RollData}} options
- * @param {keyof typeof pf1.config.skills} skillId
+ * @param {SkillId} skillId
  * @returns
  */
 const handleSkillBonus = (

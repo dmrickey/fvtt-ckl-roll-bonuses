@@ -72,8 +72,9 @@ declare global {
         | 'heal'
         | 'other';
 
+    declare type SkillId = keyof typeof pf1.config.skills;
     declare type SkillInfo = SkillRollData & {
-        id: keyof typeof pf1.config.skills;
+        id: SkillId;
         name: string;
     };
     class ActorBasePF extends BaseDocument {
@@ -113,7 +114,7 @@ declare global {
         race: ItemRacePF | null;
         hasItemBooleanFlag(key: string): boolean;
         hasWeaponProficiency(item: ItemPF, { override = true } = {}): boolean;
-        allSkills: Array<keyof typeof pf1.config.skills>;
+        allSkills: Array<SkillId>;
         changes?: Collection<ItemChange>;
         get isOwner(): boolean;
         itemTypes!: {
@@ -456,7 +457,7 @@ declare global {
         flags?: {
             pf1?: {
                 subject?: {
-                    skill: keyof typeof pf1.config.skills;
+                    skill: SkillId;
                 };
             };
         };
@@ -1592,7 +1593,7 @@ declare global {
             type: number;
         };
         size: number;
-        skills: Record<keyof typeof pf1.config.skills, SkillRollData>;
+        skills: Record<SkillId, SkillRollData>;
         spells: Record<string, SpellBookRollData>;
         traits: TraitsRollData;
         // [key: string]: any,
@@ -1808,8 +1809,8 @@ declare global {
         | 'wisMod'
         | 'wisSkills'
         | 'wounds'
-        | `skill.${keyof typeof pf1.config.skills}`
-        | `skill.~${keyof typeof pf1.config.skills}`;
+        | `skill.${SkillId}`
+        | `skill.~${SkillId}`;
 
     interface DamageType {
         abbr: string;
@@ -2199,7 +2200,7 @@ declare global {
             abilityDamageHeldMultipliers: { oh: 0.5; '1h': 1; '2h': 1.5 };
             actorSizes: Record<ActorSize, string>;
             actorStatures: Record<ActorStature, string>;
-            backgroundOnlySkills: (keyof typeof pf1.config.skills)[];
+            backgroundOnlySkills: (SkillId)[] = ['art', 'lor'];
             conditions: Conditions;
             conditionalTargets: {
                 attack: {

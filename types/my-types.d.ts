@@ -31,15 +31,15 @@ declare global {
             };
             versatilePerformance: {
                 getPerformanceSkills: (actor: ActorPF) => {
-                    [key: keyof typeof pf1.config.skills]: string;
+                    [key: SkillId]: string;
                 };
-                expandedChoices: Array<keyof typeof pf1.config.skills>;
+                expandedChoices: Array<SkillId>;
             };
             versatileTraining: {
-                default: Array<keyof typeof pf1.config.skills>;
+                default: Array<SkillId>;
                 mapping: Record<
                     keyof typeof pf1.config.weaponGroups,
-                    Array<keyof typeof pf1.config.skills>
+                    Array<SkillId>
                 >;
             };
         };

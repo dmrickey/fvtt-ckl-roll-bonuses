@@ -460,8 +460,8 @@ async function itemActionRollDamage(wrapped, ...args) {
 
 /**
  * @this {ActorPF}
- * @param {(skillId: keyof typeof pf1.config.skills, options: object) => ChatMessagePF|object|void} wrapped
- * @param {keyof typeof pf1.config.skills} skillId
+ * @param {(skillId: SkillId, options: object) => ChatMessagePF|object|void} wrapped
+ * @param {SkillId} skillId
  * @param {Object} options
  * @returns {ChatMessagePF|object|void} The chat message if one was created, or its data if not. `void` if the roll was cancelled.
  */
@@ -474,7 +474,7 @@ function actorRollSkill(wrapped, skillId, options) {
 /**
  * @this {ActorPF}
  * @param {(skillId: string, options?: { rollData?: RollData }) => SkillInfo} wrapped
- * @param {keyof typeof pf1.config.skills} skillId
+ * @param {SkillId} skillId
  * @param {object} [options]
  * @param {RollData} [options.rollData]
  * @return {SkillRollData}

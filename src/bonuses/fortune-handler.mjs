@@ -72,7 +72,7 @@ Hooks.once('ready', () => {
         [selfFortune]: () => localize('target-choice.self'),
         // @ts-ignore
         [skillFortune]:
-            (/** @type {keyof typeof pf1.config.skills | undefined} */ key, actor) => !key ? localize('PF1.Skills') : pf1.config.skills[key] || getProperty(actor?.system.skills ?? {}, key)?.name,
+            (/** @type {SkillId | undefined} */ key, actor) => !key ? localize('PF1.Skills') : pf1.config.skills[key] || getProperty(actor?.system.skills ?? {}, key)?.name,
     };
 });
 

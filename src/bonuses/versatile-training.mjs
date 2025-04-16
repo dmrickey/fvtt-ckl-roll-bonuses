@@ -31,7 +31,7 @@ class Settings {
 }
 
 {
-    /** @type {(keyof typeof pf1.config.skills)[]} */
+    /** @type {SkillId[]} */
     const allChoices = ['blf', 'int'];
     api.config.versatileTraining.default = allChoices;
     const sort = (/** @type {any[]} */ arr) => { arr.sort(); return arr; }
@@ -128,7 +128,7 @@ Hooks.on('renderActorSheetPF', (
 });
 
 /**
- * @param {{ skillId: keyof typeof pf1.config.skills, options: object }} seed
+ * @param {{ skillId: SkillId, options: object }} seed
  * @param {ActorPF} actor
  * @returns {void}
  */
@@ -173,7 +173,7 @@ function getSkillInfo(skillInfo, actor, rollData) {
 function prepareData(item, rollData) {
     if (!item.isActive || !item.actor || !item.hasItemBooleanFlag(key)) return;
 
-    /** @type {Array<keyof typeof pf1.config.skills>} */
+    /** @type {Array<SkillId>} */
     const keys = item.getFlag(MODULE_NAME, selectedKey) ?? [];
     if (keys.length && item.actor) {
         keys.forEach((skillKey) => {
@@ -257,7 +257,7 @@ Hooks.on('renderItemSheet', (
             return;
         }
 
-        const getName = (/** @type {keyof typeof pf1.config.skills} */ skillId) => isDriver(skillId)
+        const getName = (/** @type {SkillId} */ skillId) => isDriver(skillId)
             ? localize('driver')
             : getSkillName(actor, skillId);
         api.config.versatileTraining.mapping[currentGroup].forEach((skillId) => skillChoices[skillId] = getName(skillId));

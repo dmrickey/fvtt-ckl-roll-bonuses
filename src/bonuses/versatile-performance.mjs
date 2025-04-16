@@ -14,6 +14,7 @@ import { api } from '../util/api.mjs';
 import { isNotEmptyObject } from '../util/is-empty-object.mjs';
 import { getCachedBonuses } from '../util/get-cached-bonuses.mjs';
 import { itemHasCompendiumId } from '../util/has-compendium-id.mjs';
+import { getSkills } from '../util/get-skills.mjs';
 
 const key = 'versatile-performance';
 export { key as versatilePerformanceKey };
@@ -24,7 +25,7 @@ const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalE
 const compendiumIds = ['HAqAsb5H56C6cZm3', 'EuQ3UFsJX9njW3pm', 'KQeYLQvYh1QgS0XI'];
 
 {
-    /** @type {Array<keyof typeof pf1.config.skills>} */
+    /** @type {Array<SkillId>} */
     const expandedChoices = [
         'blf',
         'dip',
@@ -53,10 +54,10 @@ class Settings {
 class VPData {
     /**
      * @param {object} arg
-     * @param {keyof typeof pf1.config.skills} arg.base
-     * @param {keyof typeof pf1.config.skills} arg.choice1
-     * @param {keyof typeof pf1.config.skills} arg.choice2
-     * @param {keyof typeof pf1.config.skills} arg.expanded
+     * @param {SkillId} arg.base
+     * @param {SkillId} arg.choice1
+     * @param {SkillId} arg.choice2
+     * @param {SkillId} arg.expanded
      * @param {object} options
      * @param {boolean} [options.hasExpanded]
      */
@@ -64,12 +65,12 @@ class VPData {
         this.base = base;
         this.choice1 = choice1;
         this.choice2 = choice2;
-        /** @type {keyof typeof pf1.config.skills | ''} */
+        /** @type {SkillId | ''} */
         this.expanded = hasExpanded ? expanded : '';
     }
 
     /**
-     * @param {keyof typeof pf1.config.skills} skillId
+     * @param {SkillId} skillId
      * @returns {boolean}
      */
     includesOverride(skillId) {
@@ -181,13 +182,13 @@ Hooks.on('renderActorSheetPF', (
     if (!data.length) return;
 
     html.find('.tab.skills .skills-list li.skill, .tab.skills .skills-list li.sub-skill').each((_, li) => {
-        /** @returns {keyof typeof pf1.config.skills} */
+        /** @returns {SkillId} */
         const getSkillId = () => {
 
-            const skillId = /** @type {keyof typeof pf1.config.skills} */ ( /** @type {any} */ li.getAttribute('data-skill'));
+            const skillId = /** @type {SkillId} */ ( /** @type {any} */ li.getAttribute('data-skill'));
             const subId = li.getAttribute('data-sub-skill');
             return subId
-                ? /** @type {keyof typeof pf1.config.skills} */ ( /** @type {any} */ `${skillId}.${subId}`)
+                ? /** @type {SkillId} */ ( /** @type {any} */ `${skillId}.${subId}`)
                 : skillId;
         }
 
@@ -230,7 +231,7 @@ function getSkillInfo(skillInfo, actor, rollData) {
     });
 }
 /**
- * @param {{ skillId: keyof typeof pf1.config.skills , options: object }} seed
+ * @param {{ skillId: SkillId , options: object }} seed
  * @param {ActorPF} actor
  * @returns {void}
  */
@@ -283,7 +284,7 @@ Hooks.once('init', () => {
 {
     /**
      * @param {ActorPF} actor
-     * @returns {{ [key: keyof typeof pf1.config.skills]: string }}
+     * @returns {{ [key: SkillId]: string }}
      */
     const getPerformanceSkills = (actor) => {
         const skills = [];
@@ -319,44 +320,25 @@ Hooks.on('renderItemSheet', (
 
     const currentVPs = getVPsFromItem(item);
 
-    // /** @type { { [key: keyof typeof pf1.config.skills]: string }} */
-    /** @type {Partial<Record<keyof typeof pf1.config.skills, string>>} */
+    // /** @type { { [key: SkillId]: string }} */
+    /** @type {Partial<Record<SkillId, string>>} */
     let allSkills = {};
-    /** @type {Partial<Record<keyof typeof pf1.config.skills, string>>} */
+    /** @type {Partial<Record<SkillId, string>>} */
     let performs = {};
     if (isEditable) {
+        allSkills = getSkills(actor);
         if (actor) {
-            allSkills = actor.allSkills
-                .filter((id) => game.settings.get('pf1', 'allowBackgroundSkills') || !pf1.config.backgroundOnlySkills.includes(id))
-                .map((id) => ({ id, name: getSkillName(actor, id) }))
-                .reduce((acc, { id, name }) => ({ ...acc, [id]: name }), {});
-
             performs = getPerformanceSkills(actor);
-        }
-        else {
-            allSkills = Object.entries(pf1.config.skills)
-                .filter(
-                    ([id]) => {
-                        const _id = /** @type {keyof typeof pf1.config.skills} */ (/** @type {any} */ id);
-                        return game.settings.get('pf1', 'allowBackgroundSkills') || !pf1.config.backgroundOnlySkills.includes(_id);
-                    }
-                )
-                .map(([id, value]) => {
-                    const _id = /** @type {keyof typeof pf1.config.skills} */ (/** @type {any} */ id);
-                    return { id: _id, name: value }
-                })
-                .reduce((acc, { id, name }) => ({ ...acc, [id]: name }), {});
-        }
-
-        if (isEditable && isNotEmptyObject(performs) && !currentVPs.length) {
-            item.setFlag(MODULE_NAME, key, [new VPData({
-                // @ts-ignore
-                base: Object.keys(performs)[0],
-                // @ts-ignore
-                choice1: Object.keys(allSkills)[0],
-                // @ts-ignore
-                choice2: Object.keys(allSkills)[1],
-            })]);
+            if (isNotEmptyObject(performs) && !currentVPs.length) {
+                item.setFlag(MODULE_NAME, key, [new VPData({
+                    // @ts-ignore
+                    base: Object.keys(performs)[0],
+                    // @ts-ignore
+                    choice1: Object.keys(allSkills)[0],
+                    // @ts-ignore
+                    choice2: Object.keys(allSkills)[1],
+                })]);
+            }
         }
     }
 

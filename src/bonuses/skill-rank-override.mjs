@@ -10,6 +10,7 @@ import { MODULE_NAME } from '../consts.mjs';
 import { createChange } from '../util/conditional-helpers.mjs';
 import { getCachedBonuses } from '../util/get-cached-bonuses.mjs';
 import { traitInput } from '../handlebars-handlers/trait-input.mjs';
+import { getSkills } from '../util/get-skills.mjs';
 
 const key = 'skill-rank-override';
 const formulaKey = 'skill-rank-override-formula';
@@ -57,13 +58,13 @@ function createRankIcon(itemName, rank) {
 
 /**
  * @param {ActorPF} actor
- * @return {Array<{name: string, rank: number, skills: Array<keyof typeof pf1.config.skills>}>}
+ * @return {Array<{name: string, rank: number, skills: Array<SkillId>}>}
  */
 const getSources = (actor) => getCachedBonuses(actor, key)
     .map((source) => ({
         name: source.name,
         rank: FormulaCacheHelper.getModuleFlagValue(source, formulaKey),
-        skills: /** @type {Array<keyof typeof pf1.config.skills>} */ (source.getFlag(MODULE_NAME, selectedKey) ?? []),
+        skills: /** @type {Array<SkillId>} */ (source.getFlag(MODULE_NAME, selectedKey) ?? []),
     }));
 
 Hooks.on('renderActorSheetPF', (
@@ -75,11 +76,11 @@ Hooks.on('renderActorSheetPF', (
     if (!sources.length) return;
 
     html.find('.tab.skills .skills-list li.skill, .tab.skills .skills-list li.sub-skill').each((_, li) => {
-        /** @returns {keyof typeof pf1.config.skills} */
+        /** @returns {SkillId} */
         const getSkillId = () => {
             const skillId = li.getAttribute('data-skill');
             const subId = li.getAttribute('data-sub-skill');
-            return /** @type {keyof typeof pf1.config.skills} */ (subId
+            return /** @type {SkillId} */ (subId
                 ? `${skillId}.${subId}`
                 : skillId);
         }
@@ -97,7 +98,7 @@ Hooks.on('renderActorSheetPF', (
 });
 
 /**
- * @param {{ skillId: keyof typeof pf1.config.skills, options: object }} seed
+ * @param {{ skillId: SkillId, options: object }} seed
  * @param {ActorPF} actor
  * @returns {void}
  */
@@ -141,7 +142,7 @@ function getSkillInfo(skillInfo, actor, _rollData) {
 function prepareData(item, rollData) {
     if (!item.isActive || !item.getFlag(MODULE_NAME, key)) return;
 
-    /** @type {Array<keyof typeof pf1.config.skills>} */
+    /** @type {Array<SkillId>} */
     const keys = item.getFlag(MODULE_NAME, selectedKey) ?? [];
     if (keys.length && item.actor) {
         keys.forEach((skillKey) => {
@@ -207,12 +208,7 @@ Hooks.on('renderItemSheet', (
     /** @type {{[key: string]: string}} */
     let choices = {};
     if (isEditable) {
-        if (actor) {
-            choices = actor.allSkills
-                .reduce((acc, skillId) => ({ ...acc, [skillId]: getSkillName(actor, skillId) }), {});
-        } else {
-            choices = pf1.config.skills;
-        }
+        choices = getSkills(actor);
     }
 
     textInput({

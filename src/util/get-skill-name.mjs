@@ -1,6 +1,6 @@
 /**
  * @param {Nullable<ActorPF>} actor
- * @param {keyof typeof pf1.config.skills} id
+ * @param {SkillId} id
  * @returns {string}
  */
 export const getSkillName = (actor, id) => pf1.config.skills[id] ?? actor?.getSkillInfo(id).name ?? id;

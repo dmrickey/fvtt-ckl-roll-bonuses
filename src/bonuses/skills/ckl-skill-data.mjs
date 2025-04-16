@@ -38,7 +38,7 @@ export class CklSkillData {
     /**
      *
      * @param {ActorPF} actor
-     * @param {keyof typeof pf1.config.skills} skillId
+     * @param {SkillId} skillId
      * @param {Partial<CklSkillData>} data
      * @returns
      */
@@ -47,7 +47,7 @@ export class CklSkillData {
     /**
      *
      * @param {ActorPF} actor
-     * @param {keyof typeof pf1.config.skills} skillId
+     * @param {SkillId} skillId
      */
     static async showSkillDataDialog(actor, skillId) {
         const data = this.getSkillData(actor, skillId);
