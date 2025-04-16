@@ -1,23 +1,28 @@
+const hovered = [CONST.TOKEN_DISPLAY_MODES.HOVER, CONST.TOKEN_DISPLAY_MODES.ALWAYS];
+
 /**
  * @param {TokenDocumentPF} token
  * @returns {string}
  */
 export const getTokenDisplayName = (token) => {
-    if (!game.user.isGM) {
-        const worldConfig = /** @type {{hideActorNameByDisposition: number, hideActorNameReplacement: boolean }} */
-            (/** @type {any} */ game.settings.get('pf1', 'tooltipWorldConfig'));
-        const config = actorConfig(token);
+    const tokenName = token.name;
+    const actorName = token.actor.name;
 
-        if (config.hideName || token.disposition <= worldConfig.hideActorNameByDisposition) {
-            return config.name || worldConfig.hideActorNameReplacement || defaultName();
-        }
-        else if (config.name) {
-            return config.name;
-        }
+    const name = tokenName === actorName
+        ? tokenName
+        : `${tokenName} (${actorName})`;
+
+    if (game.user.isGM) {
+        return name;
     }
 
-    return token.name;
-};
+    if (token.testUserPermission(game.user, CONST.DOCUMENT_OWNERSHIP_LEVELS.LIMITED)) {
+        return name;
+    }
 
-const defaultName = () => game.settings.settings.get('pf1.tooltipWorldConfig').default.hideActorNameReplacement;
-const actorConfig = (/** @type{TokenDocumentPF} */token) => token?.actor?.system.details?.tooltip ?? {};
+    if (hovered.includes(token.displayName)) {
+        return tokenName;
+    }
+
+    return '???';
+};

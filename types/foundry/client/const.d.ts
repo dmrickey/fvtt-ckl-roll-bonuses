@@ -6,6 +6,14 @@ interface CONST {
         OBSERVER: 2;
         OWNER: 3;
     };
+    TOKEN_DISPLAY_MODES: {
+        NONE: 0;
+        CONTROL: 10;
+        OWNER_HOVER: 20;
+        HOVER: 30;
+        OWNER: 40;
+        ALWAYS: 50;
+    };
     TOKEN_DISPOSITIONS: {
         FRIENDLY: 1;
         HOSTILE: -1;

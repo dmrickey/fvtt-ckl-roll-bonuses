@@ -285,7 +285,6 @@
 
 # vnext
 - Create new "Roll Bonuses" section for attack dialog inputs
-- Replace "checklist-input" with a proper Item application instead of a warpgate menu
 - Add "Fortune configuration app" to help with configuring specific fortune abilities
 - Targeting
   - Add a configuration error if "this target is not configured"
@@ -329,3 +328,4 @@
   - Weapon Group Target
   - Weapon Type Target
   - Versatile Training
+- Fix description on Item Selector when using "When Active" - it is way too incorrect right now because it's assuming "item selector"

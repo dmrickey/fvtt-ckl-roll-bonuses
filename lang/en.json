@@ -560,7 +560,7 @@
         },
         "applications": {
             "token": {
-                "gm-hint": "You can see all tokens because you're the GM. Players will only be able to select tokens that are visible to them.",
+                "gm-hint": "You can see all tokens because (and names) you're the GM. Players will only be able to select tokens that are visible to them.",
                 "no-tokens": "There are no tokens in this scene",
                 "player-hint": "Any currently targeted tokens in the scene are pre-selected. You can enable a setting to skip this window and automatically use those targets."
             }

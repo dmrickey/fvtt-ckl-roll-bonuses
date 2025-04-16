@@ -625,7 +625,7 @@ declare global {
     interface TokenDocumentPF extends ItemDocument {
         id: string;
         actor: ActorCharacterPF;
-        displayName: 0 | 10 | 20 | 30 | 40 | 50;
+        displayName: TOKEN_DISPLAY_MODES;
         disposition: DispositionLevel;
         elevation: number;
         isLinked: boolean;
