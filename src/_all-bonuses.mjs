@@ -20,7 +20,9 @@ import './bonuses/weapon-specialization/greater-weapon-specialization.mjs'
 
 import './bonuses/inspiration/inspiration.mjs';
 import './bonuses/inspiration/inspiration-true.mjs'; // needs to be after inspiration.mjs
+
 import './bonuses/inspiration/inspiration-amazing.mjs'; // needs to be after inspiration.mjs
+import './bonuses/inspiration/inspiration-expanded.mjs'; // needs to be after inspiration.mjs
 import './bonuses/inspiration/inspiration-focused.mjs'; // needs to be after inspiration.mjs
 import './bonuses/inspiration/inspiration-tenacious.mjs'; // needs to be after inspiration.mjs
 

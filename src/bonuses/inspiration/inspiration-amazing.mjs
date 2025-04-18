@@ -2,22 +2,15 @@
 
 // When using inspiration, the investigator rolls a d8 instead of a d6. At 20th level, the investigator rolls 2d8 and adds both dice to the result.
 
-import { MODULE_NAME } from '../../consts.mjs';
 import { showEnabledLabel } from '../../handlebars-handlers/enabled-label.mjs';
-import { traitInput } from '../../handlebars-handlers/trait-input.mjs';
-import { isMelee } from '../../util/action-type-helpers.mjs';
-import { getCachedBonuses } from '../../util/get-cached-bonuses.mjs';
-import { getSkills } from '../../util/get-skills.mjs';
 import { itemHasCompendiumId } from '../../util/has-compendium-id.mjs';
-import { LocalHookHandler, customGlobalHooks, localHooks } from '../../util/hooks.mjs';
-import { isActorInCombat } from '../../util/is-actor-in-combat.mjs';
 import { registerItemHint } from '../../util/item-hints.mjs';
-import { localize, localizeBonusLabel, localizeBonusTooltip } from '../../util/localize.mjs';
+import { localize, localizeBonusTooltip } from '../../util/localize.mjs';
 import { onCreate } from '../../util/on-create.mjs';
 import { LanguageSettings } from '../../util/settings.mjs';
 import { truthiness } from '../../util/truthiness.mjs';
 import { SpecificBonuses } from '../_all-specific-bonuses.mjs';
-import { key as inspirationKey } from './inspiration.mjs';
+import { inspirationKey } from './_inspiration-helper.mjs';
 
 const key = 'inspiration-amazing';
 const compendiumId = 'nKbyztRQCU5XMbbs';
@@ -40,12 +33,9 @@ registerItemHint((hintcls, _actor, item, _data) => {
         return;
     }
 
-    const hint = hintcls.create('', [], { hint: localizeBonusTooltip(key), icon: 'fas fa-magnifying-glass' });
+    const hint = hintcls.create('', [], { hint: localizeBonusTooltip(key), icon: 'fas fa-magnifying-glass ckl-extra-focus' });
     return hint;
 });
-
-/** @returns {string} */
-const label = () => { return localizeBonusLabel(key); }
 
 /**
  * @param {Nullable<ActorPF>} actor

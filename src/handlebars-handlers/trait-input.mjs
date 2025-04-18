@@ -82,13 +82,13 @@ export function traitInput({
 
             /** @type {ActorTraitSelector} */
             const app = Object.values(item.apps).find(
-                (app) => app instanceof pf1.applications.ActorTraitSelector && app.options.name === options.name
+                (app) => app instanceof ChecklistSelector && app.options.name === options.name
             );
             if (app) {
                 app.render({ force: true });
                 app.bringToFront();
             } else {
-                var created = new pf1.applications.ActorTraitSelector(options);
+                var created = new ChecklistSelector(options);
                 await created.render({ force: true });
             }
         });
@@ -127,3 +127,38 @@ const onRender = (app, element) => {
     }
 };
 Hooks.on('renderActorTraitSelector', onRender);
+
+// @ts-ignore
+class ChecklistSelector extends pf1.applications.ActorTraitSelector {
+    /**
+     * The event handler for changes to form input elements
+     *
+     * @override
+     * @param {unknown} _formConfig   The configuration of the form being changed
+     * @param {Event} _event                               The triggering event
+     * @returns {void}
+     */
+    _onChangeForm(_formConfig, _event) {
+        const formData = {};
+        // @ts-ignore
+        new FormData(this.element).forEach((value, key) => (formData[key] = value));
+
+        const { custom, search } = foundry.utils.expandObject(formData);
+        // @ts-ignore
+        const choices = [];
+        Object.entries(formData).forEach(([key, value]) => {
+            if (key.startsWith('choices')) {
+                choices.push(key.split(/\.(.*)/s)[1]);
+            }
+        })
+
+        this._searchFilter = search;
+
+        // @ts-ignore
+        if (custom?.length) this.attributes.custom.add(...this.splitCustom(custom));
+
+        // @ts-ignore
+        this.attributes.standard = new Set(choices);
+        this.render();
+    }
+}

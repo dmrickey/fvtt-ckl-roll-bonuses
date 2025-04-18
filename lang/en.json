@@ -85,6 +85,7 @@
                 "has-boolean-flag-target": "Target for Boolean Flag",
                 "inspiration": "Inspiration",
                 "inspiration-amazing": "Amazing Inspiration",
+                "inspiration-focused": "Focused Inspiration",
                 "is-target-within-range": "Target within Range",
                 "is-target-within-range-max": "Maximum Range ({unit})",
                 "is-target-within-range-min": "Minimum Range ({unit})",
@@ -100,6 +101,7 @@
                 "ranged-increment-penalty-increment-range-offset": "Increment Range Offset",
                 "ranged-increment-penalty-max-increment-offset": "Maximum Increment Offset",
                 "ranged-increment-penalty-penalty-offset": "Overall Penalty Reduction",
+                "roll-untrained": "Roll Skills Untrained",
                 "script-call": "Script Call",
                 "self": "Targets Self",
                 "skill-rank-override": "Skill Rank Override",
@@ -190,6 +192,7 @@
                 "has-boolean-flag": "Activate bonuses based on whether a boolean flag is active.",
                 "inspiration": "Automatically roll an extra d6 on specified skills. Adds @inspiration to roll data.",
                 "inspiration-amazing": "Increase inspiration die.",
+                "inspiration-focused": "Increase inspiration die for chosen skills.",
                 "is-target-within-range": "Active when all targets are within a specified range.",
                 "is-target-within-range-min": "Activate bonuses whenever all targeted tokens are at least this far away.",
                 "is-target-within-range-max": "Activate bonuses whenever all targeted tokens are at most this far away.",
@@ -206,6 +209,7 @@
                 "ranged-increment-penalty-increment-range-offset": "Modify the range for each increment.",
                 "ranged-increment-penalty-max-increment-offset": "Reduce the penalty per increment.",
                 "ranged-increment-penalty-penalty-offset": "Reduce the total penalty.",
+                "roll-untrained": "Marks skills as able to be rolled untrained.",
                 "script-call": "Configure Script Calls that are executed for the targeted actions. You can drag macros here as well.",
                 "self": "Apply bonuses to all actions on this same Item.",
                 "skill-rank-override": "Set skill rank for a chosen skill to a specific value. This is useful for an item such as a Headband of Vast Intellect.",
@@ -414,7 +418,11 @@
         },
         "skill-sheet": {
             "inspiration": {
+                "invalid-skill-tip": "Must be trained to use inspiration for free.",
                 "skill-tip": "Free Inspiration ({die})"
+            },
+            "inspiration-focused": {
+                "skill-tip": "Increased Inspiration ({die})"
             },
             "roll-untrained": {
                 "skill-tip": "Can Roll Untrained"
@@ -495,6 +503,10 @@
             "inspiration-amazing": {
                 "name": "Amazing Inspiration",
                 "default": "Amazing Inspiration"
+            },
+            "inspiration-focused": {
+                "name": "Focused Inspiration",
+                "default": "Focused Inspiration"
             },
             "martial-focus": {
                 "name": "Martial Focus",

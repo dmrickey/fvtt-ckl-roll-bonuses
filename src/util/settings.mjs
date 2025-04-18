@@ -68,9 +68,12 @@ export class LanguageSettings {
     static registerItemNameTranslation = (key) => this.itemNameTranslationKeys.push(key);
 
     /** @param {string} key */
-    static getTranslation = (key) => {
+    static getTranslation = (key, toLowerCase = true) => {
         const current = this.itemNameTranslations;
-        return (current[key] || localize(`item-name-translations.${key}.default`)).toLocaleLowerCase();
+        const value = current[key] || localize(`item-name-translations.${key}.default`);
+        return toLowerCase
+            ? value.toLocaleLowerCase()
+            : value;
     }
 
     static get greater() { return this.getTranslation('greater'); }

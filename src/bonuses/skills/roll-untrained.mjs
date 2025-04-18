@@ -1,7 +1,6 @@
 import { traitInput } from '../../handlebars-handlers/trait-input.mjs';
-import { onSkillSheetRender } from '../../util/add-skill-icon-hook-handler.mjs';
-import { createSkillIcon } from '../../util/create-skill-icon.mjs';
-import { getIdsBySourceFromActor, getIdsFromActor } from '../../util/get-id-array-from-flag.mjs';
+import { onSkillSheetRender } from '../../util/on-skill-sheet-render-handler.mjs';
+import { getIdsFromActor } from '../../util/get-id-array-from-flag.mjs';
 import { getSkills } from '../../util/get-skills.mjs';
 import { LocalHookHandler, localHooks } from '../../util/hooks.mjs';
 import { registerItemHint } from '../../util/item-hints.mjs';
@@ -25,28 +24,6 @@ registerItemHint((hintcls, _actor, item, _data) => {
 });
 
 /**
- * @param {ActorPF} actor
- * @param {SkillId} id
- * @returns {HTMLElement}
- */
-function createIcon(actor, id) {
-    const rollData = actor.getRollData();
-    const tip = localize('skill-sheet.roll-untrained.skill-tip', { die: rollData.inspiration });
-    const icon = createSkillIcon(
-        tip,
-        ['fas', 'fa-book-open', 'ckl-skill-icon'],
-        () => {
-            const all = getIdsBySourceFromActor(actor, key);
-            const item = all.find(x => x.ids.includes(id))?.source;
-            if (item) {
-                item.sheet.render(true);
-            }
-        }
-    );
-    return icon;
-}
-
-/**
  * @param {SkillInfo} skillInfo
  * @param {ActorPF} actor
  * @param {RollData} rollData
@@ -61,11 +38,17 @@ function getSkillInfo(skillInfo, actor, rollData) {
 }
 LocalHookHandler.registerHandler(localHooks.actorGetSkillInfo, getSkillInfo);
 
-onSkillSheetRender(
-    (actor) => getIdsFromActor(actor, key),
-    createIcon,
-    (_id, li) => li.classList.remove('untrained'),
-);
+onSkillSheetRender({
+    key,
+    rowCallback: (_id, li) => li.classList.remove('untrained'),
+}, {
+    classes: () => ['fas', 'fa-book-open', 'ckl-skill-icon'],
+    getText: (actor) => {
+        const rollData = actor.getRollData();
+        const text = localize('skill-sheet.roll-untrained.skill-tip', { die: rollData.inspiration });
+        return text;
+    }
+});
 
 Hooks.on('renderItemSheet', (
     /** @type {ItemSheetPF} */ { isEditable, item },
@@ -79,7 +62,7 @@ Hooks.on('renderItemSheet', (
         return;
     }
 
-    const choices = /** @type {Record<string, string>} */ (getSkills(item.actor, isEditable));
+    const choices = getSkills(item.actor, isEditable);
 
     traitInput({
         choices,
