@@ -46,7 +46,7 @@ export function traitInput({
         choices = choices.reduce((acc, curr) => ({ ...acc, [curr]: curr }), {});
     }
 
-    let current = item.getFlag(MODULE_NAME, key) || [];
+    let current = foundry.utils.deepClone(item.getFlag(MODULE_NAME, key) || []);
     const traits = new Trait(choices, current);
     current = traits.names;
 

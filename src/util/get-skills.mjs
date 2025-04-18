@@ -21,7 +21,7 @@ export const getSkills = (actor, isEditable = true) => {
         }
 
         skills = allSkills
-            .map((id) => ({ id, name: getSkillName(actor, id) }))
+            .map((id) => ({ id, name: getSkillName(actor, id, 'fullName') }))
             .reduce((acc, { id, name }) => ({ ...acc, [id]: name }), {});
     }
     else {
