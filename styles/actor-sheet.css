@@ -22,3 +22,7 @@
     text-align: center;
     width: 60%;
 }
+
+.ckl-fa-magnifying-glass::after {
+    content: "\f002";
+}

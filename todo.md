@@ -62,6 +62,7 @@
 - [Range/Positional ideas](#rangepositional-ideas)
 - [Other Ideas](#other-ideas)
 - [vnext](#vnext)
+- [todo](#todo-1)
 
 # TODO
 - Figure out a way to support multiple target groups on a single Item (so I can add `Favored Enemy (Human) +4` and `Favored Enemy (goblin) +2` on a single Item)
@@ -313,3 +314,25 @@
   - Or disable the system's checkbox as this mod already accounts for it
     - but also add an "ignore" checkbox
 - Figure out a way to make Versatile Performance and Snake Sidewind work together
+
+# todo
+- fill in inspiration logic
+  - Inspiration
+    - (itself)
+    - Amazing Inspiration (talent)
+    - Focused Inspiration (feat)
+    - Tenacious Inspiration (talent)
+    - True Inspiration (capstone)
+  - Documentation
+    - Make note that the abilities/feats should have the system's class association filled in if they have class-level-based changes
+- Add Devastating Strike handling for RB
+- get ride of `forceSync` dice override
+  - Snake Sidewind needs a bit of extra love (see above) can hopefuly do this without forceSync
+  - make `handleConditional` async
+    - make sure to await it in the one place that uses it.
+  - make `simplifyTerm` not use `forceSync` -- because it is only simplifying, it should not need any actual rolls.
+  - make `safeTotal` async
+    - will require the places that use it to also be async
+  - ALTERNATIVELY
+    - rerwrite all terms to handle sync rolling...
+- Add misc section to Bonus Picker

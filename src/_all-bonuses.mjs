@@ -18,4 +18,10 @@ import './bonuses/weapon-focus/weapon-focus.mjs';
 import './bonuses/weapon-specialization/weapon-specialization.mjs';
 import './bonuses/weapon-specialization/greater-weapon-specialization.mjs'
 
+import './bonuses/inspiration/inspiration.mjs';
+import './bonuses/inspiration/inspiration-true.mjs'; // needs to be after inspiration.mjs
+import './bonuses/inspiration/inspiration-amazing.mjs'; // needs to be after inspiration.mjs
+import './bonuses/inspiration/inspiration-focused.mjs'; // needs to be after inspiration.mjs
+import './bonuses/inspiration/inspiration-tenacious.mjs'; // needs to be after inspiration.mjs
+
 import './target-and-bonus-join.mjs';

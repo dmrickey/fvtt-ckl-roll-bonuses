@@ -1,7 +1,7 @@
 import { BaseSource } from '../src/targeted/_base-source.mjs';
 import { BaseBonus } from '../src/targeted/bonuses/_base-bonus.mjs';
 import { BaseTarget } from '../src/targeted/targets/_base-target.mjs';
-import { SpecificBonuses } from '../src/bonuses/all-specific-bonuses.mjs';
+import { SpecificBonuses } from '../src/bonuses/_all-specific-bonuses.mjs';
 import { BaseGlobalBonus } from '../src/global-bonuses/base-global-bonus.mjs';
 import { handleBonusesFor } from '../src/target-and-bonus-join.mjs';
 import { showBonusPicker } from '../src/handlebars-handlers/bonus-picker.mjs';
@@ -20,6 +20,7 @@ declare global {
 
         /** config for specific inputs that can be modified by a script or mod */
         config: {
+            knowledgeSkills: SkillId[];
             elementalFocus: {
                 icons: {
                     acid: { icon: string; css: string };

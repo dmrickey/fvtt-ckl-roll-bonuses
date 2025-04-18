@@ -14,13 +14,13 @@
     "js/ts.implicitProjectConfig.strictNullChecks": false,
     "typescript.tsserver.experimental.enableProjectDiagnostics": true,
 
-  "editor.comments.ignoreEmptyLines": false,
-  "editor.tabSize": 2,
+    "editor.comments.ignoreEmptyLines": false,
+    "editor.tabSize": 4,
 
-  "prettier.arrowParens": "always",
-  "prettier.semi": true,
-  "prettier.singleQuote": true,
-  "prettier.tabWidth": 2,
-  "prettier.trailingComma": "all",
-  "prettier.useTabs": false,
+    "prettier.arrowParens": "always",
+    "prettier.semi": true,
+    "prettier.singleQuote": true,
+    "prettier.tabWidth": 4,
+    "prettier.trailingComma": "all",
+    "prettier.useTabs": false,
 }

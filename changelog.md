@@ -1,3 +1,17 @@
+## Roll Bonuses 2.20.0
+
+### New Bonuses
+- Roll Skill Untrained - Updates the actor's skill sheet to indicate that a given skill can now be used while untrained. Removes the `untrained` note when rolling as this is no longer the case.
+- Inspiration
+  - Now configured directly on the class ability. Includes support for various feats/talents such as Amazing Inspiration, Tenacious Inspiration, Focused Inspiration, and True Inspiration to automatically increase the inspiration die when necessary.
+
+### Misc
+- Settings Skill bonuses directly on the actor sheet is now deprecated and will be removed in a future update. Everything that this did can now be accomplished by setting Specific Bonuses directly on the feat/ability/buff granting those bonuses. (or with the system's skill changes as has been the case for a while now)
+
+### Bugfixes
+
+---
+
 ## Roll Bonuses 2.19.0
 
 ### New Bonuses

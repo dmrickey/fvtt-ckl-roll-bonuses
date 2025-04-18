@@ -341,6 +341,7 @@ declare global {
         formData: ActionUseFormData;
         token: TokenDocumentPF;
     }
+
     class AttackDialogData {
         action: ItemAction;
         item: ItemPF;
@@ -1153,6 +1154,9 @@ declare global {
             charges?: unknown[];
         };
         broken: boolean;
+        changes: ItemChange[];
+        /** tag identifier for class associated with this item */
+        class: string;
         flags: {
             boolean: Record<string, boolean>;
             dictionary: DictionaryFlags;
@@ -1161,7 +1165,6 @@ declare global {
         subType: 'natural';
         tag: string;
         tags: string[];
-        changes: ItemChange[];
 
         /** These properties are not natively on all item types, but I'm adding them during data prep to better target _unintended_ items */
         /** weapon */
@@ -1184,7 +1187,9 @@ declare global {
     }
     class SystemItemDataContainerPF extends SystemItemData {}
     class SystemIteMDataBuffPF extends SystemItemData {}
-    class SystemItemDataClassPF extends SystemItemData {}
+    class SystemItemDataClassPF extends SystemItemData {
+        level: number;
+    }
     class SystemItemDataConsumablePF extends SystemItemData {}
     class SystemItemDataEquipmentPF extends SystemItemData {
         armor: {
@@ -1641,6 +1646,10 @@ declare global {
         chargeCostBonus?: number;
         d20?: string;
         dcBonus?: number;
+        /** Investigator inspiration die. Default 1d6 */
+        inspiration: string;
+        /** Investigator upgraded inspiration die. Default 1d8 */
+        improvedInspiration: string;
         powerAttackBonus?: number;
         powerAttackPenalty?: number;
     }
@@ -1811,6 +1820,8 @@ declare global {
         | 'wounds'
         | `skill.${SkillId}`
         | `skill.~${SkillId}`;
+
+    type DiceString = `${number}d${number}`;
 
     interface DamageType {
         abbr: string;

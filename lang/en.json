@@ -9,6 +9,7 @@
             "good": "Good",
             "evil": "Evil"
         },
+        "all-knowledge": "Knowledge (All)",
         "all-spells": "All Spells",
         "any-target-except": "Any target except:",
         "base-dice": "Base Dice",
@@ -82,6 +83,8 @@
                 "furious-focus": "Furious Focus",
                 "has-boolean-flag": "Has Boolean Flag",
                 "has-boolean-flag-target": "Target for Boolean Flag",
+                "inspiration": "Inspiration",
+                "inspiration-amazing": "Amazing Inspiration",
                 "is-target-within-range": "Target within Range",
                 "is-target-within-range-max": "Maximum Range ({unit})",
                 "is-target-within-range-min": "Minimum Range ({unit})",
@@ -185,6 +188,8 @@
                 "function-player-label": "Label shown to players when configured. Players will not be able to edit the function.",
                 "furious-focus": "Negate the attack penalty of power attack on the first attack made each round.",
                 "has-boolean-flag": "Activate bonuses based on whether a boolean flag is active.",
+                "inspiration": "Automatically roll an extra d6 on specified skills. Adds @inspiration to roll data.",
+                "inspiration-amazing": "Increase inspiration die.",
                 "is-target-within-range": "Active when all targets are within a specified range.",
                 "is-target-within-range-min": "Activate bonuses whenever all targeted tokens are at least this far away.",
                 "is-target-within-range-max": "Activate bonuses whenever all targeted tokens are at most this far away.",
@@ -333,6 +338,7 @@
         },
         "hint-missing-bonus": "Missing Bonus, click to add",
         "hint-missing-target": "Missing Target, click to add",
+        "inspiration-amazing-die": "Inspiration Die: {die}",
         "invalid-override": "This does nothing for this item type—edit the item's details directly.",
         "item-app": {
             "description": "Bonuses will apply only when using the selected items. Right click on any row to open that Item's sheet for further verification.",
@@ -406,6 +412,14 @@
             "config": "Skill Config",
             "inspiration": "Inspiration"
         },
+        "skill-sheet": {
+            "inspiration": {
+                "skill-tip": "Free Inspiration ({die})"
+            },
+            "roll-untrained": {
+                "skill-tip": "Can Roll Untrained"
+            }
+        },
         "string-select.no-choices": "No valid choices.",
         "target-choice": {
             "self": "Self",
@@ -473,6 +487,14 @@
             "furious-focus": {
                 "name": "Furious Focus",
                 "default": "Furious Focus"
+            },
+            "inspiration": {
+                "name": "Inspiration",
+                "default": "Inspiration"
+            },
+            "inspiration-amazing": {
+                "name": "Amazing Inspiration",
+                "default": "Amazing Inspiration"
             },
             "martial-focus": {
                 "name": "Martial Focus",

@@ -74,7 +74,7 @@ export function simplifyRollFormula(formula, rollData = {}, { preserveFlavor = f
     // If the formula contains multiplication or division we cannot easily simplify
     if (/[*/]/.test(roll.formula)) {
         if (roll.isDeterministic && !/d\(/.test(roll.formula) && (!/\[/.test(roll.formula) || !preserveFlavor)) {
-            return String(new Roll(roll.formula).evaluateSync({ forceSync: true }).total);
+            return String(new Roll(roll.formula).evaluateSync({ maximize: true }).total);
         }
         else return roll.constructor.getFormula(roll.terms);
     }
