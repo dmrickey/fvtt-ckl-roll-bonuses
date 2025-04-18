@@ -1,5 +1,5 @@
 
-import { SpecificBonuses } from '../bonuses/all-specific-bonuses.mjs';
+import { SpecificBonuses } from '../bonuses/_all-specific-bonuses.mjs';
 import { api } from '../util/api.mjs';
 import { intersection } from '../util/array-intersects.mjs';
 import { handleJournalClick } from '../util/handle-journal-click.mjs';
@@ -44,7 +44,7 @@ export function showBonusPicker({
     const allTargetOverrides = api.allTargetOverrideTypes
         .filter((source) => !source.gmOnlyForPicker || game.user.isGM)
         .sort((a, b) => a.label.localeCompare(b.label));
-    const specifics = Object.values(SpecificBonuses.allBonuses)
+    const specifics = Object.values(SpecificBonuses.allSpecificBonuses)
         .sort((a, b) => a.label.localeCompare(b.label));
 
     const currentBonusSources = intersection(
@@ -63,7 +63,10 @@ export function showBonusPicker({
         allTargetOverrides.map((source) => source.key),
         currentBooleanKeys,
     );
-    const currentSpecificBonuses = intersection(currentBooleanKeys, SpecificBonuses.allBonusKeys);
+    const currentSpecificBonuses = intersection(
+        SpecificBonuses.allSpecificBonusKeys,
+        currentBooleanKeys,
+    );
 
     /** @type {BonusPickerData} */
     const data = {
@@ -244,7 +247,7 @@ class BonusPickerApp extends DocumentSheet {
                 };
 
                 if (this.sources.includes(prop)
-                    || (prop === 'specifics' && SpecificBonuses.allBonusKeys.includes(bonusData.key))
+                    || (prop === 'specifics' && SpecificBonuses.allSpecificBonusKeys.includes(bonusData.key))
                 ) {
                     // set to true if value is true, delete if value is false
                     // @ts-ignore

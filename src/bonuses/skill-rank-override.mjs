@@ -1,7 +1,7 @@
 import { registerItemHint } from "../util/item-hints.mjs";
 import { localize, localizeItemHint } from "../util/localize.mjs";
 import { truthiness } from "../util/truthiness.mjs";
-import { SpecificBonuses } from './all-specific-bonuses.mjs';
+import { SpecificBonuses } from './_all-specific-bonuses.mjs';
 import { FormulaCacheHelper, getDocFlags } from '../util/flag-helpers.mjs';
 import { LocalHookHandler, localHooks } from '../util/hooks.mjs';
 import { textInput } from '../handlebars-handlers/bonus-inputs/text-input.mjs';

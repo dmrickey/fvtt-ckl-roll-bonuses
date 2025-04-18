@@ -10,7 +10,7 @@ import { registerItemHint } from '../util/item-hints.mjs';
 import { localizeBonusLabel, localizeBonusTooltip } from '../util/localize.mjs';
 import { LanguageSettings } from '../util/settings.mjs';
 import { truthiness } from '../util/truthiness.mjs';
-import { SpecificBonuses } from './all-specific-bonuses.mjs';
+import { SpecificBonuses } from './_all-specific-bonuses.mjs';
 
 
 const vitalStrike = 'vital-strike';

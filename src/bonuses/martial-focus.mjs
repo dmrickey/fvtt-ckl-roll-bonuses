@@ -14,7 +14,7 @@ import { localize, localizeBonusLabel, localizeBonusTooltip } from "../util/loca
 import { LanguageSettings } from "../util/settings.mjs";
 import { truthiness } from "../util/truthiness.mjs";
 import { uniqueArray } from "../util/unique-array.mjs";
-import { SpecificBonuses } from './all-specific-bonuses.mjs';
+import { SpecificBonuses } from './_all-specific-bonuses.mjs';
 
 const key = 'martial-focus';
 const compendiumId = 'W1eDSqiwljxDe0zl';

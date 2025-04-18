@@ -112,7 +112,7 @@ export class HasBooleanFlagTarget extends BaseTarget {
         const choices = difference(
             flags,
             [
-                ...api.SpecificBonuses.allBonusKeys,
+                ...api.SpecificBonuses.allSpecificBonusKeys,
                 ...api.allBonusTypesKeys,
                 ...api.allGlobalTypesKeys,
                 ...api.allTargetTypesKeys,

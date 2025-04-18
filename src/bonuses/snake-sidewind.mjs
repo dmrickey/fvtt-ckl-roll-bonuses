@@ -6,7 +6,7 @@ import { LocalHookHandler, localHooks } from '../util/hooks.mjs';
 import { registerItemHint } from '../util/item-hints.mjs';
 import { localizeBonusLabel, localizeBonusTooltip } from '../util/localize.mjs';
 import { LanguageSettings } from '../util/settings.mjs';
-import { SpecificBonuses } from './all-specific-bonuses.mjs';
+import { SpecificBonuses } from './_all-specific-bonuses.mjs';
 
 const key = 'snake-sidewind';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#snake-sidewind';

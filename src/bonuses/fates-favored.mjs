@@ -4,7 +4,7 @@ import { LocalHookHandler, customGlobalHooks, localHooks } from '../util/hooks.m
 import { registerItemHint } from '../util/item-hints.mjs';
 import { localizeBonusLabel, localizeBonusTooltip } from '../util/localize.mjs';
 import { LanguageSettings } from '../util/settings.mjs';
-import { SpecificBonuses } from './all-specific-bonuses.mjs';
+import { SpecificBonuses } from './_all-specific-bonuses.mjs';
 
 const fatesFavored = 'fates-favored';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#fates-favored';

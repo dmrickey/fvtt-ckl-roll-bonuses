@@ -8,7 +8,7 @@ import { isActorInCombat } from '../util/is-actor-in-combat.mjs';
 import { registerItemHint } from '../util/item-hints.mjs';
 import { localizeBonusLabel, localizeBonusTooltip } from '../util/localize.mjs';
 import { LanguageSettings } from '../util/settings.mjs';
-import { SpecificBonuses } from './all-specific-bonuses.mjs';
+import { SpecificBonuses } from './_all-specific-bonuses.mjs';
 
 const furiousFocus = 'furious-focus';
 const furiousFocusTimestamp = 'furious-focus-timestamp';

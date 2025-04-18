@@ -6,7 +6,7 @@ import { addNodeToRollBonus } from "../handlebars-handlers/add-bonus-to-item-she
 import { registerItemHint } from "../util/item-hints.mjs";
 import { localize, localizeBonusTooltip } from "../util/localize.mjs";
 import { LanguageSettings } from "../util/settings.mjs";
-import { SpecificBonuses } from './all-specific-bonuses.mjs';
+import { SpecificBonuses } from './_all-specific-bonuses.mjs';
 import { LocalHookHandler, localHooks } from '../util/hooks.mjs';
 import { getSkillName } from '../util/get-skill-name.mjs';
 import { truthiness } from '../util/truthiness.mjs';

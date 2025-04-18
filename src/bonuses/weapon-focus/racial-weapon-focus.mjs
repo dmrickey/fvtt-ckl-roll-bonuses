@@ -8,7 +8,7 @@ import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize, localizeBonusLabel, localizeBonusTooltip } from "../../util/localize.mjs";
 import { registerSetting } from "../../util/settings.mjs";
 import { truthiness } from '../../util/truthiness.mjs';
-import { SpecificBonuses } from '../all-specific-bonuses.mjs';
+import { SpecificBonuses } from '../_all-specific-bonuses.mjs';
 import { gnomeWeaponFocusCompendiumId, racialWeaponFocusKey, weaponFocusKey } from "./ids.mjs";
 
 const key = racialWeaponFocusKey;

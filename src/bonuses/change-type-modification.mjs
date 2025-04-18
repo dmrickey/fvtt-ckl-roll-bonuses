@@ -5,7 +5,7 @@ import { FormulaCacheHelper } from "../util/flag-helpers.mjs";
 import { getCachedBonuses } from '../util/get-cached-bonuses.mjs';
 import { LocalHookHandler, localHooks } from "../util/hooks.mjs";
 import { localize, localizeBonusLabel, localizeBonusTooltip } from '../util/localize.mjs';
-import { SpecificBonuses } from './all-specific-bonuses.mjs';
+import { SpecificBonuses } from './_all-specific-bonuses.mjs';
 
 const key = 'change-modification';
 const changeTypeKey = 'change-modification-type';

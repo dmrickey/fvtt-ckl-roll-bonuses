@@ -3,7 +3,7 @@ import { registerItemHint } from "../util/item-hints.mjs";
 import { localize, localizeBonusTooltip } from "../util/localize.mjs";
 import { LanguageSettings } from "../util/settings.mjs";
 import { truthiness } from "../util/truthiness.mjs";
-import { SpecificBonuses } from './all-specific-bonuses.mjs';
+import { SpecificBonuses } from './_all-specific-bonuses.mjs';
 import { api } from '../util/api.mjs';
 import { keyValueSelect } from '../handlebars-handlers/bonus-inputs/key-value-select.mjs';
 import { getDocFlags } from '../util/flag-helpers.mjs';
@@ -164,7 +164,6 @@ function getSkillInfo(skillInfo, actor, rollData) {
         skillInfo.cs = true;
     }
 }
-
 
 /**
  * @param {ItemPF} item

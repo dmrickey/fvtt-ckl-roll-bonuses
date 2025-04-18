@@ -1,4 +1,4 @@
-import { SpecificBonuses } from '../../../bonuses/all-specific-bonuses.mjs';
+import { SpecificBonuses } from '../../../bonuses/_all-specific-bonuses.mjs';
 import { showEnabledLabel } from '../../../handlebars-handlers/enabled-label.mjs';
 import { itemHasCompendiumId } from '../../../util/has-compendium-id.mjs';
 import { LanguageSettings } from '../../../util/settings.mjs';

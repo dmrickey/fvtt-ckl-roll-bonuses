@@ -2,7 +2,6 @@ import { api } from '../util/api.mjs';
 import { localizeBonusLabel, localizeBonusTooltip } from '../util/localize.mjs';
 
 export class SpecificBonuses {
-
     /**
      * @param {object} bonus
      * @param {string} bonus.journal
@@ -12,16 +11,16 @@ export class SpecificBonuses {
      * @param {Nullable<string>?} [bonus.parent]
      */
     static registerSpecificBonus({ journal, labelKey = null, key, tooltipKey = undefined, parent }) {
-        this.allBonuses[key] = new SpecificBonus(journal, key, labelKey, parent, tooltipKey);
+        this.allSpecificBonuses[key] = new SpecificBonus(journal, key, labelKey, parent, tooltipKey);
     }
 
     /**
      * @type {Record<string, SpecificBonus>}}
      */
-    static allBonuses = {};
+    static allSpecificBonuses = {};
 
-    static get allBonusKeys() {
-        return Object.values(this.allBonuses)
+    static get allSpecificBonusKeys() {
+        return Object.values(this.allSpecificBonuses)
             .map((bonus) => bonus.key);
     }
 }

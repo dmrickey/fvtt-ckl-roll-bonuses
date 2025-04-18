@@ -8,7 +8,7 @@ import { registerItemHint } from "../../util/item-hints.mjs";
 import { LanguageSettings } from "../../util/settings.mjs";
 import { uniqueArray } from "../../util/unique-array.mjs";
 import { stringSelect } from "../../handlebars-handlers/bonus-inputs/string-select.mjs";
-import { SpecificBonuses } from '../all-specific-bonuses.mjs';
+import { SpecificBonuses } from '../_all-specific-bonuses.mjs';
 import { MODULE_NAME } from '../../consts.mjs';
 import { itemHasCompendiumId } from '../../util/has-compendium-id.mjs';
 

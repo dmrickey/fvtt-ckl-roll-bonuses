@@ -8,7 +8,7 @@ import { itemHasCompendiumId } from '../../util/has-compendium-id.mjs';
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localizeBonusLabel, localizeBonusTooltip } from "../../util/localize.mjs";
 import { LanguageSettings } from '../../util/settings.mjs';
-import { SpecificBonuses } from '../all-specific-bonuses.mjs';
+import { SpecificBonuses } from '../_all-specific-bonuses.mjs';
 import { armorFocusKey, getFocusedArmor, getImprovedFocusedArmor, improvedArmorFocusKey as key } from './shared.mjs';
 
 const compendiumId = 'WmEE6BOuP5Uh7pEE';

@@ -9,7 +9,7 @@ import { localize, localizeBonusLabel, localizeBonusTooltip } from "../../util/l
 import { SharedSettings, LanguageSettings } from "../../util/settings.mjs";
 import { signed } from '../../util/to-signed-string.mjs';
 import { uniqueArray } from "../../util/unique-array.mjs";
-import { SpecificBonuses } from '../all-specific-bonuses.mjs';
+import { SpecificBonuses } from '../_all-specific-bonuses.mjs';
 import {
     gnomeWeaponFocusCompendiumId,
     greaterWeaponFocusCompendiumId,

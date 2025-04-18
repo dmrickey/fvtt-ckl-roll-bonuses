@@ -12,7 +12,7 @@ import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize, localizeBonusLabel, localizeBonusTooltip } from "../../util/localize.mjs";
 import { SharedSettings, LanguageSettings } from "../../util/settings.mjs";
 import { uniqueArray } from "../../util/unique-array.mjs";
-import { SpecificBonuses } from '../all-specific-bonuses.mjs';
+import { SpecificBonuses } from '../_all-specific-bonuses.mjs';
 import { getFocusedWeapons } from '../weapon-focus/weapon-focus.mjs';
 
 const key = 'weapon-specialization';
