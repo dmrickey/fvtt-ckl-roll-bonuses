@@ -66,4 +66,4 @@ Hooks.on('renderItemSheet', (
     });
 });
 
-onCreate(compendiumId, () => Settings.inpsiration, key);
+onCreate(compendiumId, () => Settings.inpsiration, { booleanKeys: key });

@@ -12,8 +12,6 @@ const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalE
 
 SpecificBonuses.registerSpecificBonus({ journal, key, });
 
-const expandedCompendiumId = 'DwEK2dM8PONQRIHm';
-
 // register hint on source
 registerItemHint((hintcls, _actor, item, _data) => {
     const has = !!item.hasItemBooleanFlag(key);
@@ -60,25 +58,15 @@ Hooks.on('renderItemSheet', (
 onCreate(
     compendiumId,
     () => InspirationLanguageSettings.inpsiration,
-    key,
-    /** @type {SkillId[]} */
-    [
-        allKnowledgeSkillIds,
-        'lin',
-        'spl'
-    ],
-);
-
-onCreate(
-    expandedCompendiumId,
-    () => InspirationLanguageSettings.inspirationExpanded,
-    key,
-    /** @type {SkillId[]} */
-    [
-        'dip',
-        'hea',
-        'per',
-        'pro',
-        'sen',
-    ],
+    {
+        booleanKeys: key,
+        flagValues: {
+            [key]: /** @type {SkillId[]} */
+                ([
+                    allKnowledgeSkillIds,
+                    'lin',
+                    'spl',
+                ]),
+        }
+    },
 );

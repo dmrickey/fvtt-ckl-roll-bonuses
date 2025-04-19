@@ -6,7 +6,7 @@ import { registerItemHint } from '../../util/item-hints.mjs';
 import { localize, localizeBonusTooltip } from '../../util/localize.mjs';
 import { SpecificBonuses } from '../_all-specific-bonuses.mjs';
 
-const key = 'roll-untrained';
+export const key = 'roll-untrained';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#roll-skills-untrained';
 
 SpecificBonuses.registerSpecificBonus({ journal, key, });

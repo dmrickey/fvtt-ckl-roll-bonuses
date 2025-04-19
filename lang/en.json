@@ -510,6 +510,14 @@
                 "name": "Amazing Inspiration",
                 "default": "Amazing Inspiration"
             },
+            "inspiration-device-talent": {
+                "name": "Device Talent",
+                "default": "Device Talent"
+            },
+            "inspiration-empathy": {
+                "name": "Empathy",
+                "default": "Empathy"
+            },
             "inspiration-expanded": {
                 "name": "Expanded Inspiration",
                 "default": "Expanded Inspiration"
@@ -525,6 +533,10 @@
             "inspiration-true": {
                 "name": "True Inspiration",
                 "default": "True Inspiration"
+            },
+            "inspiration-underworld": {
+                "name": "Underworld Inspiration",
+                "default": "Underworld Inspiration"
             },
             "martial-focus": {
                 "name": "Martial Focus",

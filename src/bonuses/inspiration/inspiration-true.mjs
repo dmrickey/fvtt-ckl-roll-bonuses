@@ -65,5 +65,5 @@ Hooks.on('renderItemSheet', (
 onCreate(
     compendiumId,
     () => InspirationLanguageSettings.inpsirationTrue,
-    key,
+    { booleanKeys: key },
 );

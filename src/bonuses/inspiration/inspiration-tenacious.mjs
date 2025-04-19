@@ -54,4 +54,8 @@ Hooks.on('renderItemSheet', (
     });
 });
 
-onCreate(compendiumId, () => InspirationLanguageSettings.inpsirationTenacious, key);
+onCreate(
+    compendiumId,
+    () => InspirationLanguageSettings.inpsirationTenacious,
+    { booleanKeys: key },
+);

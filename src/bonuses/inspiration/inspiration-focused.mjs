@@ -75,5 +75,5 @@ Hooks.on('renderItemSheet', (
 onCreate(
     compendiumId,
     () => InspirationLanguageSettings.inspirationFocused,
-    key,
+    { booleanKeys: key },
 );

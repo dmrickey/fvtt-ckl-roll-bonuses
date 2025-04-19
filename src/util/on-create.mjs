@@ -4,10 +4,11 @@ import { itemHasCompendiumId } from './has-compendium-id.mjs';
 /**
  * @param {string} compendiumId
  * @param {() => string} defaultName
- * @param {string} key
- * @param {any} [flagValue]
+ * @param {object} values
+ * @param {string | string[]} [values.booleanKeys]
+ * @param {Record<string, any>} [values.flagValues]
  */
-export const onCreate = (compendiumId, defaultName, key, flagValue) => {
+export const onCreate = (compendiumId, defaultName, { booleanKeys = [], flagValues = undefined }) => {
     /**
      * @param {ItemPF} item
      * @param {object} _data
@@ -18,14 +19,22 @@ export const onCreate = (compendiumId, defaultName, key, flagValue) => {
         if (!(item instanceof pf1.documents.item.ItemPF)) return;
         if (temporary) return;
 
+        if (!Array.isArray(booleanKeys)) {
+            booleanKeys = booleanKeys ? [booleanKeys] : [];
+        }
+
         const name = item?.name?.toLowerCase() ?? '';
         const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
-        const hasBonus = item.hasItemBooleanFlag(key);
+        const hasBonus = booleanKeys.some((key) => item.hasItemBooleanFlag(key));
 
         if ((name === defaultName() || hasCompendiumId) && !hasBonus) {
-            const update = { [`system.flags.boolean.${key}`]: true };
-            if (flagValue) {
-                update[`flags.${MODULE_NAME}.${key}`] = flagValue;
+            /** @type {Record<string, any>} */
+            const update = {};
+            booleanKeys.forEach((key) => update[`system.flags.boolean.${key}`] = true);
+            if (flagValues) {
+                update.flags ||= {}
+                update.flags[MODULE_NAME] ||= {};
+                update.flags[MODULE_NAME] = { ...update.flags[MODULE_NAME], ...flagValues };
             }
             item.updateSource(update);
         }
