@@ -1,7 +1,7 @@
 import { traitInput } from '../../handlebars-handlers/trait-input.mjs';
 import { onSkillSheetRender } from '../../util/on-skill-sheet-render-handler.mjs';
 import { getIdsFromActor } from '../../util/get-id-array-from-flag.mjs';
-import { getSkills } from '../../util/get-skills.mjs';
+import { getSkillChoices } from '../../util/get-skills.mjs';
 import { LocalHookHandler, localHooks } from '../../util/hooks.mjs';
 import { registerItemHint } from '../../util/item-hints.mjs';
 import { localize, localizeBonusTooltip } from '../../util/localize.mjs';
@@ -62,7 +62,7 @@ Hooks.on('renderItemSheet', (
         return;
     }
 
-    const choices = getSkills(item.actor, isEditable);
+    const choices = getSkillChoices(item.actor, { isEditable });
 
     traitInput({
         choices,

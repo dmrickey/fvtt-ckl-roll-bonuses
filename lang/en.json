@@ -10,6 +10,8 @@
             "evil": "Evil"
         },
         "all-knowledge": "Knowledge (All)",
+        "all-performs": "Perform (All)",
+        "all-professions": "Profession (All)",
         "all-spells": "All Spells",
         "any-target-except": "Any target except:",
         "base-dice": "Base Dice",
@@ -85,6 +87,7 @@
                 "has-boolean-flag-target": "Target for Boolean Flag",
                 "inspiration": "Inspiration",
                 "inspiration-amazing": "Amazing Inspiration",
+                "inspiration-expanded": "Expanded Inspiration",
                 "inspiration-focused": "Focused Inspiration",
                 "is-target-within-range": "Target within Range",
                 "is-target-within-range-max": "Maximum Range ({unit})",
@@ -192,6 +195,7 @@
                 "has-boolean-flag": "Activate bonuses based on whether a boolean flag is active.",
                 "inspiration": "Automatically roll an extra d6 on specified skills. Adds @inspiration to roll data.",
                 "inspiration-amazing": "Increase inspiration die.",
+                "inspiration-expanded": "Can use freely use inspiration on more skills.",
                 "inspiration-focused": "Increase inspiration die for chosen skills.",
                 "is-target-within-range": "Active when all targets are within a specified range.",
                 "is-target-within-range-min": "Activate bonuses whenever all targeted tokens are at least this far away.",
@@ -503,6 +507,10 @@
             "inspiration-amazing": {
                 "name": "Amazing Inspiration",
                 "default": "Amazing Inspiration"
+            },
+            "inspiration-expanded": {
+                "name": "Expanded Inspiration",
+                "default": "Expanded Inspiration"
             },
             "inspiration-focused": {
                 "name": "Focused Inspiration",

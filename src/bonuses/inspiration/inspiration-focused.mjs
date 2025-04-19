@@ -6,12 +6,15 @@ import { traitInput } from '../../handlebars-handlers/trait-input.mjs';
 import { onSkillSheetRender } from '../../util/on-skill-sheet-render-handler.mjs';
 import { intersects } from '../../util/array-intersects.mjs';
 import { getIdsFromActor } from '../../util/get-id-array-from-flag.mjs';
-import { getSkills } from '../../util/get-skills.mjs';
+import { getSkillChoices } from '../../util/get-skills.mjs';
 import { registerItemHint } from '../../util/item-hints.mjs';
 import { localize, localizeBonusTooltip } from '../../util/localize.mjs';
 import { SpecificBonuses } from '../_all-specific-bonuses.mjs';
-import { canUseInspirationForFree, getInspirationPart, inspirationFocusedKey as key, inspirationKey, getInspirationFocusedPart } from './_inspiration-helper.mjs';
+import { canUseInspirationForFree, getInspirationPart, inspirationFocusedKey as key, inspirationKey, getInspirationFocusedPart, InspirationLanguageSettings } from './_inspiration-helper.mjs';
+import { onCreate } from '../../util/on-create.mjs';
+import { itemHasCompendiumId } from '../../util/has-compendium-id.mjs';
 
+const compendiumId = 'c6WT66xBw9y7KxUn';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#inspiration';
 
 SpecificBonuses.registerSpecificBonus({ journal, key, parent: inspirationKey });
@@ -72,10 +75,15 @@ Hooks.on('renderItemSheet', (
 
     const hasFlag = item.hasItemBooleanFlag(key);
     if (!hasFlag) {
+        const name = item?.name?.toLowerCase() ?? '';
+        const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
+        if (isEditable && (name === InspirationLanguageSettings.focusedInspiration || hasCompendiumId)) {
+            item.addItemBooleanFlag(key);
+        }
         return;
     }
 
-    const choices = getSkills(item.actor, isEditable);
+    const choices = getSkillChoices(item.actor, { isEditable });
 
     traitInput({
         choices,
@@ -89,3 +97,9 @@ Hooks.on('renderItemSheet', (
         inputType: 'specific-bonus',
     });
 });
+
+onCreate(
+    compendiumId,
+    () => InspirationLanguageSettings.focusedInspiration,
+    key,
+);

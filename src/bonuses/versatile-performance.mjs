@@ -14,7 +14,7 @@ import { api } from '../util/api.mjs';
 import { isNotEmptyObject } from '../util/is-empty-object.mjs';
 import { getCachedBonuses } from '../util/get-cached-bonuses.mjs';
 import { itemHasCompendiumId } from '../util/has-compendium-id.mjs';
-import { getSkills } from '../util/get-skills.mjs';
+import { getSkillChoices } from '../util/get-skills.mjs';
 
 const key = 'versatile-performance';
 export { key as versatilePerformanceKey };
@@ -322,11 +322,10 @@ Hooks.on('renderItemSheet', (
 
     // /** @type { { [key: SkillId]: string }} */
     /** @type {Partial<Record<SkillId, string>>} */
-    let allSkills = {};
+    const allSkills = getSkillChoices(actor, { isEditable, includeAll: false });
     /** @type {Partial<Record<SkillId, string>>} */
     let performs = {};
     if (isEditable) {
-        allSkills = getSkills(actor);
         if (actor) {
             performs = getPerformanceSkills(actor);
             if (isNotEmptyObject(performs) && !currentVPs.length) {

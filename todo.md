@@ -319,10 +319,21 @@
 - fill in inspiration logic
   - Inspiration
     - (itself)
+      - skill names in hint
+      - doc
     - Amazing Inspiration (talent)
+      - doc
+    - Expanded Inspiration
+      - all functionality
+      - doc
     - Focused Inspiration (feat)
+      - doc
     - Tenacious Inspiration (talent)
+      - all functionality
+      - doc
     - True Inspiration (capstone)
+      - all functionality
+      - doc
   - Documentation
     - Make note that the abilities/feats should have the system's class association filled in if they have class-level-based changes
     - Add current choices in hints
@@ -336,4 +347,3 @@
     - will require the places that use it to also be async
   - ALTERNATIVELY
     - rerwrite all terms to handle sync rolling...
-- Add misc section to Bonus Picker

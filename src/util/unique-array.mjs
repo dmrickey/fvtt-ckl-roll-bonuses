@@ -7,5 +7,7 @@ import { api } from './api.mjs';
  * @returns {T[]} Array of distinct values from array
  */
 export const uniqueArray = x => [...new Set(x || [])];
+export const distinct = uniqueArray;
 
+api.utils.array.distinct = distinct;
 api.utils.array.uniqueArray = uniqueArray;

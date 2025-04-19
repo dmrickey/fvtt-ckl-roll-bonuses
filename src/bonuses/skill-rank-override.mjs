@@ -10,7 +10,7 @@ import { MODULE_NAME } from '../consts.mjs';
 import { createChange } from '../util/conditional-helpers.mjs';
 import { getCachedBonuses } from '../util/get-cached-bonuses.mjs';
 import { traitInput } from '../handlebars-handlers/trait-input.mjs';
-import { getSkills } from '../util/get-skills.mjs';
+import { getSkillChoices } from '../util/get-skills.mjs';
 
 const key = 'skill-rank-override';
 const formulaKey = 'skill-rank-override-formula';
@@ -205,11 +205,8 @@ Hooks.on('renderItemSheet', (
     if (!hasFlag) {
         return;
     }
-    /** @type {{[key: string]: string}} */
-    let choices = {};
-    if (isEditable) {
-        choices = getSkills(actor);
-    }
+
+    let choices = getSkillChoices(actor, { isEditable, includeAll: false });
 
     textInput({
         item,
