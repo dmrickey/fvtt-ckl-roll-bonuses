@@ -5,8 +5,6 @@ import { truthiness } from "./truthiness.mjs";
  */
 let itemHintsAPI;
 
-/** @typedef {(hintCls: ItemHintsAPI["HintClass"], actor: ActorPF, item: ItemPF, data: object) => Hint | Hint[] | undefined} hintFunc */
-
 /**
  * @type {hintFunc[]}
  */
@@ -15,7 +13,7 @@ const funcs = [];
 /**
  * @param {ActorPF} actor
  * @param {ItemPF} item
- * @param {Object} data
+ * @param {ItemHintData} data
  * @returns {Hint[]}
  */
 function itemHintsHandler(actor, item, data) {

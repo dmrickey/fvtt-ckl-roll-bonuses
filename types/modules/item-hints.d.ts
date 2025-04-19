@@ -11,12 +11,22 @@ declare global {
         static create(
             label: string,
             cssClasses: string[],
-            options: {
-                hint?: string;
-                icon?: string;
-                image?: string;
-            }
+            options: ItemHintData
         ): Hint {}
+    }
+
+    type hintFunc = (
+        hintCls: ItemHintsAPI['HintClass'],
+        actor: ActorPF,
+        item: ItemPF,
+        data: ItemHintData
+    ) => Hint | Hint[] | undefined;
+
+    interface ItemHintData {
+        hint?: string;
+        icon?: string;
+        image?: string;
+        combo?: boolean;
     }
 
     interface ItemHintsAPI {
@@ -25,7 +35,7 @@ declare global {
             arg0: (
                 actor: ActorPF,
                 item: ItemPF,
-                data: { icon: string; hint: string }
+                data: ItemHintData
             ) => Hint[] | undefined
         ) => void;
     }

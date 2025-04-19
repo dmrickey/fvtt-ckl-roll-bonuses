@@ -39,10 +39,10 @@
     position: absolute;
     opacity: 0.4;
 }
-.hint.ckl-extra-focus::after {
+.hint .ckl-extra-focus::after {
     font-size: 1.2em;
-    margin-block-start: -8%;
-    margin-inline-start: -117%;
+    margin-block-start: -15%;
+    margin-inline-start: -118%;
 }
 
 .ckl-fa-slash {
