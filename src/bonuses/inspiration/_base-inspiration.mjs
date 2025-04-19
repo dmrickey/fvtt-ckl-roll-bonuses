@@ -12,6 +12,8 @@ export const inspirationFocusedKey = 'inspiration-focused';
 export const inspirationTenaciousKey = 'inspiration-tenacious';
 export const inspirationTrueKey = 'inspiration-true';
 
+export const inspirationExtraDieKey = 'inspiration-extra-die';
+
 export class InspirationLanguageSettings {
 
     static get inpsiration() { return LanguageSettings.getTranslation(inspirationKey); }
@@ -46,9 +48,6 @@ export class InspirationLanguageSettings {
         LanguageSettings.registerItemNameTranslation(this.#inspirationUnderworldKey);
     }
 }
-
-export const getInspirationPart = () => `@inspiration[${InspirationLanguageSettings.inpsirationProper}]`;
-export const getInspirationFocusedPart = () => `@inspirationImproved[${InspirationLanguageSettings.inspirationFocusedProper}]`;
 
 /**
  * @param {ActorPF} actor
@@ -104,8 +103,9 @@ onSkillSheetRender({
 /**
  * @typedef {object} InspirationDice
  * @property {string} inspiration
- * @property {string} inspirationBase
  * @property {string} inspirationImproved
+ * @property {string} inspirationExtra
+ * @property {string} inspirationImprovedExtra
  */
 
 /**
@@ -144,7 +144,8 @@ const getDie = (actor) => {
 
     let inspiration = `${qty}d${faces}${mod}`;
     let inspirationImproved = `${qty}d${faces + 2}${mod}`;
-    const inspirationBase = inspiration;
+    let inspirationExtra = `${qty + 1}d${faces}kh`;
+    let inspirationImprovedExtra = `${qty + 1}d${faces + 2}kh`;
 
     // only when spending inspiration
     // if (hasTrue) {
@@ -152,7 +153,12 @@ const getDie = (actor) => {
     //     inspirationImproved = `{${inspirationImproved}, ${inspirationImproved}}kh`;
     // }
 
-    return { inspirationBase, inspiration, inspirationImproved };
+    return {
+        inspiration,
+        inspirationImproved,
+        inspirationExtra,
+        inspirationImprovedExtra,
+    };
 }
 
 /**
@@ -166,12 +172,16 @@ function onGetRollData(thing, rollData) {
         const die = getDie(actor);
         if (die) {
             rollData.inspiration = die.inspiration;
-            rollData.inspirationBase = die.inspirationBase;
             rollData.inspirationImproved = die.inspirationImproved;
+            rollData.inspirationExtra = die.inspirationExtra;
+            rollData.inspirationImprovedExtra = die.inspirationImprovedExtra;
         }
     }
 }
 Hooks.on('pf1GetRollData', onGetRollData);
+
+const getInspirationPart = () => `@inspiration[${InspirationLanguageSettings.inpsirationProper}]`;
+const getInspirationFocusedPart = () => `@inspirationImproved[${InspirationLanguageSettings.inspirationFocusedProper}]`;
 
 /**
  * @param {ActorPF} actor
@@ -182,19 +192,27 @@ function onRollSkill(actor, options, skill) {
     if (!canUseInspirationForFree(actor, skill)) {
         return;
     }
+    options.parts ||= [];
+    let part;
 
-    const isFocused = intersects(getFlaggedSkillIdsFromActor(actor, inspirationFocusedKey), skill);
+    const hasExtra = getFlaggedSkillIdsBySourceFromActor(actor, inspirationExtraDieKey).find(({ ids }) => intersects(ids, skill));
+
+    const isFocused = getFlaggedSkillIdsBySourceFromActor(actor, inspirationFocusedKey).find(({ ids }) => intersects(ids, skill));
     if (isFocused) {
-        options.parts ||= [];
-        options.parts.push(getInspirationFocusedPart());
-        return;
+        part = hasExtra
+            ? `@inspirationImprovedExtra[${isFocused.source.name}, ${hasExtra.source.name}]`
+            : `@inspirationImproved[${isFocused.source.name}]`;
     }
 
-    const isInspired = intersects(getFlaggedSkillIdsFromActor(actor, inspirationKey), skill);
+    const isInspired = getFlaggedSkillIdsBySourceFromActor(actor, inspirationKey).find(({ ids }) => intersects(ids, skill));
     if (isInspired) {
-        options.parts ||= [];
-        options.parts.push(getInspirationPart());
-        return;
+        part = hasExtra
+            ? `@inspirationExtra[${isInspired.source.name}, ${hasExtra.source.name}]`
+            : `@inspiration[${isInspired.source.name}]`;
+    }
+
+    if (part) {
+        options.parts.push(part);
     }
 }
 Hooks.on('pf1PreActorRollSkill', onRollSkill);
@@ -215,7 +233,7 @@ onCreate(
                     'pro',
                     'sen',
                 ]),
-        }
+        },
     },
 );
 
@@ -235,7 +253,7 @@ onCreate(
                     'int',
                     'slt',
                 ]),
-        }
+        },
     },
 );
 
@@ -249,7 +267,7 @@ onCreate(
         flagValues: {
             [inspirationKey]: /** @type {SkillId[]} */ (['umd']),
             [rollUntrainedKey]: /** @type {SkillId[]} */ (['umd']),
-        }
+        },
     },
 );
 
@@ -259,6 +277,9 @@ onCreate(
     'HLuoqBZCrV6vSJzK',
     () => InspirationLanguageSettings.inspirationEmpathy,
     {
-        booleanKeys: [inspirationKey, 'fortune-skill_sen'],
+        booleanKeys: [inspirationExtraDieKey, inspirationKey, 'fortune-skill_sen'],
+        flagValues: {
+            [inspirationExtraDieKey]: /** @type {SkillId[]} */ (['sen']),
+        },
     },
 );

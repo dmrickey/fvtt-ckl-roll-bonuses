@@ -1551,20 +1551,9 @@ declare global {
      */
     interface RollData<T extends SystemItemData = SystemItemData> {
         critMultBonus: number;
-        rb: {
-            rangePenalty?: {
-                maxIncrements: number;
-                penalty: number;
-                penaltyOffset: number;
-                range: number;
-            };
-        };
         range: {
             melee: string;
             reach: number;
-        };
-        [MODULE_NAME]: {
-            [key: string]: number | string | object | array;
         };
         abilities: Record<keyof Abilities, AbilityRollData>;
         ac: ACRollData;
@@ -1646,14 +1635,30 @@ declare global {
         chargeCostBonus?: number;
         d20?: string;
         dcBonus?: number;
-        /** Investigator inspiration die. Default 1d6 */
-        inspiration: string;
-        /** Investigator inspiration die. Default 1d6 */
-        inspirationBase: string;
-        /** Investigator upgraded inspiration die. Default 1d8 */
-        inspirationImproved: string;
         powerAttackBonus?: number;
         powerAttackPenalty?: number;
+
+        // custom properties
+        /** Investigator inspiration die. Default 1d6 */
+        inspiration: string;
+        /** One higher and keep high. Default 2d6kh */
+        inspirationExtra: string;
+        /** Investigator upgraded inspiration die. Default 1d8 */
+        inspirationImproved: string;
+        /** One higher and keep high. Default 2d8kh */
+        inspirationImprovedExtra: string;
+
+        rb: {
+            rangePenalty?: {
+                maxIncrements: number;
+                penalty: number;
+                penaltyOffset: number;
+                range: number;
+            };
+        };
+        [MODULE_NAME]: {
+            [key: string]: number | string | object | array;
+        };
     }
 
     interface ItemActionRollAttackHookArgs {

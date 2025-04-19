@@ -42,11 +42,7 @@ onSkillSheetRender({
     rowCallback: (_id, li) => li.classList.remove('untrained'),
 }, {
     classes: () => ['fas', 'fa-book-open', 'ckl-skill-icon'],
-    getText: (actor) => {
-        const rollData = actor.getRollData();
-        const text = localize('skill-sheet.roll-untrained.skill-tip', { die: rollData.inspiration });
-        return text;
-    }
+    getText: () => localize('skill-sheet.roll-untrained.skill-tip')
 });
 
 Hooks.on('renderItemSheet', (

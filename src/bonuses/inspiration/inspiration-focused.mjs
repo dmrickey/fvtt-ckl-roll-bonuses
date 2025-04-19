@@ -4,12 +4,11 @@
 
 import { traitInput } from '../../handlebars-handlers/trait-input.mjs';
 import { onSkillSheetRender } from '../../util/on-skill-sheet-render-handler.mjs';
-import { intersects } from '../../util/array-intersects.mjs';
-import { getFlaggedSkillIdsFromActor, getSkillChoices } from '../../util/get-skills.mjs';
+import { getSkillChoices } from '../../util/get-skills.mjs';
 import { registerItemHint } from '../../util/item-hints.mjs';
 import { localize, localizeBonusTooltip } from '../../util/localize.mjs';
 import { SpecificBonuses } from '../_all-specific-bonuses.mjs';
-import { canUseInspirationForFree, getInspirationPart, inspirationFocusedKey as key, inspirationKey, getInspirationFocusedPart, InspirationLanguageSettings } from './_base-inspiration.mjs';
+import { inspirationFocusedKey as key, inspirationKey, InspirationLanguageSettings } from './_base-inspiration.mjs';
 import { onCreate } from '../../util/on-create.mjs';
 import { itemHasCompendiumId } from '../../util/has-compendium-id.mjs';
 

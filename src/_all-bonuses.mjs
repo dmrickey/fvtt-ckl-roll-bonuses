@@ -18,7 +18,9 @@ import './bonuses/weapon-focus/weapon-focus.mjs';
 import './bonuses/weapon-specialization/weapon-specialization.mjs';
 import './bonuses/weapon-specialization/greater-weapon-specialization.mjs'
 
+import './bonuses/inspiration/_base-inspiration.mjs';
 import './bonuses/inspiration/inspiration-amazing.mjs';
+import './bonuses/inspiration/inspiration-extra-die.mjs';
 import './bonuses/inspiration/inspiration-focused.mjs';
 import './bonuses/inspiration/inspiration-tenacious.mjs';
 import './bonuses/inspiration/inspiration-true.mjs';
