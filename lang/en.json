@@ -87,8 +87,9 @@
                 "has-boolean-flag-target": "Target for Boolean Flag",
                 "inspiration": "Inspiration",
                 "inspiration-amazing": "Amazing Inspiration",
-                "inspiration-expanded": "Expanded Inspiration",
                 "inspiration-focused": "Focused Inspiration",
+                "inspiration-tenacious": "Tenacious Inspiration",
+                "inspiration-true": "True Inspiration",
                 "is-target-within-range": "Target within Range",
                 "is-target-within-range-max": "Maximum Range ({unit})",
                 "is-target-within-range-min": "Minimum Range ({unit})",
@@ -193,10 +194,11 @@
                 "function-player-label": "Label shown to players when configured. Players will not be able to edit the function.",
                 "furious-focus": "Negate the attack penalty of power attack on the first attack made each round.",
                 "has-boolean-flag": "Activate bonuses based on whether a boolean flag is active.",
-                "inspiration": "Automatically roll an extra d6 on specified skills. Adds @inspiration to roll data.",
-                "inspiration-amazing": "Increase inspiration die.",
-                "inspiration-expanded": "Can use freely use inspiration on more skills.",
-                "inspiration-focused": "Increase inspiration die for chosen skills.",
+                "inspiration": "Automatically roll an extra d6 on specified skills.",
+                "inspiration-amazing": "Increase inspiration die by one step.",
+                "inspiration-focused": "Increase inspiration die by one step for chosen skills.",
+                "inspiration-tenacious": "When rolling inspiration, roll twice and keep the higher.",
+                "inspiration-true": "Can freely use inspiration on all skills.",
                 "is-target-within-range": "Active when all targets are within a specified range.",
                 "is-target-within-range-min": "Activate bonuses whenever all targeted tokens are at least this far away.",
                 "is-target-within-range-max": "Activate bonuses whenever all targeted tokens are at most this far away.",
@@ -515,6 +517,14 @@
             "inspiration-focused": {
                 "name": "Focused Inspiration",
                 "default": "Focused Inspiration"
+            },
+            "inspiration-tenacious": {
+                "name": "Tenacious Inspiration",
+                "default": "Tenacious Inspiration"
+            },
+            "inspiration-true": {
+                "name": "True Inspiration",
+                "default": "True Inspiration"
             },
             "martial-focus": {
                 "name": "Martial Focus",

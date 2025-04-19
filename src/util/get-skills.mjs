@@ -134,10 +134,10 @@ export const getFlaggedSkillIdsBySourceFromActor = (actor, flag) => {
 
 /**
  * @param {ActorPF} actor
- * @param {string} flag
+ * @param {string[]} flags
  * @returns {SkillId[]}
  */
-export const getFlaggedSkillIdsFromActor = (actor, flag) => {
-    const all = getFlaggedSkillIdsBySourceFromActor(actor, flag).flatMap(x => x.ids);
+export const getFlaggedSkillIdsFromActor = (actor, ...flags) => {
+    const all = flags.flatMap((flag) => getFlaggedSkillIdsBySourceFromActor(actor, flag).flatMap(x => x.ids));
     return distinct(all);
 };

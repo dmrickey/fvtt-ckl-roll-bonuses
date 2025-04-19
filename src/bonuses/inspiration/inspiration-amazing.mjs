@@ -8,11 +8,9 @@ import { registerItemHint } from '../../util/item-hints.mjs';
 import { localize, localizeBonusTooltip } from '../../util/localize.mjs';
 import { onCreate } from '../../util/on-create.mjs';
 import { LanguageSettings } from '../../util/settings.mjs';
-import { truthiness } from '../../util/truthiness.mjs';
 import { SpecificBonuses } from '../_all-specific-bonuses.mjs';
-import { inspirationKey } from './_inspiration-helper.mjs';
+import { inspirationAmazingeKey as key, inspirationKey } from './_base-inspiration.mjs';
 
-const key = 'inspiration-amazing';
 const compendiumId = '3ggXCz7WmYP55vu5';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#inspiration';
 
@@ -37,46 +35,6 @@ registerItemHint((hintcls, _actor, item, _data) => {
     return hint;
 });
 
-/**
- * @param {Nullable<ActorPF>} actor
- * @returns {{inspiration: DiceString, improvedInspiration: DiceString} | undefined}
- */
-const getDie = (actor) => {
-    if (actor?.hasItemBooleanFlag(inspirationKey) && actor.hasItemBooleanFlag(key)) {
-        const items = actor.itemFlags?.boolean[inspirationKey]?.sources ?? [];
-        const classLevels = items
-            .map(x => x.system.class)
-            .map((c) => actor.itemTypes.class.find(x => x.system.tag === c))
-            .filter(truthiness)
-            .map((x) => x.system.level);
-        const level = Math.max(...classLevels);
-        const inspiration = level === 20
-            ? '2d8'
-            : '1d8';
-        const improvedInspiration = level === 20
-            ? '2d10'
-            : '1d10';
-        return { inspiration, improvedInspiration };
-    }
-}
-
-/**
- * @param {ActorPF | ItemPF | ItemAction} thing
- * @param {RollData} rollData
- */
-function onGetRollData(thing, rollData) {
-    // this fires for actor -> item -> action. If I handle more than one then it would double up bonuses. So I handle the root-most option
-    if (thing instanceof pf1.documents.actor.ActorPF) {
-        const actor = thing;
-        const die = getDie(actor);
-        if (die) {
-            rollData.inspiration = die.inspiration;
-            rollData.improvedInspiration = die.improvedInspiration;
-        }
-    }
-}
-Hooks.on('pf1GetRollData', onGetRollData);
-
 Hooks.on('renderItemSheet', (
     /** @type {ItemSheetPF} */ { isEditable, item },
     /** @type {[HTMLElement]} */[html],
@@ -94,7 +52,7 @@ Hooks.on('renderItemSheet', (
         return;
     }
 
-    const die = getDie(item.actor)?.inspiration;
+    const die = item.actor?.getRollData().inspiration;
 
     showEnabledLabel({
         text: localize('inspiration-amazing-die', { die }),

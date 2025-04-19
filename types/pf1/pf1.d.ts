@@ -1648,8 +1648,10 @@ declare global {
         dcBonus?: number;
         /** Investigator inspiration die. Default 1d6 */
         inspiration: string;
+        /** Investigator inspiration die. Default 1d6 */
+        inspirationBase: string;
         /** Investigator upgraded inspiration die. Default 1d8 */
-        improvedInspiration: string;
+        inspirationImproved: string;
         powerAttackBonus?: number;
         powerAttackPenalty?: number;
     }
@@ -1820,8 +1822,6 @@ declare global {
         | 'wounds'
         | `skill.${SkillId}`
         | `skill.~${SkillId}`;
-
-    type DiceString = `${number}d${number}`;
 
     interface DamageType {
         abbr: string;
@@ -2267,6 +2267,7 @@ declare global {
                 blf: 'Bluff';
                 clm: 'Climb';
                 crf: 'Craft';
+                // [key: `crf.${string}`]: 'Craft (Sub)';
                 dev: 'Disable Device';
                 dip: 'Diplomacy';
                 dis: 'Disguise';
@@ -2289,7 +2290,9 @@ declare global {
                 lor: 'Lore';
                 per: 'Perception';
                 prf: 'Perform';
+                // [key: `prf.${string}`]: 'Perform (Sub)';
                 pro: 'Profession';
+                // [key: `pro.${string}`]: 'Profession (Sub)';
                 rid: 'Ride';
                 sen: 'Sense Motive';
                 slt: 'Sleight of Hand';

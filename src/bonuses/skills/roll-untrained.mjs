@@ -1,7 +1,6 @@
 import { traitInput } from '../../handlebars-handlers/trait-input.mjs';
 import { onSkillSheetRender } from '../../util/on-skill-sheet-render-handler.mjs';
-import { getIdsFromActor } from '../../util/get-id-array-from-flag.mjs';
-import { getSkillChoices } from '../../util/get-skills.mjs';
+import { getFlaggedSkillIdsFromActor, getSkillChoices } from '../../util/get-skills.mjs';
 import { LocalHookHandler, localHooks } from '../../util/hooks.mjs';
 import { registerItemHint } from '../../util/item-hints.mjs';
 import { localize, localizeBonusTooltip } from '../../util/localize.mjs';
@@ -26,10 +25,10 @@ registerItemHint((hintcls, _actor, item, _data) => {
 /**
  * @param {SkillInfo} skillInfo
  * @param {ActorPF} actor
- * @param {RollData} rollData
+ * @param {RollData} _rollData
  */
-function getSkillInfo(skillInfo, actor, rollData) {
-    const ids = getIdsFromActor(actor, key);
+function getSkillInfo(skillInfo, actor, _rollData) {
+    const ids = getFlaggedSkillIdsFromActor(actor, key);
     if (!ids.length) return;
 
     if (ids.includes(skillInfo.id)) {

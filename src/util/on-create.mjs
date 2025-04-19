@@ -23,10 +23,11 @@ export const onCreate = (compendiumId, defaultName, key, flagValue) => {
         const hasBonus = item.hasItemBooleanFlag(key);
 
         if ((name === defaultName() || hasCompendiumId) && !hasBonus) {
-            item.updateSource({
-                [`system.flags.boolean.${key}`]: true,
-                [`flags.${MODULE_NAME}.${key}`]: flagValue,
-            });
+            const update = { [`system.flags.boolean.${key}`]: true };
+            if (flagValue) {
+                update[`flags.${MODULE_NAME}.${key}`] = flagValue;
+            }
+            item.updateSource(update);
         }
     };
     Hooks.on('preCreateItem', handleOnCreate);

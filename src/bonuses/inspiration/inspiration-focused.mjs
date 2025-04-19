@@ -5,12 +5,11 @@
 import { traitInput } from '../../handlebars-handlers/trait-input.mjs';
 import { onSkillSheetRender } from '../../util/on-skill-sheet-render-handler.mjs';
 import { intersects } from '../../util/array-intersects.mjs';
-import { getIdsFromActor } from '../../util/get-id-array-from-flag.mjs';
-import { getSkillChoices } from '../../util/get-skills.mjs';
+import { getFlaggedSkillIdsFromActor, getSkillChoices } from '../../util/get-skills.mjs';
 import { registerItemHint } from '../../util/item-hints.mjs';
 import { localize, localizeBonusTooltip } from '../../util/localize.mjs';
 import { SpecificBonuses } from '../_all-specific-bonuses.mjs';
-import { canUseInspirationForFree, getInspirationPart, inspirationFocusedKey as key, inspirationKey, getInspirationFocusedPart, InspirationLanguageSettings } from './_inspiration-helper.mjs';
+import { canUseInspirationForFree, getInspirationPart, inspirationFocusedKey as key, inspirationKey, getInspirationFocusedPart, InspirationLanguageSettings } from './_base-inspiration.mjs';
 import { onCreate } from '../../util/on-create.mjs';
 import { itemHasCompendiumId } from '../../util/has-compendium-id.mjs';
 
@@ -36,35 +35,10 @@ onSkillSheetRender({
     classes: () => ['fas', 'fa-magnifying-glass', 'ckl-extra-focus', 'ckl-skill-icon'],
     getText: (actor) => {
         const rollData = actor.getRollData();
-        const text = localize('skill-sheet.inspiration-focused.skill-tip', { die: rollData.improvedInspiration });
+        const text = localize('skill-sheet.inspiration-focused.skill-tip', { die: rollData.inspirationImproved });
         return text;
     }
 });
-
-/**
- * @param {ActorPF} actor
- * @param {ActorRollOptions} options
- * @param {SkillId} skill
- */
-function onRollSkill(actor, options, skill) {
-    if (!canUseInspirationForFree(actor, skill)) {
-        return;
-    }
-
-    const focused = getIdsFromActor(actor, key);
-    if (!intersects(focused, skill)) {
-        return;
-    }
-
-    options.parts ||= [];
-
-    const base = getInspirationPart();
-    const part = getInspirationFocusedPart();
-    if (!options.parts.findSplice(x => x === base, part)) {
-        options.parts.push(part);
-    }
-}
-Hooks.on('pf1PreActorRollSkill', onRollSkill);
 
 Hooks.on('renderItemSheet', (
     /** @type {ItemSheetPF} */ { isEditable, item },
@@ -77,7 +51,7 @@ Hooks.on('renderItemSheet', (
     if (!hasFlag) {
         const name = item?.name?.toLowerCase() ?? '';
         const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
-        if (isEditable && (name === InspirationLanguageSettings.focusedInspiration || hasCompendiumId)) {
+        if (isEditable && (name === InspirationLanguageSettings.inspirationFocused || hasCompendiumId)) {
             item.addItemBooleanFlag(key);
         }
         return;
@@ -100,6 +74,6 @@ Hooks.on('renderItemSheet', (
 
 onCreate(
     compendiumId,
-    () => InspirationLanguageSettings.focusedInspiration,
+    () => InspirationLanguageSettings.inspirationFocused,
     key,
 );

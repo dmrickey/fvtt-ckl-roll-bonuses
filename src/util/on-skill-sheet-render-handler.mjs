@@ -1,4 +1,4 @@
-import { getIdsBySourceFromActor } from './get-id-array-from-flag.mjs';
+import { getFlaggedSkillIdsBySourceFromActor } from './get-skills.mjs';
 
 /**
  * @param {object} args
@@ -12,7 +12,7 @@ import { getIdsBySourceFromActor } from './get-id-array-from-flag.mjs';
  */
 export const onSkillSheetRender = ({
     key,
-    getSkillIds = getIdsBySourceFromActor,
+    getSkillIds = getFlaggedSkillIdsBySourceFromActor,
     rowCallback = undefined
 }, tooltip) => {
     Hooks.on('renderActorSheetPF', (
