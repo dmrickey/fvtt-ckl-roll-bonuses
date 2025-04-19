@@ -13,12 +13,12 @@ import { localize, localizeBonusTooltip } from '../../util/localize.mjs';
 import { onCreate } from '../../util/on-create.mjs';
 import { onSkillSheetRender } from '../../util/on-skill-sheet-render-handler.mjs';
 import { SpecificBonuses } from '../_all-specific-bonuses.mjs';
-import { canUseInspirationForFree, getInspirationPart, InspirationLanguageSettings, inspirationExpandedKey as key } from './_inspiration-helper.mjs';
+import { canUseInspirationForFree, getInspirationPart, inspirationKey, InspirationLanguageSettings, inspirationExpandedKey as key } from './_inspiration-helper.mjs';
 
 const compendiumId = 'DwEK2dM8PONQRIHm';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#inspiration';
 
-SpecificBonuses.registerSpecificBonus({ journal, key, });
+SpecificBonuses.registerSpecificBonus({ journal, key, parent: inspirationKey });
 
 // register hint on source
 registerItemHint((hintcls, _actor, item, _data) => {
