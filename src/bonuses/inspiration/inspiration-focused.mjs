@@ -34,7 +34,7 @@ onSkillSheetRender({
     classes: () => ['fas', 'fa-magnifying-glass', 'ckl-extra-focus', 'ckl-skill-icon'],
     getText: (actor) => {
         const rollData = actor.getRollData();
-        const text = localize('skill-sheet.inspiration-focused.skill-tip', { die: rollData.inspirationImproved });
+        const text = localize('skill-sheet.inspiration-focused.skill-tip', { die: rollData.rb?.inspiration?.improved });
         return text;
     }
 });

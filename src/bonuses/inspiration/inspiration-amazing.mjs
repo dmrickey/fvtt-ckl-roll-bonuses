@@ -52,7 +52,7 @@ Hooks.on('renderItemSheet', (
         return;
     }
 
-    const die = item.actor?.getRollData().inspiration;
+    const die = item.actor?.getRollData().rb?.inspiration?.base;
 
     showEnabledLabel({
         text: localize('inspiration-amazing-die', { die }),

@@ -1639,16 +1639,17 @@ declare global {
         powerAttackPenalty?: number;
 
         // custom properties
-        /** Investigator inspiration die. Default 1d6 */
-        inspiration: string;
-        /** One higher and keep high. Default 2d6kh */
-        inspirationExtra: string;
-        /** Investigator upgraded inspiration die. Default 1d8 */
-        inspirationImproved: string;
-        /** One higher and keep high. Default 2d8kh */
-        inspirationImprovedExtra: string;
-
         rb: {
+            inspiration?: {
+                /** Investigator inspiration die. Default 1d6 */
+                base: string;
+                /** Roll one more and keep high. Default 2d6kh */
+                baseExtra: string;
+                /** Investigator upgraded inspiration die. Default 1d8 */
+                improved: string;
+                /** One higher and keep high. Default 2d8kh */
+                improvedExtra: string;
+            }
             rangePenalty?: {
                 maxIncrements: number;
                 penalty: number;
