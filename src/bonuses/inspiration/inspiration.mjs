@@ -131,4 +131,14 @@ Hooks.on('renderItemSheet', (
     });
 });
 
-onCreate(compendiumId, () => InspirationLanguageSettings.inpsiration, key);
+onCreate(
+    compendiumId,
+    () => InspirationLanguageSettings.inpsiration,
+    key,
+    /** @type {SkillId[]} */
+    [
+        allKnowledgeSkillIds,
+        'lin',
+        'spl'
+    ],
+);

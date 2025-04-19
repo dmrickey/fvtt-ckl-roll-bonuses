@@ -325,6 +325,7 @@
     - True Inspiration (capstone)
   - Documentation
     - Make note that the abilities/feats should have the system's class association filled in if they have class-level-based changes
+    - Add current choices in hints
 - Add Devastating Strike handling for RB
 - get ride of `forceSync` dice override
   - Snake Sidewind needs a bit of extra love (see above) can hopefuly do this without forceSync

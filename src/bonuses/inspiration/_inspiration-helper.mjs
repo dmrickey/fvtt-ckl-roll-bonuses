@@ -63,7 +63,7 @@ export const canUseInspirationForFree = (actor, id) => {
  */
 export const getInspirationSkillsFromItem = (item, flag) => {
     /** @type {(SkillId | 'all-knowledge')[]} */
-    var skills = getIdsFromItem(item, flag);
+    var skills = foundry.utils.deepClone(getIdsFromItem(item, flag));
 
     const index = skills.indexOf(allKnowledgeSkillIds);
     if (index > -1) {

@@ -13,7 +13,7 @@ import { SpecificBonuses } from '../_all-specific-bonuses.mjs';
 import { inspirationKey } from './_inspiration-helper.mjs';
 
 const key = 'inspiration-amazing';
-const compendiumId = 'nKbyztRQCU5XMbbs';
+const compendiumId = '3ggXCz7WmYP55vu5';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#inspiration';
 
 SpecificBonuses.registerSpecificBonus({ journal, key, parent: inspirationKey });

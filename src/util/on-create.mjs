@@ -1,11 +1,13 @@
+import { MODULE_NAME } from '../consts.mjs';
 import { itemHasCompendiumId } from './has-compendium-id.mjs';
 
 /**
  * @param {string} compendiumId
  * @param {() => string} defaultName
  * @param {string} key
+ * @param {any} [flagValue]
  */
-export const onCreate = (compendiumId, defaultName, key) => {
+export const onCreate = (compendiumId, defaultName, key, flagValue) => {
     /**
      * @param {ItemPF} item
      * @param {object} _data
@@ -23,6 +25,7 @@ export const onCreate = (compendiumId, defaultName, key) => {
         if ((name === defaultName() || hasCompendiumId) && !hasBonus) {
             item.updateSource({
                 [`system.flags.boolean.${key}`]: true,
+                [`flags.${MODULE_NAME}.${key}`]: flagValue,
             });
         }
     };
