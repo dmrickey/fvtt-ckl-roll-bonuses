@@ -4,11 +4,19 @@ import { itemHasCompendiumId } from './has-compendium-id.mjs';
 /**
  * @param {string} compendiumId
  * @param {() => string} defaultName
- * @param {object} values
- * @param {string | string[]} [values.booleanKeys]
- * @param {Record<string, any>} [values.flagValues]
+ * @param {object} options
+ * @param {string | string[]} [options.booleanKeys]
+ * @param {(item: ItemPF) => boolean} [options.extraVerification]
+ * @param {Record<string, any>} [options.flagValues]
  */
-export const onCreate = (compendiumId, defaultName, { booleanKeys = [], flagValues = undefined }) => {
+export const onCreate = (
+    compendiumId,
+    defaultName,
+    {
+        booleanKeys = [],
+        extraVerification,
+        flagValues = undefined }
+) => {
     /**
      * @param {ItemPF} item
      * @param {object} _data
@@ -18,6 +26,10 @@ export const onCreate = (compendiumId, defaultName, { booleanKeys = [], flagValu
     const handleOnCreate = (item, _data, { temporary }, id) => {
         if (!(item instanceof pf1.documents.item.ItemPF)) return;
         if (temporary) return;
+
+        if (extraVerification && !extraVerification(item)) {
+            return;
+        }
 
         if (!Array.isArray(booleanKeys)) {
             booleanKeys = booleanKeys ? [booleanKeys] : [];

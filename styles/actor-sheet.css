@@ -2,10 +2,10 @@
     align-self: center;
     margin-inline-start: auto;
     text-align: center;
-    margin-inline-end: 0.5em;
+    margin-inline-end: 0.25em;
 }
 .ckl-skill-icon:first-of-type {
-    margin-inline-start: 0.5em;
+    margin-inline-start: 0.25em;
 }
 
 /* used by versatile performance */

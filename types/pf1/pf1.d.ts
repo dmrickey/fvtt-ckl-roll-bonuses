@@ -1177,6 +1177,7 @@ declare global {
         proficient: boolean;
         held?: keyof pf1['config']['abilityDamageHeldMultipliers'];
         size: number;
+        sources: { id: string, pages: string | number }[];
     }
     class SystemItemDataAttackPF extends SystemItemData {
         baseTypes: string[];

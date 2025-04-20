@@ -1,5 +1,5 @@
 import { intersects } from '../../util/array-intersects.mjs';
-import { getFlaggedSkillIdsBySourceFromActor, getFlaggedSkillIdsFromActor, getSkillChoices } from '../../util/get-skills.mjs';
+import { allKnowledgeSkillIds, getFlaggedSkillIdsBySourceFromActor, getFlaggedSkillIdsFromActor, getSkillChoices } from '../../util/get-skills.mjs';
 import { localize } from '../../util/localize.mjs';
 import { onCreate } from '../../util/on-create.mjs';
 import { onSkillSheetRender } from '../../util/on-skill-sheet-render-handler.mjs';
@@ -29,11 +29,15 @@ export class InspirationLanguageSettings {
     static #inspirationDeviceTalentKey = 'inspiration-device-talent';
     static #inspirationEmpathyKey = 'inspiration-empathy';
     static #inspirationExpandedKey = 'inspiration-expanded';
+    static #inspirationInspiredIntelligenceKey = 'inspiration-inspired-intelligence';
     static #inspirationUnderworldKey = 'inspiration-underworld';
+    static #inspirationUnconventionalKey = 'inspiration-unconventional';
 
     static get inspirationDeviceTalent() { return LanguageSettings.getTranslation(this.#inspirationDeviceTalentKey); }
     static get inspirationEmpathy() { return LanguageSettings.getTranslation(this.#inspirationEmpathyKey); }
     static get inspirationExpanded() { return LanguageSettings.getTranslation(this.#inspirationExpandedKey); }
+    static get inspirationInspiredIntelligence() { return LanguageSettings.getTranslation(this.#inspirationInspiredIntelligenceKey); }
+    static get inspirationUnconventional() { return LanguageSettings.getTranslation(this.#inspirationUnconventionalKey); }
     static get inspirationUnderworld() { return LanguageSettings.getTranslation(this.#inspirationUnderworldKey); }
 
     static {
@@ -45,7 +49,9 @@ export class InspirationLanguageSettings {
         LanguageSettings.registerItemNameTranslation(this.#inspirationDeviceTalentKey);
         LanguageSettings.registerItemNameTranslation(this.#inspirationEmpathyKey);
         LanguageSettings.registerItemNameTranslation(this.#inspirationExpandedKey);
+        LanguageSettings.registerItemNameTranslation(this.#inspirationInspiredIntelligenceKey);
         LanguageSettings.registerItemNameTranslation(this.#inspirationUnderworldKey);
+        LanguageSettings.registerItemNameTranslation(this.#inspirationUnconventionalKey);
     }
 }
 
@@ -270,6 +276,31 @@ function onRollSkill(actor, options, skill) {
 }
 Hooks.on('pf1PreActorRollSkill', onRollSkill);
 
+// Device Talent
+onCreate(
+    'hwcRSJ1KAX1boUNv',
+    () => InspirationLanguageSettings.inspirationDeviceTalent,
+    {
+        booleanKeys: [inspirationKey, rollUntrainedKey, 'fortune-skill_umd'],
+        flagValues: {
+            [inspirationKey]: /** @type {SkillId[]} */ (['umd']),
+            [rollUntrainedKey]: /** @type {SkillId[]} */ (['umd']),
+        },
+    },
+);
+
+// Empathy
+onCreate(
+    'HLuoqBZCrV6vSJzK',
+    () => InspirationLanguageSettings.inspirationEmpathy,
+    {
+        booleanKeys: [inspirationExtraDieKey, 'fortune-skill_sen'],
+        flagValues: {
+            [inspirationExtraDieKey]: /** @type {SkillId[]} */ (['sen']),
+        },
+    },
+);
+
 // Expanded Inspiration
 onCreate(
     'DwEK2dM8PONQRIHm',
@@ -290,6 +321,33 @@ onCreate(
     },
 );
 
+// Inspired Intelligence
+onCreate(
+    'HPzD3V2ohR5oOi8u',
+    () => InspirationLanguageSettings.inspirationInspiredIntelligence,
+    {
+        booleanKeys: [inspirationKey],
+        flagValues: {
+            [inspirationKey]:
+                /** @type {SkillId[]} */
+                ([
+                    allKnowledgeSkillIds,
+                    'lin',
+                    'spl',
+                ]),
+        }
+    },
+);
+
+// Unconventional Inspiration
+onCreate(
+    'BFNWMeWYNOyZ1Ioe',
+    () => InspirationLanguageSettings.inspirationUnconventional,
+    {
+        booleanKeys: [inspirationKey],
+    },
+);
+
 // Underworld Inspiration
 onCreate(
     'pR0MLt0XLQpBePa3',
@@ -306,33 +364,6 @@ onCreate(
                     'int',
                     'slt',
                 ]),
-        },
-    },
-);
-
-
-// Device Talent
-onCreate(
-    'hwcRSJ1KAX1boUNv',
-    () => InspirationLanguageSettings.inspirationDeviceTalent,
-    {
-        booleanKeys: [inspirationKey, rollUntrainedKey, 'fortune-skill_umd'],
-        flagValues: {
-            [inspirationKey]: /** @type {SkillId[]} */ (['umd']),
-            [rollUntrainedKey]: /** @type {SkillId[]} */ (['umd']),
-        },
-    },
-);
-
-
-// Empathy
-onCreate(
-    'HLuoqBZCrV6vSJzK',
-    () => InspirationLanguageSettings.inspirationEmpathy,
-    {
-        booleanKeys: [inspirationExtraDieKey, inspirationKey, 'fortune-skill_sen'],
-        flagValues: {
-            [inspirationExtraDieKey]: /** @type {SkillId[]} */ (['sen']),
         },
     },
 );

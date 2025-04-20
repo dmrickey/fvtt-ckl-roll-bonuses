@@ -195,7 +195,7 @@
                 "function-player-label": "Label shown to players when configured. Players will not be able to edit the function.",
                 "furious-focus": "Negate the attack penalty of power attack on the first attack made each round.",
                 "has-boolean-flag": "Activate bonuses based on whether a boolean flag is active.",
-                "inspiration": "Automatically roll an extra d6 on specified skills.",
+                "inspiration": "Freely roll your inspiration die for specified skills.",
                 "inspiration-amazing": "Increase inspiration die by one step.",
                 "inspiration-focused": "Increase inspiration die by one step for chosen skills.",
                 "inspiration-tenacious": "When rolling inspiration, roll an extra die and keep the highest.",
@@ -527,6 +527,10 @@
                 "name": "Focused Inspiration",
                 "default": "Focused Inspiration"
             },
+            "inspiration-inspired-intelligence": {
+                "name": "Inspired Intelligence",
+                "default": "Inspired Intelligence"
+            },
             "inspiration-tenacious": {
                 "name": "Tenacious Inspiration",
                 "default": "Tenacious Inspiration"
@@ -538,6 +542,10 @@
             "inspiration-underworld": {
                 "name": "Underworld Inspiration",
                 "default": "Underworld Inspiration"
+            },
+            "inspiration-unconventional": {
+                "name": "Unconventional Inspiration",
+                "default": "Unconventional Inspiration"
             },
             "martial-focus": {
                 "name": "Martial Focus",

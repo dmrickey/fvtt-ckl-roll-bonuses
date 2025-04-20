@@ -60,6 +60,8 @@ onCreate(
     () => InspirationLanguageSettings.inpsiration,
     {
         booleanKeys: key,
+        // intentionally using `==` here
+        extraVerification: (item) => !!item.system.sources?.find(({ id, pages }) => id === 'PZO1129' && pages == 31),
         flagValues: {
             [key]: /** @type {SkillId[]} */
                 ([

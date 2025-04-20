@@ -12,7 +12,7 @@ import { inspirationExtraDieKey as key, inspirationKey, inspirationTenaciousKey 
 
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#inspiration';
 
-SpecificBonuses.registerSpecificBonus({ journal, key, parent: inspirationKey });
+SpecificBonuses.registerSpecificBonus({ journal, key, tooltipKey: inspirationTenaciousKey, parent: inspirationKey });
 
 // register hint on source
 registerItemHint((hintcls, _actor, item, _data) => {
