@@ -9,6 +9,7 @@
 - Settings Skill bonuses directly on the actor sheet is now deprecated and will be removed in a future update. Everything that this did can now be accomplished by setting Specific Bonuses directly on the feat/ability/buff granting those bonuses. (or with the system's skill changes as has been the case for a while now)
 
 ### Bugfixes
+- Skill Rank Override once again actually overrides.
 
 ---
 

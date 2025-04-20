@@ -140,52 +140,50 @@ function getSkillInfo(skillInfo, actor, _rollData) {
  * @param {RollData} rollData
  */
 function prepareData(item, rollData) {
-    if (!item.isActive || !item.getFlag(MODULE_NAME, key)) return;
+    if (!item.isActive || !item.actor || !item.hasItemBooleanFlag(key)) return;
 
     /** @type {Array<SkillId>} */
     const keys = item.getFlag(MODULE_NAME, selectedKey) ?? [];
-    if (keys.length && item.actor) {
-        keys.forEach((skillKey) => {
-            const formula = item.getFlag(MODULE_NAME, formulaKey);
-            const rank = FormulaCacheHelper.getModuleFlagValue(item, formulaKey);
-            const change = createChange({
-                name: `${game.i18n.localize("PF1.SkillRankPlural")} (${item.name})`,
-                value: rank,
-                formula,
-                type: 'base',
-                target: `skill.~${skillKey}`,
-                id: `${item.id}_${key}_${skillKey}`,
-                operator: 'set',
-            });
-
-            // not null, but type safety is complaining about it here for some reason
-            if (!item.actor) return;
-
-            item.actor.changes ||= new Collection();
-            item.actor.changes.set(change.id, change);
-
-            const ori = { ...rollData.skills[skillKey] };
-            if (!ori.rank && rank && ori.cs) {
-                rollData.skills[skillKey].mod += 3;
-
-                const csChange = createChange({
-                    formula: pf1.config.classSkillBonus,
-                    value: pf1.config.classSkillBonus,
-                    target: `skill.~${skillKey}`,
-                    type: "untyped",
-                    operator: "add",
-                    name: game.i18n.localize("PF1.CSTooltip"),
-                    id: `${item.id}_${key}_${skillKey}_cs`,
-                });
-                item.actor.changes.set(csChange.id, csChange);
-            }
-
-            if (ori.rank < rank) {
-                rollData.skills[skillKey].mod += (rank - ori.rank);
-                rollData.skills[skillKey].rank = rank;
-            }
+    keys.forEach((skillKey) => {
+        const formula = item.getFlag(MODULE_NAME, formulaKey);
+        const rank = FormulaCacheHelper.getModuleFlagValue(item, formulaKey);
+        const change = createChange({
+            name: `${game.i18n.localize("PF1.SkillRankPlural")} (${item.name})`,
+            value: rank,
+            formula,
+            type: 'base',
+            target: `skill.~${skillKey}`,
+            id: `${item.id}_${key}_${skillKey}`,
+            operator: 'set',
         });
-    }
+
+        // not null, but type safety is complaining about it here for some reason
+        if (!item.actor) return;
+
+        item.actor.changes ||= new Collection();
+        item.actor.changes.set(change.id, change);
+
+        const ori = { ...rollData.skills[skillKey] };
+        if (!ori.rank && rank && ori.cs) {
+            rollData.skills[skillKey].mod += 3;
+
+            const csChange = createChange({
+                formula: pf1.config.classSkillBonus,
+                value: pf1.config.classSkillBonus,
+                target: `skill.~${skillKey}`,
+                type: "untyped",
+                operator: "add",
+                name: game.i18n.localize("PF1.CSTooltip"),
+                id: `${item.id}_${key}_${skillKey}_cs`,
+            });
+            item.actor.changes.set(csChange.id, csChange);
+        }
+
+        if (ori.rank < rank) {
+            rollData.skills[skillKey].mod += (rank - ori.rank);
+            rollData.skills[skillKey].rank = rank;
+        }
+    });
 }
 
 Hooks.once('init', () => {
