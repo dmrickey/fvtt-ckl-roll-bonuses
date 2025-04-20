@@ -217,8 +217,8 @@ const getDie = (actor) => {
     }
 
     let inspiration = `${qty}d${faces}${mod}`;
-    let inspirationImproved = `${qty}d${faces + 2}${mod}`;
     let inspirationExtra = `${qty + 1}d${faces}kh`;
+    let inspirationImproved = `${qty}d${faces + 2}${mod}`;
     let inspirationImprovedExtra = `${qty + 1}d${faces + 2}kh`;
 
     // only when spending inspiration
@@ -229,8 +229,8 @@ const getDie = (actor) => {
 
     return {
         inspiration,
-        inspirationImproved,
         inspirationExtra,
+        inspirationImproved,
         inspirationImprovedExtra,
     };
 }
