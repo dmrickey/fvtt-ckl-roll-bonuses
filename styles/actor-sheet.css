@@ -24,9 +24,6 @@
     width: 60%;
 }
 
-.ckl-fa-slash {
-    position: relative;
-}
 .ckl-extra-fa-magnifying-glass::after {
     content: "\f002";
     margin-inline-start: -0.75em;
@@ -38,6 +35,9 @@
     border-color: yellow;
 }
 
+.ckl-fa-slash {
+    position: relative;
+}
 .ckl-fa-slash::after {
     content: "\f715";
     margin-inline-start: -116%;
