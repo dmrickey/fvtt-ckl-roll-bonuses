@@ -3,6 +3,7 @@ import './bonuses/armor-focus/armor-focus.mjs';
 import './bonuses/armor-focus/improved-armor-focus.mjs';
 import './bonuses/fates-favored.mjs';
 import './bonuses/change-type-modification.mjs';
+import './bonuses/devastating-strike.mjs';
 import './bonuses/fortune-handler.mjs';
 import './bonuses/furious-focus.mjs';
 import './bonuses/martial-focus.mjs';

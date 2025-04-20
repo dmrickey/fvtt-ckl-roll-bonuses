@@ -43,7 +43,6 @@ export class FortuneBonus extends BaseBonus {
             journal: this.journal,
             key: this.key,
             parent: html,
-            tooltip: this.tooltip,
         }, {
             canEdit: isEditable,
             inputType: 'bonus',

@@ -1,9 +1,12 @@
 ## Roll Bonuses 2.20.0
 
 ### New Bonuses
-- Roll Skill Untrained - Updates the actor's skill sheet to indicate that a given skill can now be used while untrained. Removes the `untrained` note when rolling as this is no longer the case.
+- Vital Strike (more)
+  - Support for Devastating Strike and Improved Vital Strike
 - Inspiration
   - Now configured directly on the class ability. Includes support for various feats/talents such as Amazing Inspiration, Tenacious Inspiration, Focused Inspiration, and True Inspiration to automatically increase the inspiration die when necessary.
+  - If you are an Investigator, please read the in-game documentation for your options plus a helpful script call
+- Roll Skill Untrained - Updates the actor's skill sheet to indicate that a given skill can now be used while untrained. Removes the `untrained` note when rolling as this is no longer the case.
 
 ### Misc
 - Settings Skill bonuses directly on the actor sheet is now deprecated and will be removed in a future update. Everything that this did can now be accomplished by setting Specific Bonuses directly on the feat/ability/buff granting those bonuses. (or with the system's skill changes as has been the case for a while now)

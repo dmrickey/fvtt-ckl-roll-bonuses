@@ -11,6 +11,7 @@ import { localizeBonusLabel, localizeBonusTooltip } from '../util/localize.mjs';
 import { LanguageSettings } from '../util/settings.mjs';
 import { truthiness } from '../util/truthiness.mjs';
 import { SpecificBonuses } from './_all-specific-bonuses.mjs';
+import { devastatingStrikeImprovedKey, devastatingStrikeKey } from './devastating-strike.mjs';
 
 
 const vitalStrike = 'vital-strike';
@@ -125,6 +126,8 @@ class VitalStrikeData {
      * @param {ActionUse?} [options.actionUse]
      */
     constructor(actor, { actionUse = null } = {}) {
+        this.hasDevastating = actor.hasItemBooleanFlag(devastatingStrikeKey);
+        this.hasDevastatingImproved = actor.hasItemBooleanFlag(devastatingStrikeImprovedKey);
 
         // this.mythic = this.#hasVitalStrikeMythic(actor);
 
@@ -156,21 +159,60 @@ class VitalStrikeData {
                         this.enabled = typeof formData === 'boolean'
                             ? formData
                             : this.enabledByDefault;
-                        var conditional = new pf1.components.ItemConditional({
-                            _id: foundry.utils.randomID(),
-                            default: true,
-                            name: this.label,
-                            modifiers: [{
+
+                        {
+                            const conditional = new pf1.components.ItemConditional({
                                 _id: foundry.utils.randomID(),
-                                critical: 'nonCrit',
-                                formula: formula,
-                                subTarget: 'attack_0',
-                                target: 'damage',
-                                type: '',
-                                damageType: [...part.types],
-                            }],
-                        });
-                        this.conditionals.push(conditional);
+                                default: true,
+                                name: this.label,
+                                modifiers: [{
+                                    _id: foundry.utils.randomID(),
+                                    critical: 'nonCrit',
+                                    formula: formula,
+                                    subTarget: 'attack_0',
+                                    target: 'damage',
+                                    type: '',
+                                    damageType: [...part.types],
+                                }],
+                            });
+                            this.conditionals.push(conditional);
+                        }
+
+                        if (this.hasDevastating) {
+                            const conditional = new pf1.components.ItemConditional({
+                                _id: foundry.utils.randomID(),
+                                default: true,
+                                name: localizeBonusLabel(devastatingStrikeKey),
+                                modifiers: [{
+                                    _id: foundry.utils.randomID(),
+                                    critical: 'normal',
+                                    formula: `${amount * 2}[${localizeBonusLabel(devastatingStrikeKey)}]`,
+                                    subTarget: 'attack_0',
+                                    target: 'damage',
+                                    type: '',
+                                    damageType: [...part.types],
+                                }],
+                            });
+                            this.conditionals.push(conditional);
+                        }
+
+                        if (this.hasDevastatingImproved) {
+                            const conditional = new pf1.components.ItemConditional({
+                                _id: foundry.utils.randomID(),
+                                default: true,
+                                name: localizeBonusLabel(devastatingStrikeImprovedKey),
+                                modifiers: [{
+                                    _id: foundry.utils.randomID(),
+                                    critical: 'crit',
+                                    formula: `${amount * 2}[${localizeBonusLabel(devastatingStrikeImprovedKey)}]`,
+                                    subTarget: 'attack_0',
+                                    target: 'attack',
+                                    type: '',
+                                    damageType: [...part.types],
+                                }],
+                            });
+                            this.conditionals.push(conditional);
+                        }
                     }
                 }
                 return true;
@@ -259,7 +301,9 @@ Hooks.on('renderItemSheet', (
 ) => {
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
-    configureIfNecesary(item);
+    if (isEditable) {
+        configureIfNecesary(item);
+    }
 
     const isVital = item.hasItemBooleanFlag(vitalStrike);
     const isImproved = item.hasItemBooleanFlag(vitalStrikeImproved);

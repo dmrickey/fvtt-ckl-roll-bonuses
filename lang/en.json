@@ -65,6 +65,8 @@
                 "damage": "Damage",
                 "damage-type": "Damage Type",
                 "dc": "DC",
+                "devastating-strike": "Devastating Strike",
+                "devastating-strike-improved": "Improved Devastating Strike",
                 "dice-transform": "Dice Transform",
                 "dice-transform-priority": "Priority",
                 "effective-size": "Effective Size",
@@ -176,6 +178,8 @@
                 "damage": "Add bonus damage to the targeted actions.",
                 "damage-type": "Bonuses will be applied to actions that deal the chosen damage type.",
                 "dc": "Modify the DC for spells and abilities.",
+                "devastating-strike": "Adds damage with Vital Strikes",
+                "devastating-strike-improved": "Adds crit confirm with Vitale Strikes",
                 "dice-transform": "Transform base damage for targeted actions.",
                 "dice-transform-priority": "Order for multiple transformations. Higher numbers will be processed first.",
                 "effective-size": "Formula input for increasing a sizeRoll formula's Effective Size. This is used for buffs like Lead Blades, Gravity Bow, etc.",
@@ -490,6 +494,10 @@
             "armor-focus": {
                 "name": "Armor Focus",
                 "default": "Armor Focus"
+            },
+            "devastating-strike": {
+                "name": "Devastating Strike",
+                "default": "Devastating Strike"
             },
             "elemental-focus": {
                 "name": "Elemental Focus",
