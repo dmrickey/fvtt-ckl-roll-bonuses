@@ -5,7 +5,7 @@ import { localizeBonusTooltip } from '../../util/localize.mjs';
 import { onCreate } from '../../util/on-create.mjs';
 import { SpecificBonuses } from '../_all-specific-bonuses.mjs';
 import { InspirationLanguageSettings, inspirationKey as key } from './_base-inspiration.mjs';
-import { allKnowledgeSkillIds, getSkillChoices } from '../../util/get-skills.mjs';
+import { allKnowledges, getSkillChoices, getSkillHints } from '../../util/get-skills.mjs';
 
 const compendiumId = 'nKbyztRQCU5XMbbs';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#inspiration';
@@ -13,13 +13,19 @@ const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalE
 SpecificBonuses.registerSpecificBonus({ journal, key, });
 
 // register hint on source
-registerItemHint((hintcls, _actor, item, _data) => {
+registerItemHint((hintcls, actor, item, _data) => {
     const has = !!item.hasItemBooleanFlag(key);
     if (!has) {
         return;
     }
 
-    const hint = hintcls.create('', [], { hint: localizeBonusTooltip(key), icon: 'fas fa-magnifying-glass' });
+    let hintText = localizeBonusTooltip(key);
+    const skills = getSkillHints(actor, item, key);
+    if (skills.length) {
+        hintText += '<br>' + skills;
+    }
+
+    const hint = hintcls.create('', [], { hint: hintText, icon: 'fas fa-magnifying-glass' });
     return hint;
 });
 
@@ -65,7 +71,7 @@ onCreate(
         flagValues: {
             [key]: /** @type {SkillId[]} */
                 ([
-                    allKnowledgeSkillIds,
+                    allKnowledges,
                     'lin',
                     'spl',
                 ]),

@@ -5,9 +5,10 @@ import { getSkillName } from './get-skill-name.mjs';
 import { localize } from './localize.mjs';
 import { distinct } from './unique-array.mjs';
 
-export const allKnowledgeSkillIds = /** @type {const} */ ('all-knowledge');
-const allPerform = /** @type {const} */ ('all-performs');
-const allProf = /** @type {const} */ ('all-professions');
+export const allKnowledges = /** @type {const} */ ('all-knowledges');
+const allCrafts = /** @type {const} */ ('all-crafts');
+const allPerforms = /** @type {const} */ ('all-performs');
+const allProfessions = /** @type {const} */ ('all-professions');
 
 api.config.knowledgeSkills = [
     'kar',
@@ -44,7 +45,7 @@ export const getSkillChoices = (
     /** @type {boolean} */
     const backgroundEnabled = !!game.settings.get('pf1', 'allowBackgroundSkills');
 
-    /** @type {Partial<Record<SkillId | 'all-knowledge', string>>} */
+    /** @type {Partial<Record<SkillId | 'all-knowledges', string>>} */
     let skills;
     if (actor) {
         let allSkills = actor.allSkills;
@@ -64,17 +65,17 @@ export const getSkillChoices = (
     }
 
     if (includeAll) {
-        // skills[allKnowledgeSkillIds] = localize(allKnowledgeSkillIds);
-        skills.prf = localize(allPerform);
-        skills.pro = localize(allProf);
-
+        skills.crf = localize(allCrafts);
+        skills.prf = localize(allPerforms);
+        skills.pro = localize(allProfessions);
 
         let keyValues = Object.entries(skills);
         const i = Object.keys(skills).indexOf('kar');
-        keyValues.splice(i, 0, [allKnowledgeSkillIds, localize(allKnowledgeSkillIds)]);
+        keyValues.splice(i, 0, [allKnowledges, localize(allKnowledges)]);
         skills = Object.fromEntries(keyValues)
     }
     else {
+        delete skills.crf;
         delete skills.prf;
         delete skills.pro;
     }
@@ -87,14 +88,40 @@ export const getSkillChoices = (
  * @param {ActorPF} actor
  * @param {ItemPF} item
  * @param {string} flag
+ * @returns {string}
+ */
+export const getSkillHints = (actor, item, flag) => {
+    /** @type {(SkillId | 'all-knowledges')[]} */
+    const ids = foundry.utils.deepClone(getIdsFromItem(item, flag));
+
+    const names = ids.map((id) => {
+        switch (id) {
+            case 'crf': return localize(allCrafts);
+            case 'prf': return localize(allPerforms);
+            case 'pro': return localize(allProfessions);
+            case allKnowledges: return localize(allKnowledges);
+            default:
+                try { return actor.getSkillInfo(id).fullName; }
+                catch { return id; }
+        }
+    });
+
+    names.sort();
+    return names.join(', ');
+}
+
+/**
+ * @param {ActorPF} actor
+ * @param {ItemPF} item
+ * @param {string} flag
  * @returns {SkillId[]}
  */
 export const getFlaggedSkillIdsFromItem = (actor, item, flag) => {
-    /** @type {(SkillId | 'all-knowledge')[]} */
+    /** @type {(SkillId | 'all-knowledges')[]} */
     var skills = foundry.utils.deepClone(getIdsFromItem(item, flag));
 
     {
-        const index = skills.indexOf(allKnowledgeSkillIds);
+        const index = skills.indexOf(allKnowledges);
         if (index > -1) {
             skills.splice(index, 1);
             skills.push(...api.config.knowledgeSkills);

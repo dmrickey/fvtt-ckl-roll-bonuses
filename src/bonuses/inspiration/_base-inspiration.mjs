@@ -1,5 +1,5 @@
 import { intersects } from '../../util/array-intersects.mjs';
-import { allKnowledgeSkillIds, getFlaggedSkillIdsBySourceFromActor, getFlaggedSkillIdsFromActor, getSkillChoices } from '../../util/get-skills.mjs';
+import { allKnowledges, getFlaggedSkillIdsBySourceFromActor, getFlaggedSkillIdsFromActor, getSkillChoices } from '../../util/get-skills.mjs';
 import { localize, localizeBonusLabel } from '../../util/localize.mjs';
 import { onCreate } from '../../util/on-create.mjs';
 import { onSkillSheetRender } from '../../util/on-skill-sheet-render-handler.mjs';
@@ -368,7 +368,7 @@ onCreate(
             [inspirationKey]:
                 /** @type {SkillId[]} */
                 ([
-                    allKnowledgeSkillIds,
+                    allKnowledges,
                     'lin',
                     'spl',
                 ]),

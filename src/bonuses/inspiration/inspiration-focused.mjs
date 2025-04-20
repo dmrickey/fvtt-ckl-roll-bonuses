@@ -3,7 +3,7 @@
 // Choose two skills that you either are trained in or can otherwise use untrained. You must be able to use inspiration on these skills. When you use inspiration with those skills, roll a d8 instead of a d6, or a d10 if you would normally roll a d8. If you have the true inspiration class feature, you roll twice as many such dice (2d8 or 2d10) as normal.
 
 import { traitInput } from '../../handlebars-handlers/trait-input.mjs';
-import { getSkillChoices } from '../../util/get-skills.mjs';
+import { getSkillChoices, getSkillHints } from '../../util/get-skills.mjs';
 import { registerItemHint } from '../../util/item-hints.mjs';
 import { localizeBonusTooltip } from '../../util/localize.mjs';
 import { SpecificBonuses } from '../_all-specific-bonuses.mjs';
@@ -17,26 +17,21 @@ const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalE
 SpecificBonuses.registerSpecificBonus({ journal, key, parent: inspirationKey });
 
 // register hint on source
-registerItemHint((hintcls, _actor, item, _data) => {
+registerItemHint((hintcls, actor, item, _data) => {
     const has = !!item.hasItemBooleanFlag(key);
     if (!has) {
         return;
     }
 
-    const hint = hintcls.create('', [], { hint: localizeBonusTooltip(key), icon: 'fas fa-magnifying-glass ckl-extra-focus' });
+    let hintText = localizeBonusTooltip(key);
+    const skills = getSkillHints(actor, item, key);
+    if (skills.length) {
+        hintText += '<br>' + skills;
+    }
+
+    const hint = hintcls.create('', [], { hint: hintText, icon: 'fas fa-magnifying-glass ckl-extra-focus' });
     return hint;
 });
-
-// onSkillSheetRender({
-//     key,
-// }, {
-//     classes: () => ['fas', 'fa-magnifying-glass', 'ckl-extra-focus', 'ckl-skill-icon'],
-//     getText: (actor) => {
-//         const rollData = actor.getRollData();
-//         const text = localize('skill-sheet.inspiration-focused.skill-tip', { die: rollData.rb?.inspiration?.improved });
-//         return text;
-//     }
-// });
 
 Hooks.on('renderItemSheet', (
     /** @type {ItemSheetPF} */ { isEditable, item },

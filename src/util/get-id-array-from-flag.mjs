@@ -7,7 +7,7 @@ import { uniqueArray } from './unique-array.mjs';
  * @param {string} flag
  * @returns {T[]}
  */
-export const getIdsFromItem = (item, flag) => item.getFlag(MODULE_NAME, flag) || []
+export const getIdsFromItem = (item, flag) => item.getFlag(MODULE_NAME, flag) || [];
 
 /**
  * @template T
