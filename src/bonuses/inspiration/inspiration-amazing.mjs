@@ -9,7 +9,7 @@ import { localize, localizeBonusTooltip } from '../../util/localize.mjs';
 import { onCreate } from '../../util/on-create.mjs';
 import { LanguageSettings } from '../../util/settings.mjs';
 import { SpecificBonuses } from '../_all-specific-bonuses.mjs';
-import { inspirationAmazingeKey as key, inspirationKey } from './_base-inspiration.mjs';
+import { inspirationAmazingKey as key, inspirationKey } from './_base-inspiration.mjs';
 
 const compendiumId = '3ggXCz7WmYP55vu5';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#inspiration';

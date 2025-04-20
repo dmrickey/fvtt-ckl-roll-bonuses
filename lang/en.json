@@ -429,7 +429,10 @@
                 "skill-tip": "Free Inspiration ({die})"
             },
             "inspiration-focused": {
-                "skill-tip": "Increased Inspiration ({die})"
+                "skill-tip": "Increases Inspiration die by one step"
+            },
+            "inspiration-tenacious": {
+                "skill-tip": "Roll an extra Inspiration die, keep the higest"
             },
             "roll-untrained": {
                 "skill-tip": "Can Roll Untrained"
