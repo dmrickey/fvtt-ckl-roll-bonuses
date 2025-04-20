@@ -32,6 +32,7 @@ declare global {
             };
         };
         utils: {
+            getProperty(rollData: object, path: string);
             /**
              * A helper function which searches through an object to assign a value using a string key
              * This string key supports the notation a.b.c which would target object[a][b][c]

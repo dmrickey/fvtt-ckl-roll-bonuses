@@ -3,10 +3,9 @@
 // Choose two skills that you either are trained in or can otherwise use untrained. You must be able to use inspiration on these skills. When you use inspiration with those skills, roll a d8 instead of a d6, or a d10 if you would normally roll a d8. If you have the true inspiration class feature, you roll twice as many such dice (2d8 or 2d10) as normal.
 
 import { traitInput } from '../../handlebars-handlers/trait-input.mjs';
-import { onSkillSheetRender } from '../../util/on-skill-sheet-render-handler.mjs';
 import { getSkillChoices } from '../../util/get-skills.mjs';
 import { registerItemHint } from '../../util/item-hints.mjs';
-import { localize, localizeBonusTooltip } from '../../util/localize.mjs';
+import { localizeBonusTooltip } from '../../util/localize.mjs';
 import { SpecificBonuses } from '../_all-specific-bonuses.mjs';
 import { inspirationFocusedKey as key, inspirationKey, InspirationLanguageSettings } from './_base-inspiration.mjs';
 import { onCreate } from '../../util/on-create.mjs';
@@ -28,16 +27,16 @@ registerItemHint((hintcls, _actor, item, _data) => {
     return hint;
 });
 
-onSkillSheetRender({
-    key,
-}, {
-    classes: () => ['fas', 'fa-magnifying-glass', 'ckl-extra-focus', 'ckl-skill-icon'],
-    getText: (actor) => {
-        const rollData = actor.getRollData();
-        const text = localize('skill-sheet.inspiration-focused.skill-tip', { die: rollData.rb?.inspiration?.improved });
-        return text;
-    }
-});
+// onSkillSheetRender({
+//     key,
+// }, {
+//     classes: () => ['fas', 'fa-magnifying-glass', 'ckl-extra-focus', 'ckl-skill-icon'],
+//     getText: (actor) => {
+//         const rollData = actor.getRollData();
+//         const text = localize('skill-sheet.inspiration-focused.skill-tip', { die: rollData.rb?.inspiration?.improved });
+//         return text;
+//     }
+// });
 
 Hooks.on('renderItemSheet', (
     /** @type {ItemSheetPF} */ { isEditable, item },
@@ -56,7 +55,7 @@ Hooks.on('renderItemSheet', (
         return;
     }
 
-    const choices = getSkillChoices(item.actor, { isEditable });
+    const choices = getSkillChoices(item.actor, { isEditable, includeAll: false });
 
     traitInput({
         choices,
@@ -64,6 +63,7 @@ Hooks.on('renderItemSheet', (
         item,
         journal,
         key,
+        limit: 2,
         parent: html,
     }, {
         canEdit: isEditable,

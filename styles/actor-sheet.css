@@ -2,9 +2,13 @@
     align-self: center;
     margin-inline-start: auto;
     text-align: center;
-    width: 1.5rem;
+    margin-inline-end: 0.5em;
+}
+.ckl-skill-icon:first-of-type {
+    margin-inline-start: 0.5em;
 }
 
+/* used by versatile performance */
 .ckl-skill-icon-container {
     display: grid;
     grid-template-columns: 1fr;
@@ -13,9 +17,6 @@
 .ckl-skill-icon-container .ckl-skill-icon {
     grid-area: 1 / 1;
 }
-.ckl-skill-icon-slash-2 {
-    margin-inline-start: 1px;
-}
 
 #ckl-global-bonus-actor-disabled-container .ckl-description {
     margin-inline: auto;
@@ -23,34 +24,23 @@
     width: 60%;
 }
 
+.ckl-fa-slash {
+    position: relative;
+}
 .ckl-extra-fa-magnifying-glass::after {
     content: "\f002";
     margin-inline-start: -0.75em;
 }
 
 .ckl-extra-focus {
-    position: relative;
-}
-.ckl-extra-focus::after {
-    content: "\f185";
-    font-size: 1.2em;
-    margin-block-start: -8%;
-    margin-inline-start: -66%;
-    position: absolute;
-    opacity: 0.4;
-}
-.hint .ckl-extra-focus::after {
-    font-size: 1.2em;
-    margin-block-start: -15%;
-    margin-inline-start: -118%;
+    border-radius: 50%;
+    border-style: dotted;
+    border-color: yellow;
 }
 
-.ckl-fa-slash {
-    position: relative;
-}
 .ckl-fa-slash::after {
     content: "\f715";
-    margin-inline-start: -66%;
+    margin-inline-start: -116%;
     position: absolute;
     transform: scale(-0.8, 1);
 }

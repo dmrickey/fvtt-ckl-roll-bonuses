@@ -77,7 +77,13 @@ const getInspiredSkillsBySourceFromActor = (actor) => {
     }
 
     const inspired = getFlaggedSkillIdsBySourceFromActor(actor, inspirationKey);
-    return inspired;
+    const focused = getFlaggedSkillIdsBySourceFromActor(actor, inspirationFocusedKey);
+    const extra = getFlaggedSkillIdsBySourceFromActor(actor, inspirationExtraDieKey);
+    return [
+        ...inspired,
+        ...focused,
+        ...extra,
+    ];
 }
 
 onSkillSheetRender({
@@ -85,17 +91,41 @@ onSkillSheetRender({
     getSkillIds: getInspiredSkillsBySourceFromActor,
 }, {
     classes: (actor, skillId) => {
-        const classes = ['far', 'fa-magnifying-glass', 'ckl-skill-icon'];
+        /** @param {string} flag*/
+        const hasKeyForSkill = (flag) => intersects(getFlaggedSkillIdsFromActor(actor, flag), skillId);
+        const classes = ['fas', 'ckl-skill-icon'];
+
+        if (hasKeyForSkill(inspirationFocusedKey)) {
+            classes.push('ckl-extra-focus');
+        }
+
+        const hasExtra = hasKeyForSkill(inspirationExtraDieKey);
+        const hasTenacious = actor.hasItemBooleanFlag(inspirationTenaciousKey);
+        if (hasExtra && hasTenacious) {
+            classes.push('fa-magnifying-glass-plus');
+        }
+        else if (hasExtra || hasTenacious) {
+            classes.push('fa-magnifying-glass', 'ckl-extra-fa-magnifying-glass');
+        }
+        else {
+            classes.push('fa-magnifying-glass');
+        }
+
         if (!canUseInspirationForFree(actor, skillId)) {
             classes.push('ckl-fa-slash');
         }
         return classes;
     },
     getText: (actor, skillId) => {
-        const rollData = actor.getRollData();
+        let die;
+        const diePath = getDieForSkill(actor, skillId)?.path;
+        if (diePath) {
+            const rollData = actor.getRollData();
+            die = foundry.utils.getProperty(rollData, diePath);
+        }
         const text = canUseInspirationForFree(actor, skillId)
-            ? localize('skill-sheet.inspiration.skill-tip', { die: rollData.rb.inspiration?.base })
-            : localize('skill-sheet.inspiration.invalid-skill-tip');
+            ? localize('skill-sheet.inspiration.skill-tip', { die })
+            : localize('skill-sheet.inspiration.invalid-skill-tip', { die });
         return text;
     }
 });
@@ -162,6 +192,43 @@ const getDie = (actor) => {
 }
 
 /**
+ *
+ * @param {ActorPF} actor
+ * @param {SkillId} skill
+ */
+const getDieForSkill = (actor, skill) => {
+    let path;
+    const sources = [];
+
+    const hasExtra = getFlaggedSkillIdsBySourceFromActor(actor, inspirationExtraDieKey).find(({ ids }) => intersects(ids, skill));
+
+    const isFocused = getFlaggedSkillIdsBySourceFromActor(actor, inspirationFocusedKey).find(({ ids }) => intersects(ids, skill));
+    if (isFocused) {
+        path = hasExtra
+            ? 'rb.inspiration.improvedExtra'
+            : 'rb.inspiration.improved';
+        hasExtra
+            ? sources.push(isFocused.source.name, hasExtra.source.name)
+            : sources.push(isFocused.source.name);
+    }
+    else {
+        const isInspired = getFlaggedSkillIdsBySourceFromActor(actor, inspirationKey).find(({ ids }) => intersects(ids, skill));
+        if (isInspired) {
+            path = hasExtra
+                ? 'rb.inspiration.baseExtra'
+                : 'rb.inspiration.base';
+            hasExtra
+                ? sources.push(isInspired.source.name, hasExtra.source.name)
+                : sources.push(isInspired.source.name);
+        }
+    }
+
+    if (path) {
+        return { path, sources };
+    }
+}
+
+/**
  * @param {ActorPF | ItemPF | ItemAction} thing
  * @param {RollData} rollData
  */
@@ -195,23 +262,9 @@ function onRollSkill(actor, options, skill) {
     options.parts ||= [];
     let part;
 
-    const hasExtra = getFlaggedSkillIdsBySourceFromActor(actor, inspirationExtraDieKey).find(({ ids }) => intersects(ids, skill));
-
-    const isFocused = getFlaggedSkillIdsBySourceFromActor(actor, inspirationFocusedKey).find(({ ids }) => intersects(ids, skill));
-    if (isFocused) {
-        part = hasExtra
-            ? `@rb.inspiration.improvedExtra[${isFocused.source.name}, ${hasExtra.source.name}]`
-            : `@rb.inspiration.improved[${isFocused.source.name}]`;
-    }
-
-    const isInspired = getFlaggedSkillIdsBySourceFromActor(actor, inspirationKey).find(({ ids }) => intersects(ids, skill));
-    if (isInspired) {
-        part = hasExtra
-            ? `@rb.inspiration.baseExtra[${isInspired.source.name}, ${hasExtra.source.name}]`
-            : `@rb.inspiration.base[${isInspired.source.name}]`;
-    }
-
-    if (part) {
+    const bonus = getDieForSkill(actor, skill);
+    if (bonus) {
+        part = `@${bonus.path}[${bonus.sources.join(',')}]`
         options.parts.push(part);
     }
 }

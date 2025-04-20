@@ -25,12 +25,12 @@ registerItemHint((hintcls, _actor, item, _data) => {
     return hint;
 });
 
-onSkillSheetRender({
-    key,
-}, {
-    classes: () => ['fas', 'fa-magnifying-glass', 'ckl-extra-fa-magnifying-glass', 'ckl-skill-icon'],
-    getText: () => localizeBonusTooltip(inspirationTenaciousKey),
-});
+// onSkillSheetRender({
+//     key,
+// }, {
+//     classes: () => ['fas', 'fa-magnifying-glass', 'ckl-extra-fa-magnifying-glass', 'ckl-skill-icon'],
+//     getText: () => localizeBonusTooltip(inspirationTenaciousKey),
+// });
 
 Hooks.on('renderItemSheet', (
     /** @type {ItemSheetPF} */ { isEditable, item },

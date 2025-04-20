@@ -425,7 +425,7 @@
         },
         "skill-sheet": {
             "inspiration": {
-                "invalid-skill-tip": "Must be trained to use inspiration for free.",
+                "invalid-skill-tip": "Must be trained to roll for free ({die})",
                 "skill-tip": "Free Inspiration ({die})"
             },
             "inspiration-focused": {
