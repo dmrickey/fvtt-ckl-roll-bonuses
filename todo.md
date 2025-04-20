@@ -316,27 +316,6 @@
 - Figure out a way to make Versatile Performance and Snake Sidewind work together
 
 # todo
-- fill in inspiration logic
-  - Inspiration
-    - (itself)
-      - skill names in hint
-      - doc
-    - Amazing Inspiration (talent)
-      - doc
-    - Expanded Inspiration
-      - all functionality
-      - doc
-    - Focused Inspiration (feat)
-      - doc
-    - Tenacious Inspiration (talent)
-      - all functionality
-      - doc
-    - True Inspiration (capstone)
-      - all functionality
-      - doc
-  - Documentation
-    - Make note that the abilities/feats should have the system's class association filled in if they have class-level-based changes
-    - Add current choices in hints
 - Vital Strike
   - Add Devastating Strike handling for RB
   - Take another look at mythic - I should be able to rebuild the action damage and use any crit-available damage
