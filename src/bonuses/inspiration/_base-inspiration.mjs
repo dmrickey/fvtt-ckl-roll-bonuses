@@ -216,20 +216,19 @@ const getDieForSkill = (actor, skill) => {
         hasExtra
             ? sources.push(isFocused.source.name, hasExtra.source.name)
             : sources.push(isFocused.source.name);
-    }
-    else {
-        const isInspired = getFlaggedSkillIdsBySourceFromActor(actor, inspirationKey).find(({ ids }) => intersects(ids, skill));
-        if (isInspired) {
-            path = hasExtra
-                ? 'rb.inspiration.baseExtra'
-                : 'rb.inspiration.base';
-            hasExtra
-                ? sources.push(isInspired.source.name, hasExtra.source.name)
-                : sources.push(isInspired.source.name);
-        }
+
+        return { path, sources };
     }
 
-    if (path) {
+    const isInspired = getFlaggedSkillIdsBySourceFromActor(actor, inspirationKey).find(({ ids }) => intersects(ids, skill));
+    if (isInspired) {
+        path = hasExtra
+            ? 'rb.inspiration.baseExtra'
+            : 'rb.inspiration.base';
+        hasExtra
+            ? sources.push(isInspired.source.name, hasExtra.source.name)
+            : sources.push(isInspired.source.name);
+
         return { path, sources };
     }
 }
