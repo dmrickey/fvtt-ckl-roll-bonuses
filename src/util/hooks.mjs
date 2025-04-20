@@ -379,7 +379,12 @@ export class LocalHookHandler {
         const funcs = handlers[hook] || [];
 
         for (const func of funcs) {
-            func(...args);
+            try {
+                func(...args);
+            }
+            catch (e) {
+                console.error("shouldn't happen", e);
+            }
         }
     }
 }
