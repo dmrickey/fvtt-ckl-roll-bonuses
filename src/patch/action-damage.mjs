@@ -179,7 +179,10 @@ function actionDamage(action, { simplify = true, strict = true } = {}) {
         }
     }
 
+    /** BEGIN OVERRIDE */
     action[MODULE_NAME].formula = formula;
+    /** END OVERRIDE */
+
     return formula;
 }
 

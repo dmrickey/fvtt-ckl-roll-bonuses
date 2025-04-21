@@ -314,6 +314,7 @@
   - Or disable the system's checkbox as this mod already accounts for it
     - but also add an "ignore" checkbox
 - Figure out a way to make Versatile Performance and Snake Sidewind work together
+- Add Fortune/Misfortune checkboxes to attack/roll dialogs
 
 # todo
 - Vital Strike
