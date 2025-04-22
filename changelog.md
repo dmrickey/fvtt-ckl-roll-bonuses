@@ -2,7 +2,7 @@
 
 ### New Bonuses
 - Vital Strike (more)
-  - Support for Devastating Strike and Improved Vital Strike
+  - Now also supports Devastating Strike, Improved Devastating Strike, and Mythic Vital Strike
 - Inspiration
   - Now configured directly on the class ability. Includes support for various feats/talents such as Amazing Inspiration, Tenacious Inspiration, Focused Inspiration, and True Inspiration to automatically increase the inspiration die when necessary.
   - If you are an Investigator, please read the in-game documentation for your options plus a helpful script call

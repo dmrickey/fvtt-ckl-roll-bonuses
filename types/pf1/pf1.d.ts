@@ -544,7 +544,7 @@ declare global {
         };
 
         ability: {
-            attack: undefined | string;
+            attack: undefined | keyof Abilities;
             critMult: null | number;
             critRange: null | number;
             damage: undefined | keyof Abilities;
@@ -2148,8 +2148,8 @@ declare global {
     interface ActionDamageSource {
         flavor: string;
         formula: string;
-        modifier: unknown;
-        type: unknown;
+        modifier?: BonusTypes;
+        type?: BonusTypes;
         value: string | number;
     }
 

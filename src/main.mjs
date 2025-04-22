@@ -13,7 +13,7 @@ import { ifDebug } from './util/if-debug.mjs';
 import { emptyObject } from './util/empty-object.mjs';
 import { registerSetting } from './util/settings.mjs';
 import { addNodeToRollBonus } from './handlebars-handlers/add-bonus-to-item-sheet.mjs';
-import { localize } from './util/localize.mjs';
+import { localize, localizeBonusLabel } from './util/localize.mjs';
 import { FinesseOverride } from './targeted/target-overides/finesse-override.mjs';
 import { handleConditionals } from './patch/action-use_handle-conditionals.mjs';
 import { truthiness } from './util/truthiness.mjs';
@@ -248,6 +248,13 @@ async function actionUse_handleConditionals() {
                 }
             });
         });
+    }
+
+    // This needs to happen after all other conditionals have been gathered so it can double any extra
+    const vital = new api.utils.VitalStrikeData(this.actor, { actionUse: this });
+    const mythic = vital.buildMythicConditional(conditionals);
+    if (mythic) {
+        conditionalData.push(mythic);
     }
 
     handleConditionals(this, conditionalData);

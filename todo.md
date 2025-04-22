@@ -317,9 +317,6 @@
 - Add Fortune/Misfortune checkboxes to attack/roll dialogs
 
 # todo
-- Vital Strike
-  - Add Devastating Strike handling for RB
-  - Take another look at mythic - I should be able to rebuild the action damage and use any crit-available damage
 - get ride of `forceSync` dice override
   - Snake Sidewind needs a bit of extra love (see above) can hopefuly do this without forceSync
   - make `handleConditional` async
@@ -329,3 +326,4 @@
     - will require the places that use it to also be async
   - ALTERNATIVELY
     - rerwrite all terms to handle sync rolling...
+- Typo `quantity` (no `@`) in Dice Transform documentation

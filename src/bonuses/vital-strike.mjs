@@ -2,12 +2,13 @@ import { MODULE_NAME } from '../consts.mjs';
 import { checkboxInput } from '../handlebars-handlers/bonus-inputs/chekbox-input.mjs';
 import { showEnabledLabel } from '../handlebars-handlers/enabled-label.mjs';
 import { isWeapon } from '../util/action-type-helpers.mjs';
+import { api } from '../util/api.mjs';
 import { addCheckToAttackDialog, getFormData } from '../util/attack-dialog-helper.mjs';
 import { getCachedBonuses } from '../util/get-cached-bonuses.mjs';
 import { itemHasCompendiumId } from '../util/has-compendium-id.mjs';
 import { LocalHookHandler, localHooks } from '../util/hooks.mjs';
 import { registerItemHint } from '../util/item-hints.mjs';
-import { localizeBonusLabel, localizeBonusTooltip } from '../util/localize.mjs';
+import { localize, localizeBonusLabel, localizeBonusTooltip } from '../util/localize.mjs';
 import { LanguageSettings } from '../util/settings.mjs';
 import { truthiness } from '../util/truthiness.mjs';
 import { SpecificBonuses } from './_all-specific-bonuses.mjs';
@@ -31,19 +32,19 @@ const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalE
 SpecificBonuses.registerSpecificBonus({ journal, key: vitalStrike });
 SpecificBonuses.registerSpecificBonus({ journal, key: vitalStrikeImproved, parent: vitalStrike, tooltipKey: vitalStrike });
 SpecificBonuses.registerSpecificBonus({ journal, key: vitalStrikeGreater, parent: vitalStrike, tooltipKey: vitalStrike });
-// SpecificBonuses.registerSpecificBonus({ journal, key: vitalStrikeMythic, parent: vitalStrike });
+SpecificBonuses.registerSpecificBonus({ journal, key: vitalStrikeMythic, parent: vitalStrike });
 
 const hintInfo = /** @type {const} */ ({
     [vitalStrike]: { label: '×2', tooltipKey: vitalStrike, icon: undefined },
     [vitalStrikeImproved]: { label: '×3', tooltipKey: vitalStrike, icon: undefined },
     [vitalStrikeGreater]: { label: '×4', tooltipKey: vitalStrike, icon: undefined },
-    // [vitalStrikeMythic]: { label: '', tooltipKey: vitalStrikeMythic, icon: 'ra ra-croc-sword' },
+    [vitalStrikeMythic]: { label: '', tooltipKey: vitalStrikeMythic, icon: 'ra ra-croc-sword' },
 });
 const allKeys = /** @type {const} */ ([
     vitalStrike,
     vitalStrikeImproved,
     vitalStrikeGreater,
-    // vitalStrikeMythic,
+    vitalStrikeMythic,
 ]);
 
 // register hint on source
@@ -104,7 +105,7 @@ class Settings {
     }
 }
 
-class VitalStrikeData {
+export class VitalStrikeData {
     /** @type {boolean} */
     get hasVitalStrike() { return !!this.key; }
 
@@ -112,6 +113,8 @@ class VitalStrikeData {
     get isImproved() { return this.key === vitalStrikeImproved; }
     get isGreater() { return this.key === vitalStrikeGreater; }
 
+    /** @type {Nullable<ActionUse>} */
+    actionUse;
     enabled = false;
     enabledByDefault = false;
     key = '';
@@ -126,10 +129,10 @@ class VitalStrikeData {
      * @param {ActionUse?} [options.actionUse]
      */
     constructor(actor, { actionUse = null } = {}) {
+        this.actionUse = actionUse;
         this.hasDevastating = actor.hasItemBooleanFlag(devastatingStrikeKey);
         this.hasDevastatingImproved = actor.hasItemBooleanFlag(devastatingStrikeImprovedKey);
-
-        // this.mythic = this.#hasVitalStrikeMythic(actor);
+        this.mythic = this.#hasVitalStrikeMythic(actor);
 
         /**
          * @param {string} key
@@ -137,14 +140,19 @@ class VitalStrikeData {
          * @returns {boolean} true if it has this type of strike
          */
         const setupVitalStrike = (key, amount) => {
-            const vital = this.#hasVitalStrike(actor, key);
+            const vital = this.#getVitalStrikeData(actor, key);
             if (vital.has) {
                 this.key = key;
                 this.label = localizeBonusLabel(key);
                 this.enabledByDefault = vital.enabled;
+                this.multiplier = amount;
+
+                if (actionUse?.shared.attacks.length !== 1) {
+                    this.enabled = false;
+                    return false;
+                }
 
                 if (actionUse) {
-                    // if (!this.mythic) {
                     const part = actionUse.action.damage?.parts[0];
                     const partFormula = part?.formula || '';
                     const firstDice = getFirstTermFormula(partFormula);
@@ -227,8 +235,84 @@ class VitalStrikeData {
             || setupVitalStrike(vitalStrike, 1);
     }
 
+    /**
+     * @param {ItemConditional[]} conditionals
+     * @returns {ItemConditional | undefined}
+     */
+    buildMythicConditional(conditionals) {
+        if (!this.enabled || !this.mythic || !this.actionUse) {
+            return;
+        };
+
+        const formulaParts = [];
+
+        /**
+         * @param {string | number} f
+         * @param {string?} [l]
+         * @returns {string}
+        */
+        const toFormula = (f, l) => `{${new Array(this.multiplier).fill(f).join(', ')}}${(l ? `[${l}]` : '')}`;
+
+        // this.action.allDamageSources
+        formulaParts.push(...this.actionUse.action.allDamageSources.map(x => toFormula(x.formula, x.flavor)));
+
+        // and ability source
+        const abl = this.actionUse.shared.rollData.action?.ability.damage;
+        const ability = abl && this.actionUse.shared.rollData.abilities?.[abl];
+        if (ability) {
+            const isNatural = this.actionUse.shared.rollData.item.subType === "natural";
+            const held = this.actionUse.shared.rollData.action?.held || '1h';
+            const ablMult =
+                this.actionUse.shared.rollData.action?.ability.damageMult ?? (isNatural ? null : pf1.config.abilityDamageHeldMultipliers[held]) ?? 1;
+            // Determine ability score bonus
+            const max = this.actionUse.action.ability?.max ?? Infinity;
+            const ablDamage = (ability.mod < 0)
+                ? Math.min(max, ability.mod)
+                : Math.floor(Math.min(max, ability.mod) * ablMult);
+
+            if (ablDamage) {
+                formulaParts.push(toFormula(ablDamage, pf1.config.abilities[abl]));
+            }
+        }
+
+        // this.actionUse.shared.damageBonus
+        formulaParts.push(...this.actionUse.shared.damageBonus.map(x => toFormula(x)));
+
+        // filter all conditions // conditions.where target = damage and critial = normal
+        formulaParts.push(...conditionals
+            .filter(truthiness)
+            .flatMap((c) => [...c.modifiers])
+            .filter((m) => m.target === 'damage' && m.critical === 'normal')
+            .map((m) => toFormula(m.formula))
+        );
+
+        if (this.actionUse.shared.rollData.powerAttackBonus) {
+            const label = ["rwak", "twak", "rsak"].includes(this.actionUse.shared.action.actionType)
+                ? localize("PF1.DeadlyAim")
+                : localize("PF1.PowerAttack");
+            formulaParts.push(toFormula(this.actionUse.shared.rollData.powerAttackBonus, label));
+        }
+
+        const conditional = new pf1.components.ItemConditional({
+            _id: foundry.utils.randomID(),
+            default: true,
+            name: localizeBonusLabel(vitalStrikeMythic),
+            modifiers: [{
+                _id: foundry.utils.randomID(),
+                critical: 'nonCrit',
+                formula: `{${formulaParts.join(', ')}}[${localizeBonusLabel(vitalStrikeMythic)}]`,
+                subTarget: 'attack_0',
+                target: 'damage',
+                type: '',
+                damageType: [...this.actionUse.action.damage?.parts[0]?.types],
+            }],
+        });
+
+        return conditional;
+    }
+
     /** @param {ActorPF} actor @param {string} key @returns {{ has: boolean, enabled: boolean }} */
-    #hasVitalStrike = (actor, key) => {
+    #getVitalStrikeData = (actor, key) => {
         var items = getCachedBonuses(actor, key);
         var enabledByDefault = !!items.find(x => !!x.getFlag(MODULE_NAME, vitalStrikeEnabled));
         return { has: !!items.length, enabled: enabledByDefault };
@@ -236,6 +320,7 @@ class VitalStrikeData {
     /** @param {ActorPF} actor * @returns {boolean} */
     #hasVitalStrikeMythic = (actor) => actor.hasItemBooleanFlag(vitalStrikeMythic);
 }
+api.utils.VitalStrikeData = VitalStrikeData;
 
 /**
  * @this {ActionUse}
@@ -337,9 +422,9 @@ Hooks.on('renderItemSheet', (
     if (isVital) {
         showVitalStrike(vitalStrike);
     }
-    // if (isMythic) {
-    //     showVitalStrike(vitalStrikeMythic, vitalStrikeMythic);
-    // }
+    if (isMythic) {
+        showVitalStrike(vitalStrikeMythic, vitalStrikeMythic);
+    }
 
     if (isVital || isImproved || isGreater) {
         checkboxInput({
@@ -391,7 +476,7 @@ const configureIfNecesary = (item, { onCreate = false } = {}) => {
             : item.addItemBooleanFlag(flag);
 
     if (isMythic && !item.hasItemBooleanFlag(vitalStrikeMythic)) {
-        // addFlag(vitalStrikeMythic);
+        addFlag(vitalStrikeMythic);
     }
     else if (isGreater && !item.hasItemBooleanFlag(vitalStrikeGreater)) {
         addFlag(vitalStrikeGreater);
