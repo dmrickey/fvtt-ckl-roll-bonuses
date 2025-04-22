@@ -82,4 +82,49 @@ declare global {
 
         union<T, U>(set: Set<U>): Set<T|U>;
     }
+
+    type GridMeasurePathResultWaypoint = {
+        /** The segment from the previous waypoint to this waypoint. */
+        backward: GridMeasurePathResultSegment;
+        /** The segment from this waypoint to the next waypoint. */
+        forward: GridMeasurePathResultSegment;
+        /** The total distance travelled along the path up to this waypoint. */
+        distance: number;
+        /** The total number of spaces moved along a direct path up to this waypoint. */
+        spaces: number;
+        /** The total cost of the direct path ({@link BaseGrid#getDirectPath}) up to this waypoint. */
+        cost: number;
+    }
+
+    type GridMeasurePathResultSegment = {
+        /** The waypoint that this segment starts from. */
+        from: GridMeasurePathResultWaypoint;
+        /** The waypoint that this segment goes to. */
+        to: GridMeasurePathResultWaypoint;
+        /** Is teleporation? */
+        teleport: boolean;
+        /** The distance travelled in grid units along this segment. */
+        distance: number;
+        /** The number of spaces moved along this segment. */
+        spaces: number;
+        /** The cost of the direct path ({@link BaseGrid#getDirectPath}) between the two waypoints. */
+        cost: number;
+    }
+
+    type GridMeasurePathResult = {
+        /** The measurements at each waypoint. */
+        waypoints: GridMeasurePathResultWaypoint[];
+        /** The measurements at each segment. */
+        segments: GridMeasurePathResultSegment[];
+        /** The total distance travelled along the path through all waypoints. */
+        distance: number;
+        /**
+         * The total number of spaces moved along a direct path through all waypoints.
+         * Moving from a grid space to any of its neighbors counts as 1 step.
+         * Always 0 in gridless grids.
+         */
+        spaces: number;
+        /** The total cost of the direct path ({@link BaseGrid#getDirectPath}) through all waypoints. */
+        cost: number;
+    }
 }

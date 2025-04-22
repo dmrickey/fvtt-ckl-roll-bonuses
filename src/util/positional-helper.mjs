@@ -304,20 +304,14 @@ export class PositionalHelper {
             z2 = z1;
         }
 
-        // @ts-ignore
-        const { distance } = canvas.grid.measurePath([{ x: x1, y: y1 }, { x: x2, y: y2 }]);
-        if (z1 === z2) {
-            return distance;
-        }
-
-        const spots = [{ x: 0, y: z1 }, { x: 0, y: z2 }];
-        // @ts-ignore
-        const zDistance = canvas.grid.measurePath(spots).distance;
-        const d = Math.round(Math.sqrt(distance * distance + zDistance * zDistance) * 10) / 10;
-        const finalDistance = grid.type === foundry.CONST.GRID_TYPES.GRIDLESS
-            ? d
-            : (Math.floor(d / grid.distance) * grid.distance);
-        return finalDistance;
+        /**
+         * @param {{ x: number, y: number, z: number }} param1
+         * @returns
+         */
+        const measureFrom3dOrigin = ({ x, y, z }) =>
+            grid.measurePath([{ x: 0, y: 0 }, { x, y: grid.measurePath([{ x: 0, y: 0 }, { x: y, y: z }]).distance * gridSize / grid.distance }]);
+        var measured = measureFrom3dOrigin({ x: x1 - x2, y: y1 - y2, z: z1 - z2 });
+        return measured.distance;
     }
 
     /**

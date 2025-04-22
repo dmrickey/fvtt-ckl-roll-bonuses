@@ -6,6 +6,15 @@ interface CONST {
         OBSERVER: 2;
         OWNER: 3;
     };
+    GRID_DIAGONALS: {
+        EQUIDISTANT: 0;
+        EXACT: 1;
+        APPROXIMATE: 2;
+        RECTILINEAR: 3;
+        ALTERNATING_1: 4;
+        ALTERNATING_2: 5;
+        ILLEGAL: 6;
+    };
     TOKEN_DISPLAY_MODES: {
         NONE: 0;
         CONTROL: 10;
