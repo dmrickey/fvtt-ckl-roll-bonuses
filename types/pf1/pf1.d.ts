@@ -1713,14 +1713,46 @@ declare global {
         ): number;
 
         /**
-         * Safely get the result of a roll, returns 0 if unsafe.
-         * @param formula - The string that should resolve to a number
-         * @param rollData - The roll data used for resolving any variables in the formula
+         * Synchronous and thrown error consuming roll evaluation.
+         *
+         * @remarks
+         * - Returned roll has `.err` set if an error occurred during evaluation.
+         * - If error occurs, the returned roll will have its formula replaced.
+         * @param {string} formula - Roll formula
+         * @param {object} rollData - Data supplied to roll
+         * @param {any} context - If error occurs, this will be included in the error message.
+         * @param {object} [options] - Additional options
+         * @param {boolean} [options.suppressError=false] - If true, no error will be printed even if one occurs.
+         * @param {object} [evalOpts] - Additional options to pass to Roll.evaluate()
+         * @returns {Promise<RollPF & { total: number }>} - Evaluated roll, or placeholder if error occurred.
          */
-        static safeRollSync(
-            formula: string | number,
-            rollData?: Nullable<RollData>
-        ): RollPF;
+        static async safeRoll(
+            formula: string,
+            rollData: object = {},
+            context: any,
+            { suppressError = false }: { suppressError?: boolean; } = {},
+            evalOpts: object = {}
+        ): Promise<RollPF & { total: number }>;
+
+        /**
+         * Synchronous version of {@link safeRoll safeRoll()}
+         *
+         * {@inheritDoc safeRoll}
+         *
+         * @param {string} formula - Formula to evaluate
+         * @param {object} [rollData] - Roll data
+         * @param {*} [context] - Context data to log if error occurs
+         * @param {object} [options] - Additional options
+         * @param {boolean} [options.suppressError] - If true, no error will be printed
+         * @param {object} [evalOpts] - Options to pass to Roll.evaluate()
+         * @returns {RollPF & { total: number }} - Evaluated roll
+         */
+        static safeRollSync(formula: string,
+            rollData: object = {},
+            context: any,
+            { suppressError = false }: { suppressError?: boolean; } = {},
+            evalOpts: object = {}
+        ): RollPF & { total: number };
 
         evaluate(options?: InexactPartial<Options>): Promise<Evaluated<this>>;
         evaluate(

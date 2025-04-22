@@ -257,7 +257,7 @@ async function actionUse_handleConditionals() {
         conditionalData.push(mythic);
     }
 
-    handleConditionals(this, conditionalData);
+    await handleConditionals(this, conditionalData);
 }
 
 /**

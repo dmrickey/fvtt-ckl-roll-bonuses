@@ -2,30 +2,32 @@
  * @param {ActionUse} actionUse
  * @param {ItemConditional[]} conditionals
  */
-export const handleConditionals = (actionUse, conditionals) => {
+export const handleConditionals = async (actionUse, conditionals) => {
     if (!conditionals?.length) return;
 
     /** @type {RollData['conditionals']} */
     const rollDataConds = {};
 
-    conditionals.forEach((conditional) => {
+    for (const conditional of conditionals) {
         const tag = pf1.utils.createTag(conditional.name);
         for (const [modKey, modifier] of conditional.modifiers.entries()) {
             // Ignore modifiers with nonexisting formula or formulas that equal to zero
             if (modifier.formula == 0) {
                 console.warn("Ignored ineffective conditional modifier", { modifier, actionUse });
-                return;
+                continue;
             }
 
             // Adds a formula's result to rollData to allow referencing it.
             // Due to being its own roll, this will only correctly work for static formulae.
-            const conditionalRoll = RollPF.create(modifier.formula + '', actionUse.shared.rollData).evaluateSync({ forceSync: true });
+            const conditionalRoll = await RollPF.safeRoll(modifier.formula + '', actionUse.shared.rollData, undefined, undefined, {
+                allowInteractive: false,
+            });
             if (conditionalRoll.err) {
                 ui.notifications.warn(
                     game.i18n.format("PF1.Warning.ConditionalRoll", { number: modKey + 1, name: conditional.name })
                 );
                 // Skip modifier to avoid multiple errors from one non-evaluating entry
-                return;
+                continue;
             }
 
             rollDataConds[tag] ??= {};
@@ -38,8 +40,8 @@ export const handleConditionals = (actionUse, conditionals) => {
             switch (modifier.target) {
                 case "attack":
                 case "charges":
-                case "cl":
-                case "dc": {
+                case "dc":
+                case "cl": {
                     const hasFlavor = /\[.*\]/.test(modifier.formula + '');
                     const flavoredFormula = hasFlavor ? modifier.formula : `(${modifier.formula})[${conditional.name}]`;
                     actionUse.shared.conditionalPartsCommon[partString] = [
@@ -80,7 +82,7 @@ export const handleConditionals = (actionUse, conditionals) => {
             if (!cond) continue;
             const formula = cond.join(" + ");
 
-            const roll = RollPF.create(formula, actionUse.shared.rollData).evaluateSync({ forceSync: true });
+            const roll = await RollPF.safeRoll(formula, actionUse.shared.rollData, { target, formula });
             switch (target) {
                 case "cl":
                     actionUse.shared.rollData.cl ||= 0;
@@ -96,5 +98,5 @@ export const handleConditionals = (actionUse, conditionals) => {
                     break;
             }
         }
-    });
+    }
 };
