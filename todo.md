@@ -326,3 +326,6 @@
     - will require the places that use it to also be async
   - ALTERNATIVELY
     - rerwrite all terms to handle sync rolling...
+- Add a macro compendium
+  - Include example for getting API and using the positional api
+  - include "Roll Inspiration" macro

@@ -1,7 +1,7 @@
 ## Roll Bonuses 2.20.0
 
 ### New Bonuses
-- Vital Strike (more)
+- Vital Strike additions
   - Now also supports Devastating Strike, Improved Devastating Strike, and Mythic Vital Strike
 - Inspiration
   - Now configured directly on the class ability. Includes support for various feats/talents such as Amazing Inspiration, Tenacious Inspiration, Focused Inspiration, and True Inspiration to automatically increase the inspiration die when necessary.
@@ -13,6 +13,7 @@
 
 ### Bugfixes
 - Skill Rank Override once again actually overrides.
+- Fixed detecting melee range for certain scnarios of large creatures targeting large creatures.
 
 ---
 
