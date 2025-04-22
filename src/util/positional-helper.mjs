@@ -305,7 +305,7 @@ export class PositionalHelper {
         }
 
         // @ts-ignore
-        const { distance } = canvas.grid.measurePath([token1, token2]);
+        const { distance } = canvas.grid.measurePath([{ x: x1, y: y1 }, { x: x2, y: y2 }]);
         if (z1 === z2) {
             return distance;
         }
@@ -314,9 +314,10 @@ export class PositionalHelper {
         // @ts-ignore
         const zDistance = canvas.grid.measurePath(spots).distance;
         const d = Math.round(Math.sqrt(distance * distance + zDistance * zDistance) * 10) / 10;
-        return grid.type === foundry.CONST.GRID_TYPES.GRIDLESS
+        const finalDistance = grid.type === foundry.CONST.GRID_TYPES.GRIDLESS
             ? d
-            : Math.floor(d / grid.distance) * grid.distance;
+            : (Math.floor(d / grid.distance) * grid.distance);
+        return finalDistance;
     }
 
     /**
