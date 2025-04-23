@@ -324,7 +324,21 @@ declare global {
         };
         token?: TokenDocumentPF;
         useMeasureTemplate?: boolean;
-        useOptions: unknown;
+        useOptions: {
+            abilityMult?: number;
+            charge?: boolean;
+            clCheck?: boolean;
+            flanking?: boolean;
+            haste?: boolean;
+            held?: '1h' | '2h' | 'oh';
+            highGround?: boolean;
+            manyshot?: boolean;
+            measureTemplate?: boolean;
+            pointBlankShot?: boolean;
+            powerAttack?: boolean;
+            primaryAttack?: boolean;
+            rapidShot?: boolean;
+        };
 
         // chat attack dialog checkboxes
         charge?: boolean;

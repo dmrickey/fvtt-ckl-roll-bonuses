@@ -21,8 +21,9 @@ export class HigherGroundGlobalBonus extends BaseGlobalBonus {
 
     /**
      * @param {ActionUse} actionUse
+     * @return {boolean | undefined}
      */
-    static addHigherGroundBonus(actionUse) {
+    static isHigher(actionUse) {
         const { action, actor, shared } = actionUse;
         if (!actor) {
             return;
@@ -49,12 +50,17 @@ export class HigherGroundGlobalBonus extends BaseGlobalBonus {
             return d.threatens(actionUse.action) && d.isOnHigherGround();
         });
 
-        if (isHigher) {
-            shared.attackBonus.push(`1[${HigherGroundGlobalBonus.attackLabel}]`);
-        }
+        return isHigher;
     }
 
     static {
-        Hooks.on(customGlobalHooks.actionUseAlterRollData, HigherGroundGlobalBonus.addHigherGroundBonus);
+        /** @param {ActionUse} actionUse */
+        function addHigherGroundOption(actionUse) {
+            if (HigherGroundGlobalBonus.isHigher(actionUse)) {
+                actionUse.shared.useOptions.highGround = true;
+            }
+        }
+
+        Hooks.on('pf1CreateActionUse', addHigherGroundOption);
     }
 }

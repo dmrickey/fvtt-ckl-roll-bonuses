@@ -292,15 +292,6 @@
   - See example [https://gitlab.com/mxzf/adventure-uninstaller/-/blob/master/adventure-uninstaller.mjs](here)
 
 - Add "Weapon Focus" hint hook so Weapon Focus, Weapon Specialization, and Martial Focus can all use the sword icon hint
-- Specific Bonuses
-  - Inspiration
-    - Has a traits selector for various skills
-    - Expanded Inspiration
-      - Lets you pick more skills that automatically include inspiration
-    - Change Inspiration Die
-      - Allows you to change the base die from 1d6 to 1d8 or 2d8 (Amazing Inspiration talent)
-    - Inspiration "Fortune" 
-      - e.g. Empathy Talent, when rolling inspiration for sense motive, roll twice and take the higher
 - Add "ignore me" boolean flag to turn off auto configuration (stronger "hammer" for EitR-type stuff where it incorrectly makes assumptions)
   - Or possibly just add a flag that says "this has already been configured" and then don't do it again
 - Look into changing a lot of my older bonuses into the system's newer changes - will hopefully be less processing if I'm not manually injecting stuff
@@ -309,10 +300,6 @@
     - IAF - `-1` untyped ACP (Armor)
   - CL
   - DC
-- Higher Ground
-  - Automatically check the system's new "high ground" tick on the attack dialog when applicable
-  - Or disable the system's checkbox as this mod already accounts for it
-    - but also add an "ignore" checkbox
 - Figure out a way to make Versatile Performance and Snake Sidewind work together
 - Add Fortune/Misfortune checkboxes to attack/roll dialogs
 
