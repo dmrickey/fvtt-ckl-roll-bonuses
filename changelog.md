@@ -15,6 +15,7 @@
 ### Bugfixes
 - Skill Rank Override once again actually overrides.
 - Fixed detecting melee range for certain scnarios of large creatures targeting large creatures.
+- More work on vertical height detection so it more accurately represents distance
 
 ---
 
