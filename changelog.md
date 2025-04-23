@@ -9,10 +9,14 @@
 - Roll Skill Untrained - Updates the actor's skill sheet to indicate that a given skill can now be used while untrained. Removes the `untrained` note when rolling as this is no longer the case.
 
 ### Misc
-- Settings Skill bonuses directly on the actor sheet is now deprecated and will be removed in a future update. Everything that this did can now be accomplished by setting Specific Bonuses directly on the feat/ability/buff granting those bonuses. (or with the system's skill changes as has been the case for a while now)
 - Renamed "Race Target" to "Creature Type" target
 - Script Bonus - Added `this.source` as an option within the script call to grab a reference back to the source of the Bonus. Reminder: `item` references the "current item" that's being used that triggered the script.
 - Updated True Strike Buff to have a script call that will disable itself that doesn't rely on Hooks (so it will now survive between sessions)
+- Added Macro Compendium
+  - A couple of Inspiration macros for investigators
+  - A script call that will turn off a Roll Bonus buff after a single use
+  - An example on using Roll Bonuses distance finding api to measure the distance between two tokens
+- ⚠⚠⚠ Settings Skill bonuses directly on the actor sheet is now deprecated and will be removed in a future update. Everything that this did can now be accomplished by setting Specific Bonuses directly on the feat/ability/buff granting those bonuses. (or with the system's skill changes as has been the case for a while now)
 
 ### Bugfixes
 - Skill Rank Override once again actually overrides.
