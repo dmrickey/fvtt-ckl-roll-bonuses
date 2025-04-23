@@ -4,6 +4,7 @@ import * as v2 from './migrate-v2.mjs';
 import * as v3 from './migrate-v3.mjs';
 import * as v4 from './migrate-v4.mjs';
 import * as v5 from './migrate-v5.mjs';
+import { MigrateV6 as v6 } from './migrate-v6.mjs';
 import { MODULE_NAME } from '../consts.mjs';
 import { api } from '../util/api.mjs';
 import { registerSetting } from '../util/settings.mjs';
@@ -67,6 +68,9 @@ const migrations = [
 
     //  2.19 (ammo mw)
     { label: 'ettin', migrate: v5.migrateWorldV5 },
+
+    // 2.20 (race type -> creature type)
+    // { label: 'ettin', migrate: v6.migrateWorld },
 ];
 
 // should always be one more than the
@@ -127,4 +131,5 @@ api.migrate = {
     v3,
     v4,
     v5,
+    v6,
 };

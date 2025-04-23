@@ -9,19 +9,19 @@ import { BaseTarget } from '../_base-target.mjs';
 /**
  * @extends BaseTarget
  */
-export class RaceTarget extends BaseTarget {
+export class CreatureTypeTarget extends BaseTarget {
     /**
      * @inheritdoc
      * @override
      */
-    static get sourceKey() { return 'race'; }
+    static get sourceKey() { return 'creature-type'; }
 
     /**
      * @todo
      * @override
      * @returns {string}
      */
-    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.IpRhJqZEX2TUarSX#race'; }
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.IpRhJqZEX2TUarSX#creature-type'; }
 
     /**
      * @override
@@ -33,7 +33,7 @@ export class RaceTarget extends BaseTarget {
      * @override
      * @inheritdoc
      */
-    static get label() { return localize('PF1.Race'); }
+    static get label() { return localize('PF1.CreatureType'); }
 
     /**
      * @override
@@ -45,11 +45,11 @@ export class RaceTarget extends BaseTarget {
      * @param {ItemPF} source
      * @returns {Trait}
      */
-    static #getRaceTraits(source) {
+    static #getCreatureTypes(source) {
         const choices = pf1.config.creatureTypes;
         const flag = source.getFlag(MODULE_NAME, this.key);
-        const races = new Trait(choices, flag);
-        return races;
+        const types = new Trait(choices, flag);
+        return types;
     }
 
     /**
@@ -58,9 +58,9 @@ export class RaceTarget extends BaseTarget {
      * @returns {Nullable<string[]>}
      */
     static getHints(source) {
-        const races = this.#getRaceTraits(source);
-        if (races.names.length) {
-            const hint = pf1.utils.i18n.join(races.names, 'd', false);
+        const creatureTypes = this.#getCreatureTypes(source);
+        if (creatureTypes.names.length) {
+            const hint = pf1.utils.i18n.join(creatureTypes.names, 'd', false);
             return [hint];
         }
     }
@@ -80,8 +80,8 @@ export class RaceTarget extends BaseTarget {
 
         const flaggedSources = actor.itemFlags?.boolean[this.key]?.sources ?? [];
         const bonusSources = flaggedSources.filter((source) => {
-            const races = this.#getRaceTraits(source);
-            return currentTargets.every((a) => intersects(races.total, a.race?.system.creatureTypes.total));
+            const creatureTypes = this.#getCreatureTypes(source);
+            return currentTargets.every((a) => intersects(creatureTypes.total, a.race?.system.creatureTypes.total));
         });
 
         return bonusSources;

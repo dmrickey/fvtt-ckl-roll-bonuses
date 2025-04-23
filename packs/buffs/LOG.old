@@ -1,7 +1,3 @@
-2025/04/20-09:18:50.335 a350 Recovering log #1279
-2025/04/20-09:18:50.339 a350 Delete type=0 #1279
-2025/04/20-09:18:50.339 a350 Delete type=3 #1277
-2025/04/20-12:12:11.309 4cd4 Level-0 table #1284: started
-2025/04/20-12:12:11.310 4cd4 Level-0 table #1284: 0 bytes OK
-2025/04/20-12:12:11.310 4cd4 Delete type=0 #1282
-2025/04/20-12:12:11.311 4cd4 Manual compaction at level-0 from '!items!3p2PtsJOLjsF390z' @ 72057594037927935 : 1 .. '!items!bExfitM1TiM3jNPv' @ 0 : 0; will stop at (end)
+2025/04/20-12:12:41.348 892c Recovering log #1283
+2025/04/20-12:12:41.351 892c Delete type=0 #1283
+2025/04/20-12:12:41.351 892c Delete type=3 #1281

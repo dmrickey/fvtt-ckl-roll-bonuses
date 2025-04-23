@@ -2,25 +2,26 @@ import { MODULE_NAME } from '../../../consts.mjs';
 import { traitInput } from '../../../handlebars-handlers/trait-input.mjs';
 import { intersects } from '../../../util/array-intersects.mjs';
 import { currentTargetedActors } from '../../../util/get-current-targets.mjs';
+import { localize } from '../../../util/localize.mjs';
 import { Trait } from '../../../util/trait-builder.mjs';
 import { BaseTarget } from '../_base-target.mjs';
 
 /**
  * @extends BaseTarget
  */
-export class RaceSubtypeTarget extends BaseTarget {
+export class CreatureSubtypeTarget extends BaseTarget {
     /**
      * @inheritdoc
      * @override
      */
-    static get sourceKey() { return 'race-subtype'; }
+    static get sourceKey() { return 'creature-subtype'; }
 
     /**
      * @todo
      * @override
      * @returns {string}
      */
-    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.IpRhJqZEX2TUarSX#race'; }
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.IpRhJqZEX2TUarSX#creature-type'; }
 
     /**
      * @override
@@ -32,13 +33,19 @@ export class RaceSubtypeTarget extends BaseTarget {
      * @override
      * @inheritdoc
      */
+    static get label() { return localize('PF1.CreatureSubTypes.Single'); }
+
+    /**
+     * @override
+     * @inheritdoc
+     */
     static get isGenericTarget() { return true; }
 
     /**
      * @param {ItemPF} source
      * @returns {Trait}
      */
-    static #getRaceSubtypesTraits(source) {
+    static #getCreatureSubtypesTraits(source) {
         const choices = pf1.config.creatureSubtypes;
         const flag = source.getFlag(MODULE_NAME, this.key);
         const subtypes = new Trait(choices, flag);
@@ -51,7 +58,7 @@ export class RaceSubtypeTarget extends BaseTarget {
      * @returns {Nullable<string[]>}
      */
     static getHints(source) {
-        const subtypes = this.#getRaceSubtypesTraits(source);
+        const subtypes = this.#getCreatureSubtypesTraits(source);
         if (subtypes.names.length) {
             const hint = pf1.utils.i18n.join(subtypes.names, 'd', false);
             return [hint];
@@ -73,7 +80,7 @@ export class RaceSubtypeTarget extends BaseTarget {
 
         const flaggedSources = actor.itemFlags?.boolean[this.key]?.sources ?? [];
         const bonusSources = flaggedSources.filter((source) => {
-            const subtypes = this.#getRaceSubtypesTraits(source);
+            const subtypes = this.#getCreatureSubtypesTraits(source);
             return currentTargets.every((a) => intersects(subtypes.total, a.race?.system.creatureSubtypes.total));
         });
 
@@ -96,6 +103,7 @@ export class RaceSubtypeTarget extends BaseTarget {
             item,
             journal: this.journal,
             key: this.key,
+            label: this.label,
             parent: html,
             tooltip: this.tooltip,
         }, {

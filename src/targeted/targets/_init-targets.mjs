@@ -3,12 +3,12 @@ import { ActionTypeTarget } from './action-type-target.mjs';
 import { AlignmentTarget } from './conditional/alignment-target.mjs';
 import { AllTarget } from './all-target.mjs';
 import { ConditionTarget } from './conditional/condition-target.mjs';
+import { CreatureSubtypeTarget } from './conditional/creature-subtype-target.mjs';
+import { CreatureTypeTarget } from './conditional/creature-type-target.mjs';
 import { DamageTypeTarget } from "./damage-type-target.mjs";
 import { FinesseTarget } from './finesse-target.mjs';
 import { FunctionTarget } from './function-target.mjs';
 import { HasBooleanFlagTarget } from './conditional/has-boolean-flag-target.mjs';
-import { RaceSubtypeTarget } from './conditional/race-subtype-target.mjs';
-import { RaceTarget } from './conditional/race-target.mjs';
 import { SelfTarget } from './self-target.mjs';
 import { Sources } from '../source-registration.mjs';
 import { SpecificItemTarget } from "./specific-item-target/specific-item-target.mjs";
@@ -34,8 +34,8 @@ export const registerTargets = () => [
     FinesseTarget,
     FunctionTarget,
     HasBooleanFlagTarget,
-    RaceTarget,
-    RaceSubtypeTarget,
+    CreatureTypeTarget,
+    CreatureSubtypeTarget,
     SelfTarget,
     SpecificItemTarget,
     SpellDescriptorTarget,
