@@ -101,7 +101,8 @@ const chatAttackAddAttack = async (chatAttack, args) => {
         const index = chatAttack.critConfirm.terms.findIndex(x => x);
         // TODO try to swap out the confirm attack roll instead of re-rolling
         // see here https://discord.com/channels/170995199584108546/722559135371231352/1331699422563668090
-        chatAttack.critConfirm = new pf1.dice.D20RollPF(formula, chatAttack.rollData, { skipDialog: true }).evaluateSync({ forceSync: true });
+        chatAttack.critConfirm = await new pf1.dice.D20RollPF(formula, chatAttack.rollData)
+            .evaluate({ allowInteractive: false });
     }
 }
 LocalHookHandler.registerHandler(localHooks.chatAttackAddAttack, chatAttackAddAttack);

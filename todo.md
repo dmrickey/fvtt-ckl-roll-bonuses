@@ -317,15 +317,6 @@
 - Add Fortune/Misfortune checkboxes to attack/roll dialogs
 
 # todo
-- get ride of `forceSync` dice override
-  - Snake Sidewind needs a bit of extra love (see above) can hopefuly do this without forceSync
-  - make `handleConditional` async
-    - make sure to await it in the one place that uses it.
-  - make `simplifyTerm` not use `forceSync` -- because it is only simplifying, it should not need any actual rolls.
-  - make `safeTotal` async
-    - will require the places that use it to also be async
-  - ALTERNATIVELY
-    - rerwrite all terms to handle sync rolling...
 - Add a macro compendium
   - Include example for getting API and using the positional api
   - include "Roll Inspiration" macro
