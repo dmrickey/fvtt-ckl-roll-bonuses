@@ -93,6 +93,15 @@ declare global {
             render(force: boolean, { focus: boolean } = {});
         };
         name: string;
+
+        constructor(args?:{
+            type: 'script' | 'macro',
+            command: string,
+            name: string,
+        });
+
+        /** ROLL BONUS custom data */
+        source: ItemPF<SystemItemData>;
     }
 
     type Item =
@@ -2035,8 +2044,6 @@ declare global {
     class ItemScriptCall {
         id: string;
         get parent(): ItemPF<SystemItemData>;
-        /** in-memory value to determine if this mod created this */
-        rollBonus: boolean;
         get hide(): boolean;
         get category(): string;
 
@@ -2045,6 +2052,15 @@ declare global {
             shared: Partial<ActionUseShared<SystemItemData>>,
             extraParams: { [x: string]: object } = {}
         ): Promise;
+
+        type: 'script' | 'macro';
+        value: string;
+        name: string;
+
+        /** ROLL BONUS CUSTOM */
+        /** in-memory value to determine if this mod created this */
+        rollBonus?: boolean;
+        source?: ItemPF;
     }
 
     interface ActorSheetPF {

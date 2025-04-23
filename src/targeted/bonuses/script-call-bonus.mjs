@@ -67,8 +67,35 @@ export class ScriptCallBonus extends BaseBonus {
             return shared;
         }
 
+        /**
+        * Executes all script calls on this item of a specified category.
+        *
+        * @this {ItemScriptCall}
+        * @returns {Promise<Macro>} - Actual macro or its delegate
+        */
+        async function getDelegate() {
+            /** @type {Macro} */
+            let macro;
+            if (this.type === "script") {
+                macro = new Macro({
+                    type: "script",
+                    command: this.value,
+                    name: this.name,
+                });
+            } else {
+                macro = await fromUuid(this.value);
+            }
+
+            if (this.rollBonus && this.source) {
+                macro.source = this.source;
+            }
+
+            return macro;
+        }
+
         Hooks.once('init', () => {
             libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype.executeScriptCalls', executeScriptCalls, libWrapper.OVERRIDE);
+            libWrapper.register(MODULE_NAME, 'pf1.components.ItemScriptCall.prototype.getDelegate', getDelegate, libWrapper.OVERRIDE);
         });
     }
 
@@ -111,7 +138,10 @@ export class ScriptCallBonus extends BaseBonus {
             }, {
                 parent
             }));
-        scripts.forEach(x => x.rollBonus = true);
+        scripts.forEach(x => {
+            x.rollBonus = true;
+            x.source = source;
+        });
         return scripts;
     }
 

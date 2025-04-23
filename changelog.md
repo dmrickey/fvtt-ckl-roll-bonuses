@@ -5,17 +5,22 @@
   - Now also supports Devastating Strike, Improved Devastating Strike, and Mythic Vital Strike
 - Inspiration
   - Now configured directly on the class ability. Includes support for various feats/talents such as Amazing Inspiration, Tenacious Inspiration, Focused Inspiration, and True Inspiration to automatically increase the inspiration die when necessary.
-  - If you are an Investigator, please read the in-game documentation for your options plus a helpful script call
+  - If you are an Investigator, please read the in-game documentation for your options plus a helpful script call available in the new macro compendium
 - Roll Skill Untrained - Updates the actor's skill sheet to indicate that a given skill can now be used while untrained. Removes the `untrained` note when rolling as this is no longer the case.
 
 ### Misc
 - Settings Skill bonuses directly on the actor sheet is now deprecated and will be removed in a future update. Everything that this did can now be accomplished by setting Specific Bonuses directly on the feat/ability/buff granting those bonuses. (or with the system's skill changes as has been the case for a while now)
 - Renamed "Race Target" to "Creature Type" target
+- Script Bonus - Added `this.source` as an option within the script call to grab a reference back to the source of the Bonus. Reminder: `item` references the "current item" that's being used that triggered the script.
+- Updated True Strike Buff to have a script call that will disable itself that doesn't rely on Hooks (so it will now survive between sessions)
 
 ### Bugfixes
 - Skill Rank Override once again actually overrides.
 - Fixed detecting melee range for certain scnarios of large creatures targeting large creatures.
 - More work on vertical height detection so it more accurately represents distance
+- Script Bonus 
+  - fixed "on use type" always showing the default "use" option when referencing a Macro instead of a local script
+  - fixed bringing up editor for a compendium script that hadn't been loaded yet
 
 ---
 

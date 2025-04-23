@@ -319,5 +319,5 @@
 # todo
 - Add a macro compendium
   - Include example for getting API and using the positional api
-  - include "Roll Inspiration" macro
 - Turn on migration
+- Add documentation about 

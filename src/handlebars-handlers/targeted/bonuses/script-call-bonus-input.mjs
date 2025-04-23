@@ -6,13 +6,17 @@ import { addNodeToRollBonus } from "../../add-bonus-to-item-sheet.mjs";
 import { createTemplate, templates } from "../../templates.mjs";
 
 /**
+ * @typedef {Partial<ItemScriptCallData> & {value: ItemScriptCallData['value']}} ScriptBonusData
+ */
+
+/**
  * @param {object} [args]
  * @param {string} [args.category]
  * @param {string} [args.id]
  * @param {string} [args.name]
  * @param {'script' | 'macro'} [args.type]
  * @param {string} [args.value]
- * @return {Partial<ItemScriptCallData> & {value: ItemScriptCallData['value']}}
+ * @return {ScriptBonusData}
  */
 const createScriptCallData = ({ category, id, name, type, value } = {}) => {
     category ||= 'use';
@@ -29,19 +33,19 @@ const createScriptCallData = ({ category, id, name, type, value } = {}) => {
 };
 
 /**
- * @param {string} uuid
- * @return {Partial<ItemScriptCallData> & {value: ItemScriptCallData['value']}}
+ * @param {ScriptBonusData} data
+ * @return {ScriptBonusData}
  */
-const createScriptCallDataFromMacro = (uuid) => {
-    const macro = fromUuidSync(uuid);
+const createScriptCallDataFromMacro = (data) => {
+    const macro = fromUuidSync(data?.value);
     if (!macro) return createScriptCallData();
 
     return {
         _id: foundry.utils.randomID(),
-        category: 'use',
+        category: data.category || 'use',
         name: macro.name,
         type: 'macro',
-        value: uuid,
+        value: data.value,
     }
 };
 
@@ -77,11 +81,11 @@ export function showScriptBonusEditor({
             label: sc.name,
         }));
 
-    /** @type {(Partial<ItemScriptCallData> & {value: ItemScriptCallData['value']})[]} */
+    /** @type {(ScriptBonusData)[]} */
     const saved = item.getFlag(MODULE_NAME, key);
-    /** @type {(Partial<ItemScriptCallData> & {value: ItemScriptCallData['value']})[]} */
+    /** @type {(ScriptBonusData)[]} */
     const scripts = saved
-        ? saved.map((c) => c.type === 'macro' ? createScriptCallDataFromMacro(c.value) : c)
+        ? saved.map((c) => c.type === 'macro' ? createScriptCallDataFromMacro(c) : c)
         : [];
     if (!scripts.length) {
         scripts.push(createScriptCallData());
@@ -163,7 +167,10 @@ export function showScriptBonusEditor({
                     confirmationDialog({
                         title: localize('script-call-dialog.edit-macro-title', { name: macro.name }),
                         message: localize('script-call-dialog.edit-macro-message'),
-                        confirmCallback: () => macro?.sheet.render(true),
+                        confirmCallback: async () => {
+                            const macro = await fromUuid(current.value);
+                            macro?.sheet.render(true);
+                        },
                     });
                 }
             }

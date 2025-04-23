@@ -99,6 +99,16 @@
             "ownership": {
                 "PLAYER": "OBSERVER"
             }
+        },
+        {
+            "label": "Roll Bonuses Macros",
+            "name": "roll-bonuses-macros",
+            "path": "packs/macros.db",
+            "system": "pf1",
+            "type": "Macro",
+            "ownership": {
+                "PLAYER": "OBSERVER"
+            }
         }
     ],
     "license": "LICENSE",
