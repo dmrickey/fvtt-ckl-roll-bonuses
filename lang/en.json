@@ -355,6 +355,7 @@
         "hint-missing-target": "Missing Target, click to add",
         "inspiration-amazing-die": "Inspiration Die: {die}",
         "invalid-override": "This does nothing for this item type—edit the item's details directly.",
+        "invalid-token-selection": "Must select a valid target.",
         "item-app": {
             "description": "Bonuses will apply only when using the selected items. Right click on any row to open that Item's sheet for further verification.",
             "description-actions": "Bonuses will apply only when using the selected actions. Right click on any row to open that action's sheet for further verification (or header to open the item).",
@@ -454,6 +455,7 @@
         },
         "targets": "Targets",
         "to-hit-mod": "{mod} to hit",
+        "token-distance": "Distance between '{first}' and '{second}': {distance}",
         "versatile-performance": {
             "add": "Add Versatile Performance",
             "delete": "Delete Versatile Performance",

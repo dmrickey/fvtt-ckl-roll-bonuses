@@ -317,7 +317,4 @@
 - Add Fortune/Misfortune checkboxes to attack/roll dialogs
 
 # todo
-- Add a macro compendium
-  - Include example for getting API and using the positional api
 - Turn on migration
-- Add documentation about 
