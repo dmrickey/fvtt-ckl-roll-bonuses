@@ -122,16 +122,16 @@
                 "action-type-radio": "Unión de tipos de acción",
                 "change-modification": "Modificador de Cambios",
                 "has-boolean-flag-target": "Objetivo para la etiqueta (flag) booleana",
-                "inspiration": "",
-                "inspiration-amazing": "",
-                "inspiration-extra-die": "",
-                "inspiration-focused": "",
-                "devastating-strike": "",
-                "devastating-strike-improved": "",
-                "inspiration-tenacious": "",
-                "inspiration-true": "",
-                "roll-untrained": "",
-                "spell-subschool": ""
+                "inspiration": "Inspiración",
+                "inspiration-amazing": "Inspiración asombrosa",
+                "inspiration-extra-die": "Dado extra de inspiración",
+                "inspiration-focused": "Inspiración enfocada",
+                "devastating-strike": "Golpe devastador",
+                "devastating-strike-improved": "Golpe devastador mejorado",
+                "inspiration-tenacious": "Inspiración tenaz",
+                "inspiration-true": "Inspiración verdadera",
+                "roll-untrained": "Tiradas de habilidades no entrenadas",
+                "spell-subschool": "Subescuelas de conjuro"
             },
             "tooltip": {
                 "action": "Otorga bonificadores a acciones específicas.",
@@ -232,17 +232,17 @@
                 "weapon": "Elegir ataques y armas específicas para los bonificadores.",
                 "when-active": "Aplica los bonificadores cuando el Potenciador (Buff)/Arma/Dote/Aptitud/etc esté activo.",
                 "when-in-combat": "Activo cuando este actor esté en combate.",
-                "devastating-strike": "",
-                "devastating-strike-improved": "",
-                "creature-type": "",
-                "creature-subtype": "",
-                "inspiration": "",
-                "inspiration-amazing": "",
-                "inspiration-focused": "",
-                "inspiration-tenacious": "",
-                "inspiration-true": "",
-                "roll-untrained": "",
-                "spell-subschool": ""
+                "devastating-strike": "Añade daño con Golpes vitales",
+                "devastating-strike-improved": "Añade a la confirmación de crítico con Golpes vitales",
+                "creature-type": "Se aplicará cuando el objetivo actual tenga alguno de los tipos de criatura elegidos.",
+                "creature-subtype": "Se aplicará cuando el objetivo actual tenga alguno de los subtipos de criatura elegidos.",
+                "inspiration": "Tira libremente la inspiración para habilidades específicas.",
+                "inspiration-amazing": "Aumenta en un nivel el dado de inspiración.",
+                "inspiration-focused": "Aumenta en un nivel el dado de inspiración para las habilidades elegidas.",
+                "inspiration-tenacious": "Cuando tires inspiración, tira un dado extra y quédate con el resultado más alto.",
+                "inspiration-true": "Puedes usar libremente la inspiración en todas las habilidades.",
+                "roll-untrained": "Marca las habilidades como aptas para ser utilizadas sin entrenamiento.",
+                "spell-subschool": "Aplica bonificadores a los conjuros de la subescuela o subescuelas elegidas."
             }
         },
         "all-spells": "Todos los conjuros",
@@ -345,7 +345,7 @@
                     },
                     "require-melee-threaten": {
                         "description": "Rechaza un ataque cuerpo a cuerpo si el atacante no amenaza al objetivo. Al usar una acción cuerpo a cuerpo, esta rechazará la acción si el objetivo está fuera de alcance.",
-                        "issues": "Puede haber circunstancias en las que el DJ permita un ataque cuerpo a cuerpo contra un objetivo aunque no esté a su alcance. Para evitarlo, simplemente no apuntes a la ficha deseada. Si tienes alguna sugerencia, házmelo saber."
+                        "issues": "Puede haber circunstancias en las que el DJ permita un ataque cuerpo a cuerpo contra un objetivo aunque no esté dentro del alcance. Para sortear esto, puedes omitir seleccionar una ficha o marcar la casilla \"Ignorar alcance cuerpo a cuerpo\" en el cuadro de diálogo de ataque."
                     }
                 }
             }
@@ -354,10 +354,10 @@
         "hint-missing-target": "Faltan objetivos, haz click para añadirlos",
         "invalid-override": "Esto no hace nada para este tipo de artículo: edita los detalles del artículo directamente.",
         "item-app": {
-            "description": "Cada elemento seleccionado recibirá los bonificadores asociados. Haz clic derecho en cualquier fila para abrir la hoja y realizar más comprobaciones.",
+            "description": "Los bonificadores solo se aplicarán cuando se utilicen los elementos seleccionados. Haz clic con el botón derecho en cualquier fila para abrir la hoja de personaje de ese elemento y verificarlo.",
             "title": "Selector de Artículos",
-            "description-actions": "",
-            "description-when-active": ""
+            "description-actions": "Los bonificadores solo se aplicarán cuando se utilicen las acciones seleccionadas. Haz clic con el botón derecho en cualquier fila para abrir la hoja de personaje de esa acción y verificarla (o en el encabezado para abrir el elemento).",
+            "description-when-active": "Estos bonificadores solo estarán activos cuando el elemento objetivo también lo esté. Por ejemplo, los bonificadores secundarios que solo se aplican mientras estás en furia."
         },
         "item-hints": {
             "skill-rank-override": "{skills} (->{rank})"
@@ -414,7 +414,7 @@
         "script-call-dialog": {
             "delete-script-message": "Una vez se borre este script no podrá ser recuperado.<br>¿Estás seguro/a de que quieres borrar este script?",
             "delete-script-title": "Borrar script - {name}",
-            "edit-macro-message": "Está intentando editar un macro referenciado que no pertenece a este Artículo.<br><br>Modificar este macro significa que estarás editando directamente el macro del mundo. Cualquier uso de este macro será modificado.<br><br>¿Estás seguro de que quieres editar este macro?",
+            "edit-macro-message": "Está intentando editar un macro referenciado que no pertenece a este Artículo.<br><br>Modificar este macro significa que estarás editando directamente el macro del mundo. Cualquier otro uso de este macro será modificado.<br><br>¿Estás seguro de que quieres editar este macro?",
             "edit-macro-title": "Editar macro - {name}"
         },
         "skills": {
@@ -546,52 +546,52 @@
                 "default": "Especialización con un arma"
             },
             "devastating-strike": {
-                "name": "",
-                "default": ""
+                "name": "Golpe devastador",
+                "default": "Golpe devastador"
             },
             "inspiration": {
-                "name": "",
-                "default": ""
+                "name": "Inspiración",
+                "default": "Inspiración"
             },
             "inspiration-amazing": {
-                "name": "",
-                "default": ""
+                "name": "Inspiración asombrosa",
+                "default": "Inspiración asombrosa"
             },
             "inspiration-device-talent": {
-                "name": "",
-                "default": ""
+                "name": "Talento en mecanismo",
+                "default": "Talento en mecanismo"
             },
             "inspiration-empathy": {
-                "name": "",
-                "default": ""
+                "name": "Empatía",
+                "default": "Empatía"
             },
             "inspiration-expanded": {
-                "name": "",
-                "default": ""
+                "name": "Inspiración extendida",
+                "default": "Inspiración extendida"
             },
             "inspiration-focused": {
-                "name": "",
-                "default": ""
+                "name": "Inspiración enfocada",
+                "default": "Inspiración enfocada"
             },
             "inspiration-inspired-intelligence": {
-                "name": "",
-                "default": ""
+                "name": "Inteligencia inspirada",
+                "default": "Inteligencia inspirada"
             },
             "inspiration-tenacious": {
-                "name": "",
-                "default": ""
+                "name": "Inspiración tenaz",
+                "default": "Inspiración tenaz"
             },
             "inspiration-true": {
-                "name": "",
-                "default": ""
+                "name": "Inspiración verdadera",
+                "default": "Inspiración verdadera"
             },
             "inspiration-underworld": {
-                "name": "",
-                "default": ""
+                "name": "Inspiración del inframundo",
+                "default": "Inspiración del inframundo"
             },
             "inspiration-unconventional": {
-                "name": "",
-                "default": ""
+                "name": "Inspiración no convencional",
+                "default": "Inspiración no convencional"
             }
         },
         "settings": {
@@ -628,7 +628,7 @@
         },
         "applications": {
             "token": {
-                "gm-hint": "Puedes ver todas la fichas porque eres el/la DJ. Los jugadores solo serán capaces de ver las fichas que sean visibles para ellos/as.",
+                "gm-hint": "Puedes ver todas la fichas (y nombres) porque eres el/la DJ. Los jugadores solo serán capaces de ver las fichas que sean visibles para ellos/as.",
                 "no-tokens": "No hay fichas en esta escena",
                 "player-hint": "Cualquier ficha ya marcada como objetivo está pre-seleccionada. Puede activar la configuración para saltarte este modal y usar los objetivo automáticamente."
             }
@@ -638,33 +638,33 @@
                 "no-selection": "No hay objetivos"
             }
         },
-        "bane-type-subtype": "",
-        "inspiration-amazing-die": "",
-        "invalid-token-selection": "",
-        "all-crafts": "",
-        "all-knowledges": "",
-        "all-performs": "",
-        "all-professions": "",
-        "bane": "",
-        "bane-creature-type": "",
-        "bane-creature-subtype": "",
-        "bane-type": "",
-        "damage-formula": "",
+        "bane-type-subtype": "{type} ({subtype}) Perdición",
+        "inspiration-amazing-die": "Dado de inspiración: {die}",
+        "invalid-token-selection": "Debes seleccionar un objetivo válido.",
+        "all-crafts": "Artesanía (Todos)",
+        "all-knowledges": "Saber (Todos)",
+        "all-performs": "Interpretación (Todos)",
+        "all-professions": "Profesión (Todos)",
+        "bane": "Perdición",
+        "bane-creature-type": "Perdición con tipo de criatura",
+        "bane-creature-subtype": "Perdición con subtipo de criatura",
+        "bane-type": "{type} Perdición",
+        "damage-formula": "Fórmula del bonificador de daño",
         "skill-sheet": {
             "inspiration": {
-                "invalid-skill-tip": "",
-                "skill-tip": ""
+                "invalid-skill-tip": "Debe estar entrenada para poder tirarse gratis ({die})",
+                "skill-tip": "Inspiración gratuita ({die})"
             },
             "inspiration-focused": {
-                "skill-tip": ""
+                "skill-tip": "Incrementa el dado de inspiración en un paso"
             },
             "inspiration-tenacious": {
-                "skill-tip": ""
+                "skill-tip": "Tira un dado extra de inspiración, quédate con el resultado más alto"
             },
             "roll-untrained": {
-                "skill-tip": ""
+                "skill-tip": "Puede hacer tiradas no entrenadas"
             }
         },
-        "token-distance": ""
+        "token-distance": "Distancia entre '{first}' y '{second}': {distance}"
     }
 }
