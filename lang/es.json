@@ -121,7 +121,17 @@
                 "when-in-combat": "Cuando esté en combate",
                 "action-type-radio": "Unión de tipos de acción",
                 "change-modification": "Modificador de Cambios",
-                "has-boolean-flag-target": "Objetivo para la etiqueta (flag) booleana"
+                "has-boolean-flag-target": "Objetivo para la etiqueta (flag) booleana",
+                "inspiration": "",
+                "inspiration-amazing": "",
+                "inspiration-extra-die": "",
+                "inspiration-focused": "",
+                "devastating-strike": "",
+                "devastating-strike-improved": "",
+                "inspiration-tenacious": "",
+                "inspiration-true": "",
+                "roll-untrained": "",
+                "spell-subschool": ""
             },
             "tooltip": {
                 "action": "Otorga bonificadores a acciones específicas.",
@@ -221,7 +231,18 @@
                 "weapon-type-override": "Añade un tipo de arma a un Artículo que normalmente no tendría. Esto es equivalente al Tipo de equipamiento base de un arma.",
                 "weapon": "Elegir ataques y armas específicas para los bonificadores.",
                 "when-active": "Aplica los bonificadores cuando el Potenciador (Buff)/Arma/Dote/Aptitud/etc esté activo.",
-                "when-in-combat": "Activo cuando este actor esté en combate."
+                "when-in-combat": "Activo cuando este actor esté en combate.",
+                "devastating-strike": "",
+                "devastating-strike-improved": "",
+                "creature-type": "",
+                "creature-subtype": "",
+                "inspiration": "",
+                "inspiration-amazing": "",
+                "inspiration-focused": "",
+                "inspiration-tenacious": "",
+                "inspiration-true": "",
+                "roll-untrained": "",
+                "spell-subschool": ""
             }
         },
         "all-spells": "Todos los conjuros",
@@ -244,7 +265,8 @@
         "cl-label-mod": "{mod} NL ({label})",
         "crit-damage-label": {
             "crit": " (Solo crítico)",
-            "nonCrit": " (Solo no críticos)"
+            "nonCrit": " (Solo no críticos)",
+            "normal": ""
         },
         "crit-mult-mod": "Multiplicador de crítico ({mod})",
         "crit-mult-offset-all": "Intervalo de multiplicador de crítico (todo)",
@@ -310,7 +332,8 @@
                 "title": "Bonificadores globables",
                 "section": {
                     "higher-ground": {
-                        "description": "Añade +1 a los ataques cuerpo a cuerpo realizados desde una posición elevada."
+                        "description": "Añade +1 a los ataques cuerpo a cuerpo realizados desde una posición elevada.",
+                        "issues": ""
                     },
                     "range-increment-penalty": {
                         "description": "Añadir penalizadores a los incrementos de ataque a distancia. Activar esta opción también habilita los bonificadores para modificar los penalizadores de ataque a distancia y los incrementos de alcance.",
@@ -332,7 +355,9 @@
         "invalid-override": "Esto no hace nada para este tipo de artículo: edita los detalles del artículo directamente.",
         "item-app": {
             "description": "Cada elemento seleccionado recibirá los bonificadores asociados. Haz clic derecho en cualquier fila para abrir la hoja y realizar más comprobaciones.",
-            "title": "Selector de Artículos"
+            "title": "Selector de Artículos",
+            "description-actions": "",
+            "description-when-active": ""
         },
         "item-hints": {
             "skill-rank-override": "{skills} (->{rank})"
@@ -519,6 +544,54 @@
             "weapon-specialization": {
                 "name": "Especialización con un arma",
                 "default": "Especialización con un arma"
+            },
+            "devastating-strike": {
+                "name": "",
+                "default": ""
+            },
+            "inspiration": {
+                "name": "",
+                "default": ""
+            },
+            "inspiration-amazing": {
+                "name": "",
+                "default": ""
+            },
+            "inspiration-device-talent": {
+                "name": "",
+                "default": ""
+            },
+            "inspiration-empathy": {
+                "name": "",
+                "default": ""
+            },
+            "inspiration-expanded": {
+                "name": "",
+                "default": ""
+            },
+            "inspiration-focused": {
+                "name": "",
+                "default": ""
+            },
+            "inspiration-inspired-intelligence": {
+                "name": "",
+                "default": ""
+            },
+            "inspiration-tenacious": {
+                "name": "",
+                "default": ""
+            },
+            "inspiration-true": {
+                "name": "",
+                "default": ""
+            },
+            "inspiration-underworld": {
+                "name": "",
+                "default": ""
+            },
+            "inspiration-unconventional": {
+                "name": "",
+                "default": ""
             }
         },
         "settings": {
@@ -564,6 +637,34 @@
             "icon-input": {
                 "no-selection": "No hay objetivos"
             }
-        }
+        },
+        "bane-type-subtype": "",
+        "inspiration-amazing-die": "",
+        "invalid-token-selection": "",
+        "all-crafts": "",
+        "all-knowledges": "",
+        "all-performs": "",
+        "all-professions": "",
+        "bane": "",
+        "bane-creature-type": "",
+        "bane-creature-subtype": "",
+        "bane-type": "",
+        "damage-formula": "",
+        "skill-sheet": {
+            "inspiration": {
+                "invalid-skill-tip": "",
+                "skill-tip": ""
+            },
+            "inspiration-focused": {
+                "skill-tip": ""
+            },
+            "inspiration-tenacious": {
+                "skill-tip": ""
+            },
+            "roll-untrained": {
+                "skill-tip": ""
+            }
+        },
+        "token-distance": ""
     }
 }
