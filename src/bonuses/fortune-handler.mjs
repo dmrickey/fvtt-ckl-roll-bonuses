@@ -474,3 +474,9 @@ const handleSavingThrow = (
     options.misfortuneCount = misfortuneCount;
 };
 Hooks.on('pf1PreActorRollSave', handleSavingThrow);
+
+//** At some point I should use this afterwards instead of beforehand */
+// const test = (...args) => {
+//     debugger;
+// }
+// Hooks.on('pf1PreD20Roll', test);

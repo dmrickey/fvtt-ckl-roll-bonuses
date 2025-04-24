@@ -69,9 +69,9 @@ async function chatAttackAddAttack(wrapped, { noAttack = false, bonus = null, ex
  * @this {d20Roll}
  * @returns The result of the original method.
  */
-function d20RollWrapper(wrapped, options = {}) {
+async function async_d20RollWrapper(wrapped, options = {}) {
     Hooks.call(customGlobalHooks.d20Roll, options);
-    return wrapped.call(this, options);
+    return await wrapped(options);
 }
 
 // function preAttackRoll(action, config, rollData, rollOptions, parts, changes) {
@@ -605,7 +605,7 @@ Hooks.once('init', () => {
     libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.getLabels', itemAction_getLabels, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.rollAttack', itemActionRollAttack, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.rollDamage', itemActionRollDamage, libWrapper.WRAPPER);
-    libWrapper.register(MODULE_NAME, 'pf1.dice.d20Roll', d20RollWrapper, libWrapper.WRAPPER);
+    libWrapper.register(MODULE_NAME, 'pf1.dice.d20Roll', async_d20RollWrapper, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorPF.prototype.getSkillInfo', actorGetSkillInfo, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorPF.prototype.rollSkill', actorRollSkill, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemAttackPF.fromItem', itemAttackFromItem, libWrapper.WRAPPER);

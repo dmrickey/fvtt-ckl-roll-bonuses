@@ -66,7 +66,7 @@ export class FortuneBonus extends BaseBonus {
         const options = {
             fortuneCount: 1,
             dice,
-        }
+        };
         handleFortune(options);
 
         actionUse.shared.dice = options.dice;

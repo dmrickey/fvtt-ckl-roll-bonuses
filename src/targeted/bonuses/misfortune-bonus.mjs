@@ -67,7 +67,7 @@ export class MisfortuneBonus extends BaseBonus {
         const options = {
             misfortuneCount: 1,
             dice,
-        }
+        };
         handleFortune(options);
 
         actionUse.shared.dice = options.dice;
