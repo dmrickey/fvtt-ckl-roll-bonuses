@@ -53,7 +53,6 @@ export const getSkillFormula = (actor, rollData, skillId, {
         }
     }
 
-
     const formula = [pf1.dice.D20RollPF.standardRoll, ...parts].slice(includeD20 ? 0 : 1).join(" + ");
     const roll = new Roll(formula, rollData);
     return roll.formula;

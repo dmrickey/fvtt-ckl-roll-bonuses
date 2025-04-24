@@ -52,7 +52,6 @@
   - [Bonus Improvements](#bonus-improvements)
 - [Housekeeping](#housekeeping)
 - [Checklist for new (and existing features)](#checklist-for-new-and-existing-features)
-- [Deprecate](#deprecate)
 - [Add Quench Testings](#add-quench-testings)
 - [Add create hooks for initializing some items (like anything based off of name/id)](#add-create-hooks-for-initializing-some-items-like-anything-based-off-of-nameid)
 - [Add inpsiration checkbox to roll dialogs](#add-inpsiration-checkbox-to-roll-dialogs)
@@ -230,10 +229,6 @@
 - Has journal
 - Has tooltip
 
-# Deprecate
-- as of v9, PF1 now defers Roll Bonuses. So that means that the `Bonus` on the Skill settings can go away
-- It should create a new Feature with a change that includes the current formula as part of migration for deleting this
-
 # Add Quench Testings
 # Add create hooks for initializing some items (like anything based off of name/id)
 
@@ -300,7 +295,6 @@
     - IAF - `-1` untyped ACP (Armor)
   - CL
   - DC
-- Figure out a way to make Versatile Performance and Snake Sidewind work together
 - Add Fortune/Misfortune checkboxes to attack/roll dialogs
 
 # todo
