@@ -9,7 +9,7 @@ declare global {
         /**
          * Track references to the current set of Tokens which are targeted by the User
          */
-        targets: UserTargets;
+        targets: Set<TokenPF>;
         isGM: boolean;
         viewedScene: string;
     }

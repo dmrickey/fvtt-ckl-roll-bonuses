@@ -85,7 +85,7 @@ export class EnhancementBonus extends BaseBonus {
             parent: html,
         }, {
             inputType: 'bonus',
-        })
+        });
         textInput({
             item,
             journal: this.journal,

@@ -1,17 +1,19 @@
-## Roll Bonuses 2.20.0
+## Roll Bonuses 2.20.0 (rquires pf1 11.4)
 
 ### New Bonuses
-- Vital Strike additions
+- **Vital Strike additions**
   - Now also supports Devastating Strike, Improved Devastating Strike, and Mythic Vital Strike
-- Inspiration
+- **Inspiration**
   - Now configured directly on the class ability. Includes support for various feats/talents such as Amazing Inspiration, Tenacious Inspiration, Focused Inspiration, and True Inspiration to automatically increase the inspiration die when necessary.
   - If you are an Investigator, please read the in-game documentation for your options plus a helpful script call available in the new macro compendium
-- Roll Skill Untrained - Updates the actor's skill sheet to indicate that a given skill can now be used while untrained. Removes the `untrained` note when rolling as this is no longer the case.
-- Ammo
-  - Now can configure creature type and creature subtypes for Bane
+- **Roll Skill Untrained**
+  - Updates the actor's skill sheet to indicate that a given skill can now be used while untrained. Removes the `untrained` note when rolling as this is no longer the case.
+- **Bane Bonus**
+  - Grants +2 stacking enhancement and 2d6 damage to targeted attacks
+  - Also has support within Ammo
 
 ### Misc
-- Renamed "Race Target" to "Creature Type" target
+- Renamed "Race Target" to "Creature Type Target"
 - Script Bonus - Added `this.source` as an option within the script call to grab a reference back to the source of the Bonus. Reminder: `item` references the "current item" that's being used that triggered the script.
 - Updated True Strike Buff to have a script call that will disable itself that doesn't rely on Hooks (so it will now survive between sessions)
 - Added Macro Compendium
@@ -22,11 +24,12 @@
 
 ### Bugfixes
 - Skill Rank Override once again actually overrides.
-- Fixed detecting melee range for certain scnarios of large creatures targeting large creatures.
+- Fixed detecting melee range for certain scenarios of larger creatures targeting larger creatures.
 - More work on vertical height detection so it more accurately represents distance
 - Script Bonus 
   - fixed "on use type" always showing the default "use" option when referencing a Macro instead of a local script
-  - fixed bringing up editor for a compendium script that hadn't been loaded yet
+  - fixed bringing up editor for a compendium macro that hadn't been loaded into memory yet
+- Function Target - no longer bricks the item sheet when an invalid function is saved and closed.
 
 ---
 
