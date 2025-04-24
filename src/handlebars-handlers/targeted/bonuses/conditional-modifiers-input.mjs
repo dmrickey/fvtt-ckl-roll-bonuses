@@ -456,7 +456,7 @@ export function modifiersInput({
                     await updateItem();
                 };
                 const app = new pf1.applications.DamageTypeSelector(
-                    { id: key },
+                    { uuid: key },
                     modifier._id,
                     modifier.damageType || [],
                     { updateCallback }

@@ -2255,7 +2255,7 @@ declare global {
             };
             DamageTypeSelector: {
                 new (
-                    object: { id: string },
+                    object: { uuid: string },
                     dataPath: string,
                     data: ItemConditionalModifierSourceData['damageType'],
                     options = { updateCallback({ [dataPath]: object }) },

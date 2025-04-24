@@ -39,7 +39,7 @@
                 "type": "module",
                 "manifest": "https://github.com/ruipin/fvtt-lib-wrapper/releases/latest/download/module.json",
                 "compatibility": {
-                    "verified": "1.12.11.0"
+                    "verified": "1.13.2.0"
                 }
             }
         ],
@@ -49,9 +49,8 @@
                 "type": "system",
                 "manifest": "https://gitlab.com/foundryvtt_pathfinder1e/foundryvtt-pathfinder1/-/releases/permalink/latest/downloads/system.json",
                 "compatibility": {
-                    "minimum": "11",
-                    "verified": "11",
-                    "maximum": "11.x"
+                    "minimum": "11.4",
+                    "verified": "11.4"
                 }
             }
         ]

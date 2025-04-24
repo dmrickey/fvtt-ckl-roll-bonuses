@@ -158,7 +158,7 @@ export function damageInput({
                 };
 
                 const app = new pf1.applications.DamageTypeSelector(
-                    { id: key },
+                    { uuid: key },
                     path,
                     savedParts[+damageIndex].types,
                     { updateCallback },
