@@ -7,6 +7,8 @@
   - Now configured directly on the class ability. Includes support for various feats/talents such as Amazing Inspiration, Tenacious Inspiration, Focused Inspiration, and True Inspiration to automatically increase the inspiration die when necessary.
   - If you are an Investigator, please read the in-game documentation for your options plus a helpful script call available in the new macro compendium
 - Roll Skill Untrained - Updates the actor's skill sheet to indicate that a given skill can now be used while untrained. Removes the `untrained` note when rolling as this is no longer the case.
+- Ammo
+  - Now can configure creature type and creature subtypes for Bane
 
 ### Misc
 - Renamed "Race Target" to "Creature Type" target

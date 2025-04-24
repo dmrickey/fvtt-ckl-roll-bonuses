@@ -1,11 +1,13 @@
 import { MODULE_NAME } from "../consts.mjs";
 import { textInput } from "../handlebars-handlers/bonus-inputs/text-input.mjs";
 import { damageInput } from "../handlebars-handlers/targeted/bonuses/damage.mjs";
+import { traitInput } from '../handlebars-handlers/trait-input.mjs';
 import { getEnhancementBonusForAction } from '../util/enhancement-bonus-helper.mjs';
 import { FormulaCacheHelper } from '../util/flag-helpers.mjs';
+import { getTraitsFromItem } from '../util/get-id-array-from-flag.mjs';
 import { LocalHookHandler, customGlobalHooks, localHooks } from "../util/hooks.mjs";
 import { localize } from "../util/localize.mjs";
-import { ammoEnhancementKey, ammoEnhancementStacksKey } from './ammunition-shared-keys.mjs';
+import { ammoBaneCreatureSubtype, ammoBaneCreatureType, ammoEnhancementKey, ammoEnhancementStacksKey } from './ammunition-shared-keys.mjs';
 
 const ammoAttackKey = 'ammo-attack';
 const ammoDamageKey = 'ammo-damage';
@@ -47,7 +49,11 @@ function getConditionalParts(actionUse, result, atk, index) {
             result['attack.normal'].push(`1[${localize('PF1.AmmunitionAbbr')} - ${localize('PF1.Masterwork')}]`)
         }
         else {
-            const { total: totalWithAmmo } = getEnhancementBonusForAction({ action: actionUse.action, ammo });
+            const { hasBane, total: totalWithAmmo } = getEnhancementBonusForAction({
+                action: actionUse.action,
+                ammo,
+                targets: [...game.user.targets],
+            });
             let itemMwOffset = 0;
             if (itemMw && !itemEnh && (ammoEnhBonus || ammoEnhStacksBonus)) {
                 itemMwOffset = 1;
@@ -59,6 +65,18 @@ function getConditionalParts(actionUse, result, atk, index) {
                     result['attack.normal'].push(`${diff - itemMwOffset}[${label} (${totalWithAmmo})]`);
                 }
                 result['damage.normal'].push([`${diff}[${label} (${totalWithAmmo})]`, [label], false]);
+            }
+
+            if (hasBane) {
+                // todo map to traits
+                const creatureTypes = getTraitsFromItem(ammo, ammoBaneCreatureType, pf1.config.creatureTypes);
+                const creatureSubtypes = getTraitsFromItem(ammo, ammoBaneCreatureSubtype, pf1.config.creatureSubtypes);
+                const label = creatureSubtypes.total.size && creatureTypes.total.size
+                    ? localize('bane-type-subtype', { type: creatureTypes.names.join(', '), subtype: creatureSubtypes.names.join(', ') })
+                    : creatureTypes.total.size
+                        ? localize('bane-type', { type: creatureTypes.names.join(', ') })
+                        : localize('bane-type', { type: creatureSubtypes.names.join(', ') });
+                result['damage.nonCrit'].push([`2d6[${label}]`, [], false])
             }
         }
 
@@ -154,6 +172,29 @@ Hooks.on('renderItemSheet', (
     }, {
         canEdit: isEditable,
         inputType: 'ammo',
+    });
+    traitInput({
+        choices: pf1.config.creatureTypes,
+        item,
+        label: localize('bane-creature-type'),
+        journal,
+        key: ammoBaneCreatureType,
+        parent: html,
+    }, {
+        canEdit: isEditable,
+        inputType: 'ammo',
+    });
+    traitInput({
+        choices: pf1.config.creatureSubtypes,
+        item,
+        label: localize('bane-creature-subtype'),
+        journal,
+        key: ammoBaneCreatureSubtype,
+        parent: html,
+    }, {
+        canEdit: isEditable,
+        inputType: 'ammo',
+        isSubLabel: true,
     });
     textInput({
         item,

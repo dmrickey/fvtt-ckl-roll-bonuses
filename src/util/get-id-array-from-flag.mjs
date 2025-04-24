@@ -1,5 +1,14 @@
 import { MODULE_NAME } from '../consts.mjs'
+import { Trait } from './trait-builder.mjs';
 import { uniqueArray } from './unique-array.mjs';
+
+/**
+ * @param {ItemPF} item
+ * @param {string} flag
+ * @param {Record<string, string>} choices
+ * @returns {Trait}
+ */
+export const getTraitsFromItem = (item, flag, choices) => new Trait(choices, item.getFlag(MODULE_NAME, flag) || []);
 
 /**
  * @template T

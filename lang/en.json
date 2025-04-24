@@ -15,6 +15,11 @@
         "all-professions": "Profession (All)",
         "all-spells": "All Spells",
         "any-target-except": "Any target except:",
+        "bane": "Bane",
+        "bane-creature-type": "Bane Creature Type",
+        "bane-creature-subtype": "Bane Creature Subtype",
+        "bane-type": "{type} Bane",
+        "bane-type-subtype": "{type} ({subtype}) Bane",
         "base-dice": "Base Dice",
         "bonus-header-labels": {
             "bonus": "Bonuses",
