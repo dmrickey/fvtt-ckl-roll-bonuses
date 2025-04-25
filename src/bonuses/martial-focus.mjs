@@ -55,7 +55,6 @@ export function getMartialFocusCondtional(item) {
 
     if (isItemFocused(actor, item)) {
         return new pf1.components.ItemConditional({
-            _id: foundry.utils.randomID(),
             default: true,
             name: Settings.martialFocus,
             modifiers: [{

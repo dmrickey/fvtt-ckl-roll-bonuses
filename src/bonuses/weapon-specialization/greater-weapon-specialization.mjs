@@ -90,7 +90,6 @@ export function getGreaterWeaponSpecializaitonConditional(item) {
     if (overlap.length) {
         const source = actor.itemFlags?.boolean[key]?.sources?.find((s) => overlap.includes(s.flags[MODULE_NAME]?.[key]));
         return new pf1.components.ItemConditional({
-            _id: foundry.utils.randomID(),
             default: true,
             name: source?.name ?? '',
             modifiers: [{

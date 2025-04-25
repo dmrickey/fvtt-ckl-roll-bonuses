@@ -170,7 +170,6 @@ export class VitalStrikeData {
 
                         {
                             const conditional = new pf1.components.ItemConditional({
-                                _id: foundry.utils.randomID(),
                                 default: true,
                                 name: this.label,
                                 modifiers: [{
@@ -188,7 +187,6 @@ export class VitalStrikeData {
 
                         if (this.hasDevastating) {
                             const conditional = new pf1.components.ItemConditional({
-                                _id: foundry.utils.randomID(),
                                 default: true,
                                 name: localizeBonusLabel(devastatingStrikeKey),
                                 modifiers: [{
@@ -206,7 +204,6 @@ export class VitalStrikeData {
 
                         if (this.hasDevastatingImproved) {
                             const conditional = new pf1.components.ItemConditional({
-                                _id: foundry.utils.randomID(),
                                 default: true,
                                 name: localizeBonusLabel(devastatingStrikeImprovedKey),
                                 modifiers: [{
@@ -294,7 +291,6 @@ export class VitalStrikeData {
         }
 
         const conditional = new pf1.components.ItemConditional({
-            _id: foundry.utils.randomID(),
             default: true,
             name: localizeBonusLabel(vitalStrikeMythic),
             modifiers: [{

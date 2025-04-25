@@ -93,7 +93,6 @@ export function getWeaponSpecializaitonConditional(item) {
     const specializations = getSpecializedWeapons(actor);
     if (intersects(baseTypes, specializations)) {
         return new pf1.components.ItemConditional({
-            _id: foundry.utils.randomID(),
             default: true,
             name: Settings.weaponSpecialization,
             modifiers: [{

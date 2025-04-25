@@ -11,11 +11,9 @@
     - [Consume Item/Charge](#consume-itemcharge)
     - [Maximized Critical](#maximized-critical)
   - [Targets](#targets)
-    - [Creature type/subtype](#creature-typesubtype)
     - [By Disposition](#by-disposition)
     - [All healing](#all-healing)
     - [Armor Target (useful for something like Magic Vestment)](#armor-target-useful-for-something-like-magic-vestment)
-    - [Die Result](#die-result)
     - [Skill Target](#skill-target)
     - [Spellbook target](#spellbook-target)
     - [Spell preparation Qty](#spell-preparation-qty)
@@ -24,23 +22,16 @@
 - [Class Features](#class-features)
   - [Cleric](#cleric)
     - [Healing Domain - Healer's Blessing](#healing-domain---healers-blessing)
-  - [Psychic](#psychic)
-    - [Phrenic Amplification](#phrenic-amplification)
   - [Ranger](#ranger)
-    - [Favored Enemy](#favored-enemy)
     - [Favored Terrain](#favored-terrain)
 - [Feats](#feats)
-  - [Shared Remembrance](#shared-remembrance)
   - [Spell Perfection](#spell-perfection)
   - [Spirited Charge](#spirited-charge)
   - [Scarred by War](#scarred-by-war)
 - [Buffs](#buffs)
-  - [Bane](#bane)
 - [Racial Features](#racial-features)
   - [Sylph](#sylph)
     - [Air Affinity](#air-affinity)
-- [Weapon Abilities](#weapon-abilities)
-  - [Bane](#bane-1)
 - [Misc](#misc)
   - [I am targeted](#i-am-targeted)
   - [Magic](#magic)
@@ -54,7 +45,6 @@
 - [Checklist for new (and existing features)](#checklist-for-new-and-existing-features)
 - [Add Quench Testings](#add-quench-testings)
 - [Add create hooks for initializing some items (like anything based off of name/id)](#add-create-hooks-for-initializing-some-items-like-anything-based-off-of-nameid)
-- [Add inpsiration checkbox to roll dialogs](#add-inpsiration-checkbox-to-roll-dialogs)
 - [Skills](#skills)
 - [in pf1 V10](#in-pf1-v10)
 - [Not Possible](#not-possible)
@@ -91,9 +81,6 @@
 - [link](https://www.d20pfsrd.com/alternative-rule-systems/mythic/mythic-heroes/mythic-paths-paizo-inc/champion/champion-path-abilities/maximized-critical-ex/)
 
 ## Targets
-### Creature type/subtype
-- Is possible now with v11 now that creature types/subtypes are hard data points
-  - would support [Ranger](#ranger)'s Favored Enemy and [Bane](https://www.d20pfsrd.com/magic-items/magic-weapons/magic-weapon-special-abilities/bane/)
 ### By Disposition
 - Ally/Hostile/Neutral multiselect
   - multi select
@@ -103,9 +90,6 @@
 ### All healing
 ### Armor Target (useful for something like Magic Vestment)
 - see Armor Focus for similar
-### Die Result
-- When the die is (some value range)
-  - Would allow for "1s turn to 2s" (e.g. target die = 1; bonus + 1)
 ### Skill Target
 - Include "smart groups" that will give options e.g.
   - specific ability skills (e.g. all int skills)
@@ -125,18 +109,11 @@
 - Cure Spells are treated as if they're empowered (+50% healing)
   - IsHealing target
   - Empowered Bonus
-## Psychic
-### Phrenic Amplification
-  - increases DC of `mind-affecting` spells by 1/2/3
 ## Ranger
-### Favored Enemy
-  - Add a button to chat cards to modify ranger damage for favored enemy 
-    - Perhaps do it automatically depending on target
 ### Favored Terrain
   - Add a button to chat cards to increase the skill/initiative/whatever roll when applicable
 
 # Feats
-## [Shared Remembrance](https://aonprd.com/FeatDisplay.aspx?ItemName=Shared%20Remembrance)
 ## [Spell Perfection](https://www.d20pfsrd.com/feats/general-feats/spell-perfection/)
 ## Spirited Charge
 - Double Damage without critting
@@ -144,9 +121,6 @@
  - (used to grant diplomacy bonus while not in combat)
 
 # Buffs
-## Bane
-- use the new [Bane][#bane] feature - add an action on the Buff that when used, prompts a script to change the creature type
-- when activated, prompt for creature type and targeted weapon
 
 # Racial Features
 ## Sylph
@@ -154,36 +128,6 @@
 - sorcerers with the elemental (air) bloodline treat their Charisma scores as 2 points higher for the purposes of all sorcerer spells and class abilities
   - Specifically just "treat <ability score> higher/lower for <spell book>"
   - maybe also "treat <ability score> higher/lower for <class ability>" -- would need to be based off of class key and ability that has a parent as that class
-
-# Weapon Abilities
-## Bane
-- choose one of the following types, humanoids and outsiders also require a subtype
-  > Aberrations
-  >
-  > Animals
-  >
-  > Constructs
-  >
-  > Dragons
-  >
-  > Fey
-  >
-  > Humanoids (pick one subtype)
-  >
-  > Magical beasts
-  >
-  > Monstrous humanoids
-  >
-  > Oozes
-  >
-  > Outsiders (pick one subtype)
-  >
-  > Plants
-  >
-  > Undead
-  >
-  > Vermin
-- +2 to existing enhancement bonus and 2d6 against chosen type
 
 # Misc
 ## I am targeted
@@ -194,7 +138,6 @@
 - specialization schools (and opposed)
 
 ## Misc
-- add the formula class to skill inputs
 - consumable buffs - requires later release (waiting on issue #1946) (did not make it into v9)
   - idea is to create a a flag on a buff that will add the bonus in "prehook" (and/or use built in changes) but use the new pf1 v.next posthook to disable the buff when it is consumed
 - Alter bonus effect for crit confirmation only
@@ -219,7 +162,6 @@
 
 # Housekeeping
 - Consolidate weapon hints (Weapon Focus, Specialization, Martial) - find a way to make them more concise
-- Remove Inspiration from being added into the dialog and instead create a change as part of rolling the skill
 
 # Checklist for new (and existing features)
 - Has hint on keyed ability
@@ -231,10 +173,6 @@
 
 # Add Quench Testings
 # Add create hooks for initializing some items (like anything based off of name/id)
-
-# Add inpsiration checkbox to roll dialogs
-- https://gitlab.com/foundryvtt_pathfinder1e/foundryvtt-pathfinder1/-/merge_requests/2758
-  - > "So actionUse.formData for actions and overriding _getFormData() for d20rolls"
 
 # Skills
 - Condtional Bonus when taking 10
@@ -295,8 +233,13 @@
 
 # todo
 - Turn on migration
-- Add Bane Specific Bonus
+- Add Bane Targeted Bonus
   - do all of it
+  - make sure that bane doesn't stack with bane
   - add documentation
+    - If necessary, make sure it includes info about this bonus being unique in that it's also a "half target"
 - Ammo (bane)
+  - verify "label -> sublabel, sublabel" shows correctly
   - add documentation
+- Damage Type selector is currently broken
+- verify that function target no longer breaks with bad js
