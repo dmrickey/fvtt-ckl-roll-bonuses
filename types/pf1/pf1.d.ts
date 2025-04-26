@@ -1954,6 +1954,7 @@ declare global {
         get modifiers(): Readonly<Collection<ItemConditionalModifier>>;
         get name(): string;
         get parent(): undefined | ItemPF;
+        get default(): boolean;
 
         get _source(): ItemConditionalSourceData;
 
