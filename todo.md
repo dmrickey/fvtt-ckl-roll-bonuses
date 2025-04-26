@@ -14,7 +14,6 @@
     - [By Disposition](#by-disposition)
     - [All healing](#all-healing)
     - [Armor Target (useful for something like Magic Vestment)](#armor-target-useful-for-something-like-magic-vestment)
-    - [Skill Target](#skill-target)
     - [Spellbook target](#spellbook-target)
     - [Spell preparation Qty](#spell-preparation-qty)
 - [Affect other tokens](#affect-other-tokens)
@@ -42,6 +41,7 @@
   - [Bonuses](#bonuses-1)
   - [Bonus Improvements](#bonus-improvements)
 - [Housekeeping](#housekeeping)
+  - [Remove Skill Config](#remove-skill-config)
 - [Checklist for new (and existing features)](#checklist-for-new-and-existing-features)
 - [Add Quench Testings](#add-quench-testings)
 - [Add create hooks for initializing some items (like anything based off of name/id)](#add-create-hooks-for-initializing-some-items-like-anything-based-off-of-nameid)
@@ -51,7 +51,6 @@
 - [Range/Positional ideas](#rangepositional-ideas)
 - [Other Ideas](#other-ideas)
 - [vnext](#vnext)
-- [todo](#todo-1)
 
 # TODO
 - Figure out a way to support multiple target groups on a single Item (so I can add `Favored Enemy (Human) +4` and `Favored Enemy (goblin) +2` on a single Item)
@@ -90,10 +89,6 @@
 ### All healing
 ### Armor Target (useful for something like Magic Vestment)
 - see Armor Focus for similar
-### Skill Target
-- Include "smart groups" that will give options e.g.
-  - specific ability skills (e.g. all int skills)
-  - The default layout will group subskills under the base skill and checking the base skill will automatically check all subskills
 ### Spellbook target
 ### Spell preparation Qty
 - Don't see how it's possible with my framework
@@ -163,6 +158,10 @@
 # Housekeeping
 - Consolidate weapon hints (Weapon Focus, Specialization, Martial) - find a way to make them more concise
 
+## Remove Skill Config
+- currently deprecated as of Apr 26, 2025
+- also remove warpgate as this is the last part using it.
+
 # Checklist for new (and existing features)
 - Has hint on keyed ability
 - Has hint on affected Item (Weapon/Attack/Spell/etc)
@@ -230,7 +229,3 @@
   - CL
   - DC
 - Add Fortune/Misfortune checkboxes to attack/roll dialogs
-
-# todo
-- Turn on migration
-- remove warpgate

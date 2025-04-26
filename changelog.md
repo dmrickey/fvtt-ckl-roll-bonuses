@@ -1,23 +1,23 @@
 ## Roll Bonuses 2.20.0 (rquires pf1 11.4)
 
 ### New Bonuses
-- **Vital Strike additions**
-  - Now also supports Devastating Strike, Improved Devastating Strike, and Mythic Vital Strike
+- **Bane Bonus**
+  - Grants +2 stacking enhancement and 2d6 damage to targeted attacks when targeting a creature with the chosen creature types
+  - Also has support within Ammo
 - **Inspiration**
   - Now configured directly on the class ability. Includes support for various feats/talents such as Amazing Inspiration, Tenacious Inspiration, Focused Inspiration, and True Inspiration to automatically increase the inspiration die when necessary.
   - If you are an Investigator, please read the in-game documentation for your options plus a helpful script call available in the new macro compendium
 - **Roll Skill Untrained**
   - Updates the actor's skill sheet to indicate that a given skill can now be used while untrained. Removes the `untrained` note when rolling as this is no longer the case.
-- **Bane Bonus**
-  - Grants +2 stacking enhancement and 2d6 damage to targeted attacks when targeting a creature with the chosen creature types
-  - Also has support within Ammo
+- **Vital Strike additions**
+  - Now also supports Devastating Strike, Improved Devastating Strike, and Mythic Vital Strike
 
 ### Misc
 - Renamed "Race Target" to "Creature Type Target"
 - Script Bonus - Added `this.source` as an option within the script call to grab a reference back to the source of the Bonus. Reminder: `item` references the "current item" that's being used that triggered the script.
 - Updated True Strike Buff to have a script call that will disable itself that doesn't rely on Hooks (so it will now survive between sessions if enabled a previous session)
 - Added Macro Compendium
-  - A couple of Inspiration macros for investigators
+  - A couple of Inspiration macros for investigators (don't forget to read the new documentation)
   - A script call that will turn off a Roll Bonus buff after a single use (see the True Strike buff for an example configuration)
   - An example on using Roll Bonuses distance finding api to measure the distance between two tokens
 - ⚠⚠⚠ Setting Skill bonuses directly on the actor sheet is now deprecated and will be removed in a future update. Everything that this did can now be accomplished by setting Specific Bonuses directly on the feat/ability/buff granting those bonuses. (or with the system's skill changes as has been the case for a while now)
@@ -29,7 +29,7 @@
 - Script Bonus 
   - fixed "on use type" always showing the default "use" option when referencing a Macro instead of a local script
   - fixed bringing up editor for a compendium macro that hadn't been loaded into memory yet
-- Function Target - no longer bricks the item sheet when an invalid function is saved and closed.
+- Function Target - no longer bricks the item sheet when an invalid function is saved and closed. Adds a very noisy console error when a broken function is detected.
 
 ---
 
