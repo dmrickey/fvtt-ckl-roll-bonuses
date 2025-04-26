@@ -1,10 +1,10 @@
-import { traitInput } from '../../handlebars-handlers/trait-input.mjs';
-import { onSkillSheetRender } from '../../util/on-skill-sheet-render-handler.mjs';
-import { getFlaggedSkillIdsFromActor, getSkillChoices } from '../../util/get-skills.mjs';
-import { LocalHookHandler, localHooks } from '../../util/hooks.mjs';
-import { registerItemHint } from '../../util/item-hints.mjs';
-import { localize, localizeBonusTooltip } from '../../util/localize.mjs';
-import { SpecificBonuses } from '../_all-specific-bonuses.mjs';
+import { traitInput } from '../handlebars-handlers/trait-input.mjs';
+import { onSkillSheetRender } from '../util/on-skill-sheet-render-handler.mjs';
+import { getFlaggedSkillIdsFromActor, getSkillChoices } from '../util/get-skills.mjs';
+import { LocalHookHandler, localHooks } from '../util/hooks.mjs';
+import { registerItemHint } from '../util/item-hints.mjs';
+import { localize, localizeBonusTooltip } from '../util/localize.mjs';
+import { SpecificBonuses } from './_all-specific-bonuses.mjs';
 
 export const key = 'roll-untrained';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#roll-skills-untrained';

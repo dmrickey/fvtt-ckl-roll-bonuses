@@ -7,6 +7,7 @@ import './bonuses/devastating-strike.mjs';
 import './bonuses/fortune-handler.mjs';
 import './bonuses/furious-focus.mjs';
 import './bonuses/martial-focus.mjs';
+import './bonuses/roll-untrained.mjs';
 import './bonuses/skill-rank-override.mjs';
 import './bonuses/skills/init.mjs';
 import './bonuses/snake-sidewind.mjs';

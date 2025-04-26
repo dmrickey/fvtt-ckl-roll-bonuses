@@ -4,7 +4,7 @@ import { localize, localizeBonusLabel } from '../../util/localize.mjs';
 import { onCreate } from '../../util/on-create.mjs';
 import { onSkillSheetRender } from '../../util/on-skill-sheet-render-handler.mjs';
 import { LanguageSettings } from '../../util/settings.mjs';
-import { key as rollUntrainedKey } from '../skills/roll-untrained.mjs'
+import { key as rollUntrainedKey } from '../roll-untrained.mjs'
 
 export const inspirationKey = 'inspiration';
 export const inspirationAmazingKey = 'inspiration-amazing';
