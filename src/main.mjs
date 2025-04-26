@@ -233,8 +233,29 @@ async function actionUse_handleConditionals() {
     const conditionals = [];
     LocalHookHandler.fireHookNoReturnSync(localHooks.actionUse_handleConditionals, this, conditionals);
 
+    const BaneBonus = api.bonusTypeMap['bonus_bane'];
+    const baneProvider = BaneBonus.actionHasBaneTarget(this.action);
+    if (baneProvider) {
+        const label = BaneBonus.getLabelForTargetsFromSource(baneProvider) || localizeBonusLabel(BaneBonus.key);
+
+        const bane = new pf1.components.ItemConditional({
+            default: true,
+            name: localizeBonusLabel('bonus_bane'),
+            modifiers: [{
+                _id: foundry.utils.randomID(),
+                critical: 'nonCrit',
+                damageType: ['untyped'],
+                formula: `2d6[${label}]`,
+                subTarget: 'allDamage',
+                target: 'damage',
+            }],
+        });
+        conditionals.push(bane);
+    }
+
+    const actionConditionals = this.shared.conditionals.map((id) => this.shared.action.conditionals.get(id))
     const conditionalData = [
-        ...this.shared.conditionals.map((id) => this.shared.action.conditionals.get(id)),
+        ...actionConditionals,
         ...conditionals,
     ].filter(truthiness);
 
@@ -253,14 +274,16 @@ async function actionUse_handleConditionals() {
     // This needs to happen after all other conditionals have been gathered so it can double any extra
     // excluding default conditionals because those are already included in action's damage sources
     const vital = new api.utils.VitalStrikeData(this.actor, { actionUse: this });
-    const mythic = vital.buildMythicConditional([
-        ...conditionals,
-        ...actionConditionals
-            .filter(truthiness)
-            .filter(x => !x.default),
-    ]);
-    if (mythic) {
-        conditionalData.push(mythic);
+    if (vital.enabled) {
+        const mythic = vital.buildMythicConditional([
+            ...conditionals,
+            ...actionConditionals
+                .filter(truthiness)
+                .filter(x => !x.default),
+        ]);
+        if (mythic) {
+            conditionalData.push(mythic);
+        }
     }
 
     await handleConditionals(this, conditionalData);
@@ -346,6 +369,11 @@ function itemActionEnhancementBonus(wrapped) {
     this[MODULE_NAME] ||= emptyObject();
 
     LocalHookHandler.fireHookWithReturnSync(localHooks.itemActionEnhancementBonus, seed, this);
+
+    const hasBane = api.bonusTypeMap['bonus_bane'].actionHasBaneTarget(this);
+    if (hasBane) {
+        seed.stacks += 2;
+    }
 
     const total = seed.base + seed.stacks
     this[MODULE_NAME].enhancement = {

@@ -233,13 +233,3 @@
 
 # todo
 - Turn on migration
-- Add Bane Targeted Bonus
-  - do all of it
-  - make sure that bane doesn't stack with bane
-  - add documentation
-    - If necessary, make sure it includes info about this bonus being unique in that it's also a "half target"
-- Ammo (bane)
-  - verify "label -> sublabel, sublabel" shows correctly
-  - add documentation
-- Damage Type selector is currently broken
-- verify that function target no longer breaks with bad js

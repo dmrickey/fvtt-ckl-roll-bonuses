@@ -256,8 +256,6 @@ function getAttackSources(item, sources) {
     newSources = newSources.filter(truthiness);
 
     sources.push(...newSources);
-    // todo reduce attack bonus highest of each type
-    // todo increase luck bonus if actor has fate's favored flag
 
     return sources;
 }
@@ -280,7 +278,6 @@ function getDamageTooltipSources(thing, sources) {
 
     const newChanges = changes.filter(truthiness);
 
-    // todo increase luck bonus if actor has fate's favored flag (double check that there isn't a named bonus for that already)
     sources.push(...newChanges);
 }
 Hooks.on(customGlobalHooks.getDamageTooltipSources, getDamageTooltipSources);

@@ -66,7 +66,7 @@ export class FunctionTarget extends BaseTarget {
                     return !!func(doc);
                 }
                 catch {
-                    console.error('invalid function target', source);
+                    console.error('invalid function target', source.uuid, source);
                     return false;
                 }
             }

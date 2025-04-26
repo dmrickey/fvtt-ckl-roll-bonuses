@@ -9,6 +9,7 @@ import { BaseTargetOverride } from '../src/targeted/target-overides/_base-target
 import { simplifyRollFormula } from '../src/util/simplify-roll-formula.mjs';
 import { VitalStrikeData } from '../src/bonuses/vital-strike.mjs';
 import { BaseMigrate } from '../src/migration/_migrate-base.mjs';
+import { BaneBonus } from '../src/targeted/bonuses/bane-bonus.mjs';
 
 export {};
 
@@ -50,28 +51,26 @@ declare global {
         /** Array of all targeted bonuses */
         get allBonusTypes(): (typeof BaseBonus)[];
         get allBonusTypesKeys(): string[];
+        /** map of every targeted bonus from its key to its type */
+        bonusTypeMap: {
+            bonus_bane: typeof BaneBonus;
+        } & Record<string, typeof BaseBonus>;
 
         /** Array of all global bonuses */
         get allGlobalTypes(): (typeof BaseGlobalBonus)[];
         get allGlobalTypesKeys(): string[];
+        /** map of every targeted bonus from its key to its type */
+        globalTypeMap: Record<string, typeof BaseGlobalBonus>;
 
         /** Array of all targeted targets */
         get allTargetTypes(): (typeof BaseTarget)[];
         get allTargetTypesKeys(): string[];
+        /** map of every targeted target from its key to its type */
+        targetTypeMap: Record<string, typeof BaseTarget>;
 
         /** Array of all targeted targets */
         get allTargetOverrideTypes(): (typeof BaseTargetOverride)[];
         get allTargetOverrideTypesKeys(): string[];
-
-        /** map of every targeted bonus from its key to its type */
-        bonusTypeMap: Record<string, typeof BaseBonus>;
-
-        /** map of every targeted bonus from its key to its type */
-        globalTypeMap: Record<string, typeof BaseGlobalBonus>;
-
-        /** map of every targeted target from its key to its type */
-        targetTypeMap: Record<string, typeof BaseTarget>;
-
         /** map of every target override from its key to its type */
         targetOverrideTypeMap: Record<string, typeof BaseTargetOverride>;
 

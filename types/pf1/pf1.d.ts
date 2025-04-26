@@ -1482,7 +1482,6 @@ declare global {
         journal?: string;
     }
     interface TraitsRollData {
-        // TODO
         armorProf: {
             custom: string;
             customTotal: string;
@@ -1567,7 +1566,6 @@ declare global {
         spellSlotAbilityBonusFormula: string;
     }
     interface SpellRollData {
-        // TODO
     }
 
     /**

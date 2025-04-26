@@ -3,6 +3,21 @@ import { addNodeToRollBonus } from '../add-bonus-to-item-sheet.mjs';
 import { createTemplate, templates } from '../templates.mjs';
 
 /**
+ * @overload
+ * @param {object} args
+ * @param {ItemPF} args.item
+ * @param {string} args.journal
+ * @param {string} args.label
+ * @param {HTMLElement} args.parent,
+ * @param {string} args.tooltip
+ * @param {object} options
+ * @param {InputType} options.inputType
+ * @param {boolean} [options.isSubLabel]
+ * @returns {void}
+ */
+
+/**
+ * @overload
  * @param {object} args
  * @param {ItemPF} args.item
  * @param {string} args.journal
@@ -13,7 +28,21 @@ import { createTemplate, templates } from '../templates.mjs';
  * @param {object} options
  * @param {InputType} options.inputType
  * @param {boolean} [options.isSubLabel]
-*/
+ * @returns {void}
+ */
+
+/**
+ * @param {object} args
+ * @param {ItemPF} args.item
+ * @param {string} args.journal
+ * @param {string | undefined} [args.key]
+ * @param {string} [args.label]
+ * @param {HTMLElement} args.parent,
+ * @param {string} [args.tooltip]
+ * @param {object} options
+ * @param {InputType} options.inputType
+ * @param {boolean} [options.isSubLabel]
+ */
 export function showLabel({
     item,
     journal,
@@ -25,8 +54,10 @@ export function showLabel({
     inputType,
     isSubLabel = false,
 }) {
-    label ||= localizeBonusLabel(key);
-    tooltip ||= localizeBonusTooltip(key);
+    if (key) {
+        label ||= localizeBonusLabel(key);
+        tooltip ||= localizeBonusTooltip(key);
+    }
 
     const div = createTemplate(
         templates.label,

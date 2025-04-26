@@ -75,7 +75,6 @@ export class WeaponTypeTarget extends BaseTarget {
             .flatMap((_item) => _item.system.baseTypes ?? [])
             ?? [];
         const currentTypes = this.#getTypes(item);
-        // TODO fetch override types
         const overrides = (item?.actor?.itemFlags?.boolean[WeaponBaseTypeOverride.key]?.sources ?? [])
             .flatMap((_item) => _item.system.baseTypes ?? [])
             ?? [];

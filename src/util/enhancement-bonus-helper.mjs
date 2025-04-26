@@ -5,9 +5,17 @@ import { intersects } from './array-intersects.mjs';
 import { FormulaCacheHelper } from './flag-helpers.mjs';
 import { getIdsFromItem } from './get-id-array-from-flag.mjs';
 
+/**
+ * @typedef {{base?: number, stacks?: number, hasBane: boolean}} EnhDataArgs
+ */
+
 class EnhData {
-    constructor({ base = 0, stacks = 0 }) {
+    /**
+     * @param {EnhDataArgs} param0
+     */
+    constructor({ base = 0, stacks = 0, hasBane }) {
         this.base = base;
+        this.hasBane = hasBane;
         this.stacks = stacks;
     }
     get total() { return (this.base || 0) + (this.stacks || 0); }
@@ -19,8 +27,6 @@ class EnhBonusResult {
 
     /** @type {EnhData?} */
     action = null;
-
-    hasBane = false;
 
     get base() {
         return Math.max(this.ammo?.base || 0, this.action?.base || 0);
@@ -53,7 +59,8 @@ const getEnhancementBonusForAction = ({ action, ammo, targets }) => {
         let { base, stacks } = action[MODULE_NAME]?.enhancement ?? {};
         base ||= 0;
         stacks ||= 0;
-        enhData.action = new EnhData({ base, stacks });
+        const hasBane = !!api.bonusTypeMap['bonus_bane'].actionHasBaneTarget(action);
+        enhData.action = new EnhData({ base, hasBane, stacks });
     }
 
     if (ammo) {
@@ -64,24 +71,24 @@ const getEnhancementBonusForAction = ({ action, ammo, targets }) => {
         const base = FormulaCacheHelper.getModuleFlagValue(ammo, ammoEnhancementKey);
         let stacks = FormulaCacheHelper.getModuleFlagValue(ammo, ammoEnhancementStacksKey);
 
-        if (targets?.length) {
+        let hasBane = false;
+        if (targets?.length && !enhData.action?.hasBane) {
             const creatureTypes = getIdsFromItem(ammo, ammoBaneCreatureType);
             const creatureSubtypes = getIdsFromItem(ammo, ammoBaneCreatureSubtype);
 
             if (creatureTypes.length || creatureSubtypes.length) {
-                enhData.hasBane = targets.map(x => x.actor).every((a) =>
+                hasBane = targets.map(x => x.actor).every((a) =>
                     (!creatureTypes.length || intersects(creatureTypes, a?.race?.system.creatureTypes.total))
                     && (!creatureSubtypes.length || intersects(creatureSubtypes, a?.race?.system.creatureSubtypes.total))
                 );
 
-                if (enhData.hasBane) {
+                if (hasBane) {
                     stacks += 2;
                 }
             }
         }
 
-
-        enhData.ammo = new EnhData({ base, stacks });
+        enhData.ammo = new EnhData({ base, hasBane, stacks });
     }
 
     return enhData;
