@@ -13,12 +13,6 @@ class Api {
     sources = {};
     targetTypeMap = {};
     targetOverrideTypeMap = {};
-    migrate = {
-        migrate: async () => { },
-        v1: {
-            migrateAmmoForActor: async () => { },
-        },
-    };
 
     applications = {};
     showApplication = {};
