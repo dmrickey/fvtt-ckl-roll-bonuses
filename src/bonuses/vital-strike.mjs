@@ -290,6 +290,10 @@ export class VitalStrikeData {
             formulaParts.push(toFormula(this.actionUse.shared.rollData.powerAttackBonus, label));
         }
 
+        if (!formulaParts.length) {
+            return;
+        }
+
         const conditional = new pf1.components.ItemConditional({
             default: true,
             name: localizeBonusLabel(vitalStrikeMythic),
