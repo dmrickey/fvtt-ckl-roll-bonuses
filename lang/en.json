@@ -660,6 +660,13 @@
             "icon-input": {
                 "no-selection": "No current targets"
             }
+        },
+        "deprecation": {
+            "dice": {
+                "bonus": "Use of skill bonuses configured directly on the item is deprecated and will be removed in a future version. Configure changes directly on the source ability granting these bonuses.",
+                "inspiration": "Use of inspiration configured directly on the skill is deprecated and will be removed in a future version. Transition to using the Inspiration specific skills configured on the appropriate abilities.",
+                "dice": "Use of modifying the base dice for skills is deprecated and will be removed in a future version. See the documentation for how to configure skills for fortune/misfortune. If you have a need not covered by (mis)fortune, let me know."
+            }
         }
     }
 }

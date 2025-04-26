@@ -1,4 +1,5 @@
 import { CONFIG_BUTTON } from '../../consts.mjs';
+import { localize } from '../../util/localize.mjs';
 import { CklSkillConfig } from './ckl-skill-config.mjs';
 import { CklSkillData } from './ckl-skill-data.mjs';
 
@@ -135,8 +136,10 @@ const handleSkillBonus = (
 
     if (data.bonus) {
         options.bonus = options.bonus
-            ? `${options.bonus} + ${data.bonus}`
+            ? `${options.bonus}
+            ui.notifications.warn(message);+ ${data.bonus}`
             : data.bonus;
+        ui.notifications.warn(localize('deprecation.dice.bonus'));
     }
 
     if (data.inspiration) {
@@ -144,10 +147,12 @@ const handleSkillBonus = (
         options.bonus = options.bonus
             ? `${options.bonus} + ${insp}`
             : insp;
+        ui.notifications.warn(localize('deprecation.dice.inspiration'));
     }
 
     if (data.dice) {
         options.dice = data.dice;
+        ui.notifications.warn(localize('deprecation.dice.dice'));
     }
 };
 Hooks.on('pf1PreActorRollSkill', handleSkillBonus);
