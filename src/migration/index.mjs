@@ -70,7 +70,7 @@ const migrations = [
     { label: 'ettin', migrate: v5.migrateWorldV5 },
 
     // 2.20 (race type -> creature type)
-    { label: 'ettin', migrate: v6.migrateWorld },
+    { label: 'frost worm', migrate: () => v6.migrateWorld() },
 ];
 
 // should always be one more than the

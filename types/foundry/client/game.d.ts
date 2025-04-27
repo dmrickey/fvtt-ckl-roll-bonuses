@@ -51,6 +51,14 @@ interface Game {
     userId: string;
 }
 
+interface Pack<T extends Document = Document> {
+    documentName: string;
+    locked: boolean;
+
+    getDocuments(): Promise<EmbeddedCollection<Document>>;
+    updateAll(func: (Document) => void): Promise<void>;
+}
+
 interface Scene {
     grid: {
         /**

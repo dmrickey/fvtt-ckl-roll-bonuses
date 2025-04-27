@@ -30,6 +30,8 @@ declare global {
         get(id: string): T | undefined;
 
         toObject(): { [key: string]: any };
+
+        updateAll(func: (T) => void): Promise<void>;
     }
 
     class HbsTemplate {}

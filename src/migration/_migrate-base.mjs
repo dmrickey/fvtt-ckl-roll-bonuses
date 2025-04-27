@@ -42,8 +42,7 @@ export class BaseMigrate {
     static async migrateWorldItems() {
         log('migrating game items');
 
-        // @ts-ignore don't care about defining type definition for Pack
-        game.items?.updateAll((item) => getItemUpdateData(item) || {});
+        await game.items?.updateAll((item) => this.getItemUpdateData(item) || {});
 
         log('...finished migrating game items');
     };
@@ -52,12 +51,11 @@ export class BaseMigrate {
         log('migrating unlocked packs');
 
         for (const pack of game.packs.filter(x => x.documentName === "Item" && !x.locked)) {
-            // @ts-ignore don't care about defining type definition for Pack
-            await pack.updateAll((item) => getItemUpdateData(item) || {});
+            await pack.updateAll((item) => this.getItemUpdateData(item) || {});
         }
 
         for (const pack of game.packs.filter(x => x.documentName === "Actor" && !x.locked)) {
-            const actors = await pack.getDocuments();
+            const actors = /** @type {EmbeddedCollection<ActorPF>} */ /** @type {any} */ (await pack.getDocuments());
             for (const actor of actors) {
                 const updates = actor.items.map(this.getItemUpdateData)
                     .filter(truthiness);

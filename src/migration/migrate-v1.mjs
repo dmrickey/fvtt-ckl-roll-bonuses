@@ -56,7 +56,7 @@ const migratePacks = async () => {
     log('migrating unlocked packs');
 
     for (const pack of game.packs.filter(x => x.documentName === "Item" && !x.locked)) {
-        const docs = await pack.getDocuments();
+        const docs = /** @type {EmbeddedCollection<ItemPF>} */ /** @type {any} */ (await pack.getDocuments());
         for (const item of docs) {
             await migrateItem(item);
         }

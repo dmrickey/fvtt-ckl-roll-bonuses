@@ -1,3 +1,11 @@
+
+## Roll Bonuses 2.20.1
+
+### Bugfixes
+- Fixed race type -> creature type migration from v2.19 to v2.20
+
+---
+
 ## Roll Bonuses 2.20.0 (rquires pf1 11.4)
 
 ### New Bonuses
