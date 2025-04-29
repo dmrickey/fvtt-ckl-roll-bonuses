@@ -1,3 +1,5 @@
+import { listFormat } from './list-format.mjs';
+
 /**
  * @implements {TraitSelector}
  */
@@ -32,4 +34,14 @@ export class Trait {
     get names() {
         return [...this.standard.map((t) => this.#choices[t] || t), ...this.custom];
     };
+
+    /** @type {string} */
+    get namesAnd() {
+        return listFormat(this.names, 'and');
+    }
+
+    /** @type {string} */
+    get namesOr() {
+        return listFormat(this.names, 'or');
+    }
 }
