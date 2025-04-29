@@ -229,3 +229,9 @@
   - CL
   - DC
 - Add Fortune/Misfortune checkboxes to attack/roll dialogs
+
+- Add `getSourceFlag` to api so mod authors don't have to save my mod id
+  - e.g. no `source.getFlag("ckl-roll-bonuses", this.key)`
+  - but instead `getSourceFlag(source, this.key)`
+  - Add traits and 'get ids' to API
+  - remove `Record<any, any>` from API type definition and make sure all individual references are imported
