@@ -1,3 +1,14 @@
+## Roll Bonuses 2.20.2
+
+### Misc
+- Added v2.19 and v2.20 Spanish strings (thanks Chechu!)
+
+### Bugfixes
+- Fixed issue with over agressive footnote parsing
+- 
+
+---
+
 
 ## Roll Bonuses 2.20.1
 
@@ -22,7 +33,7 @@
 
 ### Misc
 - Renamed "Race Target" to "Creature Type Target"
-- Script Bonus - Added `this.source` as an option within the script call to grab a reference back to the source of the Bonus. Reminder: `item` references the "current item" that's being used that triggered the script.
+- Script Bonus - Added `this.source` as an option within the script call Bonus to grab a reference back to the source of the Bonus. Reminder: `item` references the "current item" that's being used that triggered the script.
 - Updated True Strike Buff to have a script call that will disable itself that doesn't rely on Hooks (so it will now survive between sessions if enabled a previous session)
 - Added Macro Compendium
   - A couple of Inspiration macros for investigators (don't forget to read the new documentation)

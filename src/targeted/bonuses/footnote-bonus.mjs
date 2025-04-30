@@ -12,7 +12,6 @@ export class FootnoteBonus extends BaseBonus {
      */
     static get sourceKey() { return 'footnote'; }
 
-    // TODO VERIFY JOURNAL LINK
     /**
      * @override
      * @returns {string}
@@ -27,20 +26,15 @@ export class FootnoteBonus extends BaseBonus {
      */
     static prepareSourceData(item, rollData) {
         let note = item.getFlag(MODULE_NAME, this.key);
-        if (!note) {
-            return;
+        if (note) {
+
+            // replace only item level so it uses the source's item level in any formula
+            const level = ( /** @type {RollData<SystemItemDataBuffPF>} */ (rollData)).item.level;
+            if (level !== undefined) {
+                note = Roll.replaceFormulaData(note, { item: { level } });
+            }
+            item[MODULE_NAME][this.key] = note;
         }
-
-        const r = /\[\[([^\[].+?)\]\]/g;
-        const matches = [...note.matchAll(r)];
-
-        // const simplified = [];
-        matches.forEach(([_, match]) => {
-            const roll = RollPF.create(match, rollData);
-            note = note.replace(match, roll.simplifiedFormula);
-        });
-
-        item[MODULE_NAME][this.key] = note;
     }
 
     /**
@@ -61,9 +55,9 @@ export class FootnoteBonus extends BaseBonus {
      */
     static getFootnotes(source, _item) {
         /** @type { string } */
-        const enriched = source[MODULE_NAME][this.key];
-        if (enriched) {
-            return [{ text: enriched, source: source.name }];
+        const text = source[MODULE_NAME][this.key];
+        if (text) {
+            return [{ text, source: source.name }];
         }
     }
 

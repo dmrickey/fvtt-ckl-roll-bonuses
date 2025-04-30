@@ -1210,7 +1210,9 @@ declare global {
         weaponGroups: TraitSelector<keyof WeaponGroups>;
     }
     class SystemItemDataContainerPF extends SystemItemData {}
-    class SystemIteMDataBuffPF extends SystemItemData {}
+    class SystemItemDataBuffPF extends SystemItemData {
+        level: number;
+    }
     class SystemItemDataClassPF extends SystemItemData {
         level: number;
     }
@@ -1618,13 +1620,9 @@ declare global {
         dFlags?: DictionaryFlags;
         item: T;
 
-        // buff roll data
-        level?: number;
-
         // spell roll data
         cl?: number;
         sl?: number;
-        classLevel?: number;
         ablMod?: number;
 
         // action roll data

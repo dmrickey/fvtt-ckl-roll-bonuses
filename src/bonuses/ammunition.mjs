@@ -109,7 +109,7 @@ async function addEffectNotes(chatAttack) {
             ammo = containerItems.find((x) => x.id === chatAttack.ammo.id);
         }
         if (ammo) {
-            const note = ammo[MODULE_NAME][ammoEffectKey];
+            const note = ammo.getFlag(MODULE_NAME, ammoEffectKey);
             if (note) {
                 const enriched = await TextEditor.enrichHTML(`<div>${note}</div>`, { async: true });
                 chatAttack.effectNotes.push({ text: enriched, source: ammo.name });
@@ -218,20 +218,6 @@ LocalHookHandler.registerHandler(localHooks.prepareData, (item, rollData) => {
         const roll = RollPF.create(damage.formula, rollData);
         item[MODULE_NAME][ammoDamageKey].push(roll.simplifiedFormula);
     });
-
-    let note = item.getFlag(MODULE_NAME, ammoEffectKey);
-    if (note) {
-        const r = /\[\[([^\[].+?)\]\]/g;
-        const matches = [...note.matchAll(r)];
-
-        // const simplified = [];
-        matches.forEach(([_, match]) => {
-            const roll = RollPF.create(match, rollData);
-            note = note.replace(match, roll.simplifiedFormula);
-        });
-
-        item[MODULE_NAME][ammoEffectKey] = note;
-    }
 });
 
 /**
