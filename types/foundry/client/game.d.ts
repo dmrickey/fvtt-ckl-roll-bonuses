@@ -37,6 +37,7 @@ interface Game {
     scenes: EmbeddedCollection<Scene> & {
         /** @deprecated Do not use, base everything on the token or user's scene */
         active: Scene;
+        current: Scene;
     };
 
     /**
@@ -59,7 +60,7 @@ interface Pack<T extends Document = Document> {
     updateAll(func: (Document) => void): Promise<void>;
 }
 
-interface Scene {
+interface Scene extends BaseDocument {
     grid: {
         /**
          * Measure a shortest, direct path through the given waypoints.
