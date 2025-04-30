@@ -1,3 +1,4 @@
+import { api } from './api.mjs';
 import { localize } from './localize.mjs';
 import { truthiness } from './truthiness.mjs';
 
@@ -14,6 +15,8 @@ const buildClasses = (classes) => {
 }
 
 /**
+ * Prompts an "are you sure?" message giving the user a chance to confirm/cancel
+ *
  * @param {object} args
  * @param {string} args.title
  * @param {string} args.message
@@ -47,3 +50,5 @@ export const confirmationDialog = ({
         },
         default: "submit"
     }).render(true);
+
+api.utils.confirmationDialog = confirmationDialog;

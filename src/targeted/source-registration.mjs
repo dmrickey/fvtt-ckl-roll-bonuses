@@ -10,15 +10,15 @@ export class Sources {
     static registerSource(source) {
         if (source.prototype instanceof api.sources.BaseBonus) {
             const bonus = /** @type {RollBonusesAPI['sources']['BaseBonus']} */ (/** @type {unknown} */ (source));
-            api.bonusTypeMap[source.key] = bonus;
+            api.bonusTypeMap[bonus.key] = bonus;
         }
         else if (source.prototype instanceof api.sources.BaseTarget) {
             const target = /** @type {RollBonusesAPI['sources']['BaseTarget']} */ (/** @type {unknown} */ (source));
-            api.targetTypeMap[source.key] = target;
+            api.targetTypeMap[target.key] = target;
         }
         else if (source.prototype instanceof api.sources.BaseTargetOverride) {
             const targetOverride = /** @type {RollBonusesAPI['sources']['BaseTargetOverride']} */ (/** @type {unknown} */ (source));
-            api.targetOverrideTypeMap[source.key] = targetOverride;
+            api.targetOverrideTypeMap[targetOverride.key] = targetOverride;
         }
     }
 

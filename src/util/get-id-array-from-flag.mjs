@@ -1,4 +1,5 @@
 import { MODULE_NAME } from '../consts.mjs'
+import { api } from './api.mjs';
 import { Trait } from './trait-builder.mjs';
 import { uniqueArray } from './unique-array.mjs';
 
@@ -42,4 +43,11 @@ export const getIdsBySourceFromActor = (actor, flag) => {
         source: item,
         ids: getIdsFromItem(item, flag),
     }));
+}
+
+api.utils.getIds = {
+    getTraitsFromItem,
+    getIdsFromItem,
+    getIdsFromActor,
+    getIdsBySourceFromActor,
 }

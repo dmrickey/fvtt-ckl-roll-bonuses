@@ -11,7 +11,7 @@ const toSet = (a) => a instanceof Set ? a : Array.isArray(a) ? new Set(a) : new 
  * @template T
  * @param {Nullable<T | T[] | Set<T>>} a
  * @param {Nullable<T | T[] | Set<T>>} b
- * @returns {boolean} True if both arrays share a common element
+ * @returns {boolean} True if both arrays share at least one  common element
  */
 export const intersects = (a, b) => {
     if (!a && !b) return true;
@@ -41,7 +41,7 @@ export const intersection = (a, b) => {
 
 /**
  * @template T
- * @param {T[]|Set<T>} a
+ * @param {T|T[]|Set<T>} a
  * @param {T|T[]|Set<T>} b
  * @returns {T[]} items in collection a that aren't in collection b
  */

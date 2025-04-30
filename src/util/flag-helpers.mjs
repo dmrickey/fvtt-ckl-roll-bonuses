@@ -30,13 +30,7 @@ export const getDocFlags = (doc, key) => {
     return [];
 }
 
-api.utils.getDocFlags = getDocFlags;
-
 export class FormulaCacheHelper {
-
-    static {
-        api.utils.FormulaCacheHelper = FormulaCacheHelper;
-    }
 
     /** @type {string[]} */
     static #moduleFlags = [];
@@ -127,3 +121,6 @@ export class FormulaCacheHelper {
         return formulas;
     }
 }
+
+api.utils.getDocFlags = getDocFlags;
+api.utils.FormulaCacheHelper = FormulaCacheHelper;

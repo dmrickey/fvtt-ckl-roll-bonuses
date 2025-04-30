@@ -1,4 +1,5 @@
 import { MODULE_NAME } from '../consts.mjs';
+import { api } from './api.mjs';
 import { itemHasCompendiumId } from './has-compendium-id.mjs';
 
 /**
@@ -92,3 +93,6 @@ export const onRenderCreate = (item, key, compendiumId, nameFunc, isEditable, fl
     }
     return true;
 }
+
+api.utils.onCreate = onCreate;
+api.utils.onRenderCreate = onRenderCreate;

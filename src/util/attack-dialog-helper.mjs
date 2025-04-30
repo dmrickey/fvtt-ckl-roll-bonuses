@@ -119,8 +119,7 @@ class DialogBooleanTracker {
     static #removeApp(id) { this.#trackedApplications.delete(id); }
 }
 
-api.utils.DialogBooleanTracker = DialogBooleanTracker;
-
+api.utils.addCheckToAttackDialog = addCheckToAttackDialog;
 
 /**
  * @param {ActionUse} actionUse

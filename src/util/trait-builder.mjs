@@ -1,6 +1,9 @@
+import { api } from './api.mjs';
 import { listFormat } from './list-format.mjs';
 
 /**
+ * Proper type wrapper for pf1's "traits" that are built inline.
+ * Plus a couple conveniency getters.
  * @implements {TraitSelector}
  */
 export class Trait {
@@ -35,13 +38,23 @@ export class Trait {
         return [...this.standard.map((t) => this.#choices[t] || t), ...this.custom];
     };
 
-    /** @type {string} */
+    /**
+     * Joins [a, b, c] to 'a, b, and c'
+     * Joins [a, b] to 'a and b'
+     * @type {string}
+     */
     get namesAnd() {
         return listFormat(this.names, 'and');
     }
 
-    /** @type {string} */
+    /**
+     * Joins [a, b, c] to 'a, b, or c'
+     * Joins [a, b] to 'a or b'
+     * @type {string}
+     */
     get namesOr() {
         return listFormat(this.names, 'or');
     }
 }
+
+api.utils.Trait = Trait;

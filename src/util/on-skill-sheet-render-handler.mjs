@@ -1,3 +1,4 @@
+import { api } from './api.mjs';
 import { getFlaggedSkillIdsBySourceFromActor } from './get-skills.mjs';
 
 /**
@@ -79,3 +80,5 @@ const createSkillIcon = (toolTip, classes, source) => {
 
     return icon;
 }
+
+api.utils.onSkillSheetRender = onSkillSheetRender;

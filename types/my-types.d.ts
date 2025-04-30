@@ -10,6 +10,51 @@ import { simplifyRollFormula } from '../src/util/simplify-roll-formula.mjs';
 import { VitalStrikeData } from '../src/bonuses/vital-strike.mjs';
 import { BaseMigrate } from '../src/migration/_migrate-base.mjs';
 import { BaneBonus } from '../src/targeted/bonuses/bane-bonus.mjs';
+import { Sources } from '../src/targeted/source-registration.mjs';
+import {
+    isMelee,
+    isNatural,
+    isNaturalSecondary,
+    isPhysical,
+    isRanged,
+    isSpell,
+    isThrown,
+    isWeapon,
+} from '../src/util/action-type-helpers.mjs';
+import {
+    difference,
+    intersection,
+    intersects,
+} from '../src/util/array-intersects.mjs';
+import { getEnhancementBonusForAction } from '../src/util/enhancement-bonus-helper.mjs';
+import { FormulaCacheHelper, getDocFlags } from '../src/util/flag-helpers.mjs';
+import {
+    currentTargetedActors,
+    currentTargets,
+} from '../src/util/get-current-targets.mjs';
+import { getActionDamageTypes } from '../src/util/get-damage-types.mjs';
+import { getSkillFormula } from '../src/util/get-skill-formula.mjs';
+import { itemHasCompendiumId } from '../src/util/has-compendium-id.mjs';
+import { ifDebug } from '../src/util/if-debug.mjs';
+import { listFormat } from '../src/util/list-format.mjs';
+import { PositionalHelper } from '../src/util/positional-helper.mjs';
+import { distinct, uniqueArray } from '../src/util/unique-array.mjs';
+import { Trait } from '../src/util/trait-builder.mjs';
+import {
+    getIdsBySourceFromActor,
+    getIdsFromActor,
+    getIdsFromItem,
+    getTraitsFromItem,
+} from '../src/util/get-id-array-from-flag.mjs';
+import { isActorInCombat } from '../src/util/is-actor-in-combat.mjs';
+import { isEmptyObject } from 'jquery';
+import { isNotEmptyObject } from '../src/util/is-empty-object.mjs';
+import { onCreate, onRenderCreate } from '../src/util/on-create.mjs';
+import { onSkillSheetRender } from '../src/util/on-skill-sheet-render-handler.mjs';
+import { signed } from '../src/util/to-signed-string.mjs';
+import { truthiness } from '../src/util/truthiness.mjs';
+import { confirmationDialog } from '../src/util/confirmation-dialog.mjs';
+import { addCheckToAttackDialog } from '../src/util/attack-dialog-helper.mjs';
 
 export {};
 
@@ -102,11 +147,57 @@ declare global {
 
         /** various utility helper methods and classes used throughout the mod */
         utils: {
+            actionTypeHelpers: {
+                isMelee: typeof isMelee;
+                isNatural: typeof isNatural;
+                isNaturalSecondary: typeof isNaturalSecondary;
+                isPhysical: typeof isPhysical;
+                isRanged: typeof isRanged;
+                isSpell: typeof isSpell;
+                isThrown: typeof isThrown;
+                isWeapon: typeof isWeapon;
+            };
+            array: {
+                difference: typeof difference;
+                distinct: typeof distinct;
+                intersection: typeof intersection;
+                intersects: typeof intersects;
+                listFormat: typeof listFormat;
+                uniqueArray: typeof uniqueArray;
+            };
+            getIds: {
+                getTraitsFromItem: typeof getTraitsFromItem;
+                getIdsFromItem: typeof getIdsFromItem;
+                getIdsFromActor: typeof getIdsFromActor;
+                getIdsBySourceFromActor: typeof getIdsBySourceFromActor;
+            };
+
+            addCheckToAttackDialog: typeof addCheckToAttackDialog;
+            confirmationDialog: typeof confirmationDialog;
+            currentTargetedActors: typeof currentTargetedActors;
+            currentTargets: typeof currentTargets;
+            getActionDamageTypes: typeof getActionDamageTypes;
+            getDocFlags: typeof getDocFlags;
+            getEnhancementBonusForAction: typeof getEnhancementBonusForAction;
+            getSkillFormula: typeof getSkillFormula;
             handleBonusesFor: typeof handleBonusesFor;
-            array: Record<string, (...args) => any>;
+            ifDebug: typeof ifDebug;
+            isActorInCombat: typeof isActorInCombat;
+            isEmptyObject: typeof isEmptyObject;
+            isNotEmptyObject: typeof isNotEmptyObject;
+            itemHasCompendiumId: typeof itemHasCompendiumId;
+            onCreate: typeof onCreate;
+            onRenderCreate: typeof onRenderCreate;
+            onSkillSheetRender: typeof onSkillSheetRender;
+            registerSource: (typeof Sources)['registerSource'];
+            signed: typeof signed;
             simplifyRollFormula: typeof simplifyRollFormula;
+            truthiness: typeof truthiness;
+
+            FormulaCacheHelper: typeof FormulaCacheHelper;
+            PositionalHelper: typeof PositionalHelper;
+            Trait: typeof Trait;
             VitalStrikeData: typeof VitalStrikeData;
-            [key: string]: any;
         };
     }
 

@@ -1,3 +1,5 @@
+import { api } from './api.mjs';
+
 /**
  * Returns true if object is truthy. Useful for filtering arrays and being obvious about what's happening.
  * @template T
@@ -8,3 +10,5 @@ export const truthiness = x =>
     typeof x === 'string'
         ? !!x?.trim()
         : !!x;
+
+api.utils.truthiness = truthiness;

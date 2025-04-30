@@ -28,6 +28,8 @@ class Api {
 
     utils = {
         array: {},
+        getIds: {},
+        actionTypeHelpers: {},
     };
 }
 
