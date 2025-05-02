@@ -4,8 +4,8 @@
 - Added v2.19 and v2.20 Spanish strings (thanks Chechu!)
 
 ### Bugfixes
-- Fixed issue with over agressive footnote parsing
-- 
+- Fixed issue with overagressive footnote parsing
+- Updates to how damage and effect note bonuses (including ammo damage/effect notes) were caching formulas, will allow more roll variables to be used in those instances (e.g. action.ability.critMult)
 
 ---
 

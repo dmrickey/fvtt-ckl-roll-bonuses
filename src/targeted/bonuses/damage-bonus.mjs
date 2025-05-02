@@ -42,8 +42,8 @@ export class DamageBonus extends BaseBonus {
             damages.forEach((/** @type {DamageInputModel}*/ damage) => {
                 item[MODULE_NAME][this.key] ||= [];
                 try {
-                    const roll = RollPF.create(damage.formula, rollData);
-                    item[MODULE_NAME][this.key].push(roll.simplifiedFormula);
+                    const formula = Roll.replaceFormulaData(damage.formula, { item: rollData.item, class: rollData.class });
+                    item[MODULE_NAME][this.key].push(formula);
                 }
                 catch {
                     console.error('Problem with formula', damage.formula, this.key, item);
@@ -55,8 +55,8 @@ export class DamageBonus extends BaseBonus {
             changes.forEach((/** @type {{formula: string, type: BonusTypes}}*/ change) => {
                 item[MODULE_NAME][this.#changeKey] ||= [];
                 try {
-                    const roll = RollPF.create(change.formula, rollData);
-                    item[MODULE_NAME][this.#changeKey].push(roll.simplifiedFormula);
+                    const formula = Roll.replaceFormulaData(change.formula, { item: rollData.item, class: rollData.class });
+                    item[MODULE_NAME][this.#changeKey].push(formula);
                 }
                 catch {
                     console.error('Problem with formula', change.formula, this.#changeKey, item);

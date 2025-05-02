@@ -27,12 +27,7 @@ export class FootnoteBonus extends BaseBonus {
     static prepareSourceData(item, rollData) {
         let note = item.getFlag(MODULE_NAME, this.key);
         if (note) {
-
-            // replace only item level so it uses the source's item level in any formula
-            const level = ( /** @type {RollData<SystemItemDataBuffPF>} */ (rollData)).item.level;
-            if (level !== undefined) {
-                note = Roll.replaceFormulaData(note, { item: { level } });
-            }
+            note = Roll.replaceFormulaData(note, { item: rollData.item, class: rollData.class });
             item[MODULE_NAME][this.key] = note;
         }
     }

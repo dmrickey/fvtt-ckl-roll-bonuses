@@ -31,13 +31,7 @@ function applyChange(actor, targets = null, { applySourceInfo = true, rollData }
 
         let value = 0;
         if (this.formula) {
-            if (operator === "function") {
-                foundry.utils.logCompatibilityWarning(
-                    "ItemChange function operator is no longer supported with no replacement.",
-                    { since: "PF1 v10", until: "PF1 v11" }
-                );
-                continue;
-            } else if (!isNaN(this.formula)) {
+            if (!isNaN(this.formula)) {
                 value = parseFloat(this.formula);
             } else if (this.isDeferred && RollPF.parse(this.formula).some((t) => !t.isDeterministic)) {
                 value = RollPF.replaceFormulaData(this.formula, rollData, { missing: 0 });
@@ -52,9 +46,9 @@ function applyChange(actor, targets = null, { applySourceInfo = true, rollData }
             }
         }
 
-        // THIS IS MY ONLY CHANGE - MODIFY THE VALUE BEFORE IT'S USED BELOW
+        // #region THIS IS MY ONLY CHANGE - MODIFY THE VALUE BEFORE IT'S USED BELOW
         value = LocalHookHandler.fireHookWithReturnSync(localHooks.patchChangeValue, value, this.type, this.parent?.actor);
-        // END MY ONLY CHANGE
+        // #endregion END MY ONLY CHANGE
 
         this.value = value;
 

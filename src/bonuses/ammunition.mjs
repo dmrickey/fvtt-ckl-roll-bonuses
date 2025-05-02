@@ -213,9 +213,9 @@ Hooks.on('renderItemSheet', (
 LocalHookHandler.registerHandler(localHooks.prepareData, (item, rollData) => {
     const damages = item.getFlag(MODULE_NAME, ammoDamageKey) || [];
     damages.forEach((/** @type {DamageInputModel}*/ damage) => {
+        const formula = Roll.replaceFormulaData(damage.formula, { item: rollData.item, class: rollData.class });
         item[MODULE_NAME][ammoDamageKey] ||= [];
-        const roll = RollPF.create(damage.formula, rollData);
-        item[MODULE_NAME][ammoDamageKey].push(roll.simplifiedFormula);
+        item[MODULE_NAME][ammoDamageKey].push(formula);
     });
 });
 

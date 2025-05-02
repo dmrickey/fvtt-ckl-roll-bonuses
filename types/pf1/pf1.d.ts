@@ -1589,6 +1589,7 @@ declare global {
             type: number;
         };
         attributes: AttributeRollData;
+        class?: ClassRollData;
         classes: Record<string, ClassRollData>;
         conditions: { loseDexToAC: boolean, [string: keyof Conditions]: boolean };
         /** Conditionals being used as part of this action */
