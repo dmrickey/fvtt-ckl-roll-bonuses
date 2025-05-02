@@ -3,7 +3,6 @@ import { api } from '../../../util/api.mjs';
 import { createTemplate, templates } from "../../templates.mjs";
 import { addNodeToRollBonus } from "../../add-bonus-to-item-sheet.mjs";
 import { localize, localizeBonusLabel, localizeBonusTooltip } from "../../../util/localize.mjs";
-import { uniqueArray } from '../../../util/unique-array.mjs';
 
 /**
  * @param {object} args

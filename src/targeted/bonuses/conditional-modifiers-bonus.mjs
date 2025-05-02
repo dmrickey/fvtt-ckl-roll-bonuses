@@ -39,8 +39,8 @@ export class ConditionalModifiersBonus extends BaseBonus {
                     item[MODULE_NAME][this.key].conditionals ||= {};
                     item[MODULE_NAME][this.key].conditionals[c.id] ||= {};
 
-                    const roll = RollPF.create(m.formula, rollData);
-                    item[MODULE_NAME][this.key].conditionals[c.id][m._id] = roll.simplifiedFormula;
+                    const formula = Roll.replaceFormulaData(m.formula, { item: rollData.item, class: rollData.class });
+                    item[MODULE_NAME][this.key].conditionals[c.id][m._id] = formula;
                 });
             });
         });
