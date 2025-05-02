@@ -1,3 +1,10 @@
+## Roll Bonuses 2.20.3
+
+### Misc
+- Expandeded previous change to less aggressively cache formula to Conditional Bonus
+
+---
+
 ## Roll Bonuses 2.20.2
 
 ### Misc
@@ -8,7 +15,6 @@
 - Updates to how damage and effect note bonuses (including ammo damage/effect notes) were caching formulas, will allow more roll variables to be used in those instances (e.g. action.ability.critMult)
 
 ---
-
 
 ## Roll Bonuses 2.20.1
 
