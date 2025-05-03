@@ -29,7 +29,7 @@ export class DiceTransformBonus extends BaseBonus {
         LocalHookHandler.registerHandler(localHooks.prepareData, (item, rollData) => {
             const modification = item.getFlag(MODULE_NAME, this.key);
             if (modification) {
-                item[MODULE_NAME][this.key] = Roll.replaceFormulaData(modification, rollData);
+                item[MODULE_NAME][this.key] = Roll.replaceFormulaData(modification, { item: rollData.item, class: rollData.class });
             }
         });
     }

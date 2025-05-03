@@ -1,3 +1,10 @@
+## Roll Bonuses 2.20.4
+
+### Misc
+- Expandeded previous change to less aggressively cache formula to Dice Transform Bonus
+
+---
+
 ## Roll Bonuses 2.20.3
 
 ### Misc
