@@ -81,7 +81,7 @@ export class WhenTargetInRange extends BaseTarget {
         }
 
         const filtered = sources.filter((source) => {
-            // pf1 system believe "minRange" is not inclusive, so it reports "minRange" as "squares one closer".
+            // pf1 system believes "minRange" is not inclusive, so it reports "minRange" as "squares one closer".
             // The distance logic is now set up for that so reducing this by Infinitesimally small amount accounts for their error
             const min = (this.#min(source) || 0) - .0001;
             const max = this.#max(source);

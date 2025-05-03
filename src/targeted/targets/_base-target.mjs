@@ -27,6 +27,8 @@ export class BaseTarget extends BaseSource {
         }
 
         const sources = item.actor.itemFlags?.boolean[this.key]?.sources ?? [];
+        if (!sources.length) return [];
+
         // @ts-ignore checked above to make sure actor is defined
         return this._getSourcesFor(item, sources, doc) || [];
     };
