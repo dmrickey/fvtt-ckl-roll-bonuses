@@ -44,9 +44,9 @@ Hooks.on('renderItemSheet', (
     }
 
     showEnabledLabel({
+        item,
         journal,
         key,
-        item,
         parent: html,
     }, {
         canEdit: isEditable,

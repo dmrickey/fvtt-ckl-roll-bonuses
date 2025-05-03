@@ -55,11 +55,11 @@ Hooks.on('renderItemSheet', (
     const die = item.actor?.getRollData().rb?.inspiration?.base;
 
     showEnabledLabel({
-        text: localize('inspiration-amazing-die', { die }),
+        item,
         journal,
         key,
-        item,
         parent: html,
+        text: localize('inspiration-amazing-die', { die }),
     }, {
         canEdit: isEditable,
         inputType: 'specific-bonus',
