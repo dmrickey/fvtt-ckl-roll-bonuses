@@ -61,7 +61,6 @@ export function createElementalClOrDc(t) {
     FormulaCacheHelper.registerModuleFlag(formulaKey);
 
     /**
-     *
      * @param {ItemPF} item
      * @param {ItemAction?} action
      * @returns {undefined | { offset: number, elements: string[]}}

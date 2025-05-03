@@ -1930,7 +1930,6 @@ declare global {
             type: BonusTypes | DamageTypes | string;
             operator: '+' | '-';
             priority: number;
-            get subTarget(): string;
             target: BuffTarget = 'skill';
             value: number;
         };

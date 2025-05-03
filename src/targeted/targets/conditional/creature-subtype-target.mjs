@@ -68,18 +68,15 @@ export class CreatureSubtypeTarget extends BaseTarget {
     /**
      * @inheritdoc
      * @override
-     * @param {ItemPF & { actor: ActorPF }} item
-     * @param {ItemPF[]} _sources
+     * @param {ItemPF & { actor: ActorPF }} _item
+     * @param {ItemPF[]} sources
      * @returns {ItemPF[]}
      */
-    static _getSourcesFor(item, _sources) {
-        const { actor } = item;
-
+    static _getSourcesFor(_item, sources) {
         const currentTargets = currentTargetedActors();
         if (!currentTargets.length) return [];
 
-        const flaggedSources = actor.itemFlags?.boolean[this.key]?.sources ?? [];
-        const bonusSources = flaggedSources.filter((source) => {
+        const bonusSources = sources.filter((source) => {
             const subtypes = this.#getCreatureSubtypesTraits(source);
             return currentTargets.every((a) => intersects(subtypes.total, a.race?.system.creatureSubtypes.total));
         });

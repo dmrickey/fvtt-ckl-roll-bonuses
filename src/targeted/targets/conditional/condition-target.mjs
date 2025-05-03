@@ -81,8 +81,7 @@ export class ConditionTarget extends BaseTarget {
 
         const currentTargets = currentTargetedActors();
 
-        const flaggedSources = actor.itemFlags?.boolean[this.key]?.sources ?? [];
-        const bonusSources = flaggedSources.filter((source) => {
+        const bonusSources = sources.filter((source) => {
             const condition = source.getFlag(MODULE_NAME, this.key);
             if (!condition) return false;
 
