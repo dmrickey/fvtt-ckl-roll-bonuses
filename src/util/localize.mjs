@@ -15,7 +15,9 @@ const localize = (key, opts = {}) => {
 
     ifDebug(() => {
         if (str === key && key.includes('.')) {
-            console.error(`${MODULE_NAME} - Missing translation for ${key}`);
+            const message = `${MODULE_NAME} - Missing translation for ${key}`;
+            ui.notifications.error(message);
+            console.error(message);
             str = `*** ${str} ***`;
         }
     });

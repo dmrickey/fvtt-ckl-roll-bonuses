@@ -16,6 +16,8 @@ declare global {
 
     let ui: ui;
 
+    let canvas: Canvas;
+
     let CONFIG: CONFIG;
 
     let CONST: CONST;

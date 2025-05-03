@@ -1,6 +1,6 @@
+import { MODULE_NAME } from '../consts.mjs';
 import { api } from './api.mjs';
 import { ifDebug } from './if-debug.mjs';
-import { truthiness } from './truthiness.mjs';
 
 export class PositionalHelper {
 
@@ -85,6 +85,36 @@ export class PositionalHelper {
         return PositionalHelper.#threatens(this.token1, this.token2) || PositionalHelper.#threatens(this.token2, this.token1);
     }
 
+    /**
+     * @param {object} [args]
+     * @param {ItemAction} [args.action]
+     * @param {TokenPF[]} [args.flankingWith]
+     * @returns {TokenPF[]}
+     */
+    isFlanking({
+        action = undefined,
+        flankingWith = undefined,
+    } = {
+            action: undefined,
+            flankingWith: undefined,
+        }
+    ) {
+        if (!this.threatens(action)) return [];
+
+        const potentials = flankingWith || this.token1.scene.tokens
+            .filter((x) => ![this.token1.id, this.token2.id].includes(x.id)
+                && x.disposition !== this.token2.document.disposition
+                && x.disposition === this.token1.document.disposition
+            )
+            .map((x) => new PositionalHelper(x, this.token2))
+            .filter((helper) => helper.threatens())
+            .map((helper) => helper.token1);
+
+        const flankAllies = potentials
+            .filter((ally) => PositionalHelper.#isFlankingWith(this.token1, ally, this.token2, action));
+        return flankAllies;
+    }
+
     isOnHigherGround() {
         return PositionalHelper.#floor(this.token1) > PositionalHelper.#floor(this.token2);
     }
@@ -165,12 +195,14 @@ export class PositionalHelper {
         }
 
         return actions.some((action) => {
+            const range = action[MODULE_NAME].range || { max: 0, min: 0, range: 0 };
+            const { max, min, single } = range;
             ifDebug(() => {
-                if (action.getRange() && !action.maxRange) {
+                if (single && !max) {
                     ui.notifications.error(`Action (${action.id}) on Item '${action.item.name}' (${action.item.uuid}) has invalid range. Verify the max increments and range has been set up correctly.`);
                 }
             });
-            return this.#isWithinRange(attacker, target, action.minRange, action.maxRange || 0);
+            return this.#isWithinRange(attacker, target, min, max || 0);
         });
     }
 
@@ -209,6 +241,7 @@ export class PositionalHelper {
         }
 
         return enlarged.intersects(right.bounds)
+            // essentially this.#sharesElevation(left, right) but with an enlarged area to verify
             && (
                 (this.#floor(right) <= ceiling && ceiling <= this.#ceiling(right))
                 || (this.#floor(right) <= floor && floor <= this.#ceiling(right))
@@ -222,11 +255,67 @@ export class PositionalHelper {
      * @returns {boolean}
      */
     static #isSharingSquare(first, second) {
-        /** @param {TokenPF} f @param {TokenPF} s @returns {boolean} */
-        const isSharing = (f, s) => f.bounds.intersects(s.bounds)
-            && !this.#isAboveCeiling(f, s)
-            && !this.#isBelowFloor(f, s);
-        return isSharing(first, second) || isSharing(second, first);
+        const isSharing = () => first.bounds.intersects(second.bounds);
+        return isSharing() && this.#sharesElevation(first, second);
+    }
+
+    /**
+     * @param {TokenPF} first
+     * @param {TokenPF} second
+     * @param {TokenPF} target
+     * @param {ItemAction} [specificAction]
+     * @returns {boolean}
+     */
+    static #isFlankingWith(first, second, target, specificAction = undefined) {
+        if (!this.#threatens(first, target, specificAction) || !this.#threatens(second, target)) {
+            return false;
+        }
+
+        const isOnOppositeSides = () => {
+            if ((this.#isLeftOf(first, target, true) && !this.#isAbove(first, target) && !this.#isBelow(first, target))
+                && (this.#isRightOf(second, target, true) && !this.#isAbove(second, target) && !this.#isBelow(second, target))
+            ) {
+                return true;
+            }
+            if ((this.#isRightOf(first, target, true) && !this.#isAbove(first, target) && !this.#isBelow(first, target))
+                && (this.#isLeftOf(second, target, true) && !this.#isAbove(second, target) && !this.#isBelow(second, target))
+            ) {
+                return true;
+            }
+            if ((this.#isAbove(first, target, true) && !this.#isLeftOf(first, target) && !this.#isRightOf(first, target))
+                && (this.#isBelow(second, target, true) && !this.#isLeftOf(second, target) && !this.#isRightOf(second, target))
+            ) {
+                return true;
+            }
+            if ((this.#isBelow(first, target, true) && !this.#isLeftOf(first, target) && !this.#isRightOf(first, target))
+                && (this.#isAbove(second, target, true) && !this.#isLeftOf(second, target) && !this.#isRightOf(second, target))
+            ) {
+                return true;
+            }
+
+            // on opposite diagonals - can be technically wrong for creatures with reach
+            if (this.#isLeftOf(first, target, true) && this.#isAbove(first, target, true) && this.#isRightOf(second, target, true) && this.#isBelow(second, target, true)) {
+                return true;
+            }
+            if (this.#isLeftOf(first, target, true) && this.#isBelow(first, target, true) && this.#isRightOf(second, target, true) && this.#isAbove(second, target, true)) {
+                return true;
+            }
+            if (this.#isLeftOf(second, target, true) && this.#isAbove(second, target, true) && this.#isRightOf(first, target, true) && this.#isBelow(first, target, true)) {
+                return true;
+            }
+            if (this.#isLeftOf(second, target, true) && this.#isBelow(second, target, true) && this.#isRightOf(first, target, true) && this.#isAbove(first, target, true)) {
+                return true;
+            }
+
+            return false;
+        }
+
+        const isAboveAndBelow = () => (this.#isAboveCeiling(first, target, true) && this.#isBelowFloor(second, target, true))
+            || (this.#isBelowFloor(first, target, true) && this.#isAboveCeiling(second, target, true));
+
+        const isOpposite = isOnOppositeSides();
+        return (this.#sharesElevation(first, target) && this.#sharesElevation(second, target) && isOpposite)
+            || (isAboveAndBelow() && (isOpposite || (first.bounds.intersects(target.bounds) && second.bounds.intersects(target.bounds))));
     }
 
     /**
@@ -315,48 +404,133 @@ export class PositionalHelper {
     }
 
     /**
-     * @param {TokenPF} token
-     * @param {TokenPF} target
+     * @param {TokenPF} left
+     * @param {TokenPF} right
      * @returns {boolean}
      */
-    static #isLeftOf(token, target) { return token.bounds.right <= target.bounds.left; }
-    /**
-     * @param {TokenPF} token
-     * @param {TokenPF} target
-     * @returns {boolean}
-     */
-    static #isRightOf(token, target) { return token.bounds.left >= target.bounds.right; }
-    /**
-     * @param {TokenPF} token
-     * @param {TokenPF} target
-     * @returns {boolean}
-     */
-    static #isAbove(token, target) { return token.bounds.bottom <= target.bounds.top; }
-    /**
-     * @param {TokenPF} token
-     * @param {TokenPF} target
-     * @returns {boolean}
-     */
-    static #isBelow(token, target) { return token.bounds.top >= target.bounds.bottom; }
-    /**
-     * @param {TokenPF} token
-     * @param {TokenPF} target
-     * @returns {boolean}
-     */
-    static #isAboveCeiling(token, target) { return this.#floor(token) >= this.#ceiling(target); }
-    /**
-     * @param {TokenPF} token
-     * @param {TokenPF} target
-     * @returns {boolean}
-     */
-    static #isBelowFloor(token, target) { return this.#ceiling(token) <= this.#floor(target); }
+    static #sharesElevation(left, right) {
+        return !this.#isAboveCeiling(left, right)
+            && !this.#isBelowFloor(left, right);
+    }
 
     /**
+     * @param {TokenPF} token
+     * @param {TokenPF} target
+     * @param {boolean} [anySquare]
+     * @returns {boolean}
+     */
+    static #isLeftOf(token, target, anySquare = false) {
+        if (!anySquare) {
+            return token.bounds.right <= target.bounds.left;
+        }
+
+        const size = token.scene.grid.size;
+        const widthSquares = Math.ceil(token.bounds.width / size);
+
+        const rights = [...Array(widthSquares)].map((_, i) => token.bounds.right - i * size);
+        return rights.some((right) => right <= target.bounds.left);
+    }
+    /**
+     * @param {TokenPF} token
+     * @param {TokenPF} target
+     * @param {boolean} [anySquare]
+     * @returns {boolean}
+     */
+    static #isRightOf(token, target, anySquare = false) {
+        if (!anySquare) {
+            return token.bounds.left >= target.bounds.right;
+        }
+
+        const size = token.scene.grid.size;
+        const widthSquares = Math.ceil(token.bounds.width / size);
+
+        const lefts = [...Array(widthSquares)].map((_, i) => token.bounds.left + i * size);
+        return lefts.some((left) => left >= target.bounds.right);
+    }
+    /**
+     * @param {TokenPF} token
+     * @param {TokenPF} target
+     * @param {boolean} [anySquare]
+     * @returns {boolean}
+     */
+    static #isAbove(token, target, anySquare = false) {
+        if (!anySquare) {
+            return token.bounds.bottom <= target.bounds.top;
+        }
+
+        const size = token.scene.grid.size;
+        const heightSquares = Math.ceil(token.bounds.height / size);
+
+        const bottoms = [...Array(heightSquares)].map((_, i) => token.bounds.bottom - i * size);
+        return bottoms.some((bottom) => bottom <= target.bounds.top);
+    }
+    /**
+     * @param {TokenPF} token
+     * @param {TokenPF} target
+     * @param {boolean} [anySquare]
+     * @returns {boolean}
+     */
+    static #isBelow(token, target, anySquare = false) {
+        if (!anySquare) {
+            return token.bounds.top >= target.bounds.bottom;
+        }
+
+        const size = token.scene.grid.size;
+        const heightSquares = Math.ceil(token.bounds.height / size);
+
+        const tops = [...Array(heightSquares)].map((_, i) => token.bounds.top + i * size);
+        return tops.some((top) => top >= target.bounds.bottom);
+    }
+    /**
+     * @param {TokenPF} token
+     * @param {TokenPF} target
+     * @param {boolean} [anySquare]
+     * @returns {boolean} If the floor of the token is above the ceiling of the target.
+     */
+    static #isAboveCeiling(token, target, anySquare = false) {
+        if (!anySquare) {
+            return this.#floor(token) >= this.#ceiling(target);
+        }
+
+        const floor = this.#floor(token);
+        const height = this.#ceiling(token) - floor;
+
+        const size = token.scene.grid.size;
+        const heightSquares = Math.ceil(height / size);
+
+        const floors = [...Array(heightSquares)].map((_, i) => floor + i * size);
+        return floors.some((f) => f >= this.#ceiling(target));
+    }
+    /**
+     * @param {TokenPF} token
+     * @param {boolean} [anySquare]
+     * @param {TokenPF} target
+     * @returns {boolean} If the ceiling of the token is below the floor of the target.
+     */
+    static #isBelowFloor(token, target, anySquare = false) {
+        if (!anySquare) {
+            return this.#ceiling(token) <= this.#floor(target);
+        }
+
+        const floor = this.#floor(token);
+        const ceiling = this.#ceiling(token);
+        const height = ceiling - floor;
+
+        const size = token.scene.grid.size;
+        const heightSquares = Math.ceil(height / size);
+
+        const ceilings = [...Array(heightSquares)].map((_, i) => ceiling - i * size);
+        return ceilings.some((c) => c <= this.#floor(target));
+    }
+
+    /**
+     * Gets the ceiling (height) of the token as a z coordinate normalized by the grid size.
      * @param {TokenPF} token
      * @returns {number}
      */
     static #ceiling(token) { return this.#floor(token) + (token.bounds.width + token.bounds.height) / 2; }
     /**
+     * Gets the floor of the token as a z coordinate normalized by the grid size.
      * @param {TokenPF} token
      * @returns {number}
      */

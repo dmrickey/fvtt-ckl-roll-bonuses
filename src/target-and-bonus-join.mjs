@@ -466,7 +466,6 @@ const itemGetTypeChatData = (item, props, rollData) => {
 Hooks.on(customGlobalHooks.itemGetTypeChatData, itemGetTypeChatData);
 
 /**
- *
  * @param {ItemAction} action
  * @param {RollData} rollData
  */

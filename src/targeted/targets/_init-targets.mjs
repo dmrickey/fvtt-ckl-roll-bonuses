@@ -23,6 +23,7 @@ import { WeaponTypeTarget } from "./weapon-type-target.mjs";
 import { WhenActiveTarget } from './conditional/when-active-target.mjs';
 import { WhenInCombatTarget } from './conditional/when-in-combat-target.mjs';
 import { WhenTargetInRange } from './conditional/is-target-within-range.mjs';
+import { IsFlankingTarget } from './conditional/is-flanking.mjs';
 
 export const registerTargets = () => [
     ActionTarget,
@@ -34,6 +35,7 @@ export const registerTargets = () => [
     FinesseTarget,
     FunctionTarget,
     HasBooleanFlagTarget,
+    IsFlankingTarget,
     CreatureTypeTarget,
     CreatureSubtypeTarget,
     SelfTarget,

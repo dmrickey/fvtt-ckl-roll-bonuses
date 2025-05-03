@@ -615,8 +615,11 @@ declare global {
 
         getRollData(): RollData;
         getRange({
-            type: string = 'single' | 'min' | 'max',
-            rollData: RollData = null,
+            type = 'single',
+            rollData = null,
+        }: {
+            type: 'single' | 'min' | 'max'
+            rollData: RollData | undefined,
         } = {}): number;
     }
 
