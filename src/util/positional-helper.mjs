@@ -86,33 +86,22 @@ export class PositionalHelper {
     }
 
     /**
-     * @param {object} [args]
-     * @param {ItemAction} [args.action]
-     * @param {TokenPF[]} [args.flankingWith]
-     * @returns {TokenPF[]}
+     *
+     * @param {TokenPF} ally
+     * @param {object} [options]
+     * @param {ItemAction} [options.specificAction]
+     * @param {boolean} [options.hasImprovedOutflank]
+     * @returns {boolean}
      */
-    isFlanking({
-        action = undefined,
-        flankingWith = undefined,
+    isFlankingWith(ally, {
+        specificAction = undefined,
+        hasImprovedOutflank = false,
     } = {
-            action: undefined,
-            flankingWith: undefined,
+            specificAction: undefined,
+            hasImprovedOutflank: false,
         }
     ) {
-        if (!this.threatens(action)) return [];
-
-        const potentials = flankingWith || this.token1.scene.tokens
-            .filter((x) => ![this.token1.id, this.token2.id].includes(x.id)
-                && x.disposition !== this.token2.document.disposition
-                && x.disposition === this.token1.document.disposition
-            )
-            .map((x) => new PositionalHelper(x, this.token2))
-            .filter((helper) => helper.threatens())
-            .map((helper) => helper.token1);
-
-        const flankAllies = potentials
-            .filter((ally) => PositionalHelper.#isFlankingWith(this.token1, ally, this.token2, action));
-        return flankAllies;
+        return PositionalHelper.#isFlankingWith(this.token1, ally, this.token2, { specificAction, hasImprovedOutflank });
     }
 
     isOnHigherGround() {
@@ -263,55 +252,68 @@ export class PositionalHelper {
      * @param {TokenPF} first
      * @param {TokenPF} second
      * @param {TokenPF} target
-     * @param {ItemAction} [specificAction]
+     * @param {object} [options]
+     * @param {ItemAction} [options.specificAction]
+     * @param {boolean} [options.hasImprovedOutflank]
      * @returns {boolean}
      */
-    static #isFlankingWith(first, second, target, specificAction = undefined) {
+    static #isFlankingWith(
+        first,
+        second,
+        target,
+        {
+            specificAction = undefined,
+            hasImprovedOutflank = false,
+        } = {
+                specificAction: undefined,
+                hasImprovedOutflank: false,
+            }
+    ) {
         if (!this.#threatens(first, target, specificAction) || !this.#threatens(second, target)) {
             return false;
         }
 
         const isOnOppositeSides = () => {
-            if ((this.#isLeftOf(first, target, true) && !this.#isAbove(first, target) && !this.#isBelow(first, target))
-                && (this.#isRightOf(second, target, true) && !this.#isAbove(second, target) && !this.#isBelow(second, target))
+            if ((this.#isLeftOf(first, target, { anySquare: true }) && !this.#isAbove(first, target) && !this.#isBelow(first, target))
+                && (this.#isRightOf(second, target, { anySquare: true }) && !this.#isAbove(second, target) && !this.#isBelow(second, target))
             ) {
                 return true;
             }
-            if ((this.#isRightOf(first, target, true) && !this.#isAbove(first, target) && !this.#isBelow(first, target))
-                && (this.#isLeftOf(second, target, true) && !this.#isAbove(second, target) && !this.#isBelow(second, target))
+            if ((this.#isRightOf(first, target, { anySquare: true }) && !this.#isAbove(first, target) && !this.#isBelow(first, target))
+                && (this.#isLeftOf(second, target, { anySquare: true }) && !this.#isAbove(second, target) && !this.#isBelow(second, target))
             ) {
                 return true;
             }
-            if ((this.#isAbove(first, target, true) && !this.#isLeftOf(first, target) && !this.#isRightOf(first, target))
-                && (this.#isBelow(second, target, true) && !this.#isLeftOf(second, target) && !this.#isRightOf(second, target))
+            if ((this.#isAbove(first, target, { anySquare: true }) && !this.#isLeftOf(first, target) && !this.#isRightOf(first, target))
+                && (this.#isBelow(second, target, { anySquare: true }) && !this.#isLeftOf(second, target) && !this.#isRightOf(second, target))
             ) {
                 return true;
             }
-            if ((this.#isBelow(first, target, true) && !this.#isLeftOf(first, target) && !this.#isRightOf(first, target))
-                && (this.#isAbove(second, target, true) && !this.#isLeftOf(second, target) && !this.#isRightOf(second, target))
+            if ((this.#isBelow(first, target, { anySquare: true }) && !this.#isLeftOf(first, target) && !this.#isRightOf(first, target))
+                && (this.#isAbove(second, target, { anySquare: true }) && !this.#isLeftOf(second, target) && !this.#isRightOf(second, target))
             ) {
                 return true;
             }
 
             // on opposite diagonals - can be technically wrong for creatures with reach
-            if (this.#isLeftOf(first, target, true) && this.#isAbove(first, target, true) && this.#isRightOf(second, target, true) && this.#isBelow(second, target, true)) {
+            if (this.#isLeftOf(first, target, { anySquare: true }) && this.#isAbove(first, target, { anySquare: true }) && this.#isRightOf(second, target, { anySquare: true }) && this.#isBelow(second, target, { anySquare: true })) {
                 return true;
             }
-            if (this.#isLeftOf(first, target, true) && this.#isBelow(first, target, true) && this.#isRightOf(second, target, true) && this.#isAbove(second, target, true)) {
+            if (this.#isLeftOf(first, target, { anySquare: true }) && this.#isBelow(first, target, { anySquare: true }) && this.#isRightOf(second, target, { anySquare: true }) && this.#isAbove(second, target, { anySquare: true })) {
                 return true;
             }
-            if (this.#isLeftOf(second, target, true) && this.#isAbove(second, target, true) && this.#isRightOf(first, target, true) && this.#isBelow(first, target, true)) {
+            if (this.#isLeftOf(second, target, { anySquare: true }) && this.#isAbove(second, target, { anySquare: true }) && this.#isRightOf(first, target, { anySquare: true }) && this.#isBelow(first, target, { anySquare: true })) {
                 return true;
             }
-            if (this.#isLeftOf(second, target, true) && this.#isBelow(second, target, true) && this.#isRightOf(first, target, true) && this.#isAbove(first, target, true)) {
+            if (this.#isLeftOf(second, target, { anySquare: true }) && this.#isBelow(second, target, { anySquare: true }) && this.#isRightOf(first, target, { anySquare: true }) && this.#isAbove(first, target, { anySquare: true })) {
                 return true;
             }
 
             return false;
         }
 
-        const isAboveAndBelow = () => (this.#isAboveCeiling(first, target, true) && this.#isBelowFloor(second, target, true))
-            || (this.#isBelowFloor(first, target, true) && this.#isAboveCeiling(second, target, true));
+        const isAboveAndBelow = () => (this.#isAboveCeiling(first, target, { anySquare: true }) && this.#isBelowFloor(second, target, { anySquare: true }))
+            || (this.#isBelowFloor(first, target, { anySquare: true }) && this.#isAboveCeiling(second, target, { anySquare: true }));
 
         const isOpposite = isOnOppositeSides();
         return (this.#sharesElevation(first, target) && this.#sharesElevation(second, target) && isOpposite)
@@ -416,10 +418,12 @@ export class PositionalHelper {
     /**
      * @param {TokenPF} token
      * @param {TokenPF} target
-     * @param {boolean} [anySquare]
+     * @param {object} [options]
+     * @param {boolean} [options.anySquare]
+     * @param {boolean} [options.enlarged]
      * @returns {boolean}
      */
-    static #isLeftOf(token, target, anySquare = false) {
+    static #isLeftOf(token, target, { anySquare = false, enlarged = false } = {}) {
         if (!anySquare) {
             return token.bounds.right <= target.bounds.left;
         }
@@ -433,10 +437,12 @@ export class PositionalHelper {
     /**
      * @param {TokenPF} token
      * @param {TokenPF} target
-     * @param {boolean} [anySquare]
+     * @param {object} [options]
+     * @param {boolean} [options.anySquare]
+     * @param {boolean} [options.enlarged]
      * @returns {boolean}
      */
-    static #isRightOf(token, target, anySquare = false) {
+    static #isRightOf(token, target, { anySquare = false, enlarged = false } = {}) {
         if (!anySquare) {
             return token.bounds.left >= target.bounds.right;
         }
@@ -450,10 +456,12 @@ export class PositionalHelper {
     /**
      * @param {TokenPF} token
      * @param {TokenPF} target
-     * @param {boolean} [anySquare]
+     * @param {object} [options]
+     * @param {boolean} [options.anySquare]
+     * @param {boolean} [options.enlarged]
      * @returns {boolean}
      */
-    static #isAbove(token, target, anySquare = false) {
+    static #isAbove(token, target, { anySquare = false, enlarged = false } = {}) {
         if (!anySquare) {
             return token.bounds.bottom <= target.bounds.top;
         }
@@ -467,10 +475,12 @@ export class PositionalHelper {
     /**
      * @param {TokenPF} token
      * @param {TokenPF} target
-     * @param {boolean} [anySquare]
+     * @param {object} [options]
+     * @param {boolean} [options.anySquare]
+     * @param {boolean} [options.enlarged]
      * @returns {boolean}
      */
-    static #isBelow(token, target, anySquare = false) {
+    static #isBelow(token, target, { anySquare = false, enlarged = false } = {}) {
         if (!anySquare) {
             return token.bounds.top >= target.bounds.bottom;
         }
@@ -484,10 +494,12 @@ export class PositionalHelper {
     /**
      * @param {TokenPF} token
      * @param {TokenPF} target
-     * @param {boolean} [anySquare]
+     * @param {object} [options]
+     * @param {boolean} [options.anySquare]
+     * @param {boolean} [options.enlarged]
      * @returns {boolean} If the floor of the token is above the ceiling of the target.
      */
-    static #isAboveCeiling(token, target, anySquare = false) {
+    static #isAboveCeiling(token, target, { anySquare = false, enlarged = false } = {}) {
         if (!anySquare) {
             return this.#floor(token) >= this.#ceiling(target);
         }
@@ -503,11 +515,13 @@ export class PositionalHelper {
     }
     /**
      * @param {TokenPF} token
-     * @param {boolean} [anySquare]
      * @param {TokenPF} target
+     * @param {object} [options]
+     * @param {boolean} [options.anySquare]
+     * @param {boolean} [options.enlarged]
      * @returns {boolean} If the ceiling of the token is below the floor of the target.
      */
-    static #isBelowFloor(token, target, anySquare = false) {
+    static #isBelowFloor(token, target, { anySquare = false, enlarged = false } = {}) {
         if (!anySquare) {
             return this.#ceiling(token) <= this.#floor(target);
         }

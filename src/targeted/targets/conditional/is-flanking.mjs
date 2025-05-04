@@ -1,8 +1,8 @@
 import { MODULE_NAME } from "../../../consts.mjs";
 import { showEnabledLabel } from '../../../handlebars-handlers/enabled-label.mjs';
+import { FlankHelper } from '../../../util/flank-helper.mjs';
 import { listFormat } from '../../../util/list-format.mjs';
 import { localize } from '../../../util/localize.mjs';
-import { PositionalHelper } from '../../../util/positional-helper.mjs';
 import { truthiness } from "../../../util/truthiness.mjs";
 import { BaseTarget } from "../_base-target.mjs";
 
@@ -100,9 +100,8 @@ export class IsFlankingTarget extends BaseTarget {
         const bonusSources = sources.filter((source) =>
             self.some((meToken) =>
                 [...this.#currentTargets].every((target) => {
-                    const helper = new PositionalHelper(meToken, target);
-                    const isFlanking = helper.isFlanking({ action, flankingWith: this.#potentialFlankTokens(source) })
-                    return isFlanking.length;
+                    const helper = new FlankHelper(meToken, target, { action, flankingWith: this.#potentialFlankTokens(source) });
+                    return helper.isFlanking;
                 })
             )
         );

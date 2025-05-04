@@ -233,5 +233,15 @@
 - Add `getSourceFlag` to api so mod authors don't have to save my mod id
   - e.g. no `source.getFlag("ckl-roll-bonuses", this.key)`
   - but instead `getSourceFlag(source, this.key)`
-  - Add traits and 'get ids' to API
   - remove `Record<any, any>` from API type definition and make sure all individual references are imported
+  - Add "configure" method to each bonus and target that takes whatever args it needs to save itself
+- Flanking
+  - Add `enlarged: hasImprovedOutflank` to each private PositionalHelper method
+  - Add bonuses for various feats/abilities that grant flank (see FlankHelper)
+    - fill in logic in FlankHelper for reading the various bonuses
+  - Add journal entries for all of the bonuses it needs to account for
+  - Add bonuses for abiltities that deny flanking
+  - Add "only specific allies" input to is-flanking bonus
+    - Add "Actor Picker" app
+- Add "While adjacent to" bonus
+  - use actor picker app

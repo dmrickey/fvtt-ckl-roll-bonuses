@@ -1,3 +1,17 @@
+## Roll Bonuses 2.21.0
+
+### New Bonuses
+- **Is Flanking**
+  - Activates bonuses when you're flanking your target, can further configure to only activate bonuses while flanking with a specifica ally
+  - Includes a global bonus to automatically trigger flanking when Attacking
+    - Includes support for automatic increases such as Outflank and Menacing
+  - Supports 3-dimensional flanking
+  - Supports various positional overrides like Gang Up, Swashbuckler Mouser's Underfoot Assault, Pack Flanking, and Ratfolk Swarming.
+- **While Adjacent To**
+  - Activates bonuses while adjacent to a chosen ally
+
+---
+
 ## Roll Bonuses 2.20.4
 
 ### Misc
