@@ -121,7 +121,7 @@ export class FlankHelper {
         if (this.hasImprovedOutflank(this.attacker)) {
             this.allFlankBuddies.push(...threateningAllies.filter((ally) =>
                 this.hasImprovedOutflank(ally)
-                && new PositionalHelper(ally, this.attacker).isFlankingWith(ally, { hasImprovedOutflank: true, specificAction: action },)
+                && attackerAndTarget.isFlankingWith(ally, { hasImprovedOutflank: true, specificAction: action })
             ));
 
             threateningAllies = difference(threateningAllies, this.allFlankBuddies);

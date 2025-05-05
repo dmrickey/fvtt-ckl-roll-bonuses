@@ -89,19 +89,19 @@ export class PositionalHelper {
      *
      * @param {TokenPF} ally
      * @param {object} [options]
-     * @param {ItemAction} [options.specificAction]
      * @param {boolean} [options.hasImprovedOutflank]
+     * @param {ItemAction} [options.specificAction]
      * @returns {boolean}
      */
     isFlankingWith(ally, {
-        specificAction = undefined,
         hasImprovedOutflank = false,
+        specificAction = undefined,
     } = {
-            specificAction: undefined,
             hasImprovedOutflank: false,
+            specificAction: undefined,
         }
     ) {
-        return PositionalHelper.#isFlankingWith(this.token1, ally, this.token2, { specificAction, hasImprovedOutflank });
+        return PositionalHelper.#isFlankingWith(this.token1, ally, this.token2, { hasImprovedOutflank, specificAction });
     }
 
     isOnHigherGround() {
@@ -262,50 +262,56 @@ export class PositionalHelper {
         second,
         target,
         {
-            specificAction = undefined,
             hasImprovedOutflank = false,
+            specificAction = undefined,
         } = {
-                specificAction: undefined,
                 hasImprovedOutflank: false,
+                specificAction: undefined,
             }
     ) {
         if (!this.#threatens(first, target, specificAction) || !this.#threatens(second, target)) {
             return false;
         }
 
-        const isOnOppositeSides = () => {
-            if ((this.#isLeftOf(first, target, { anySquare: true }) && !this.#isAbove(first, target) && !this.#isBelow(first, target))
-                && (this.#isRightOf(second, target, { anySquare: true }) && !this.#isAbove(second, target) && !this.#isBelow(second, target))
+        /**
+         * Specifically passing in f/s (vs using local reference to parameter) becasue Improved Outflank needs to enlarged one at a time
+         * @param {TokenPF} f
+         * @param {TokenPF} s
+         * @returns {boolean}
+         */
+        const isOnOppositeSides = (f, s) => {
+            if ((this.#isLeftOf(f, target, { anySquare: true, enlarged: hasImprovedOutflank }) && !this.#isAbove(f, target, { anySquare: true, enlarged: hasImprovedOutflank, func: 'every' }) && !this.#isBelow(f, target, { anySquare: true, enlarged: hasImprovedOutflank, func: 'every' }))
+                && (this.#isRightOf(s, target, { anySquare: true }) && !this.#isAbove(s, target, { anySquare: true, func: 'every' }) && !this.#isBelow(s, target, { anySquare: true, func: 'every' }))
             ) {
                 return true;
             }
-            if ((this.#isRightOf(first, target, { anySquare: true }) && !this.#isAbove(first, target) && !this.#isBelow(first, target))
-                && (this.#isLeftOf(second, target, { anySquare: true }) && !this.#isAbove(second, target) && !this.#isBelow(second, target))
+            if ((this.#isRightOf(f, target, { anySquare: true, enlarged: hasImprovedOutflank }) && !this.#isAbove(f, target, { anySquare: true, enlarged: hasImprovedOutflank, func: 'every' }) && !this.#isBelow(f, target, { anySquare: true, enlarged: hasImprovedOutflank, func: 'every' }))
+                && (this.#isLeftOf(s, target, { anySquare: true }) && !this.#isAbove(s, target, { anySquare: true, func: 'every' }) && !this.#isBelow(s, target, { anySquare: true, func: 'every' }))
             ) {
                 return true;
             }
-            if ((this.#isAbove(first, target, { anySquare: true }) && !this.#isLeftOf(first, target) && !this.#isRightOf(first, target))
-                && (this.#isBelow(second, target, { anySquare: true }) && !this.#isLeftOf(second, target) && !this.#isRightOf(second, target))
+            if ((this.#isAbove(f, target, { anySquare: true, enlarged: hasImprovedOutflank }) && !this.#isLeftOf(f, target, { anySquare: true, enlarged: hasImprovedOutflank, func: 'every' }) && !this.#isRightOf(f, target, { anySquare: true, enlarged: hasImprovedOutflank, func: 'every' }))
+                && (this.#isBelow(s, target, { anySquare: true }) && !this.#isLeftOf(s, target, { anySquare: true, func: 'every' }) && !this.#isRightOf(s, target, { anySquare: true, func: 'every' }))
             ) {
                 return true;
             }
-            if ((this.#isBelow(first, target, { anySquare: true }) && !this.#isLeftOf(first, target) && !this.#isRightOf(first, target))
-                && (this.#isAbove(second, target, { anySquare: true }) && !this.#isLeftOf(second, target) && !this.#isRightOf(second, target))
+            if ((this.#isBelow(f, target, { anySquare: true, enlarged: hasImprovedOutflank }) && !this.#isLeftOf(f, target, { anySquare: true, enlarged: hasImprovedOutflank, func: 'every' }) && !this.#isRightOf(f, target, { anySquare: true, enlarged: hasImprovedOutflank, func: 'every' }))
+                && (this.#isAbove(s, target, { anySquare: true }) && !this.#isLeftOf(s, target, { anySquare: true, func: 'every' }) && !this.#isRightOf(s, target, { anySquare: true, func: 'every' }))
             ) {
                 return true;
             }
 
             // on opposite diagonals - can be technically wrong for creatures with reach
-            if (this.#isLeftOf(first, target, { anySquare: true }) && this.#isAbove(first, target, { anySquare: true }) && this.#isRightOf(second, target, { anySquare: true }) && this.#isBelow(second, target, { anySquare: true })) {
+            if (this.#isLeftOf(f, target, { anySquare: true, enlarged: hasImprovedOutflank }) && this.#isAbove(f, target, { anySquare: true, enlarged: hasImprovedOutflank }) && this.#isRightOf(s, target, { anySquare: true }) && this.#isBelow(s, target, { anySquare: true })) {
                 return true;
             }
-            if (this.#isLeftOf(first, target, { anySquare: true }) && this.#isBelow(first, target, { anySquare: true }) && this.#isRightOf(second, target, { anySquare: true }) && this.#isAbove(second, target, { anySquare: true })) {
+            if (this.#isLeftOf(f, target, { anySquare: true, enlarged: hasImprovedOutflank }) && this.#isBelow(f, target, { anySquare: true, enlarged: hasImprovedOutflank }) && this.#isRightOf(s, target, { anySquare: true }) && this.#isAbove(s, target, { anySquare: true })) {
                 return true;
             }
-            if (this.#isLeftOf(second, target, { anySquare: true }) && this.#isAbove(second, target, { anySquare: true }) && this.#isRightOf(first, target, { anySquare: true }) && this.#isBelow(first, target, { anySquare: true })) {
+            if (this.#isLeftOf(s, target, { anySquare: true, enlarged: hasImprovedOutflank }) && this.#isAbove(s, target, { anySquare: true, enlarged: hasImprovedOutflank }) && this.#isRightOf(f, target, { anySquare: true }) && this.#isBelow(f, target, { anySquare: true })) {
                 return true;
             }
-            if (this.#isLeftOf(second, target, { anySquare: true }) && this.#isBelow(second, target, { anySquare: true }) && this.#isRightOf(first, target, { anySquare: true }) && this.#isAbove(first, target, { anySquare: true })) {
+            if (this.#isLeftOf(s, target, { anySquare: true, enlarged: hasImprovedOutflank }) && this.#isBelow(s, target, { anySquare: true, enlarged: hasImprovedOutflank }) && this.#isRightOf(f, target, { anySquare: true }) && this.#isAbove(f, target, { anySquare: true })) {
                 return true;
             }
 
@@ -315,7 +321,8 @@ export class PositionalHelper {
         const isAboveAndBelow = () => (this.#isAboveCeiling(first, target, { anySquare: true }) && this.#isBelowFloor(second, target, { anySquare: true }))
             || (this.#isBelowFloor(first, target, { anySquare: true }) && this.#isAboveCeiling(second, target, { anySquare: true }));
 
-        const isOpposite = isOnOppositeSides();
+        // don't need to check the second condition if no outflank as it's the exact same as the first
+        const isOpposite = isOnOppositeSides(first, second) || (hasImprovedOutflank && isOnOppositeSides(second, first));
         return (this.#sharesElevation(first, target) && this.#sharesElevation(second, target) && isOpposite)
             || (isAboveAndBelow() && (isOpposite || (first.bounds.intersects(target.bounds) && second.bounds.intersects(target.bounds))));
     }
@@ -416,125 +423,130 @@ export class PositionalHelper {
     }
 
     /**
+     * @typedef {'some' | 'every'} ArrayFunc
+     * @typedef {{anySquare: boolean, enlarged?: false, func?: ArrayFunc} | { anySquare: true, enlarged: true, func?: ArrayFunc}} PositionalComparisons
+     */
+
+    /**
      * @param {TokenPF} token
      * @param {TokenPF} target
-     * @param {object} [options]
-     * @param {boolean} [options.anySquare]
-     * @param {boolean} [options.enlarged]
+     * @param {PositionalComparisons} [options]
      * @returns {boolean}
      */
-    static #isLeftOf(token, target, { anySquare = false, enlarged = false } = {}) {
+    static #isLeftOf(token, target, { anySquare = false, enlarged = false, func = 'some' } = { anySquare: false, enlarged: false, func: 'some' }) {
         if (!anySquare) {
             return token.bounds.right <= target.bounds.left;
         }
 
-        const size = token.scene.grid.size;
-        const widthSquares = Math.ceil(token.bounds.width / size);
+        // if enlarged (i.e. Improved Outflank), add two squares on either side to account for flanking from those spots
 
-        const rights = [...Array(widthSquares)].map((_, i) => token.bounds.right - i * size);
-        return rights.some((right) => right <= target.bounds.left);
+        const size = token.scene.grid.size;
+        const widthSquares = Math.ceil(token.bounds.width / size) + (enlarged ? 2 : 0);
+
+        const rights = [...Array(widthSquares)].map((_, i) => token.bounds.right - i * size + (enlarged ? size : 0));
+        return rights[func]((right) => right <= target.bounds.left);
     }
     /**
      * @param {TokenPF} token
      * @param {TokenPF} target
-     * @param {object} [options]
-     * @param {boolean} [options.anySquare]
-     * @param {boolean} [options.enlarged]
+     * @param {PositionalComparisons} [options]
      * @returns {boolean}
      */
-    static #isRightOf(token, target, { anySquare = false, enlarged = false } = {}) {
+    static #isRightOf(token, target, { anySquare = false, enlarged = false, func = 'some' } = { anySquare: false, enlarged: false, func: 'some' }) {
         if (!anySquare) {
             return token.bounds.left >= target.bounds.right;
         }
 
-        const size = token.scene.grid.size;
-        const widthSquares = Math.ceil(token.bounds.width / size);
+        // if enlarged (i.e. Improved Outflank), add two squares on either side to account for flanking from those spots
 
-        const lefts = [...Array(widthSquares)].map((_, i) => token.bounds.left + i * size);
-        return lefts.some((left) => left >= target.bounds.right);
+        const size = token.scene.grid.size;
+        const widthSquares = Math.ceil(token.bounds.width / size) + (enlarged ? 2 : 0);
+
+        const lefts = [...Array(widthSquares)].map((_, i) => token.bounds.left + i * size - (enlarged ? size : 0));
+        return lefts[func]((left) => left >= target.bounds.right);
     }
     /**
      * @param {TokenPF} token
      * @param {TokenPF} target
-     * @param {object} [options]
-     * @param {boolean} [options.anySquare]
-     * @param {boolean} [options.enlarged]
+     * @param {PositionalComparisons} [options]
      * @returns {boolean}
      */
-    static #isAbove(token, target, { anySquare = false, enlarged = false } = {}) {
+    static #isAbove(token, target, { anySquare = false, enlarged = false, func = 'some' } = { anySquare: false, enlarged: false, func: 'some' }) {
         if (!anySquare) {
             return token.bounds.bottom <= target.bounds.top;
         }
 
-        const size = token.scene.grid.size;
-        const heightSquares = Math.ceil(token.bounds.height / size);
+        // if enlarged (i.e. Improved Outflank), add two squares on either side to account for flanking from those spots
 
-        const bottoms = [...Array(heightSquares)].map((_, i) => token.bounds.bottom - i * size);
-        return bottoms.some((bottom) => bottom <= target.bounds.top);
+        const size = token.scene.grid.size;
+        const heightSquares = Math.ceil(token.bounds.height / size) + (enlarged ? 2 : 0);
+
+        const bottoms = [...Array(heightSquares)].map((_, i) => token.bounds.bottom - i * size + (enlarged ? size : 0));
+        return bottoms[func]((bottom) => bottom <= target.bounds.top);
     }
     /**
      * @param {TokenPF} token
      * @param {TokenPF} target
-     * @param {object} [options]
-     * @param {boolean} [options.anySquare]
-     * @param {boolean} [options.enlarged]
+     * @param {PositionalComparisons} [options]
      * @returns {boolean}
      */
-    static #isBelow(token, target, { anySquare = false, enlarged = false } = {}) {
+    static #isBelow(token, target, { anySquare = false, enlarged = false, func = 'some' } = { anySquare: false, enlarged: false, func: 'some' }) {
         if (!anySquare) {
             return token.bounds.top >= target.bounds.bottom;
         }
 
-        const size = token.scene.grid.size;
-        const heightSquares = Math.ceil(token.bounds.height / size);
+        // if enlarged (i.e. Improved Outflank), add two squares on either side to account for flanking from those spots
 
-        const tops = [...Array(heightSquares)].map((_, i) => token.bounds.top + i * size);
-        return tops.some((top) => top >= target.bounds.bottom);
+        const size = token.scene.grid.size;
+        const heightSquares = Math.ceil(token.bounds.height / size) + (enlarged ? 2 : 0);
+
+        const tops = [...Array(heightSquares)].map((_, i) => token.bounds.top + i * size - (enlarged ? size : 0));
+        return tops[func]((top) => top >= target.bounds.bottom);
     }
     /**
      * @param {TokenPF} token
      * @param {TokenPF} target
-     * @param {object} [options]
-     * @param {boolean} [options.anySquare]
-     * @param {boolean} [options.enlarged]
+     * @param {PositionalComparisons} [options]
      * @returns {boolean} If the floor of the token is above the ceiling of the target.
      */
-    static #isAboveCeiling(token, target, { anySquare = false, enlarged = false } = {}) {
+    static #isAboveCeiling(token, target, { anySquare = false, enlarged = false, func = 'some' } = { anySquare: false, enlarged: false, func: 'some' }) {
         if (!anySquare) {
             return this.#floor(token) >= this.#ceiling(target);
         }
+
+        // if enlarged (i.e. Improved Outflank), add two squares on either side to account for flanking from those spots
 
         const floor = this.#floor(token);
         const height = this.#ceiling(token) - floor;
 
         const size = token.scene.grid.size;
-        const heightSquares = Math.ceil(height / size);
+        const heightSquares = Math.ceil(height / size) + (enlarged ? 2 : 0);
 
-        const floors = [...Array(heightSquares)].map((_, i) => floor + i * size);
-        return floors.some((f) => f >= this.#ceiling(target));
+        const floors = [...Array(heightSquares)].map((_, i) => floor + i * size - (enlarged ? size : 0));
+        return floors[func]((f) => f >= this.#ceiling(target));
     }
     /**
      * @param {TokenPF} token
      * @param {TokenPF} target
-     * @param {object} [options]
-     * @param {boolean} [options.anySquare]
-     * @param {boolean} [options.enlarged]
+     * @param {PositionalComparisons} [options]
      * @returns {boolean} If the ceiling of the token is below the floor of the target.
      */
-    static #isBelowFloor(token, target, { anySquare = false, enlarged = false } = {}) {
+    static #isBelowFloor(token, target, { anySquare = false, enlarged = false, func = 'some' } = { anySquare: false, enlarged: false, func: 'some' }) {
         if (!anySquare) {
             return this.#ceiling(token) <= this.#floor(target);
         }
+
+        // if enlarged (i.e. Improved Outflank), add two squares on either side to account for flanking from those spots
 
         const floor = this.#floor(token);
         const ceiling = this.#ceiling(token);
         const height = ceiling - floor;
 
         const size = token.scene.grid.size;
-        const heightSquares = Math.ceil(height / size);
+        const heightSquares = Math.ceil(height / size) + (enlarged ? 2 : 0);
 
-        const ceilings = [...Array(heightSquares)].map((_, i) => ceiling - i * size);
-        return ceilings.some((c) => c <= this.#floor(target));
+        const ceilings = [...Array(heightSquares)].map((_, i) => ceiling - i * size + (enlarged ? size : 0));
+        return ceilings[func]((c) => c <= this.#floor(target));
     }
 
     /**
