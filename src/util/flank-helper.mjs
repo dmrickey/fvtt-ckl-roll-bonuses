@@ -14,10 +14,17 @@ export class FlankHelper {
      * @readonly
      * @type {TokenPF[]}
      */
-    get outflankBuddies() { return this.allFlankBuddies.filter(this.hasOutflank); };
+    get outflankBuddies() {
+        return this.hasOutflank(this.attacker)
+            ? this.allFlankBuddies.filter(this.hasOutflank)
+            : [];
+    };
     get isOutflanking() { return this.hasOutflank(this.attacker) && !!this.outflankBuddies.length; }
 
-    get isMenacing() { return this.hasMenacing(this.attacker) && !!this.allFlankBuddies.filter(this.hasMenacing).length; };
+    targetIsBeingMenaced = false;
+
+    /** @returns {number} */
+    get totalBonus() { return 2 + (this.isOutflanking ? 2 : 0) + (this.targetIsBeingMenaced ? 2 : 0); }
 
     /** @type {TokenPF} */ attacker;
     /** @type {TokenPF} */ target;
@@ -67,6 +74,11 @@ export class FlankHelper {
 
         const attackerAndTarget = new PositionalHelper(this.attacker, this.target);
         if (!attackerAndTarget.threatens(action)) return;
+
+        // is being menaced
+        this.targetIsBeingMenaced = [this.attacker, ...threateningAllies]
+            .filter(this.hasMenacing)
+            .some((x) => new PositionalHelper(x, this.target).isAdjacent());
 
         // Gang Up
         if (this.hasGangUp(this.attacker)) {
