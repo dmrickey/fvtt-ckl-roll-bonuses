@@ -2,7 +2,6 @@ import { MODULE_NAME } from '../consts.mjs';
 import { showEnabledLabel } from '../handlebars-handlers/enabled-label.mjs';
 import { isMelee } from '../util/action-type-helpers.mjs';
 import { getCachedBonuses } from '../util/get-cached-bonuses.mjs';
-import { itemHasCompendiumId } from '../util/has-compendium-id.mjs';
 import { LocalHookHandler, customGlobalHooks, localHooks } from '../util/hooks.mjs';
 import { isActorInCombat } from '../util/is-actor-in-combat.mjs';
 import { registerItemHint } from '../util/item-hints.mjs';
@@ -10,40 +9,58 @@ import { localizeBonusLabel, localizeBonusTooltip } from '../util/localize.mjs';
 import { LanguageSettings } from '../util/settings.mjs';
 import { SpecificBonus } from './_specific-bonus.mjs';
 
-const furiousFocus = 'furious-focus';
 const furiousFocusTimestamp = 'furious-focus-timestamp';
-const compendiumId = 'UcEIgufLJlIfhHmu';
-const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#furious-focus';
 
 export class FuriousFocus extends SpecificBonus {
     /** @inheritdoc @override */
-    static get sourceKey() { return furiousFocus; }
+    static get sourceKey() { return 'furious-focus'; }
 
     /** @inheritdoc @override */
-    static get journal() { return journal; }
+    static get journal() { return 'Compendium'; }
+
+    /** @inheritdoc @override @returns {CreateAndRender} */
+    static get configuration() {
+        return {
+            type: 'render-and-create',
+            compendiumId: 'UcEIgufLJlIfhHmu',
+            isItemMatchFunc: (name) => name === Settings.name,
+            itemFilter: (item) => item instanceof pf1.documents.item.ItemPF,
+            showInputsFunc: (item, html, isEditable) => {
+                showEnabledLabel({
+                    item,
+                    journal: this.journal,
+                    key: this.key,
+                    parent: html,
+                }, {
+                    canEdit: isEditable,
+                    inputType: 'specific-bonus',
+                });
+            },
+        };
+    }
 }
 
 class Settings {
-    static get furiousFocus() { return LanguageSettings.getTranslation(furiousFocus); }
+    static get name() { return LanguageSettings.getTranslation(FuriousFocus.key); }
 
     static {
-        LanguageSettings.registerItemNameTranslation(furiousFocus);
+        LanguageSettings.registerItemNameTranslation(FuriousFocus.key);
     }
 }
 
 // register hint on source
 registerItemHint((hintcls, _actor, item, _data) => {
-    const has = !!item.hasItemBooleanFlag(furiousFocus);
+    const has = !!item.hasItemBooleanFlag(FuriousFocus.key);
     if (!has) {
         return;
     }
 
-    const hint = hintcls.create('', [], { hint: localizeBonusTooltip(furiousFocus), icon: 'fas fa-burst' });
+    const hint = hintcls.create('', [], { hint: localizeBonusTooltip(FuriousFocus.key), icon: 'fas fa-burst' });
     return hint;
 });
 
 /** @returns {string} */
-const label = () => { return localizeBonusLabel(furiousFocus); }
+const label = () => { return localizeBonusLabel(FuriousFocus.key); }
 
 /**
  * @param {ActionUse<ItemWeaponPF>} actionUse
@@ -57,7 +74,7 @@ function getConditionalParts(actionUse, result, atk, index) {
         return;
     }
 
-    const hasFocus = actor.hasItemBooleanFlag(furiousFocus);
+    const hasFocus = actor.hasItemBooleanFlag(FuriousFocus.key);
     const penalty = shared.rollData.powerAttackPenalty || 0;
     const hasUsed = hasUsedFF(actor);
     const isMeleeAttack = isMelee(shared.item, shared.action);
@@ -75,38 +92,10 @@ Hooks.on(customGlobalHooks.getConditionalParts, getConditionalParts);
 async function addEffectNotes(chatAttack) {
     const { actor, attack, effectNotes } = chatAttack;
     if (attack?.terms.some((x) => x.options?.flavor === label())) {
-        effectNotes.push({ text: label(), source: getCachedBonuses(actor, furiousFocus)[0]?.name });
+        effectNotes.push({ text: label(), source: getCachedBonuses(actor, FuriousFocus.key)[0]?.name });
     }
 }
 LocalHookHandler.registerHandler(localHooks.chatAttackEffectNotes, addEffectNotes);
-
-Hooks.on('renderItemSheet', (
-    /** @type {ItemSheetPF} */ { isEditable, item },
-    /** @type {[HTMLElement]} */[html],
-    /** @type {unknown} */ _data
-) => {
-    if (!(item instanceof pf1.documents.item.ItemPF)) return;
-
-    const hasFlag = item.hasItemBooleanFlag(furiousFocus);
-    if (!hasFlag) {
-        const name = item?.name?.toLowerCase() ?? '';
-        const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
-        if (isEditable && (name === Settings.furiousFocus || hasCompendiumId)) {
-            item.addItemBooleanFlag(furiousFocus);
-        }
-        return;
-    }
-
-    showEnabledLabel({
-        journal,
-        key: furiousFocus,
-        item,
-        parent: html,
-    }, {
-        canEdit: isEditable,
-        inputType: 'specific-bonus',
-    });
-});
 
 /** @param {ActorPF} actor */
 const hasUsedFF = (actor) => isActorInCombat(actor) && actor.getFlag(MODULE_NAME, furiousFocusTimestamp) === game.time.worldTime;
@@ -114,25 +103,3 @@ const hasUsedFF = (actor) => isActorInCombat(actor) && actor.getFlag(MODULE_NAME
 const setUsedFF = (actor) => isActorInCombat(actor)
     ? actor.setFlag(MODULE_NAME, furiousFocusTimestamp, game.time.worldTime)
     : actor.setFlag(MODULE_NAME, furiousFocusTimestamp, null);
-
-/**
- * @param {ItemPF} item
- * @param {object} data
- * @param {{temporary: boolean}} param2
- * @param {string} id
- */
-const onCreate = (item, data, { temporary }, id) => {
-    if (!(item instanceof pf1.documents.item.ItemPF)) return;
-    if (temporary) return;
-
-    const name = item?.name?.toLowerCase() ?? '';
-    const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
-    const hasBonus = item.hasItemBooleanFlag(furiousFocus);
-
-    if ((name === Settings.furiousFocus || hasCompendiumId) && !hasBonus) {
-        item.updateSource({
-            [`system.flags.boolean.${furiousFocus}`]: true,
-        });
-    }
-};
-Hooks.on('preCreateItem', onCreate);

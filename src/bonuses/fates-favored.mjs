@@ -22,8 +22,8 @@ export class FatesFavored extends SpecificBonus {
             showInputsFunc: (item, html, isEditable) => {
                 showEnabledLabel({
                     item,
-                    journal: FatesFavored.journal,
-                    key: FatesFavored.key,
+                    journal: this.journal,
+                    key: this.key,
                     parent: html,
                 }, {
                     canEdit: isEditable,
