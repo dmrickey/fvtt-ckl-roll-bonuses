@@ -8,14 +8,20 @@ import { registerItemHint } from "../../util/item-hints.mjs";
 import { LanguageSettings } from "../../util/settings.mjs";
 import { uniqueArray } from "../../util/unique-array.mjs";
 import { stringSelect } from "../../handlebars-handlers/bonus-inputs/string-select.mjs";
-import { SpecificBonuses } from '../_all-specific-bonuses.mjs';
+import { SpecificBonus } from '../_specific-bonus.mjs';
 import { MODULE_NAME } from '../../consts.mjs';
 import { itemHasCompendiumId } from '../../util/has-compendium-id.mjs';
 
 const compendiumId = 'zBrrZynIB0EXagds';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#armor-focus';
 
-SpecificBonuses.registerSpecificBonus({ key, journal });
+export class ArmorFocus extends SpecificBonus {
+    /** @inheritdoc @override */
+    static get sourceKey() { return key; }
+
+    /** @inheritdoc @override */
+    static get journal() { return journal; }
+}
 
 class Settings {
     static get armorFocus() { return LanguageSettings.getTranslation(key); }

@@ -14,13 +14,19 @@ import { localize, localizeBonusLabel, localizeBonusTooltip } from "../util/loca
 import { LanguageSettings } from "../util/settings.mjs";
 import { truthiness } from "../util/truthiness.mjs";
 import { uniqueArray } from "../util/unique-array.mjs";
-import { SpecificBonuses } from './_all-specific-bonuses.mjs';
+import { SpecificBonus } from './_specific-bonus.mjs';
 
 const key = 'martial-focus';
 const compendiumId = 'W1eDSqiwljxDe0zl';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#martial-focus';
 
-SpecificBonuses.registerSpecificBonus({ journal, key });
+export class MartialFocus extends SpecificBonus {
+    /** @inheritdoc @override */
+    static get sourceKey() { return key; }
+
+    /** @inheritdoc @override */
+    static get journal() { return journal; }
+}
 
 class Settings {
     static get martialFocus() { return LanguageSettings.getTranslation(key); }

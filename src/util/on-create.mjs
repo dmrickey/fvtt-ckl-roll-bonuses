@@ -56,42 +56,96 @@ export const onCreate = (
 }
 
 /**
- * @param {ItemPF} item
+ * @param {(item: ItemPF) => boolean} itemFilter will not operate if false
  * @param {string} key
  * @param {string} compendiumId
- * @param {((name: string) => boolean) | string | boolean} nameFunc
- * @param {boolean} isEditable
- * @param {() => object} [flagValueFunc]
- *
- * @returns {boolean}
+ * @param {(name: string, item?: ItemPF) => boolean} isItemFunc
+ * @param {(item: ItemPF, html: HTMLElement, isEditable: boolean) => void} showInputsFunc
+ * @param {object} [options]
+ * @param {string[]} [options.extraBooleanFlags]
+ * @param {(item?: ItemPF) => object} [options.flagValueFunc]
  */
-export const onRenderCreate = (item, key, compendiumId, nameFunc, isEditable, flagValueFunc) => {
-    const hasFlag = item.hasItemBooleanFlag(key);
-    if (!hasFlag) {
-        const name = item?.name?.toLowerCase() ?? "";
-        const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
+export const onRenderCreate = (
+    itemFilter,
+    key,
+    compendiumId,
+    isItemFunc,
+    showInputsFunc,
+    {
+        extraBooleanFlags = [],
+        flagValueFunc,
 
-        const nameMatch = typeof nameFunc === 'string'
-            ? nameFunc === name
-            : typeof nameFunc === 'boolean'
-                ? nameFunc
-                : nameFunc(name);
-        if (isEditable && (nameMatch || hasCompendiumId)) {
-            item.addItemBooleanFlag(key);
-            if (flagValueFunc) {
-                try {
-                    const value = flagValueFunc()
-                    item.setFlag(MODULE_NAME, key, value);
-                    return true;
+    } = {}
+) => {
+    var allBooleanKeys = [key, ...extraBooleanFlags];
+
+    Hooks.on(
+        'renderItemSheet',
+        (
+            /** @type {ItemSheetPF} */ { isEditable, item },
+            /** @type {[HTMLElement]} */[html],
+            /** @type {unknown} */ _data
+        ) => {
+            if (!itemFilter(item)) return;
+
+            const hasFlag = allBooleanKeys.every((key) => item.hasItemBooleanFlag(key));
+            if (!hasFlag && isEditable) {
+                const name = item?.name?.toLowerCase() ?? "";
+                const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
+                const isItemMatch = isItemFunc(name, item);
+
+                if (isItemMatch || hasCompendiumId) {
+                    /** @type {Record<string, any>} */
+                    const update = {};
+                    allBooleanKeys.forEach((key) => update[`system.flags.boolean.${key}`] = true);
+                    try {
+                        const flagValues = flagValueFunc ? flagValueFunc(item) : undefined;
+                        if (flagValues) {
+                            update.flags ||= {}
+                            update.flags[MODULE_NAME] ||= {};
+                            update.flags[MODULE_NAME] = { ...update.flags[MODULE_NAME], ...flagValues };
+                        }
+                    }
+                    catch (e) {
+                        console.error("Shouldn't happen", e);
+                    }
+                    item.update(update);
                 }
-                catch (e) {
-                    console.error("Shouldn't happen", e);
-                }
+                return;
             }
+
+            showInputsFunc(item, html, isEditable);
         }
-        return false;
-    }
-    return true;
+    );
+
+    /**
+     * @param {ItemPF} item
+     * @param {object} _data
+     * @param {{temporary: boolean}} param2
+     * @param {string} id
+     */
+    const handleOnCreate = (item, _data, { temporary }, id) => {
+        if (!itemFilter(item) || temporary) return;
+
+        const name = item?.name?.toLowerCase() ?? '';
+        const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
+        const isItemMatch = isItemFunc(name, item);
+        const hasBonus = allBooleanKeys.every((key) => item.hasItemBooleanFlag(key));
+
+        if ((isItemMatch || hasCompendiumId) && !hasBonus) {
+            /** @type {Record<string, any>} */
+            const update = {};
+            allBooleanKeys.forEach((key) => update[`system.flags.boolean.${key}`] = true);
+            const flagValues = flagValueFunc ? flagValueFunc(item) : undefined;
+            if (flagValues) {
+                update.flags ||= {}
+                update.flags[MODULE_NAME] ||= {};
+                update.flags[MODULE_NAME] = { ...update.flags[MODULE_NAME], ...flagValues };
+            }
+            item.updateSource(update);
+        }
+    };
+    Hooks.on('preCreateItem', handleOnCreate);
 }
 
 api.utils.onCreate = onCreate;

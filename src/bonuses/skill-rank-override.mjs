@@ -1,7 +1,7 @@
 import { registerItemHint } from "../util/item-hints.mjs";
 import { localize, localizeItemHint } from "../util/localize.mjs";
 import { truthiness } from "../util/truthiness.mjs";
-import { SpecificBonuses } from './_all-specific-bonuses.mjs';
+import { SpecificBonus } from './_specific-bonus.mjs';
 import { FormulaCacheHelper, getDocFlags } from '../util/flag-helpers.mjs';
 import { LocalHookHandler, localHooks } from '../util/hooks.mjs';
 import { textInput } from '../handlebars-handlers/bonus-inputs/text-input.mjs';
@@ -17,7 +17,14 @@ const formulaKey = 'skill-rank-override-formula';
 const selectedKey = 'skill-rank-override-selected';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#skill-rank-override';
 
-SpecificBonuses.registerSpecificBonus({ journal, key });
+export class SkillRankOverride extends SpecificBonus {
+    /** @inheritdoc @override */
+    static get sourceKey() { return key; }
+
+    /** @inheritdoc @override */
+    static get journal() { return journal; }
+}
+
 FormulaCacheHelper.registerModuleFlag(formulaKey);
 
 registerItemHint((hintcls, actor, item, _data) => {

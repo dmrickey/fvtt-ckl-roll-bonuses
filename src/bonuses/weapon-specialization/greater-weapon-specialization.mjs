@@ -12,8 +12,8 @@ import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize, localizeBonusLabel, localizeBonusTooltip } from "../../util/localize.mjs";
 import { SharedSettings, LanguageSettings } from '../../util/settings.mjs';
 import { uniqueArray } from '../../util/unique-array.mjs';
-import { SpecificBonuses } from '../_all-specific-bonuses.mjs';
-import { greaterWeaponFocusKey } from "../weapon-focus/ids.mjs";
+import { SpecificBonus } from '../_specific-bonus.mjs';
+import { greaterWeaponFocusKey } from "../weapon-focus/_base-weapon-focus.mjs";
 import { getFocusedWeapons } from '../weapon-focus/weapon-focus.mjs';
 import { WeaponSpecializationSettings, getSpecializedWeapons, weaponSpecializationKey } from "./weapon-specialization.mjs";
 
@@ -22,7 +22,16 @@ export { key as greaterWeaponSpecializationKey };
 const compendiumId = 'asmQDyDYTtuXg8b4';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#weapon-specialization';
 
-SpecificBonuses.registerSpecificBonus({ journal, key, parent: weaponSpecializationKey });
+export class WeaponSpecializationGreater extends SpecificBonus {
+    /** @inheritdoc @override */
+    static get sourceKey() { return key; }
+
+    /** @inheritdoc @override */
+    static get journal() { return journal; }
+
+    /** @inheritdoc @override */
+    static get parent() { return weaponSpecializationKey; }
+}
 
 /**
  * @param { ActorPF } actor

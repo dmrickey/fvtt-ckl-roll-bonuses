@@ -5,13 +5,13 @@ import { MODULE_NAME } from '../../consts.mjs';
 import { stringSelect } from "../../handlebars-handlers/bonus-inputs/string-select.mjs";
 import { getCachedBonuses } from '../../util/get-cached-bonuses.mjs';
 import { itemHasCompendiumId } from '../../util/has-compendium-id.mjs';
-import { customGlobalHooks, LocalHookHandler, localHooks } from "../../util/hooks.mjs";
+import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize, localizeBonusLabel, localizeBonusTooltip } from "../../util/localize.mjs";
 import { LanguageSettings } from "../../util/settings.mjs";
 import { truthiness } from "../../util/truthiness.mjs";
 import { uniqueArray } from "../../util/unique-array.mjs";
-import { SpecificBonuses } from '../_all-specific-bonuses.mjs';
+import { SpecificBonus } from '../_specific-bonus.mjs';
 import { getFocusedSchools } from "./spell-focus.mjs";
 
 const key = 'spell-specialization';
@@ -19,7 +19,13 @@ const exclusionKey = 'spell-specialization-exclusions';
 const compendiumId = 'CO2Qmj0aj76zJsew';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#spell-specialization';
 
-SpecificBonuses.registerSpecificBonus({ journal, key });
+export class SpellSpecialization extends SpecificBonus {
+    /** @inheritdoc @override */
+    static get sourceKey() { return key; }
+
+    /** @inheritdoc @override */
+    static get journal() { return journal; }
+}
 
 class Settings {
     static get spellSpecialization() { return LanguageSettings.getTranslation(key); }

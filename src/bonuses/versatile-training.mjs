@@ -3,7 +3,7 @@ import { registerItemHint } from "../util/item-hints.mjs";
 import { localize, localizeBonusTooltip } from "../util/localize.mjs";
 import { LanguageSettings } from "../util/settings.mjs";
 import { truthiness } from "../util/truthiness.mjs";
-import { SpecificBonuses } from './_all-specific-bonuses.mjs';
+import { SpecificBonus } from './_specific-bonus.mjs';
 import { api } from '../util/api.mjs';
 import { keyValueSelect } from '../handlebars-handlers/bonus-inputs/key-value-select.mjs';
 import { getDocFlags } from '../util/flag-helpers.mjs';
@@ -20,7 +20,13 @@ const selectedKey = 'versatile-training-selected';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#versatile-training';
 const compendiumId = 'ORQUp9lBAMxPhRVu';
 
-SpecificBonuses.registerSpecificBonus({ journal, key });
+export class VersatileTraining extends SpecificBonus {
+    /** @inheritdoc @override */
+    static get sourceKey() { return key; }
+
+    /** @inheritdoc @override */
+    static get journal() { return journal; }
+}
 
 class Settings {
     static get versatileTraining() { return LanguageSettings.getTranslation(key); }

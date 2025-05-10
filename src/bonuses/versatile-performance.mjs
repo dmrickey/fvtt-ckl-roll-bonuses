@@ -6,7 +6,7 @@ import { addNodeToRollBonus } from "../handlebars-handlers/add-bonus-to-item-she
 import { registerItemHint } from "../util/item-hints.mjs";
 import { localize, localizeBonusTooltip } from "../util/localize.mjs";
 import { LanguageSettings } from "../util/settings.mjs";
-import { SpecificBonuses } from './_all-specific-bonuses.mjs';
+import { SpecificBonus } from './_specific-bonus.mjs';
 import { LocalHookHandler, localHooks } from '../util/hooks.mjs';
 import { getSkillName } from '../util/get-skill-name.mjs';
 import { truthiness } from '../util/truthiness.mjs';
@@ -40,8 +40,24 @@ const compendiumIds = ['HAqAsb5H56C6cZm3', 'EuQ3UFsJX9njW3pm', 'KQeYLQvYh1QgS0XI
 }
 const expandedChoices = api.config.versatilePerformance.expandedChoices;
 
-SpecificBonuses.registerSpecificBonus({ journal, key });
-SpecificBonuses.registerSpecificBonus({ journal, key: expandedKey, parent: key });
+export class VersatilePerformance extends SpecificBonus {
+    /** @inheritdoc @override */
+    static get sourceKey() { return key; }
+
+    /** @inheritdoc @override */
+    static get journal() { return journal; }
+}
+
+export class VersatilePerformanceExpanded extends SpecificBonus {
+    /** @inheritdoc @override */
+    static get sourceKey() { return expandedKey; }
+
+    /** @inheritdoc @override */
+    static get journal() { return journal; }
+
+    /** @inheritdoc @override */
+    static get parent() { return VersatilePerformance.key; }
+}
 
 class Settings {
     static get versatilePerformance() { return LanguageSettings.getTranslation(key); }

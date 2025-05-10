@@ -51,6 +51,7 @@
 - [Range/Positional ideas](#rangepositional-ideas)
 - [Other Ideas](#other-ideas)
 - [vnext](#vnext)
+    - [Specific Bonuses](#specific-bonuses)
 
 # TODO
 - Figure out a way to support multiple target groups on a single Item (so I can add `Favored Enemy (Human) +4` and `Favored Enemy (goblin) +2` on a single Item)
@@ -243,5 +244,11 @@
   - Add bonuses for abiltities that deny flanking
   - Add "only specific allies" input to is-flanking bonus
     - Add "Actor Picker" app
+  - Add "cannot be flanked" ability
 - Add "While adjacent to" bonus
   - use actor picker app
+- Verify that Precise Shot and Devastating Strike (plus imrpoved) still work after creatre/render refactor
+### Specific Bonuses
+- Migrate all keys to start with `specific_`
+  - update all journal entries to indicate what the key is
+- Make sure everything referencing keys is doing so off of the class so it is actually using the correct key

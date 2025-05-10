@@ -59,7 +59,7 @@ export class FlankHelper {
         const _target = toToken(target);
 
         if (_attacker.scene !== _target.scene) {
-            throw new Error('tokens must be in teh same scene');
+            throw new Error('tokens must be in the same scene');
         }
 
         this.attacker = _attacker;

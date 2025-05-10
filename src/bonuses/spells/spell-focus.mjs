@@ -3,14 +3,14 @@ import { keyValueSelect } from "../../handlebars-handlers/bonus-inputs/key-value
 import { intersects } from '../../util/array-intersects.mjs';
 import { getCachedBonuses } from '../../util/get-cached-bonuses.mjs';
 import { itemHasCompendiumId } from '../../util/has-compendium-id.mjs';
-import { LocalHookHandler, customGlobalHooks, localHooks } from "../../util/hooks.mjs";
+import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize, localizeBonusLabel, localizeBonusTooltip } from "../../util/localize.mjs";
 import { LanguageSettings } from "../../util/settings.mjs";
 import { signed } from "../../util/to-signed-string.mjs";
 import { truthiness } from '../../util/truthiness.mjs';
 import { uniqueArray } from '../../util/unique-array.mjs';
-import { SpecificBonuses } from '../_all-specific-bonuses.mjs';
+import { SpecificBonus } from '../_specific-bonus.mjs';
 
 export const spellFocusKey = 'spell-focus';
 export const greaterSpellFocusKey = 'spell-focus-greater';
@@ -24,9 +24,33 @@ const mythicSpellFocusCompendiumId = 'TOMEhAeZsgGHrSH6';
 
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#spell-focus';
 
-SpecificBonuses.registerSpecificBonus({ journal, key: spellFocusKey });
-SpecificBonuses.registerSpecificBonus({ journal, key: greaterSpellFocusKey, parent: spellFocusKey });
-SpecificBonuses.registerSpecificBonus({ journal, key: mythicSpellFocusKey, parent: spellFocusKey });
+export class SpellFocus extends SpecificBonus {
+    /** @inheritdoc @override */
+    static get sourceKey() { return spellFocusKey; }
+
+    /** @inheritdoc @override */
+    static get journal() { return journal; }
+}
+export class SpellFocusGreater extends SpecificBonus {
+    /** @inheritdoc @override */
+    static get sourceKey() { return greaterSpellFocusKey; }
+
+    /** @inheritdoc @override */
+    static get journal() { return journal; }
+
+    /** @inheritdoc @override */
+    static get parent() { return SpellFocus.key; }
+}
+export class SpellFocusMythic extends SpecificBonus {
+    /** @inheritdoc @override */
+    static get sourceKey() { return mythicSpellFocusKey; }
+
+    /** @inheritdoc @override */
+    static get journal() { return journal; }
+
+    /** @inheritdoc @override */
+    static get parent() { return SpellFocus.key; }
+}
 
 class Settings {
     static get spellFocus() { return LanguageSettings.getTranslation(spellFocusKey); }

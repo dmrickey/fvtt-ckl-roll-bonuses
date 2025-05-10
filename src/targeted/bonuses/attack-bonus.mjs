@@ -1,4 +1,4 @@
-import { SpecificBonuses } from '../../bonuses/_all-specific-bonuses.mjs';
+import { SpecificBonus } from '../../bonuses/_specific-bonus.mjs';
 import { MODULE_NAME } from '../../consts.mjs';
 import { checkboxInput } from '../../handlebars-handlers/bonus-inputs/chekbox-input.mjs';
 import { textInputAndKeyValueSelect } from '../../handlebars-handlers/bonus-inputs/text-input-and-key-value-select.mjs';

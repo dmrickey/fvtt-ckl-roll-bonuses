@@ -8,30 +8,38 @@ import { registerItemHint } from '../../util/item-hints.mjs';
 import { localize, localizeBonusTooltip } from '../../util/localize.mjs';
 import { onCreate } from '../../util/on-create.mjs';
 import { LanguageSettings } from '../../util/settings.mjs';
-import { SpecificBonuses } from '../_all-specific-bonuses.mjs';
-import { inspirationAmazingKey as key, inspirationKey } from './_base-inspiration.mjs';
+import { SpecificBonus } from '../_specific-bonus.mjs';
+import { Inspiration } from './inspiration.mjs';
 
 const compendiumId = '3ggXCz7WmYP55vu5';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#inspiration';
 
-SpecificBonuses.registerSpecificBonus({ journal, key, parent: inspirationKey });
+export class InspirationAmazing extends SpecificBonus {
+    /** @inheritdoc @override */
+    static get sourceKey() { return 'inspiration-amazing'; }
 
+    /** @inheritdoc @override */
+    static get journal() { return journal; }
+
+    /** @inheritdoc @override */
+    static get parent() { return Inspiration.key; }
+}
 class Settings {
-    static get inpsiration() { return LanguageSettings.getTranslation(key); }
+    static get inpsirationAmazing() { return LanguageSettings.getTranslation(InspirationAmazing.key); }
 
     static {
-        LanguageSettings.registerItemNameTranslation(key);
+        LanguageSettings.registerItemNameTranslation(InspirationAmazing.key);
     }
 }
 
 // register hint on source
 registerItemHint((hintcls, _actor, item, _data) => {
-    const has = !!item.hasItemBooleanFlag(key);
+    const has = !!item.hasItemBooleanFlag(InspirationAmazing.key);
     if (!has) {
         return;
     }
 
-    const hint = hintcls.create('', [], { hint: localizeBonusTooltip(key), icon: 'fas fa-magnifying-glass ckl-extra-focus' });
+    const hint = hintcls.create('', [], { hint: localizeBonusTooltip(InspirationAmazing.key), icon: 'fas fa-magnifying-glass ckl-extra-focus' });
     return hint;
 });
 
@@ -42,12 +50,12 @@ Hooks.on('renderItemSheet', (
 ) => {
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
-    const hasFlag = item.hasItemBooleanFlag(key);
+    const hasFlag = item.hasItemBooleanFlag(InspirationAmazing.key);
     if (!hasFlag) {
         const name = item?.name?.toLowerCase() ?? '';
         const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
-        if (isEditable && (name === Settings.inpsiration || hasCompendiumId)) {
-            item.addItemBooleanFlag(key);
+        if (isEditable && (name === Settings.inpsirationAmazing || hasCompendiumId)) {
+            item.addItemBooleanFlag(InspirationAmazing.key);
         }
         return;
     }
@@ -57,7 +65,7 @@ Hooks.on('renderItemSheet', (
     showEnabledLabel({
         item,
         journal,
-        key,
+        key: InspirationAmazing.key,
         parent: html,
         text: localize('inspiration-amazing-die', { die }),
     }, {
@@ -66,4 +74,4 @@ Hooks.on('renderItemSheet', (
     });
 });
 
-onCreate(compendiumId, () => Settings.inpsiration, { booleanKeys: key });
+onCreate(compendiumId, () => Settings.inpsirationAmazing, { booleanKeys: InspirationAmazing.key });

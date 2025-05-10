@@ -12,7 +12,7 @@ import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize, localizeBonusLabel, localizeBonusTooltip } from "../../util/localize.mjs";
 import { SharedSettings, LanguageSettings } from "../../util/settings.mjs";
 import { uniqueArray } from "../../util/unique-array.mjs";
-import { SpecificBonuses } from '../_all-specific-bonuses.mjs';
+import { SpecificBonus } from '../_specific-bonus.mjs';
 import { getFocusedWeapons } from '../weapon-focus/weapon-focus.mjs';
 
 const key = 'weapon-specialization';
@@ -20,7 +20,13 @@ export { key as weaponSpecializationKey };
 const compendiumId = 'YLCvMNeAF9V31m1h';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#weapon-specialization';
 
-SpecificBonuses.registerSpecificBonus({ journal, key });
+export class WeaponSpecialization extends SpecificBonus {
+    /** @inheritdoc @override */
+    static get sourceKey() { return key; }
+
+    /** @inheritdoc @override */
+    static get journal() { return journal; }
+}
 
 class Settings {
     static get weaponSpecialization() { return LanguageSettings.getTranslation(key); }

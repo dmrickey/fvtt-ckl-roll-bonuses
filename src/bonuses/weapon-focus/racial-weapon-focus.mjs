@@ -8,13 +8,9 @@ import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize, localizeBonusLabel, localizeBonusTooltip } from "../../util/localize.mjs";
 import { registerSetting } from "../../util/settings.mjs";
 import { truthiness } from '../../util/truthiness.mjs';
-import { SpecificBonuses } from '../_all-specific-bonuses.mjs';
-import { gnomeWeaponFocusCompendiumId, racialWeaponFocusKey, weaponFocusKey } from "./ids.mjs";
+import { gnomeWeaponFocusCompendiumId, racialWeaponFocusKey, weaponFocusKey, WeaponFocusRacial } from "./_base-weapon-focus.mjs";
 
 const key = racialWeaponFocusKey;
-const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#weapon-focus';
-
-SpecificBonuses.registerSpecificBonus({ journal, key: racialWeaponFocusKey, parent: weaponFocusKey });
 
 class Settings {
     static defaultRaceKey = 'weapon-focus-racial-default-race';
@@ -129,7 +125,7 @@ Hooks.on('renderItemSheet', (
     textInput({
         current,
         item,
-        journal,
+        journal: WeaponFocusRacial.journal,
         key,
         parent: html,
     }, {

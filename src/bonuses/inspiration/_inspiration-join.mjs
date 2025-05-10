@@ -5,27 +5,14 @@ import { onCreate } from '../../util/on-create.mjs';
 import { onSkillSheetRender } from '../../util/on-skill-sheet-render-handler.mjs';
 import { LanguageSettings } from '../../util/settings.mjs';
 import { key as rollUntrainedKey } from '../roll-untrained.mjs'
+import { InspirationAmazing } from './inspiration-amazing.mjs';
+import { InspirationExtraDie } from './inspiration-extra-die.mjs';
+import { InspirationFocused } from './inspiration-focused.mjs';
+import { InspirationTenacious } from './inspiration-tenacious.mjs';
+import { InspirationTrue } from './inspiration-true.mjs';
+import { Inspiration } from './inspiration.mjs';
 
-export const inspirationKey = 'inspiration';
-export const inspirationAmazingKey = 'inspiration-amazing';
-export const inspirationFocusedKey = 'inspiration-focused';
-export const inspirationTenaciousKey = 'inspiration-tenacious';
-export const inspirationTrueKey = 'inspiration-true';
-
-export const inspirationExtraDieKey = 'inspiration-extra-die';
-
-export class InspirationLanguageSettings {
-
-    static get inpsiration() { return LanguageSettings.getTranslation(inspirationKey); }
-    static get inpsirationProper() { return LanguageSettings.getTranslation(inspirationKey, false); }
-
-    static get inspirationFocused() { return LanguageSettings.getTranslation(inspirationFocusedKey); }
-    static get inspirationFocusedProper() { return LanguageSettings.getTranslation(inspirationFocusedKey, false); }
-
-    static get inpsirationTenacious() { return LanguageSettings.getTranslation(inspirationTenaciousKey); }
-
-    static get inpsirationTrue() { return LanguageSettings.getTranslation(inspirationTrueKey); }
-
+class MiscInspirationLanguageSettings {
     static #inspirationDeviceTalentKey = 'inspiration-device-talent';
     static #inspirationEmpathyKey = 'inspiration-empathy';
     static #inspirationExpandedKey = 'inspiration-expanded';
@@ -41,11 +28,6 @@ export class InspirationLanguageSettings {
     static get inspirationUnderworld() { return LanguageSettings.getTranslation(this.#inspirationUnderworldKey); }
 
     static {
-        LanguageSettings.registerItemNameTranslation(inspirationKey);
-        LanguageSettings.registerItemNameTranslation(inspirationFocusedKey);
-        LanguageSettings.registerItemNameTranslation(inspirationTenaciousKey);
-        LanguageSettings.registerItemNameTranslation(inspirationTrueKey);
-
         LanguageSettings.registerItemNameTranslation(this.#inspirationDeviceTalentKey);
         LanguageSettings.registerItemNameTranslation(this.#inspirationEmpathyKey);
         LanguageSettings.registerItemNameTranslation(this.#inspirationExpandedKey);
@@ -61,9 +43,9 @@ export class InspirationLanguageSettings {
  * @returns {boolean}
  */
 export const canUseInspirationForFree = (actor, id) => {
-    if (actor.hasItemBooleanFlag(inspirationTrueKey)) return true;
+    if (InspirationTrue.has(actor)) return true;
 
-    const inspired = getFlaggedSkillIdsFromActor(actor, inspirationKey);
+    const inspired = getFlaggedSkillIdsFromActor(actor, InspirationTrue.key);
     if (intersects(inspired, id) && actor.getSkillInfo(id).rank) return true;
 
     return false;
@@ -74,7 +56,7 @@ export const canUseInspirationForFree = (actor, id) => {
  * @returns {{ source: ItemPF, ids: SkillId[]}[]}
  */
 const getInspiredSkillsBySourceFromActor = (actor) => {
-    const trueItem = actor.itemFlags?.boolean[inspirationTrueKey]?.sources[0];
+    const trueItem = actor.itemFlags?.boolean[InspirationTrue.key]?.sources[0];
     if (trueItem) {
         return [{
             source: trueItem,
@@ -82,9 +64,9 @@ const getInspiredSkillsBySourceFromActor = (actor) => {
         }];
     }
 
-    const inspired = getFlaggedSkillIdsBySourceFromActor(actor, inspirationKey);
-    const focused = getFlaggedSkillIdsBySourceFromActor(actor, inspirationFocusedKey);
-    const extra = getFlaggedSkillIdsBySourceFromActor(actor, inspirationExtraDieKey);
+    const inspired = getFlaggedSkillIdsBySourceFromActor(actor, Inspiration.key);
+    const focused = getFlaggedSkillIdsBySourceFromActor(actor, InspirationFocused.key);
+    const extra = getFlaggedSkillIdsBySourceFromActor(actor, InspirationExtraDie.key);
     return [
         ...inspired,
         ...focused,
@@ -93,7 +75,7 @@ const getInspiredSkillsBySourceFromActor = (actor) => {
 }
 
 onSkillSheetRender({
-    key: inspirationKey,
+    key: Inspiration.key,
     getSkillIds: getInspiredSkillsBySourceFromActor,
 }, {
     classes: (actor, skillId) => {
@@ -101,12 +83,12 @@ onSkillSheetRender({
         const hasKeyForSkill = (flag) => intersects(getFlaggedSkillIdsFromActor(actor, flag), skillId);
         const classes = ['fas', 'ckl-skill-icon'];
 
-        if (hasKeyForSkill(inspirationFocusedKey)) {
+        if (hasKeyForSkill(InspirationFocused.key)) {
             classes.push('ckl-extra-focus');
         }
 
-        const hasExtra = hasKeyForSkill(inspirationExtraDieKey);
-        const hasTenacious = actor.hasItemBooleanFlag(inspirationTenaciousKey);
+        const hasExtra = hasKeyForSkill(InspirationExtraDie.key);
+        const hasTenacious = InspirationTenacious.has(actor);
         if (hasExtra && hasTenacious) {
             classes.push('fa-magnifying-glass-plus');
         }
@@ -139,34 +121,34 @@ onSkillSheetRender({
             .find(({ ids }) => ids.includes(skillId));
 
         {
-            const amazing = actor.hasItemBooleanFlag(inspirationAmazingKey);
+            const amazing = InspirationAmazing.has(actor);
             if (amazing) {
-                text += "<br><br>" + actor.itemFlags?.boolean[inspirationAmazingKey]?.sources[0]?.name;
-                text += "<br>" + localize(`skill-sheet.${inspirationFocusedKey}.skill-tip`);
+                text += "<br><br>" + actor.itemFlags?.boolean[InspirationAmazing.key]?.sources[0]?.name;
+                text += "<br>" + localize(`skill-sheet.${InspirationFocused.key}.skill-tip`);
             }
         }
 
         {
-            const focused = hasKeyForSkill(inspirationFocusedKey);
+            const focused = hasKeyForSkill(InspirationFocused.key);
             if (focused) {
                 text += "<br><br>" + focused.source.name;
-                text += "<br>" + localize(`skill-sheet.${inspirationFocusedKey}.skill-tip`);
+                text += "<br>" + localize(`skill-sheet.${InspirationFocused.key}.skill-tip`);
             }
         }
 
         {
-            const extra = hasKeyForSkill(inspirationExtraDieKey);
+            const extra = hasKeyForSkill(InspirationExtraDie.key);
             if (extra) {
                 text += "<br><br>" + extra.source.name;
-                text += "<br>" + localize(`skill-sheet.${inspirationTenaciousKey}.skill-tip`);
+                text += "<br>" + localize(`skill-sheet.${InspirationTenacious.key}.skill-tip`);
             }
         }
 
         {
-            const tenacious = actor.hasItemBooleanFlag(inspirationTenaciousKey);
+            const tenacious = InspirationTenacious.has(actor);
             if (tenacious) {
-                text += "<br><br>" + actor.itemFlags?.boolean[inspirationTenaciousKey]?.sources[0]?.name;
-                text += "<br>" + localize(`skill-sheet.${inspirationTenaciousKey}.skill-tip`);
+                text += "<br><br>" + actor.itemFlags?.boolean[InspirationTenacious.key]?.sources[0]?.name;
+                text += "<br>" + localize(`skill-sheet.${InspirationTenacious.key}.skill-tip`);
             }
         }
 
@@ -189,9 +171,9 @@ onSkillSheetRender({
 const getDie = (actor) => {
     if (!actor) return;
 
-    const hasInspiration = !!actor.hasItemBooleanFlag(inspirationKey);
-    const hasAmazing = !!actor.hasItemBooleanFlag(inspirationAmazingKey);
-    const hasTenacious = !!actor.hasItemBooleanFlag(inspirationTenaciousKey);
+    const hasInspiration = Inspiration.has(actor);
+    const hasAmazing = InspirationAmazing.has(actor);
+    const hasTenacious = InspirationTenacious.has(actor);
     // const hasTrue = !!actor.hasItemBooleanFlag(inspirationTrueKey);
     if (!hasInspiration) return;
 
@@ -200,7 +182,7 @@ const getDie = (actor) => {
     let mod = '';
     // I don't think this is accurate, but I'm just leaving this here for future me
     // if (hasAmazing) {
-    //     const items = actor.itemFlags?.boolean[inspirationKey]?.sources ?? [];
+    //     const items = actor.itemFlags?.boolean[Inspiration.key]?.sources ?? [];
     //     const classLevels = items
     //         .map(x => x.system.class)
     //         .map((c) => actor.itemTypes.class.find(x => x.system.tag === c))
@@ -242,9 +224,9 @@ const getDie = (actor) => {
  */
 const getDieForSkill = (actor, skill) => {
 
-    const hasExtra = getFlaggedSkillIdsBySourceFromActor(actor, inspirationExtraDieKey).find(({ ids }) => intersects(ids, skill));
+    const hasExtra = getFlaggedSkillIdsBySourceFromActor(actor, InspirationExtraDie.key).find(({ ids }) => intersects(ids, skill));
 
-    const isFocused = getFlaggedSkillIdsBySourceFromActor(actor, inspirationFocusedKey).find(({ ids }) => intersects(ids, skill));
+    const isFocused = getFlaggedSkillIdsBySourceFromActor(actor, InspirationFocused.key).find(({ ids }) => intersects(ids, skill));
     if (isFocused) {
         return hasExtra
             ? {
@@ -257,7 +239,7 @@ const getDieForSkill = (actor, skill) => {
             };
     }
 
-    const isInspired = getFlaggedSkillIdsBySourceFromActor(actor, inspirationKey).find(({ ids }) => intersects(ids, skill));
+    const isInspired = getFlaggedSkillIdsBySourceFromActor(actor, Inspiration.key).find(({ ids }) => intersects(ids, skill));
     if (isInspired) {
         return hasExtra
             ? {
@@ -276,7 +258,7 @@ const getDieForSkill = (actor, skill) => {
  * @param {RollData} rollData
  */
 function onGetRollData(thing, rollData) {
-    // this fires for actor -> item -> action. If I handle more than one then it would double up bonuses. So I handle the root-most option
+    // this fires for actor -> item -> action
     if (thing instanceof pf1.documents.actor.ActorPF) {
         const actor = thing;
         const die = getDie(actor);
@@ -316,11 +298,11 @@ Hooks.on('pf1PreActorRollSkill', onRollSkill);
 // Device Talent
 onCreate(
     'hwcRSJ1KAX1boUNv',
-    () => InspirationLanguageSettings.inspirationDeviceTalent,
+    () => MiscInspirationLanguageSettings.inspirationDeviceTalent,
     {
-        booleanKeys: [inspirationKey, rollUntrainedKey, 'fortune-skill_umd'],
+        booleanKeys: [Inspiration.key, rollUntrainedKey, 'fortune-skill_umd'],
         flagValues: {
-            [inspirationKey]: /** @type {SkillId[]} */ (['umd']),
+            [Inspiration.key]: /** @type {SkillId[]} */ (['umd']),
             [rollUntrainedKey]: /** @type {SkillId[]} */ (['umd']),
         },
     },
@@ -329,11 +311,11 @@ onCreate(
 // Empathy
 onCreate(
     'HLuoqBZCrV6vSJzK',
-    () => InspirationLanguageSettings.inspirationEmpathy,
+    () => MiscInspirationLanguageSettings.inspirationEmpathy,
     {
-        booleanKeys: [inspirationExtraDieKey, 'fortune-skill_sen'],
+        booleanKeys: [InspirationExtraDie.key, 'fortune-skill_sen'],
         flagValues: {
-            [inspirationExtraDieKey]: /** @type {SkillId[]} */ (['sen']),
+            [InspirationExtraDie.key]: /** @type {SkillId[]} */ (['sen']),
         },
     },
 );
@@ -341,11 +323,11 @@ onCreate(
 // Expanded Inspiration
 onCreate(
     'DwEK2dM8PONQRIHm',
-    () => InspirationLanguageSettings.inspirationExpanded,
+    () => MiscInspirationLanguageSettings.inspirationExpanded,
     {
-        booleanKeys: [inspirationKey],
+        booleanKeys: [Inspiration.key],
         flagValues: {
-            [inspirationKey]:
+            [Inspiration.key]:
                 /** @type {SkillId[]} */
                 ([
                     'dip',
@@ -361,11 +343,11 @@ onCreate(
 // Inspired Intelligence
 onCreate(
     'HPzD3V2ohR5oOi8u',
-    () => InspirationLanguageSettings.inspirationInspiredIntelligence,
+    () => MiscInspirationLanguageSettings.inspirationInspiredIntelligence,
     {
-        booleanKeys: [inspirationKey],
+        booleanKeys: [Inspiration.key],
         flagValues: {
-            [inspirationKey]:
+            [Inspiration.key]:
                 /** @type {SkillId[]} */
                 ([
                     allKnowledges,
@@ -379,20 +361,20 @@ onCreate(
 // Unconventional Inspiration
 onCreate(
     'BFNWMeWYNOyZ1Ioe',
-    () => InspirationLanguageSettings.inspirationUnconventional,
+    () => MiscInspirationLanguageSettings.inspirationUnconventional,
     {
-        booleanKeys: [inspirationKey],
+        booleanKeys: [Inspiration.key],
     },
 );
 
 // Underworld Inspiration
 onCreate(
     'pR0MLt0XLQpBePa3',
-    () => InspirationLanguageSettings.inspirationUnderworld,
+    () => MiscInspirationLanguageSettings.inspirationUnderworld,
     {
-        booleanKeys: [inspirationKey],
+        booleanKeys: [Inspiration.key],
         flagValues: {
-            [inspirationKey]:
+            [Inspiration.key]:
                 /** @type {SkillId[]} */
                 ([
                     'blf',

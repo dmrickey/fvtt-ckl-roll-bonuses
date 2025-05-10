@@ -19,7 +19,7 @@ import {
     mythicWeaponFocusKey,
     racialWeaponFocusKey,
     weaponFocusKey,
-} from '../../src/bonuses/weapon-focus/ids.mjs';
+} from '../../src/bonuses/weapon-focus/_base-weapon-focus.mjs';
 import { greaterWeaponSpecializationKey } from '../../src/bonuses/weapon-specialization/greater-weapon-specialization.mjs';
 import { weaponSpecializationKey } from '../../src/bonuses/weapon-specialization/weapon-specialization.mjs';
 import { MODULE_NAME } from '../../src/consts.mjs';
@@ -783,7 +783,7 @@ declare global {
         setItemDictionaryFlag(key: string, value: FlagValue): Promise<void>;
 
         /**
-         * @param key - THe key for the boolean flag
+         * @param key - The key for the boolean flag
          * @returns True if the item has the boolean flag
          */
         hasItemBooleanFlag(key: string): boolean;

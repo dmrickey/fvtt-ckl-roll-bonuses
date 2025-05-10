@@ -4,12 +4,18 @@ import { getFlaggedSkillIdsFromActor, getSkillChoices } from '../util/get-skills
 import { LocalHookHandler, localHooks } from '../util/hooks.mjs';
 import { registerItemHint } from '../util/item-hints.mjs';
 import { localize, localizeBonusTooltip } from '../util/localize.mjs';
-import { SpecificBonuses } from './_all-specific-bonuses.mjs';
+import { SpecificBonus } from './_specific-bonus.mjs';
 
 export const key = 'roll-untrained';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#roll-skills-untrained';
 
-SpecificBonuses.registerSpecificBonus({ journal, key, });
+export class RollSkillUntrained extends SpecificBonus {
+    /** @inheritdoc @override */
+    static get sourceKey() { return key; }
+
+    /** @inheritdoc @override */
+    static get journal() { return journal; }
+}
 
 // register hint on source
 registerItemHint((hintcls, _actor, item, _data) => {

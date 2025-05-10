@@ -1,7 +1,10 @@
 import { BaseSource } from '../src/targeted/_base-source.mjs';
 import { BaseBonus } from '../src/targeted/bonuses/_base-bonus.mjs';
 import { BaseTarget } from '../src/targeted/targets/_base-target.mjs';
-import { SpecificBonuses } from '../src/bonuses/_all-specific-bonuses.mjs';
+import {
+    SpecificBonus,
+    SpecificBonuses,
+} from '../src/bonuses/_specific-bonus.mjs';
 import { BaseGlobalBonus } from '../src/global-bonuses/base-global-bonus.mjs';
 import { handleBonusesFor } from '../src/target-and-bonus-join.mjs';
 import { showBonusPicker } from '../src/handlebars-handlers/bonus-picker.mjs';
@@ -93,31 +96,36 @@ declare global {
             };
         };
 
+        bonusTypeMap: {
+            bonus_bane: typeof BaneBonus;
+        } & Record<string, typeof BaseBonus>;
         /** Array of all targeted bonuses */
         get allBonusTypes(): (typeof BaseBonus)[];
         get allBonusTypesKeys(): string[];
         /** map of every targeted bonus from its key to its type */
-        bonusTypeMap: {
-            bonus_bane: typeof BaneBonus;
-        } & Record<string, typeof BaseBonus>;
 
+        globalTypeMap: Record<string, typeof BaseGlobalBonus>;
         /** Array of all global bonuses */
         get allGlobalTypes(): (typeof BaseGlobalBonus)[];
         get allGlobalTypesKeys(): string[];
         /** map of every targeted bonus from its key to its type */
-        globalTypeMap: Record<string, typeof BaseGlobalBonus>;
 
+        targetTypeMap: Record<string, typeof BaseTarget>;
         /** Array of all targeted targets */
         get allTargetTypes(): (typeof BaseTarget)[];
         get allTargetTypesKeys(): string[];
         /** map of every targeted target from its key to its type */
-        targetTypeMap: Record<string, typeof BaseTarget>;
 
+        targetOverrideTypeMap: Record<string, typeof BaseTargetOverride>;
         /** Array of all targeted targets */
         get allTargetOverrideTypes(): (typeof BaseTargetOverride)[];
         get allTargetOverrideTypesKeys(): string[];
         /** map of every target override from its key to its type */
-        targetOverrideTypeMap: Record<string, typeof BaseTargetOverride>;
+
+        specificBonusTypeMap: Record<string, typeof SpecificBonus>;
+        /** Array of all targeted targets */
+        get allSpecificBonusTypes(): (typeof SpecificBonus)[];
+        get allSpecificBonusTypesKeys(): string[];
 
         /** all the input helpers for adding various inputs for bonusees */
         inputs: Record<string, (...args) => void>;
@@ -141,9 +149,7 @@ declare global {
             BaseTargetOverride: typeof BaseTargetOverride;
         };
         BaseGlobalBonus: typeof BaseGlobalBonus;
-
-        /** Helper class for registering non-targeted bonuses. Used mostly for the bonus picker application */
-        SpecificBonuses: typeof SpecificBonuses;
+        SpecificBonus: typeof SpecificBonus;
 
         /** various utility helper methods and classes used throughout the mod */
         utils: {

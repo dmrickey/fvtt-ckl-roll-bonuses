@@ -3,24 +3,37 @@ import { itemHasCompendiumId } from '../../util/has-compendium-id.mjs';
 import { registerItemHint } from '../../util/item-hints.mjs';
 import { localizeBonusTooltip } from '../../util/localize.mjs';
 import { onCreate } from '../../util/on-create.mjs';
-import { SpecificBonuses } from '../_all-specific-bonuses.mjs';
-import { InspirationLanguageSettings, inspirationKey as key } from './_base-inspiration.mjs';
+import { SpecificBonus } from '../_specific-bonus.mjs';
 import { allKnowledges, getSkillChoices, getSkillHints } from '../../util/get-skills.mjs';
+import { LanguageSettings } from '../../util/settings.mjs';
 
 const compendiumId = 'nKbyztRQCU5XMbbs';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#inspiration';
 
-SpecificBonuses.registerSpecificBonus({ journal, key, });
+export class Inspiration extends SpecificBonus {
+    /** @inheritdoc @override */
+    static get sourceKey() { return 'inspiration'; }
+
+    /** @inheritdoc @override */
+    static get journal() { return journal; }
+}
+class Settings {
+    static get inpsiration() { return LanguageSettings.getTranslation(Inspiration.sourceKey); }
+
+    static {
+        LanguageSettings.registerItemNameTranslation(Inspiration.sourceKey);
+    }
+}
 
 // register hint on source
 registerItemHint((hintcls, actor, item, _data) => {
-    const has = !!item.hasItemBooleanFlag(key);
+    const has = !!item.hasItemBooleanFlag(Inspiration.key);
     if (!has) {
         return;
     }
 
-    let hintText = localizeBonusTooltip(key);
-    const skills = getSkillHints(actor, item, key);
+    let hintText = localizeBonusTooltip(Inspiration.key);
+    const skills = getSkillHints(actor, item, Inspiration.key);
     if (skills.length) {
         hintText += '<br>' + skills;
     }
@@ -36,12 +49,12 @@ Hooks.on('renderItemSheet', (
 ) => {
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
-    const hasFlag = item.hasItemBooleanFlag(key);
+    const hasFlag = item.hasItemBooleanFlag(Inspiration.key);
     if (!hasFlag) {
         const name = item?.name?.toLowerCase() ?? '';
         const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
-        if (isEditable && (name === InspirationLanguageSettings.inpsiration || hasCompendiumId)) {
-            item.addItemBooleanFlag(key);
+        if (isEditable && (name === Settings.inpsiration || hasCompendiumId)) {
+            item.addItemBooleanFlag(Inspiration.key);
         }
         return;
     }
@@ -53,7 +66,7 @@ Hooks.on('renderItemSheet', (
         hasCustom: false,
         item,
         journal,
-        key,
+        key: Inspiration.key,
         parent: html,
     }, {
         canEdit: isEditable,
@@ -63,13 +76,13 @@ Hooks.on('renderItemSheet', (
 
 onCreate(
     compendiumId,
-    () => InspirationLanguageSettings.inpsiration,
+    () => Settings.inpsiration,
     {
-        booleanKeys: key,
+        booleanKeys: Inspiration.key,
         // intentionally using `==` here
         extraVerification: (item) => !!item.system.sources?.find(({ id, pages }) => id === 'PZO1129' && pages == 31),
         flagValues: {
-            [key]: /** @type {SkillId[]} */
+            [Inspiration.key]: /** @type {SkillId[]} */
                 ([
                     allKnowledges,
                     'lin',

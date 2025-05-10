@@ -8,25 +8,42 @@ import { itemHasCompendiumId } from '../../util/has-compendium-id.mjs';
 import { registerItemHint } from '../../util/item-hints.mjs';
 import { localizeBonusTooltip } from '../../util/localize.mjs';
 import { onCreate } from '../../util/on-create.mjs';
-import { SpecificBonuses } from '../_all-specific-bonuses.mjs';
-import { InspirationLanguageSettings, inspirationTrueKey as key } from './_base-inspiration.mjs';
+import { SpecificBonus } from '../_specific-bonus.mjs';
 import { getSkillHints } from '../../util/get-skills.mjs';
 import { showEnabledLabel } from '../../handlebars-handlers/enabled-label.mjs';
+import { LanguageSettings } from '../../util/settings.mjs';
+import { Inspiration } from './inspiration.mjs';
 
 const compendiumId = 'H2Iac6ELVKBU6Ayu';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#inspiration';
 
-SpecificBonuses.registerSpecificBonus({ journal, key, });
+export class InspirationTrue extends SpecificBonus {
+    /** @inheritdoc @override */
+    static get sourceKey() { return 'inspiration-true'; }
+
+    /** @inheritdoc @override */
+    static get journal() { return journal; }
+
+    /** @inheritdoc @override */
+    static get parent() { return Inspiration.key; }
+}
+class Settings {
+    static get inpsirationTrue() { return LanguageSettings.getTranslation(InspirationTrue.key); }
+
+    static {
+        LanguageSettings.registerItemNameTranslation(InspirationTrue.key);
+    }
+}
 
 // register hint on source
 registerItemHint((hintcls, actor, item, _data) => {
-    const has = !!item.hasItemBooleanFlag(key);
+    const has = !!item.hasItemBooleanFlag(InspirationTrue.key);
     if (!has) {
         return;
     }
 
-    let hintText = localizeBonusTooltip(key);
-    const skills = getSkillHints(actor, item, key);
+    let hintText = localizeBonusTooltip(InspirationTrue.key);
+    const skills = getSkillHints(actor, item, InspirationTrue.key);
     if (skills.length) {
         hintText += '<br>' + skills;
     }
@@ -42,12 +59,12 @@ Hooks.on('renderItemSheet', (
 ) => {
     if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
-    const hasFlag = item.hasItemBooleanFlag(key);
+    const hasFlag = item.hasItemBooleanFlag(InspirationTrue.key);
     if (!hasFlag) {
         const name = item?.name?.toLowerCase() ?? '';
         const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
-        if (isEditable && (name === InspirationLanguageSettings.inpsirationTrue || hasCompendiumId)) {
-            item.addItemBooleanFlag(key);
+        if (isEditable && (name === Settings.inpsirationTrue || hasCompendiumId)) {
+            item.addItemBooleanFlag(InspirationTrue.key);
         }
         return;
     }
@@ -55,7 +72,7 @@ Hooks.on('renderItemSheet', (
     showEnabledLabel({
         item,
         journal,
-        key,
+        key: InspirationTrue.key,
         parent: html,
     }, {
         canEdit: isEditable,
@@ -65,6 +82,6 @@ Hooks.on('renderItemSheet', (
 
 onCreate(
     compendiumId,
-    () => InspirationLanguageSettings.inpsirationTrue,
-    { booleanKeys: key },
+    () => Settings.inpsirationTrue,
+    { booleanKeys: InspirationTrue.key },
 );

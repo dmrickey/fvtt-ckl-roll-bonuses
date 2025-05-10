@@ -5,7 +5,7 @@ import { FormulaCacheHelper } from "../util/flag-helpers.mjs";
 import { getCachedBonuses } from '../util/get-cached-bonuses.mjs';
 import { LocalHookHandler, localHooks } from "../util/hooks.mjs";
 import { localize, localizeBonusLabel, localizeBonusTooltip } from '../util/localize.mjs';
-import { SpecificBonuses } from './_all-specific-bonuses.mjs';
+import { SpecificBonus } from './_specific-bonus.mjs';
 
 const key = 'change-modification';
 const changeTypeKey = 'change-modification-type';
@@ -35,7 +35,13 @@ const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalE
 
 FormulaCacheHelper.registerModuleFlag(formulaKey);
 
-SpecificBonuses.registerSpecificBonus({ journal, key });
+export class ChangeTypeModification extends SpecificBonus {
+    /** @inheritdoc @override */
+    static get sourceKey() { return key; }
+
+    /** @inheritdoc @override */
+    static get journal() { return journal; }
+}
 
 /**
  * @param {ItemPF} item

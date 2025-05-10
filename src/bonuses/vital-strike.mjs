@@ -11,8 +11,8 @@ import { registerItemHint } from '../util/item-hints.mjs';
 import { localize, localizeBonusLabel, localizeBonusTooltip } from '../util/localize.mjs';
 import { LanguageSettings } from '../util/settings.mjs';
 import { truthiness } from '../util/truthiness.mjs';
-import { SpecificBonuses } from './_all-specific-bonuses.mjs';
-import { devastatingStrikeImprovedKey, devastatingStrikeKey } from './devastating-strike.mjs';
+import { SpecificBonus } from './_specific-bonus.mjs';
+import { DevastatingStrike, DevastatingStrikeImproved } from './devastating-strike.mjs';
 
 
 const vitalStrike = 'vital-strike';
@@ -29,10 +29,49 @@ const vitalStrikeEnabled = 'vital-strike-enabled';
 
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#vital-strike';
 
-SpecificBonuses.registerSpecificBonus({ journal, key: vitalStrike });
-SpecificBonuses.registerSpecificBonus({ journal, key: vitalStrikeImproved, parent: vitalStrike, tooltipKey: vitalStrike });
-SpecificBonuses.registerSpecificBonus({ journal, key: vitalStrikeGreater, parent: vitalStrike, tooltipKey: vitalStrike });
-SpecificBonuses.registerSpecificBonus({ journal, key: vitalStrikeMythic, parent: vitalStrike });
+export class VitalStrike extends SpecificBonus {
+    /** @inheritdoc @override */
+    static get sourceKey() { return vitalStrike; }
+
+    /** @inheritdoc @override */
+    static get journal() { return journal; }
+}
+export class VitalStrikeImproved extends SpecificBonus {
+    /** @inheritdoc @override */
+    static get sourceKey() { return vitalStrikeImproved; }
+
+    /** @inheritdoc @override */
+    static get journal() { return journal; }
+
+    /** @inheritdoc @override */
+    static get parent() { return VitalStrike.key; }
+
+    /** @inheritdoc @override */
+    static get tooltip() { return VitalStrike.tooltip; }
+}
+export class VitalStrikeGreater extends SpecificBonus {
+    /** @inheritdoc @override */
+    static get sourceKey() { return vitalStrikeGreater; }
+
+    /** @inheritdoc @override */
+    static get journal() { return journal; }
+
+    /** @inheritdoc @override */
+    static get parent() { return VitalStrike.key; }
+
+    /** @inheritdoc @override */
+    static get tooltip() { return VitalStrike.tooltip; }
+}
+export class VitalStrikeMythic extends SpecificBonus {
+    /** @inheritdoc @override */
+    static get sourceKey() { return vitalStrikeMythic; }
+
+    /** @inheritdoc @override */
+    static get journal() { return journal; }
+
+    /** @inheritdoc @override */
+    static get parent() { return VitalStrike.key; }
+}
 
 const hintInfo = /** @type {const} */ ({
     [vitalStrike]: { label: '×2', tooltipKey: vitalStrike, icon: undefined },
@@ -130,8 +169,8 @@ export class VitalStrikeData {
      */
     constructor(actor, { actionUse = null } = {}) {
         this.actionUse = actionUse;
-        this.hasDevastating = actor.hasItemBooleanFlag(devastatingStrikeKey);
-        this.hasDevastatingImproved = actor.hasItemBooleanFlag(devastatingStrikeImprovedKey);
+        this.hasDevastating = actor.hasItemBooleanFlag(DevastatingStrike.key);
+        this.hasDevastatingImproved = actor.hasItemBooleanFlag(DevastatingStrikeImproved.key);
         this.mythic = this.#hasVitalStrikeMythic(actor);
 
         /**
@@ -188,11 +227,11 @@ export class VitalStrikeData {
                         if (this.hasDevastating) {
                             const conditional = new pf1.components.ItemConditional({
                                 default: true,
-                                name: localizeBonusLabel(devastatingStrikeKey),
+                                name: localizeBonusLabel(DevastatingStrike.key),
                                 modifiers: [{
                                     _id: foundry.utils.randomID(),
                                     critical: 'normal',
-                                    formula: `${amount * 2}[${localizeBonusLabel(devastatingStrikeKey)}]`,
+                                    formula: `${amount * 2}[${localizeBonusLabel(DevastatingStrike.key)}]`,
                                     subTarget: 'attack_0',
                                     target: 'damage',
                                     type: '',
@@ -205,11 +244,11 @@ export class VitalStrikeData {
                         if (this.hasDevastatingImproved) {
                             const conditional = new pf1.components.ItemConditional({
                                 default: true,
-                                name: localizeBonusLabel(devastatingStrikeImprovedKey),
+                                name: localizeBonusLabel(DevastatingStrikeImproved.key),
                                 modifiers: [{
                                     _id: foundry.utils.randomID(),
                                     critical: 'crit',
-                                    formula: `${amount * 2}[${localizeBonusLabel(devastatingStrikeImprovedKey)}]`,
+                                    formula: `${amount * 2}[${localizeBonusLabel(DevastatingStrikeImproved.key)}]`,
                                     subTarget: 'attack_0',
                                     target: 'attack',
                                     type: '',

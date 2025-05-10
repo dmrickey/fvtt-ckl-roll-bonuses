@@ -4,13 +4,19 @@ import { LocalHookHandler, customGlobalHooks, localHooks } from '../util/hooks.m
 import { registerItemHint } from '../util/item-hints.mjs';
 import { localizeBonusLabel, localizeBonusTooltip } from '../util/localize.mjs';
 import { LanguageSettings } from '../util/settings.mjs';
-import { SpecificBonuses } from './_all-specific-bonuses.mjs';
+import { SpecificBonus } from './_specific-bonus.mjs';
 
 const fatesFavored = 'fates-favored';
 const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#fates-favored';
 const compendiumId = 'Cvgd7Dehxxj6Muup';
 
-SpecificBonuses.registerSpecificBonus({ journal, key: fatesFavored });
+export class FatesFavored extends SpecificBonus {
+    /** @inheritdoc @override */
+    static get sourceKey() { return fatesFavored; }
+
+    /** @inheritdoc @override */
+    static get journal() { return journal; }
+}
 
 class Settings {
     static get fatesFavored() { return LanguageSettings.getTranslation(fatesFavored); }

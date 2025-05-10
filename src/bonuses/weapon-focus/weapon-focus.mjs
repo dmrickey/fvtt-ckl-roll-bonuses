@@ -9,7 +9,7 @@ import { localize, localizeBonusLabel, localizeBonusTooltip } from "../../util/l
 import { SharedSettings, LanguageSettings } from "../../util/settings.mjs";
 import { signed } from '../../util/to-signed-string.mjs';
 import { uniqueArray } from "../../util/unique-array.mjs";
-import { SpecificBonuses } from '../_all-specific-bonuses.mjs';
+import { SpecificBonus } from '../_specific-bonus.mjs';
 import {
     gnomeWeaponFocusCompendiumId,
     greaterWeaponFocusCompendiumId,
@@ -19,14 +19,10 @@ import {
     racialWeaponFocusKey,
     weaponFocusCompendiumId,
     weaponFocusKey,
-} from "./ids.mjs";
+    WeaponFocus,
+} from "./_base-weapon-focus.mjs";
 
 const allKeys = [weaponFocusKey, greaterWeaponFocusKey, mythicWeaponFocusKey];
-const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#weapon-focus';
-
-SpecificBonuses.registerSpecificBonus({ journal, key: weaponFocusKey });
-SpecificBonuses.registerSpecificBonus({ journal, key: greaterWeaponFocusKey, parent: weaponFocusKey });
-SpecificBonuses.registerSpecificBonus({ journal, key: mythicWeaponFocusKey, parent: weaponFocusKey });
 
 class Settings {
     static get weaponFocus() { return LanguageSettings.getTranslation(weaponFocusKey); }
@@ -214,7 +210,7 @@ Hooks.on('renderItemSheet', (
     stringSelect({
         choices,
         item,
-        journal,
+        journal: WeaponFocus.journal,
         key,
         parent: html
     }, {
