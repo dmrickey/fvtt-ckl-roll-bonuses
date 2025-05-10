@@ -74,36 +74,40 @@ onRenderCreate(
     DevastatingStrike.key,
     compendiumId,
     (name) => Settings.devastatingStrike === name,
-    (item, html, isEditable) =>
-        showEnabledLabel(
-            {
-                item,
-                journal,
-                key: DevastatingStrike.key,
-                parent: html,
-            },
-            {
-                canEdit: isEditable,
-                inputType: "specific-bonus",
-            }
-        )
+    {
+        showInputsFunc: (item, html, isEditable) =>
+            showEnabledLabel(
+                {
+                    item,
+                    journal,
+                    key: DevastatingStrike.key,
+                    parent: html,
+                },
+                {
+                    canEdit: isEditable,
+                    inputType: "specific-bonus",
+                }
+            )
+    }
 );
 onRenderCreate(
     (item) => item instanceof pf1.documents.item.ItemPF,
     DevastatingStrikeImproved.key,
     improvedCompendiumId,
     (name) => name.includes(Settings.devastatingStrike) && name.includes(LanguageSettings.improved),
-    (item, html, isEditable) =>
-        showEnabledLabel(
-            {
-                item,
-                journal,
-                key: DevastatingStrikeImproved.key,
-                parent: html,
-            },
-            {
-                canEdit: isEditable,
-                inputType: "specific-bonus",
-            }
-        )
+    {
+        showInputsFunc: (item, html, isEditable) =>
+            showEnabledLabel(
+                {
+                    item,
+                    journal,
+                    key: DevastatingStrikeImproved.key,
+                    parent: html,
+                },
+                {
+                    canEdit: isEditable,
+                    inputType: "specific-bonus",
+                }
+            )
+    }
 );

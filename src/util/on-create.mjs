@@ -60,8 +60,8 @@ export const onCreate = (
  * @param {string} key
  * @param {string} compendiumId
  * @param {(name: string, item?: ItemPF) => boolean} isItemFunc
- * @param {(item: ItemPF, html: HTMLElement, isEditable: boolean) => void} showInputsFunc
  * @param {object} [options]
+ * @param {(item: ItemPF, html: HTMLElement, isEditable: boolean) => void} [options.showInputsFunc]
  * @param {string[]} [options.extraBooleanFlags]
  * @param {(item: ItemPF) => Record<string, any> | undefined} [options.defaultFlagValuesFunc]
  */
@@ -70,8 +70,8 @@ export const onRenderCreate = (
     key,
     compendiumId,
     isItemFunc,
-    showInputsFunc,
     {
+        showInputsFunc,
         extraBooleanFlags = [],
         defaultFlagValuesFunc,
 
@@ -116,7 +116,7 @@ export const onRenderCreate = (
                 return;
             }
 
-            showInputsFunc(item, html, isEditable);
+            showInputsFunc?.(item, html, isEditable);
         }
     );
 

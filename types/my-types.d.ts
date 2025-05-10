@@ -277,6 +277,7 @@ declare global {
 
     declare type JustRender = {
         type: 'just-render';
+        itemFilter: (item: ItemPF) => boolean;
         showInputsFunc: ShowInputsFunc;
     };
 

@@ -258,6 +258,7 @@
 - Fill in the `configure` method for all specific bonuses
 - Fill in the `configuration` property for all specific bonuses
 - Add "get item hint" function to base class
+- at the end, if all of my configuration.itemFilters look like `(item) => item instanceof pf1.documents.item.ItemPF` then move that logic to a single place
 ### Bugfix
 - Found a bug where a change targeting "Critical Confirmation" doesnt function when roll bonuses is active. Easy to test. 
   - Make a buff with a change targetting "Critical Confirmation

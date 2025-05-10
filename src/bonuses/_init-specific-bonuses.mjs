@@ -88,10 +88,10 @@ export const initSpecificBonuses = () => {
                         bonus.key,
                         config.compendiumId,
                         config.isItemMatchFunc,
-                        config.showInputsFunc,
                         {
-                            extraBooleanFlags: config.options?.extraBooleanFlags,
                             defaultFlagValuesFunc: config.options?.defaultFlagValuesFunc,
+                            extraBooleanFlags: config.options?.extraBooleanFlags,
+                            showInputsFunc: config.showInputsFunc,
                         }
                     );
                     break;

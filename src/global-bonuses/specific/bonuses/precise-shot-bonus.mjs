@@ -20,15 +20,17 @@ onRenderCreate(
     key,
     compendiumId,
     name => name === Settings.name,
-    (item, html, isEditable) => showEnabledLabel({
-        item,
-        journal,
-        key,
-        parent: html,
-    }, {
-        canEdit: isEditable,
-        inputType: 'specific-bonus',
-    }),
+    {
+        showInputsFunc: (item, html, isEditable) => showEnabledLabel({
+            item,
+            journal,
+            key,
+            parent: html,
+        }, {
+            canEdit: isEditable,
+            inputType: 'specific-bonus',
+        }),
+    }
 );
 
 export class PreciseShot extends SpecificBonus {
