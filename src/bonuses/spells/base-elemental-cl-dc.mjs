@@ -11,14 +11,63 @@ import { signed } from "../../util/to-signed-string.mjs";
 import { uniqueArray } from '../../util/unique-array.mjs';
 import { SpecificBonus } from '../_specific-bonus.mjs';
 
-const damageElements = [
+const damageElements = /** @type {const} */ ([
     'acid',
     'cold',
     'electric',
     'fire'
-];
+]);
 
-export class ElementalCl extends SpecificBonus {
+class BaseElemental extends SpecificBonus {
+    static get formulaKey() { return `${this.key}-formula`; }
+
+    /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} item
+     * @param {number | string} formula
+     * @param {typeof damageElements[number]} element
+     * @returns {Promise<void>}
+     */
+    static async configure(item, formula, element) {
+        await item.update({
+            system: { flags: { boolean: { [this.key]: true } } },
+            flags: {
+                [MODULE_NAME]: {
+                    [this.key]: element,
+                    [this.formulaKey]: formula,
+                },
+            },
+        });
+    }
+
+    /** @inheritdoc @override @returns {JustRender} */
+    static get configuration() {
+        return {
+            type: 'just-render',
+            itemFilter: (item) => item instanceof ItemPF,
+            showInputsFunc: (item, html, isEditable) => {
+                const current = item.getFlag(MODULE_NAME, this.key);
+                const choices = damageElements
+                    .map(element => ({ key: element, label: pf1.registry.damageTypes.get(element)?.name || element }));
+                const currentText = item.getFlag(MODULE_NAME, this.formulaKey) || '';
+
+                textInputAndKeyValueSelect({
+                    item,
+                    journal: this.journal,
+                    parent: html,
+                    select: { current, choices, key: this.key },
+                    text: { current: currentText, key: this.formulaKey },
+                }, {
+                    canEdit: isEditable,
+                    inputType: 'specific-bonus',
+                });
+            },
+        };
+    }
+}
+
+export class ElementalCl extends BaseElemental {
     /** @inheritdoc @override */
     static get sourceKey() { return 'elemental-cl'; }
 
@@ -27,11 +76,10 @@ export class ElementalCl extends SpecificBonus {
 
     /** @returns {'cl'} */
     static get rollVariableProp() { return 'cl'; }
-    static get formulaKey() { return `${this.key}-formula`; }
     static get partial() { return 'cl'; }
 }
 
-export class ElementalDc extends SpecificBonus {
+export class ElementalDc extends BaseElemental {
     /** @inheritdoc @override */
     static get sourceKey() { return 'elemental-dc'; }
 
@@ -40,7 +88,6 @@ export class ElementalDc extends SpecificBonus {
 
     /** @returns {'dcBonus'} */
     static get rollVariableProp() { return 'dcBonus'; }
-    static get formulaKey() { return `${this.key}-formula`; }
     static get partial() { return 'dc'; }
 }
 
@@ -213,32 +260,4 @@ export function createElementalClOrDc(bonus) {
         };
         Hooks.on('pf1PreActorRollCl', onActorRollCL);
     }
-
-    Hooks.on('renderItemSheet', (
-    /** @type {ItemSheetPF} */ { isEditable, item },
-    /** @type {[HTMLElement]} */[html],
-    /** @type {unknown} */ _data
-    ) => {
-        if (!(item instanceof pf1.documents.item.ItemPF)) return;
-
-        if (!item.hasItemBooleanFlag(bonus.key)) {
-            return;
-        }
-
-        const current = item.getFlag(MODULE_NAME, bonus.key);
-        const choices = damageElements
-            .map(element => ({ key: element, label: pf1.registry.damageTypes.get(element)?.name || element }));
-        const currentText = item.getFlag(MODULE_NAME, bonus.formulaKey) || '';
-
-        textInputAndKeyValueSelect({
-            item,
-            journal: bonus.journal,
-            parent: html,
-            select: { current, choices, key: bonus.key },
-            text: { current: currentText, key: bonus.formulaKey },
-        }, {
-            canEdit: isEditable,
-            inputType: 'specific-bonus',
-        });
-    });
 }
