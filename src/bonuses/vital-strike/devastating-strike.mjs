@@ -2,12 +2,12 @@
 
 // Whenever you use Vital Strike, Improved Vital Strike, or Greater Vital Strike, you gain a +2 bonus on each extra weapon damage dice roll those feats grant (+6 maximum). This bonus damage is multiplied on a critical hit.
 
-import { registerItemHint } from "../util/item-hints.mjs";
-import { localizeBonusTooltip } from "../util/localize.mjs";
-import { onCreate, onRenderCreate } from "../util/on-create.mjs";
-import { SpecificBonus } from "./_specific-bonus.mjs";
-import { LanguageSettings } from "../util/settings.mjs";
-import { showEnabledLabel } from '../handlebars-handlers/enabled-label.mjs';
+import { showEnabledLabel } from '../../handlebars-handlers/enabled-label.mjs';
+import { registerItemHint } from "../../util/item-hints.mjs";
+import { localizeBonusTooltip } from "../../util/localize.mjs";
+import { onRenderCreate } from "../../util/on-create.mjs";
+import { LanguageSettings } from "../../util/settings.mjs";
+import { SpecificBonus } from "../_specific-bonus.mjs";
 
 const compendiumId = "DEVWkg29qOYtoQ7e";
 const improvedCompendiumId = "cXRxY3sO0jrtADfD";

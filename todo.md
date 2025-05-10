@@ -52,6 +52,7 @@
 - [Other Ideas](#other-ideas)
 - [vnext](#vnext)
     - [Specific Bonuses](#specific-bonuses)
+    - [Bugfix](#bugfix)
 
 # TODO
 - Figure out a way to support multiple target groups on a single Item (so I can add `Favored Enemy (Human) +4` and `Favored Enemy (goblin) +2` on a single Item)
@@ -252,3 +253,9 @@
 - Migrate all keys to start with `specific_`
   - update all journal entries to indicate what the key is
 - Make sure everything referencing keys is doing so off of the class so it is actually using the correct key
+### Bugfix
+- Found a bug where a change targeting "Critical Confirmation" doesnt function when roll bonuses is active. Easy to test. 
+  - Make a buff with a change targetting "Critical Confirmation
+  - Add a weapon to your inventory
+  - Roll an attack with that weapon, putting in "20" into the "Check Override"
+  - The critical confirmation bonus doesnt show up in the roll

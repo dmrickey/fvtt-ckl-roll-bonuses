@@ -1,19 +1,18 @@
-import { MODULE_NAME } from '../consts.mjs';
-import { checkboxInput } from '../handlebars-handlers/bonus-inputs/chekbox-input.mjs';
-import { showEnabledLabel } from '../handlebars-handlers/enabled-label.mjs';
-import { isWeapon } from '../util/action-type-helpers.mjs';
-import { api } from '../util/api.mjs';
-import { addCheckToAttackDialog, getFormData } from '../util/attack-dialog-helper.mjs';
-import { getCachedBonuses } from '../util/get-cached-bonuses.mjs';
-import { itemHasCompendiumId } from '../util/has-compendium-id.mjs';
-import { LocalHookHandler, localHooks } from '../util/hooks.mjs';
-import { registerItemHint } from '../util/item-hints.mjs';
-import { localize, localizeBonusLabel, localizeBonusTooltip } from '../util/localize.mjs';
-import { LanguageSettings } from '../util/settings.mjs';
-import { truthiness } from '../util/truthiness.mjs';
-import { SpecificBonus } from './_specific-bonus.mjs';
+import { MODULE_NAME } from '../../consts.mjs';
+import { checkboxInput } from '../../handlebars-handlers/bonus-inputs/chekbox-input.mjs';
+import { showEnabledLabel } from '../../handlebars-handlers/enabled-label.mjs';
+import { isWeapon } from '../../util/action-type-helpers.mjs';
+import { api } from '../../util/api.mjs';
+import { addCheckToAttackDialog, getFormData } from '../../util/attack-dialog-helper.mjs';
+import { getCachedBonuses } from '../../util/get-cached-bonuses.mjs';
+import { itemHasCompendiumId } from '../../util/has-compendium-id.mjs';
+import { LocalHookHandler, localHooks } from '../../util/hooks.mjs';
+import { registerItemHint } from '../../util/item-hints.mjs';
+import { localize, localizeBonusLabel, localizeBonusTooltip } from '../../util/localize.mjs';
+import { LanguageSettings } from '../../util/settings.mjs';
+import { truthiness } from '../../util/truthiness.mjs';
+import { SpecificBonus } from '../_specific-bonus.mjs';
 import { DevastatingStrike, DevastatingStrikeImproved } from './devastating-strike.mjs';
-
 
 const vitalStrike = 'vital-strike';
 const vitalStrikeImproved = 'vital-strike-improved';

@@ -1,7 +1,7 @@
 import { ArmorFocus } from './armor-focus/armor-focus.mjs';
 import { ArmorFocusImproved } from './armor-focus/improved-armor-focus.mjs';
 import { ChangeTypeModification } from './change-type-modification.mjs';
-import { DevastatingStrike, DevastatingStrikeImproved } from './devastating-strike.mjs';
+import { DevastatingStrike, DevastatingStrikeImproved } from './vital-strike/devastating-strike.mjs';
 import { FatesFavored } from './fates-favored.mjs';
 import { FuriousFocus } from './furious-focus.mjs';
 import { InspirationAmazing } from './inspiration/inspiration-amazing.mjs';
@@ -20,7 +20,7 @@ import { SpellFocus, SpellFocusGreater, SpellFocusMythic } from './spells/spell-
 import { SpellSpecialization } from './spells/spell-specialization.mjs';
 import { VersatilePerformance, VersatilePerformanceExpanded } from './versatile-performance.mjs';
 import { VersatileTraining } from './versatile-training.mjs';
-import { VitalStrike, VitalStrikeGreater, VitalStrikeImproved, VitalStrikeMythic } from './vital-strike.mjs';
+import { VitalStrike, VitalStrikeGreater, VitalStrikeImproved, VitalStrikeMythic } from './vital-strike/vital-strike.mjs';
 import { WeaponFocus, WeaponFocusGreater, WeaponFocusMythic, WeaponFocusRacial } from './weapon-focus/_base-weapon-focus.mjs';
 import { WeaponSpecializationGreater } from './weapon-specialization/greater-weapon-specialization.mjs';
 import { WeaponSpecialization } from './weapon-specialization/weapon-specialization.mjs';

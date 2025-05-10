@@ -10,7 +10,7 @@ import { handleBonusesFor } from '../src/target-and-bonus-join.mjs';
 import { showBonusPicker } from '../src/handlebars-handlers/bonus-picker.mjs';
 import { BaseTargetOverride } from '../src/targeted/target-overides/_base-target-override.mjs';
 import { simplifyRollFormula } from '../src/util/simplify-roll-formula.mjs';
-import { VitalStrikeData } from '../src/bonuses/vital-strike.mjs';
+import { VitalStrikeData } from '../src/bonuses/vital-strike/vital-strike.mjs';
 import { BaseMigrate } from '../src/migration/_migrate-base.mjs';
 import { BaneBonus } from '../src/targeted/bonuses/bane-bonus.mjs';
 import { Sources } from '../src/targeted/source-registration.mjs';
