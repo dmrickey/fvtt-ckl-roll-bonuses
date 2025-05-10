@@ -63,7 +63,7 @@ export const onCreate = (
  * @param {(item: ItemPF, html: HTMLElement, isEditable: boolean) => void} showInputsFunc
  * @param {object} [options]
  * @param {string[]} [options.extraBooleanFlags]
- * @param {(item?: ItemPF) => object} [options.flagValueFunc]
+ * @param {(item?: ItemPF) => Record<string, any> | undefined} [options.defaultFlagValuesFunc]
  */
 export const onRenderCreate = (
     itemFilter,
@@ -73,12 +73,10 @@ export const onRenderCreate = (
     showInputsFunc,
     {
         extraBooleanFlags = [],
-        flagValueFunc,
+        defaultFlagValuesFunc,
 
     } = {}
 ) => {
-    var allBooleanKeys = [key, ...extraBooleanFlags];
-
     Hooks.on(
         'renderItemSheet',
         (
@@ -88,29 +86,33 @@ export const onRenderCreate = (
         ) => {
             if (!itemFilter(item)) return;
 
-            const hasFlag = allBooleanKeys.every((key) => item.hasItemBooleanFlag(key));
-            if (!hasFlag && isEditable) {
-                const name = item?.name?.toLowerCase() ?? "";
-                const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
-                const isItemMatch = isItemFunc(name, item);
+            const allBooleanKeys = [key, ...extraBooleanFlags];
+            const hasFlag = allBooleanKeys.every((k) => item.hasItemBooleanFlag(k));
+            if (!hasFlag) {
+                if (isEditable) {
+                    const name = item?.name?.toLowerCase() ?? "";
+                    const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
+                    const isItemMatch = isItemFunc(name, item);
 
-                if (isItemMatch || hasCompendiumId) {
-                    /** @type {Record<string, any>} */
-                    const update = {};
-                    allBooleanKeys.forEach((key) => update[`system.flags.boolean.${key}`] = true);
-                    try {
-                        const flagValues = flagValueFunc ? flagValueFunc(item) : undefined;
-                        if (flagValues) {
-                            update.flags ||= {}
-                            update.flags[MODULE_NAME] ||= {};
-                            update.flags[MODULE_NAME] = { ...update.flags[MODULE_NAME], ...flagValues };
+                    if (isItemMatch || hasCompendiumId) {
+                        /** @type {Record<string, any>} */
+                        const update = {};
+                        allBooleanKeys.forEach((k) => update[`system.flags.boolean.${k}`] = true);
+                        try {
+                            const flagValues = defaultFlagValuesFunc?.(item);
+                            if (flagValues) {
+                                update.flags ||= {}
+                                update.flags[MODULE_NAME] ||= {};
+                                update.flags[MODULE_NAME] = { ...update.flags[MODULE_NAME], ...flagValues };
+                            }
                         }
+                        catch (e) {
+                            console.error("unexpected error looking up default flag values on item", item, e);
+                        }
+                        item.update(update);
                     }
-                    catch (e) {
-                        console.error("Shouldn't happen", e);
-                    }
-                    item.update(update);
                 }
+
                 return;
             }
 
@@ -130,17 +132,23 @@ export const onRenderCreate = (
         const name = item?.name?.toLowerCase() ?? '';
         const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
         const isItemMatch = isItemFunc(name, item);
-        const hasBonus = allBooleanKeys.every((key) => item.hasItemBooleanFlag(key));
+        const allBooleanKeys = [key, ...extraBooleanFlags];
+        const hasBonus = allBooleanKeys.every((k) => item.hasItemBooleanFlag(k));
 
         if ((isItemMatch || hasCompendiumId) && !hasBonus) {
             /** @type {Record<string, any>} */
             const update = {};
-            allBooleanKeys.forEach((key) => update[`system.flags.boolean.${key}`] = true);
-            const flagValues = flagValueFunc ? flagValueFunc(item) : undefined;
-            if (flagValues) {
-                update.flags ||= {}
-                update.flags[MODULE_NAME] ||= {};
-                update.flags[MODULE_NAME] = { ...update.flags[MODULE_NAME], ...flagValues };
+            allBooleanKeys.forEach((k) => update[`system.flags.boolean.${k}`] = true);
+            try {
+                const flagValues = defaultFlagValuesFunc?.(item);
+                if (flagValues) {
+                    update.flags ||= {}
+                    update.flags[MODULE_NAME] ||= {};
+                    update.flags[MODULE_NAME] = { ...update.flags[MODULE_NAME], ...flagValues };
+                }
+            }
+            catch (e) {
+                console.error("unexpected error looking up default flag values on item", item, e);
             }
             item.updateSource(update);
         }

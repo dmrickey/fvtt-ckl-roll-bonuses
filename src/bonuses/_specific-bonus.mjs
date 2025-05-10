@@ -53,4 +53,9 @@ export class SpecificBonus {
     static has(doc, ..._args) {
         return doc.hasItemBooleanFlag(this.key);
     }
+
+    /**
+     * @returns { JustRender | RenderAndCreateConfigure }
+     */
+    static get configuration() { throw new Error('must be overridden'); }
 }

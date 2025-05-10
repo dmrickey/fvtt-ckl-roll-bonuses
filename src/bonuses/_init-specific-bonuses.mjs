@@ -1,7 +1,8 @@
+import { onRenderCreate } from '../util/on-create.mjs';
+import { SpecificBonus } from './_specific-bonus.mjs';
 import { ArmorFocus } from './armor-focus/armor-focus.mjs';
 import { ArmorFocusImproved } from './armor-focus/improved-armor-focus.mjs';
 import { ChangeTypeModification } from './change-type-modification.mjs';
-import { DevastatingStrike, DevastatingStrikeImproved } from './vital-strike/devastating-strike.mjs';
 import { FatesFavored } from './fates-favored.mjs';
 import { FuriousFocus } from './furious-focus.mjs';
 import { InspirationAmazing } from './inspiration/inspiration-amazing.mjs';
@@ -20,12 +21,13 @@ import { SpellFocus, SpellFocusGreater, SpellFocusMythic } from './spells/spell-
 import { SpellSpecialization } from './spells/spell-specialization.mjs';
 import { VersatilePerformance, VersatilePerformanceExpanded } from './versatile-performance.mjs';
 import { VersatileTraining } from './versatile-training.mjs';
+import { DevastatingStrike, DevastatingStrikeImproved } from './vital-strike/devastating-strike.mjs';
 import { VitalStrike, VitalStrikeGreater, VitalStrikeImproved, VitalStrikeMythic } from './vital-strike/vital-strike.mjs';
 import { WeaponFocus, WeaponFocusGreater, WeaponFocusMythic, WeaponFocusRacial } from './weapon-focus/_base-weapon-focus.mjs';
 import { WeaponSpecializationGreater } from './weapon-specialization/greater-weapon-specialization.mjs';
 import { WeaponSpecialization } from './weapon-specialization/weapon-specialization.mjs';
 
-export const registerSpecificBonuses = () => [
+const allSpecificBonuses = [
     ArmorFocus,
     ArmorFocusImproved,
     ChangeTypeModification,
@@ -65,4 +67,51 @@ export const registerSpecificBonuses = () => [
     WeaponFocusRacial,
     WeaponSpecialization,
     WeaponSpecializationGreater,
-].forEach(x => x.register());
+];
+
+export const initSpecificBonuses = () => {
+    allSpecificBonuses.forEach(x => x.register());
+    allSpecificBonuses.forEach((bonus) => {
+        try {
+            const config = bonus.configuration;
+            switch (config.type) {
+                case 'just-render':
+                    render(bonus);
+                    break;
+                case 'render-and-create-configure':
+                    onRenderCreate(
+                        config.itemFilter,
+                        bonus.key,
+                        config.compendiumId,
+                        config.isItemMatchFunc,
+                        config.showInputsFunc,
+                        {
+                            extraBooleanFlags: config.options?.extraBooleanFlags,
+                            defaultFlagValuesFunc: config.options?.defaultFlagValuesFunc,
+                        }
+                    );
+                    break;
+                default: throw new Error('new configuration type was added and this switch statement wasn\'t updated');
+            }
+        }
+        catch {
+            // todo fill in remaining specific bonuses
+        }
+    })
+}
+
+/** @param {typeof SpecificBonus} bonus */
+const render = (bonus) => {
+    Hooks.on(
+        'renderItemSheet',
+        (
+            /** @type {ItemSheetPF} */ { isEditable, item },
+            /** @type {[HTMLElement]} */[html],
+            /** @type {unknown} */ _data
+        ) => {
+            if (item.hasItemBooleanFlag(bonus.key)) {
+                bonus.configuration.showInputsFunc(item, html, isEditable);
+            }
+        }
+    );
+};

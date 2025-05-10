@@ -255,4 +255,53 @@ declare global {
             actionUse?: ActionUse | null
         ): boolean;
     };
+
+    declare type ShowInputsFunc = (
+        item: ItemPF,
+        html: HTMLElement,
+        isEditable: boolean
+    ) => void;
+
+    declare type JustRender = {
+        type: 'just-render';
+        showInputsFunc: ShowInputsFunc;
+    };
+
+    // declare type JustCreate = {
+    //     type: 'just-create';
+    //     compendiumId: string;
+    //     itemFilter: (item: ItemPF) => boolean;
+    //     isItemMatchFunc: (name: string, item?: ItemPF) => boolean;
+    //     options?: {
+    //         extraBooleanFlags?: string[];
+    //         defaultFlagValuesFunc?: (
+    //             item?: ItemPF
+    //         ) => Record<string, any> | undefined;
+    //     };
+    // };
+
+    // declare type RenderConfigure = {
+    //     type: 'render-configure';
+    //     compendiumId: string;
+    //     itemFilter: (item: ItemPF) => boolean;
+    //     isItemMatchFunc: (name: string, item?: ItemPF) => boolean;
+    //     showInputsFunc: ShowInputsFunc;
+    //     options?: {
+    //         defaultFlagValuesFunc: (item?: ItemPF) => object;
+    //     };
+    // };
+
+    declare type RenderAndCreateConfigure = {
+        type: 'render-and-create-configure';
+        compendiumId: string;
+        itemFilter: (item: ItemPF) => boolean;
+        isItemMatchFunc: (name: string, item?: ItemPF) => boolean;
+        showInputsFunc: ShowInputsFunc;
+        options?: {
+            extraBooleanFlags?: string[];
+            defaultFlagValuesFunc?: (
+                item?: ItemPF
+            ) => Record<string, any> | undefined;
+        };
+    };
 }
