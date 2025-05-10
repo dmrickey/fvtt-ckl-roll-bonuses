@@ -1,61 +1,25 @@
-import { changeKey, changeTypeOffsetFormulaKey, changeTypeKey } from '../bonuses/change-type-modification.mjs';
-import { MODULE_NAME } from '../consts.mjs';
-import { itemHasCompendiumId } from '../util/has-compendium-id.mjs';
+import { ChangeTypeModification } from '../bonuses/change-type-modification.mjs';
+import { onRenderCreate } from '../util/on-create.mjs';
 import { LanguageSettings } from '../util/settings.mjs';
 
-const compendiumId = 'WSRZEwNGpQUNcvI9';
-const key = 'extreme-mood-swings';
-
 class Settings {
-    static get name() { return LanguageSettings.getTranslation(key); }
+    static get #key() { return 'extreme-mood-swings'; }
+    static get name() { return LanguageSettings.getTranslation(this.#key); }
 
     static {
-        LanguageSettings.registerItemNameTranslation(key);
+        LanguageSettings.registerItemNameTranslation(this.#key);
     }
 }
 
-Hooks.on('renderItemSheet', (
-    /** @type {ItemSheetPF} */ { isEditable, item },
-    /** @type {[HTMLElement]} */[html],
-    /** @type {unknown} */ _data
-) => {
-    if (!isEditable) return;
-    if (!(item instanceof pf1.documents.item.ItemPF)) return;
-
-    const hasBonus = item.hasItemBooleanFlag(changeKey);
-
-    if (!hasBonus) {
-        const name = item?.name?.toLowerCase() ?? '';
-        const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
-        if (name === Settings.name || hasCompendiumId) {
-            item.update({
-                [`system.flags.boolean.${changeKey}`]: true,
-                [`flags.${MODULE_NAME}.${changeTypeKey}`]: 'morale',
-                [`flags.${MODULE_NAME}.${changeTypeOffsetFormulaKey}`]: 1,
-            });
-        }
+onRenderCreate(
+    (item) => item instanceof pf1.documents.item.ItemPF,
+    ChangeTypeModification.key,
+    'WSRZEwNGpQUNcvI9',
+    (name) => name === Settings.name,
+    {
+        defaultFlagValuesFunc: () => ({
+            [ChangeTypeModification.changeTypeKey]: 'morale',
+            [ChangeTypeModification.formulaKey]: 1,
+        }),
     }
-});
-
-/**
- * @param {ItemPF} item
- * @param {object} data
- * @param {{temporary: boolean}} param2
- * @param {string} id
- */
-const onCreate = (item, data, { temporary }, id) => {
-    if (!(item instanceof pf1.documents.item.ItemPF)) return;
-    if (temporary) return;
-
-    const name = item?.name?.toLowerCase() ?? '';
-    const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
-
-    if (name === Settings.name || hasCompendiumId) {
-        item.updateSource({
-            [`system.flags.boolean.${changeKey}`]: true,
-            [`flags.${MODULE_NAME}.${changeTypeKey}`]: 'morale',
-            [`flags.${MODULE_NAME}.${changeTypeOffsetFormulaKey}`]: 1,
-        });
-    }
-};
-Hooks.on('preCreateItem', onCreate);
+);
