@@ -5,21 +5,38 @@
 import { showEnabledLabel } from '../../handlebars-handlers/enabled-label.mjs';
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localizeBonusTooltip } from "../../util/localize.mjs";
-import { onRenderCreate } from "../../util/on-create.mjs";
 import { LanguageSettings } from "../../util/settings.mjs";
 import { SpecificBonus } from "../_specific-bonus.mjs";
-
-const compendiumId = "DEVWkg29qOYtoQ7e";
-const improvedCompendiumId = "cXRxY3sO0jrtADfD";
-const journal =
-    "Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#vital-strike";
 
 export class DevastatingStrike extends SpecificBonus {
     /** @inheritdoc @override */
     static get sourceKey() { return 'devastating-strike'; }
 
     /** @inheritdoc @override */
-    static get journal() { return journal; }
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#vital-strike'; }
+
+    /** @inheritdoc @override @returns {CreateAndRender} */
+    static get configuration() {
+        return {
+            type: 'render-and-create',
+            itemFilter: (item) => item instanceof pf1.documents.item.ItemPF,
+            compendiumId: 'DEVWkg29qOYtoQ7e',
+            isItemMatchFunc: (name) => name === Settings.devastatingStrike,
+            showInputsFunc: (item, html, isEditable) =>
+                showEnabledLabel(
+                    {
+                        item,
+                        journal: this.journal,
+                        key: DevastatingStrike.key,
+                        parent: html,
+                    },
+                    {
+                        canEdit: isEditable,
+                        inputType: "specific-bonus",
+                    }
+                ),
+        }
+    }
 }
 
 export class DevastatingStrikeImproved extends SpecificBonus {
@@ -27,10 +44,33 @@ export class DevastatingStrikeImproved extends SpecificBonus {
     static get sourceKey() { return 'devastating-strike-improved'; }
 
     /** @inheritdoc @override */
-    static get journal() { return journal; }
+    static get journal() { return DevastatingStrike.journal; }
 
     /** @inheritdoc @override */
     static get parent() { return DevastatingStrike.key; }
+
+    /** @inheritdoc @override @returns {CreateAndRender} */
+    static get configuration() {
+        return {
+            type: 'render-and-create',
+            itemFilter: (item) => item instanceof pf1.documents.item.ItemPF,
+            compendiumId: 'cXRxY3sO0jrtADfD',
+            isItemMatchFunc: (name) => name.includes(Settings.devastatingStrike) && name.includes(LanguageSettings.improved),
+            showInputsFunc: (item, html, isEditable) =>
+                showEnabledLabel(
+                    {
+                        item,
+                        journal: this.journal,
+                        key: DevastatingStrikeImproved.key,
+                        parent: html,
+                    },
+                    {
+                        canEdit: isEditable,
+                        inputType: "specific-bonus",
+                    }
+                ),
+        }
+    }
 }
 
 class Settings {
@@ -68,46 +108,3 @@ registerItemHint((hintcls, _actor, item, _data) => {
         });
     });
 });
-
-onRenderCreate(
-    (item) => item instanceof pf1.documents.item.ItemPF,
-    DevastatingStrike.key,
-    compendiumId,
-    (name) => Settings.devastatingStrike === name,
-    {
-        showInputsFunc: (item, html, isEditable) =>
-            showEnabledLabel(
-                {
-                    item,
-                    journal,
-                    key: DevastatingStrike.key,
-                    parent: html,
-                },
-                {
-                    canEdit: isEditable,
-                    inputType: "specific-bonus",
-                }
-            )
-    }
-);
-onRenderCreate(
-    (item) => item instanceof pf1.documents.item.ItemPF,
-    DevastatingStrikeImproved.key,
-    improvedCompendiumId,
-    (name) => name.includes(Settings.devastatingStrike) && name.includes(LanguageSettings.improved),
-    {
-        showInputsFunc: (item, html, isEditable) =>
-            showEnabledLabel(
-                {
-                    item,
-                    journal,
-                    key: DevastatingStrikeImproved.key,
-                    parent: html,
-                },
-                {
-                    canEdit: isEditable,
-                    inputType: "specific-bonus",
-                }
-            )
-    }
-);
