@@ -1,3 +1,4 @@
+import { api } from './api.mjs';
 import { truthiness } from "./truthiness.mjs";
 
 /**
@@ -39,3 +40,4 @@ Hooks.once('ready', itemHintsRegistration);
  * @param {hintFunc} func
  */
 export const registerItemHint = (func) => funcs.push(func);
+api.utils.registerItemHint = registerItemHint;

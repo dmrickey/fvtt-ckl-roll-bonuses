@@ -58,6 +58,7 @@ import { signed } from '../src/util/to-signed-string.mjs';
 import { truthiness } from '../src/util/truthiness.mjs';
 import { confirmationDialog } from '../src/util/confirmation-dialog.mjs';
 import { addCheckToAttackDialog } from '../src/util/attack-dialog-helper.mjs';
+import { registerItemHint } from '../src/util/item-hints.mjs';
 
 export {};
 
@@ -195,6 +196,7 @@ declare global {
             onCreate: typeof onCreate;
             onRenderCreate: typeof onRenderCreate;
             onSkillSheetRender: typeof onSkillSheetRender;
+            registerItemHint: typeof registerItemHint;
             registerSource: (typeof Sources)['registerSource'];
             signed: typeof signed;
             simplifyRollFormula: typeof simplifyRollFormula;
