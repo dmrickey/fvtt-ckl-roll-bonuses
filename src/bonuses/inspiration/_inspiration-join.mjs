@@ -1,10 +1,10 @@
 import { intersects } from '../../util/array-intersects.mjs';
 import { allKnowledges, getFlaggedSkillIdsBySourceFromActor, getFlaggedSkillIdsFromActor, getSkillChoices } from '../../util/get-skills.mjs';
-import { localize, localizeBonusLabel } from '../../util/localize.mjs';
+import { localize } from '../../util/localize.mjs';
 import { onCreate } from '../../util/on-create.mjs';
 import { onSkillSheetRender } from '../../util/on-skill-sheet-render-handler.mjs';
 import { LanguageSettings } from '../../util/settings.mjs';
-import { key as rollUntrainedKey } from '../roll-untrained.mjs'
+import { key as rollUntrainedKey } from '../roll-untrained.mjs';
 import { InspirationAmazing } from './inspiration-amazing.mjs';
 import { InspirationExtraDie } from './inspiration-extra-die.mjs';
 import { InspirationFocused } from './inspiration-focused.mjs';

@@ -27,6 +27,10 @@ import { WeaponFocus, WeaponFocusGreater, WeaponFocusMythic, WeaponFocusRacial }
 import { WeaponSpecializationGreater } from './weapon-specialization/greater-weapon-specialization.mjs';
 import { WeaponSpecialization } from './weapon-specialization/weapon-specialization.mjs';
 
+// import logic for joint handling
+import './inspiration/_inspiration-join.mjs';
+import './armor-focus/shared.mjs';
+
 const allSpecificBonuses = [
     ArmorFocus,
     ArmorFocusImproved,
@@ -76,7 +80,7 @@ export const initSpecificBonuses = () => {
             const config = bonus.configuration;
             switch (config.type) {
                 case 'just-render':
-                    render(bonus);
+                    onRender(bonus);
                     break;
                 case 'render-and-create-configure':
                     onRenderCreate(
@@ -95,13 +99,13 @@ export const initSpecificBonuses = () => {
             }
         }
         catch {
-            // todo fill in remaining specific bonuses
+            console.error(`Bonus '${bonus.prototype.constructor.name} :: ${bonus.key}' has not been migrated yet.`);
         }
     })
 }
 
 /** @param {typeof SpecificBonus} bonus */
-const render = (bonus) => {
+const onRender = (bonus) => {
     Hooks.on(
         'renderItemSheet',
         (

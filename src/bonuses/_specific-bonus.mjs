@@ -36,7 +36,7 @@ export class SpecificBonus {
     /**
      * @abstract
      * @param {ItemPF} item
-     * @param {object?} _options
+     * @param {any?} _options
      * @returns {Promise<void>}
      */
     static async configure(item, _options) {

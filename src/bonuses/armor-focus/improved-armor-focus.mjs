@@ -4,34 +4,92 @@
 import { MODULE_NAME } from '../../consts.mjs';
 import { stringSelect } from "../../handlebars-handlers/bonus-inputs/string-select.mjs";
 import { intersects } from "../../util/array-intersects.mjs";
-import { itemHasCompendiumId } from '../../util/has-compendium-id.mjs';
+import { getCachedBonuses } from '../../util/get-cached-bonuses.mjs';
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localizeBonusLabel, localizeBonusTooltip } from "../../util/localize.mjs";
 import { LanguageSettings } from '../../util/settings.mjs';
+import { uniqueArray } from '../../util/unique-array.mjs';
 import { SpecificBonus } from '../_specific-bonus.mjs';
 import { ArmorFocus } from './armor-focus.mjs';
-import { armorFocusKey, getFocusedArmor, getImprovedFocusedArmor, improvedArmorFocusKey as key } from './shared.mjs';
-
-const compendiumId = 'WmEE6BOuP5Uh7pEE';
-const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#armor-focus';
 
 export class ArmorFocusImproved extends SpecificBonus {
     /** @inheritdoc @override */
-    static get sourceKey() { return key; }
+    static get sourceKey() { return 'armor-focus-improved'; }
 
     /** @inheritdoc @override */
-    static get journal() { return journal; }
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#armor-focus'; }
 
     /** @inheritdoc @override */
     static get parent() { return ArmorFocus.key; }
+
+    /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} item
+     * @param {string} armorType
+     * @returns {Promise<void>}
+     */
+    static async configure(item, armorType) {
+        await item.update({
+            system: { flags: { boolean: { [this.key]: true } } },
+            flags: { [MODULE_NAME]: { [this.key]: armorType } },
+        });
+    }
+
+    /** @inheritdoc @override @returns {RenderAndCreateConfigure} */
+    static get configuration() {
+        return {
+            type: 'render-and-create-configure',
+            itemFilter: (item) => item instanceof pf1.documents.item.ItemPF,
+            compendiumId: 'WmEE6BOuP5Uh7pEE',
+            isItemMatchFunc: (name) => ArmorFocus.configuration.isItemMatchFunc(name) && name.includes(LanguageSettings.improved),
+            showInputsFunc: (item, html, isEditable) => {
+                const actor = item.actor;
+                const choices = (isEditable && actor)
+                    ? ArmorFocus.getFocusedArmor(actor)
+                    : [];
+
+                stringSelect({
+                    choices,
+                    item,
+                    journal: this.journal,
+                    key: this.key,
+                    parent: html
+                }, {
+                    canEdit: isEditable,
+                    inputType: 'specific-bonus',
+                });
+            },
+            options: {
+                defaultFlagValuesFunc: (item) => {
+                    const actor = item?.actor;
+                    if (!actor) return;
+
+                    const focused = ArmorFocus.getFocusedArmor(actor)[0] || '';
+                    return { [this.key]: focused };
+                }
+            }
+        };
+    }
+
+    /**
+     * @param { ActorPF } actor
+     * @returns {string[]}
+     */
+    static getImprovedFocusedArmor(actor) {
+        return uniqueArray(getCachedBonuses(actor, this.key)
+            .filter(x => x.hasItemBooleanFlag(this.key))
+            .flatMap(x => x.getFlag(MODULE_NAME, this.key))
+        );
+    }
 }
 
 // register hint on source feat
 registerItemHint((hintcls, _actor, item, _data) => {
-    const has = item.hasItemBooleanFlag(key);
-    const current = item.getFlag(MODULE_NAME, key);
+    const has = item.hasItemBooleanFlag(ArmorFocusImproved.key);
+    const current = item.getFlag(MODULE_NAME, ArmorFocusImproved.key);
     if (has && current) {
-        return hintcls.create(`${current}`, [], { hint: localizeBonusTooltip(key) });
+        return hintcls.create(`${current}`, [], { hint: localizeBonusTooltip(ArmorFocusImproved.key) });
     }
 });
 
@@ -45,7 +103,7 @@ function handleArmorFocusRollData(doc, rollData) {
     const actor = doc.actor;
     if (!actor) return;
 
-    const armorFocuses = getImprovedFocusedArmor(actor);
+    const armorFocuses = ArmorFocusImproved.getImprovedFocusedArmor(actor);
     if (!armorFocuses.length) return;
 
     const armor = actor.items.find(
@@ -73,7 +131,7 @@ Hooks.on('pf1GetRollData', handleArmorFocusRollData);
  * @param {ItemChange[]} tempChanges
  */
 function handleArmorFocusChange(actor, tempChanges) {
-    const armorFocuses = getImprovedFocusedArmor(actor);
+    const armorFocuses = ArmorFocusImproved.getImprovedFocusedArmor(actor);
     if (!armorFocuses.length) return;
 
     const armor =
@@ -91,7 +149,7 @@ function handleArmorFocusChange(actor, tempChanges) {
     if (current > 0) {
         tempChanges.push(
             new pf1.components.ItemChange({
-                flavor: localizeBonusLabel(key),
+                flavor: localizeBonusLabel(ArmorFocusImproved.key),
                 formula: -1,
                 type: "untypedPerm",
                 target: "acpA",
@@ -100,73 +158,3 @@ function handleArmorFocusChange(actor, tempChanges) {
     }
 }
 Hooks.on('pf1AddDefaultChanges', handleArmorFocusChange);
-
-Hooks.on('renderItemSheet', (
-    /** @type {ItemSheetPF} */ { actor, isEditable, item },
-    /** @type {[HTMLElement]} */[html],
-    /** @type {unknown} */ _data
-) => {
-    if (!(item instanceof pf1.documents.item.ItemPF)) return;
-
-    const hasKey = item.hasItemBooleanFlag(key);
-    if (!hasKey) {
-        const name = item?.name?.toLowerCase() ?? '';
-        const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
-        if (isEditable &&
-            ((name.includes(LanguageSettings.getTranslation(armorFocusKey)) && name.includes(LanguageSettings.improved))
-                || hasCompendiumId)
-        ) {
-            item.addItemBooleanFlag(key);
-        }
-        return;
-    }
-
-    const choices = (isEditable && actor)
-        ? getFocusedArmor(actor)
-        : [];
-
-    stringSelect({
-        choices,
-        item,
-        journal,
-        key,
-        parent: html
-    }, {
-        canEdit: isEditable,
-        inputType: 'specific-bonus',
-    });
-});
-
-/**
- * @param {ItemPF} item
- * @param {object} data
- * @param {{temporary: boolean}} param2
- * @param {string} id
- */
-const onCreate = (item, data, { temporary }, id) => {
-    if (!(item instanceof pf1.documents.item.ItemPF)) return;
-    if (temporary) return;
-
-    const name = item?.name?.toLowerCase() ?? '';
-    const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
-    const hasBonus = item.hasItemBooleanFlag(key);
-
-    let focused = '';
-    if (item.actor) {
-        focused = getFocusedArmor(item.actor)[0] || '';
-    }
-
-    let updated = false;
-    if (((name.includes(LanguageSettings.getTranslation(armorFocusKey)) && name.includes(LanguageSettings.improved)) || hasCompendiumId) && !hasBonus) {
-        item.updateSource({
-            [`system.flags.boolean.${key}`]: true,
-        });
-        updated = true;
-    }
-    if ((hasBonus || updated) && focused && !item.flags[MODULE_NAME]?.[key]) {
-        item.updateSource({
-            [`flags.${MODULE_NAME}.${key}`]: focused,
-        });
-    }
-};
-Hooks.on('preCreateItem', onCreate);

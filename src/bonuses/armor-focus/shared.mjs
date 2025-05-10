@@ -1,26 +1,28 @@
-import { MODULE_NAME } from '../../consts.mjs';
-import { getCachedBonuses } from '../../util/get-cached-bonuses.mjs';
-import { uniqueArray } from '../../util/unique-array.mjs';
+import { intersects } from '../../util/array-intersects.mjs';
+import { registerItemHint } from '../../util/item-hints.mjs';
+import { localize, localizeBonusLabel } from '../../util/localize.mjs';
+import { ArmorFocus } from './armor-focus.mjs';
+import { ArmorFocusImproved } from './improved-armor-focus.mjs';
 
-export const armorFocusKey = 'armor-focus';
-export const improvedArmorFocusKey = 'armor-focus-improved';
+// register hint on focused item
+registerItemHint((hintcls, actor, item, _data) => {
+    if (!(item instanceof pf1.documents.item.ItemEquipmentPF)) return;
 
-/**
- * @param { ActorPF } actor
- * @returns {string[]}
- */
-export const getFocusedArmor = (actor) =>
-    uniqueArray(getCachedBonuses(actor, armorFocusKey)
-        .filter(x => x.hasItemBooleanFlag(armorFocusKey))
-        .flatMap(x => x.getFlag(MODULE_NAME, armorFocusKey))
-    );
+    const isArmor = item.isActive && item.system.slot === 'armor';
+    const baseTypes = item.system.baseTypes;
+    if (!baseTypes?.length) return;
 
-/**
- * @param { ActorPF } actor
- * @returns {string[]}
- */
-export const getImprovedFocusedArmor = (actor) =>
-    uniqueArray(getCachedBonuses(actor, improvedArmorFocusKey)
-        .filter(x => x.hasItemBooleanFlag(improvedArmorFocusKey))
-        .flatMap(x => x.getFlag(MODULE_NAME, improvedArmorFocusKey))
-    );
+    const armorFocuses = ArmorFocus.getFocusedArmor(actor);
+    const improvedFocuses = ArmorFocusImproved.getImprovedFocusedArmor(actor);
+    const isFocused = intersects(armorFocuses, baseTypes);
+    const isImprovedFocus = intersects(improvedFocuses, baseTypes);
+
+    if (isArmor && isFocused) {
+        const tips = [localizeBonusLabel(ArmorFocus.key), localize('ac-mod', { mod: '+1' })];
+        if (isImprovedFocus) {
+            tips.push('', localizeBonusLabel(ArmorFocusImproved.key), localize('acp-mod', { mod: -1 }));
+        }
+        const hint = hintcls.create('', [], { icon: 'ra ra-helmet', hint: tips.join('\n') });
+        return hint;
+    }
+});

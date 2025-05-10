@@ -4,19 +4,33 @@
 import { MODULE_NAME } from '../../consts.mjs';
 import { stringSelect } from "../../handlebars-handlers/bonus-inputs/string-select.mjs";
 import { intersects } from "../../util/array-intersects.mjs";
+import { getCachedBonuses } from '../../util/get-cached-bonuses.mjs';
 import { registerItemHint } from "../../util/item-hints.mjs";
-import { localize, localizeBonusLabel, localizeBonusTooltip } from "../../util/localize.mjs";
+import { localizeBonusLabel, localizeBonusTooltip } from "../../util/localize.mjs";
 import { LanguageSettings } from "../../util/settings.mjs";
 import { uniqueArray } from "../../util/unique-array.mjs";
 import { SpecificBonus } from '../_specific-bonus.mjs';
-import { getFocusedArmor, getImprovedFocusedArmor, improvedArmorFocusKey, armorFocusKey as key } from "./shared.mjs";
 
 export class ArmorFocus extends SpecificBonus {
     /** @inheritdoc @override */
-    static get sourceKey() { return key; }
+    static get sourceKey() { return 'armor-focus'; }
 
     /** @inheritdoc @override */
     static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#armor-focus'; }
+
+    /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} item
+     * @param {string} armorType
+     * @returns {Promise<void>}
+     */
+    static async configure(item, armorType) {
+        await item.update({
+            system: { flags: { boolean: { [this.key]: true } } },
+            flags: { [MODULE_NAME]: { [this.key]: armorType } },
+        });
+    }
 
     /** @inheritdoc @override @returns {RenderAndCreateConfigure} */
     static get configuration() {
@@ -37,7 +51,7 @@ export class ArmorFocus extends SpecificBonus {
                     choices,
                     item,
                     journal: this.journal,
-                    key,
+                    key: this.key,
                     parent: html
                 }, {
                     canEdit: isEditable,
@@ -59,45 +73,33 @@ export class ArmorFocus extends SpecificBonus {
             }
         };
     }
+
+    /**
+     * @param { ActorPF } actor
+     * @returns {string[]}
+     */
+    static getFocusedArmor(actor) {
+        return uniqueArray(getCachedBonuses(actor, this.key)
+            .filter(x => x.hasItemBooleanFlag(this.key))
+            .flatMap(x => x.getFlag(MODULE_NAME, this.key))
+        );
+    }
 }
 
 class Settings {
-    static get armorFocus() { return LanguageSettings.getTranslation(key); }
+    static get armorFocus() { return LanguageSettings.getTranslation(ArmorFocus.key); }
 
     static {
-        LanguageSettings.registerItemNameTranslation(key);
+        LanguageSettings.registerItemNameTranslation(ArmorFocus.key);
     }
 }
 
 // register hint on source feat
 registerItemHint((hintcls, _actor, item, _data) => {
-    const has = item.hasItemBooleanFlag(key);
-    const current = item.getFlag(MODULE_NAME, key);
+    const has = item.hasItemBooleanFlag(ArmorFocus.key);
+    const current = item.getFlag(MODULE_NAME, ArmorFocus.key);
     if (has && current) {
-        return hintcls.create(`${current}`, [], { hint: localizeBonusTooltip(key) });
-    }
-});
-
-// register hint on focused item
-registerItemHint((hintcls, actor, item, _data) => {
-    if (!(item instanceof pf1.documents.item.ItemEquipmentPF)) return;
-
-    const isArmor = item.isActive && item.system.slot === 'armor';
-    const baseTypes = item.system.baseTypes;
-    if (!baseTypes?.length) return;
-
-    const armorFocuses = getFocusedArmor(actor);
-    const improvedFocuses = getImprovedFocusedArmor(actor);
-    const isFocused = intersects(armorFocuses, baseTypes);
-    const isImprovedFocus = intersects(improvedFocuses, baseTypes);
-
-    if (isArmor && isFocused) {
-        const tips = [localizeBonusLabel(key), localize('ac-mod', { mod: '+1' })];
-        if (isImprovedFocus) {
-            tips.push('', localizeBonusLabel(improvedArmorFocusKey), localize('acp-mod', { mod: -1 }));
-        }
-        const hint = hintcls.create('', [], { icon: 'ra ra-helmet', hint: tips.join('\n') });
-        return hint;
+        return hintcls.create(`${current}`, [], { hint: localizeBonusTooltip(ArmorFocus.key) });
     }
 });
 
@@ -111,7 +113,7 @@ function handleArmorFocusRollData(doc, rollData) {
     const actor = doc.actor;
     if (!actor) return;
 
-    const armorFocuses = getFocusedArmor(actor);
+    const armorFocuses = ArmorFocus.getFocusedArmor(actor);
     if (!armorFocuses.length) return;
 
     const armor = actor.items.find(
@@ -133,7 +135,7 @@ Hooks.on('pf1AddDefaultChanges', handleArmorFocusChange);
  * @param {ItemChange[]} tempChanges
  */
 function handleArmorFocusChange(actor, tempChanges) {
-    const armorFocuses = getFocusedArmor(actor);
+    const armorFocuses = ArmorFocus.getFocusedArmor(actor);
     if (!armorFocuses.length) return;
 
     const armor = actor.items.find(
@@ -149,7 +151,7 @@ function handleArmorFocusChange(actor, tempChanges) {
 
     tempChanges.push(
         new pf1.components.ItemChange({
-            flavor: localizeBonusLabel(key),
+            flavor: localizeBonusLabel(ArmorFocus.key),
             formula: 1,
             type: "untypedPerm",
             target: "aac",
