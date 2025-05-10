@@ -9,10 +9,10 @@ export class Swarming extends SpecificBonus {
     /** @inheritdoc @override */
     static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.IpRhJqZEX2TUarSX#swarming-(ratfolk-racial-ability)'; }
 
-    /** @inheritdoc @override @returns {RenderAndCreateConfigure} */
+    /** @inheritdoc @override @returns {CreateAndRender} */
     static get configuration() {
         return {
-            type: 'render-and-create-configure',
+            type: 'render-and-create',
             itemFilter: (item) => item instanceof pf1.documents.item.ItemPF,
             compendiumId: 'fyRBxVBVyy1gQgfV',
             isItemMatchFunc: name => name === Settings.name,

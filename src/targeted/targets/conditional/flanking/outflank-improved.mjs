@@ -13,10 +13,10 @@ export class OutflankImproved extends SpecificBonus {
     /** @inheritdoc @override */
     static get parent() { return Outflank.key; }
 
-    /** @inheritdoc @override @returns {RenderAndCreateConfigure} */
+    /** @inheritdoc @override @returns {CreateAndRender} */
     static get configuration() {
         return {
-            type: 'render-and-create-configure',
+            type: 'render-and-create',
             itemFilter: (item) => item instanceof pf1.documents.item.ItemPF,
             compendiumId: 'OYKXMl4diLeGyifQ',
             isItemMatchFunc: name => name === Settings.name,

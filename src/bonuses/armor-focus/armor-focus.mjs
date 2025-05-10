@@ -32,10 +32,10 @@ export class ArmorFocus extends SpecificBonus {
         });
     }
 
-    /** @inheritdoc @override @returns {RenderAndCreateConfigure} */
+    /** @inheritdoc @override @returns {CreateAndRender} */
     static get configuration() {
         return {
-            type: 'render-and-create-configure',
+            type: 'render-and-create',
             itemFilter: (item) => item instanceof pf1.documents.item.ItemPF,
             compendiumId: 'zBrrZynIB0EXagds',
             isItemMatchFunc: (name) => name === Settings.armorFocus,

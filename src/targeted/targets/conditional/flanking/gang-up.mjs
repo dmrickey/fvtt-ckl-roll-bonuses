@@ -9,10 +9,10 @@ export class GangUp extends SpecificBonus {
     /** @inheritdoc @override */
     static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.IpRhJqZEX2TUarSX#gang-up-(feat)'; }
 
-    /** @inheritdoc @override @returns {RenderAndCreateConfigure} */
+    /** @inheritdoc @override @returns {CreateAndRender} */
     static get configuration() {
         return {
-            type: 'render-and-create-configure',
+            type: 'render-and-create',
             itemFilter: (item) => item instanceof pf1.documents.item.ItemPF,
             compendiumId: 'sy6IEh9YQ3278buR',
             isItemMatchFunc: name => name === Settings.name,

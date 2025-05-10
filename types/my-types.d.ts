@@ -262,23 +262,26 @@ declare global {
         isEditable: boolean
     ) => void;
 
+    declare type JustCreate = {
+        type: 'just-create';
+        compendiumId: string;
+        itemFilter: (item: ItemPF) => boolean;
+        isItemMatchFunc: (name: string, item?: ItemPF) => boolean;
+        options?: {
+            extraBooleanFlags?: string[];
+            defaultFlagValuesFunc?: (
+                item: ItemPF
+            ) => Record<string, any> | undefined;
+        };
+    };
+
     declare type JustRender = {
         type: 'just-render';
         showInputsFunc: ShowInputsFunc;
     };
 
-    // declare type JustCreate = {
-    //     type: 'just-create';
-    //     compendiumId: string;
-    //     itemFilter: (item: ItemPF) => boolean;
-    //     isItemMatchFunc: (name: string, item?: ItemPF) => boolean;
-    //     options?: {
-    //         extraBooleanFlags?: string[];
-    //         defaultFlagValuesFunc?: (
-    //             item?: ItemPF
-    //         ) => Record<string, any> | undefined;
-    //     };
-    // };
+    declare type CreateAndRender = Omit<JustCreate, 'type'> &
+        Omit<JustRender, 'type'> & { type: 'render-and-create' };
 
     // declare type RenderConfigure = {
     //     type: 'render-configure';
@@ -291,17 +294,19 @@ declare global {
     //     };
     // };
 
-    declare type RenderAndCreateConfigure = {
-        type: 'render-and-create-configure';
-        compendiumId: string;
-        itemFilter: (item: ItemPF) => boolean;
-        isItemMatchFunc: (name: string, item?: ItemPF) => boolean;
-        showInputsFunc: ShowInputsFunc;
-        options?: {
-            extraBooleanFlags?: string[];
-            defaultFlagValuesFunc?: (
-                item?: ItemPF
-            ) => Record<string, any> | undefined;
-        };
-    };
+    // declare type CreateAndRender = {
+    //     type: 'render-and-create';
+    //     compendiumId: string;
+    //     itemFilter: (item: ItemPF) => boolean;
+    //     isItemMatchFunc: (name: string, item?: ItemPF) => boolean;
+    //     showInputsFunc: ShowInputsFunc;
+    //     options?: {
+    //         extraBooleanFlags?: string[];
+    //         defaultFlagValuesFunc?: (
+    //             item?: ItemPF
+    //         ) => Record<string, any> | undefined;
+    //     };
+    // };
+
+    // declare type JustCreate = Omit<CreateAndRender, 'showInuptsFunc'>;
 }

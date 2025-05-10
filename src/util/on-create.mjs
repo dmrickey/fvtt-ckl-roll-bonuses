@@ -63,7 +63,7 @@ export const onCreate = (
  * @param {(item: ItemPF, html: HTMLElement, isEditable: boolean) => void} showInputsFunc
  * @param {object} [options]
  * @param {string[]} [options.extraBooleanFlags]
- * @param {(item?: ItemPF) => Record<string, any> | undefined} [options.defaultFlagValuesFunc]
+ * @param {(item: ItemPF) => Record<string, any> | undefined} [options.defaultFlagValuesFunc]
  */
 export const onRenderCreate = (
     itemFilter,

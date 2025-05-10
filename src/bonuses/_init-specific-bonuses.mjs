@@ -80,9 +80,9 @@ export const initSpecificBonuses = () => {
             const config = bonus.configuration;
             switch (config.type) {
                 case 'just-render':
-                    onRender(bonus);
+                    onRender(bonus.key, config.showInputsFunc);
                     break;
-                case 'render-and-create-configure':
+                case 'render-and-create':
                     onRenderCreate(
                         config.itemFilter,
                         bonus.key,
@@ -104,8 +104,11 @@ export const initSpecificBonuses = () => {
     })
 }
 
-/** @param {typeof SpecificBonus} bonus */
-const onRender = (bonus) => {
+/**
+ * @param {string} key
+ * @param {ShowInputsFunc} showInputsFunc
+ */
+const onRender = (key, showInputsFunc) => {
     Hooks.on(
         'renderItemSheet',
         (
@@ -113,8 +116,8 @@ const onRender = (bonus) => {
             /** @type {[HTMLElement]} */[html],
             /** @type {unknown} */ _data
         ) => {
-            if (item.hasItemBooleanFlag(bonus.key)) {
-                bonus.configuration.showInputsFunc(item, html, isEditable);
+            if (item.hasItemBooleanFlag(key)) {
+                showInputsFunc(item, html, isEditable);
             }
         }
     );

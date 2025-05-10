@@ -57,7 +57,7 @@ export class SpecificBonus {
     }
 
     /**
-     * @returns { JustRender | RenderAndCreateConfigure }
+     * @returns { JustCreate | JustRender | CreateAndRender }
      */
     static get configuration() { throw new Error('must be overridden'); }
 }
