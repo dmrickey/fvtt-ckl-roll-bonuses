@@ -50,7 +50,7 @@ export class Inspiration extends SpecificBonus {
     }
 }
 class Settings {
-    static get inpsiration() { return LanguageSettings.getTranslation(Inspiration.sourceKey); }
+    static get name() { return LanguageSettings.getTranslation(Inspiration.sourceKey); }
 
     static {
         LanguageSettings.registerItemNameTranslation(Inspiration.sourceKey);

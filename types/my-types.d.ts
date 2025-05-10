@@ -310,4 +310,9 @@ declare global {
     // };
 
     // declare type JustCreate = Omit<CreateAndRender, 'showInuptsFunc'>;
+
+    interface Function {
+        /** @deprecated Don't use this */
+        readonly name: string;
+    }
 }
