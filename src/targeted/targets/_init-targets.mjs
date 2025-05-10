@@ -23,7 +23,7 @@ import { WeaponTypeTarget } from "./weapon-type-target.mjs";
 import { WhenActiveTarget } from './conditional/when-active-target.mjs';
 import { WhenInCombatTarget } from './conditional/when-in-combat-target.mjs';
 import { WhenTargetInRange } from './conditional/is-target-within-range.mjs';
-import { IsFlankingTarget } from './conditional/is-flanking.mjs';
+import { IsFlankingTarget } from './conditional/flanking/is-flanking.mjs';
 
 export const registerTargets = () => [
     ActionTarget,

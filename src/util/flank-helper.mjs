@@ -1,3 +1,9 @@
+import { Outflank } from '../global-bonuses/specific/bonuses/flanking/outflank.mjs';
+import { GangUp } from '../targeted/targets/conditional/flanking/gang-up.mjs';
+import { OutflankImproved } from '../targeted/targets/conditional/flanking/outflank-improved.mjs';
+import { PackFlanking } from '../targeted/targets/conditional/flanking/pack-flanking.mjs';
+import { Swarming } from '../targeted/targets/conditional/flanking/swarming.mjs';
+import { UnderfootAssault } from '../targeted/targets/conditional/flanking/underfoot-assault.mjs';
 import { difference } from './array-intersects.mjs';
 import { PositionalHelper } from './positional-helper.mjs';
 
@@ -91,7 +97,8 @@ export class FlankHelper {
 
         // ratfolk swarming
         if (this.hasSwarming(this.attacker)) {
-            this.allFlankBuddies.push(...threateningAllies.filter(this.hasSwarming));
+            const withSwarming = threateningAllies.filter(this.hasSwarming);
+            this.allFlankBuddies.push(...withSwarming.filter((ally) => new PositionalHelper(this.attacker, ally).isSharingSquare()));
             threateningAllies = difference(threateningAllies, this.allFlankBuddies);
             if (!threateningAllies.length) return;
         }
@@ -153,7 +160,7 @@ export class FlankHelper {
      * @returns {boolean}
      */
     hasGangUp(token) {
-        return false;
+        return GangUp.has(token);
     }
 
     /**
@@ -161,7 +168,7 @@ export class FlankHelper {
      * @returns {boolean}
      */
     hasOutflank(token) {
-        return false;
+        return Outflank.has(token);
     }
 
     /**
@@ -169,7 +176,7 @@ export class FlankHelper {
      * @returns {boolean}
      */
     hasImprovedOutflank(token) {
-        return false;
+        return OutflankImproved.has(token);
     }
 
     /**
@@ -177,6 +184,12 @@ export class FlankHelper {
      * @returns {boolean}
      */
     hasMenacing(token) {
+        const actor = token.actor;
+        if (!actor) return false;
+
+        // const flagged = actor.itemFlags?.boolean[Menacing.key] ?? [];
+
+        // TODO figure out how to get a list of
         return false;
     }
 
@@ -186,8 +199,7 @@ export class FlankHelper {
      * @returns {boolean}
      */
     hasPackFlanking(token, partner) {
-        // make sure to check that "token is configured for partner" and "partner is configured parent"
-        return false;
+        return PackFlanking.has(token.actor, partner.actor) && PackFlanking.has(token.actor, partner.actor);
     }
 
     /**
@@ -195,7 +207,7 @@ export class FlankHelper {
      * @returns {boolean}
      */
     hasSwarming(token) {
-        return false;
+        return Swarming.has(token);
     }
 
     /**
@@ -203,6 +215,6 @@ export class FlankHelper {
      * @returns {boolean}
      */
     isMouser(token) {
-        return false;
+        return UnderfootAssault.has(token);
     }
 }

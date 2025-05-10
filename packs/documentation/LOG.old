@@ -1,16 +1,14 @@
-2025/05/04-09:52:43.665 8d60 Recovering log #1315
-2025/05/04-09:52:43.666 8d60 Level-0 table #1317: started
-2025/05/04-09:52:43.668 8d60 Level-0 table #1317: 97057 bytes OK
-2025/05/04-09:52:43.671 8d60 Delete type=0 #1315
-2025/05/04-09:52:43.671 8d60 Delete type=3 #1314
-2025/05/04-10:05:46.320 8ff0 Level-0 table #1320: started
-2025/05/04-10:05:46.320 8ff0 Level-0 table #1320: 0 bytes OK
-2025/05/04-10:05:46.320 8ff0 Delete type=0 #1318
-2025/05/04-10:05:46.321 8ff0 Manual compaction at level-0 from '!journal!FrG2K3YAM1jdSxcC' @ 72057594037927935 : 1 .. '!journal.pages!FrG2K3YAM1jdSxcC.zHKvVEnQ3jAyUiKn' @ 0 : 0; will stop at '!journal.pages!FrG2K3YAM1jdSxcC.zHKvVEnQ3jAyUiKn' @ 5190 : 1
-2025/05/04-10:05:46.321 8ff0 Compacting 1@0 + 1@1 files
-2025/05/04-10:05:46.323 8ff0 Generated table #1321@0: 12 keys, 49366 bytes
-2025/05/04-10:05:46.323 8ff0 Compacted 1@0 + 1@1 files => 49366 bytes
-2025/05/04-10:05:46.323 8ff0 compacted to: files[ 0 1 0 0 0 0 0 ]
-2025/05/04-10:05:46.323 8ff0 Delete type=2 #1307
-2025/05/04-10:05:46.324 8ff0 Delete type=2 #1317
-2025/05/04-10:05:46.325 8ff0 Manual compaction at level-0 from '!journal.pages!FrG2K3YAM1jdSxcC.zHKvVEnQ3jAyUiKn' @ 5190 : 1 .. '!journal.pages!FrG2K3YAM1jdSxcC.zHKvVEnQ3jAyUiKn' @ 0 : 0; will stop at (end)
+2025/05/05-19:24:14.569 21e4 Recovering log #1323
+2025/05/05-19:24:14.572 21e4 Delete type=0 #1323
+2025/05/05-19:24:14.572 21e4 Delete type=3 #1322
+2025/05/10-01:53:40.352 1ea4 Level-0 table #1327: started
+2025/05/10-01:53:40.366 1ea4 Level-0 table #1327: 1349036 bytes OK
+2025/05/10-01:53:40.367 1ea4 Delete type=0 #1325
+2025/05/10-01:53:40.371 1ea4 Manual compaction at level-0 from '!journal!FrG2K3YAM1jdSxcC' @ 72057594037927935 : 1 .. '!journal.pages!FrG2K3YAM1jdSxcC.zHKvVEnQ3jAyUiKn' @ 0 : 0; will stop at '!journal.pages!FrG2K3YAM1jdSxcC.zHKvVEnQ3jAyUiKn' @ 5214 : 1
+2025/05/10-01:53:40.371 1ea4 Compacting 1@0 + 1@1 files
+2025/05/10-01:53:40.376 1ea4 Generated table #1328@0: 12 keys, 50495 bytes
+2025/05/10-01:53:40.376 1ea4 Compacted 1@0 + 1@1 files => 50495 bytes
+2025/05/10-01:53:40.376 1ea4 compacted to: files[ 0 1 0 0 0 0 0 ]
+2025/05/10-01:53:40.376 1ea4 Delete type=2 #1321
+2025/05/10-01:53:40.376 1ea4 Delete type=2 #1327
+2025/05/10-01:53:40.376 1ea4 Manual compaction at level-0 from '!journal.pages!FrG2K3YAM1jdSxcC.zHKvVEnQ3jAyUiKn' @ 5214 : 1 .. '!journal.pages!FrG2K3YAM1jdSxcC.zHKvVEnQ3jAyUiKn' @ 0 : 0; will stop at (end)

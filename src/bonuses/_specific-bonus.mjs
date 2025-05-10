@@ -46,12 +46,14 @@ export class SpecificBonus {
     /**
      * If the item or actor is configured for this bonus
      * @abstract
-     * @param {ItemPF | ActorPF} doc
+     * @param {ItemPF | ActorPF | TokenPF} doc
      * @param  {any[]} _args
      * @returns {boolean}
      */
     static has(doc, ..._args) {
-        return doc.hasItemBooleanFlag(this.key);
+        return doc instanceof pf1.canvas.TokenPF
+            ? doc.actor?.hasItemBooleanFlag(this.key)
+            : doc.hasItemBooleanFlag(this.key);
     }
 
     /**

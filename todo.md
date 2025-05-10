@@ -238,21 +238,25 @@
   - remove `Record<any, any>` from API type definition and make sure all individual references are imported
   - Add "configure" method to each bonus and target that takes whatever args it needs to save itself
 - Flanking
-  - Add `enlarged: hasImprovedOutflank` to each private PositionalHelper method
   - Add bonuses for various feats/abilities that grant flank (see FlankHelper)
-    - fill in logic in FlankHelper for reading the various bonuses
   - Add journal entries for all of the bonuses it needs to account for
   - Add bonuses for abiltities that deny flanking
   - Add "only specific allies" input to is-flanking bonus
     - Add "Actor Picker" app
   - Add "cannot be flanked" ability
+  - Add "menacing" targeted Bonus for global
+  - Fill in logic for global bonus - make it include a "flanking" roll variable to give a total value 
+  - Find out what the bonus picker looks like with Improved Outflank nested under Outflank if the global bonus is turned off
+  - Add language translation keys for all of the new bonuses
+  - Add hints for new bonuses
 - Add "While adjacent to" bonus
   - use actor picker app
-- Verify that Precise Shot and Devastating Strike (plus imrpoved) still work after creatre/render refactor
+- Add a way to specifically order children in bonus picker app
 ### Specific Bonuses
-- Migrate all keys to start with `specific_`
+- ~~Migrate all keys to start with `specific_`~~ Do this later after SBC has a chance to update to only use the API
   - update all journal entries to indicate what the key is
-- Make sure everything referencing keys is doing so off of the class so it is actually using the correct key
+- Fill in the `configure` method for all specific bonuses
+- Fill in the `configuration` property for all specific bonuses
 ### Bugfix
 - Found a bug where a change targeting "Critical Confirmation" doesnt function when roll bonuses is active. Easy to test. 
   - Make a buff with a change targetting "Critical Confirmation

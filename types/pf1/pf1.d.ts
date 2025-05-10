@@ -669,7 +669,7 @@ declare global {
         };
     }
 
-    interface TokenPF {
+    class TokenPF {
         id: string;
         actor: ActorCharacterPF;
         document: TokenDocumentPF;
@@ -2262,6 +2262,9 @@ declare global {
                 ): DamageTypeSelector;
             };
         };
+        canvas: {
+            TokenPF: typeof TokenPF;
+        }
         components: {
             ItemAction: typeof ItemAction;
             ItemChange: typeof ItemChange;
