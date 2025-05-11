@@ -2,6 +2,7 @@
 
 // Choose two skills that you either are trained in or can otherwise use untrained. You must be able to use inspiration on these skills. When you use inspiration with those skills, roll a d8 instead of a d6, or a d10 if you would normally roll a d8. If you have the true inspiration class feature, you roll twice as many such dice (2d8 or 2d10) as normal.
 
+import { MODULE_NAME } from '../../consts.mjs';
 import { traitInput } from '../../handlebars-handlers/trait-input.mjs';
 import { getSkillChoices, getSkillHints } from '../../util/get-skills.mjs';
 import { registerItemHint } from '../../util/item-hints.mjs';
@@ -19,6 +20,20 @@ export class InspirationFocused extends SpecificBonus {
 
     /** @inheritdoc @override */
     static get parent() { return Inspiration.key; }
+
+    /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} item
+     * @param {string[]} skillIds
+     * @returns {Promise<void>}
+     */
+    static async configure(item, skillIds) {
+        await item.update({
+            system: { flags: { boolean: { [this.key]: true } } },
+            flags: { [MODULE_NAME]: { [this.key]: skillIds } },
+        });
+    }
 
     /** @inheritdoc @override @returns {CreateAndRender} */
     static get configuration() {

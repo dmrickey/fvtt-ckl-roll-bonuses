@@ -4,14 +4,12 @@
 //
 // In addition, whenever he expends inspiration on an ability check, attack roll, saving throw, or skill check, he adds 2d6 rather than 1d6 to the result. Some talents can affect this. If using the amazing inspiration investigator talent, he rolls 2d8 instead. If using this with empathy, tenacious inspiration, underworld inspiration, or a similar talent, he rolls two sets of inspiration dice and uses the higher of the two results.
 
-import { itemHasCompendiumId } from '../../util/has-compendium-id.mjs';
+import { showEnabledLabel } from '../../handlebars-handlers/enabled-label.mjs';
+import { getSkillHints } from '../../util/get-skills.mjs';
 import { registerItemHint } from '../../util/item-hints.mjs';
 import { localizeBonusTooltip } from '../../util/localize.mjs';
-import { onCreate } from '../../util/on-create.mjs';
-import { SpecificBonus } from '../_specific-bonus.mjs';
-import { getSkillHints } from '../../util/get-skills.mjs';
-import { showEnabledLabel } from '../../handlebars-handlers/enabled-label.mjs';
 import { LanguageSettings } from '../../util/settings.mjs';
+import { SpecificBonus } from '../_specific-bonus.mjs';
 import { Inspiration } from './inspiration.mjs';
 
 export class InspirationTrue extends SpecificBonus {

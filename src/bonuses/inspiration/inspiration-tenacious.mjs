@@ -3,10 +3,8 @@
 // When an investigator rolls his inspiration die, he can roll an additional inspiration die and take the higher result.
 
 import { showEnabledLabel } from '../../handlebars-handlers/enabled-label.mjs';
-import { itemHasCompendiumId } from '../../util/has-compendium-id.mjs';
 import { registerItemHint } from '../../util/item-hints.mjs';
 import { localizeBonusTooltip } from '../../util/localize.mjs';
-import { onCreate } from '../../util/on-create.mjs';
 import { LanguageSettings } from '../../util/settings.mjs';
 import { SpecificBonus } from '../_specific-bonus.mjs';
 import { Inspiration } from './inspiration.mjs';

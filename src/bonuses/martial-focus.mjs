@@ -7,7 +7,6 @@ import { intersects } from "../util/array-intersects.mjs";
 import { createChangeForTooltip } from '../util/conditional-helpers.mjs';
 import { getActorItemsByTypes } from '../util/get-actor-items-by-type.mjs';
 import { getCachedBonuses } from '../util/get-cached-bonuses.mjs';
-import { itemHasCompendiumId } from '../util/has-compendium-id.mjs';
 import { customGlobalHooks } from "../util/hooks.mjs";
 import { registerItemHint } from "../util/item-hints.mjs";
 import { localize, localizeBonusLabel, localizeBonusTooltip } from "../util/localize.mjs";
@@ -16,23 +15,87 @@ import { truthiness } from "../util/truthiness.mjs";
 import { uniqueArray } from "../util/unique-array.mjs";
 import { SpecificBonus } from './_specific-bonus.mjs';
 
-const key = 'martial-focus';
-const compendiumId = 'W1eDSqiwljxDe0zl';
-const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#martial-focus';
-
 export class MartialFocus extends SpecificBonus {
     /** @inheritdoc @override */
-    static get sourceKey() { return key; }
+    static get sourceKey() { return 'martial-focus'; }
 
     /** @inheritdoc @override */
-    static get journal() { return journal; }
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#martial-focus'; }
+
+    /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} item
+     * @param {string} weaponGroup
+     * @returns {Promise<void>}
+     */
+    static async configure(item, weaponGroup) {
+        await item.update({
+            system: { flags: { boolean: { [this.key]: true } } },
+            flags: { [MODULE_NAME]: { [this.key]: weaponGroup } },
+        });
+    }
+
+    /** @inheritdoc @override @returns {CreateAndRender} */
+    static get configuration() {
+        return {
+            type: 'render-and-create',
+            compendiumId: 'W1eDSqiwljxDe0zl',
+            isItemMatchFunc: (name) => name === Settings.name,
+            itemFilter: (item) => item instanceof pf1.documents.item.ItemPF,
+            showInputsFunc: (item, html, isEditable) => {
+                const current = item.getFlag(MODULE_NAME, MartialFocus.key);
+                const customs =
+                    !item?.actor || !isEditable
+                        ? []
+                        : uniqueArray(
+                            getActorItemsByTypes(item.actor, 'attack', 'weapon')
+                                .flatMap((i) => ([...(i.system.weaponGroups?.custom ?? [])]))
+                                .filter(truthiness)
+                        ).map((i) => ({ key: i, label: i }));
+
+                const groups = Object.entries(pf1.config.weaponGroups).map(([key, label]) => ({ key, label }));
+                const choices = [...groups, ...customs].sort((a, b) => a.label.localeCompare(b.label));
+
+                keyValueSelect({
+                    choices,
+                    current,
+                    item,
+                    journal: this.journal,
+                    key: this.key,
+                    parent: html
+                }, {
+                    canEdit: isEditable,
+                    inputType: 'specific-bonus',
+                });
+            },
+            options: {
+                defaultFlagValuesFunc: (item) => {
+                    const onActor =
+                        !item?.actor
+                            ? []
+                            : uniqueArray(
+                                getActorItemsByTypes(item.actor, 'attack', 'weapon')
+                                    .flatMap((i) => ([...(i.system.weaponGroups?.total ?? [])]))
+                                    .filter(truthiness)
+                            );
+
+                    const groups = Object.keys(pf1.config.weaponGroups);
+                    const choices = [...onActor, ...groups];
+                    return {
+                        [this.key]: choices[0],
+                    }
+                }
+            }
+        };
+    }
 }
 
 class Settings {
-    static get martialFocus() { return LanguageSettings.getTranslation(key); }
+    static get name() { return LanguageSettings.getTranslation(MartialFocus.key); }
 
     static {
-        LanguageSettings.registerItemNameTranslation(key);
+        LanguageSettings.registerItemNameTranslation(MartialFocus.key);
     }
 }
 
@@ -43,8 +106,8 @@ class Settings {
  */
 const isItemFocused = (actor, item) => {
     const weaponGroups = item.system.weaponGroups?.total ?? new Set();
-    const focuses = getCachedBonuses(actor, key)
-        .flatMap(x => x.getFlag(MODULE_NAME, key))
+    const focuses = getCachedBonuses(actor, MartialFocus.key)
+        .flatMap(x => x.getFlag(MODULE_NAME, MartialFocus.key))
         .filter(truthiness);
     return intersects(weaponGroups, focuses);
 }
@@ -62,7 +125,7 @@ export function getMartialFocusCondtional(item) {
     if (isItemFocused(actor, item)) {
         return new pf1.components.ItemConditional({
             default: true,
-            name: Settings.martialFocus,
+            name: Settings.name,
             modifiers: [{
                 _id: foundry.utils.randomID(),
                 critical: 'normal',
@@ -77,10 +140,10 @@ export function getMartialFocusCondtional(item) {
 
 // register hint on source feat
 registerItemHint((hintcls, _actor, item, _data) => {
-    const has = item.hasItemBooleanFlag(key);
-    const current = /** @type {keyof WeaponGroups} */ (item.getFlag(MODULE_NAME, key));
+    const has = item.hasItemBooleanFlag(MartialFocus.key);
+    const current = /** @type {keyof WeaponGroups} */ (item.getFlag(MODULE_NAME, MartialFocus.key));
     if (has && current) {
-        return hintcls.create(pf1.config.weaponGroups[current] ?? current, [], { hint: localizeBonusTooltip(key) });
+        return hintcls.create(pf1.config.weaponGroups[current] ?? current, [], { hint: localizeBonusTooltip(MartialFocus.key) });
     }
 });
 
@@ -92,7 +155,7 @@ registerItemHint((hintcls, actor, item, _data) => {
 
     const isFocused = isItemFocused(actor, item);
     if (isFocused) {
-        return hintcls.create(`+1 ${localize('PF1.Damage')}`, [], { hint: localizeBonusLabel(key) });
+        return hintcls.create(`+1 ${localize('PF1.Damage')}`, [], { hint: localizeBonusLabel(MartialFocus.key) });
     }
 });
 
@@ -108,7 +171,7 @@ function addMartialFocus({ actor, item, shared }) {
 
     const isFocused = isItemFocused(actor, item);
     if (isFocused) {
-        shared.damageBonus.push(`${1}[${localizeBonusLabel(key)}]`);
+        shared.damageBonus.push(`${1}[${localizeBonusLabel(MartialFocus.key)}]`);
     }
 }
 Hooks.on(customGlobalHooks.actionUseAlterRollData, addMartialFocus);
@@ -129,7 +192,7 @@ function getDamageTooltipSources(item, sources) {
 
     const isFocused = isItemFocused(actor, item);
     if (isFocused) {
-        const name = localizeBonusLabel(key);
+        const name = localizeBonusLabel(MartialFocus.key);
         const change = createChangeForTooltip({ name, value: 1 });
         return sources.push(change);
     }
@@ -173,47 +236,3 @@ Hooks.on(customGlobalHooks.getDamageTooltipSources, getDamageTooltipSources);
 //     }
 // }
 // Hooks.on('pf1GetRollData', getFocusedItemRollData);
-
-Hooks.on('renderItemSheet', (
-    /** @type {ItemSheetPF} */ { actor, isEditable, item },
-    /** @type {[HTMLElement]} */[html],
-    /** @type {unknown} */ _data
-) => {
-    if (!(item instanceof pf1.documents.item.ItemPF)) return;
-
-    const hasKey = item.hasItemBooleanFlag(key);
-    if (!hasKey) {
-        const name = item?.name?.toLowerCase() ?? '';
-        const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
-        if (isEditable && (name === Settings.martialFocus || hasCompendiumId)) {
-            item.addItemBooleanFlag(key);
-        }
-        return;
-    }
-
-    const current = item.getFlag(MODULE_NAME, key);
-
-    const customs =
-        !actor || !isEditable
-            ? []
-            : uniqueArray(
-                getActorItemsByTypes(actor, 'attack', 'weapon')
-                    .flatMap((i) => ([...(i.system.weaponGroups?.custom ?? [])]))
-                    .filter(truthiness)
-            ).map((i) => ({ key: i, label: i }));
-
-    const groups = Object.entries(pf1.config.weaponGroups).map(([key, label]) => ({ key, label }));
-    const choices = [...groups, ...customs].sort((a, b) => a.label.localeCompare(b.label));
-
-    keyValueSelect({
-        choices,
-        current,
-        item,
-        journal,
-        key,
-        parent: html
-    }, {
-        canEdit: isEditable,
-        inputType: 'specific-bonus',
-    });
-});

@@ -2,6 +2,7 @@
 
 // Increases the amount of dice rolled with inspiration for specific skills (like Empathy linked above)
 
+import { MODULE_NAME } from '../../consts.mjs';
 import { traitInput } from '../../handlebars-handlers/trait-input.mjs';
 import { getSkillChoices, getSkillHints } from '../../util/get-skills.mjs';
 import { registerItemHint } from '../../util/item-hints.mjs';
@@ -22,6 +23,20 @@ export class InspirationExtraDie extends SpecificBonus {
 
     /** @inheritdoc @override */
     static get tooltip() { return InspirationTenacious.tooltip; }
+
+    /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} item
+     * @param {string[]} skillIds
+     * @returns {Promise<void>}
+     */
+    static async configure(item, skillIds) {
+        await item.update({
+            system: { flags: { boolean: { [this.key]: true } } },
+            flags: { [MODULE_NAME]: { [this.key]: skillIds } },
+        });
+    }
 
     /** @inheritdoc @override @returns {JustRender} */
     static get configuration() {

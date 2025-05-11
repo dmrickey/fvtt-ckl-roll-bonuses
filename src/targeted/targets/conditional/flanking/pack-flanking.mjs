@@ -1,4 +1,5 @@
 import { SpecificBonus } from '../../../../bonuses/_specific-bonus.mjs';
+import { MODULE_NAME } from '../../../../consts.mjs';
 import { LanguageSettings } from '../../../../util/settings.mjs';
 
 export class PackFlanking extends SpecificBonus {
@@ -7,6 +8,20 @@ export class PackFlanking extends SpecificBonus {
 
     /** @inheritdoc @override */
     static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.IpRhJqZEX2TUarSX#pack-flanking-(feat)'; }
+
+    /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} item
+     * @param {string} actorUuid
+     * @returns {Promise<void>}
+     */
+    static async configure(item, actorUuid) {
+        await item.update({
+            system: { flags: { boolean: { [this.key]: true } } },
+            flags: { [MODULE_NAME]: { [this.key]: actorUuid } },
+        });
+    }
 
     /** @inheritdoc @override @returns {CreateAndRender} */
     static get configuration() {

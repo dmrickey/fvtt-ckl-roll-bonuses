@@ -629,9 +629,11 @@ declare global {
         base: T[];
         /** Traits added by the user */
         custom: Set<string>;
+        /** Translated names for standard plus custom */
         names: Array<string>;
         /** Traits defined by the system*/
         standard: Set<T>;
+        /** Combined set of both custom and standard */
         total: Set<string>;
     }
 

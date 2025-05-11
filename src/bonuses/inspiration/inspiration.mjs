@@ -1,12 +1,10 @@
+import { MODULE_NAME } from '../../consts.mjs';
 import { traitInput } from '../../handlebars-handlers/trait-input.mjs';
-import { itemHasCompendiumId } from '../../util/has-compendium-id.mjs';
+import { allKnowledges, getSkillChoices, getSkillHints } from '../../util/get-skills.mjs';
 import { registerItemHint } from '../../util/item-hints.mjs';
 import { localizeBonusTooltip } from '../../util/localize.mjs';
-import { onCreate } from '../../util/on-create.mjs';
-import { SpecificBonus } from '../_specific-bonus.mjs';
-import { allKnowledges, getSkillChoices, getSkillHints } from '../../util/get-skills.mjs';
 import { LanguageSettings } from '../../util/settings.mjs';
-import { showEnabledLabel } from '../../handlebars-handlers/enabled-label.mjs';
+import { SpecificBonus } from '../_specific-bonus.mjs';
 
 export class Inspiration extends SpecificBonus {
     /** @inheritdoc @override */
@@ -14,6 +12,20 @@ export class Inspiration extends SpecificBonus {
 
     /** @inheritdoc @override */
     static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#inspiration'; }
+
+    /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} item
+     * @param {string[]} skillIds
+     * @returns {Promise<void>}
+     */
+    static async configure(item, skillIds) {
+        await item.update({
+            system: { flags: { boolean: { [this.key]: true } } },
+            flags: { [MODULE_NAME]: { [this.key]: skillIds } },
+        });
+    }
 
     /** @inheritdoc @override @returns {CreateAndRender} */
     static get configuration() {
