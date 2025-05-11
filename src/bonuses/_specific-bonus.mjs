@@ -1,8 +1,60 @@
 import { api } from '../util/api.mjs';
 import { localizeBonusLabel, localizeBonusTooltip } from '../util/localize.mjs';
+import { onRenderCreate } from '../util/on-create.mjs';
+
+/** @param {typeof SpecificBonus} bonus */
+export const initBonus = (bonus) => {
+    try {
+        const config = bonus.configuration;
+        switch (config.type) {
+            case 'just-render':
+                onRender(bonus.key, config.showInputsFunc);
+                break;
+            case 'render-and-create':
+                onRenderCreate(
+                    config.itemFilter,
+                    bonus.key,
+                    config.compendiumId,
+                    config.isItemMatchFunc,
+                    {
+                        defaultFlagValuesFunc: config.options?.defaultFlagValuesFunc,
+                        extraBooleanFlags: config.options?.extraBooleanFlags,
+                        showInputsFunc: config.showInputsFunc,
+                    }
+                );
+                break;
+            default: throw new Error('new configuration type was added and this switch statement wasn\'t updated');
+        }
+    }
+    catch {
+        console.error(`Bonus '${bonus.prototype.constructor.name} :: ${bonus.key}' has not been migrated yet.`);
+    }
+}
+
+/**
+ * @param {string} key
+ * @param {ShowInputsFunc} showInputsFunc
+ */
+const onRender = (key, showInputsFunc) => {
+    Hooks.on(
+        'renderItemSheet',
+        (
+            /** @type {ItemSheetPF} */ { isEditable, item },
+            /** @type {[HTMLElement]} */[html],
+            /** @type {unknown} */ _data
+        ) => {
+            if (item.hasItemBooleanFlag(key)) {
+                showInputsFunc(item, html, isEditable);
+            }
+        }
+    );
+};
 
 export class SpecificBonus {
-    static register() { api.specificBonusTypeMap[this.key] = this; }
+    static register() {
+        api.specificBonusTypeMap[this.key] = this;
+        initBonus(this);
+    }
 
     /** @returns { string } */
     static get key() { return this.sourceKey; }

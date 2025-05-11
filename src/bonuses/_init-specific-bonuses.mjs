@@ -1,4 +1,3 @@
-import { onRenderCreate } from '../util/on-create.mjs';
 import { SpecificBonus } from './_specific-bonus.mjs';
 import { ArmorFocus } from './armor-focus/armor-focus.mjs';
 import { ArmorFocusImproved } from './armor-focus/improved-armor-focus.mjs';
@@ -28,9 +27,13 @@ import { WeaponSpecializationGreater } from './weapon-specialization/greater-wea
 import { WeaponSpecialization } from './weapon-specialization/weapon-specialization.mjs';
 
 // import logic for joint handling
-import './inspiration/_inspiration-join.mjs';
 import './armor-focus/shared.mjs';
+import './inspiration/_inspiration-join.mjs';
 
+/**
+ * Array of all bonuses that are always on
+ * @see SpecificBonus
+ */
 const allSpecificBonuses = [
     ArmorFocus,
     ArmorFocusImproved,
@@ -73,52 +76,4 @@ const allSpecificBonuses = [
     WeaponSpecializationGreater,
 ];
 
-export const initSpecificBonuses = () => {
-    allSpecificBonuses.forEach(x => x.register());
-    allSpecificBonuses.forEach((bonus) => {
-        try {
-            const config = bonus.configuration;
-            switch (config.type) {
-                case 'just-render':
-                    onRender(bonus.key, config.showInputsFunc);
-                    break;
-                case 'render-and-create':
-                    onRenderCreate(
-                        config.itemFilter,
-                        bonus.key,
-                        config.compendiumId,
-                        config.isItemMatchFunc,
-                        {
-                            defaultFlagValuesFunc: config.options?.defaultFlagValuesFunc,
-                            extraBooleanFlags: config.options?.extraBooleanFlags,
-                            showInputsFunc: config.showInputsFunc,
-                        }
-                    );
-                    break;
-                default: throw new Error('new configuration type was added and this switch statement wasn\'t updated');
-            }
-        }
-        catch {
-            console.error(`Bonus '${bonus.prototype.constructor.name} :: ${bonus.key}' has not been migrated yet.`);
-        }
-    })
-}
-
-/**
- * @param {string} key
- * @param {ShowInputsFunc} showInputsFunc
- */
-const onRender = (key, showInputsFunc) => {
-    Hooks.on(
-        'renderItemSheet',
-        (
-            /** @type {ItemSheetPF} */ { isEditable, item },
-            /** @type {[HTMLElement]} */[html],
-            /** @type {unknown} */ _data
-        ) => {
-            if (item.hasItemBooleanFlag(key)) {
-                showInputsFunc(item, html, isEditable);
-            }
-        }
-    );
-};
+export const initSpecificBonuses = () => allSpecificBonuses.forEach(x => x.register());
