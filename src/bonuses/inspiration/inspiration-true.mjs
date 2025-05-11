@@ -14,21 +14,39 @@ import { showEnabledLabel } from '../../handlebars-handlers/enabled-label.mjs';
 import { LanguageSettings } from '../../util/settings.mjs';
 import { Inspiration } from './inspiration.mjs';
 
-const compendiumId = 'H2Iac6ELVKBU6Ayu';
-const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#inspiration';
-
 export class InspirationTrue extends SpecificBonus {
     /** @inheritdoc @override */
     static get sourceKey() { return 'inspiration-true'; }
 
     /** @inheritdoc @override */
-    static get journal() { return journal; }
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#inspiration'; }
 
     /** @inheritdoc @override */
     static get parent() { return Inspiration.key; }
+
+    /** @inheritdoc @override @returns {CreateAndRender} */
+    static get configuration() {
+        return {
+            type: 'render-and-create',
+            compendiumId: 'H2Iac6ELVKBU6Ayu',
+            isItemMatchFunc: (name) => name === Settings.name,
+            itemFilter: (item) => item instanceof pf1.documents.item.ItemPF,
+            showInputsFunc: (item, html, isEditable) => {
+                showEnabledLabel({
+                    item,
+                    journal: this.journal,
+                    key: this.key,
+                    parent: html,
+                }, {
+                    canEdit: isEditable,
+                    inputType: 'specific-bonus',
+                });
+            },
+        };
+    }
 }
 class Settings {
-    static get inpsirationTrue() { return LanguageSettings.getTranslation(InspirationTrue.key); }
+    static get name() { return LanguageSettings.getTranslation(InspirationTrue.key); }
 
     static {
         LanguageSettings.registerItemNameTranslation(InspirationTrue.key);
@@ -51,37 +69,3 @@ registerItemHint((hintcls, actor, item, _data) => {
     const hint = hintcls.create('', [], { hint: hintText, icon: 'fas fa-magnifying-glass' });
     return hint;
 });
-
-Hooks.on('renderItemSheet', (
-    /** @type {ItemSheetPF} */ { isEditable, item },
-    /** @type {[HTMLElement]} */[html],
-    /** @type {unknown} */ _data
-) => {
-    if (!(item instanceof pf1.documents.item.ItemPF)) return;
-
-    const hasFlag = item.hasItemBooleanFlag(InspirationTrue.key);
-    if (!hasFlag) {
-        const name = item?.name?.toLowerCase() ?? '';
-        const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
-        if (isEditable && (name === Settings.inpsirationTrue || hasCompendiumId)) {
-            item.addItemBooleanFlag(InspirationTrue.key);
-        }
-        return;
-    }
-
-    showEnabledLabel({
-        item,
-        journal,
-        key: InspirationTrue.key,
-        parent: html,
-    }, {
-        canEdit: isEditable,
-        inputType: 'specific-bonus',
-    });
-});
-
-onCreate(
-    compendiumId,
-    () => Settings.inpsirationTrue,
-    { booleanKeys: InspirationTrue.key },
-);

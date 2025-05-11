@@ -10,20 +10,42 @@ import { SpecificBonus } from '../_specific-bonus.mjs';
 import { InspirationTenacious } from './inspiration-tenacious.mjs';
 import { Inspiration } from './inspiration.mjs';
 
-const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#inspiration';
-
 export class InspirationExtraDie extends SpecificBonus {
     /** @inheritdoc @override */
     static get sourceKey() { return 'inspiration-extra-die'; }
 
     /** @inheritdoc @override */
-    static get journal() { return journal; }
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#inspiration'; }
 
     /** @inheritdoc @override */
     static get parent() { return Inspiration.key; }
 
     /** @inheritdoc @override */
     static get tooltip() { return InspirationTenacious.tooltip; }
+
+    /** @inheritdoc @override @returns {JustRender} */
+    static get configuration() {
+        return {
+            type: 'just-render',
+            itemFilter: (item) => item instanceof pf1.documents.item.ItemPF,
+            showInputsFunc: (item, html, isEditable) => {
+                const choices = getSkillChoices(item.actor, { isEditable });
+                traitInput({
+                    choices,
+                    description: localizeBonusTooltip(InspirationTenacious.key),
+                    hasCustom: false,
+                    item,
+                    journal: this.journal,
+                    key: InspirationExtraDie.key,
+                    tooltip: this.tooltip,
+                    parent: html,
+                }, {
+                    canEdit: isEditable,
+                    inputType: 'specific-bonus',
+                });
+            },
+        };
+    }
 }
 
 // register hint on source
@@ -41,32 +63,4 @@ registerItemHint((hintcls, actor, item, _data) => {
 
     const hint = hintcls.create('', [], { hint: hintText, icon: 'fas fa-magnifying-glass ckl-extra-fa-magnifying-glass' });
     return hint;
-});
-
-Hooks.on('renderItemSheet', (
-    /** @type {ItemSheetPF} */ { isEditable, item },
-    /** @type {[HTMLElement]} */[html],
-    /** @type {unknown} */ _data
-) => {
-    if (!(item instanceof pf1.documents.item.ItemPF)) return;
-
-    const hasFlag = item.hasItemBooleanFlag(InspirationExtraDie.key);
-    if (!hasFlag) {
-        return;
-    }
-
-    const choices = getSkillChoices(item.actor, { isEditable });
-
-    traitInput({
-        choices,
-        description: localizeBonusTooltip(InspirationTenacious.key),
-        hasCustom: false,
-        item,
-        journal,
-        key: InspirationExtraDie.key,
-        parent: html,
-    }, {
-        canEdit: isEditable,
-        inputType: 'specific-bonus',
-    });
 });
