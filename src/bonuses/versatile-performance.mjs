@@ -1,28 +1,19 @@
 // https://www.d20pfsrd.com/classes/core-classes/bard/#Versatile_Performance_Ex
 
 import { MODULE_NAME } from "../consts.mjs";
-import { createTemplate, templates } from "../handlebars-handlers/templates.mjs";
 import { addNodeToRollBonus } from "../handlebars-handlers/add-bonus-to-item-sheet.mjs";
+import { createTemplate, templates } from "../handlebars-handlers/templates.mjs";
+import { api } from '../util/api.mjs';
+import { getCachedBonuses } from '../util/get-cached-bonuses.mjs';
+import { getSkillName } from '../util/get-skill-name.mjs';
+import { getSkillChoices } from '../util/get-skills.mjs';
+import { LocalHookHandler, localHooks } from '../util/hooks.mjs';
+import { isNotEmptyObject } from '../util/is-empty-object.mjs';
 import { registerItemHint } from "../util/item-hints.mjs";
 import { localize, localizeBonusTooltip } from "../util/localize.mjs";
 import { LanguageSettings } from "../util/settings.mjs";
-import { SpecificBonus } from './_specific-bonus.mjs';
-import { LocalHookHandler, localHooks } from '../util/hooks.mjs';
-import { getSkillName } from '../util/get-skill-name.mjs';
 import { truthiness } from '../util/truthiness.mjs';
-import { api } from '../util/api.mjs';
-import { isNotEmptyObject } from '../util/is-empty-object.mjs';
-import { getCachedBonuses } from '../util/get-cached-bonuses.mjs';
-import { itemHasCompendiumId } from '../util/has-compendium-id.mjs';
-import { getSkillChoices } from '../util/get-skills.mjs';
-
-const key = 'versatile-performance';
-export { key as versatilePerformanceKey };
-const expandedKey = `${key}-expanded`;
-
-const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#versatile-performance';
-
-const compendiumIds = ['HAqAsb5H56C6cZm3', 'EuQ3UFsJX9njW3pm', 'KQeYLQvYh1QgS0XI'];
+import { SpecificBonus } from './_specific-bonus.mjs';
 
 {
     /** @type {Array<SkillId>} */
@@ -42,28 +33,140 @@ const expandedChoices = api.config.versatilePerformance.expandedChoices;
 
 export class VersatilePerformance extends SpecificBonus {
     /** @inheritdoc @override */
-    static get sourceKey() { return key; }
+    static get sourceKey() { return 'versatile-performance'; }
 
     /** @inheritdoc @override */
-    static get journal() { return journal; }
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#versatile-performance'; }
+
+    /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} item
+     * @param {{ base: SkillId, choice1: SkillId, choice2: SkillId, expanded: SkillId }[]} versatiles
+     * @returns {Promise<void>}
+     */
+    static async configure(item, versatiles) {
+        const boolean = { [this.key]: true }
+        if (versatiles.some((x) => !!x.expanded)) {
+            boolean[VersatilePerformanceExpanded.key] = true;
+        }
+        await item.update({
+            system: { flags: { boolean } },
+            flags: { [MODULE_NAME]: { [this.key]: versatiles } },
+        });
+    }
+
+    /** @inheritdoc @override @returns {CreateAndRender} */
+    static get configuration() {
+        return {
+            type: 'render-and-create',
+            compendiumId: 'HAqAsb5H56C6cZm3',
+            isItemMatchFunc: (name) => name.includes(Settings.name),
+            itemFilter: (item) => item instanceof pf1.documents.item.ItemPF,
+            showInputsFunc: (item, html, isEditable) => {
+                const actor = item.actor;
+                const currentVPs = getVPsFromItem(item);
+
+                // /** @type { { [key: SkillId]: string }} */
+                /** @type {Partial<Record<SkillId, string>>} */
+                const allSkills = getSkillChoices(actor, { isEditable, includeAll: false });
+                /** @type {Partial<Record<SkillId, string>>} */
+                let performs = {};
+                if (isEditable) {
+                    if (actor) {
+                        performs = getPerformanceSkills(actor);
+                        if (isNotEmptyObject(performs) && !currentVPs.length) {
+                            item.setFlag(MODULE_NAME, this.key, [new VPData({
+                                // @ts-ignore
+                                base: Object.keys(performs)[0],
+                                // @ts-ignore
+                                choice1: Object.keys(allSkills)[0],
+                                // @ts-ignore
+                                choice2: Object.keys(allSkills)[1],
+                            })]);
+                        }
+                    }
+                }
+
+                const hasExpanded = item.hasItemBooleanFlag(VersatilePerformanceExpanded.key);
+                const expandedSkills = expandedChoices.reduce((acc, id) => ({ ...acc, [id]: getSkillName(actor, id) }), {});
+
+                const templateData = {
+                    allSkills,
+                    currentVPs,
+                    expandedSkills,
+                    hasExpanded,
+                    journal: this.journal,
+                    label: localize('versatile-performance.header'),
+                    performs,
+                    readonly: !isEditable,
+                    tooltip: this.tooltip,
+                };
+
+                const div = createTemplate(templates.versatilePerformance, templateData);
+
+                if (isEditable) {
+                    div.querySelectorAll('select').forEach((element) => {
+                        element.addEventListener('change', async (event) => {
+                            // @ts-ignore - event.target is HTMLSelectElement
+                            const /** @type {HTMLSelectElement} */ target = event.target;
+                            const value = target?.value;
+                            const path = target.dataset.path;
+                            if (!path) return;
+                            foundry.utils.setProperty(currentVPs, path, value);
+                            await item.setFlag(MODULE_NAME, this.key, currentVPs);
+                        });
+                    });
+
+                    div.querySelectorAll('.vp-actions a').forEach((element) => {
+                        element.addEventListener('click', async (event) => {
+                            event?.preventDefault();
+                            /** @type {HTMLElement } */
+                            // @ts-ignore
+                            const a = event.currentTarget;
+                            if (!a) return;
+
+                            if (a.classList.contains('add')) {
+                                currentVPs.push(new VPData({
+                                    // @ts-ignore
+                                    base: Object.keys(performs)[0],
+                                    // @ts-ignore
+                                    choice1: Object.keys(allSkills)[0],
+                                    // @ts-ignore
+                                    choice2: Object.keys(allSkills)[1],
+                                }));
+                                await item.setFlag(MODULE_NAME, this.key, currentVPs);
+                            }
+                            else if (a.classList.contains('delete')) {
+                                currentVPs.pop();
+                                await item.setFlag(MODULE_NAME, this.key, currentVPs);
+                            }
+                        });
+                    });
+                }
+
+                addNodeToRollBonus(html, div, item, isEditable, 'specific-bonus');
+            },
+        };
+    }
 }
 
 export class VersatilePerformanceExpanded extends SpecificBonus {
     /** @inheritdoc @override */
-    static get sourceKey() { return expandedKey; }
+    static get sourceKey() { return `${VersatilePerformance.sourceKey}-expanded`; }
 
     /** @inheritdoc @override */
-    static get journal() { return journal; }
+    static get journal() { return VersatilePerformance.journal; }
 
     /** @inheritdoc @override */
     static get parent() { return VersatilePerformance.key; }
 }
 
 class Settings {
-    static get versatilePerformance() { return LanguageSettings.getTranslation(key); }
+    static get name() { return LanguageSettings.getTranslation(VersatilePerformance.key); }
 
     static {
-        LanguageSettings.registerItemNameTranslation(key);
+        LanguageSettings.registerItemNameTranslation(VersatilePerformance.key);
     }
 }
 
@@ -99,14 +202,14 @@ class VPData {
  * @returns { VPData[] }
  */
 const getVPsFromItem = (item) => {
-    if (!item.hasItemBooleanFlag(key)) {
+    if (!VersatilePerformance.has(item)) {
         return [];
     }
 
-    const vps = item.getFlag(MODULE_NAME, key) || [];
+    const vps = item.getFlag(MODULE_NAME, VersatilePerformance.key) || [];
 
     return vps.map(( /** @type {any} */ x) => {
-        const data = new VPData(x || {}, { hasExpanded: item.hasItemBooleanFlag(expandedKey) });
+        const data = new VPData(x || {}, { hasExpanded: item.hasItemBooleanFlag(VersatilePerformanceExpanded.key) });
         return data.base ? data : null;
     })
         .filter(truthiness);
@@ -117,7 +220,7 @@ const getVPsFromItem = (item) => {
  * @returns { VPData[] }
  */
 const getVPDataFromActor = (actor) => {
-    const items = getCachedBonuses(actor, key);
+    const items = getCachedBonuses(actor, VersatilePerformance.key);
     return items.flatMap(getVPsFromItem).filter(truthiness);
 }
 
@@ -138,7 +241,7 @@ registerItemHint((hintcls, actor, item, _data) => {
 
         const baseName = getSkillName(actor, data.base);
         const skills = substitutes.map((id) => getSkillName(actor, id)).join(', ');
-        const hint = hintcls.create(localize('versatile-performance.hint', { base: baseName, skills }), [], { hint: localizeBonusTooltip(key) });
+        const hint = hintcls.create(localize('versatile-performance.hint', { base: baseName, skills }), [], { hint: localizeBonusTooltip(VersatilePerformance.key) });
         return hint;
     });
     return hints;
@@ -317,123 +420,3 @@ Hooks.once('init', () => {
     api.config.versatilePerformance.getPerformanceSkills = getPerformanceSkills;
 }
 const getPerformanceSkills = api.config.versatilePerformance.getPerformanceSkills;
-
-Hooks.on('renderItemSheet', (
-    /** @type {ItemSheetPF} */ { actor, isEditable, item },
-    /** @type {[HTMLElement]} */[html],
-    /** @type {unknown} */ _data
-) => {
-    if (!(item instanceof pf1.documents.item.ItemPF)) return;
-
-    const name = item?.name?.toLowerCase() ?? '';
-    const hasFlag = item.hasItemBooleanFlag(key);
-    if (!hasFlag) {
-        if (isEditable && (name === Settings.versatilePerformance || compendiumIds.some(x => itemHasCompendiumId(item, x)))) {
-            item.addItemBooleanFlag(key);
-        }
-        return;
-    }
-
-    const currentVPs = getVPsFromItem(item);
-
-    // /** @type { { [key: SkillId]: string }} */
-    /** @type {Partial<Record<SkillId, string>>} */
-    const allSkills = getSkillChoices(actor, { isEditable, includeAll: false });
-    /** @type {Partial<Record<SkillId, string>>} */
-    let performs = {};
-    if (isEditable) {
-        if (actor) {
-            performs = getPerformanceSkills(actor);
-            if (isNotEmptyObject(performs) && !currentVPs.length) {
-                item.setFlag(MODULE_NAME, key, [new VPData({
-                    // @ts-ignore
-                    base: Object.keys(performs)[0],
-                    // @ts-ignore
-                    choice1: Object.keys(allSkills)[0],
-                    // @ts-ignore
-                    choice2: Object.keys(allSkills)[1],
-                })]);
-            }
-        }
-    }
-
-    const hasExpanded = item.hasItemBooleanFlag(expandedKey);
-    const expandedSkills = expandedChoices.reduce((acc, id) => ({ ...acc, [id]: getSkillName(actor, id) }), {});
-
-    const templateData = {
-        allSkills,
-        currentVPs,
-        expandedSkills,
-        hasExpanded,
-        journal,
-        label: localize('versatile-performance.header'),
-        performs,
-        readonly: !isEditable,
-        tooltip: localizeBonusTooltip(key),
-    };
-
-    const div = createTemplate(templates.versatilePerformance, templateData);
-
-    if (isEditable) {
-        div.querySelectorAll('select').forEach((element) => {
-            element.addEventListener('change', async (event) => {
-                // @ts-ignore - event.target is HTMLSelectElement
-                const /** @type {HTMLSelectElement} */ target = event.target;
-                const value = target?.value;
-                const path = target.dataset.path;
-                if (!path) return;
-                foundry.utils.setProperty(currentVPs, path, value);
-                await item.setFlag(MODULE_NAME, key, currentVPs);
-            });
-        });
-
-        div.querySelectorAll('.vp-actions a').forEach((element) => {
-            element.addEventListener('click', async (event) => {
-                event?.preventDefault();
-                /** @type {HTMLElement } */
-                // @ts-ignore
-                const a = event.currentTarget;
-                if (!a) return;
-
-                if (a.classList.contains('add')) {
-                    currentVPs.push(new VPData({
-                        // @ts-ignore
-                        base: Object.keys(performs)[0],
-                        // @ts-ignore
-                        choice1: Object.keys(allSkills)[0],
-                        // @ts-ignore
-                        choice2: Object.keys(allSkills)[1],
-                    }));
-                    await item.setFlag(MODULE_NAME, key, currentVPs);
-                }
-                else if (a.classList.contains('delete')) {
-                    currentVPs.pop();
-                    await item.setFlag(MODULE_NAME, key, currentVPs);
-                }
-            });
-        });
-    }
-
-    addNodeToRollBonus(html, div, item, isEditable, 'specific-bonus');
-});
-
-/**
- * @param {ItemPF} item
- * @param {object} data
- * @param {{temporary: boolean}} param2
- * @param {string} id
- */
-const onCreate = (item, data, { temporary }, id) => {
-    if (!(item instanceof pf1.documents.item.ItemPF)) return;
-    if (temporary) return;
-
-    const name = item?.name?.toLowerCase() ?? '';
-    const hasBonus = item.hasItemBooleanFlag(key);
-
-    if ((name === Settings.versatilePerformance || compendiumIds.some(x => itemHasCompendiumId(item, x))) && !hasBonus) {
-        item.updateSource({
-            [`system.flags.boolean.${key}`]: true,
-        });
-    }
-};
-Hooks.on('preCreateItem', onCreate);
