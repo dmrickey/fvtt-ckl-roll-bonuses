@@ -12,7 +12,7 @@ import { LanguageSettings } from "../../util/settings.mjs";
 import { truthiness } from "../../util/truthiness.mjs";
 import { uniqueArray } from "../../util/unique-array.mjs";
 import { SpecificBonus } from '../_specific-bonus.mjs';
-import { getFocusedSchools } from "./spell-focus.mjs";
+import { SpellFocus } from './spell-focus.mjs';
 
 const key = 'spell-specialization';
 const exclusionKey = 'spell-specialization-exclusions';
@@ -155,7 +155,7 @@ Hooks.on('renderItemSheet', (
     /** @type {string[]} */
     let choices = [];
     if (actor && isEditable) {
-        const focuses = getFocusedSchools(actor);
+        const focuses = SpellFocus.getFocusedSchools(actor);
 
         const spellChoices = actor?.items
             .filter(
@@ -194,7 +194,7 @@ const onCreate = (item, data, { temporary }, id) => {
 
     let choice = '';
     if (item.actor) {
-        const focuses = getFocusedSchools(item.actor);
+        const focuses = SpellFocus.getFocusedSchools(item.actor);
 
         const spellChoices = item.actor?.items
             .filter(

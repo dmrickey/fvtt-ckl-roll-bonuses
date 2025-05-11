@@ -28,7 +28,7 @@ export class InspirationExtraDie extends SpecificBonus {
      * @inheritdoc
      * @override
      * @param {ItemPF} item
-     * @param {string[]} skillIds
+     * @param {SkillId[]} skillIds
      * @returns {Promise<void>}
      */
     static async configure(item, skillIds) {

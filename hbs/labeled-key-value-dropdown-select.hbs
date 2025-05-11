@@ -4,9 +4,13 @@
         {{#if readonly}}
             <input type="text" readonly value="{{current.label}}" />
         {{else}}
+        {{#if errorMsg}}
+        <div class="error-text">{{errorMsg}}</div>
+        {{else}}
         <select id="key-value-selector-{{key}}">
             {{selectOptions choices selected=current valueAttr="key" labelAttr="label"}}
         </select>
+        {{/if}}
         {{/if}}
     </div>
 </div>

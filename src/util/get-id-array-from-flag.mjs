@@ -1,6 +1,7 @@
 import { MODULE_NAME } from '../consts.mjs'
 import { api } from './api.mjs';
 import { Trait } from './trait-builder.mjs';
+import { truthiness } from './truthiness.mjs';
 import { uniqueArray } from './unique-array.mjs';
 
 /**
@@ -27,7 +28,8 @@ export const getIdsFromItem = (item, flag) => item.getFlag(MODULE_NAME, flag) ||
  */
 export const getIdsFromActor = (actor, flag) => {
     const items = actor.itemFlags?.boolean[flag]?.sources ?? [];
-    var ids = uniqueArray(items.flatMap((i) => getIdsFromItem(i, flag)));
+    var ids = uniqueArray(items.flatMap((i) => getIdsFromItem(i, flag)))
+        .filter(truthiness);
     return ids;
 }
 

@@ -1,48 +1,97 @@
+import { MODULE_NAME } from '../consts.mjs';
+import { textInput } from '../handlebars-handlers/bonus-inputs/text-input.mjs';
+import { traitInput } from '../handlebars-handlers/trait-input.mjs';
+import { createChange } from '../util/conditional-helpers.mjs';
+import { FormulaCacheHelper, getDocFlags } from '../util/flag-helpers.mjs';
+import { getCachedBonuses } from '../util/get-cached-bonuses.mjs';
+import { getSkillName } from '../util/get-skill-name.mjs';
+import { getSkillChoices } from '../util/get-skills.mjs';
+import { LocalHookHandler, localHooks } from '../util/hooks.mjs';
 import { registerItemHint } from "../util/item-hints.mjs";
 import { localize, localizeItemHint } from "../util/localize.mjs";
 import { truthiness } from "../util/truthiness.mjs";
 import { SpecificBonus } from './_specific-bonus.mjs';
-import { FormulaCacheHelper, getDocFlags } from '../util/flag-helpers.mjs';
-import { LocalHookHandler, localHooks } from '../util/hooks.mjs';
-import { textInput } from '../handlebars-handlers/bonus-inputs/text-input.mjs';
-import { getSkillName } from '../util/get-skill-name.mjs';
-import { MODULE_NAME } from '../consts.mjs';
-import { createChange } from '../util/conditional-helpers.mjs';
-import { getCachedBonuses } from '../util/get-cached-bonuses.mjs';
-import { traitInput } from '../handlebars-handlers/trait-input.mjs';
-import { getSkillChoices } from '../util/get-skills.mjs';
-
-const key = 'skill-rank-override';
-const formulaKey = 'skill-rank-override-formula';
-const selectedKey = 'skill-rank-override-selected';
-const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#skill-rank-override';
 
 export class SkillRankOverride extends SpecificBonus {
     /** @inheritdoc @override */
-    static get sourceKey() { return key; }
+    static get sourceKey() { return 'skill-rank-override'; }
+
+    static get formulaKey() { return `${this.key}-formula`; }
+    static get selectedKey() { return `${this.key}-selected`; }
 
     /** @inheritdoc @override */
-    static get journal() { return journal; }
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#skill-rank-override'; }
+
+    /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} item
+     * @param {SkillId[]} skillIds
+     * @param {number | string} formula
+     * @returns {Promise<void>}
+     */
+    static async configure(item, skillIds, formula) {
+        await item.update({
+            system: { flags: { boolean: { [this.key]: true } } },
+            flags: {
+                [MODULE_NAME]: {
+                    [this.formulaKey]: formula,
+                    [this.selectedKey]: skillIds,
+                },
+            },
+        });
+    }
+
+    /** @inheritdoc @override @returns {JustRender} */
+    static get configuration() {
+        return {
+            type: 'just-render',
+            itemFilter: (item) => item instanceof ItemPF,
+            showInputsFunc: (item, html, isEditable) => {
+                let choices = getSkillChoices(item.actor, { isEditable, includeAll: false });
+
+                textInput({
+                    item,
+                    journal: this.journal,
+                    key: this.formulaKey,
+                    parent: html,
+                }, {
+                    canEdit: isEditable,
+                    inputType: 'specific-bonus',
+                })
+                traitInput({
+                    choices,
+                    item,
+                    journal: this.journal,
+                    key: this.selectedKey,
+                    parent: html,
+                }, {
+                    canEdit: isEditable,
+                    inputType: 'specific-bonus',
+                });
+            },
+        };
+    }
 }
 
-FormulaCacheHelper.registerModuleFlag(formulaKey);
+FormulaCacheHelper.registerModuleFlag(SkillRankOverride.formulaKey);
 
 registerItemHint((hintcls, actor, item, _data) => {
-    const hasOverride = item.hasItemBooleanFlag(key);
+    const hasOverride = item.hasItemBooleanFlag(SkillRankOverride.key);
     if (!hasOverride) return;
 
-    const overrides = getDocFlags(item, selectedKey)
+    const overrides = getDocFlags(item, SkillRankOverride.selectedKey)
         .flatMap(x => x)
         .filter(truthiness);
 
-    const rank = FormulaCacheHelper.getModuleFlagValue(item, formulaKey);
+    const rank = FormulaCacheHelper.getModuleFlagValue(item, SkillRankOverride.formulaKey);
 
     if (!overrides.length || !rank) {
         return;
     }
 
     const skills = overrides.map((id) => getSkillName(actor, id)).join(', ');
-    const label = localizeItemHint(key, { rank, skills });
+    const label = localizeItemHint(SkillRankOverride.key, { rank, skills });
     const hint = hintcls.create(label, [], {});
     return hint;
 });
@@ -56,7 +105,7 @@ function createRankIcon(itemName, rank) {
     const icon = document.createElement('a');
     icon.classList.add('fas', 'fa-brain', 'ckl-skill-icon');
 
-    const tip = localize(`${key}.skill-sheet-tip`, { itemName, rank });
+    const tip = localize(`${SkillRankOverride.key}.skill-sheet-tip`, { itemName, rank });
     icon.setAttribute('data-tooltip', tip);
     icon.setAttribute('data-tooltip-direction', 'UP');
 
@@ -67,11 +116,11 @@ function createRankIcon(itemName, rank) {
  * @param {ActorPF} actor
  * @return {Array<{name: string, rank: number, skills: Array<SkillId>}>}
  */
-const getSources = (actor) => getCachedBonuses(actor, key)
+const getSources = (actor) => getCachedBonuses(actor, SkillRankOverride.key)
     .map((source) => ({
         name: source.name,
-        rank: FormulaCacheHelper.getModuleFlagValue(source, formulaKey),
-        skills: /** @type {Array<SkillId>} */ (source.getFlag(MODULE_NAME, selectedKey) ?? []),
+        rank: FormulaCacheHelper.getModuleFlagValue(source, SkillRankOverride.formulaKey),
+        skills: /** @type {Array<SkillId>} */ (source.getFlag(MODULE_NAME, SkillRankOverride.selectedKey) ?? []),
     }));
 
 Hooks.on('renderActorSheetPF', (
@@ -124,7 +173,7 @@ function rollSkill(seed, actor) {
         if (!name) {
             return;
         }
-        const title = localize(`${key}.skill-card-name`, { sourceName: source.name, rank: source.rank, skillName: name })
+        const title = localize(`${SkillRankOverride.key}.skill-card-name`, { sourceName: source.name, rank: source.rank, skillName: name })
         doc.updateSource({ content: doc.content.replace(name, title) });
     });
 }
@@ -147,20 +196,20 @@ function getSkillInfo(skillInfo, actor, _rollData) {
  * @param {RollData} rollData
  */
 function prepareData(item, rollData) {
-    if (!item.isActive || !item.actor || !item.hasItemBooleanFlag(key)) return;
+    if (!item.isActive || !item.actor || !item.hasItemBooleanFlag(SkillRankOverride.key)) return;
 
     /** @type {Array<SkillId>} */
-    const keys = item.getFlag(MODULE_NAME, selectedKey) ?? [];
+    const keys = item.getFlag(MODULE_NAME, SkillRankOverride.selectedKey) ?? [];
     keys.forEach((skillKey) => {
-        const formula = item.getFlag(MODULE_NAME, formulaKey);
-        const rank = FormulaCacheHelper.getModuleFlagValue(item, formulaKey);
+        const formula = item.getFlag(MODULE_NAME, SkillRankOverride.formulaKey);
+        const rank = FormulaCacheHelper.getModuleFlagValue(item, SkillRankOverride.formulaKey);
         const change = createChange({
             name: `${game.i18n.localize("PF1.SkillRankPlural")} (${item.name})`,
             value: rank,
             formula,
             type: 'base',
             target: `skill.~${skillKey}`,
-            id: `${item.id}_${key}_${skillKey}`,
+            id: `${item.id}_${SkillRankOverride.key}_${skillKey}`,
             operator: 'set',
         });
 
@@ -181,7 +230,7 @@ function prepareData(item, rollData) {
                 type: "untyped",
                 operator: "add",
                 name: game.i18n.localize("PF1.CSTooltip"),
-                id: `${item.id}_${key}_${skillKey}_cs`,
+                id: `${item.id}_${SkillRankOverride.key}_${skillKey}_cs`,
             });
             item.actor.changes.set(csChange.id, csChange);
         }
@@ -197,39 +246,4 @@ Hooks.once('init', () => {
     LocalHookHandler.registerHandler(localHooks.actorRollSkill, rollSkill);
     LocalHookHandler.registerHandler(localHooks.actorGetSkillInfo, getSkillInfo);
     LocalHookHandler.registerHandler(localHooks.prepareData, prepareData);
-});
-
-Hooks.on('renderItemSheet', (
-    /** @type {ItemSheetPF} */ { actor, isEditable, item },
-    /** @type {[HTMLElement]} */[html],
-    /** @type {unknown} */ _data
-) => {
-    if (!(item instanceof pf1.documents.item.ItemPF)) return;
-
-    const hasFlag = item.hasItemBooleanFlag(key);
-    if (!hasFlag) {
-        return;
-    }
-
-    let choices = getSkillChoices(actor, { isEditable, includeAll: false });
-
-    textInput({
-        item,
-        journal,
-        key: formulaKey,
-        parent: html,
-    }, {
-        canEdit: isEditable,
-        inputType: 'specific-bonus',
-    })
-    traitInput({
-        choices,
-        item,
-        journal,
-        key: selectedKey,
-        parent: html,
-    }, {
-        canEdit: isEditable,
-        inputType: 'specific-bonus',
-    });
 });

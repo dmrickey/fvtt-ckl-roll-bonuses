@@ -1,6 +1,6 @@
 import { MODULE_NAME } from '../../consts.mjs';
 import { api } from '../../util/api.mjs';
-import { localizeBonusLabel, localizeBonusTooltip } from '../../util/localize.mjs';
+import { localize, localizeBonusLabel, localizeBonusTooltip } from '../../util/localize.mjs';
 import { addNodeToRollBonus } from "../add-bonus-to-item-sheet.mjs";
 import { createTemplate, templates } from "../templates.mjs";
 
@@ -52,11 +52,17 @@ export function keyValueSelect({
         }
     }
 
+    let errorMsg = '';
+    if (!choices.length) {
+        errorMsg = localize('string-select.no-choices');
+    }
+
     const div = createTemplate(
         templates.keyValueSelect,
         {
             choices,
             current,
+            errorMsg,
             isSubLabel,
             journal,
             key,
