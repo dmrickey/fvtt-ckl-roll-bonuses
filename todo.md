@@ -266,7 +266,6 @@
   - Roll an attack with that weapon, putting in "20" into the "Check Override"
   - The critical confirmation bonus doesnt show up in the roll
 
-- inspiration always thinks skill is untrained
 - vital strike is configuring both VS and IVS
 
 ### Idea

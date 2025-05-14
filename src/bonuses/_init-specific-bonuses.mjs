@@ -29,7 +29,7 @@ import { WeaponSpecialization } from './weapon-specialization/weapon-specializat
 // import logic for joint handling
 import './armor-focus/shared.mjs';
 import './inspiration/_inspiration-join.mjs';
-import './weapon-focus/_weapon-focus-shared.mjs'
+import './weapon-focus/_weapon-focus-shared.mjs';
 
 // separate because its deprecated
 import './skills/init.mjs';

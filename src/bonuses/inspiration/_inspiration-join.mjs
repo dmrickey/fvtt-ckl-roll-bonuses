@@ -45,7 +45,7 @@ class MiscInspirationLanguageSettings {
 export const canUseInspirationForFree = (actor, id) => {
     if (InspirationTrue.has(actor)) return true;
 
-    const inspired = getFlaggedSkillIdsFromActor(actor, InspirationTrue.key);
+    const inspired = getFlaggedSkillIdsFromActor(actor, Inspiration.key);
     if (intersects(inspired, id) && actor.getSkillInfo(id).rank) return true;
 
     return false;
@@ -289,7 +289,7 @@ function onRollSkill(actor, options, skill) {
 
     const bonus = getDieForSkill(actor, skill);
     if (bonus) {
-        part = `@${bonus.path}[${bonus.sources.join(',')}]`
+        part = `@${bonus.path}[${bonus.sources.join(', ')}]`;
         options.parts.push(part);
     }
 }
