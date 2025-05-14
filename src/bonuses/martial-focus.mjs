@@ -42,7 +42,6 @@ export class MartialFocus extends SpecificBonus {
             type: 'render-and-create',
             compendiumId: 'W1eDSqiwljxDe0zl',
             isItemMatchFunc: (name) => name === Settings.name,
-            itemFilter: (item) => item instanceof pf1.documents.item.ItemPF,
             showInputsFunc: (item, html, isEditable) => {
                 const current = item.getFlag(MODULE_NAME, MartialFocus.key);
                 const customs =

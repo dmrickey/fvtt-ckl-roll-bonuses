@@ -13,7 +13,6 @@ export class Outflank extends SpecificBonus {
     static get configuration() {
         return {
             type: 'render-and-create',
-            itemFilter: (item) => item instanceof pf1.documents.item.ItemPF,
             compendiumId: 'ln2Dhw97Fol1BCxU',
             isItemMatchFunc: name => name === Settings.name,
             showInputsFunc: (item, html, isEditable) => showEnabledLabel({

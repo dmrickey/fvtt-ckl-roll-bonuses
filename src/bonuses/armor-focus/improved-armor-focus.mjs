@@ -40,7 +40,6 @@ export class ArmorFocusImproved extends SpecificBonus {
     static get configuration() {
         return {
             type: 'render-and-create',
-            itemFilter: (item) => item instanceof pf1.documents.item.ItemPF,
             compendiumId: 'WmEE6BOuP5Uh7pEE',
             isItemMatchFunc: (name) => ArmorFocus.configuration.isItemMatchFunc(name) && name.includes(LanguageSettings.improved),
             showInputsFunc: (item, html, isEditable) => {

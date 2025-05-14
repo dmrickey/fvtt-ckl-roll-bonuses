@@ -40,7 +40,6 @@ export class WeaponSpecialization extends SpecificBonus {
             type: 'render-and-create',
             compendiumId: 'YLCvMNeAF9V31m1h',
             isItemMatchFunc: (name) => name === Settings.name,
-            itemFilter: (item) => item instanceof pf1.documents.item.ItemPF,
             showInputsFunc: (item, html, isEditable) => {
                 const actor = item.actor;
                 const choices = (actor && isEditable)

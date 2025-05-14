@@ -46,7 +46,6 @@ export class SpellFocus extends BaseSpellFocus {
             type: 'render-and-create',
             compendiumId: 'V2zY7BltkpSXwejy',
             isItemMatchFunc: (name) => name === Settings.name,
-            itemFilter: (item) => item instanceof pf1.documents.item.ItemPF,
             showInputsFunc: (item, html, isEditable) => {
                 const { spellSchools } = pf1.config;
                 const current = item.getFlag(MODULE_NAME, this.key);
@@ -84,7 +83,6 @@ export class SpellFocusGreater extends BaseSpellFocus {
             type: 'render-and-create',
             compendiumId: 'LSykiaxYWzva2boF',
             isItemMatchFunc: (name) => name.includes(Settings.name) && name.includes(LanguageSettings.greater),
-            itemFilter: (item) => item instanceof pf1.documents.item.ItemPF,
             showInputsFunc: (item, html, isEditable) => {
                 const baseFocused = item.actor ? SpellFocus.getFocusedSchools(item.actor) : [];
                 const { spellSchools } = pf1.config;
@@ -130,7 +128,6 @@ export class SpellFocusMythic extends BaseSpellFocus {
             type: 'render-and-create',
             compendiumId: 'TOMEhAeZsgGHrSH6',
             isItemMatchFunc: (name) => name.includes(Settings.name) && name.includes(LanguageSettings.mythic),
-            itemFilter: (item) => item instanceof pf1.documents.item.ItemPF,
             showInputsFunc: (item, html, isEditable) => {
                 const baseFocused = item.actor ? SpellFocus.getFocusedSchools(item.actor) : [];
                 const { spellSchools } = pf1.config;

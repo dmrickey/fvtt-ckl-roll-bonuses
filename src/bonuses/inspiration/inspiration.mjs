@@ -33,7 +33,6 @@ export class Inspiration extends SpecificBonus {
             type: 'render-and-create',
             compendiumId: 'nKbyztRQCU5XMbbs',
             isItemMatchFunc: (name, item) => name === Settings.name && !!item?.system.sources?.find(({ id, pages }) => id === 'PZO1129' && pages == 31),
-            itemFilter: (item) => item instanceof pf1.documents.item.ItemPF,
             showInputsFunc: (item, html, isEditable) => {
                 const choices = getSkillChoices(item.actor, { isEditable });
 

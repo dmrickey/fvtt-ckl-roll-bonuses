@@ -60,7 +60,6 @@ export class VersatileTraining extends SpecificBonus {
             type: 'render-and-create',
             compendiumId: 'ORQUp9lBAMxPhRVu',
             isItemMatchFunc: (name) => name === Settings.name,
-            itemFilter: (item) => item instanceof pf1.documents.item.ItemPF,
             showInputsFunc: (item, html, isEditable) => {
                 let currentGroup = /** @type {WeaponGroup} */ (item.getFlag(MODULE_NAME, this.key));
 

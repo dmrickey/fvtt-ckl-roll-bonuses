@@ -262,7 +262,6 @@ declare global {
     declare type JustCreate = {
         type: 'just-create';
         compendiumId: string;
-        itemFilter: (item: ItemPF) => boolean;
         isItemMatchFunc: (name: string, item?: ItemPF) => boolean;
         options?: {
             extraBooleanFlags?: string[];
@@ -274,7 +273,6 @@ declare global {
 
     declare type JustRender = {
         type: 'just-render';
-        itemFilter: (item: ItemPF) => boolean;
         showInputsFunc: ShowInputsFunc;
     };
 
@@ -284,7 +282,6 @@ declare global {
     // declare type RenderConfigure = {
     //     type: 'render-configure';
     //     compendiumId: string;
-    //     itemFilter: (item: ItemPF) => boolean;
     //     isItemMatchFunc: (name: string, item?: ItemPF) => boolean;
     //     showInputsFunc: ShowInputsFunc;
     //     options?: {
@@ -295,7 +292,6 @@ declare global {
     // declare type CreateAndRender = {
     //     type: 'render-and-create';
     //     compendiumId: string;
-    //     itemFilter: (item: ItemPF) => boolean;
     //     isItemMatchFunc: (name: string, item?: ItemPF) => boolean;
     //     showInputsFunc: ShowInputsFunc;
     //     options?: {

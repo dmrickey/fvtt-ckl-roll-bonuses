@@ -24,7 +24,6 @@ export class FuriousFocus extends SpecificBonus {
             type: 'render-and-create',
             compendiumId: 'UcEIgufLJlIfhHmu',
             isItemMatchFunc: (name) => name === Settings.name,
-            itemFilter: (item) => item instanceof pf1.documents.item.ItemPF,
             showInputsFunc: (item, html, isEditable) => {
                 showEnabledLabel({
                     item,

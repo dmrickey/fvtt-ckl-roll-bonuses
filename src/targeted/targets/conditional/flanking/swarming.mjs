@@ -13,7 +13,6 @@ export class Swarming extends SpecificBonus {
     static get configuration() {
         return {
             type: 'render-and-create',
-            itemFilter: (item) => item instanceof pf1.documents.item.ItemPF,
             compendiumId: 'fyRBxVBVyy1gQgfV',
             isItemMatchFunc: name => name === Settings.name,
             showInputsFunc: (item, html, isEditable) => showEnabledLabel({

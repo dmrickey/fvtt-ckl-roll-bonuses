@@ -20,7 +20,6 @@ export class SnakeSidewind extends SpecificBonus {
             type: 'render-and-create',
             compendiumId: 'Cvgd7Dehxxj6Muup',
             isItemMatchFunc: (name) => name === Settings.name,
-            itemFilter: (item) => item instanceof pf1.documents.item.ItemPF,
             showInputsFunc: (item, html, isEditable) => {
                 showEnabledLabel({
                     item,

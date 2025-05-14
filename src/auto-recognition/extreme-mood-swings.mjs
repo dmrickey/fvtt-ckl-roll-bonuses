@@ -12,7 +12,6 @@ class Settings {
 }
 
 onRenderCreate(
-    (item) => item instanceof pf1.documents.item.ItemPF,
     ChangeTypeModification.key,
     'WSRZEwNGpQUNcvI9',
     (name) => name === Settings.name,

@@ -46,7 +46,6 @@ export class SkillRankOverride extends SpecificBonus {
     static get configuration() {
         return {
             type: 'just-render',
-            itemFilter: (item) => item instanceof ItemPF,
             showInputsFunc: (item, html, isEditable) => {
                 let choices = getSkillChoices(item.actor, { isEditable, includeAll: false });
 

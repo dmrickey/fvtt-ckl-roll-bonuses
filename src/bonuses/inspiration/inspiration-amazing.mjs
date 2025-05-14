@@ -25,7 +25,6 @@ export class InspirationAmazing extends SpecificBonus {
             type: 'render-and-create',
             compendiumId: '3ggXCz7WmYP55vu5',
             isItemMatchFunc: (name) => name === Settings.name,
-            itemFilter: (item) => item instanceof pf1.documents.item.ItemPF,
             showInputsFunc: (item, html, isEditable) => {
                 const die = item.actor?.getRollData().rb?.inspiration?.base;
                 showEnabledLabel({

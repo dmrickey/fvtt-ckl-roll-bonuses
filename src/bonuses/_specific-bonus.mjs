@@ -12,7 +12,6 @@ export const initConfiguration = (bonus) => {
                 break;
             case 'render-and-create':
                 onRenderCreate(
-                    config.itemFilter,
                     bonus.key,
                     config.compendiumId,
                     config.isItemMatchFunc,
@@ -43,6 +42,7 @@ const onRender = (key, showInputsFunc) => {
             /** @type {[HTMLElement]} */[html],
             /** @type {unknown} */ _data
         ) => {
+            if (!(item instanceof pf1.documents.item.ItemPF)) return;
             if (item.hasItemBooleanFlag(key)) {
                 showInputsFunc(item, html, isEditable);
             }

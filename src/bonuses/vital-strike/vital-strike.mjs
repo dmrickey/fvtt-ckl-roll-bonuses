@@ -70,7 +70,6 @@ export class VitalStrike extends VitalBase {
             type: 'render-and-create',
             compendiumId: 'DorPGQ2mifJbMKH8',
             isItemMatchFunc: (name) => name === Settings.name,
-            itemFilter: (item) => item instanceof pf1.documents.item.ItemPF,
             showInputsFunc: this.showVitalStrikeInputs.bind(this),
         };
     }
@@ -94,7 +93,6 @@ export class VitalStrikeImproved extends VitalBase {
             type: 'render-and-create',
             compendiumId: '26k1Gi7t5BoqxhIj',
             isItemMatchFunc: (name) => LanguageSettings.isImproved(name, Settings.name),
-            itemFilter: (item) => item instanceof pf1.documents.item.ItemPF,
             showInputsFunc: this.showVitalStrikeInputs.bind(this),
         };
     }
@@ -118,7 +116,6 @@ export class VitalStrikeGreater extends VitalBase {
             type: 'render-and-create',
             compendiumId: 'zKNk7a4XxXsygJ67',
             isItemMatchFunc: (name) => LanguageSettings.isGreater(name, Settings.name),
-            itemFilter: (item) => item instanceof pf1.documents.item.ItemPF,
             showInputsFunc: this.showVitalStrikeInputs.bind(this),
         };
     }
@@ -139,7 +136,6 @@ export class VitalStrikeMythic extends VitalBase {
             type: 'render-and-create',
             compendiumId: 'rYLOl3zfFt3by3CE',
             isItemMatchFunc: (name) => LanguageSettings.isMythic(name, Settings.name),
-            itemFilter: (item) => item instanceof pf1.documents.item.ItemPF,
             showInputsFunc: (item, html, isEditable) => {
                 showEnabledLabel({
                     item,

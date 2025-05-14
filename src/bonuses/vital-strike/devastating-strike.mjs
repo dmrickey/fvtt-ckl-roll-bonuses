@@ -19,7 +19,6 @@ export class DevastatingStrike extends SpecificBonus {
     static get configuration() {
         return {
             type: 'render-and-create',
-            itemFilter: (item) => item instanceof pf1.documents.item.ItemPF,
             compendiumId: 'DEVWkg29qOYtoQ7e',
             isItemMatchFunc: (name) => name === Settings.devastatingStrike,
             showInputsFunc: (item, html, isEditable) =>
@@ -53,7 +52,6 @@ export class DevastatingStrikeImproved extends SpecificBonus {
     static get configuration() {
         return {
             type: 'render-and-create',
-            itemFilter: (item) => item instanceof pf1.documents.item.ItemPF,
             compendiumId: 'cXRxY3sO0jrtADfD',
             isItemMatchFunc: (name) => name.includes(Settings.devastatingStrike) && name.includes(LanguageSettings.improved),
             showInputsFunc: (item, html, isEditable) =>

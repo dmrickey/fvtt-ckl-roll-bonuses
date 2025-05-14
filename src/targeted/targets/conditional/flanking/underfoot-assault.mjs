@@ -13,7 +13,6 @@ export class UnderfootAssault extends SpecificBonus {
     static get configuration() {
         return {
             type: 'render-and-create',
-            itemFilter: (item) => item instanceof pf1.documents.item.ItemPF,
             compendiumId: 'ks7p3n3LbKuVuFiD',
             isItemMatchFunc: name => name.includes(Settings.name),
             showInputsFunc: (item, html, isEditable) => showEnabledLabel({

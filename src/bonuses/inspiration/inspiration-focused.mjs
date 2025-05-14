@@ -41,7 +41,6 @@ export class InspirationFocused extends SpecificBonus {
             type: 'render-and-create',
             compendiumId: 'c6WT66xBw9y7KxUn',
             isItemMatchFunc: (name) => name === Settings.inspirationFocused,
-            itemFilter: (item) => item instanceof pf1.documents.item.ItemPF,
             showInputsFunc: (item, html, isEditable) => {
                 const choices = getSkillChoices(item.actor, { isEditable, includeAll: false });
                 traitInput({

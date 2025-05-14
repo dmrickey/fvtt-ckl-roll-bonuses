@@ -28,7 +28,6 @@ export class InspirationTrue extends SpecificBonus {
             type: 'render-and-create',
             compendiumId: 'H2Iac6ELVKBU6Ayu',
             isItemMatchFunc: (name) => name === Settings.name,
-            itemFilter: (item) => item instanceof pf1.documents.item.ItemPF,
             showInputsFunc: (item, html, isEditable) => {
                 showEnabledLabel({
                     item,

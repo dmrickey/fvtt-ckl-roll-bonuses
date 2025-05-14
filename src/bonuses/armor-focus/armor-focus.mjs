@@ -38,7 +38,6 @@ export class ArmorFocus extends SpecificBonus {
             type: 'render-and-create',
             compendiumId: 'zBrrZynIB0EXagds',
             isItemMatchFunc: (name) => name === Settings.armorFocus,
-            itemFilter: (item) => item instanceof pf1.documents.item.ItemPF,
             showInputsFunc: (item, html, isEditable) => {
                 const actor = item.actor;
                 const choices = (isEditable && actor)

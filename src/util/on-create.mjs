@@ -56,7 +56,6 @@ export const onCreate = (
 }
 
 /**
- * @param {(item: ItemPF) => boolean} itemFilter will not operate if false
  * @param {string} key
  * @param {string} compendiumId
  * @param {(name: string, item?: ItemPF) => boolean} isItemFunc
@@ -66,7 +65,6 @@ export const onCreate = (
  * @param {(item: ItemPF) => Record<string, any> | undefined} [options.defaultFlagValuesFunc]
  */
 export const onRenderCreate = (
-    itemFilter,
     key,
     compendiumId,
     isItemFunc,
@@ -74,7 +72,6 @@ export const onRenderCreate = (
         showInputsFunc,
         extraBooleanFlags = [],
         defaultFlagValuesFunc,
-
     } = {}
 ) => {
     Hooks.on(
@@ -84,7 +81,7 @@ export const onRenderCreate = (
             /** @type {[HTMLElement]} */[html],
             /** @type {unknown} */ _data
         ) => {
-            if (!itemFilter(item)) return;
+            if (!(item instanceof pf1.documents.item.ItemPF)) return;
 
             const allBooleanKeys = [key, ...extraBooleanFlags];
             const hasFlag = allBooleanKeys.every((k) => item.hasItemBooleanFlag(k));
@@ -127,7 +124,8 @@ export const onRenderCreate = (
      * @param {string} id
      */
     const handleOnCreate = (item, _data, { temporary }, id) => {
-        if (!itemFilter(item) || temporary) return;
+        if (!(item instanceof pf1.documents.item.ItemPF)) return;
+        if (temporary) return;
 
         const name = item?.name?.toLowerCase() ?? '';
         const hasCompendiumId = itemHasCompendiumId(item, compendiumId);

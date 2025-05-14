@@ -43,7 +43,6 @@ export class WeaponSpecializationGreater extends SpecificBonus {
             type: 'render-and-create',
             compendiumId: 'asmQDyDYTtuXg8b4',
             isItemMatchFunc: (name) => LanguageSettings.isGreater(name, WeaponSpecializationSettings.name),
-            itemFilter: (item) => item instanceof pf1.documents.item.ItemPF,
             showInputsFunc: (item, html, isEditable) => {
                 const actor = item.actor;
                 const choices = (actor && isEditable)

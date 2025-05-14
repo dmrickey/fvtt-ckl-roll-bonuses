@@ -25,7 +25,6 @@ export class InspirationTenacious extends SpecificBonus {
             type: 'render-and-create',
             compendiumId: 'L1Xj4ZQ48ap20hSw',
             isItemMatchFunc: (name) => name === Settings.name,
-            itemFilter: (item) => item instanceof pf1.documents.item.ItemPF,
             showInputsFunc: (item, html, isEditable) => {
                 showEnabledLabel({
                     item,

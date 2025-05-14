@@ -63,7 +63,6 @@ export class VersatilePerformance extends SpecificBonus {
             type: 'render-and-create',
             compendiumId: 'HAqAsb5H56C6cZm3',
             isItemMatchFunc: (name) => name.includes(Settings.name),
-            itemFilter: (item) => item instanceof pf1.documents.item.ItemPF,
             showInputsFunc: (item, html, isEditable) => {
                 const actor = item.actor;
                 const currentVPs = getVPsFromItem(item);
@@ -168,7 +167,6 @@ export class VersatilePerformanceExpanded extends SpecificBonus {
             type: 'render-and-create',
             compendiumId: 'vfIW1NT2bfnBLElS',
             isItemMatchFunc: (name) => name.includes(Settings.expanded),
-            itemFilter: (item) => item instanceof pf1.documents.item.ItemPF,
             showInputsFunc: (item, html, isEditable) => {
                 // don't show if this is configured on the same item as Versatile Performance
                 if (VersatilePerformance.has(item)) return;

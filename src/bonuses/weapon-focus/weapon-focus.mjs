@@ -43,7 +43,6 @@ export class WeaponFocus extends BaseWeaponFocus {
             type: 'render-and-create',
             compendiumId: 'n250dFlbykAIAg5Z',
             isItemMatchFunc: (name) => name === Settings.name,
-            itemFilter: (item) => item instanceof pf1.documents.item.ItemPF,
             showInputsFunc: (item, html, isEditable) => {
                 const actor = item.actor;
                 const choices = (isEditable && actor)
@@ -90,7 +89,6 @@ export class WeaponFocusGreater extends BaseWeaponFocus {
             type: 'render-and-create',
             compendiumId: 'IER2MzJrjSvxMlNS',
             isItemMatchFunc: (name) => LanguageSettings.isGreater(name, Settings.name),
-            itemFilter: (item) => item instanceof pf1.documents.item.ItemPF,
             showInputsFunc: (item, html, isEditable) => {
                 const actor = item.actor;
                 const choices = actor
@@ -137,7 +135,6 @@ export class WeaponFocusMythic extends BaseWeaponFocus {
             type: 'render-and-create',
             compendiumId: 'stJ6Jp1ALN6qgGBr',
             isItemMatchFunc: (name) => LanguageSettings.isMythic(name, Settings.name),
-            itemFilter: (item) => item instanceof pf1.documents.item.ItemPF,
             showInputsFunc: (item, html, isEditable) => {
                 const actor = item.actor;
                 const choices = actor
@@ -185,7 +182,6 @@ export class WeaponFocusRacial extends SpecificBonus {
             type: 'render-and-create',
             compendiumId: '8RzIeYtbx0UtXUge',
             isItemMatchFunc: (name) => name === Settings.racialWeaponFocus,
-            itemFilter: (item) => item instanceof pf1.documents.item.ItemPF,
             showInputsFunc: (item, html, isEditable) => {
                 const current = item.getFlag(MODULE_NAME, WeaponFocusRacial.key);
                 textInput({

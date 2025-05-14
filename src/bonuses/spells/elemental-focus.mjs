@@ -46,7 +46,6 @@ export class ElementalFocus extends BaseFocus {
             type: 'render-and-create',
             compendiumId: '1frgqDSnQFiTq0MC',
             isItemMatchFunc: (name) => name === Settings.elementalFocus,
-            itemFilter: (item) => item instanceof pf1.documents.item.ItemPF,
             showInputsFunc: (item, html, isEditable) => {
                 const elements = Object.fromEntries(damageElements.map(k => [k, pf1.registry.damageTypes.get(k)]));
                 const choices = Object.keys(elements).map((key) => ({ key, label: elements[key]?.name ?? '' }));
@@ -81,7 +80,6 @@ export class ElementalFocusGreater extends BaseFocus {
             type: 'render-and-create',
             compendiumId: 'l4yE4RGFbORuDfp7',
             isItemMatchFunc: (name) => name.includes(Settings.elementalFocus) && name.includes(LanguageSettings.greater),
-            itemFilter: (item) => item instanceof pf1.documents.item.ItemPF,
             showInputsFunc: (item, html, isEditable) => {
                 /** @type {{key: string, label: string}[]} */
                 let choices = [];
@@ -126,7 +124,6 @@ export class ElementalFocusMythic extends BaseFocus {
             type: 'render-and-create',
             compendiumId: 'yelJyBhjWtiIMgci',
             isItemMatchFunc: (name) => name.includes(Settings.elementalFocus) && name.includes(LanguageSettings.mythic),
-            itemFilter: (item) => item instanceof pf1.documents.item.ItemPF,
             showInputsFunc: (item, html, isEditable) => {
                 /** @type {{key: string, label: string}[]} */
                 let choices = [];

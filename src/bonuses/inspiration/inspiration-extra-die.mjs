@@ -42,7 +42,6 @@ export class InspirationExtraDie extends SpecificBonus {
     static get configuration() {
         return {
             type: 'just-render',
-            itemFilter: (item) => item instanceof pf1.documents.item.ItemPF,
             showInputsFunc: (item, html, isEditable) => {
                 const choices = getSkillChoices(item.actor, { isEditable });
                 traitInput({

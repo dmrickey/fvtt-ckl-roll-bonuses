@@ -47,7 +47,6 @@ export class SpellSpecialization extends SpecificBonus {
             type: 'render-and-create',
             compendiumId: 'CO2Qmj0aj76zJsew',
             isItemMatchFunc: (name) => name === Settings.name,
-            itemFilter: (item) => item instanceof pf1.documents.item.ItemPF,
             showInputsFunc: (item, html, isEditable) => {
                 /** @type {string[]} */
                 let choices = [];

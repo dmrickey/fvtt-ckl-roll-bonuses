@@ -45,7 +45,6 @@ class BaseElemental extends SpecificBonus {
     static get configuration() {
         return {
             type: 'just-render',
-            itemFilter: (item) => item instanceof ItemPF,
             showInputsFunc: (item, html, isEditable) => {
                 const current = item.getFlag(MODULE_NAME, this.key);
                 const choices = damageElements
