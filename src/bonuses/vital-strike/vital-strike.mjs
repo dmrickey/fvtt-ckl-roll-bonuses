@@ -68,7 +68,7 @@ export class VitalStrike extends VitalBase {
     static get configuration() {
         return {
             type: 'render-and-create',
-            compendiumId: 'DorPGQ2mifJbMKH8',
+            compendiumId: '26k1Gi7t5BoqxhIj',
             isItemMatchFunc: (name) => name === Settings.name,
             showInputsFunc: this.showVitalStrikeInputs.bind(this),
         };
@@ -91,7 +91,7 @@ export class VitalStrikeImproved extends VitalBase {
     static get configuration() {
         return {
             type: 'render-and-create',
-            compendiumId: '26k1Gi7t5BoqxhIj',
+            compendiumId: 'DorPGQ2mifJbMKH8',
             isItemMatchFunc: (name) => LanguageSettings.isImproved(name, Settings.name),
             showInputsFunc: this.showVitalStrikeInputs.bind(this),
         };

@@ -266,7 +266,5 @@
   - Roll an attack with that weapon, putting in "20" into the "Check Override"
   - The critical confirmation bonus doesnt show up in the roll
 
-- vital strike is configuring both VS and IVS
-
 ### Idea
 - turn `LanguageSettings` into a base class that other classes extend (or create a base class that has shared logic)
