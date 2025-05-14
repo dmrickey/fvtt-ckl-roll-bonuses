@@ -79,7 +79,7 @@ export class VitalStrike extends VitalBase {
 }
 export class VitalStrikeImproved extends VitalBase {
     /** @inheritdoc @override */
-    static get sourceKey() { return `${VitalStrike.sourceKey}-improved`; }
+    static get sourceKey() { return `vital-strike-improved`; }
 
     /** @inheritdoc @override */
     static get parent() { return VitalStrike.key; }
@@ -102,7 +102,7 @@ export class VitalStrikeImproved extends VitalBase {
 }
 export class VitalStrikeGreater extends VitalBase {
     /** @inheritdoc @override */
-    static get sourceKey() { return `${VitalStrike.sourceKey}-greater`; }
+    static get sourceKey() { return `vital-strike-greater`; }
 
     /** @inheritdoc @override */
     static get parent() { return VitalStrike.key; }
@@ -125,7 +125,7 @@ export class VitalStrikeGreater extends VitalBase {
 }
 export class VitalStrikeMythic extends VitalBase {
     /** @inheritdoc @override */
-    static get sourceKey() { return `${VitalStrike.sourceKey}-mythic`; }
+    static get sourceKey() { return `vital-strike-mythic`; }
 
     /** @inheritdoc @override */
     static get parent() { return VitalStrike.key; }
