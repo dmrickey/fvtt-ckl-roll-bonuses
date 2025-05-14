@@ -26,6 +26,8 @@ export class Outflank extends SpecificBonus {
             }),
         };
     }
+
+    static get defaultName() { return Settings.name; }
 }
 
 class Settings {

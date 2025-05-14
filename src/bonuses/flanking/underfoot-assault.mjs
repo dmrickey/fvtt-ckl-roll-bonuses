@@ -1,6 +1,6 @@
-import { SpecificBonus } from '../../../../bonuses/_specific-bonus.mjs';
-import { showEnabledLabel } from '../../../../handlebars-handlers/enabled-label.mjs';
-import { LanguageSettings } from '../../../../util/settings.mjs';
+import { SpecificBonus } from '../_specific-bonus.mjs';
+import { showEnabledLabel } from '../../handlebars-handlers/enabled-label.mjs';
+import { LanguageSettings } from '../../util/settings.mjs';
 
 export class UnderfootAssault extends SpecificBonus {
     /** @inheritdoc @override */

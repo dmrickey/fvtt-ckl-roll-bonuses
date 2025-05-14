@@ -1,6 +1,6 @@
-import { SpecificBonus } from '../../../../bonuses/_specific-bonus.mjs';
-import { MODULE_NAME } from '../../../../consts.mjs';
-import { LanguageSettings } from '../../../../util/settings.mjs';
+import { SpecificBonus } from '../_specific-bonus.mjs';
+import { MODULE_NAME } from '../../consts.mjs';
+import { LanguageSettings } from '../../util/settings.mjs';
 
 export class PackFlanking extends SpecificBonus {
     /** @inheritdoc @override */

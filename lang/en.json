@@ -89,6 +89,7 @@
                 "function": "Custom Targeting Function",
                 "function-player-label": "Function label for player view",
                 "furious-focus": "Furious Focus",
+                "gang-up": "Gang Up",
                 "has-boolean-flag": "Has Boolean Flag",
                 "has-boolean-flag-target": "Target for Boolean Flag",
                 "inspiration": "Inspiration",
@@ -104,7 +105,11 @@
                 "item": "Specific Items",
                 "martial-focus": "Martial Focus",
                 "maximize-damage": "Maximize Damage",
+                "menacing": "Menacing",
                 "misfortune": "Misfortune",
+                "outflank": "Outflank",
+                "outflank-improved": "Improved Outflank",
+                "pack-flanking": "Pack Flanking",
                 "precise-shot": "Precise Shot",
                 "proficiency": "Is Proficient",
                 "ranged-increment-penalty": "Ranged Increment Penalty Bonuses",
@@ -127,8 +132,10 @@
                 "spell-school": "Spell Schools",
                 "spell-subschool": "Spell Subschools",
                 "spell-specialization": "Spell Specialization",
+                "swarming": "Swarming",
                 "token": "Targeted Tokens",
                 "token-invert": "Invert Targeted Tokens",
+                "underfoot-assault": "Underfoot Assault",
                 "versatile-performance": "Versatile Performance",
                 "versatile-performance-expanded": "Expanded Versatile Performance",
                 "versatile-training": "Versatile Training - Weapon Group",
@@ -205,6 +212,7 @@
                 "function": "A custom function that's executed to determine what to target. See examples in documentation.",
                 "function-player-label": "Label shown to players when configured. Players will not be able to edit the function.",
                 "furious-focus": "Negate the attack penalty of power attack on the first attack made each round.",
+                "gang-up": "You are considered threatening your target if at least two of your allies are threatening your target.",
                 "has-boolean-flag": "Activate bonuses based on whether a boolean flag is active.",
                 "inspiration": "Freely roll Inspiration for specified skills.",
                 "inspiration-amazing": "Increase Inspiration die by one step.",
@@ -218,7 +226,11 @@
                 "item": "Apply bonuses when using these specific Items.",
                 "martial-focus": "+1 damage with chosen weapon group. Attacks and Weapons must be properly configured with weapon groups.",
                 "maximize-damage": "Maximize the damage rolls for the targeted abilities.",
+                "menacing": "Increase any flank bonus by +2 against an enemy you currently threaten.",
                 "misfortune": "Roll twice and take the worse. Multiple bonuses stack.",
+                "outflank": "Teamwork feat to increase flank bonuses by +2.",
+                "outflank-improved": "Teamwork feat to increase flank positioning options.",
+                "pack-flanking": "You are considered flanking with your pet if you both have this feat and are adjacent and threatening the same target.",
                 "precise-shot": "Negate penalty for shooting into melee.",
                 "proficiency": "Adds Proficiency for this item (usually needed alongside a Weapon Group override).",
                 "ranged-increment-penalty": "Modify the penalties associated with ranged weapon increments.",
@@ -241,8 +253,10 @@
                 "spell-focus-greater": "Further increase a school from Spell Focus by +1 DC.",
                 "spell-focus-mythic": "Double Spell Focus bonuses.",
                 "spell-descriptor": "Apply bonuses for spells with the chosen descriptors.",
+                "swarming": "While sharing a square with an ally with this ability, you are considered flanking your target.",
                 "token": "Apply bonuses for actions while specific tokens are targeted. When this buff is activated, a dialog will show up that allows you to choose from tokens in the scene.",
                 "token-invert": "Invert the selection, meaning bonuses will apply when any token is targeted that is not the chosen token.",
+                "underfoot-assault": "While sharing a square with an opponent and adjacent to an ally, you are considered flanking that opponent.",
                 "versatile-performance": "Replace two skills with a chosen perform skill.",
                 "versatile-performance-expanded": "Select a third skill to associate with the selected Perform skill.",
                 "versatile-training": "Use BAB instead of ranks for two skills associated with a weapon group.",
@@ -319,6 +333,7 @@
                 "require-melee-threaten": "Skipped Melee Requiremnt"
             },
             "label": {
+                "flanking": "Flanking",
                 "higher-ground": "High Ground Melee Bonus",
                 "range-increment-penalty": "Ranged Increment Penalty",
                 "shoot-into-melee": "Shooting into Melee",
@@ -338,6 +353,10 @@
                 "label": "Configure Global Bonuses",
                 "title": "Global Bonuses",
                 "section": {
+                    "flanking": {
+                        "description": "Attempts to automatically add appropriate bonuses for flanking. The mod includes various bonuses to account for different feats/abilities that increase the bonus and modify how positioning works. Be sure to check out the journal for more details on those abilties.",
+                        "issues": "Flanking on diagonals when not adjacent to the target may not be technically accurate, but should be close enough for most scenarios (i.e. if you rotated the map 45 degrees, it would definitely be flanking)."
+                    },
                     "higher-ground": {
                         "description": "Add +1 to melee attacks when made from a higher elevation.",
                         "issues": ""
@@ -522,6 +541,10 @@
                 "name": "Furious Focus",
                 "default": "Furious Focus"
             },
+            "gang-up": {
+                "name": "Gang Up",
+                "default": "Gang Up"
+            },
             "inspiration": {
                 "name": "Inspiration",
                 "default": "Inspiration"
@@ -570,6 +593,14 @@
                 "name": "Martial Focus",
                 "default": "Martial Focus"
             },
+            "outflank": {
+                "name": "Outflank",
+                "default": "Outflank"
+            },
+            "pack-flanking": {
+                "name": "Pack Flanking",
+                "default": "Pack Flanking"
+            },
             "precise-shot": {
                 "name": "Precise Shot",
                 "default": "Precise Shot"
@@ -585,6 +616,14 @@
             "spell-specialization": {
                 "name": "Spell Specialization",
                 "default": "Spell Specialization"
+            },
+            "swarming": {
+                "name": "Swarming",
+                "default": "Swarming"
+            },
+            "underfoot-assault": {
+                "name": "Underfoot Assault",
+                "default": "Underfoot Assault"
             },
             "versatile-performance": {
                 "name": "Versatile Performance",

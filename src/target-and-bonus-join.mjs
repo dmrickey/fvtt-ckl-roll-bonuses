@@ -6,9 +6,11 @@ import { localize } from "./util/localize.mjs";
 import { truthiness } from "./util/truthiness.mjs";
 import { initSources } from './targeted/init-sources.mjs';
 import { api } from './util/api.mjs';
-import { registerGlobalBonuses } from './global-bonuses/init-global-bonuses.mjs';
+import { registerGlobalBonuses } from './global-bonuses/_init-global-bonuses.mjs';
 
 initSources();
+
+// doing this here because they also register extra sources
 registerGlobalBonuses();
 
 registerItemHint((hintcls, actor, item, _data) => {
@@ -104,35 +106,50 @@ registerItemHint((hintcls, actor, item, _data) => {
 
 /**
  * @overload
- * @param {ActionUse | ItemPF | ItemAction} thing
+ * @param {ArrayOrSelf<ArrayOrSelf<ActionUse | ItemPF | ItemAction>>} things
  * @param {(bonusType: typeof BaseBonus, sourceItem: ItemPF) => void} func The type providing the bonus, and the Item providing the bonus
  * @param {object} [options]
  * @param {boolean} [options.skipGenericTarget]
  * @param {never} [options.specificBonusType]
+ * @param {'some' | 'every'} [options.thingsFilter]
  * @returns {void}
  */
 
 /**
  * @template {typeof BaseBonus} T
  * @overload
- * @param {ActionUse | ItemPF | ItemAction} thing
+ * @param {ArrayOrSelf<ActionUse | ItemPF | ItemAction>} things
  * @param {(bonusType: T, sourceItem: ItemPF) => void} func The type providing the bonus, and the Item providing the bonus
  * @param {object} [options]
  * @param {boolean} [options.skipGenericTarget]
  * @param {T} [options.specificBonusType]
+ * @param {'some' | 'every'} [options.thingsFilter]
  * @returns {void}
  */
 
 /**
  * @template {typeof BaseBonus} T
- * @param {ActionUse | ItemPF | ItemAction} thing
+ * @param {ArrayOrSelf<ActionUse | ItemPF | ItemAction>} things
  * @param {(bonusType: T | typeof BaseBonus, sourceItem: ItemPF) => void} func The type providing the bonus, and the Item providing the bonus
  * @param {object} [options]
  * @param {boolean} [options.skipGenericTarget]
  * @param {T | never} [options.specificBonusType]
+ * @param {'some' | 'every'} [options.thingsFilter]
  */
-export const handleBonusesFor = (thing, func, { skipGenericTarget = false, specificBonusType = undefined } = {}) => {
-    const actor = thing.actor;
+export const handleBonusesFor = (
+    things,
+    func,
+    {
+        skipGenericTarget = false,
+        specificBonusType = undefined,
+        thingsFilter = 'some',
+    } = {}
+) => {
+    if (!Array.isArray(things)) {
+        things = [things];
+    }
+
+    const actor = things.find(x => !!x?.actor)?.actor;
     if (!actor || !actor.itemFlags?.boolean) return;
 
     let sources = [];
@@ -156,7 +173,8 @@ export const handleBonusesFor = (thing, func, { skipGenericTarget = false, speci
             const targets = sourceItem[MODULE_NAME].targets
                 .filter((targetType) => !skipGenericTarget || !targetType.isGenericTarget);
             const func = sourceItem.getFlag(MODULE_NAME, 'target-toggle') === 'all' ? 'every' : 'some';
-            return !!targets.length && targets[func]((sourceTarget) => sourceTarget.doesTargetInclude(sourceItem, thing));
+            return !!targets.length
+                && targets[func]((sourceTarget) => things[thingsFilter]((thing) => sourceTarget.doesTargetInclude(sourceItem, thing)));
         })
         .forEach((sourceItem) => sourceItem[MODULE_NAME].bonuses.forEach((bonusType) => {
             if (!specificBonusType || bonusType === specificBonusType) {

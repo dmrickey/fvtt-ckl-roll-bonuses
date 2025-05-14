@@ -1,11 +1,15 @@
+import { GangUp } from '../bonuses/flanking/gang-up.mjs';
+import { OutflankImproved } from '../bonuses/flanking/outflank-improved.mjs';
+import { PackFlanking } from '../bonuses/flanking/pack-flanking.mjs';
+import { Swarming } from '../bonuses/flanking/swarming.mjs';
+import { UnderfootAssault } from '../bonuses/flanking/underfoot-assault.mjs';
 import { Outflank } from '../global-bonuses/specific/bonuses/flanking/outflank.mjs';
-import { GangUp } from '../targeted/targets/conditional/flanking/gang-up.mjs';
-import { OutflankImproved } from '../targeted/targets/conditional/flanking/outflank-improved.mjs';
-import { PackFlanking } from '../targeted/targets/conditional/flanking/pack-flanking.mjs';
-import { Swarming } from '../targeted/targets/conditional/flanking/swarming.mjs';
-import { UnderfootAssault } from '../targeted/targets/conditional/flanking/underfoot-assault.mjs';
+import { MenacingBonus } from '../global-bonuses/targeted/bonuses/menacing.mjs';
+import { handleBonusesFor } from '../target-and-bonus-join.mjs';
+import { isMelee } from './action-type-helpers.mjs';
 import { difference } from './array-intersects.mjs';
 import { PositionalHelper } from './positional-helper.mjs';
+import { truthiness } from './truthiness.mjs';
 
 export class FlankHelper {
 
@@ -21,11 +25,11 @@ export class FlankHelper {
      * @type {TokenPF[]}
      */
     get outflankBuddies() {
-        return this.hasOutflank(this.attacker)
-            ? this.allFlankBuddies.filter(this.hasOutflank)
+        return this.#hasOutflank(this.attacker)
+            ? this.allFlankBuddies.filter(this.#hasOutflank)
             : [];
     };
-    get isOutflanking() { return this.hasOutflank(this.attacker) && !!this.outflankBuddies.length; }
+    get isOutflanking() { return this.#hasOutflank(this.attacker) && !!this.outflankBuddies.length; }
 
     targetIsBeingMenaced = false;
 
@@ -71,6 +75,10 @@ export class FlankHelper {
         this.attacker = _attacker;
         this.target = _target;
 
+        if (this.#cannotBeFlanked(this.attacker, this.target)) {
+            return;
+        }
+
         let threateningAllies = flankingWith || this.attacker.scene.tokens
             .filter((x) => ![this.attacker.id, this.target.id].includes(x.id)
                 && x.disposition !== this.target.document.disposition
@@ -82,12 +90,13 @@ export class FlankHelper {
         if (!attackerAndTarget.threatens(action)) return;
 
         // is being menaced
-        this.targetIsBeingMenaced = [this.attacker, ...threateningAllies]
-            .filter(this.hasMenacing)
-            .some((x) => new PositionalHelper(x, this.target).isAdjacent());
+        this.targetIsBeingMenaced = this.#hasMenacing(this.attacker, [action].filter(truthiness))
+            || threateningAllies
+                .filter((x) => new PositionalHelper(x, this.target).isAdjacent())
+                .some((x) => this.#hasMenacing(x));
 
         // Gang Up
-        if (this.hasGangUp(this.attacker)) {
+        if (this.#hasGangUp(this.attacker)) {
             if (threateningAllies.length >= 2) {
                 this.allFlankBuddies.push(...threateningAllies);
                 // no need to go further since they're all already accounted for
@@ -96,15 +105,15 @@ export class FlankHelper {
         }
 
         // ratfolk swarming
-        if (this.hasSwarming(this.attacker)) {
-            const withSwarming = threateningAllies.filter(this.hasSwarming);
+        if (this.#hasSwarming(this.attacker)) {
+            const withSwarming = threateningAllies.filter(this.#hasSwarming);
             this.allFlankBuddies.push(...withSwarming.filter((ally) => new PositionalHelper(this.attacker, ally).isSharingSquare()));
             threateningAllies = difference(threateningAllies, this.allFlankBuddies);
             if (!threateningAllies.length) return;
         }
 
         //mouser
-        if (this.isMouser(this.attacker)) {
+        if (this.#isMouser(this.attacker)) {
             if (attackerAndTarget.isSharingSquare()) {
                 this.allFlankBuddies.push(...threateningAllies.filter((ally) =>
                     new PositionalHelper(this.attacker, ally).isAdjacent() && new PositionalHelper(ally, this.target).isAdjacent()
@@ -115,7 +124,7 @@ export class FlankHelper {
             }
         }
         // if any allies are mouser
-        const mousers = threateningAllies.filter(this.isMouser);
+        const mousers = threateningAllies.filter(this.#isMouser);
         if (mousers.length) {
             this.allFlankBuddies.push(...mousers.filter((mouser) => {
                 const mouserAndTarget = new PositionalHelper(mouser, this.target);
@@ -128,7 +137,7 @@ export class FlankHelper {
         //pack flanking
         {
             this.allFlankBuddies.push(...threateningAllies.filter((ally) =>
-                this.hasPackFlanking(this.attacker, ally)
+                this.#hasPackFlanking(this.attacker, ally)
                 && new PositionalHelper(ally, this.attacker).isAdjacent()
             ));
 
@@ -137,9 +146,9 @@ export class FlankHelper {
         }
 
         //Improved Outflank
-        if (this.hasImprovedOutflank(this.attacker)) {
+        if (this.#hasImprovedOutflank(this.attacker)) {
             this.allFlankBuddies.push(...threateningAllies.filter((ally) =>
-                this.hasImprovedOutflank(ally)
+                this.#hasImprovedOutflank(ally)
                 && attackerAndTarget.isFlankingWith(ally, { hasImprovedOutflank: true, specificAction: action })
             ));
 
@@ -153,13 +162,24 @@ export class FlankHelper {
         ));
     }
 
+    /**
+     * @param {TokenPF} attacker
+     * @param {TokenPF} target
+     * @returns {boolean}
+     */
+    #cannotBeFlanked(attacker, target) {
+        // todo
+        return false;
+        // throw new Error('Method not implemented.');
+    }
+
     // todo fill in logic for these getters
 
     /**
      * @param {TokenPF} token
      * @returns {boolean}
      */
-    hasGangUp(token) {
+    #hasGangUp(token) {
         return GangUp.has(token);
     }
 
@@ -167,7 +187,7 @@ export class FlankHelper {
      * @param {TokenPF} token
      * @returns {boolean}
      */
-    hasOutflank(token) {
+    #hasOutflank(token) {
         return Outflank.has(token);
     }
 
@@ -175,22 +195,36 @@ export class FlankHelper {
      * @param {TokenPF} token
      * @returns {boolean}
      */
-    hasImprovedOutflank(token) {
+    #hasImprovedOutflank(token) {
         return OutflankImproved.has(token);
     }
 
     /**
      * @param {TokenPF} token
+     * @param {ItemAction[]} [actions]
      * @returns {boolean}
      */
-    hasMenacing(token) {
+    #hasMenacing(token, actions = []) {
         const actor = token.actor;
         if (!actor) return false;
 
-        // const flagged = actor.itemFlags?.boolean[Menacing.key] ?? [];
+        if (!actions.length) {
+            actions = [...actor.itemTypes.attack, ...actor.itemTypes.weapon]
+                .filter((item) => item.isActive)
+                .flatMap((item) => [...item.actions])
+                .filter((action) => isMelee(action.item, action));
+        }
 
-        // TODO figure out how to get a list of
-        return false;
+        let hasMenacing = false;
+        handleBonusesFor(
+            actions,
+            () => hasMenacing = true,
+            {
+                specificBonusType: MenacingBonus
+            }
+        );
+
+        return hasMenacing;
     }
 
     /**
@@ -198,7 +232,7 @@ export class FlankHelper {
      * @param {TokenPF} partner
      * @returns {boolean}
      */
-    hasPackFlanking(token, partner) {
+    #hasPackFlanking(token, partner) {
         return PackFlanking.has(token.actor, partner.actor) && PackFlanking.has(token.actor, partner.actor);
     }
 
@@ -206,7 +240,7 @@ export class FlankHelper {
      * @param {TokenPF} token
      * @returns {boolean}
      */
-    hasSwarming(token) {
+    #hasSwarming(token) {
         return Swarming.has(token);
     }
 
@@ -214,7 +248,7 @@ export class FlankHelper {
      * @param {TokenPF} token
      * @returns {boolean}
      */
-    isMouser(token) {
+    #isMouser(token) {
         return UnderfootAssault.has(token);
     }
 }

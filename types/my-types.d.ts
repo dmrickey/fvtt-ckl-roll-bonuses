@@ -279,30 +279,7 @@ declare global {
     declare type CreateAndRender = Omit<JustCreate, 'type'> &
         Omit<JustRender, 'type'> & { type: 'render-and-create' };
 
-    // declare type RenderConfigure = {
-    //     type: 'render-configure';
-    //     compendiumId: string;
-    //     isItemMatchFunc: (name: string, item?: ItemPF) => boolean;
-    //     showInputsFunc: ShowInputsFunc;
-    //     options?: {
-    //         defaultFlagValuesFunc: (item?: ItemPF) => object;
-    //     };
-    // };
-
-    // declare type CreateAndRender = {
-    //     type: 'render-and-create';
-    //     compendiumId: string;
-    //     isItemMatchFunc: (name: string, item?: ItemPF) => boolean;
-    //     showInputsFunc: ShowInputsFunc;
-    //     options?: {
-    //         extraBooleanFlags?: string[];
-    //         defaultFlagValuesFunc?: (
-    //             item?: ItemPF
-    //         ) => Record<string, any> | undefined;
-    //     };
-    // };
-
-    // declare type JustCreate = Omit<CreateAndRender, 'showInuptsFunc'>;
+    declare type ArrayOrSelf<T> = T | T[];
 
     interface Function {
         /** @deprecated Don't use this */

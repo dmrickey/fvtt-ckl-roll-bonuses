@@ -259,12 +259,15 @@
   - update all journal entries to indicate what the key is
 - Add "get item hint" function to base class
 
+- add "get flank parts" to `FlankHelper` so it can be clearly labeled as "flanking"/"outflanking"/"menacing"
+
 ### Bugfix
 - Found a bug where a change targeting "Critical Confirmation" doesnt function when roll bonuses is active. Easy to test. 
   - Make a buff with a change targetting "Critical Confirmation
   - Add a weapon to your inventory
   - Roll an attack with that weapon, putting in "20" into the "Check Override"
   - The critical confirmation bonus doesnt show up in the roll
+- CMB is failing "requires melee threatens"
 
 ### Idea
 - turn `LanguageSettings` into a base class that other classes extend (or create a base class that has shared logic)

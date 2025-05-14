@@ -36,10 +36,10 @@ export class ShootIntoMeleeGlobalBonus extends BaseGlobalBonus {
      */
     static addPenalty(actionUse) {
         const { action, actor, shared } = actionUse;
-        if (ShootIntoMeleeGlobalBonus.isDisabled() || ShootIntoMeleeGlobalBonus.isDisabledForActor(actor)) {
+        if (this.isDisabled() || this.isDisabledForActor(actor)) {
             return;
         }
-        if (!actor || actor.hasItemBooleanFlag(PreciseShot.key)) {
+        if (!actor || PreciseShot.has(actor)) {
             return;
         }
 
@@ -56,17 +56,17 @@ export class ShootIntoMeleeGlobalBonus extends BaseGlobalBonus {
         }
 
         const penalties = targets.map((target) => {
-            const penalty = new PositionalHelper(actorToken, target);
-            return penalty.getShootingIntoMeleePenalty();
+            const helper = new PositionalHelper(actorToken, target);
+            return helper.getShootingIntoMeleePenalty();
         });
 
         const penalty = Math.max(...penalties);
         if (penalty) {
-            shared.attackBonus.push(`-${penalty}[${ShootIntoMeleeGlobalBonus.attackLabel}]`);
+            shared.attackBonus.push(`-${penalty}[${this.attackLabel}]`);
         }
     }
 
     static {
-        Hooks.on(customGlobalHooks.actionUseAlterRollData, ShootIntoMeleeGlobalBonus.addPenalty);
+        Hooks.on(customGlobalHooks.actionUseAlterRollData, this.addPenalty.bind(this));
     }
 }

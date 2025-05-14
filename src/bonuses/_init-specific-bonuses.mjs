@@ -3,6 +3,11 @@ import { ArmorFocus } from './armor-focus/armor-focus.mjs';
 import { ArmorFocusImproved } from './armor-focus/improved-armor-focus.mjs';
 import { ChangeTypeModification } from './change-type-modification.mjs';
 import { FatesFavored } from './fates-favored.mjs';
+import { GangUp } from './flanking/gang-up.mjs';
+import { OutflankImproved } from './flanking/outflank-improved.mjs';
+import { PackFlanking } from './flanking/pack-flanking.mjs';
+import { Swarming } from './flanking/swarming.mjs';
+import { UnderfootAssault } from './flanking/underfoot-assault.mjs';
 import { FuriousFocus } from './furious-focus.mjs';
 import { InspirationAmazing } from './inspiration/inspiration-amazing.mjs';
 import { InspirationExtraDie } from './inspiration/inspiration-extra-die.mjs';
@@ -49,15 +54,18 @@ const allSpecificBonuses = [
     ElementalFocus,
     ElementalFocusGreater,
     ElementalFocusMythic,
+    FatesFavored,
+    FuriousFocus,
+    GangUp,
     Inspiration,
     InspirationAmazing,
     InspirationExtraDie,
     InspirationFocused,
     InspirationTenacious,
     InspirationTrue,
-    FatesFavored,
-    FuriousFocus,
     MartialFocus,
+    OutflankImproved,
+    PackFlanking,
     RollSkillUntrained,
     SkillRankOverride,
     SnakeSidewind,
@@ -65,6 +73,8 @@ const allSpecificBonuses = [
     SpellFocusGreater,
     SpellFocusMythic,
     SpellSpecialization,
+    Swarming,
+    UnderfootAssault,
     VersatilePerformance,
     VersatilePerformanceExpanded,
     VersatileTraining,

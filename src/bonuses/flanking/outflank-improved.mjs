@@ -1,7 +1,7 @@
-import { SpecificBonus } from '../../../../bonuses/_specific-bonus.mjs';
-import { showEnabledLabel } from '../../../../handlebars-handlers/enabled-label.mjs';
-import { LanguageSettings } from '../../../../util/settings.mjs';
-import { Outflank } from '../../../../global-bonuses/specific/bonuses/flanking/outflank.mjs';
+import { SpecificBonus } from '../_specific-bonus.mjs';
+import { showEnabledLabel } from '../../handlebars-handlers/enabled-label.mjs';
+import { LanguageSettings } from '../../util/settings.mjs';
+import { Outflank } from '../../global-bonuses/specific/bonuses/flanking/outflank.mjs';
 
 export class OutflankImproved extends SpecificBonus {
     /** @inheritdoc @override */
@@ -18,7 +18,7 @@ export class OutflankImproved extends SpecificBonus {
         return {
             type: 'render-and-create',
             compendiumId: 'OYKXMl4diLeGyifQ',
-            isItemMatchFunc: name => name === Settings.name,
+            isItemMatchFunc: name => LanguageSettings.isImproved(name, Outflank.defaultName),
             showInputsFunc: (item, html, isEditable) => showEnabledLabel({
                 item,
                 journal: this.journal,
@@ -29,13 +29,5 @@ export class OutflankImproved extends SpecificBonus {
                 inputType: 'specific-bonus',
             }),
         };
-    }
-}
-
-class Settings {
-    static get name() { return LanguageSettings.getTranslation(OutflankImproved.key); }
-
-    static {
-        LanguageSettings.registerItemNameTranslation(OutflankImproved.key);
     }
 }
