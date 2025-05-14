@@ -76,17 +76,19 @@ export class WeaponSpecializationGreater extends SpecificBonus {
 
     /**
      * @param { ActorPF | ItemPF } doc
+     * @param {object} [options]
+     * @param {boolean} [options.onlyActive] Default true - if it should return when the bonus is active
      * @returns {string[]}
      */
-    static getGreaterSpecializedWeapons(doc) {
-        return getDocFlags(doc, this.key);
+    static getGreaterSpecializedWeapons(doc, { onlyActive = true } = { onlyActive: true }) {
+        return getDocFlags(doc, this.key, { onlyActive });
     }
 }
 
 // register hint on source feat
 registerItemHint((hintcls, _actor, item, _data) => {
     const has = WeaponSpecializationGreater.has(item);
-    const current = WeaponSpecializationGreater.getGreaterSpecializedWeapons(item)[0];
+    const current = WeaponSpecializationGreater.getGreaterSpecializedWeapons(item, { onlyActive: false })[0];
     if (has && current) {
         return hintcls.create(`${current}`, [], { hint: WeaponSpecializationGreater.tooltip });
     }

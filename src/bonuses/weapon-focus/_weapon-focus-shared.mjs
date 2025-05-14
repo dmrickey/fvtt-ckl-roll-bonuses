@@ -18,7 +18,7 @@ registerItemHint((hintcls, _actor, item, _data) => {
         return;
     }
 
-    const currentTarget = bonus.getFocusedWeapons(item)[0];
+    const currentTarget = bonus.getFocusedWeapons(item, { onlyActive: false })[0];
     if (!currentTarget) {
         return;
     }

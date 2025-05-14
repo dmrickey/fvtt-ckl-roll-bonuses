@@ -12,10 +12,12 @@ class BaseWeaponFocus extends SpecificBonus {
 
     /**
      * @param { ActorPF | ItemPF } doc
+     * @param {object} [options]
+     * @param {boolean} [options.onlyActive] Default true - if it should return when the bonus is active
      * @returns {string[]}
      */
-    static getFocusedWeapons(doc) {
-        return getDocFlags(doc, this.key);
+    static getFocusedWeapons(doc, { onlyActive = true } = { onlyActive: true }) {
+        return getDocFlags(doc, this.key, { onlyActive });
     }
 
     /**

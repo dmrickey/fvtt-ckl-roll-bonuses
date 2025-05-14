@@ -73,10 +73,12 @@ export class WeaponSpecialization extends SpecificBonus {
 
     /**
      * @param { ActorPF | ItemPF } doc
+     * @param {object} [options]
+     * @param {boolean} [options.onlyActive] Default true - if it should return when the bonus is active
      * @returns {string[]}
      */
-    static getSpecializedWeapons(doc) {
-        return getDocFlags(doc, this.key);
+    static getSpecializedWeapons(doc, { onlyActive = true } = { onlyActive: true }) {
+        return getDocFlags(doc, this.key, { onlyActive });
     }
 }
 
@@ -92,7 +94,7 @@ export { Settings as WeaponSpecializationSettings };
 // register hint on source feat
 registerItemHint((hintcls, _actor, item, _data) => {
     const has = WeaponSpecialization.has(item);
-    const current = WeaponSpecialization.getSpecializedWeapons(item)[0];
+    const current = WeaponSpecialization.getSpecializedWeapons(item, { onlyActive: false })[0];
     if (has && current) {
         return hintcls.create(`${current}`, [], { hint: WeaponSpecialization.label });
     }

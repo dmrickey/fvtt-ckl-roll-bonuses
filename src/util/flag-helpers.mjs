@@ -37,8 +37,8 @@ export const getDocFlags = (
     }
 
     // else read the flag off the item
-    if (doc instanceof pf1.documents.item.ItemPF && doc.isActive) {
-        return !onlyActive || doc.hasItemBooleanFlag(booleanFlag)
+    if (doc instanceof pf1.documents.item.ItemPF) {
+        return !onlyActive || (doc.isActive && doc.hasItemBooleanFlag(booleanFlag))
             ? [doc.getFlag(MODULE_NAME, key)].filter(truthiness)
             : [];
     }

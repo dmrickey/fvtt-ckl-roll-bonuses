@@ -268,7 +268,6 @@
 
 - inspiration always thinks skill is untrained
 - vital strike is configuring both VS and IVS
-- Bonuses using `getDocFlags` is only getting active flags, which means they're not showing their own tooltip hints. I need a way to "get active configured for actor" and "get all configured for self/item"
 
 ### Idea
 - turn `LanguageSettings` into a base class that other classes extend (or create a base class that has shared logic)

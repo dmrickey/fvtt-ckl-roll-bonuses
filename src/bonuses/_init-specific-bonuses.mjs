@@ -31,6 +31,9 @@ import './armor-focus/shared.mjs';
 import './inspiration/_inspiration-join.mjs';
 import './weapon-focus/_weapon-focus-shared.mjs'
 
+// separate because its deprecated
+import './skills/init.mjs';
+
 /**
  * Array of all bonuses that are always on
  * @see SpecificBonus
