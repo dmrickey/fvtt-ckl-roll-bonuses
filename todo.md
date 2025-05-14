@@ -53,6 +53,7 @@
 - [vnext](#vnext)
     - [Specific Bonuses](#specific-bonuses)
     - [Bugfix](#bugfix)
+    - [Idea](#idea)
 
 # TODO
 - Figure out a way to support multiple target groups on a single Item (so I can add `Favored Enemy (Human) +4` and `Favored Enemy (goblin) +2` on a single Item)
@@ -232,6 +233,7 @@
   - DC
 - Add Fortune/Misfortune checkboxes to attack/roll dialogs
 
+- Remove `greater`/`improved`/`mythic` getters from LanguageSettings and use the new `is` methods
 - Add `getSourceFlag` to api so mod authors don't have to save my mod id
   - e.g. no `source.getFlag("ckl-roll-bonuses", this.key)`
   - but instead `getSourceFlag(source, this.key)`
@@ -259,9 +261,17 @@
 - Fill in the `configuration` property for all specific bonuses
 - Add "get item hint" function to base class
 - at the end, if all of my configuration.itemFilters look like `(item) => item instanceof pf1.documents.item.ItemPF` then move that logic to a single place
+
 ### Bugfix
 - Found a bug where a change targeting "Critical Confirmation" doesnt function when roll bonuses is active. Easy to test. 
   - Make a buff with a change targetting "Critical Confirmation
   - Add a weapon to your inventory
   - Roll an attack with that weapon, putting in "20" into the "Check Override"
   - The critical confirmation bonus doesnt show up in the roll
+
+- inspiration always thinks skill is untrained
+- vital strike is configuring both VS and IVS
+- Bonuses using `getDocFlags` is only getting active flags, which means they're not showing their own tooltip hints. I need a way to "get active configured for actor" and "get all configured for self/item"
+
+### Idea
+- turn `LanguageSettings` into a base class that other classes extend (or create a base class that has shared logic)

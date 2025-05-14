@@ -41,7 +41,7 @@ export class ArmorFocus extends SpecificBonus {
             itemFilter: (item) => item instanceof pf1.documents.item.ItemPF,
             showInputsFunc: (item, html, isEditable) => {
                 const actor = item.actor;
-                const choices = isEditable && actor
+                const choices = (isEditable && actor)
                     ? uniqueArray(actor.itemTypes.equipment
                         ?.filter((item) => item.system.slot === 'armor')
                         .flatMap((item) => item.system.baseTypes ?? []))

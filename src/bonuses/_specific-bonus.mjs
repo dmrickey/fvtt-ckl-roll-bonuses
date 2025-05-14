@@ -3,7 +3,7 @@ import { localizeBonusLabel, localizeBonusTooltip } from '../util/localize.mjs';
 import { onRenderCreate } from '../util/on-create.mjs';
 
 /** @param {typeof SpecificBonus} bonus */
-export const initBonus = (bonus) => {
+export const initConfiguration = (bonus) => {
     try {
         const config = bonus.configuration;
         switch (config.type) {
@@ -27,7 +27,7 @@ export const initBonus = (bonus) => {
         }
     }
     catch {
-        console.error(`Bonus '${bonus.prototype.constructor.name} :: ${bonus.key}' has not been migrated yet.`);
+        ui.notifications.error(`Bonus '${bonus.prototype.constructor.name} :: ${bonus.key}' has no configuration.`);
     }
 }
 
@@ -53,7 +53,7 @@ const onRender = (key, showInputsFunc) => {
 export class SpecificBonus {
     static register() {
         api.specificBonusTypeMap[this.key] = this;
-        initBonus(this);
+        initConfiguration(this);
     }
 
     /** @returns { string } */

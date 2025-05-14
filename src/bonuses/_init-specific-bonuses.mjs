@@ -22,13 +22,14 @@ import { VersatilePerformance, VersatilePerformanceExpanded } from './versatile-
 import { VersatileTraining } from './versatile-training.mjs';
 import { DevastatingStrike, DevastatingStrikeImproved } from './vital-strike/devastating-strike.mjs';
 import { VitalStrike, VitalStrikeGreater, VitalStrikeImproved, VitalStrikeMythic } from './vital-strike/vital-strike.mjs';
-import { WeaponFocus, WeaponFocusGreater, WeaponFocusMythic, WeaponFocusRacial } from './weapon-focus/_base-weapon-focus.mjs';
+import { WeaponFocus, WeaponFocusGreater, WeaponFocusMythic, WeaponFocusRacial } from './weapon-focus/weapon-focus.mjs';
 import { WeaponSpecializationGreater } from './weapon-specialization/greater-weapon-specialization.mjs';
 import { WeaponSpecialization } from './weapon-specialization/weapon-specialization.mjs';
 
 // import logic for joint handling
 import './armor-focus/shared.mjs';
 import './inspiration/_inspiration-join.mjs';
+import './weapon-focus/_weapon-focus-shared.mjs'
 
 /**
  * Array of all bonuses that are always on

@@ -90,10 +90,7 @@ declare global {
             };
             versatileTraining: {
                 default: Array<SkillId>;
-                mapping: Record<
-                    keyof typeof pf1.config.weaponGroups,
-                    Array<SkillId>
-                >;
+                mapping: Record<WeaponGroup, Array<SkillId>>;
             };
         };
 

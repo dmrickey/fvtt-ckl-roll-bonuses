@@ -58,6 +58,26 @@ export class SharedSettings {
 }
 
 export class LanguageSettings {
+    /**
+     * @param {string} itemName
+     * @param {string} baseName
+     * @param {boolean} [exact] True (default) if name needs to match exactly, false if the item name only needs to include the translated name
+     * @returns {boolean}
+     */
+    static is(itemName, baseName, exact = true) {
+        return exact
+            ? itemName === baseName
+            : itemName.includes(baseName);
+    }
+
+    /** @param {string} itemName @param {string} baseName @returns {boolean} */
+    static isImproved(itemName, baseName) { return itemName.includes(baseName) && itemName.includes(this.improved); }
+
+    /** @param {string} itemName @param {string} baseName @returns {boolean} */
+    static isGreater(itemName, baseName) { return itemName.includes(baseName) && itemName.includes(this.greater); }
+
+    /** @param {string} itemName @param {string} baseName @returns {boolean} */
+    static isMythic(itemName, baseName) { return itemName.includes(baseName) && itemName.includes(this.mythic); }
 
     static get itemNameTranslationsKey() { return 'item-name-translations'; }
 

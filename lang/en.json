@@ -443,7 +443,7 @@
                 "skill-tip": "Increases Inspiration die by one step"
             },
             "inspiration-tenacious": {
-                "skill-tip": "Roll an extra Inspiration die, keep the higest"
+                "skill-tip": "Roll an extra Inspiration die, keep the highest"
             },
             "roll-untrained": {
                 "skill-tip": "Can Roll Untrained"
@@ -589,6 +589,10 @@
             "versatile-performance": {
                 "name": "Versatile Performance",
                 "default": "Versatile Performance"
+            },
+            "versatile-performance-expanded": {
+                "name": "Expanded Versatility",
+                "default": "Expanded Versatility"
             },
             "versatile-training": {
                 "name": "Versatile Training",

@@ -27,7 +27,7 @@ export class SpellSchoolTarget extends BaseTarget {
         const groups = source.getFlag(MODULE_NAME, this.key) || [];
         const schools = groups
             .filter(truthiness)
-            .map((/** @type {keyof typeof pf1.config.spellSchools} */ school) => pf1.config.spellSchools[school] || school);
+            .map((/** @type {SpellSchool} */ school) => pf1.config.spellSchools[school] || school);
         return schools;
     }
 

@@ -80,7 +80,7 @@ registerItemHint((hintcls, actor, item, _data) => {
     const hasOverride = item.hasItemBooleanFlag(SkillRankOverride.key);
     if (!hasOverride) return;
 
-    const overrides = getDocFlags(item, SkillRankOverride.selectedKey)
+    const overrides = getDocFlags(item, SkillRankOverride.key, { key: SkillRankOverride.selectedKey, onlyActive: false })
         .flatMap(x => x)
         .filter(truthiness);
 

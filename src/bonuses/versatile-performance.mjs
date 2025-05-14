@@ -2,6 +2,7 @@
 
 import { MODULE_NAME } from "../consts.mjs";
 import { addNodeToRollBonus } from "../handlebars-handlers/add-bonus-to-item-sheet.mjs";
+import { showEnabledLabel } from '../handlebars-handlers/enabled-label.mjs';
 import { createTemplate, templates } from "../handlebars-handlers/templates.mjs";
 import { api } from '../util/api.mjs';
 import { getCachedBonuses } from '../util/get-cached-bonuses.mjs';
@@ -88,7 +89,7 @@ export class VersatilePerformance extends SpecificBonus {
                     }
                 }
 
-                const hasExpanded = item.hasItemBooleanFlag(VersatilePerformanceExpanded.key);
+                const hasExpanded = !!actor?.hasItemBooleanFlag(VersatilePerformanceExpanded.key);
                 const expandedSkills = expandedChoices.reduce((acc, id) => ({ ...acc, [id]: getSkillName(actor, id) }), {});
 
                 const templateData = {
@@ -153,17 +154,42 @@ export class VersatilePerformance extends SpecificBonus {
 
 export class VersatilePerformanceExpanded extends SpecificBonus {
     /** @inheritdoc @override */
-    static get sourceKey() { return `${VersatilePerformance.sourceKey}-expanded`; }
+    static get sourceKey() { return `versatile-performance-expanded`; }
 
     /** @inheritdoc @override */
     static get journal() { return VersatilePerformance.journal; }
 
     /** @inheritdoc @override */
     static get parent() { return VersatilePerformance.key; }
+
+    /** @inheritdoc @override @returns {CreateAndRender} */
+    static get configuration() {
+        return {
+            type: 'render-and-create',
+            compendiumId: 'vfIW1NT2bfnBLElS',
+            isItemMatchFunc: (name) => name.includes(Settings.expanded),
+            itemFilter: (item) => item instanceof pf1.documents.item.ItemPF,
+            showInputsFunc: (item, html, isEditable) => {
+                // don't show if this is configured on the same item as Versatile Performance
+                if (VersatilePerformance.has(item)) return;
+
+                showEnabledLabel({
+                    item,
+                    journal: this.journal,
+                    key: this.key,
+                    parent: html,
+                }, {
+                    canEdit: isEditable,
+                    inputType: 'specific-bonus',
+                });
+            },
+        };
+    }
 }
 
 class Settings {
     static get name() { return LanguageSettings.getTranslation(VersatilePerformance.key); }
+    static get expanded() { return LanguageSettings.getTranslation(VersatilePerformanceExpanded.key); }
 
     static {
         LanguageSettings.registerItemNameTranslation(VersatilePerformance.key);
@@ -209,7 +235,7 @@ const getVPsFromItem = (item) => {
     const vps = item.getFlag(MODULE_NAME, VersatilePerformance.key) || [];
 
     return vps.map(( /** @type {any} */ x) => {
-        const data = new VPData(x || {}, { hasExpanded: item.hasItemBooleanFlag(VersatilePerformanceExpanded.key) });
+        const data = new VPData(x || {}, { hasExpanded: !!item.actor?.hasItemBooleanFlag(VersatilePerformanceExpanded.key) });
         return data.base ? data : null;
     })
         .filter(truthiness);

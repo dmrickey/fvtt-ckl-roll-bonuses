@@ -25,7 +25,7 @@ class BaseSpellFocus extends SpecificBonus {
      * @inheritdoc
      * @override
      * @param {ItemPF} item
-     * @param {keyof typeof pf1.config.spellSchools} school
+     * @param {SpellSchool} school
      * @returns {Promise<void>}
      */
     static async configure(item, school) {
@@ -213,15 +213,15 @@ registerItemHint((hintcls, actor, item, _data) => {
         const tips = []
         let bonus = 0;
         if (isFocused) {
-            tips.push(localizeBonusLabel(SpellFocus.key));
+            tips.push(SpellFocus.label);
             bonus += 1;
         }
         if (isGreater) {
-            tips.push(localizeBonusLabel(SpellFocusGreater.key));
+            tips.push(SpellFocusGreater.label);
             bonus += 1;
         }
         if (isMythic) {
-            tips.push(localizeBonusLabel(SpellFocusMythic.key));
+            tips.push(SpellFocusMythic.label);
             bonus *= 2;
         }
         tips.push(localize('dc-mod', { mod: signed(bonus) }));
@@ -236,7 +236,7 @@ registerItemHint((hintcls, _actor, item, _data) => {
         return;
     }
 
-    const currentSchool = /** @type {keyof typeof pf1.config.spellSchools} */ (item.getFlag(MODULE_NAME, key));
+    const currentSchool = /** @type {SpellSchool} */ (item.getFlag(MODULE_NAME, key));
     if (!currentSchool) {
         return;
     }

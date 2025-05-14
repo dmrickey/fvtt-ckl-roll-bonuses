@@ -19,7 +19,7 @@ import {
     mythicWeaponFocusKey,
     racialWeaponFocusKey,
     weaponFocusKey,
-} from '../../src/bonuses/weapon-focus/_base-weapon-focus.mjs';
+} from '../../src/bonuses/weapon-focus/weapon-focus.mjs';
 import { greaterWeaponSpecializationKey } from '../../src/bonuses/weapon-specialization/greater-weapon-specialization.mjs';
 import { weaponSpecializationKey } from '../../src/bonuses/weapon-specialization/weapon-specialization.mjs';
 import { MODULE_NAME } from '../../src/consts.mjs';
@@ -27,6 +27,7 @@ import { RangedIncrementPenaltyGlobalBonus } from '../../src/global-bonuses/atta
 import { BaseBonus } from '../../src/targeted/bonuses/_base-bonus.mjs';
 import { BaseTargetOverride } from '../../src/targeted/target-overides/_base-target-override.mjs';
 import { BaseTarget } from '../../src/targeted/targets/_base-target.mjs';
+import { SpellSubschoolTarget } from '../../src/targeted/targets/spell-subschool-target.mjs';
 import Document from '../foundry/common/abstract/document.mjs';
 
 export {};
@@ -1250,8 +1251,8 @@ declare global {
     }
     class SystemItemDataSpellPF extends SystemItemData {
         descriptors: TraitSelector<keyof SpellDescriptors>;
-        school: keyof typeof pf1.config.spellSchools;
-        subschool: TraitSelector<keyof pf1['config']['spellSubschools']>;
+        school: SpellSchool;
+        subschool: TraitSelector<SpellSubschool>;
 
         /** @deprecated use until v10 (then use @see {descriptors} ) */
         types: string;
@@ -2377,18 +2378,7 @@ declare global {
                 umd: 'Use Magic Device';
             };
             spellDescriptors: SpellDescriptors;
-            spellSchools: {
-                abj: 'Abjuration';
-                con: 'Conjuration';
-                div: 'Divination';
-                enc: 'Enchantment';
-                evo: 'Evocation';
-                ill: 'Illusion';
-                misc: 'Miscellaneous';
-                nec: 'Necromancy';
-                trs: 'Transmutation';
-                uni: 'Universal';
-            };
+            spellSchools: SpellSchools;
             spellSubschools: SpellSubschools;
             weaponGroups: WeaponGroups;
         };
@@ -2479,6 +2469,21 @@ declare global {
         will: 'Will';
     };
 
+    type SpellSchool = keyof typeof pf1.config.spellSchools;
+    type SpellSchools = {
+        abj: 'Abjuration';
+        con: 'Conjuration';
+        div: 'Divination';
+        enc: 'Enchantment';
+        evo: 'Evocation';
+        ill: 'Illusion';
+        misc: 'Miscellaneous';
+        nec: 'Necromancy';
+        trs: 'Transmutation';
+        uni: 'Universal';
+    }
+
+    type SpellSubschool = keyof typeof pf1.config.spellSubschools;
     type SpellSubschools = {
         calling: 'Calling';
         charm: 'Charm';
@@ -2497,6 +2502,7 @@ declare global {
         teleportation: 'Teleportation';
     };
 
+    type WeaponGroup = keyof typeof pf1.config.weaponGroups;
     type WeaponGroups = {
         axes: 'Axes';
         bladesHeavy: 'Blades, Heavy';
