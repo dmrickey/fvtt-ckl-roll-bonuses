@@ -240,16 +240,11 @@
   - remove `Record<any, any>` from API type definition and make sure all individual references are imported
   - Add "configure" method to each bonus and target that takes whatever args it needs to save itself
 - Flanking
-  - Add bonuses for various feats/abilities that grant flank (see FlankHelper)
-  - Add journal entries for all of the bonuses it needs to account for
   - Add bonuses for abiltities that deny flanking
   - Add "only specific allies" input to is-flanking bonus
     - Add "Actor Picker" app
   - Add "cannot be flanked" ability
-  - Add "menacing" targeted Bonus for global
-  - Fill in logic for global bonus - make it include a "flanking" roll variable to give a total value 
   - Find out what the bonus picker looks like with Improved Outflank nested under Outflank if the global bonus is turned off
-  - Add language translation keys for all of the new bonuses
   - Add hints for new bonuses
 - Add "While adjacent to" bonus
   - use actor picker app
@@ -262,11 +257,6 @@
 - add "get flank parts" to `FlankHelper` so it can be clearly labeled as "flanking"/"outflanking"/"menacing"
 
 ### Bugfix
-- Found a bug where a change targeting "Critical Confirmation" doesnt function when roll bonuses is active. Easy to test. 
-  - Make a buff with a change targetting "Critical Confirmation
-  - Add a weapon to your inventory
-  - Roll an attack with that weapon, putting in "20" into the "Check Override"
-  - The critical confirmation bonus doesnt show up in the roll
 - CMB is failing "requires melee threatens"
 
 ### Idea
