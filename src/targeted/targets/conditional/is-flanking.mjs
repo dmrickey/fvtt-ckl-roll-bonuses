@@ -1,10 +1,10 @@
-import { MODULE_NAME } from "../../../../consts.mjs";
-import { showEnabledLabel } from '../../../../handlebars-handlers/enabled-label.mjs';
-import { FlankHelper } from '../../../../util/flank-helper.mjs';
-import { listFormat } from '../../../../util/list-format.mjs';
-import { localize } from '../../../../util/localize.mjs';
-import { truthiness } from "../../../../util/truthiness.mjs";
-import { BaseTarget } from "../../_base-target.mjs";
+import { MODULE_NAME } from "../../../consts.mjs";
+import { showEnabledLabel } from '../../../handlebars-handlers/enabled-label.mjs';
+import { FlankHelper } from '../../../util/flank-helper.mjs';
+import { listFormat } from '../../../util/list-format.mjs';
+import { localize } from '../../../util/localize.mjs';
+import { truthiness } from "../../../util/truthiness.mjs";
+import { BaseTarget } from "../_base-target.mjs";
 
 export class IsFlankingTarget extends BaseTarget {
 
