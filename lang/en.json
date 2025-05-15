@@ -124,6 +124,7 @@
                 "skill-rank-override-formula": "Override Skill Ranks Formula",
                 "skill-rank-override-selected": "Skills to Override",
                 "snake-sidewind": "Snake Sidewind",
+                "solo-tactics": "Solo Tactics",
                 "spell": "Specific Spells",
                 "spell-descriptor": "Spell Descriptors",
                 "spell-focus": "Spell Focus",
@@ -245,6 +246,7 @@
                 "skill-rank-override-formula": "Formula to set skill rank for chosen skill(s) to a specific value. This is useful for an item such as a Headband of Vast Intellect.",
                 "skill-rank-override-selected": "The skills to be overridden with the supplied formula.",
                 "snake-sidewind": "Use Sense Motive for critical confirmations when your maximum Sense Motive result is higher than your maximum attack roll.",
+                "solo-tactics": "Consider allies to have your Teamwork Feats (currently used for Outflank and Improved Outflank).",
                 "spell-school": "Apply bonuses to spells of the chosen school(s).",
                 "spell-subschool": "Apply bonuses to spells of the chosen subschool(s).",
                 "spell-specialization": "Increase CL by 2 for a chosen spell from a school that you have Spell Focus for.",
@@ -608,6 +610,10 @@
             "snake-sidewind": {
                 "name": "Snake Sidewind",
                 "default": "Snake Sidewind"
+            },
+            "solo-tactics": {
+                "name": "Solo Tactics",
+                "default": "Solo Tactics"
             },
             "spell-focus": {
                 "name": "Spell Focus",

@@ -1,14 +1,27 @@
 ## Roll Bonuses 2.21.0
 
 ### New Bonuses
-- **Is Flanking**
-  - Activates bonuses when you're flanking your target, can further configure to only activate bonuses while flanking with a specifica ally
-  - Includes a global bonus to automatically trigger flanking when Attacking
-    - Includes support for automatic increases such as Outflank and Menacing
+- **Flanking**
+  - **Is Flanking** Conditional Target
+    - Activates bonuses when you're flanking your target, can further configure to only activate bonuses while flanking with a specifica ally
+  - **Flanking** Global Bonus
+    - automatically add flanking bonuses to attack rolls
+    - Includes support for automatically increasing flank bonus with **Outflank** and **Menacing**
   - Supports 3-dimensional flanking
-  - Supports various positional overrides like Gang Up, Swashbuckler Mouser's Underfoot Assault, Pack Flanking, and Ratfolk Swarming.
+  - Multiple Specific Bonuses to further enhance how flanking works
+    - Supports various positional overrides like **Gang Up**, Swashbuckler Mouser's **Underfoot Assault**, **Pack Flanking**, and Ratfolk **Swarming**
+    - Actors can be immune to flanking with **Flanking Immunity** to support abilities like All-Around Vision or creatures like Oozes or Elementals
+    - **Outflank** and **Improved Outflank** are also supported by **Solo Tactics**
 - **While Adjacent To**
   - Activates bonuses while adjacent to a chosen ally
+
+### Misc
+- Completely refactored how Specific Bonuses are added to my framework. Unifying and simplifying a lot of duplicated logic.
+- developers and/or macro users can now more easily programmatically configure any given bonus
+- type docs improved for developers
+
+### Bugfixes
+- `extraChanges` being added to attacks are no longer lost (e.g. the system's crit only attack changes now work as expected once again)
 
 ---
 

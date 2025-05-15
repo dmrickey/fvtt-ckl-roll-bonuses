@@ -3,6 +3,7 @@ import { OutflankImproved } from '../bonuses/flanking/outflank-improved.mjs';
 import { PackFlanking } from '../bonuses/flanking/pack-flanking.mjs';
 import { Swarming } from '../bonuses/flanking/swarming.mjs';
 import { UnderfootAssault } from '../bonuses/flanking/underfoot-assault.mjs';
+import { SoloTactics } from '../bonuses/solo-tactics.mjs';
 import { Outflank } from '../global-bonuses/specific/bonuses/flanking/outflank.mjs';
 import { MenacingBonus } from '../global-bonuses/targeted/bonuses/menacing.mjs';
 import { handleBonusesFor } from '../target-and-bonus-join.mjs';
@@ -29,7 +30,10 @@ export class FlankHelper {
             ? this.allFlankBuddies.filter(this.#hasOutflank)
             : [];
     };
-    get isOutflanking() { return this.#hasOutflank(this.attacker) && !!this.outflankBuddies.length; }
+    get isOutflanking() {
+        return this.#hasOutflank(this.attacker)
+            && (this.#hasSoloTactics(this.attacker) || !!this.outflankBuddies.length);
+    }
 
     targetIsBeingMenaced = false;
 
@@ -148,7 +152,7 @@ export class FlankHelper {
         //Improved Outflank
         if (this.#hasImprovedOutflank(this.attacker)) {
             this.allFlankBuddies.push(...threateningAllies.filter((ally) =>
-                this.#hasImprovedOutflank(ally)
+                (this.#hasImprovedOutflank(ally) || this.#hasSoloTactics(this.attacker))
                 && attackerAndTarget.isFlankingWith(ally, { hasImprovedOutflank: true, specificAction: action })
             ));
 
@@ -197,6 +201,14 @@ export class FlankHelper {
      */
     #hasImprovedOutflank(token) {
         return OutflankImproved.has(token);
+    }
+
+    /**
+     * @param {TokenPF} token
+     * @returns {boolean}
+     */
+    #hasSoloTactics(token) {
+        return SoloTactics.has(token);
     }
 
     /**
