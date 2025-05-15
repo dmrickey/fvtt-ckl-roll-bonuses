@@ -126,7 +126,7 @@ declare global {
         get allSpecificBonusTypesKeys(): string[];
 
         /** all the input helpers for adding various inputs for bonusees */
-        inputs: Record<string, (...args) => void>;
+        inputs: Record<string, (...args) => void>; // todo specific types
 
         /** for being able to manually trigger an update in case something was missed */
         migrate: {

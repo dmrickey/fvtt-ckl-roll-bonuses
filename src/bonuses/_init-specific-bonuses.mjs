@@ -39,6 +39,7 @@ import './weapon-focus/_weapon-focus-shared.mjs';
 
 // separate because its deprecated
 import './skills/init.mjs';
+import { UncannyDodgeImproved } from './flanking/uncanny-dodge-improved.mjs';
 
 /**
  * Array of all bonuses that are always on
@@ -76,6 +77,7 @@ const allSpecificBonuses = [
     SpellFocusMythic,
     SpellSpecialization,
     Swarming,
+    UncannyDodgeImproved,
     UnderfootAssault,
     VersatilePerformance,
     VersatilePerformanceExpanded,

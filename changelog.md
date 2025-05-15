@@ -8,6 +8,10 @@
     - automatically add flanking bonuses to attack rolls
     - Includes support for automatically increasing flank bonus with **Outflank** and **Menacing**
   - Supports 3-dimensional flanking
+  - **Flanking Immunity**
+    - to cover abilities like All-Around Vision
+  - **Improved Uncanny Dodge**
+    - to provide immunity when flanked by non-rogues. This must be configured on a class feature with a Class Assosiation properly configured.
   - Multiple Specific Bonuses to further enhance how flanking works
     - Supports various positional overrides like **Gang Up**, Swashbuckler Mouser's **Underfoot Assault**, **Pack Flanking**, and Ratfolk **Swarming**
     - Actors can be immune to flanking with **Flanking Immunity** to support abilities like All-Around Vision or creatures like Oozes or Elementals

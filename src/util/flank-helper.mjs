@@ -1,7 +1,9 @@
+import { FlankingImmunity } from '../bonuses/flanking/flanking-immunity.mjs';
 import { GangUp } from '../bonuses/flanking/gang-up.mjs';
 import { OutflankImproved } from '../bonuses/flanking/outflank-improved.mjs';
 import { PackFlanking } from '../bonuses/flanking/pack-flanking.mjs';
 import { Swarming } from '../bonuses/flanking/swarming.mjs';
+import { UncannyDodgeImproved } from '../bonuses/flanking/uncanny-dodge-improved.mjs';
 import { UnderfootAssault } from '../bonuses/flanking/underfoot-assault.mjs';
 import { SoloTactics } from '../bonuses/solo-tactics.mjs';
 import { Outflank } from '../global-bonuses/specific/bonuses/flanking/outflank.mjs';
@@ -172,12 +174,8 @@ export class FlankHelper {
      * @returns {boolean}
      */
     #cannotBeFlanked(attacker, target) {
-        // todo
-        return false;
-        // throw new Error('Method not implemented.');
+        return FlankingImmunity.has(target) || UncannyDodgeImproved.isImmuneToFlank(target, attacker);
     }
-
-    // todo fill in logic for these getters
 
     /**
      * @param {TokenPF} token

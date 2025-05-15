@@ -119,6 +119,8 @@ declare global {
         | ItemSpellPF
         | ItemWeaponPF;
 
+    type ItemTypeArrayCache<T> = T[] & { getId(string): T; getName(string): T };
+
     class ActorPF extends ActorBasePF {
         allItems: ItemPF[];
         race: ItemRacePF | null;
@@ -128,7 +130,7 @@ declare global {
         changes?: Collection<ItemChange>;
         get isOwner(): boolean;
         itemTypes!: {
-            [T in Item as T['type']]: T[];
+            [T in Item as T['type']]: ItemTypeArrayCache<T>;
         };
         getActiveTokens(): Array<TokenPF>;
         getSkillInfo(skillId: string): SkillInfo;
@@ -1191,7 +1193,7 @@ declare global {
             dictionary: DictionaryFlags;
         };
         masterwork: boolean;
-        subType: 'natural';
+        subType: 'natural' | 'classFeat';
         tag: string;
         tags: string[];
 
