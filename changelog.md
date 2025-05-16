@@ -3,7 +3,7 @@
 ### New Bonuses
 - **Flanking**
   - **Is Flanking** (Conditional Target)
-    - Activates bonuses when you're flanking your target, can further configure to only activate bonuses while flanking with a specifica ally
+    - Activates bonuses when you're flanking your target, can further configure to only activate bonuses while flanking with a specific ally
   - **Flanking** (Global Bonus)
     - automatically add flanking bonuses to attack rolls
     - Includes support for automatically increasing flank bonus with **Outflank** and **Menacing**
@@ -24,16 +24,10 @@
 - All bonus classes now have a `configure` function so developers and/or advanced macro/script users can more easily programatically configure any bonus
   - (as always, this isn't necessary for any new item that is simply "enabled" and has no choices to be made (e.g. Fate's Favored has no choices to make and is automatically turned on when added to an actor))
 - type docs improved for developers
+- Expandeded previous change to less aggressively cache formula to Dice Transform Bonus
 
 ### Bugfixes
 - `extraChanges` being added to attacks are no longer lost (e.g. the system's crit only attack changes now work as expected once again)
-
----
-
-## Roll Bonuses 2.20.4
-
-### Misc
-- Expandeded previous change to less aggressively cache formula to Dice Transform Bonus
 
 ---
 
