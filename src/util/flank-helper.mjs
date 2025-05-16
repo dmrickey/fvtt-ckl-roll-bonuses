@@ -85,11 +85,11 @@ export class FlankHelper {
             return;
         }
 
-        let threateningAllies = flankingWith || this.attacker.scene.tokens
+        let threateningAllies = (flankingWith || this.attacker.scene.tokens
             .filter((x) => ![this.attacker.id, this.target.id].includes(x.id)
                 && x.disposition !== this.target.document.disposition
                 && x.disposition === this.attacker.document.disposition
-            ).map(toToken)
+            ).map(toToken))
             .filter((x) => new PositionalHelper(x, this.target).threatens());
 
         const attackerAndTarget = new PositionalHelper(this.attacker, this.target);

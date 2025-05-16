@@ -5,7 +5,7 @@ import { localizeBonusLabel } from '../../../util/localize.mjs';
 import { BaseTarget } from '../_base-target.mjs';
 import { showLabel } from '../../../handlebars-handlers/bonus-inputs/show-label.mjs';
 
-export class WhenTargetInRange extends BaseTarget {
+export class WhenTargetInRangeTarget extends BaseTarget {
 
     /**
      * @override

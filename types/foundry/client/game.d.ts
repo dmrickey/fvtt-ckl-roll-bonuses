@@ -37,7 +37,9 @@ interface Game {
     scenes: EmbeddedCollection<Scene> & {
         /** @deprecated Do not use, base everything on the token or user's scene */
         active: Scene;
+        /** @deprecated Do not use, base everything on the token or user's scene */
         current: Scene;
+        viewed: Scene;
     };
 
     /**

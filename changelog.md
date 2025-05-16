@@ -2,26 +2,27 @@
 
 ### New Bonuses
 - **Flanking**
-  - **Is Flanking** Conditional Target
+  - **Is Flanking** (Conditional Target)
     - Activates bonuses when you're flanking your target, can further configure to only activate bonuses while flanking with a specifica ally
-  - **Flanking** Global Bonus
+  - **Flanking** (Global Bonus)
     - automatically add flanking bonuses to attack rolls
     - Includes support for automatically increasing flank bonus with **Outflank** and **Menacing**
   - Supports 3-dimensional flanking
-  - **Flanking Immunity**
+  - **Flanking Immunity** (Bonus)
     - to cover abilities like All-Around Vision
-  - **Improved Uncanny Dodge**
+  - **Improved Uncanny Dodge** (Bonus)
     - to provide immunity when flanked by non-rogues. This must be configured on a class feature with a Class Assosiation properly configured.
   - Multiple Specific Bonuses to further enhance how flanking works
-    - Supports various positional overrides like **Gang Up**, Swashbuckler Mouser's **Underfoot Assault**, **Pack Flanking**, and Ratfolk **Swarming**
+    - Supports various positional overrides like **Gang Up**, **Improved Outflank** Swashbuckler Mouser's **Underfoot Assault**, **Pack Flanking**, and Ratfolk **Swarming**
     - Actors can be immune to flanking with **Flanking Immunity** to support abilities like All-Around Vision or creatures like Oozes or Elementals
     - **Outflank** and **Improved Outflank** are also supported by **Solo Tactics**
-- **While Adjacent To**
+- **While Adjacent To** (Target)
   - Activates bonuses while adjacent to a chosen ally
 
 ### Misc
 - Completely refactored how Specific Bonuses are added to my framework. Unifying and simplifying a lot of duplicated logic.
-- developers and/or macro users can now more easily programmatically configure any given bonus
+- All bonus classes now have a `configure` function so developers and/or advanced macro/script users can more easily programatically configure any bonus
+  - (as always, this isn't necessary for any new item that is simply "enabled" and has no choices to be made (e.g. Fate's Favored has no choices to make and is automatically turned on when added to an actor))
 - type docs improved for developers
 
 ### Bugfixes

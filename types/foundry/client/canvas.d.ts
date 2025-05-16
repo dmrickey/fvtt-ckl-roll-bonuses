@@ -4,4 +4,5 @@ interface Canvas {
 
 interface TokenLayer {
     controlled: TokenPF[];
+    placeables: TokenPF[];
 }

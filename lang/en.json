@@ -512,6 +512,7 @@
             "skill-tip": "Versatile Training - uses BAB ({bab}) instead of ranks",
             "title": "{skill} - Versatile Training"
         },
+        "with": "with",
         "item-name-translations": {
             "improved": {
                 "name": "Improved",

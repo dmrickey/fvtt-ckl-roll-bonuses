@@ -63,7 +63,7 @@ export class TokenSelectorApp extends DocumentSheet {
             game.i18n.localize('TOKEN.DISPOSITION.' + Object.entries(CONST.TOKEN_DISPOSITIONS).find(([ /** @type{string */_, value]) => value === disposition)?.[0] || '');
 
         const currentTargetUuids = [...game.user.targets].map(x => x.document.uuid);
-        const availableTargets = game.scenes.get(game.user.viewedScene)?.tokens
+        const availableTargets = game.scenes.viewed?.tokens
             .filter((token) => token.actor && token.object.isVisible && token.actor.id !== item.actor?.id)
             .map((token) => ({
                 id: token.id,

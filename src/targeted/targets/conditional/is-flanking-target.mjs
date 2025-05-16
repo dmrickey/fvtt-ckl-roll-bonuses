@@ -39,6 +39,7 @@ export class IsFlankingTarget extends BaseTarget {
     }
 
     /**
+     * Returns nothing if no allies are configured, otherwise it returns all tokens for configured allies within this scene
      * @param {ItemPF} source
      * @returns {TokenPF[] | undefined}
      */
@@ -49,8 +50,10 @@ export class IsFlankingTarget extends BaseTarget {
             return;
         }
 
-        const tokens = game.scenes.get(game.user.viewedScene)?.tokens.filter((token) => uuids.includes(token.actor.uuid));
-        return tokens?.length ? tokens.map(t => t.object) : undefined;
+        const tokens = game.scenes.viewed?.tokens
+            .filter((token) => uuids.includes(token.actor.uuid))
+            .map((token) => token.object);
+        return tokens || [];
     }
 
     /**
@@ -69,7 +72,7 @@ export class IsFlankingTarget extends BaseTarget {
     static getHints(source) {
         const buddies = this.#potentialFlankActors(source);
         if (buddies) {
-            return [localize('with ' + listFormat(buddies.map(x => x.name), 'or'))];
+            return [`${localize('with')} ${listFormat(buddies.map(x => x.name), 'or')}`];
         }
     }
 
@@ -146,5 +149,7 @@ export class IsFlankingTarget extends BaseTarget {
                 canEdit: isEditable,
                 inputType: 'target',
             });
+
+        // TODO create actor input app
     }
 }

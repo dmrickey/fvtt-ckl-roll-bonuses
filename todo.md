@@ -261,3 +261,9 @@
 
 ### Idea
 - turn `LanguageSettings` into a base class that other classes extend (or create a base class that has shared logic)
+- **System Changes Bonus**
+  - Define system changes as a bonus - mirror the inputs for Changes and then when the targets are correct, add those changes into the actor's prepped data (may possibly need to remove them if the targeting criteria is somehow lost without data prep triggering -- need to investigate)
+    - These would essentially work only with Conditional Targets (and self/all)
+    - This would allow for things like "+4 intimidate when targeting a creature type"
+      - or "+4 initiative when in a city (using Fair's target)"
+      - or possibly literally any change ¯\_(ツ)_/¯ 

@@ -22,8 +22,9 @@ import { WeaponTarget } from "./specific-item-target/weapon-target.mjs";
 import { WeaponTypeTarget } from "./weapon-type-target.mjs";
 import { WhenActiveTarget } from './conditional/when-active-target.mjs';
 import { WhenInCombatTarget } from './conditional/when-in-combat-target.mjs';
-import { WhenTargetInRange } from './conditional/is-target-within-range.mjs';
-import { IsFlankingTarget } from './conditional/is-flanking.mjs';
+import { WhenTargetInRangeTarget } from './conditional/is-target-within-range.mjs';
+import { IsFlankingTarget } from './conditional/is-flanking-target.mjs';
+import { WhileAdjacentToTarget } from './conditional/while-adjacent-to-target.mjs';
 
 export const registerTargets = () => [
     ActionTarget,
@@ -50,5 +51,6 @@ export const registerTargets = () => [
     WeaponTypeTarget,
     WhenActiveTarget,
     WhenInCombatTarget,
-    WhenTargetInRange,
+    WhenTargetInRangeTarget,
+    WhileAdjacentToTarget,
 ].forEach(Sources.registerSource);
