@@ -12,5 +12,6 @@ declare global {
         targets: Set<TokenPF>;
         isGM: boolean;
         viewedScene: string;
+        character: ActorCharacterPF;
     }
 }

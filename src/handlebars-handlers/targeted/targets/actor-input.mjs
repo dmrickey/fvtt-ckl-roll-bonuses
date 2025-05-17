@@ -1,11 +1,10 @@
 import { MODULE_NAME } from "../../../consts.mjs";
 import { api } from '../../../util/api.mjs';
-import { getTokenDisplayName } from "../../../util/get-token-display-name.mjs";
 import { localizeBonusLabel, localizeBonusTooltip } from '../../../util/localize.mjs';
 import { truthiness } from "../../../util/truthiness.mjs";
 import { addNodeToRollBonus } from "../../add-bonus-to-item-sheet.mjs";
 import { createTemplate, templates } from "../../templates.mjs";
-import { TokenSelectorApp } from "./token-select-app.mjs";
+import { ActorSelectorApp } from './actor-select-app.mjs';
 
 /**
  * @param {object} args
@@ -17,8 +16,9 @@ import { TokenSelectorApp } from "./token-select-app.mjs";
  * @param {HTMLElement} args.parent
  * @param {object} options
  * @param {boolean} options.canEdit
+ * @param {boolean} [options.isSubLabel]
  */
-export function showTokenInput({
+export function showActorInput({
     item,
     journal,
     key,
@@ -27,30 +27,32 @@ export function showTokenInput({
     tooltip = '',
 }, {
     canEdit,
+    isSubLabel = false,
 }) {
     label ||= localizeBonusLabel(key);
     tooltip ||= localizeBonusTooltip(key);
 
     /**
      * @param {string} uuid
-     * @returns {TokenDocumentPF}
+     * @returns {ActorPF}
      */
-    const getToken = (uuid) => fromUuidSync(uuid);
+    const getActor = (uuid) => fromUuidSync(uuid);
 
     /** @type {string[]} */
     const savedTargets = item.getFlag(MODULE_NAME, key) || [];
     const current = savedTargets
-        .map((uuid) => getToken(uuid))
+        .map((uuid) => getActor(uuid))
         .filter(truthiness)
-        .map((token) => ({
-            img: token.texture.src,
-            name: getTokenDisplayName(token),
-            id: token.id,
-            uuid: token.uuid,
+        .map((actor) => ({
+            img: actor.thumbnail,
+            name: actor.name,
+            id: actor.id,
+            uuid: actor.uuid,
         }));
 
     const templateData = {
         current,
+        isSubLabel,
         journal,
         label,
         readonly: !canEdit,
@@ -63,7 +65,7 @@ export function showTokenInput({
             element.addEventListener('click', (event) => {
                 event.preventDefault();
                 const options = { key };
-                new TokenSelectorApp(item, options).render(true);
+                new ActorSelectorApp(item, options).render(true);
             });
         });
     }
@@ -78,10 +80,10 @@ export function showTokenInput({
 
             const uuid = parent?.dataset.uuid;
             if (uuid) {
-                /** @type {TokenDocumentPF} */
-                const doc = fromUuidSync(uuid);
-                if (doc?.actor?.testUserPermission(game.user, CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER)) {
-                    doc.actor.sheet.render(true);
+                /** @type {ActorPF} */
+                const actor = fromUuidSync(uuid);
+                if (actor?.testUserPermission(game.user, CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER)) {
+                    actor.sheet.render(true);
                 }
             }
         });
@@ -90,4 +92,4 @@ export function showTokenInput({
     addNodeToRollBonus(parent, div, item, canEdit, 'target');
 }
 
-api.inputs.showTokenInput = showTokenInput;
+api.inputs.showActorInput = showActorInput;

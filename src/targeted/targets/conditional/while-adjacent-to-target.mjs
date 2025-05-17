@@ -1,4 +1,5 @@
 import { MODULE_NAME } from '../../../consts.mjs';
+import { showActorInput } from '../../../handlebars-handlers/targeted/targets/actor-input.mjs';
 import { listFormat } from '../../../util/list-format.mjs';
 import { localize } from '../../../util/localize.mjs';
 import { PositionalHelper } from '../../../util/positional-helper.mjs';
@@ -11,7 +12,6 @@ export class WhileAdjacentToTarget extends BaseTarget {
      * @inheritdoc
      */
     static get sourceKey() { return 'while-adjacent-to'; }
-    static get #withActorAlliesKey() { return `${this.key}-with`; }
 
     /**
      * @param {ItemPF} source
@@ -19,7 +19,7 @@ export class WhileAdjacentToTarget extends BaseTarget {
      */
     static #withAllies(source) {
         /** @type {string[]} */
-        const uuids = source.getFlag(MODULE_NAME, this.#withActorAlliesKey) ?? [];
+        const uuids = source.getFlag(MODULE_NAME, this.key) ?? [];
         const buddies = uuids
             .map((uuid) => /** @type {ActorPF} */(fromUuidSync(uuid)))
             .filter(truthiness);
@@ -33,7 +33,7 @@ export class WhileAdjacentToTarget extends BaseTarget {
      */
     static #allyTokens(source) {
         /** @type {string[]} */
-        const uuids = source.getFlag(MODULE_NAME, this.#withActorAlliesKey) || [];
+        const uuids = source.getFlag(MODULE_NAME, this.key) || [];
         const tokens = game.scenes.viewed?.tokens
             .filter((token) => uuids.includes(token.actor.uuid))
             .map((token) => token.object);
@@ -74,7 +74,7 @@ export class WhileAdjacentToTarget extends BaseTarget {
         else if (doc instanceof pf1.components.ItemAction) token = item.actor.getActiveTokens()[0];
         else token = doc.token.object;
 
-        if (token.scene !== game.scenes.viewed) {
+        if (token?.scene !== game.scenes.viewed) {
             return [];
         }
 
@@ -113,6 +113,13 @@ export class WhileAdjacentToTarget extends BaseTarget {
             return;
         }
 
-        // TODO create actor input app
+        showActorInput({
+            item,
+            journal: this.journal,
+            key: this.key,
+            parent: html,
+        }, {
+            canEdit: isEditable,
+        });
     }
 }

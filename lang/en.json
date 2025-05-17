@@ -100,6 +100,7 @@
                 "inspiration-tenacious": "Tenacious Inspiration",
                 "inspiration-true": "True Inspiration",
                 "is-flanking": "Is Flanking",
+                "is-flanking-with": "With Ally",
                 "is-target-within-range": "Target within Range",
                 "is-target-within-range-max": "Maximum Range ({unit})",
                 "is-target-within-range-min": "Minimum Range ({unit})",
@@ -160,7 +161,8 @@
                 "weapon-type-override": "Weapon Type",
                 "weapon": "Specific Weapons and Attacks",
                 "when-active": "When Item Is Active",
-                "when-in-combat": "When in Combat"
+                "when-in-combat": "When in Combat",
+                "while-adjacent-to": "While Adjacent To"
             },
             "tooltip": {
                 "action": "Grant bonuses to specific actions.",
@@ -224,6 +226,7 @@
                 "inspiration-tenacious": "When rolling Inspiration, roll an extra die and keep the highest.",
                 "inspiration-true": "Can freely use Inspiration on all skills.",
                 "is-flanking": "Activate bonuses while flanking your current targets.",
+                "is-flanking-with": "Activate bonuses while adjacent to any of the specified allies.",
                 "is-target-within-range": "Active when all targets are within a specified range.",
                 "is-target-within-range-min": "Activate bonuses whenever all targeted tokens are at least this far away.",
                 "is-target-within-range-max": "Activate bonuses whenever all targeted tokens are at most this far away.",
@@ -282,7 +285,8 @@
                 "weapon-type-override": "Adds a Weapon Type to an Item that normally can't have one. This is equivalent to a weapon's Equipment Base Type.",
                 "weapon": "Choose specific Attacks and Weapons for bonuses.",
                 "when-active": "Apply bonuses when specified Buff/Weapon/Feat/etc is active.",
-                "when-in-combat": "Active when this actor is in combat."
+                "when-in-combat": "Active when this actor is in combat.",
+                "while-adjacent-to": "Activates bonuses while adjacent to any of the specified allies."
             }
         },
         "cancel": "Cancel",
@@ -684,6 +688,10 @@
             }
         },
         "settings": {
+            "allow-friendly-npc-selection": {
+                "name": "Allow Players to See All Friendly NPCs",
+                "hint": "When using Conditional Targets like Is Flanking (with specific ally) or While Adjacent To (allied character), setting this to true will allow your players to see all friendly NPCs defined in your world. While set to false, they can only target actors owned by players."
+            },
             "debug": {
                 "name": "Debug Mode",
                 "hint": "Enable this to turn on extra logging which may help in tracking down certain issues. Defaults to `false`."
@@ -716,6 +724,9 @@
             }
         },
         "applications": {
+            "actor": {
+                "no-actors": "This world does not have any actors that share your disposition."
+            },
             "token": {
                 "gm-hint": "You can see all tokens because (and names) you're the GM. Players will only be able to select tokens that are visible to them.",
                 "no-tokens": "There are no tokens in this scene",

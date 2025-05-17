@@ -34,6 +34,9 @@ export {};
 
 declare global {
     abstract class BaseDocument extends Document {
+        uuid: string;
+        ownership: Record<UUID, OwnerShipLevel> & { default: OwnerShipLevel };
+
         getRollData(): RollData;
         getFlag(moduleName: string, key: string): any;
         async setFlag<T>(
@@ -43,7 +46,6 @@ declare global {
         ): Promise<void>;
         async unsetFlag(moduleName: string, key: string): Promise<Document>;
         updateSource(changes: Record<string, any>, options?: object);
-        uuid: string;
         update(data: Record<string, any>);
         testUserPermission(user: User, OBSERVER: any): boolean;
         toObject(): any;
@@ -87,6 +89,8 @@ declare global {
         sheet: {
             render(force: boolean, { focus: boolean } = {});
         };
+
+        prototypeToken: { disposition: DispositionLevel};
     }
 
     class Macro extends BaseDocument {
@@ -122,20 +126,25 @@ declare global {
     type ItemTypeArrayCache<T> = T[] & { getId(string): T; getName(string): T };
 
     class ActorPF extends ActorBasePF {
+        id: string;
+
         allItems: ItemPF[];
-        race: ItemRacePF | null;
-        hasItemBooleanFlag(key: string): boolean;
-        hasWeaponProficiency(item: ItemPF, { override = true } = {}): boolean;
         allSkills: Array<SkillId>;
         changes?: Collection<ItemChange>;
-        get isOwner(): boolean;
-        itemTypes!: {
-            [T in Item as T['type']]: ItemTypeArrayCache<T>;
-        };
+        items: EmbeddedCollection<ItemPF>;
+        itemTypes!: { [T in Item as T['type']]: ItemTypeArrayCache<T>; };
+        name: string;
+        race: ItemRacePF | null;
+        statuses: { has(key: keyof Conditions): boolean; }
+        system: SystemActorData;
+        thumbnail: string;
+
         getActiveTokens(): Array<TokenPF>;
         getSkillInfo(skillId: string): SkillInfo;
+        hasItemBooleanFlag(key: string): boolean;
+        hasWeaponProficiency(item: ItemPF, { override = true } = {}): boolean;
+        get isOwner(): boolean;
 
-        statuses: { has(key: keyof Conditions): boolean; }
 
         /**
          * Gets the actor's roll data.
@@ -144,18 +153,10 @@ declare global {
          */
         getRollData(args?: { refresh?: boolean }): RollData;
 
-        id: string;
-
-        items: EmbeddedCollection<ItemPF>;
-
-        name: string;
-
         rollSkill(
             skillId: string,
             arg1: { skipDialog: boolean }
         ): Promise<ChatMessagePF>;
-
-        system: SystemActorData;
 
         updateEmbeddedDocuments(
             type: 'Item',
@@ -647,8 +648,8 @@ declare global {
         | /** neutral */ 0
         | /** friendly */ 1;
 
-    /** @see {CONST.DOCUMENT_PERMISSION_LEVELS} */
-    type PermissionLevel =
+    /** @see {CONST.DOCUMENT_OWNERSHIP_LEVELS} */
+    type OwnerShipLevel =
         | /** inherit */ -1
         | /** none */ 0
         | /** limited */ 1

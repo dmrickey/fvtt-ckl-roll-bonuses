@@ -1,8 +1,9 @@
 import { MODULE_NAME } from "../../../consts.mjs";
 import { showEnabledLabel } from '../../../handlebars-handlers/enabled-label.mjs';
+import { showActorInput } from '../../../handlebars-handlers/targeted/targets/actor-input.mjs';
 import { FlankHelper } from '../../../util/flank-helper.mjs';
 import { listFormat } from '../../../util/list-format.mjs';
-import { localize } from '../../../util/localize.mjs';
+import { localize, localizeBonusLabel, localizeBonusTooltip } from '../../../util/localize.mjs';
 import { truthiness } from "../../../util/truthiness.mjs";
 import { BaseTarget } from "../_base-target.mjs";
 
@@ -150,6 +151,16 @@ export class IsFlankingTarget extends BaseTarget {
                 inputType: 'target',
             });
 
-        // TODO create actor input app
+        showActorInput({
+            item,
+            journal: this.journal,
+            key: this.#withActorAlliesKey,
+            label: localizeBonusLabel(this.#withActorAlliesKey),
+            parent: html,
+            tooltip: localizeBonusTooltip(this.#withActorAlliesKey),
+        }, {
+            canEdit: isEditable,
+            isSubLabel: true,
+        });
     }
 }

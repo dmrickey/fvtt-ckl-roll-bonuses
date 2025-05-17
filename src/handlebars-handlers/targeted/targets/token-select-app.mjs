@@ -6,19 +6,19 @@ import { uniqueArray } from "../../../util/unique-array.mjs";
 import { templates } from "../../templates.mjs";
 
 /**
- * @typedef {object} TokenActorSelectorOptions
+ * @typedef {object} TokenSelectorOptions
  * @property {string} key
 */
 
 // @ts-ignore
-/** @extends {DocumentSheet<TokenActorSelectorOptions, ItemPF>} */
+/** @extends {DocumentSheet<TokenSelectorOptions, ItemPF>} */
 export class TokenSelectorApp extends DocumentSheet {
     /** @override */
     static get defaultOptions() {
         const options = super.defaultOptions;
 
         options.height = 'auto';
-        options.template = templates.tokenApp;
+        options.template = templates.tokenSelectApp;
 
         return options;
     }

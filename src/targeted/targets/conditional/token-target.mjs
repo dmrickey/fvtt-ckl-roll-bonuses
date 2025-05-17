@@ -1,7 +1,7 @@
 import { MODULE_NAME } from "../../../consts.mjs";
 import { checkboxInput } from '../../../handlebars-handlers/bonus-inputs/chekbox-input.mjs';
 import { showTokenInput } from "../../../handlebars-handlers/targeted/targets/token-input.mjs";
-import { TokenSelectorApp } from "../../../handlebars-handlers/targeted/targets/token-selector-app.mjs";
+import { TokenSelectorApp } from "../../../handlebars-handlers/targeted/targets/token-select-app.mjs";
 import { difference, intersection, intersects } from "../../../util/array-intersects.mjs";
 import { localize } from '../../../util/localize.mjs';
 import { registerSetting } from "../../../util/settings.mjs";

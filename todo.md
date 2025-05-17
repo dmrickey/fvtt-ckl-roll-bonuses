@@ -240,15 +240,10 @@
   - remove `Record<any, any>` from API type definition and make sure all individual references are imported
   - Add "configure" method to each bonus and target that takes whatever args it needs to save itself
 - Flanking
-  - Add bonuses for abiltities that deny flanking
-  - Add "only specific allies" input to is-flanking bonus
-    - Add "Actor Picker" app
-  - Add "cannot be flanked" ability
   - Find out what the bonus picker looks like with Improved Outflank nested under Outflank if the global bonus is turned off
-  - Add hints for new bonuses
-- Add "While adjacent to" bonus
-  - use actor picker app
-- Add a way to specifically order children in bonus picker app
+  - Add hints for new bonusesr
+  
+- order children in bonus picker app
 ### Specific Bonuses
 - ~~Migrate all keys to start with `specific_`~~ Do this later after SBC has a chance to update to only use the API
   - update all journal entries to indicate what the key is
@@ -267,3 +262,5 @@
     - This would allow for things like "+4 intimidate when targeting a creature type"
       - or "+4 initiative when in a city (using Fair's target)"
       - or possibly literally any change ¯\_(ツ)_/¯ 
+
+Actor picker app - Add hint text for GM about how players can't see as many as they can by default

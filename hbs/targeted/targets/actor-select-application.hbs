@@ -1,0 +1,51 @@
+{{!--
+const templateData = {
+    isGm: {boolean}
+    item: {ItemPF},
+    path: {string},
+    groupedActors: {}[],
+};
+all of the classes are "token-..." because it uses the same styles as the token selector app
+--}}
+<form class="roll-bonuses roll-bonuses-form token-selector pf1">
+    <div class="form-body">
+        {{#each groupedActors}}
+        <h4>{{@key}}</h4>
+        <div class="grouped-tokens">
+            {{#each this}}
+            <div
+                class="individual-token"
+                data-tooltip="{{this.name}}"
+                data-token-uuid="{{this.uuid}}"
+            >
+                <input
+                    type="checkbox"
+                    name="{{../../path}}"
+                    {{#if this.checked}}checked{{/if}}
+                    value="{{this.uuid}}"
+                    id="token_{{../../item.id}}_{{this.id}}"
+                >
+                <label for="token_{{../../item.id}}_{{this.id}}">
+                    <div class="token-selector-contents">
+                        <img src="{{this.img}}">
+                        <div>{{this.name}}</div>
+                    </div>
+                </label>
+            </div>
+            {{/each}}
+        </div>
+        {{else}}
+        <div class="no-tokens">
+            {{localize "ckl-roll-bonuses.applications.actor.no-actors"}}
+        </div>
+        {{/each}}
+    </div>
+    <div class="control-group">
+        <button type="reset">
+            <i class="fas fa-rotate-left"></i> {{localize "ckl-roll-bonuses.cancel"}}
+        </button>
+        <button type="submit">
+            <i class="fas fa-save"></i> {{localize "ckl-roll-bonuses.ok"}}
+        </button>
+    </div>
+</form>
