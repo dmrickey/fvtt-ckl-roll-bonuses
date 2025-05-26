@@ -273,6 +273,7 @@
                 "vital-strike": "Extra damage on attack actions based on weapon's damage.",
                 "vital-strike-mythic": "When using a Vital Strike feat, also include any other bonus that would normally be multiplied on a critical hit.",
                 "vital-strike-enabled": "Whether or not Vital Strike should be checked by default in attack dialogs.",
+                "vital-strike-enabled-current": "Currently enabled by default.",
                 "weapon-focus": "+1 bonus on attack rolls for chosen weapon type. Attacks and Weapons must be properly configured with Equipment Base Types.",
                 "weapon-focus-greater": "Further increase attack roll for a chosen weapon type from Weapon Focus by +1.",
                 "weapon-group": "Apply bonuses when using weapons from chosen Weapon Group(s). Attacks and Weapons must be properly configured with weapon groups.",

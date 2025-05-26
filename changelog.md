@@ -28,6 +28,7 @@
 
 ### Bugfixes
 - `extraChanges` being added to attacks are no longer lost (e.g. the system's crit only attack changes now work as expected once again)
+- Vital Strike once again correctly adds Improved and Greater bonuses as expected
 
 ---
 

@@ -5,7 +5,6 @@ import { isWeapon } from '../../util/action-type-helpers.mjs';
 import { api } from '../../util/api.mjs';
 import { addCheckToAttackDialog, getFormData } from '../../util/attack-dialog-helper.mjs';
 import { getCachedBonuses } from '../../util/get-cached-bonuses.mjs';
-import { itemHasCompendiumId } from '../../util/has-compendium-id.mjs';
 import { LocalHookHandler, localHooks } from '../../util/hooks.mjs';
 import { registerItemHint } from '../../util/item-hints.mjs';
 import { localize, localizeBonusLabel, localizeBonusTooltip } from '../../util/localize.mjs';
@@ -49,14 +48,22 @@ class VitalBase extends SpecificBonus {
         checkboxInput({
             item,
             journal: this.journal,
-            key: this.key,
+            key: vitalStrikeEnabled,
             parent: html,
-            tooltip: this.tooltip,
+            tooltip: localizeBonusTooltip(vitalStrikeEnabled),
         }, {
             canEdit: isEditable,
             inputType: 'specific-bonus',
             isSubLabel: true,
         });
+    }
+
+    /**
+     * @param {ItemPF} item
+     * @returns {boolean}
+     */
+    static enabledByDefault(item) {
+        return item.getFlag(MODULE_NAME, vitalStrikeEnabled);
     }
 }
 
@@ -71,6 +78,9 @@ export class VitalStrike extends VitalBase {
             compendiumId: '26k1Gi7t5BoqxhIj',
             isItemMatchFunc: (name) => name === Settings.name,
             showInputsFunc: this.showVitalStrikeInputs.bind(this),
+            options: {
+                defaultFlagValuesFunc: () => ({ [vitalStrikeEnabled]: true }),
+            },
         };
     }
 
@@ -94,6 +104,9 @@ export class VitalStrikeImproved extends VitalBase {
             compendiumId: 'DorPGQ2mifJbMKH8',
             isItemMatchFunc: (name) => LanguageSettings.isImproved(name, Settings.name),
             showInputsFunc: this.showVitalStrikeInputs.bind(this),
+            options: {
+                defaultFlagValuesFunc: () => ({ [vitalStrikeEnabled]: true }),
+            },
         };
     }
 
@@ -117,6 +130,9 @@ export class VitalStrikeGreater extends VitalBase {
             compendiumId: 'zKNk7a4XxXsygJ67',
             isItemMatchFunc: (name) => LanguageSettings.isGreater(name, Settings.name),
             showInputsFunc: this.showVitalStrikeInputs.bind(this),
+            options: {
+                defaultFlagValuesFunc: () => ({ [vitalStrikeEnabled]: true }),
+            },
         };
     }
 
@@ -168,9 +184,15 @@ registerItemHint((hintcls, _actor, item, _data) => {
         return;
     }
 
-    return bonuses.map((bonus) =>
-        hintcls.create(bonus.vsHintInfo.multiplier, [], { hint: bonus.tooltip, icon: bonus.vsHintInfo.icon })
-    );
+    return bonuses.map((bonus) => {
+        let hint = bonus.tooltip;
+        if (VitalStrike.enabledByDefault(item)) {
+            hint += '\n\n';
+            hint += localize('vital-strike-enabled-current');
+        }
+
+        return hintcls.create(bonus.vsHintInfo.multiplier, [], { hint, icon: bonus.vsHintInfo.icon })
+    });
 });
 
 /**
@@ -272,9 +294,9 @@ export class VitalStrikeData {
 
                     if (firstDice) {
                         const formula =
-                            this.isGreater ? `${firstDice}[${VitalStrike.key}] + ${firstDice}[${VitalStrikeImproved.label}] + ${firstDice}[${VitalStrikeGreater.key}]`
-                                : this.isImproved ? `${firstDice}[${VitalStrike.key}] + ${firstDice}[${VitalStrikeImproved.key}]`
-                                    : `${firstDice}[${VitalStrike.key}]`;
+                            this.isGreater ? `${firstDice}[${VitalStrike.label}] + ${firstDice}[${VitalStrikeImproved.label}] + ${firstDice}[${VitalStrikeGreater.label}]`
+                                : this.isImproved ? `${firstDice}[${VitalStrike.label}] + ${firstDice}[${VitalStrikeImproved.label}]`
+                                    : `${firstDice}[${VitalStrike.label}]`;
 
                         const formData = getFormData(actionUse, key);
                         this.enabled = typeof formData === 'boolean'
