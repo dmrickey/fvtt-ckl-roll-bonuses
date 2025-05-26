@@ -616,6 +616,7 @@ declare global {
 
         get enhancementBonus(): number;
         get hasSave(): boolean;
+        get uuid(): string;
 
         getRollData(): RollData;
         getRange({

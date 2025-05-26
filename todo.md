@@ -52,7 +52,6 @@
 - [Other Ideas](#other-ideas)
 - [vnext](#vnext)
     - [Specific Bonuses](#specific-bonuses)
-    - [Bugfix](#bugfix)
     - [Idea](#idea)
 
 # TODO
@@ -241,7 +240,7 @@
   - Add "configure" method to each bonus and target that takes whatever args it needs to save itself
 - Flanking
   - Find out what the bonus picker looks like with Improved Outflank nested under Outflank if the global bonus is turned off
-  - Add hints for new bonusesr
+  - Add hints for new bonuses
   
 - order children in bonus picker app
 ### Specific Bonuses
@@ -250,9 +249,6 @@
 - Add "get item hint" function to base class
 
 - add "get flank parts" to `FlankHelper` so it can be clearly labeled as "flanking"/"outflanking"/"menacing"
-
-### Bugfix
-- CMB is failing "requires melee threatens"
 
 ### Idea
 - turn `LanguageSettings` into a base class that other classes extend (or create a base class that has shared logic)

@@ -24,7 +24,8 @@
 - All bonus classes now have a `configure` function so developers and/or advanced macro/script users can more easily programatically configure any bonus
   - (as always, this isn't necessary for any new item that is simply "enabled" and has no choices to be made (e.g. Fate's Favored has no choices to make and is automatically turned on when added to an actor))
 - type docs improved for developers
-- Expandeded previous change to less aggressively cache formula to Dice Transform Bonus
+- Expandeded previous change to less aggressively cache formula to Dice Transform Bonus (see 2.20.2 below)
+- Actions with invalid ranges are now always assumed to threaten the target instead of treating its range as 0. Debug UI warning is now printed to console if console's debug setting is disabled.
 
 ### Bugfixes
 - `extraChanges` being added to attacks are no longer lost (e.g. the system's crit only attack changes now work as expected once again)
@@ -35,7 +36,7 @@
 ## Roll Bonuses 2.20.3
 
 ### Misc
-- Expandeded previous change to less aggressively cache formula to Conditional Bonus
+- Expandeded previous change to less aggressively cache formula to Conditional Bonus (see 2.20.2 below)
 
 ---
 

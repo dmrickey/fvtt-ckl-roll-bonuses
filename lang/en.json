@@ -745,6 +745,9 @@
                 "inspiration": "Use of inspiration configured directly on the skill is deprecated and will be removed in a future version. Transition to using the Inspiration specific skills configured on the appropriate abilities.",
                 "dice": "Use of modifying the base dice for skills is deprecated and will be removed in a future version. See the documentation for how to configure skills for fortune/misfortune. If you have a need not covered by (mis)fortune, let me know."
             }
+        },
+        "warnings": {
+            "range-misconfigured": "Action ({actionName}) on Item '${itemName}' (${actionUuid}) has invalid range. Verify its max increments and range has been set up correctly. Automatically assuming it's in range."
         }
     }
 }

@@ -1,6 +1,7 @@
 import { MODULE_NAME } from '../consts.mjs';
 import { api } from './api.mjs';
 import { ifDebug } from './if-debug.mjs';
+import { localize } from './localize.mjs';
 
 export class PositionalHelper {
 
@@ -185,12 +186,20 @@ export class PositionalHelper {
 
         return actions.some((action) => {
             const range = action[MODULE_NAME].range || { max: 0, min: 0, range: 0 };
-            const { max, min, single } = range;
-            ifDebug(() => {
-                if (single && !max) {
-                    ui.notifications.error(`Action (${action.id}) on Item '${action.item.name}' (${action.item.uuid}) has invalid range. Verify the max increments and range has been set up correctly.`);
-                }
-            });
+            let { max, min, single } = range;
+            if ((single && !max) || (single === null || single === undefined)) {
+                const error = localize('warnings.range-misconfigured', {
+                    actionName: action.name,
+                    itemName: action.item.name,
+                    actionUuid: action.uuid,
+                })
+                ifDebug(
+                    () => ui.notifications.error(error),
+                    () => console.warn(error),
+                );
+
+                return true;
+            }
             return this.#isWithinRange(attacker, target, min, max || 0);
         });
     }
