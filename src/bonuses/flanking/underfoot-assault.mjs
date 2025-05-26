@@ -7,7 +7,7 @@ export class UnderfootAssault extends SpecificBonus {
     static get sourceKey() { return 'underfoot-assault'; }
 
     /** @inheritdoc @override */
-    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.IpRhJqZEX2TUarSX#underfoot-assault-(mouser-swashbuckler-archetype)'; }
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#underfoot-assault-(mouser-swashbuckler-archetype)'; }
 
     /** @inheritdoc @override @returns {CreateAndRender} */
     static get configuration() {

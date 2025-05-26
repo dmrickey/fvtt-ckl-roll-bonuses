@@ -7,7 +7,7 @@ export class Swarming extends SpecificBonus {
     static get sourceKey() { return 'swarming'; }
 
     /** @inheritdoc @override */
-    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.IpRhJqZEX2TUarSX#swarming-(ratfolk-racial-ability)'; }
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#swarming-(ratfolk-racial-ability)'; }
 
     /** @inheritdoc @override @returns {CreateAndRender} */
     static get configuration() {

@@ -7,7 +7,7 @@ export class FlankingImmunity extends SpecificBonus {
     static get sourceKey() { return 'flanking-immunity'; }
 
     /** @inheritdoc @override */
-    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.IpRhJqZEX2TUarSX#pack-flanking-(feat)'; }
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#pack-flanking-(feat)'; }
 
     /** @inheritdoc @override @returns {CreateAndRender} */
     static get configuration() {

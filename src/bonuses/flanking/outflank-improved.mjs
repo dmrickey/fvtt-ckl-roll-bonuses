@@ -8,7 +8,7 @@ export class OutflankImproved extends SpecificBonus {
     static get sourceKey() { return 'outflank-improved'; }
 
     /** @inheritdoc @override */
-    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.IpRhJqZEX2TUarSX#improved-outflank-(feat)'; }
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#improved-outflank-(feat)'; }
 
     /** @inheritdoc @override */
     static get parent() { return Outflank.key; }

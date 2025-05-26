@@ -3,10 +3,12 @@ import { ArmorFocus } from './armor-focus/armor-focus.mjs';
 import { ArmorFocusImproved } from './armor-focus/improved-armor-focus.mjs';
 import { ChangeTypeModification } from './change-type-modification.mjs';
 import { FatesFavored } from './fates-favored.mjs';
+import { FlankingImmunity } from './flanking/flanking-immunity.mjs';
 import { GangUp } from './flanking/gang-up.mjs';
 import { OutflankImproved } from './flanking/outflank-improved.mjs';
 import { PackFlanking } from './flanking/pack-flanking.mjs';
 import { Swarming } from './flanking/swarming.mjs';
+import { UncannyDodgeImproved } from './flanking/uncanny-dodge-improved.mjs';
 import { UnderfootAssault } from './flanking/underfoot-assault.mjs';
 import { FuriousFocus } from './furious-focus.mjs';
 import { InspirationAmazing } from './inspiration/inspiration-amazing.mjs';
@@ -39,7 +41,6 @@ import './weapon-focus/_weapon-focus-shared.mjs';
 
 // separate because its deprecated
 import './skills/init.mjs';
-import { UncannyDodgeImproved } from './flanking/uncanny-dodge-improved.mjs';
 
 /**
  * Array of all bonuses that are always on
@@ -57,6 +58,7 @@ const allSpecificBonuses = [
     ElementalFocusGreater,
     ElementalFocusMythic,
     FatesFavored,
+    FlankingImmunity,
     FuriousFocus,
     GangUp,
     Inspiration,

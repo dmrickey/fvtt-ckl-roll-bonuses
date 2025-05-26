@@ -7,7 +7,7 @@ export class GangUp extends SpecificBonus {
     static get sourceKey() { return 'gang-up'; }
 
     /** @inheritdoc @override */
-    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.IpRhJqZEX2TUarSX#gang-up-(feat)'; }
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#gang-up-(feat)'; }
 
     /** @inheritdoc @override @returns {CreateAndRender} */
     static get configuration() {
