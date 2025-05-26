@@ -11,6 +11,7 @@ import { MenacingBonus } from '../global-bonuses/targeted/bonuses/menacing.mjs';
 import { handleBonusesFor } from '../target-and-bonus-join.mjs';
 import { isMelee } from './action-type-helpers.mjs';
 import { difference } from './array-intersects.mjs';
+import { localize } from './localize.mjs';
 import { PositionalHelper } from './positional-helper.mjs';
 import { truthiness } from './truthiness.mjs';
 
@@ -39,8 +40,17 @@ export class FlankHelper {
 
     targetIsBeingMenaced = false;
 
+    /** @returns {string} */
+    get formula() {
+        const parts = [];
+        if (this.isFlanking) parts.push(`2[${localize('PF1.Flanking')}]`);
+        if (this.isOutflanking) parts.push(`2[${Outflank.label}]`);
+        if (this.targetIsBeingMenaced) parts.push(`2[${MenacingBonus.label}]`);
+        return parts.join(' + ');
+    }
+
     /** @returns {number} */
-    get totalBonus() { return 2 + (this.isOutflanking ? 2 : 0) + (this.targetIsBeingMenaced ? 2 : 0); }
+    get totalBonus() { return (this.isFlanking ? 2 : 0) + (this.isOutflanking ? 2 : 0) + (this.targetIsBeingMenaced ? 2 : 0); }
 
     /** @type {TokenPF} */ attacker;
     /** @type {TokenPF} */ target;

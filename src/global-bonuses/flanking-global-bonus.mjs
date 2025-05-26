@@ -53,10 +53,9 @@ export class FlankingGlobalBonus extends BaseGlobalBonus {
             return;
         }
 
-        const bonus = Math.min(...helpers.map(x => x.totalBonus));
-
-        if (bonus) {
-            shared.attackBonus.push(`${bonus}[${this.label}]`);
+        const helper = helpers.reduce((a, b) => a.totalBonus >= b.totalBonus ? a : b);
+        if (helper) {
+            shared.attackBonus.push(helper.formula);
         }
     }
 

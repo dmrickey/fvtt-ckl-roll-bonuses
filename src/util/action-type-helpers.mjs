@@ -7,7 +7,7 @@ export const isMelee = (_item, action) => ['mwak', 'msak', 'mcman'].includes(act
 export const isNatural = (item) => {
     const isAttack = item instanceof pf1.documents.item.ItemAttackPF;
     return (isAttack && item.subType === 'natural')
-        || !!item.system.weaponGroups?.total?.has("natural");
+        || !!item?.system.weaponGroups?.total?.has("natural");
 }
 
 /** @type {ActionTypeFilterFunc} */
@@ -18,7 +18,7 @@ export const isNaturalSecondary = (item, action, actionUse) => {
 }
 
 /**@type {ActionTypeFilterFunc}*/
-export const isPhysical = (item, action) => !!item?.isPhysical;
+export const isPhysical = (item, _action) => !!item?.isPhysical;
 
 /**@type {ActionTypeFilterFunc}*/
 export const isRanged = (_item, action) => ['rcman', 'rwak', 'rsak', 'twak'].includes(action?.actionType ?? '');

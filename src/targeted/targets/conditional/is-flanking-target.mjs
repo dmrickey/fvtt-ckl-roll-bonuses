@@ -1,6 +1,7 @@
 import { MODULE_NAME } from "../../../consts.mjs";
 import { showEnabledLabel } from '../../../handlebars-handlers/enabled-label.mjs';
 import { showActorInput } from '../../../handlebars-handlers/targeted/targets/actor-input.mjs';
+import { isMelee } from '../../../util/action-type-helpers.mjs';
 import { FlankHelper } from '../../../util/flank-helper.mjs';
 import { listFormat } from '../../../util/list-format.mjs';
 import { localize, localizeBonusLabel, localizeBonusTooltip } from '../../../util/localize.mjs';
@@ -100,6 +101,8 @@ export class IsFlankingTarget extends BaseTarget {
             : doc instanceof pf1.actionUse.ActionUse
                 ? doc.action
                 : doc;
+
+        if (!isMelee(item, action)) return [];
 
         const bonusSources = sources.filter((source) =>
             self.some((meToken) =>

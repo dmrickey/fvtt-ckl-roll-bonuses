@@ -1,4 +1,5 @@
 import { MODULE_NAME } from '../consts.mjs';
+import { isMelee } from './action-type-helpers.mjs';
 import { api } from './api.mjs';
 import { ifDebug } from './if-debug.mjs';
 import { localize } from './localize.mjs';
@@ -186,15 +187,20 @@ export class PositionalHelper {
         } else {
             actions = attacker.actor.items
                 .filter((item) => item.canUse && item.activeState)
-                .flatMap((item) => item.actions.contents)
-                .filter((action) => action.hasAttack && !action.isRanged);
+                .flatMap((item) => item.actions.contents);
         }
+        actions = actions
+            .filter((action) => action.hasAttack && isMelee(undefined, action));
 
         return actions.some((action) => {
             const range = action[MODULE_NAME].range || { max: 0, min: 0, range: 0 };
             let { max, min, single } = range;
-            if ((single && !max) || (single === null || single === undefined)) {
-                if (!errorCache.includes(action.uuid)) {
+
+            // early failsafe for first data prep
+            if (single === null || single === undefined) return true;
+
+            if ((single && !max)) {
+                if (specificAction && !errorCache.includes(action.uuid)) {
                     const error = localize('warnings.range-misconfigured', {
                         actionName: action.name,
                         itemName: action.item.name,
@@ -207,6 +213,7 @@ export class PositionalHelper {
 
                 return true;
             }
+
             return this.#isWithinRange(attacker, target, min, max || 0);
         });
     }

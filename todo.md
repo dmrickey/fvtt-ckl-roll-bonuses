@@ -241,8 +241,6 @@
   - update all journal entries to indicate what the key is
 - Add "get item hint" function to base class
 
-- add "get flank parts" to `FlankHelper` so it can be clearly labeled as "flanking"/"outflanking"/"menacing"
-
 ### Idea
 - turn `LanguageSettings` into a base class that other classes extend (or create a base class that has shared logic)
 - **System Changes Bonus**

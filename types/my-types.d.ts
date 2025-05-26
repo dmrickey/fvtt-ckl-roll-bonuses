@@ -247,7 +247,7 @@ declare global {
 
     declare type ActionTypeFilterFunc = {
         (
-            item: ItemPF,
+            item?: ItemPF,
             action?: ItemAction,
             actionUse?: ActionUse | null
         ): boolean;
