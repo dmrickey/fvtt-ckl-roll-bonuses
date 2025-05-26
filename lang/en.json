@@ -747,7 +747,7 @@
             }
         },
         "warnings": {
-            "range-misconfigured": "Action ({actionName}) on Item '${itemName}' (${actionUuid}) has invalid range. Verify its max increments and range has been set up correctly. Automatically assuming it's in range."
+            "range-misconfigured": "Action ({actionName}) on Item '{itemName}' ({actionUuid}) has invalid range. Verify its max increments and range has been set up correctly. Automatically assuming it's in range."
         }
     }
 }

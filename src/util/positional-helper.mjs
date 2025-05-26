@@ -3,6 +3,12 @@ import { api } from './api.mjs';
 import { ifDebug } from './if-debug.mjs';
 import { localize } from './localize.mjs';
 
+/**
+ * Cache so the console isn't spammed everytime the same invalid action is found
+ * @type {UUID[]}
+ */
+const errorCache = [];
+
 export class PositionalHelper {
 
     /** @type {TokenPF} */ token1;
@@ -188,15 +194,16 @@ export class PositionalHelper {
             const range = action[MODULE_NAME].range || { max: 0, min: 0, range: 0 };
             let { max, min, single } = range;
             if ((single && !max) || (single === null || single === undefined)) {
-                const error = localize('warnings.range-misconfigured', {
-                    actionName: action.name,
-                    itemName: action.item.name,
-                    actionUuid: action.uuid,
-                })
-                ifDebug(
-                    () => ui.notifications.error(error),
-                    () => console.warn(error),
-                );
+                if (!errorCache.includes(action.uuid)) {
+                    const error = localize('warnings.range-misconfigured', {
+                        actionName: action.name,
+                        itemName: action.item.name,
+                        actionUuid: action.uuid,
+                    });
+                    ifDebug(() => ui.notifications.error(error));
+                    console.warn(error, { max, min, single });
+                    errorCache.push(action.uuid);
+                }
 
                 return true;
             }
