@@ -103,7 +103,7 @@ export function showBonusPicker({
             value: currentTargetOverrideSources.includes(source.key),
         })),
         specifics: specifics
-            .filter((bonus) => !bonus.parent)
+            .filter((bonus) => !bonus.parent || !specifics.find((parent) => parent.key === bonus.parent))
             .map((bonus, i) => ({
                 journal: bonus.journal,
                 key: bonus.key,

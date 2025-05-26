@@ -191,12 +191,6 @@
   - changes are generated and applied too early and too broadly in the system prep. I can either create a change that applies to everything (pointless) or I can create a specific change that exists for the specified target, but it's created too late to both be reduced to the best bonus type and actually be added to the roll
 
 # Range/Positional ideas
-- Flank
-  - Also includes a "cannot be flanked" flag that would go on an Item to signify when an actor can't be flanked
-  - has to do with melee
-  - Needs a "Target" so that I can give out extra bonuses when flanking
-    - Dirty Fighter Trait
-    - Outflank (would need extra info about flank target) 
 - IsAdjacent
 - IsSharingSquare
 
@@ -239,7 +233,6 @@
   - remove `Record<any, any>` from API type definition and make sure all individual references are imported
   - Add "configure" method to each bonus and target that takes whatever args it needs to save itself
 - Flanking
-  - Find out what the bonus picker looks like with Improved Outflank nested under Outflank if the global bonus is turned off
   - Add hints for new bonuses
   
 - order children in bonus picker app
