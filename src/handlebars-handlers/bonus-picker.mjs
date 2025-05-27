@@ -126,31 +126,6 @@ export function showBonusPicker({
             })),
     };
 
-    //     const term = 'attack';
-    //
-    //     /**
-    //      * @param {PickerItemData} itemData
-    //      */
-    //     const fillSearchInfo = (itemData) => {
-    //         let _term = (term || '').trim().toLocaleLowerCase();
-    //         if (!_term) return;
-    //
-    //         const _label = itemData.label.toLocaleLowerCase();
-    //         const _tooltip = itemData.tooltip.toLocaleLowerCase();
-    //         const found = _label.includes(_term) || _tooltip.includes(_term);
-    //         itemData.searched = found;
-    //         itemData.unSearched = !found;
-    //     }
-    //
-    //     data.bonuses.forEach(fillSearchInfo);
-    //     data.targets.forEach(fillSearchInfo);
-    //     data.conditionalTargets.forEach(fillSearchInfo);
-    //     data.targetOverrides.forEach(fillSearchInfo);
-    //     data.specifics.forEach((s) => {
-    //         fillSearchInfo(s);
-    //         (s.children || []).forEach(fillSearchInfo);
-    //     });
-
     const app = new BonusPickerApp(item, data);
     app.render(true);
 }
@@ -198,15 +173,18 @@ class BonusPickerApp extends DocumentSheet {
 
         this.#searchFilter = new SearchFilter({
             inputSelector: 'input[name="search"]',
-            // contentSelector: ".checkbox-label[data-key]",
             contentSelector: '.form-body',
             callback: (
-                /** @type {InputEvent} */ event,
-                /** @type {string} */ query,
-                /** @type {RegExp} */ rgx,
-                /** @type {HTMLElement} */ html,
+                _event,
+                query,
+                rgx,
+                html,
             ) => {
-                for (let elem of html.querySelectorAll('.checkbox-label[data-key]')) {
+                if (!html) return;
+
+                /** @type {NodeListOf<HTMLElement>} */
+                const elems = html.querySelectorAll('.checkbox-label[data-key]');
+                for (let elem of elems) {
                     if (!query) {
                         elem.classList.remove("searched");
                         elem.classList.remove("un-searched");
@@ -214,6 +192,7 @@ class BonusPickerApp extends DocumentSheet {
                     }
 
                     const key = elem.dataset.key;
+                    if (!key) continue;
                     const bonus = this.#allBonuses[key];
                     if (!bonus) continue;
 
@@ -259,6 +238,7 @@ class BonusPickerApp extends DocumentSheet {
     activateListeners(html) {
         super.activateListeners(html);
         html.find('button[type=reset]')?.click(this.close.bind(this));
+        // @ts-ignore
         this.#searchFilter.bind(this.element[0]);
 
         const buttons = html.find('[data-journal]');
