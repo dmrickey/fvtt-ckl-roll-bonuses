@@ -1,9 +1,6 @@
 .bonus-picker-app .window-content {
     padding: 0;
 }
-.bonus-picker-app .form-body {
-    /* max-height: 20vh; */
-}
 .bonus-picker-app .control-group {
     padding-block-end: 0.5rem;
     padding-inline: 0.5rem;
@@ -51,10 +48,12 @@
 .bonus-picker-app .roll-bonuses-form .picker-tab,
 .bonus-picker-app .tab-hint.help-text {
     display: none;
+    text-wrap: balance;
 }
 .bonus-picker-app .roll-bonuses-form .picker-tab.active,
 .bonus-picker-app .tab-hint.help-text.active {
     display: block;
+    text-wrap: balance;
 }
 
 .bonus-picker-app .roll-bonuses-form h2,
@@ -63,12 +62,6 @@
     background-color: rgb(178, 178, 178);
     position: sticky;
     top: 0px;
-}
-
-.bonus-picker-app .roll-bonuses-form .sources,
-.bonus-picker-app .roll-bonuses-form .specific-bonuses {
-    /* max-height: 50vh;
-    overflow-y: auto; */
 }
 
 .bonus-picker-app .bonus-picker-items {

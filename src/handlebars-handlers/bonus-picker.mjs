@@ -12,6 +12,8 @@ import { templates } from './templates.mjs';
  * @property {string} label
  * @property {string} tooltip
  * @property {boolean} value
+//  * @property {boolean} [searched]
+//  * @property {boolean} [unSearched]
  */
 
 /**
@@ -124,6 +126,31 @@ export function showBonusPicker({
             })),
     };
 
+    //     const term = 'attack';
+    //
+    //     /**
+    //      * @param {PickerItemData} itemData
+    //      */
+    //     const fillSearchInfo = (itemData) => {
+    //         let _term = (term || '').trim().toLocaleLowerCase();
+    //         if (!_term) return;
+    //
+    //         const _label = itemData.label.toLocaleLowerCase();
+    //         const _tooltip = itemData.tooltip.toLocaleLowerCase();
+    //         const found = _label.includes(_term) || _tooltip.includes(_term);
+    //         itemData.searched = found;
+    //         itemData.unSearched = !found;
+    //     }
+    //
+    //     data.bonuses.forEach(fillSearchInfo);
+    //     data.targets.forEach(fillSearchInfo);
+    //     data.conditionalTargets.forEach(fillSearchInfo);
+    //     data.targetOverrides.forEach(fillSearchInfo);
+    //     data.specifics.forEach((s) => {
+    //         fillSearchInfo(s);
+    //         (s.children || []).forEach(fillSearchInfo);
+    //     });
+
     const app = new BonusPickerApp(item, data);
     app.render(true);
 }
@@ -133,6 +160,25 @@ api.showApplication.showBonusPicker = showBonusPicker;
 /** @ts-ignore */
 /** @extends {DocumentSheet<BonusPickerData, ItemPF>} */
 class BonusPickerApp extends DocumentSheet {
+
+    #searchFilter;
+
+    /** @type {Record<string, PickerItemData>} */
+    #allBonuses = {};
+
+    /**
+     *
+     * @param {string} key
+     */
+    findData(key) {
+        return this.data.bonuses.find(x => x.key === key)
+            || this.data.targets.find(x => x.key === key)
+            || this.data.conditionalTargets.find(x => x.key === key)
+            || this.data.targetOverrides.find(x => x.key === key)
+            || this.data.specifics.find(x => x.key === key)
+
+    }
+
     /**
      * @param {ItemPF} item
      * @param {BonusPickerData} data
@@ -140,7 +186,48 @@ class BonusPickerApp extends DocumentSheet {
     constructor(item, data) {
         super(item, data);
         this.data = data;
+
+        data.bonuses.forEach(x => this.#allBonuses[x.key] = x);
+        data.targets.forEach(x => this.#allBonuses[x.key] = x);
+        data.conditionalTargets.forEach(x => this.#allBonuses[x.key] = x);
+        data.targetOverrides.forEach(x => this.#allBonuses[x.key] = x);
+        data.specifics.forEach((s) => {
+            this.#allBonuses[s.key] = s;
+            (s.children || []).forEach(x => this.#allBonuses[x.key] = x);
+        });
+
+        this.#searchFilter = new SearchFilter({
+            inputSelector: 'input[name="search"]',
+            // contentSelector: ".checkbox-label[data-key]",
+            contentSelector: '.form-body',
+            callback: (
+                /** @type {InputEvent} */ event,
+                /** @type {string} */ query,
+                /** @type {RegExp} */ rgx,
+                /** @type {HTMLElement} */ html,
+            ) => {
+                for (let elem of html.querySelectorAll('.checkbox-label[data-key]')) {
+                    if (!query) {
+                        elem.classList.remove("searched");
+                        elem.classList.remove("un-searched");
+                        continue;
+                    }
+
+                    const key = elem.dataset.key;
+                    const bonus = this.#allBonuses[key];
+                    if (!bonus) continue;
+
+                    const nameMatch = () => rgx.test(SearchFilter.cleanQuery(bonus.label));
+                    const tipMatch = () => rgx.test(SearchFilter.cleanQuery(bonus.tooltip));
+
+                    const match = nameMatch() || tipMatch();
+                    elem.classList.toggle("searched", match);
+                    elem.classList.toggle("un-searched", !match);
+                }
+            },
+        });
     }
+
     /** @override */
     static get defaultOptions() {
         const options = super.defaultOptions;
@@ -172,6 +259,7 @@ class BonusPickerApp extends DocumentSheet {
     activateListeners(html) {
         super.activateListeners(html);
         html.find('button[type=reset]')?.click(this.close.bind(this));
+        this.#searchFilter.bind(this.element[0]);
 
         const buttons = html.find('[data-journal]');
         buttons?.on(

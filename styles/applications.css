@@ -48,6 +48,14 @@
     display: flex;
 }
 
+.checkbox-label.searched {
+    font-weight: bold;
+}
+.checkbox-label.un-searched {
+    color: rgb(178, 178, 178);
+    /* display: none; */
+}
+
 .item-based-list .roll-bonuses-form .type-header {
     align-content: center;
     position: sticky;
