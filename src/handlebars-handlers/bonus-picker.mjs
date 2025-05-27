@@ -202,6 +202,12 @@ class BonusPickerApp extends DocumentSheet {
                 /** @type {HTMLElement} */
                 const targetedBody = event.target.parentElement.parentElement.querySelector('.targeted-body');
                 targetedBody.classList.add('active');
+                /** @type {HTMLElement} */
+                const specificHint = event.target.parentElement.parentElement.querySelector('.tab-hint.help-text.specific');
+                specificHint.classList.remove('active');
+                /** @type {HTMLElement} */
+                const targetedHint = event.target.parentElement.parentElement.querySelector('.tab-hint.help-text.targeted');
+                targetedHint.classList.add('active');
                 refreshApp();
             }
         )
@@ -218,6 +224,12 @@ class BonusPickerApp extends DocumentSheet {
                 /** @type {HTMLElement} */
                 const targetedBody = event.target.parentElement.parentElement.querySelector('.targeted-body');
                 targetedBody.classList.remove('active');
+                /** @type {HTMLElement} */
+                const specificHint = event.target.parentElement.parentElement.querySelector('.tab-hint.help-text.specific');
+                specificHint.classList.add('active');
+                /** @type {HTMLElement} */
+                const targetedHint = event.target.parentElement.parentElement.querySelector('.tab-hint.help-text.targeted');
+                targetedHint.classList.remove('active');
                 refreshApp();
             }
         )

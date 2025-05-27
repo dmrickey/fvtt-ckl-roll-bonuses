@@ -3,12 +3,21 @@
         <h3 id="targeted-tab-button-{{item.id}}" class="item tab-button active">{{localize 'ckl-roll-bonuses.picker.tabs.targeted'}}</h3>
         <h3 id="specific-tab-button-{{item.id}}" class="item tab-button">{{localize 'ckl-roll-bonuses.picker.tabs.specific'}}</h3>
     </div>
+
+    <div class="hint-container">
+        <div class="tab-hint help-text targeted active">
+            <i class="help-icon fas fa-info-circle"></i>
+            {{localize 'ckl-roll-bonuses.picker.tabs.targeted-description'}}
+        </div>
+
+        <div class="tab-hint help-text specific">
+            <i class="help-icon fas fa-info-circle"></i>
+            {{localize 'ckl-roll-bonuses.picker.tabs.specific-description'}}
+        </div>
+    </div>
+
     <div class="form-body">
         <div class="targeted-body picker-tab active">
-            <div class="tab-hint help-text">
-                <i class="help-icon fas fa-info-circle"></i>
-                {{localize 'ckl-roll-bonuses.picker.tabs.targeted-description'}}
-            </div>
             <div class="sources">
                 <div>
                     <h2>
@@ -20,9 +29,11 @@
                             <i class="fas fa-book"></i>
                         </a>
                     </h2>
-                    {{#each bonuses}}
-                    {{> "modules/ckl-roll-bonuses/hbs/bonus-picker-item.hbs"}}
-                    {{/each}}
+                    <div class="bonus-picker-items">
+                        {{#each bonuses}}
+                        {{> "modules/ckl-roll-bonuses/hbs/bonus-picker-item.hbs"}}
+                        {{/each}}
+                    </div>
                 </div>
                 <div>
                     <h2>
@@ -34,9 +45,11 @@
                             <i class="fas fa-book"></i>
                         </a>
                     </h2>
-                    {{#each targets}}
-                    {{> "modules/ckl-roll-bonuses/hbs/bonus-picker-item.hbs"}}
-                    {{/each}}
+                    <div class="bonus-picker-items">
+                        {{#each targets}}
+                        {{> "modules/ckl-roll-bonuses/hbs/bonus-picker-item.hbs"}}
+                        {{/each}}
+                    </div>
                 </div>
                 <div>
                     <h2>
@@ -48,9 +61,11 @@
                             <i class="fas fa-book"></i>
                         </a>
                     </h2>
-                    {{#each conditionalTargets}}
-                    {{> "modules/ckl-roll-bonuses/hbs/bonus-picker-item.hbs"}}
-                    {{/each}}
+                    <div class="bonus-picker-items">
+                        {{#each conditionalTargets}}
+                        {{> "modules/ckl-roll-bonuses/hbs/bonus-picker-item.hbs"}}
+                        {{/each}}
+                    </div>
                 </div>
                 <div>
                     <h2>
@@ -62,18 +77,16 @@
                             <i class="fas fa-book"></i>
                         </a>
                     </h2>
-                    {{#each targetOverrides}}
-                    {{> "modules/ckl-roll-bonuses/hbs/bonus-picker-item.hbs"}}
-                    {{/each}}
+                    <div class="bonus-picker-items">
+                        {{#each targetOverrides}}
+                        {{> "modules/ckl-roll-bonuses/hbs/bonus-picker-item.hbs"}}
+                        {{/each}}
+                    </div>
                 </div>
             </div>
         </div>
 
         <div class="specific-body picker-tab">
-            <div class="tab-hint help-text">
-                <i class="help-icon fas fa-info-circle"></i>
-                {{localize 'ckl-roll-bonuses.picker.tabs.specific-description'}}
-            </div>
             {{#if specifics.length}}
             <h2>
                 {{ localize 'ckl-roll-bonuses.picker.specific-bonuses.label' }}
@@ -84,7 +97,7 @@
                     <i class="fas fa-book"></i>
                 </a>
             </h2>
-            <div class="specific-bonuses">
+            <div class="specific-bonuses bonus-picker-items">
                 {{#each specifics}}
                 {{> "modules/ckl-roll-bonuses/hbs/bonus-picker-item.hbs"}}
                 {{#each children}}
