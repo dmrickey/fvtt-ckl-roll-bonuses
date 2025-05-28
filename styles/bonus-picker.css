@@ -45,6 +45,18 @@
     text-align: center;
 }
 
+.bonus-picker-app .search-container {
+    width: 100%;
+    /* padding-block-start: 0.25rem; */
+    padding-block-end: 0.25rem;
+    text-align: center;
+}
+.bonus-picker-app .search-container input[name="filter"] {
+    width: fit-content;
+    max-width: 80%;
+    margin-inline: auto;
+}
+
 .bonus-picker-app .roll-bonuses-form .picker-tab,
 .bonus-picker-app .tab-hint.help-text {
     display: none;
@@ -86,6 +98,13 @@
 
 .bonus-picker-app .roll-bonuses-form h2 {
     text-align: center;
+}
+
+.bonus-picker-app .form-body .sources > div h2 {
+    border-inline-end: 1px solid #000;
+}
+.bonus-picker-app .form-body .sources > div:nth-child(even) h2 {
+    border-inline-end: unset;
 }
 
 .bonus-picker-app .roll-bonuses-form .fas.fa-book {

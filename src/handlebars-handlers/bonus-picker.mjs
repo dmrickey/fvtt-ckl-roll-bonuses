@@ -4,6 +4,7 @@ import { api } from '../util/api.mjs';
 import { intersection } from '../util/array-intersects.mjs';
 import { handleJournalClick } from '../util/handle-journal-click.mjs';
 import { localize } from '../util/localize.mjs';
+import { LanguageSettings } from '../util/settings.mjs';
 import { templates } from './templates.mjs';
 
 /**
@@ -126,6 +127,18 @@ export function showBonusPicker({
             })),
     };
 
+    data.specifics.forEach(s => s.children?.sort((a, b) => {
+        const aImproved = a.label.toLocaleLowerCase().startsWith(LanguageSettings.improved);
+        const bGreater = b.label.toLocaleLowerCase().startsWith(LanguageSettings.greater);
+        if (aImproved && bGreater) return -1;
+
+        const aGreater = a.label.toLocaleLowerCase().startsWith(LanguageSettings.greater);
+        const bImproved = b.label.toLocaleLowerCase().startsWith(LanguageSettings.improved);
+        if (bImproved && aGreater) return 1;
+
+        return a.label.localeCompare(b.label);
+    }));
+
     const app = new BonusPickerApp(item, data);
     app.render(true);
 }
@@ -172,7 +185,7 @@ class BonusPickerApp extends DocumentSheet {
         });
 
         this.#searchFilter = new SearchFilter({
-            inputSelector: 'input[name="search"]',
+            inputSelector: 'input[name="filter"]',
             contentSelector: '.form-body',
             callback: (
                 _event,

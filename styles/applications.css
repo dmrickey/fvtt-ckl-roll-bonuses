@@ -1,5 +1,5 @@
 .roll-bonuses-form .form-body {
-    max-height: 80vh;
+    max-height: 65vh;
     overflow-y: auto;
 }
 
@@ -76,6 +76,12 @@
 
 .item-based-list .roll-bonuses-form .search-container {
     margin: 0 0.5rem 0.5rem 0.5rem;
+}
+.roll-bonuses-form .search-container .fa-magnifying-glass {
+    margin-inline-end: 0.5rem;
+}
+.roll-bonuses-form .search-container input[type="search"] {
+    text-align: start;
 }
 
 .item-based-list
