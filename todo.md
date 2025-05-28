@@ -227,15 +227,11 @@
 - Add Fortune/Misfortune checkboxes to attack/roll dialogs
 
 - Remove `greater`/`improved`/`mythic` getters from LanguageSettings and use the new `is` methods
-- Add `getSourceFlag` to api so mod authors don't have to save my mod id
-  - e.g. no `source.getFlag("ckl-roll-bonuses", this.key)`
-  - but instead `getSourceFlag(source, this.key)`
-  - remove `Record<any, any>` from API type definition and make sure all individual references are imported
+- remove `Record<any, any>` from API type definition and make sure all individual references are imported
   - Add "configure" method to each bonus and target that takes whatever args it needs to save itself
 - Flanking
   - Add hints for new bonuses
   
-- order children in bonus picker app
 ### Specific Bonuses
 - ~~Migrate all keys to start with `specific_`~~ Do this later after SBC has a chance to update to only use the API
   - update all journal entries to indicate what the key is
