@@ -75,6 +75,8 @@
 }
 
 .item-based-list .roll-bonuses-form .search-container {
+    align-items: center;
+    display: flex;
     margin: 0 0.5rem 0.5rem 0.5rem;
 }
 .roll-bonuses-form .search-container .fa-magnifying-glass {

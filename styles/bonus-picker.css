@@ -46,14 +46,12 @@
 }
 
 .bonus-picker-app .search-container {
-    width: 100%;
-    /* padding-block-start: 0.25rem; */
     padding-block-end: 0.25rem;
     text-align: center;
+    width: 100%;
 }
 .bonus-picker-app .search-container input[name="filter"] {
     width: fit-content;
-    max-width: 80%;
     margin-inline: auto;
 }
 
