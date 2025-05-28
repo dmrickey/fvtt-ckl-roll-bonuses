@@ -48,7 +48,6 @@
 - [Skills](#skills)
 - [in pf1 V10](#in-pf1-v10)
 - [Not Possible](#not-possible)
-- [Range/Positional ideas](#rangepositional-ideas)
 - [Other Ideas](#other-ideas)
 - [vnext](#vnext)
     - [Specific Bonuses](#specific-bonuses)
@@ -189,10 +188,6 @@
   - Sad day. Not possible for basically the same reason custom changes aren't possible
 - Custom changes that effect only specific targets :(
   - changes are generated and applied too early and too broadly in the system prep. I can either create a change that applies to everything (pointless) or I can create a specific change that exists for the specified target, but it's created too late to both be reduced to the best bonus type and actually be added to the roll
-
-# Range/Positional ideas
-- IsAdjacent
-- IsSharingSquare
 
 # Other Ideas
 - Add Concealment

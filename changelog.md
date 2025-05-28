@@ -18,6 +18,8 @@
     - **Outflank** and **Improved Outflank** are also supported by **Solo Tactics**
 - **While Adjacent To** (Target)
   - Activates bonuses while adjacent to a chosen ally
+- **While Sharing Square With** (Target)
+  - Activates bonuses while sharing a square with a chosen ally
 
 ### Misc
 - Completely refactored how Specific Bonuses are added to my framework. Unifying and simplifying a lot of duplicated logic.

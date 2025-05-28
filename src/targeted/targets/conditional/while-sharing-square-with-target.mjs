@@ -6,12 +6,12 @@ import { PositionalHelper } from '../../../util/positional-helper.mjs';
 import { truthiness } from '../../../util/truthiness.mjs';
 import { BaseTarget } from '../_base-target.mjs';
 
-export class WhileAdjacentToTarget extends BaseTarget {
+export class WhileSharingSquareWithTarget extends BaseTarget {
     /**
      * @override
      * @inheritdoc
      */
-    static get sourceKey() { return 'while-adjacent-to'; }
+    static get sourceKey() { return 'while-sharing-with'; }
 
     /**
      * @param {ItemPF} source
@@ -45,7 +45,7 @@ export class WhileAdjacentToTarget extends BaseTarget {
      * @inheritdoc
      * @returns {string}
      */
-    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.IpRhJqZEX2TUarSX#while-adjacent-to'; }
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.IpRhJqZEX2TUarSX#while-sharing-square-with'; }
 
     /**
      * @override
@@ -80,7 +80,7 @@ export class WhileAdjacentToTarget extends BaseTarget {
 
         const filtered = sources.filter((source) => {
             const allies = this.#allyTokens(source);
-            return allies.every((ally) => new PositionalHelper(token, ally).isAdjacent());
+            return allies.every((ally) => new PositionalHelper(token, ally).isSharingSquare());
         })
 
         return filtered;

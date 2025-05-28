@@ -162,7 +162,8 @@
                 "weapon": "Specific Weapons and Attacks",
                 "when-active": "When Item Is Active",
                 "when-in-combat": "When in Combat",
-                "while-adjacent-to": "While Adjacent To"
+                "while-adjacent-to": "While Adjacent To",
+                "while-sharing-with": "While Sharing Square With"
             },
             "tooltip": {
                 "action": "Grant bonuses to specific actions.",
@@ -287,7 +288,8 @@
                 "weapon": "Choose specific Attacks and Weapons for bonuses.",
                 "when-active": "Apply bonuses when specified Buff/Weapon/Feat/etc is active.",
                 "when-in-combat": "Active when this actor is in combat.",
-                "while-adjacent-to": "Activates bonuses while adjacent to any of the specified allies."
+                "while-adjacent-to": "Activates bonuses while adjacent to any of the specified allies.",
+                "while-sharing-with": "Activates bonuses while sharing a square with any of the specified allies."
             }
         },
         "cancel": "Cancel",

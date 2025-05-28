@@ -51,7 +51,7 @@
     width: 100%;
 }
 .bonus-picker-app .search-container input[name="filter"] {
-    width: fit-content;
+    width: 200px;
     margin-inline: auto;
 }
 
