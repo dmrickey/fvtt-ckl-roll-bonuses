@@ -323,6 +323,7 @@ class BonusPickerApp extends DocumentSheet {
      */
     _getSubmitData(updateData) {
         const formData = super._getSubmitData(updateData);
+        delete formData.filter;
 
         /** @type {Partial<ItemPF>} */ // @ts-ignore
         let updateObj = null;
