@@ -1,7 +1,7 @@
 .roll-bonuses-form .sticky-header {
+    background-color: rgb(178, 178, 178);
     position: sticky;
     top: 0;
-    background-color: rgb(178, 178, 178);
     z-index: 1;
 }
 
@@ -66,11 +66,7 @@
 
 .item-based-list .roll-bonuses-form .type-header {
     align-content: center;
-    position: sticky;
     height: 24px;
-    top: 0;
-    z-index: 1;
-    background-color: rgb(178, 178, 178);
     padding-inline-start: 0.5rem;
 }
 
