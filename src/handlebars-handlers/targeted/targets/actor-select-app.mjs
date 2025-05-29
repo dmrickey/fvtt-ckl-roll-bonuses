@@ -126,10 +126,10 @@ export class ActorSelectorApp extends DocumentSheet {
         });
 
         // uncomment for empty testing
-        templateData.groupedActors.push({
-            label: 'Empty test actors',
-            actors: [],
-        });
+        // templateData.groupedActors.push({
+        //     label: 'Empty test actors',
+        //     actors: [],
+        // });
 
         const observedActors = friendlyActors
             .filter((a) => game.users.players.some((u) => a.testUserPermission(u, CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER)))

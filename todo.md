@@ -240,9 +240,3 @@
     - This would allow for things like "+4 intimidate when targeting a creature type"
       - or "+4 initiative when in a city (using Fair's target)"
       - or possibly literally any change ¯\_(ツ)_/¯ 
-
-Actor picker app - Add hint text for GM about how players can't see as many as they can by default
-
-token/actor inputs
-- hover
-  - change cursor to pointer

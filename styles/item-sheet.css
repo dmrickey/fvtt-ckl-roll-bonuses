@@ -72,6 +72,10 @@
     padding-inline-end: 0.25rem;
 }
 
+#ckl-roll-bonus-container .editable-icon-input li:hover {
+    cursor: pointer;
+}
+
 /* copied from apps.less in pf1 repo */
 .pf1.sheet .roll-bonuses .delete-change,
 .pf1.sheet .roll-bonuses .delete-damage {
