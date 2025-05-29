@@ -52,7 +52,13 @@ const onRender = (key, showInputsFunc) => {
 
 export class SpecificBonus {
     static register() {
-        api.specificBonusTypeMap[this.key] = this;
+        const key = /** @type {keyof RollBonusesAPI['specificBonusTypeMap']} */ (this.key);
+        if (!!api.specificBonusTypeMap[key]) {
+            console.error(`Roll Bonus for key '${key}' (${this.label}) has already been registered. This is not a user error. Report this to the mod author adding this bonus.`);
+            return;
+        }
+        // @ts-ignore
+        api.specificBonusTypeMap[key] = this;
         initConfiguration(this);
     }
 

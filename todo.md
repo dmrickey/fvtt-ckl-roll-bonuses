@@ -239,4 +239,7 @@
     - These would essentially work only with Conditional Targets (and self/all)
     - This would allow for things like "+4 intimidate when targeting a creature type"
       - or "+4 initiative when in a city (using Fair's target)"
-      - or possibly literally any change ¯\_(ツ)_/¯ 
+      - or possibly literally any change ¯\_(ツ)_/¯
+
+Flanking 
+- disable or hijack system's checkbox in attack dialog
