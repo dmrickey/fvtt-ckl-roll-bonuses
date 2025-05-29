@@ -242,3 +242,8 @@
       - or possibly literally any change ¯\_(ツ)_/¯ 
 
 Actor picker app - Add hint text for GM about how players can't see as many as they can by default
+
+token/actor inputs
+- hover
+  - change cursor to pointer
+  - highlight token on map (see actor/token-select-app for example)

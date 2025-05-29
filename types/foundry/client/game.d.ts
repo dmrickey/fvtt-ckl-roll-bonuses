@@ -50,7 +50,10 @@ interface Game {
     time: { worldTime: number };
 
     user: User;
-    users: { activeGM: user } & EmbeddedCollection<User>;
+    users: {
+        activeGM: user & { isGM: true };
+        players: Array<User & { isGM: false }>;
+    } & EmbeddedCollection<User>;
     userId: string;
 }
 

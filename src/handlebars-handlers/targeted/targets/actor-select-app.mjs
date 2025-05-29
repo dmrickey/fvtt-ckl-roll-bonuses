@@ -1,5 +1,6 @@
 import { MODULE_NAME } from "../../../consts.mjs";
 import { api } from '../../../util/api.mjs';
+import { localize } from '../../../util/localize.mjs';
 import { registerSetting } from '../../../util/settings.mjs';
 import { truthiness } from "../../../util/truthiness.mjs";
 import { templates } from "../../templates.mjs";
@@ -21,8 +22,9 @@ class Settings {
 
 /**
  * @typedef {object} ActorSelectorOptions
+ * @property {ActorPF} actor
  * @property {string} key
-*/
+ */
 
 /**
  * In the html, all of the classes are "token-..." because it uses the same styles as the token selector app.
@@ -35,6 +37,7 @@ export class ActorSelectorApp extends DocumentSheet {
     static get defaultOptions() {
         const options = super.defaultOptions;
 
+        options.classes = ['token-based-list'];
         options.height = 'auto';
         options.template = templates.actorSelectApp;
 
@@ -55,25 +58,52 @@ export class ActorSelectorApp extends DocumentSheet {
             /** @this {HTMLElement} */
             function () {
                 const uuid = this.dataset.tokenUuid || '';
-                const actor = fromUuidSync(uuid)?.object;
+                /** @type {ActorPF} */
+                const actor = fromUuidSync(uuid);
                 if (!actor) return;
 
-                this.addEventListener('pointerenter', (e) => actor._onHoverIn(e, { hoverOutOthers: false }));
-                this.addEventListener('pointerleave', (e) => actor._onHoverOut(e));
+                actor.getActiveTokens().forEach((token) => {
+                    this.addEventListener('pointerenter', (e) => token._onHoverIn(e, { hoverOutOthers: false }));
+                    this.addEventListener('pointerleave', (e) => token._onHoverOut(e));
+                });
             });
     }
+
+    /**
+     * @typedef {object} SpecficActorSelectTemplateData
+     * @property {string} id
+     * @property {DispositionLevel} disposition
+     * @property {string} img
+     * @property {string} name
+     * @property {string} uuid
+     * @property {boolean} checked
+     *
+     * @typedef {object} ActorGroupTemplateData
+     * @property {string} label
+     * @property {SpecficActorSelectTemplateData[]} actors
+     *
+     * @typedef {object} ActorSelectTemplateData
+     * @property {ItemPF} item
+     * @property {string} path
+     * @property {boolean} isGm
+     * @property { ActorGroupTemplateData[]} groupedActors
+     */
 
     /** @override */
     async getData() {
         const item = this.object;
+        /** @type {ActorSelectTemplateData} */
         const templateData = {
             item,
             path: this.path,
             isGm: game.user.isGM,
-            groupedActors: {},
+            groupedActors: [],
         };
 
-        /** @param {ActorPF} actor */
+        /**
+         * @param {ActorPF} actor
+         * @returns {SpecficActorSelectTemplateData}
+         */
         const toTargetData = (actor) => ({
             id: actor.id,
             disposition: actor.prototypeToken.disposition,
@@ -84,46 +114,44 @@ export class ActorSelectorApp extends DocumentSheet {
         });
 
         const disposition = item.actor?.prototypeToken.disposition ?? CONST.TOKEN_DISPOSITIONS.FRIENDLY
-        const allActors = game.actors.filter(x => x.prototypeToken.disposition === disposition);
+        const friendlyActors = game.actors.filter(x =>
+            x.prototypeToken.disposition === disposition
+            && x.uuid !== item.actor?.uuid
+        );
 
-        // const playerActors = game.actors
-        //     .filter((actor) => Object.entries(actor.ownership)
-        //         .filter(([id, _ownership]) => game.user.isGM || !(game.users.get(id) && game.users.get(id)?.isGM))
-        //         .some(([_id, ownership]) => ownership >= CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER)
-        //     )
-        //     .filter(x => x.uuid !== item.actor?.uuid);
+        const playerActors = friendlyActors.filter(x => x.hasPlayerOwner);
+        templateData.groupedActors.push({
+            label: localize('applications.actor.players'),
+            actors: playerActors.map(toTargetData),
+        });
 
-        const playerActors = game.actors
-            .filter((a) => game.users
-                .filter(u => game.user.isGM || !u.isGM)
-                .some(u => a.testUserPermission(u, CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER))
-            )
-            .filter(x => x.uuid !== item.actor?.uuid);
+        // uncomment for empty testing
+        templateData.groupedActors.push({
+            label: 'Empty test actors',
+            actors: [],
+        });
 
-        // const playerCharacters = game.users
-        //     .map((user) => user.character)
-        //     .filter(truthiness)
-        //     .filter(x => x.uuid !== item.actor?.uuid);
-
-        if (game.user.isGM) {
-            templateData.groupedActors = {
-                ['Friendly Actors']: playerActors.map(toTargetData),
-            };
+        const observedActors = friendlyActors
+            .filter((a) => game.users.players.some((u) => a.testUserPermission(u, CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER)))
+            .filter((a) => !playerActors.some(x => x.uuid === a.uuid));
+        if (observedActors.length) {
+            templateData.groupedActors.push({
+                label: localize('applications.actor.observed'),
+                actors: observedActors.map(toTargetData),
+            });
         }
-        else {
-            // handle player characters when players can't see NPCs
+
+        if (game.user.isGM || Settings.allowFriendlyNpcSelection) {
+            const npcs = friendlyActors
+                .filter((a) => !playerActors.some(x => x.uuid === a.uuid))
+                .filter((a) => !observedActors.some(x => x.uuid === a.uuid));
+            templateData.groupedActors.push({
+                label: localize('applications.actor.npcs'),
+                actors: npcs.map(toTargetData),
+            });
         }
-        // else {
-        //     // handle player characters when players can also see NPCs
-        //     if (game.user.isGM || Settings.allowFriendlyNpcSelection) {
-        //         const characterIds = playerActors.map(x => x.uuid);
-        //         const npcs = allActors
-        //         .filter((actor) => !characterIds.includes(actor.uuid))
-        //         .filter(x => x.uuid !== item.actor?.uuid);
-        //         // @ts-ignore
-        //         templateData.groupedActors['Friendly NPCs'] = npcs.map(toTargetData);
-        //     }
-        // }
+
+        templateData.groupedActors.forEach((group) => group.actors.sort((a, b) => a.name.localeCompare(b.name)));
 
         return templateData;
     }
@@ -135,8 +163,6 @@ export class ActorSelectorApp extends DocumentSheet {
     _getSubmitData(updateData) {
         const path = this.path;
 
-        // /** @type {{[key: string]: Nullable<string> | Nullable<string>[]}} */
-        // /** @type {Record<string, string | string[]>} */
         const formData = super._getSubmitData(updateData);
         formData[path] = Array.isArray(formData[path])
             ? formData[path]

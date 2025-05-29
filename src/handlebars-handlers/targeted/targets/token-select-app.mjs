@@ -17,6 +17,7 @@ export class TokenSelectorApp extends DocumentSheet {
     static get defaultOptions() {
         const options = super.defaultOptions;
 
+        options.classes = ['token-based-list'];
         options.height = 'auto';
         options.template = templates.tokenSelectApp;
 
@@ -37,6 +38,7 @@ export class TokenSelectorApp extends DocumentSheet {
             /** @this {HTMLElement} */
             function () {
                 const uuid = this.dataset.tokenUuid || '';
+                /** @type {TokenPF} */
                 const token = fromUuidSync(uuid)?.object;
                 if (!token) return;
 

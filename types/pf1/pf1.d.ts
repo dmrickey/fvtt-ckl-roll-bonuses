@@ -90,6 +90,7 @@ declare global {
             render(force: boolean, { focus: boolean } = {});
         };
 
+        get hasPlayerOwner(): boolean;
         prototypeToken: { disposition: DispositionLevel};
     }
 
@@ -687,6 +688,9 @@ declare global {
         y: number;
         bounds: Rect;
         scene: Scene;
+
+        _onHoverIn(e: PointerEvent, arg1: { hoverOutOthers: boolean; });
+        _onHoverOut(e: PointerEvent);
     }
 
     class ItemPF<

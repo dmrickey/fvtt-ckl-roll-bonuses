@@ -1,3 +1,10 @@
+.roll-bonuses-form .sticky-header {
+    position: sticky;
+    top: 0;
+    background-color: rgb(178, 178, 178);
+    z-index: 1;
+}
+
 .roll-bonuses-form .form-body {
     max-height: 65vh;
     overflow-y: auto;
@@ -19,6 +26,7 @@
     flex: 3;
 }
 
+.token-based-list.window-app .window-content,
 .item-based-list.window-app .window-content {
     padding: 0;
 }
@@ -138,47 +146,44 @@
     text-wrap: balance;
 }
 
-.roll-bonuses-form.token-selector div.help-text {
+.token-based-list div.help-text {
     max-width: 424px;
     text-align: center;
     text-wrap: balance;
 }
 
-.roll-bonuses-form.token-selector .no-tokens {
+.token-based-list .no-tokens {
     color: var(--pf1-color-text-error);
-    padding: 1rem;
+    padding: 0 0 1rem 0.25rem;
     text-align: center;
 }
 
-.roll-bonuses-form.token-selector .grouped-tokens {
+.token-based-list .grouped-tokens {
     display: flex;
     flex-wrap: wrap;
     min-width: 300px;
     max-width: 424px;
 }
 
-.roll-bonuses-form.token-selector .grouped-tokens *:not(:last-child) {
+.token-based-list .grouped-tokens *:not(:last-child) {
     margin-inline-end: 0.5rem;
 }
 
-.roll-bonuses-form.token-selector .grouped-tokens .individual-token {
+.token-based-list .grouped-tokens .individual-token {
     position: relative;
 }
 
-.roll-bonuses-form.token-selector .grouped-tokens .individual-token:hover {
+.token-based-list .grouped-tokens .individual-token:hover {
     color: var(--pf1-item-hover-text);
     text-shadow: var(--pf1-item-hover-shadow);
     cursor: pointer;
 }
 
-.roll-bonuses-form.token-selector .grouped-tokens .individual-token input {
+.token-based-list .grouped-tokens .individual-token input {
     position: absolute;
 }
 
-.roll-bonuses-form.token-selector
-    .grouped-tokens
-    .individual-token
-    .token-selector-contents {
+.token-based-list .grouped-tokens .individual-token .token-selector-contents {
     display: flex;
     flex-direction: column;
     min-height: 125px;
@@ -187,11 +192,28 @@
     max-width: 96px;
 }
 
-/* .roll-bonuses-form.token-selector .grouped-tokens .individual-token .token-selector-contents div {
-    margin: 0;
-} */
+.token-based-list .form-body > *:first-child:not(h4) {
+    margin-block-start: 0.5rem;
+    margin-block-end: 0.25rem;
+}
+.token-based-list .form-body > *:not(h4) {
+    margin-inline: 0.5rem;
+}
+.token-based-list .form-body > h4 {
+    padding-inline-start: 0.5rem;
+}
 
-.roll-bonuses-form.token-selector
+.token-based-list
+    .grouped-tokens
+    .individual-token
+    .token-selector-contents
+    div {
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.token-based-list
     .grouped-tokens
     .individual-token
     .token-selector-contents
