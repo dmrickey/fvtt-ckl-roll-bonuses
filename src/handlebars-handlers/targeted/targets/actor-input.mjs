@@ -69,24 +69,28 @@ export function showActorInput({
             });
         });
     }
-    div.querySelectorAll('li').forEach((element) => {
-        element.addEventListener('contextmenu', (event) => {
-            event.preventDefault();
-            // @ts-ignore
-            const /** @type {HTMLElement?} */ target = event.target;
 
-            let parent = target;
-            while (parent && !parent.dataset.uuid) { parent = parent.parentElement }
+    div.querySelectorAll('li[data-uuid]').forEach((element) => {
+        const li = /** @type {HTMLDataListElement} */ (element);
 
-            const uuid = parent?.dataset.uuid;
-            if (uuid) {
-                /** @type {ActorPF} */
-                const actor = fromUuidSync(uuid);
-                if (actor?.testUserPermission(game.user, CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER)) {
+        const uuid = li.dataset.uuid;
+        if (uuid) {
+            /** @type {ActorPF} */
+            const actor = fromUuidSync(uuid);
+
+            const tokens = actor?.getActiveTokens() ?? [];
+            tokens.forEach((token) => {
+                li.addEventListener('pointerenter', (e) => token._onHoverIn(e, { hoverOutOthers: false }));
+                li.addEventListener('pointerleave', (e) => token._onHoverOut(e));
+            });
+
+            if (actor?.testUserPermission(game.user, CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER)) {
+                element.addEventListener('contextmenu', (event) => {
+                    event.preventDefault();
                     actor.sheet.render(true);
-                }
+                });
             }
-        });
+        }
     });
 
     addNodeToRollBonus(parent, div, item, canEdit, 'target');
