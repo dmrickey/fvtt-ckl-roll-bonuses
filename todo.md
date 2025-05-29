@@ -222,10 +222,10 @@
 - Add Fortune/Misfortune checkboxes to attack/roll dialogs
 
 - Remove `greater`/`improved`/`mythic` getters from LanguageSettings and use the new `is` methods
-- remove `Record<any, any>` from API type definition and make sure all individual references are imported
-  - Add "configure" method to each bonus and target that takes whatever args it needs to save itself
+- Add "configure" method to each bonus and target that takes whatever args it needs to save itself
 - Flanking
   - Add hints for new bonuses
+  - disable or hijack system's checkbox in attack dialog
   
 ### Specific Bonuses
 - ~~Migrate all keys to start with `specific_`~~ Do this later after SBC has a chance to update to only use the API
@@ -240,6 +240,3 @@
     - This would allow for things like "+4 intimidate when targeting a creature type"
       - or "+4 initiative when in a city (using Fair's target)"
       - or possibly literally any change ¯\_(ツ)_/¯
-
-Flanking 
-- disable or hijack system's checkbox in attack dialog
