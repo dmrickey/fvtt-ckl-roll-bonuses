@@ -118,7 +118,7 @@ export function showItemInput({
 
 /** @ts-ignore */
 /** @extends {DocumentSheet<ItemSelectorOptions, ItemPF>} */
-class ItemSelector extends DocumentSheet {
+export class ItemSelector extends DocumentSheet {
     /** @override */
     static get defaultOptions() {
         const options = super.defaultOptions;

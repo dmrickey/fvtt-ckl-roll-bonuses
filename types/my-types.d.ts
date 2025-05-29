@@ -71,7 +71,36 @@ import { ShootIntoMeleeGlobalBonus } from '../src/global-bonuses/shoot-into-mele
 import { Outflank } from '../src/global-bonuses/specific/bonuses/flanking/outflank.mjs';
 import { PreciseShot } from '../src/global-bonuses/specific/bonuses/precise-shot-bonus.mjs';
 import { MenacingBonus } from '../src/global-bonuses/targeted/bonuses/menacing.mjs';
-import { showBonusPicker } from '../src/handlebars-handlers/bonus-picker.mjs';
+import { addNodeToRollBonus } from '../src/handlebars-handlers/add-bonus-to-item-sheet.mjs';
+import { checkboxInput } from '../src/handlebars-handlers/bonus-inputs/chekbox-input.mjs';
+import { errorMessage } from '../src/handlebars-handlers/bonus-inputs/error-message.mjs';
+import { keyValueSelect } from '../src/handlebars-handlers/bonus-inputs/key-value-select.mjs';
+import { radioInput } from '../src/handlebars-handlers/bonus-inputs/radio-input.mjs';
+import { stringSelect } from '../src/handlebars-handlers/bonus-inputs/string-select.mjs';
+import { textInputAndKeyValueSelect } from '../src/handlebars-handlers/bonus-inputs/text-input-and-key-value-select.mjs';
+import { textInput } from '../src/handlebars-handlers/bonus-inputs/text-input.mjs';
+import {
+    BonusPickerApp,
+    showBonusPicker,
+} from '../src/handlebars-handlers/bonus-picker.mjs';
+import { showEnabledLabel } from '../src/handlebars-handlers/enabled-label.mjs';
+import { showInvalidLabel } from '../src/handlebars-handlers/invalid-label.mjs';
+import { modifiersInput } from '../src/handlebars-handlers/targeted/bonuses/conditional-modifiers-input.mjs';
+import { damageInput } from '../src/handlebars-handlers/targeted/bonuses/damage.mjs';
+import { showScriptBonusEditor } from '../src/handlebars-handlers/targeted/bonuses/script-call-bonus-input.mjs';
+import {
+    ActionSelector,
+    showActionInput,
+} from '../src/handlebars-handlers/targeted/targets/action-input.mjs';
+import { showActorInput } from '../src/handlebars-handlers/targeted/targets/actor-input.mjs';
+import { ActorSelectorApp } from '../src/handlebars-handlers/targeted/targets/actor-select-app.mjs';
+import {
+    ItemSelector,
+    showItemInput,
+} from '../src/handlebars-handlers/targeted/targets/item-input.mjs';
+import { showTokenInput } from '../src/handlebars-handlers/targeted/targets/token-input.mjs';
+import { TokenSelectorApp } from '../src/handlebars-handlers/targeted/targets/token-select-app.mjs';
+import { traitInput } from '../src/handlebars-handlers/trait-input.mjs';
 import { BaseMigrate } from '../src/migration/_migrate-base.mjs';
 import { handleBonusesFor } from '../src/target-and-bonus-join.mjs';
 import { BaseSource } from '../src/targeted/_base-source.mjs';
@@ -178,7 +207,13 @@ export {};
 declare global {
     interface RollBonusesAPI {
         /** Applications that the app uses that are used by various inputs */
-        applications: Record<string, DocumentSheet>;
+        applications: {
+            ActionSelector: typeof ActionSelector;
+            ActorSelectorApp: typeof ActorSelectorApp;
+            BonusPickerApp: typeof BonusPickerApp;
+            ItemSelector: typeof ItemSelector;
+            TokenSelectorApp: typeof TokenSelectorApp;
+        };
         showApplication: {
             showBonusPicker: typeof showBonusPicker;
         };
@@ -347,7 +382,26 @@ declare global {
         get allSpecificBonusTypesKeys(): string[];
 
         /** all the input helpers for adding various inputs for bonusees */
-        inputs: Record<string, (...args) => void>; // todo specific types
+        inputs: {
+            addNodeToRollBonus: typeof addNodeToRollBonus;
+            checkboxInput: typeof checkboxInput;
+            damageInput: typeof damageInput;
+            errorMessage: typeof errorMessage;
+            keyValueSelect: typeof keyValueSelect;
+            modifiersInput: typeof modifiersInput;
+            radioInput: typeof radioInput;
+            showActionInput: typeof showActionInput;
+            showActorInput: typeof showActorInput;
+            showEnabledLabel: typeof showEnabledLabel;
+            showInvalidLabel: typeof showInvalidLabel;
+            showItemInput: typeof showItemInput;
+            showScriptBonusEditor: typeof showScriptBonusEditor;
+            showTokenInput: typeof showTokenInput;
+            stringSelect: typeof stringSelect;
+            textInput: typeof textInput;
+            textInputAndKeyValueSelect: typeof textInputAndKeyValueSelect;
+            traitInput: typeof traitInput;
+        };
 
         /** for being able to manually trigger an update in case something was missed */
         migrate: {

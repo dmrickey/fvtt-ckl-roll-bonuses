@@ -147,7 +147,7 @@ api.showApplication.showBonusPicker = showBonusPicker;
 
 /** @ts-ignore */
 /** @extends {DocumentSheet<BonusPickerData, ItemPF>} */
-class BonusPickerApp extends DocumentSheet {
+export class BonusPickerApp extends DocumentSheet {
 
     #searchFilter;
 

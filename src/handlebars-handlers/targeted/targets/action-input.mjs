@@ -136,7 +136,7 @@ export function showActionInput({
 
 /** @ts-ignore */
 /** @extends {DocumentSheet<ActionSelectorOptions, ItemPF>} */
-class ActionSelector extends DocumentSheet {
+export class ActionSelector extends DocumentSheet {
     /** @override */
     static get defaultOptions() {
         const options = super.defaultOptions;
