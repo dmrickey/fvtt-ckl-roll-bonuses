@@ -22,7 +22,7 @@ class Settings {
 
 /**
  * @typedef {object} ActorSelectorOptions
- * @property {ActorPF} actor
+ * @property {string[]} current
  * @property {string} key
  */
 
@@ -110,7 +110,7 @@ export class ActorSelectorApp extends DocumentSheet {
             img: actor.thumbnail,
             name: actor.name,
             uuid: actor.uuid,
-            checked: false,
+            checked: this.options.current.includes(actor.uuid),
         });
 
         const disposition = item.actor?.prototypeToken.disposition ?? CONST.TOKEN_DISPOSITIONS.FRIENDLY

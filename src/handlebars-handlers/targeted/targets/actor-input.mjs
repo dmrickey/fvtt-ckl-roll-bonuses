@@ -64,7 +64,7 @@ export function showActorInput({
         div.querySelectorAll('li,a.trait-selector,.error-text').forEach((element) => {
             element.addEventListener('click', (event) => {
                 event.preventDefault();
-                const options = { key };
+                const options = { current: current.map(x => x.uuid), key };
                 new ActorSelectorApp(item, options).render(true);
             });
         });

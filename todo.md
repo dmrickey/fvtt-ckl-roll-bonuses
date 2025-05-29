@@ -246,4 +246,3 @@ Actor picker app - Add hint text for GM about how players can't see as many as t
 token/actor inputs
 - hover
   - change cursor to pointer
-- Apps no longer show currently selected options
