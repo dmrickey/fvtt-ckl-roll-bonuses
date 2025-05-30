@@ -325,27 +325,36 @@ export class BonusPickerApp extends DocumentSheet {
         const formData = super._getSubmitData(updateData);
         delete formData.filter;
 
-        /** @type {Partial<ItemPF>} */ // @ts-ignore
+        /** @type {RecursivePartial<ItemPF> | null} */
         let updateObj = null;
         Object.entries(formData).forEach(([key, value]) => {
-            // @ts-ignore
-            const /** @type {[keyof BonusPickerData, string]} */[prop, index, childIndex] = key.split('.');
 
-            /** @type {PickerItemData} */ // @ts-ignore
-            const bonusData = this.data[prop][index].children?.[childIndex] || this.data[prop][index];
+            const [prop, index, childIndex] =  /** @type {[keyof BonusPickerData, number, number]} */ (key.split('.'));
+
+            /** @type {PickerItemData} */
+            const bonusData =
+                'children' in this.data[prop][index] && this.data[prop][index].children?.[childIndex] || this.data[prop][index];
 
             if (bonusData.value !== value) {
-                updateObj ||= {
-                    //@ts-ignore
-                    system: { flags: { boolean: {}, dictionary: {} } },
-                };
+                if (!updateObj?.system?.flags?.boolean) {
+                    updateObj = {};
+                    updateObj.system = {};
+                    updateObj.system.flags = {};
+                    updateObj.system.flags.boolean = {};
+                }
 
                 if (this.sources.includes(prop)
                     || (prop === 'specifics' && api.allSpecificBonusTypesKeys.includes(bonusData.key))
                 ) {
                     // set to true if value is true, delete if value is false
-                    // @ts-ignore
-                    updateObj.system.flags.boolean[`${(value ? '' : '-=')}${bonusData.key}`] = true;
+                    if (value) {
+                        updateObj.system.flags.boolean[bonusData.key] = true;
+                    }
+                    else {
+                        const _key = `${'-='}bonusData.key`;
+                        const _value = /** @type {ItemPF['system']['flags']['boolean'][string]} */ (/** @type {unknown} */  (null));
+                        updateObj.system.flags.boolean[_key] = _value;
+                    }
                 }
                 else {
                     throw new Error("should never happen");
