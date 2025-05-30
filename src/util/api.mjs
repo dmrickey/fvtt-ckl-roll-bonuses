@@ -31,7 +31,7 @@ class Api {
         versatileTraining: {},
     }
 
-    elementalFocus = {};
+    inputs = {};
 
     /** @deprecated use root level properties instead */
     SpecificBonuses = () => {
