@@ -197,6 +197,7 @@ import { onCreate, onRenderCreate } from '../src/util/on-create.mjs';
 import { onSkillSheetRender } from '../src/util/on-skill-sheet-render-handler.mjs';
 import { PositionalHelper } from '../src/util/positional-helper.mjs';
 import { simplifyRollFormula } from '../src/util/simplify-roll-formula.mjs';
+import { toArray } from '../src/util/to-array.mjs';
 import { signed } from '../src/util/to-signed-string.mjs';
 import { Trait } from '../src/util/trait-builder.mjs';
 import { truthiness } from '../src/util/truthiness.mjs';
@@ -473,6 +474,7 @@ declare global {
             registerSource: (typeof Sources)['registerSource'];
             signed: typeof signed;
             simplifyRollFormula: typeof simplifyRollFormula;
+            toArray: typeof toArray;
             truthiness: typeof truthiness;
 
             FormulaCacheHelper: typeof FormulaCacheHelper;

@@ -223,14 +223,21 @@
 
 - Remove `greater`/`improved`/`mythic` getters from LanguageSettings and use the new `is` methods
 - Add "configure" method to each bonus and target that takes whatever args it needs to save itself
+  - ~~Bonuses~~
+  - ~~Specific Bonuses~~
+  - Targets
+  - Conditional Targets
+  - Targetable Overrides
 - Flanking
   - Add hints for new bonuses
   - disable or hijack system's checkbox in attack dialog
-  
+  - Finish logic for Pack Flanking
+
 ### Specific Bonuses
 - ~~Migrate all keys to start with `specific_`~~ Do this later after SBC has a chance to update to only use the API
   - update all journal entries to indicate what the key is
 - Add "get item hint" function to base class
+- Verify BaneBonus label still works type/subtype/both)
 
 ### Idea
 - turn `LanguageSettings` into a base class that other classes extend (or create a base class that has shared logic)

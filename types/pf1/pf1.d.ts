@@ -1254,8 +1254,8 @@ declare global {
         slot: string;
     }
     class SystemItemDataRacePF extends SystemItemData {
-        creatureSubtypes: TraitSelector;
-        creatureTypes: TraitSelector;
+        creatureSubtypes: TraitSelector<CreatureSubtype>;
+        creatureTypes: TraitSelector<CreatureType>;
     }
     class SystemItemDataSpellPF extends SystemItemData {
         descriptors: TraitSelector<keyof SpellDescriptors>;
@@ -2319,8 +2319,8 @@ declare global {
                     _label: 'Size';
                 };
             };
-            creatureSubtypes: Record<string, string>;
-            creatureTypes: Record<string, string>;
+            creatureSubtypes: CreatureSubTypes;
+            creatureTypes: CreatureTypes;
             abilities: Abilities;
             bonusTypes: { [key in BonusTypes]: string };
             damageResistances: {
@@ -2470,6 +2470,111 @@ declare global {
         get info(): string;
     }
     class ScriptCallRegistry extends Collection<ScriptCallCategory> {}
+
+    type CreatureSubtype = keyof CreatureSubtypes;
+    type CreatureSubtypes = {
+        adlet: 'Adlet';
+        aeon: 'Aeon';
+        aether: 'Aether';
+        agathion: 'Agathion';
+        air: 'Air';
+        android: 'Android';
+        angel: 'Angel';
+        aquatic: 'Aquatic';
+        archon: 'Archon';
+        astomoi: 'Astomoi';
+        asura: 'Asura';
+        augmented: 'Augmented';
+        azata: 'Azata';
+        behemoth: 'Behemoth';
+        blight: 'Blight';
+        catfolk: 'Catfolk';
+        changeling: 'Changeling';
+        chaotic: 'Chaotic';
+        clockwork: 'Clockwork';
+        cold: 'Cold';
+        colossus: 'Colossus';
+        daemon: 'Daemon';
+        darkFolk: 'Dark Folk';
+        deepOne: 'Deep One';
+        demodand: 'Demodand';
+        demon: 'Demon';
+        derro: 'Derro';
+        devil: 'Devil';
+        div: 'Div';
+        dwarf: 'Dwarf';
+        earth: 'Earth';
+        elemental: 'Elemental';
+        elf: 'Elf';
+        evil: 'Evil';
+        extraplanar: 'Extraplanar';
+        fire: 'Fire';
+        giant: 'Giant';
+        gnome: 'Gnome';
+        goblinoid: 'Goblinoid';
+        good: 'Good';
+        gray: 'Gray';
+        greatOldOne: 'Great Old One';
+        grippli: 'Grippli';
+        halfling: 'Halfling';
+        herald: 'Herald';
+        hive: 'Hive';
+        human: 'Human';
+        incorporeal: 'Incorporeal';
+        inevitable: 'Inevitable';
+        kaiju: 'Kaiju';
+        kami: 'Kami';
+        kasatha: 'Kasatha';
+        kitsune: 'Kitsune';
+        kyton: 'Kyton';
+        lawful: 'Lawful';
+        leshy: 'Leshy';
+        manasaputra: 'Manasaputra';
+        mortic: 'Mortic';
+        munavri: 'Munavri';
+        mythic: 'Mythic';
+        native: 'Native';
+        nightshade: 'Nightshade';
+        oni: 'Oni';
+        orc: 'Orc';
+        phantom: 'Phantom';
+        protean: 'Protean';
+        psychopomp: 'Psychopomp';
+        qlippoth: 'Qlippoth';
+        rakshasa: 'Rakshasa';
+        ratfolk: 'Ratfolk';
+        reptilian: 'Reptilian';
+        robot: 'Robot';
+        sahkil: 'Sahkil';
+        samsaran: 'Samsaran';
+        sasquatch: 'Sasquatch';
+        shapechanger: 'Shapechanger';
+        skinwalker: 'Skinwalker';
+        spawnOfRovagug: 'Spawn of Rovagug';
+        swarm: 'Swarm';
+        troop: 'Troop';
+        vanara: 'Vanara';
+        vishkanya: 'Vishkanya';
+        water: 'Water';
+        wayang: 'Wayang';
+        wildHunt: 'Wild Hunt';
+    };
+    type CreatureType = keyof CreatureTypes;
+    type CreatureTypes = {
+        aberration: 'Aberration';
+        animal: 'Animal';
+        construct: 'Construct';
+        dragon: 'Dragon';
+        fey: 'Fey';
+        humanoid: 'Humanoid';
+        magicalBeast: 'Magical Beast';
+        monstrousHumanoid: 'Monstrous Humanoid';
+        ooze: 'Ooze';
+        outsider: 'Outsider';
+        plant: 'Plant';
+        undead: 'Undead';
+        vermin: 'Vermin';
+    };
 
     type SavingThrows = {
         fort: 'Fortitude';

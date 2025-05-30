@@ -1,3 +1,4 @@
+import { MODULE_NAME } from '../../consts.mjs';
 import { showLabel } from '../../handlebars-handlers/bonus-inputs/show-label.mjs';
 import { traitInput } from '../../handlebars-handlers/trait-input.mjs';
 import { handleBonusesFor } from '../../target-and-bonus-join.mjs';
@@ -6,6 +7,7 @@ import { getBaneLabelForTargetsFromSource } from '../../util/bane-helper.mjs';
 import { getIdsFromItem, getTraitsFromItem } from '../../util/get-id-array-from-flag.mjs';
 import { listFormat } from '../../util/list-format.mjs';
 import { localize, localizeBonusTooltip } from '../../util/localize.mjs';
+import { toArray } from '../../util/to-array.mjs';
 import { BaseBonus } from './_base-bonus.mjs';
 
 export class BaneBonus extends BaseBonus {
@@ -100,6 +102,27 @@ export class BaneBonus extends BaseBonus {
         }
 
         return hints;
+    }
+
+    /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} item
+     * @param {object} options
+     * @param {ArrayOrSelf<CreatureType>} [options.creatureTypes]
+     * @param {ArrayOrSelf<CreatureSubtype>} [options.creatureSubtypes]
+     * @returns {Promise<void>}
+     */
+    static async configure(item, { creatureTypes, creatureSubtypes }) {
+        await item.update({
+            system: { flags: { boolean: { [this.key]: true } } },
+            flags: {
+                [MODULE_NAME]: {
+                    [this.creatureTypeKey]: toArray(creatureTypes),
+                    [this.creatureSubtypeKey]: toArray(creatureSubtypes),
+                },
+            },
+        });
     }
 
     /**

@@ -15,9 +15,9 @@ export const getBaneLabelForTargetsFromSource = (source, creatureTypeKey, creatu
         return;
     }
 
-    /** @type {string[]} */
+    /** @type {CreatureType[]} */
     const creatureTypes = getIdsFromItem(source, creatureTypeKey);
-    /** @type {string[]} */
+    /** @type {CreatureSubtype[]} */
     const creatureSubtypes = getIdsFromItem(source, creatureSubtypeKey);
     if (!creatureTypes.length && !creatureSubtypes.length) {
         return;
@@ -27,29 +27,29 @@ export const getBaneLabelForTargetsFromSource = (source, creatureTypeKey, creatu
         .map(target => target.actor?.race?.system.creatureTypes.base)
         .filter(truthiness);
     const targetTypes = targetTypeMap.reduce((acc, curr) => intersection(acc, curr), targetTypeMap[0]);
-    let type = intersection(targetTypes, creatureTypes)[0];
-    type = pf1.config.creatureTypes[type] || type;
+    const type = intersection(targetTypes, creatureTypes)[0];
+    const typeLabel = type && pf1.config.creatureTypes[type] || type;
 
     const targetSubtypesMap = targets
         .map(target => target.actor?.race?.system.creatureSubtypes.base)
         .filter(truthiness);
     const targetSubtypes = targetSubtypesMap.reduce((acc, curr) => intersection(acc, curr), targetSubtypesMap[0]);
-    let subtype = intersection(targetSubtypes, creatureSubtypes)[0];
-    subtype = pf1.config.creatureSubtypes[subtype] || subtype;
+    const subtype = intersection(targetSubtypes, creatureSubtypes)[0];
+    const subtypeLabel = subtype && pf1.config.creatureSubtypes[subtype] || subtype;
 
     if (creatureTypes.length && creatureSubtypes.length) {
         if (type && subtype) {
-            return localize('bane-type-subtype', { type, subtype });
+            return localize('bane-type-subtype', { type: typeLabel, subtype: subtypeLabel });
         }
     }
     else if (creatureTypes.length) {
         if (type) {
-            return localize('bane-type', { type });
+            return localize('bane-type', { type: typeLabel });
         }
     }
     else if (creatureSubtypes.length) {
         if (subtype) {
-            return localize('bane-type', { type: subtype });
+            return localize('bane-type', { type: subtypeLabel });
         }
     }
 }

@@ -112,6 +112,26 @@ export class DiceTransformBonus extends BaseBonus {
     }
 
     /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} item
+     * @param {string} formula
+     * @param {number} [priority]
+     * @returns {Promise<void>}
+     */
+    static async configure(item, formula, priority) {
+        await item.update({
+            system: { flags: { boolean: { [this.key]: true } } },
+            flags: {
+                [MODULE_NAME]: {
+                    [this.key]: formula,
+                    [this.#priorityKey]: priority,
+                },
+            },
+        });
+    }
+
+    /**
      * @override
      * @inheritdoc
      * @param {object} options

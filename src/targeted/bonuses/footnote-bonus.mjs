@@ -59,6 +59,22 @@ export class FootnoteBonus extends BaseBonus {
     /**
      * @inheritdoc
      * @override
+     * @param {ItemPF} item
+     * @param {string} note
+     * @returns {Promise<void>}
+     */
+    static async configure(item, note) {
+        await item.update({
+            system: { flags: { boolean: { [this.key]: true } } },
+            flags: {
+                [MODULE_NAME]: { [this.key]: note || '' },
+            },
+        });
+    }
+
+    /**
+     * @inheritdoc
+     * @override
      * @param {object} options
      * @param {ActorPF | null} options.actor
      * @param {HTMLElement} options.html

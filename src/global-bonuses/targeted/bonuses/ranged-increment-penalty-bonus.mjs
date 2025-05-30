@@ -1,3 +1,4 @@
+import { MODULE_NAME } from '../../../consts.mjs';
 import { textInput } from '../../../handlebars-handlers/bonus-inputs/text-input.mjs';
 import { BaseBonus } from '../../../targeted/bonuses/_base-bonus.mjs';
 import { FormulaCacheHelper } from '../../../util/flag-helpers.mjs';
@@ -154,5 +155,35 @@ export class RangedIncrementPenaltyBonus extends BaseBonus {
 
         // doing this instead of `getHints` because this way I can add an icon
         registerItemHint(this.handleHint.bind(this));
+    }
+
+    /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} item
+     * @param {number | string} incrementPenaltyOffsetKey
+     * @param {number | string} penaltyOffsetKey
+     * @param {number | string} incrementRangeOffsetKey
+     * @param {number | string} maxIncrementOffsetKey
+     * @returns {Promise<void>}
+     */
+    static async configure(
+        item,
+        incrementPenaltyOffsetKey,
+        penaltyOffsetKey,
+        incrementRangeOffsetKey,
+        maxIncrementOffsetKey,
+    ) {
+        await item.update({
+            system: { flags: { boolean: { [this.key]: true } } },
+            flags: {
+                [MODULE_NAME]: {
+                    [this.#incrementPenaltyOffsetKey]: incrementPenaltyOffsetKey,
+                    [this.#penaltyOffsetKey]: penaltyOffsetKey,
+                    [this.#incrementRangeOffsetKey]: incrementRangeOffsetKey,
+                    [this.#maxIncrementOffsetKey]: maxIncrementOffsetKey,
+                },
+            },
+        });
     }
 }

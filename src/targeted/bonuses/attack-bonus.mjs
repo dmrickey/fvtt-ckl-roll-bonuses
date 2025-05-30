@@ -125,6 +125,48 @@ export class AttackBonus extends BaseBonus {
     }
 
     /**
+     * @overload
+     * @param {ItemPF} item
+     * @param {number | string} formula
+     * @param {object} options
+     * @param {false | undefined} [options.critOnly]
+     * @param {BonusTypes} options.bonusType
+     * @returns {Promise<void>}
+     */
+
+    /**
+     * @overload
+     * @param {ItemPF} item
+     * @param {number | string} formula
+     * @param {object} options
+     * @param {true} options.critOnly
+     * @returns {Promise<void>}
+     */
+
+    /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} item
+     * @param {number | string} formula
+     * @param {object} options
+     * @param {boolean | undefined} [options.critOnly]
+     * @param {BonusTypes | undefined} [options.bonusType]
+     * @returns {Promise<void>}
+     */
+    static async configure(item, formula, { critOnly, bonusType }) {
+        await item.update({
+            system: { flags: { boolean: { [this.key]: true } } },
+            flags: {
+                [MODULE_NAME]: {
+                    [this.key]: (formula || 0) + '',
+                    [this.#critOnlyKey]: !!critOnly,
+                    [this.#typeKey]: bonusType,
+                },
+            },
+        });
+    }
+
+    /**
      * @override
      * @inheritdoc
      * @param {object} options
