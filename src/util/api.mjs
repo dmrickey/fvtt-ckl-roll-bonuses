@@ -1,4 +1,3 @@
-
 class Api {
     sources = {};
 
@@ -26,11 +25,13 @@ class Api {
     showApplication = {};
     config = {
         elementalFocus: {},
+        knowledgeSkills: [],
+        rogueClasses: [],
         versatilePerformance: {},
         versatileTraining: {},
     }
 
-    inputs = {};
+    elementalFocus = {};
 
     /** @deprecated use root level properties instead */
     SpecificBonuses = () => {
@@ -52,5 +53,5 @@ class Api {
 }
 
 const _api = new Api();
-const api = /** @type {RollBonusesAPI} */ (/** @type {unknown} */ (_api))
+const api = /** @type {RollBonusesAPI} */ (/** @type {unknown} */ (_api));
 export { api };

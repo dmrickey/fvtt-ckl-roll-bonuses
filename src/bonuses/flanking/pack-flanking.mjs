@@ -29,10 +29,10 @@ export class PackFlanking extends SpecificBonus {
      * @inheritdoc
      * @override
      * @param {ItemPF | ActorPF | TokenPF} doc
-     * @param {ItemPF | ActorPF | TokenPF} target
+     * @param {ItemPF | ActorPF | TokenPF} ally
      * @returns {boolean}
      */
-    static has(doc, target) {
+    static has(doc, ally) {
         if (!super.has(doc)) return false;
 
         /**
@@ -43,15 +43,15 @@ export class PackFlanking extends SpecificBonus {
             ? _doc
             : _doc.actor;
         const selfActor = toActor(doc);
-        const targetActor = toActor(target);
+        const allyActor = toActor(ally);
 
-        if (!selfActor || !targetActor) return false;
+        if (!selfActor || !allyActor) return false;
 
         var packs = selfActor.itemFlags?.boolean[this.key]?.sources ?? [];
         return packs.some((pack) => {
             /** @type {UUID[]} */
             const uuids = getSourceFlag(pack, PackFlanking) || [];
-            return uuids.some((uuid) => uuid === targetActor.uuid)
+            return uuids.some((uuid) => uuid === allyActor.uuid)
         });
     }
 

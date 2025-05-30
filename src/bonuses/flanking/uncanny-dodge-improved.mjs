@@ -1,9 +1,13 @@
 import { errorMessage } from '../../handlebars-handlers/bonus-inputs/error-message.mjs';
 import { showEnabledLabel } from '../../handlebars-handlers/enabled-label.mjs';
+import { api } from '../../util/api.mjs';
 import { localize } from '../../util/localize.mjs';
 import { LanguageSettings } from '../../util/settings.mjs';
 import { truthiness } from '../../util/truthiness.mjs';
 import { SpecificBonus } from '../_specific-bonus.mjs';
+
+const rogueClasses = ['rogue', 'rogueUnchained'];
+api.config.rogueClasses = rogueClasses;
 
 export class UncannyDodgeImproved extends SpecificBonus {
     /** @inheritdoc @override */
@@ -95,7 +99,7 @@ export class UncannyDodgeImproved extends SpecificBonus {
                 .filter((item) => this.has(item))
                 .map((item) => item.system.class)
                 .filter(truthiness);
-            const classes = ['rogue', 'rogueUnchained', ...dodgeClasses];
+            const classes = [...api.config.rogueClasses, ...dodgeClasses];
             const sum = classes
                 .map((classTag) => actor.itemTypes.class.getId(classTag))
                 .filter(truthiness)

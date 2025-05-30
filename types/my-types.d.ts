@@ -221,7 +221,6 @@ declare global {
 
         /** config for specific inputs that can be modified by a script or mod */
         config: {
-            knowledgeSkills: SkillId[];
             elementalFocus: {
                 icons: {
                     acid: { icon: string; css: string };
@@ -231,6 +230,9 @@ declare global {
                 };
                 damageElements: readonly ['acid', 'cold', 'electric', 'fire'];
             };
+            knowledgeSkills: SkillId[];
+            /** Used for default classes that can overcome Improved Uncanny Dodge. If any actor has Uncanny Dodge from any other source, that is also included by default */
+            rogueClasses: ClassTag[];
             versatilePerformance: {
                 getPerformanceSkills: (actor: ActorPF) => {
                     [key: SkillId]: string;
@@ -484,6 +486,7 @@ declare global {
         };
     }
 
+    type ClassTag = string;
     type UUID = string;
     type Formula = number | string;
 
