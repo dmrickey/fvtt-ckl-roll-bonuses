@@ -234,7 +234,7 @@
 - Flanking
   - Add hints for new bonuses
   - disable or hijack system's checkbox in attack dialog
-  - Finish logic for Pack Flanking
+  - Test pack flanking
 
 ### Specific Bonuses
 - ~~Migrate all keys to start with `specific_`~~ Do this later after SBC has a chance to update to only use the API
