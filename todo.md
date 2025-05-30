@@ -201,6 +201,9 @@
       - or when targeted by any enemy except specified enemy
 - Initial popup with brief tutorial/explanation 
   - Specifically include "automatic" things like Global Bonuses
+- Alignment Target
+  - Refactor so that it's an array
+  - allow neutral to be chosen
 
 # vnext
 - Create new "Roll Bonuses" section for attack dialog inputs
@@ -227,7 +230,7 @@
   - ~~Specific Bonuses~~
   - Targets
   - Conditional Targets
-  - Targetable Overrides
+  - ~~Targetable Overrides~~
 - Flanking
   - Add hints for new bonuses
   - disable or hijack system's checkbox in attack dialog

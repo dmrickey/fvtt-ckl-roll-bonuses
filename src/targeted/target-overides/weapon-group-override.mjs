@@ -83,6 +83,22 @@ export class WeaponGroupOverride extends BaseTargetOverride {
     }
 
     /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} item
+     * @param {WeaponGroup[]} weaponGroups
+     * @returns {Promise<void>}
+     */
+    static async configure(item, weaponGroups) {
+        await item.update({
+            system: { flags: { boolean: { [this.key]: true } } },
+            flags: {
+                [MODULE_NAME]: { [this.key]: weaponGroups || [] },
+            },
+        });
+    }
+
+    /**
      * @override
      * @inheritdoc
      * @param {object} options
