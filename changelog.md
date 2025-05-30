@@ -30,6 +30,7 @@
 - Actions with invalid ranges are now always assumed to threaten the target instead of treating its range as 0. Debug UI warning is now printed to console if console's debug setting is disabled.
 - Bonus Picker dialog improvements - searching, sticky headers, and put Improved before Greater in Specific Bonus tab
 - Token and Actor inputs - when hovering over the images, now highlight any tokens within the current scene
+- Fixed removing Bonuses via the picker in foundry v13
 
 ### Bugfixes
 - `extraChanges` being added to attacks are no longer lost (e.g. the system's crit only attack changes now work as expected once again)
