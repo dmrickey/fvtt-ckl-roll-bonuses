@@ -5,6 +5,7 @@ import { isMelee } from '../../../util/action-type-helpers.mjs';
 import { FlankHelper } from '../../../util/flank-helper.mjs';
 import { listFormat } from '../../../util/list-format.mjs';
 import { localize, localizeBonusLabel, localizeBonusTooltip } from '../../../util/localize.mjs';
+import { toArray } from '../../../util/to-array.mjs';
 import { truthiness } from "../../../util/truthiness.mjs";
 import { BaseTarget } from "../_base-target.mjs";
 
@@ -128,6 +129,22 @@ export class IsFlankingTarget extends BaseTarget {
      * @returns {boolean}
      */
     static get isGenericTarget() { return true; }
+
+    /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} item
+     * @param {ArrayOrSelf<string>} actorUuids
+     * @returns {Promise<void>}
+     */
+    static async configure(item, actorUuids) {
+        await item.update({
+            system: { flags: { boolean: { [this.key]: true } } },
+            flags: {
+                [MODULE_NAME]: { [this.#withActorAlliesKey]: toArray(actorUuids || []) },
+            },
+        });
+    }
 
     /**
      * @override

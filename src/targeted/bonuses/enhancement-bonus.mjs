@@ -75,8 +75,8 @@ export class EnhancementBonus extends BaseBonus {
      * @override
      * @param {ItemPF} item
      * @param {object} options
-     * @param {number | string} [options.enh]
-     * @param {number | string} [options.stacking]
+     * @param {Formula} [options.enh]
+     * @param {Formula} [options.stacking]
      * @returns {Promise<void>}
      */
     static async configure(item, { enh, stacking }) {

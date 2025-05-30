@@ -109,6 +109,22 @@ export class AlignmentTarget extends BaseTarget {
     /**
      * @inheritdoc
      * @override
+     * @param {ItemPF} item
+     * @param {keyof typeof choices} alignment
+     * @returns {Promise<void>}
+     */
+    static async configure(item, alignment) {
+        await item.update({
+            system: { flags: { boolean: { [this.key]: true } } },
+            flags: {
+                [MODULE_NAME]: { [this.key]: alignment || Object.keys(choices)[0] },
+            },
+        });
+    }
+
+    /**
+     * @inheritdoc
+     * @override
      * @param {object} options
      * @param {ActorPF | null | undefined} options.actor
      * @param {HTMLElement} options.html

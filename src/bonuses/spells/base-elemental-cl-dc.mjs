@@ -25,7 +25,7 @@ class BaseElemental extends SpecificBonus {
      * @inheritdoc
      * @override
      * @param {ItemPF} item
-     * @param {number | string} formula
+     * @param {Formula} formula
      * @param {typeof damageElements[number]} element
      * @returns {Promise<void>}
      */
@@ -35,7 +35,7 @@ class BaseElemental extends SpecificBonus {
             flags: {
                 [MODULE_NAME]: {
                     [this.key]: element,
-                    [this.formulaKey]: formula,
+                    [this.formulaKey]: formula + '',
                 },
             },
         });

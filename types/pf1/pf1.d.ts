@@ -183,7 +183,7 @@ declare global {
     type ArmorType = 'lgt' | 'med' | 'hvy' | 'shl' | 'twr';
 
     type ConditionalPart = [
-        number | string,
+        Formula,
         ItemConditionalModifierSourceData['damageType'],
         false
     ];
@@ -1645,7 +1645,7 @@ declare global {
             _id: string;
             ability: {
                 attack: keyof Abilities;
-                critMult: number | string;
+                critMult: Formula;
                 critRange: number;
                 damage: keyof Abilities;
                 damageMult: number;
@@ -1934,7 +1934,7 @@ declare global {
         priority: number;
         target: string;
         type?: Nullable<BonusTypes | DamageTypes | string>;
-        value: number | string;
+        value: Formula;
 
         get id(): string;
 

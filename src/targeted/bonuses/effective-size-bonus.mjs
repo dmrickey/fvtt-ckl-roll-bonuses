@@ -68,14 +68,14 @@ export class EffectiveSizeBonus extends BaseBonus {
      * @inheritdoc
      * @override
      * @param {ItemPF} item
-     * @param {number | string} formula
+     * @param {Formula} formula
      * @returns {Promise<void>}
      */
     static async configure(item, formula) {
         await item.update({
             system: { flags: { boolean: { [this.key]: true } } },
             flags: {
-                [MODULE_NAME]: { [this.key]: (formula || 0) + '' },
+                [MODULE_NAME]: { [this.key]: (formula || '') + '' },
             },
         });
     }

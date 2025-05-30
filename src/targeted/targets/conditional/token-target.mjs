@@ -5,6 +5,7 @@ import { TokenSelectorApp } from "../../../handlebars-handlers/targeted/targets/
 import { difference, intersection, intersects } from "../../../util/array-intersects.mjs";
 import { localize } from '../../../util/localize.mjs';
 import { registerSetting } from "../../../util/settings.mjs";
+import { toArray } from '../../../util/to-array.mjs';
 import { truthiness } from "../../../util/truthiness.mjs";
 import { BaseTarget } from "../_base-target.mjs";
 
@@ -103,6 +104,27 @@ export class TokenTarget extends BaseTarget {
      * @returns {boolean}
      */
     static get isGenericTarget() { return true; }
+
+    /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} item
+     * @param {object} options
+     * @param {boolean} [options.inverted]
+     * @param {ArrayOrSelf<string>} [options.tokenUuids]
+     * @returns {Promise<void>}
+     */
+    static async configure(item, { inverted, tokenUuids }) {
+        await item.update({
+            system: { flags: { boolean: { [this.key]: true } } },
+            flags: {
+                [MODULE_NAME]: {
+                    [this.#inversionKey]: !!inverted,
+                    [this.key]: toArray(tokenUuids || []),
+                },
+            },
+        });
+    }
 
     /**
      * @override

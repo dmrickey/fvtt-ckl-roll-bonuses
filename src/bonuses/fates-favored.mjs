@@ -42,10 +42,10 @@ class Settings {
 }
 
 /**
- * @param {number | string} value
+ * @param {Formula} value
  * @param {BonusTypes} type
  * @param {Nullable<ActorPF>} actor
- * @returns {number | string}
+ * @returns {Formula}
  */
 function patchChangeValue(value, type, actor) {
     value = type === 'luck' && actor?.hasItemBooleanFlag(FatesFavored.key)

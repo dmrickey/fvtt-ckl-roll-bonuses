@@ -101,6 +101,26 @@ export class ConditionTarget extends BaseTarget {
     /**
      * @inheritdoc
      * @override
+     * @param {ItemPF} item
+     * @param {keyof Conditions} condition
+     * @param {TargetOptions} [targetOrSelf]
+     * @returns {Promise<void>}
+     */
+    static async configure(item, condition, targetOrSelf = 'target') {
+        await item.update({
+            system: { flags: { boolean: { [this.key]: true } } },
+            flags: {
+                [MODULE_NAME]: {
+                    [this.key]: condition || '',
+                    [this.#targetKey]: targetOrSelf,
+                },
+            },
+        });
+    }
+
+    /**
+     * @inheritdoc
+     * @override
      * @param {object} options
      * @param {ActorPF | null | undefined} options.actor
      * @param {HTMLElement} options.html

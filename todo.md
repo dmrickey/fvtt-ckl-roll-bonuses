@@ -229,7 +229,7 @@
   - ~~Bonuses~~
   - ~~Specific Bonuses~~
   - Targets
-  - Conditional Targets
+  - ~~Conditional Targets~~
   - ~~Targetable Overrides~~
 - Flanking
   - Add hints for new bonuses

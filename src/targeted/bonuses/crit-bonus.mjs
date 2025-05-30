@@ -305,8 +305,8 @@ export class CritBonus extends BaseBonus {
      * @param {ItemPF} item
      * @param {object} options
      * @param {boolean} [options.keen]
-     * @param {number | string} [options.mult]
-     * @param {number | string} [options.offset]
+     * @param {Formula} [options.mult]
+     * @param {Formula} [options.offset]
      * @returns {Promise<void>}
      */
     static async configure(item, { keen, mult, offset }) {

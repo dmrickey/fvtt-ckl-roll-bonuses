@@ -29,7 +29,7 @@ function actionDamage(action, { simplify = true, strict = true } = {}) {
     const actionDamageNonCritParts = [...actionData.damage.nonCritParts];
     /** END OVERRIDE */
 
-    /** @type {(number | string)[]} */
+    /** @type {Formula[]} */
     const parts = [];
 
     const lazy = {

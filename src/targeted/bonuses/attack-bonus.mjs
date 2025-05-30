@@ -127,7 +127,7 @@ export class AttackBonus extends BaseBonus {
     /**
      * @overload
      * @param {ItemPF} item
-     * @param {number | string} formula
+     * @param {Formula} formula
      * @param {object} options
      * @param {false | undefined} [options.critOnly]
      * @param {BonusTypes} options.bonusType
@@ -137,7 +137,7 @@ export class AttackBonus extends BaseBonus {
     /**
      * @overload
      * @param {ItemPF} item
-     * @param {number | string} formula
+     * @param {Formula} formula
      * @param {object} options
      * @param {true} options.critOnly
      * @returns {Promise<void>}
@@ -147,7 +147,7 @@ export class AttackBonus extends BaseBonus {
      * @inheritdoc
      * @override
      * @param {ItemPF} item
-     * @param {number | string} formula
+     * @param {Formula} formula
      * @param {object} options
      * @param {boolean | undefined} [options.critOnly]
      * @param {BonusTypes | undefined} [options.bonusType]
@@ -158,7 +158,7 @@ export class AttackBonus extends BaseBonus {
             system: { flags: { boolean: { [this.key]: true } } },
             flags: {
                 [MODULE_NAME]: {
-                    [this.key]: (formula || 0) + '',
+                    [this.key]: (formula || '') + '',
                     [this.#critOnlyKey]: !!critOnly,
                     [this.#typeKey]: bonusType,
                 },

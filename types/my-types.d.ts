@@ -485,6 +485,7 @@ declare global {
     }
 
     type UUID = string;
+    type Formula = number | string;
 
     type InputType =
         | 'bonus'
@@ -499,7 +500,7 @@ declare global {
 
     interface ModifierSource {
         /** The value of this modifer */
-        value: number | string;
+        value: Formula;
 
         /** The name of the source of this modifier */
         name: string;

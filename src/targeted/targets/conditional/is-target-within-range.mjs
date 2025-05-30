@@ -4,6 +4,7 @@ import { FormulaCacheHelper } from '../../../util/flag-helpers.mjs';
 import { localizeBonusLabel } from '../../../util/localize.mjs';
 import { BaseTarget } from '../_base-target.mjs';
 import { showLabel } from '../../../handlebars-handlers/bonus-inputs/show-label.mjs';
+import { MODULE_NAME } from '../../../consts.mjs';
 
 export class WhenTargetInRangeTarget extends BaseTarget {
 
@@ -101,6 +102,27 @@ export class WhenTargetInRangeTarget extends BaseTarget {
      * @inheritdoc
      */
     static get isGenericTarget() { return true; }
+
+    /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} item
+     * @param {object} options
+     * @param {Formula} [options.min]
+     * @param {Formula} [options.max]
+     * @returns {Promise<void>}
+     */
+    static async configure(item, { min, max }) {
+        await item.update({
+            system: { flags: { boolean: { [this.key]: true } } },
+            flags: {
+                [MODULE_NAME]: {
+                    [this.#minKey]: (min || '') + '',
+                    [this.#maxKey]: (max || '') + '',
+                },
+            },
+        });
+    }
 
     /**
      * @inheritdoc

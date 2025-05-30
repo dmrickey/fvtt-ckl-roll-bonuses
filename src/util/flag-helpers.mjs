@@ -125,7 +125,7 @@ export class FormulaCacheHelper {
     /**
      * @param {ItemPF} item
      * @param {...string} keys
-     * @returns {Record<string, number | string>}}
+     * @returns {Record<string, Formula>}}
      */
     static getModuleFlagFormula(item, ...keys) {
         ifDebug(() => {

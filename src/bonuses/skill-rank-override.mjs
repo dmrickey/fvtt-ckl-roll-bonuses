@@ -27,7 +27,7 @@ export class SkillRankOverride extends SpecificBonus {
      * @override
      * @param {ItemPF} item
      * @param {SkillId[]} skillIds
-     * @param {number | string} formula
+     * @param {Formula} formula
      * @returns {Promise<void>}
      */
     static async configure(item, skillIds, formula) {
@@ -35,7 +35,7 @@ export class SkillRankOverride extends SpecificBonus {
             system: { flags: { boolean: { [this.key]: true } } },
             flags: {
                 [MODULE_NAME]: {
-                    [this.formulaKey]: formula,
+                    [this.formulaKey]: formula + '',
                     [this.selectedKey]: skillIds,
                 },
             },

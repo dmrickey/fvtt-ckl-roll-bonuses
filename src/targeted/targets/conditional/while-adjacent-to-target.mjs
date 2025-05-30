@@ -3,6 +3,7 @@ import { showActorInput } from '../../../handlebars-handlers/targeted/targets/ac
 import { listFormat } from '../../../util/list-format.mjs';
 import { localize } from '../../../util/localize.mjs';
 import { PositionalHelper } from '../../../util/positional-helper.mjs';
+import { toArray } from '../../../util/to-array.mjs';
 import { truthiness } from '../../../util/truthiness.mjs';
 import { BaseTarget } from '../_base-target.mjs';
 
@@ -98,6 +99,24 @@ export class WhileAdjacentToTarget extends BaseTarget {
      * @returns {boolean}
      */
     static get isGenericTarget() { return true; }
+
+    /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} item
+     * @param {ArrayOrSelf<string>} actorUuids
+     * @returns {Promise<void>}
+     */
+    static async configure(item, actorUuids) {
+        await item.update({
+            system: { flags: { boolean: { [this.key]: true } } },
+            flags: {
+                [MODULE_NAME]: {
+                    [this.key]: toArray(actorUuids || []),
+                },
+            },
+        });
+    }
 
     /**
      * @override

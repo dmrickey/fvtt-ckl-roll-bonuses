@@ -161,10 +161,10 @@ export class RangedIncrementPenaltyBonus extends BaseBonus {
      * @inheritdoc
      * @override
      * @param {ItemPF} item
-     * @param {number | string} incrementPenaltyOffsetKey
-     * @param {number | string} penaltyOffsetKey
-     * @param {number | string} incrementRangeOffsetKey
-     * @param {number | string} maxIncrementOffsetKey
+     * @param {Formula} incrementPenaltyOffsetKey
+     * @param {Formula} penaltyOffsetKey
+     * @param {Formula} incrementRangeOffsetKey
+     * @param {Formula} maxIncrementOffsetKey
      * @returns {Promise<void>}
      */
     static async configure(
@@ -178,10 +178,10 @@ export class RangedIncrementPenaltyBonus extends BaseBonus {
             system: { flags: { boolean: { [this.key]: true } } },
             flags: {
                 [MODULE_NAME]: {
-                    [this.#incrementPenaltyOffsetKey]: incrementPenaltyOffsetKey,
-                    [this.#penaltyOffsetKey]: penaltyOffsetKey,
-                    [this.#incrementRangeOffsetKey]: incrementRangeOffsetKey,
-                    [this.#maxIncrementOffsetKey]: maxIncrementOffsetKey,
+                    [this.#incrementPenaltyOffsetKey]: incrementPenaltyOffsetKey + '',
+                    [this.#penaltyOffsetKey]: penaltyOffsetKey + '',
+                    [this.#incrementRangeOffsetKey]: incrementRangeOffsetKey + '',
+                    [this.#maxIncrementOffsetKey]: maxIncrementOffsetKey + '',
                 },
             },
         });

@@ -36,7 +36,7 @@ export class ChangeTypeModification extends SpecificBonus {
      * @inheritdoc
      * @override
      * @param {ItemPF} item
-     * @param {number | string} formula
+     * @param {Formula} formula
      * @param {BonusTypes} type
      * @param {SetType} addOrSet
      * @returns {Promise<void>}
@@ -46,7 +46,7 @@ export class ChangeTypeModification extends SpecificBonus {
             system: { flags: { boolean: { [this.key]: true } } },
             flags: {
                 [MODULE_NAME]: {
-                    [ChangeTypeModification.formulaKey]: formula,
+                    [ChangeTypeModification.formulaKey]: formula + '',
                     [ChangeTypeModification.changeTypeKey]: type,
                     [ChangeTypeModification.setTypeKey]: addOrSet,
                 }
@@ -109,10 +109,10 @@ FormulaCacheHelper.registerModuleFlag(ChangeTypeModification.formulaKey);
 const getOffsetType = (item) => item.getFlag(MODULE_NAME, ChangeTypeModification.setTypeKey) || setTypes[0];
 
 /**
- * @param {number | string} value
+ * @param {Formula} value
  * @param {BonusTypes} type
  * @param {Nullable<ActorPF>} actor
- * @returns {number | string}
+ * @returns {Formula}
  */
 function patchChangeValue(value, type, actor) {
     if (!actor) {
