@@ -213,7 +213,7 @@
                 "finesse-bonus": "Use dex for attack rolls instead of strength.",
                 "finesse-override": "Add the finesse weapon property to an Item that doesn't normally have weapon properties.",
                 "finesse-target": "Activate bonuses for all finesse-able targets. This requires the weapon/attack to have the Finesse weapon property, be in the Natural Attack weapon group, or have the `finesse-override` boolean flag.",
-                "flanking-immunity": "Grants immunity to Is Flanking and the Flanking Global Bonus",
+                "flanking-immunity": "Grants immunity to both the Is Flanking Target and the Flanking Global Bonus",
                 "footnote": "Targeted attacks will include this footnote.",
                 "fortune": "Roll twice and take the better. Multiple bonuses stack.",
                 "function": "A custom function that's executed to determine what to target. See examples in documentation.",
@@ -753,7 +753,9 @@
             }
         },
         "warnings": {
-            "range-misconfigured": "Action ({actionName}) on Item '{itemName}' ({actionUuid}) has invalid range. Verify its max increments and range has been set up correctly. Automatically assuming it's in range."
+            "pack-flanking": "Pack Flanking requires an ally to be configured.",
+            "range-misconfigured": "Action ({actionName}) on Item '{itemName}' ({actionUuid}) has invalid range. Verify its max increments and range has been set up correctly. Automatically assuming it's in range.",
+            "uncanny-dodge-improved": "Must be configured on a Class Feature with its Associated Class correctly configured."
         }
     }
 }

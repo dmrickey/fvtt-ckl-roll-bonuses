@@ -105,10 +105,9 @@ export class SpecificBonus {
      * If the item or actor is configured for this bonus
      * @abstract
      * @param {ItemPF | ActorPF | TokenPF} doc
-     * @param  {any[]} _args
      * @returns {boolean}
      */
-    static has(doc, ..._args) {
+    static has(doc) {
         return doc instanceof pf1.canvas.TokenPF
             ? doc.actor?.hasItemBooleanFlag(this.key)
             : doc.hasItemBooleanFlag(this.key);

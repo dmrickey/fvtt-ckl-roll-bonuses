@@ -204,15 +204,12 @@
 - Alignment Target
   - Refactor so that it's an array
   - allow neutral to be chosen
-
-# vnext
 - Create new "Roll Bonuses" section for attack dialog inputs
 - Add "Fortune configuration app" to help with configuring specific fortune abilities
 - Targeting
   - Add a configuration error if "this target is not configured"
 - Roll Bonuses button in header that goes "show me a list of items with bonuses". This can also have a button to auto-populate any that it thinks should have bonuses added
   - See example [https://gitlab.com/mxzf/adventure-uninstaller/-/blob/master/adventure-uninstaller.mjs](here)
-
 - Add "Weapon Focus" hint hook so Weapon Focus, Weapon Specialization, and Martial Focus can all use the sword icon hint
 - Add "ignore me" boolean flag to turn off auto configuration (stronger "hammer" for EitR-type stuff where it incorrectly makes assumptions)
   - Or possibly just add a flag that says "this has already been configured" and then don't do it again
@@ -222,19 +219,18 @@
     - IAF - `-1` untyped ACP (Armor)
   - CL
   - DC
+
+# vnext
 - Add Fortune/Misfortune checkboxes to attack/roll dialogs
 
 - Remove `greater`/`improved`/`mythic` getters from LanguageSettings and use the new `is` methods
 - Flanking
-  - Add hints for new bonuses
   - disable or hijack system's checkbox in attack dialog
-  - Test pack flanking
 
 ### Specific Bonuses
 - ~~Migrate all keys to start with `specific_`~~ Do this later after SBC has a chance to update to only use the API
   - update all journal entries to indicate what the key is
 - Add "get item hint" function to base class
-- Verify BaneBonus label still works type/subtype/both)
 
 ### Idea
 - turn `LanguageSettings` into a base class that other classes extend (or create a base class that has shared logic)

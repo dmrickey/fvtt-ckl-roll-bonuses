@@ -1,6 +1,7 @@
 import { errorMessage } from '../../handlebars-handlers/bonus-inputs/error-message.mjs';
 import { showEnabledLabel } from '../../handlebars-handlers/enabled-label.mjs';
 import { api } from '../../util/api.mjs';
+import { registerItemHint } from '../../util/item-hints.mjs';
 import { localize } from '../../util/localize.mjs';
 import { LanguageSettings } from '../../util/settings.mjs';
 import { truthiness } from '../../util/truthiness.mjs';
@@ -73,10 +74,10 @@ export class UncannyDodgeImproved extends SpecificBonus {
      * @returns {boolean}
      */
     static has(doc) {
-        return doc instanceof pf1.documents.item.ItemFeatPF
+        return super.has(doc)
+            && doc instanceof pf1.documents.item.ItemFeatPF
             && doc.system.subType === 'classFeat'
-            && !!doc.system.class
-            && super.has(doc);
+            && !!doc.system.class;
     }
 
     /**
@@ -114,6 +115,18 @@ export class UncannyDodgeImproved extends SpecificBonus {
         return attackerDodgeLevel - 4 < targetDodgeLevel;
     }
 }
+
+// register hint on source ability
+registerItemHint((hintcls, _actor, item, _data) => {
+    const has = UncannyDodgeImproved.has(item);
+    if (has) {
+        return hintcls.create('', [], { hint: UncannyDodgeImproved.tooltip, icon: 'ra ra-player-dodge' });
+    }
+
+    if (item.hasItemBooleanFlag(UncannyDodgeImproved.key)) {
+        return hintcls.create(UncannyDodgeImproved.label, ['error'], { hint: localize('warnings.uncanny-dodge-improved') });
+    }
+});
 
 class Settings {
     static get name() { return LanguageSettings.getTranslation('uncanny-dodge'); }

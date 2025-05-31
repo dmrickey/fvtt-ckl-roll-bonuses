@@ -1,5 +1,6 @@
 import { SpecificBonus } from '../../../../bonuses/_specific-bonus.mjs';
 import { showEnabledLabel } from '../../../../handlebars-handlers/enabled-label.mjs';
+import { registerItemHint } from '../../../../util/item-hints.mjs';
 import { LanguageSettings } from '../../../../util/settings.mjs';
 
 export class Outflank extends SpecificBonus {
@@ -29,6 +30,14 @@ export class Outflank extends SpecificBonus {
 
     static get defaultName() { return Settings.name; }
 }
+
+// register hint on source ability
+registerItemHint((hintcls, _actor, item, _data) => {
+    const has = Outflank.has(item);
+    if (has) {
+        return hintcls.create('', [], { icon: 'ra ra-dervish-swords', hint: Outflank.tooltip });
+    }
+});
 
 class Settings {
     static get name() { return LanguageSettings.getTranslation(Outflank.key); }

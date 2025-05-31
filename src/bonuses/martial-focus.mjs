@@ -139,7 +139,7 @@ export function getMartialFocusCondtional(item) {
 
 // register hint on source feat
 registerItemHint((hintcls, _actor, item, _data) => {
-    const has = item.hasItemBooleanFlag(MartialFocus.key);
+    const has = MartialFocus.has(item);
     const current = /** @type {keyof WeaponGroups} */ (item.getFlag(MODULE_NAME, MartialFocus.key));
     if (has && current) {
         return hintcls.create(pf1.config.weaponGroups[current] ?? current, [], { hint: localizeBonusTooltip(MartialFocus.key) });

@@ -253,7 +253,7 @@ export class FlankHelper {
      * @returns {boolean}
      */
     #hasPackFlanking(token, partner) {
-        return PackFlanking.has(token.actor, partner.actor) && PackFlanking.has(token.actor, partner.actor);
+        return PackFlanking.hasFlankingWith(token.actor, partner.actor) && PackFlanking.hasFlankingWith(token.actor, partner.actor);
     }
 
     /**

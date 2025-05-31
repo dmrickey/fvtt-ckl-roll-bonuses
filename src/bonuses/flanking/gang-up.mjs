@@ -1,6 +1,7 @@
 import { SpecificBonus } from '../_specific-bonus.mjs';
 import { showEnabledLabel } from '../../handlebars-handlers/enabled-label.mjs';
 import { LanguageSettings } from '../../util/settings.mjs';
+import { registerItemHint } from '../../util/item-hints.mjs';
 
 export class GangUp extends SpecificBonus {
     /** @inheritdoc @override */
@@ -27,6 +28,14 @@ export class GangUp extends SpecificBonus {
         };
     }
 }
+
+// register hint on source ability
+registerItemHint((hintcls, _actor, item, _data) => {
+    const has = GangUp.has(item);
+    if (has) {
+        return hintcls.create('', [], { hint: GangUp.tooltip, icon: 'fas fa-people-group' });
+    }
+});
 
 class Settings {
     static get name() { return LanguageSettings.getTranslation(GangUp.key); }

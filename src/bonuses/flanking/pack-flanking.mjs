@@ -3,6 +3,10 @@ import { MODULE_NAME } from '../../consts.mjs';
 import { LanguageSettings } from '../../util/settings.mjs';
 import { showActorInput } from '../../handlebars-handlers/targeted/targets/actor-input.mjs';
 import { getSourceFlag } from '../../util/get-source-flag.mjs';
+import { registerItemHint } from '../../util/item-hints.mjs';
+import { truthiness } from '../../util/truthiness.mjs';
+import { localize } from '../../util/localize.mjs';
+import { listFormat } from '../../util/list-format.mjs';
 
 export class PackFlanking extends SpecificBonus {
     /** @inheritdoc @override */
@@ -26,13 +30,11 @@ export class PackFlanking extends SpecificBonus {
     }
 
     /**
-     * @inheritdoc
-     * @override
      * @param {ItemPF | ActorPF | TokenPF} doc
      * @param {ItemPF | ActorPF | TokenPF} ally
      * @returns {boolean}
      */
-    static has(doc, ally) {
+    static hasFlankingWith(doc, ally) {
         if (!super.has(doc)) return false;
 
         /**
@@ -74,6 +76,31 @@ export class PackFlanking extends SpecificBonus {
         };
     }
 }
+
+// register hint on source ability
+registerItemHint((hintcls, _actor, item, _data) => {
+    const has = item.hasItemBooleanFlag(PackFlanking.key);
+    if (!has) return;
+
+    /** @type {string[]} */
+    const uuids = getSourceFlag(item, PackFlanking) || [];
+
+    const buddies = uuids
+        .map((uuid) => fromUuidSync(uuid))
+        .filter(truthiness);
+    if (buddies.length) {
+        return hintcls.create(
+            '',
+            [],
+            {
+                hint: `${PackFlanking.tooltip}\n\n${localize('with')} ${listFormat(buddies.map(x => x.name), 'or')}`,
+                icon: 'ra ra-wolf-howl',
+            });
+    }
+    else {
+        return hintcls.create(PackFlanking.label, ['error'], { hint: localize('warnings.pack-flanking') });
+    }
+});
 
 class Settings {
     static get name() { return LanguageSettings.getTranslation(PackFlanking.key); }

@@ -1,6 +1,7 @@
 import { SpecificBonus } from './_specific-bonus.mjs';
 import { showEnabledLabel } from '../handlebars-handlers/enabled-label.mjs';
 import { LanguageSettings } from '../util/settings.mjs';
+import { registerItemHint } from '../util/item-hints.mjs';
 
 export class SoloTactics extends SpecificBonus {
     /** @inheritdoc @override */
@@ -27,6 +28,14 @@ export class SoloTactics extends SpecificBonus {
         };
     }
 }
+
+// register hint on source ability
+registerItemHint((hintcls, _actor, item, _data) => {
+    const has = SoloTactics.has(item);
+    if (has) {
+        return hintcls.create('', [], { hint: SoloTactics.tooltip, icon: 'ra ra-divert' });
+    }
+});
 
 class Settings {
     static get name() { return LanguageSettings.getTranslation(SoloTactics.key); }

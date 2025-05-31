@@ -181,6 +181,10 @@ form .versatile-performance-selector .form-fields {
     text-align: end;
 }
 
+#ckl-roll-bonus-container .bonuses .form-group.roll-bonuses {
+    border-bottom: 1px solid #37373711;
+}
+
 /* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs .conditionals {
 /* copied from pf1 */     list-style: none;
 /* copied from pf1 */     margin: 0;

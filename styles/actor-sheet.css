@@ -23,24 +23,3 @@
     text-align: center;
     width: 60%;
 }
-
-.ckl-extra-fa-magnifying-glass::after {
-    content: "\f002";
-    margin-inline-start: -0.75em;
-}
-
-.ckl-extra-focus {
-    border-radius: 50%;
-    border-style: dotted;
-    border-color: yellow;
-}
-
-.ckl-fa-slash {
-    position: relative;
-}
-.ckl-fa-slash::after {
-    content: "\f715";
-    margin-inline-start: -116%;
-    position: absolute;
-    transform: scale(-0.8, 1);
-}

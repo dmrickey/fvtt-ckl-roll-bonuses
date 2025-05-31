@@ -1,6 +1,7 @@
 import { SpecificBonus } from '../_specific-bonus.mjs';
 import { LanguageSettings } from '../../util/settings.mjs';
 import { showEnabledLabel } from '../../handlebars-handlers/enabled-label.mjs';
+import { registerItemHint } from '../../util/item-hints.mjs';
 
 export class FlankingImmunity extends SpecificBonus {
     /** @inheritdoc @override */
@@ -27,6 +28,14 @@ export class FlankingImmunity extends SpecificBonus {
         };
     }
 }
+
+// register hint on source ability
+registerItemHint((hintcls, _actor, item, _data) => {
+    const has = FlankingImmunity.has(item);
+    if (has) {
+        return hintcls.create(FlankingImmunity.label, [], { icon: 'ra ra-eyeball', hint: FlankingImmunity.tooltip, combo: true });
+    }
+});
 
 class Settings {
     static get name() { return LanguageSettings.getTranslation(FlankingImmunity.key); }
