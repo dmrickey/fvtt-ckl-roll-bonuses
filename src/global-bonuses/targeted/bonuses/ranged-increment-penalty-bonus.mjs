@@ -1,3 +1,4 @@
+import { MODULE_NAME } from '../../../consts.mjs';
 import { textInput } from '../../../handlebars-handlers/bonus-inputs/text-input.mjs';
 import { BaseBonus } from '../../../targeted/bonuses/_base-bonus.mjs';
 import { FormulaCacheHelper } from '../../../util/flag-helpers.mjs';
@@ -122,8 +123,22 @@ export class RangedIncrementPenaltyBonus extends BaseBonus {
      * @return {Hint | undefined}
      */
     static handleHint(hintCls, _actor, item, _data) {
-        if (!item.hasItemBooleanFlag(RangedIncrementPenaltyBonus.key)) return;
-        return hintCls.create('', [], { icon: 'ra ra-archery-target', hint: RangedIncrementPenaltyBonus.label });
+        if (!this.isSource(item)) return;
+        return hintCls.create('', [], { icon: 'ra ra-archery-target', hint: this.label });
+    }
+
+    /**
+     * Get Item Hints tooltip value
+     *
+     * @override
+     * @param {ItemPF} _source The source of the bonus
+     * @param {(ActionUse | ItemPF | ItemAction)?} [target] The target for contextually aware hints
+     * @returns {Nullable<string[]>}
+     */
+    static getHints(_source, target = undefined) {
+        if (!target) return;
+
+        return [this.label];
     }
 
     /**
@@ -137,6 +152,38 @@ export class RangedIncrementPenaltyBonus extends BaseBonus {
             this.#maxIncrementOffsetKey,
             this.#penaltyOffsetKey,
         );
-        registerItemHint(this.handleHint);
+
+        // doing this instead of `getHints` because this way I can add an icon
+        registerItemHint(this.handleHint.bind(this));
+    }
+
+    /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} item
+     * @param {Formula} incrementPenaltyOffsetKey
+     * @param {Formula} penaltyOffsetKey
+     * @param {Formula} incrementRangeOffsetKey
+     * @param {Formula} maxIncrementOffsetKey
+     * @returns {Promise<void>}
+     */
+    static async configure(
+        item,
+        incrementPenaltyOffsetKey,
+        penaltyOffsetKey,
+        incrementRangeOffsetKey,
+        maxIncrementOffsetKey,
+    ) {
+        await item.update({
+            system: { flags: { boolean: { [this.key]: true } } },
+            flags: {
+                [MODULE_NAME]: {
+                    [this.#incrementPenaltyOffsetKey]: incrementPenaltyOffsetKey + '',
+                    [this.#penaltyOffsetKey]: penaltyOffsetKey + '',
+                    [this.#incrementRangeOffsetKey]: incrementRangeOffsetKey + '',
+                    [this.#maxIncrementOffsetKey]: maxIncrementOffsetKey + '',
+                },
+            },
+        });
     }
 }

@@ -300,6 +300,29 @@ export class CritBonus extends BaseBonus {
     }
 
     /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} item
+     * @param {object} options
+     * @param {boolean} [options.keen]
+     * @param {Formula} [options.mult]
+     * @param {Formula} [options.offset]
+     * @returns {Promise<void>}
+     */
+    static async configure(item, { keen, mult, offset }) {
+        await item.update({
+            system: { flags: { boolean: { [this.key]: true } } },
+            flags: {
+                [MODULE_NAME]: {
+                    [this.#critKeenKey]: !!keen,
+                    [this.#critMultKey]: (mult || '') + '',
+                    [this.#critOffsetKey]: (offset || '') + '',
+                },
+            },
+        });
+    }
+
+    /**
      * @override
      * @param {object} options
      * @param {ActorPF | null} options.actor

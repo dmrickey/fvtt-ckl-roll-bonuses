@@ -1,3 +1,4 @@
+import { MODULE_NAME } from '../../consts.mjs';
 import { textInput } from '../../handlebars-handlers/bonus-inputs/text-input.mjs';
 import { api } from '../../util/api.mjs';
 import { FormulaCacheHelper } from '../../util/flag-helpers.mjs';
@@ -79,6 +80,22 @@ export class CasterLevelBonus extends BaseBonus {
             const mod = signed(value);
             return [`${localize('cl-mod', { mod })} ${source.name}`];
         }
+    }
+
+    /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} item
+     * @param {Formula} formula
+     * @returns {Promise<void>}
+     */
+    static async configure(item, formula) {
+        await item.update({
+            system: { flags: { boolean: { [this.key]: true } } },
+            flags: {
+                [MODULE_NAME]: { [this.key]: (formula || '') + '' },
+            },
+        });
     }
 
     /**

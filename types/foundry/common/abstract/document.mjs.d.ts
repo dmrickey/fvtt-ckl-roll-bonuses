@@ -162,7 +162,7 @@ export declare abstract class Document<
     /**
      * Test whether a certain User has a requested permission level (or greater) over the Document
      * @param user       - The User being tested
-     * @param permission - The permission level from DOCUMENT_PERMISSION_LEVELS to test
+     * @param permission - The permission level from DOCUMENT_OWNERSHIP_LEVELS to test
      * @param exact      - Require the exact permission level requested?
      *                     (default: `false`)
      * @returns Does the user have this permission level over the Document?

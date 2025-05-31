@@ -84,11 +84,13 @@
                 "finesse-bonus": "Finesse",
                 "finesse-override": "Finesse",
                 "finesse-target": "Finesse",
+                "flanking-immunity": "Flanking Immunity",
                 "footnote": "Footnote",
                 "fortune": "Fortune",
                 "function": "Custom Targeting Function",
                 "function-player-label": "Function label for player view",
                 "furious-focus": "Furious Focus",
+                "gang-up": "Gang Up",
                 "has-boolean-flag": "Has Boolean Flag",
                 "has-boolean-flag-target": "Target for Boolean Flag",
                 "inspiration": "Inspiration",
@@ -97,13 +99,19 @@
                 "inspiration-focused": "Focused Inspiration",
                 "inspiration-tenacious": "Tenacious Inspiration",
                 "inspiration-true": "True Inspiration",
+                "is-flanking": "Is Flanking",
+                "is-flanking-with": "With Ally",
                 "is-target-within-range": "Target within Range",
                 "is-target-within-range-max": "Maximum Range ({unit})",
                 "is-target-within-range-min": "Minimum Range ({unit})",
                 "item": "Specific Items",
                 "martial-focus": "Martial Focus",
                 "maximize-damage": "Maximize Damage",
+                "menacing": "Menacing",
                 "misfortune": "Misfortune",
+                "outflank": "Outflank",
+                "outflank-improved": "Improved Outflank",
+                "pack-flanking": "Pack Flanking",
                 "precise-shot": "Precise Shot",
                 "proficiency": "Is Proficient",
                 "ranged-increment-penalty": "Ranged Increment Penalty Bonuses",
@@ -118,6 +126,7 @@
                 "skill-rank-override-formula": "Override Skill Ranks Formula",
                 "skill-rank-override-selected": "Skills to Override",
                 "snake-sidewind": "Snake Sidewind",
+                "solo-tactics": "Solo Tactics",
                 "spell": "Specific Spells",
                 "spell-descriptor": "Spell Descriptors",
                 "spell-focus": "Spell Focus",
@@ -126,8 +135,11 @@
                 "spell-school": "Spell Schools",
                 "spell-subschool": "Spell Subschools",
                 "spell-specialization": "Spell Specialization",
+                "swarming": "Swarming",
                 "token": "Targeted Tokens",
                 "token-invert": "Invert Targeted Tokens",
+                "uncanny-dodge-improved": "Improved Uncanny Dodge",
+                "underfoot-assault": "Underfoot Assault",
                 "versatile-performance": "Versatile Performance",
                 "versatile-performance-expanded": "Expanded Versatile Performance",
                 "versatile-training": "Versatile Training - Weapon Group",
@@ -149,7 +161,9 @@
                 "weapon-type-override": "Weapon Type",
                 "weapon": "Specific Weapons and Attacks",
                 "when-active": "When Item Is Active",
-                "when-in-combat": "When in Combat"
+                "when-in-combat": "When in Combat",
+                "while-adjacent-to": "While Adjacent To",
+                "while-sharing-with": "While Sharing Square With"
             },
             "tooltip": {
                 "action": "Grant bonuses to specific actions.",
@@ -199,24 +213,32 @@
                 "finesse-bonus": "Use dex for attack rolls instead of strength.",
                 "finesse-override": "Add the finesse weapon property to an Item that doesn't normally have weapon properties.",
                 "finesse-target": "Activate bonuses for all finesse-able targets. This requires the weapon/attack to have the Finesse weapon property, be in the Natural Attack weapon group, or have the `finesse-override` boolean flag.",
+                "flanking-immunity": "Grants immunity to both the Is Flanking Target and the Flanking Global Bonus",
                 "footnote": "Targeted attacks will include this footnote.",
                 "fortune": "Roll twice and take the better. Multiple bonuses stack.",
                 "function": "A custom function that's executed to determine what to target. See examples in documentation.",
                 "function-player-label": "Label shown to players when configured. Players will not be able to edit the function.",
                 "furious-focus": "Negate the attack penalty of power attack on the first attack made each round.",
+                "gang-up": "You are considered threatening your target if at least two of your allies are threatening your target.",
                 "has-boolean-flag": "Activate bonuses based on whether a boolean flag is active.",
                 "inspiration": "Freely roll Inspiration for specified skills.",
                 "inspiration-amazing": "Increase Inspiration die by one step.",
                 "inspiration-focused": "Increase Inspiration die by one step for chosen skills.",
                 "inspiration-tenacious": "When rolling Inspiration, roll an extra die and keep the highest.",
                 "inspiration-true": "Can freely use Inspiration on all skills.",
+                "is-flanking": "Activate bonuses while flanking your current targets.",
+                "is-flanking-with": "Activate bonuses while adjacent to any of the specified allies.",
                 "is-target-within-range": "Active when all targets are within a specified range.",
                 "is-target-within-range-min": "Activate bonuses whenever all targeted tokens are at least this far away.",
                 "is-target-within-range-max": "Activate bonuses whenever all targeted tokens are at most this far away.",
                 "item": "Apply bonuses when using these specific Items.",
                 "martial-focus": "+1 damage with chosen weapon group. Attacks and Weapons must be properly configured with weapon groups.",
                 "maximize-damage": "Maximize the damage rolls for the targeted abilities.",
+                "menacing": "Increase any flank bonus by +2 against an enemy you currently threaten.",
                 "misfortune": "Roll twice and take the worse. Multiple bonuses stack.",
+                "outflank": "Teamwork feat to increase flank bonuses by +2.",
+                "outflank-improved": "Teamwork feat to increase flank positioning options.",
+                "pack-flanking": "You are considered flanking with your pet if you both have this feat and are adjacent and threatening the same target.",
                 "precise-shot": "Negate penalty for shooting into melee.",
                 "proficiency": "Adds Proficiency for this item (usually needed alongside a Weapon Group override).",
                 "ranged-increment-penalty": "Modify the penalties associated with ranged weapon increments.",
@@ -231,6 +253,7 @@
                 "skill-rank-override-formula": "Formula to set skill rank for chosen skill(s) to a specific value. This is useful for an item such as a Headband of Vast Intellect.",
                 "skill-rank-override-selected": "The skills to be overridden with the supplied formula.",
                 "snake-sidewind": "Use Sense Motive for critical confirmations when your maximum Sense Motive result is higher than your maximum attack roll.",
+                "solo-tactics": "Consider allies to have your Teamwork Feats (currently used for Outflank and Improved Outflank).",
                 "spell-school": "Apply bonuses to spells of the chosen school(s).",
                 "spell-subschool": "Apply bonuses to spells of the chosen subschool(s).",
                 "spell-specialization": "Increase CL by 2 for a chosen spell from a school that you have Spell Focus for.",
@@ -239,8 +262,11 @@
                 "spell-focus-greater": "Further increase a school from Spell Focus by +1 DC.",
                 "spell-focus-mythic": "Double Spell Focus bonuses.",
                 "spell-descriptor": "Apply bonuses for spells with the chosen descriptors.",
+                "swarming": "While sharing a square with an ally with this ability, you are considered flanking your target.",
                 "token": "Apply bonuses for actions while specific tokens are targeted. When this buff is activated, a dialog will show up that allows you to choose from tokens in the scene.",
                 "token-invert": "Invert the selection, meaning bonuses will apply when any token is targeted that is not the chosen token.",
+                "uncanny-dodge-improved": "Grants immunity to flank unless attacked by a higher level rogue. Must only be placed on a class feature.",
+                "underfoot-assault": "While sharing a square with an opponent and adjacent to an ally, you are considered flanking that opponent.",
                 "versatile-performance": "Replace two skills with a chosen perform skill.",
                 "versatile-performance-expanded": "Select a third skill to associate with the selected Perform skill.",
                 "versatile-training": "Use BAB instead of ranks for two skills associated with a weapon group.",
@@ -248,6 +274,7 @@
                 "vital-strike": "Extra damage on attack actions based on weapon's damage.",
                 "vital-strike-mythic": "When using a Vital Strike feat, also include any other bonus that would normally be multiplied on a critical hit.",
                 "vital-strike-enabled": "Whether or not Vital Strike should be checked by default in attack dialogs.",
+                "vital-strike-enabled-current": "Currently enabled by default.",
                 "weapon-focus": "+1 bonus on attack rolls for chosen weapon type. Attacks and Weapons must be properly configured with Equipment Base Types.",
                 "weapon-focus-greater": "Further increase attack roll for a chosen weapon type from Weapon Focus by +1.",
                 "weapon-group": "Apply bonuses when using weapons from chosen Weapon Group(s). Attacks and Weapons must be properly configured with weapon groups.",
@@ -260,7 +287,9 @@
                 "weapon-type-override": "Adds a Weapon Type to an Item that normally can't have one. This is equivalent to a weapon's Equipment Base Type.",
                 "weapon": "Choose specific Attacks and Weapons for bonuses.",
                 "when-active": "Apply bonuses when specified Buff/Weapon/Feat/etc is active.",
-                "when-in-combat": "Active when this actor is in combat."
+                "when-in-combat": "Active when this actor is in combat.",
+                "while-adjacent-to": "Activates bonuses while adjacent to any of the specified allies.",
+                "while-sharing-with": "Activates bonuses while sharing a square with any of the specified allies."
             }
         },
         "cancel": "Cancel",
@@ -317,6 +346,7 @@
                 "require-melee-threaten": "Skipped Melee Requiremnt"
             },
             "label": {
+                "flanking": "Flanking",
                 "higher-ground": "High Ground Melee Bonus",
                 "range-increment-penalty": "Ranged Increment Penalty",
                 "shoot-into-melee": "Shooting into Melee",
@@ -336,6 +366,10 @@
                 "label": "Configure Global Bonuses",
                 "title": "Global Bonuses",
                 "section": {
+                    "flanking": {
+                        "description": "Attempts to automatically add appropriate bonuses for flanking. The mod includes various bonuses to account for different feats/abilities that increase the bonus and modify how positioning works. Be sure to check out the journal for more details on those abilties.",
+                        "issues": "Flanking on diagonals when not adjacent to the target may not be technically accurate, but should be close enough for most scenarios (i.e. if you rotated the map 45 degrees, it would definitely be flanking)."
+                    },
                     "higher-ground": {
                         "description": "Add +1 to melee attacks when made from a higher elevation.",
                         "issues": ""
@@ -358,6 +392,8 @@
         "hint-missing-bonus": "Missing Bonus, click to add",
         "hint-missing-target": "Missing Target, click to add",
         "inspiration-amazing-die": "Inspiration Die: {die}",
+        "invalid-uncanny-dodge-class": "Class Association must be configured.",
+        "invalid-uncanny-dodge-item": "Must be placed on a class feature.",
         "invalid-override": "This does nothing for this item type—edit the item's details directly.",
         "invalid-token-selection": "Must select a valid target.",
         "item-app": {
@@ -441,7 +477,7 @@
                 "skill-tip": "Increases Inspiration die by one step"
             },
             "inspiration-tenacious": {
-                "skill-tip": "Roll an extra Inspiration die, keep the higest"
+                "skill-tip": "Roll an extra Inspiration die, keep the highest"
             },
             "roll-untrained": {
                 "skill-tip": "Can Roll Untrained"
@@ -483,6 +519,7 @@
             "skill-tip": "Versatile Training - uses BAB ({bab}) instead of ranks",
             "title": "{skill} - Versatile Training"
         },
+        "with": "with",
         "item-name-translations": {
             "improved": {
                 "name": "Improved",
@@ -516,9 +553,17 @@
                 "name": "Fate's Favored",
                 "default": "Fate's Favored"
             },
+            "flanking-immunity": {
+                "name": "Flanking Immunity",
+                "default": "All-Around Vision"
+            },
             "furious-focus": {
                 "name": "Furious Focus",
                 "default": "Furious Focus"
+            },
+            "gang-up": {
+                "name": "Gang Up",
+                "default": "Gang Up"
             },
             "inspiration": {
                 "name": "Inspiration",
@@ -568,6 +613,14 @@
                 "name": "Martial Focus",
                 "default": "Martial Focus"
             },
+            "outflank": {
+                "name": "Outflank",
+                "default": "Outflank"
+            },
+            "pack-flanking": {
+                "name": "Pack Flanking",
+                "default": "Pack Flanking"
+            },
             "precise-shot": {
                 "name": "Precise Shot",
                 "default": "Precise Shot"
@@ -575,6 +628,10 @@
             "snake-sidewind": {
                 "name": "Snake Sidewind",
                 "default": "Snake Sidewind"
+            },
+            "solo-tactics": {
+                "name": "Solo Tactics",
+                "default": "Solo Tactics"
             },
             "spell-focus": {
                 "name": "Spell Focus",
@@ -584,9 +641,25 @@
                 "name": "Spell Specialization",
                 "default": "Spell Specialization"
             },
+            "swarming": {
+                "name": "Swarming",
+                "default": "Swarming"
+            },
+            "uncanny-dodge": {
+                "name": "Uncanny Dodge",
+                "default": "Uncanny Dodge"
+            },
+            "underfoot-assault": {
+                "name": "Underfoot Assault",
+                "default": "Underfoot Assault"
+            },
             "versatile-performance": {
                 "name": "Versatile Performance",
                 "default": "Versatile Performance"
+            },
+            "versatile-performance-expanded": {
+                "name": "Expanded Versatility",
+                "default": "Expanded Versatility"
             },
             "versatile-training": {
                 "name": "Versatile Training",
@@ -618,6 +691,10 @@
             }
         },
         "settings": {
+            "allow-friendly-npc-selection": {
+                "name": "Allow Players to See All Friendly NPCs",
+                "hint": "When using Conditional Targets like Is Flanking (with specific ally) or While Adjacent To (allied character), setting this to true will allow your players to see all friendly NPCs defined in your world. While set to false, they can only target actors owned by players."
+            },
             "debug": {
                 "name": "Debug Mode",
                 "hint": "Enable this to turn on extra logging which may help in tracking down certain issues. Defaults to `false`."
@@ -650,8 +727,15 @@
             }
         },
         "applications": {
+            "actor": {
+                "gm-hint": "You can see all friendly actors because you're the GM. Players can only select player tokens and tokens they have observer permissions for. There is a module setting to allow them to select any friendly NPC token within the world (which could reveal tokens in other scenes).",
+                "no-actors": "No actors found.",
+                "npcs": "Friendly NPCs",
+                "observed": "Observed Actors",
+                "players": "Player Actors"
+            },
             "token": {
-                "gm-hint": "You can see all tokens because (and names) you're the GM. Players will only be able to select tokens that are visible to them.",
+                "gm-hint": "You can see all tokens because you're the GM. Players will only be able to select tokens that are visible to them.",
                 "no-tokens": "There are no tokens in this scene",
                 "player-hint": "Any currently targeted tokens in the scene are pre-selected. You can enable a setting to skip this window and automatically use those targets."
             }
@@ -667,6 +751,11 @@
                 "inspiration": "Use of inspiration configured directly on the skill is deprecated and will be removed in a future version. Transition to using the Inspiration specific skills configured on the appropriate abilities.",
                 "dice": "Use of modifying the base dice for skills is deprecated and will be removed in a future version. See the documentation for how to configure skills for fortune/misfortune. If you have a need not covered by (mis)fortune, let me know."
             }
+        },
+        "warnings": {
+            "pack-flanking": "Pack Flanking requires an ally to be configured.",
+            "range-misconfigured": "Action ({actionName}) on Item '{itemName}' ({actionUuid}) has invalid range. Verify its max increments and range has been set up correctly. Automatically assuming it's in range.",
+            "uncanny-dodge-improved": "Must be configured on a Class Feature with its Associated Class correctly configured."
         }
     }
 }

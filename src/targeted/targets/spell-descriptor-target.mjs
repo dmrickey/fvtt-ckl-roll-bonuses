@@ -1,6 +1,7 @@
 import { MODULE_NAME } from '../../consts.mjs';
 import { traitInput } from '../../handlebars-handlers/trait-input.mjs';
 import { intersects } from '../../util/array-intersects.mjs';
+import { toArray } from '../../util/to-array.mjs';
 import { truthiness } from '../../util/truthiness.mjs';
 import { uniqueArray } from '../../util/unique-array.mjs';
 import { BaseTarget } from './_base-target.mjs';
@@ -61,6 +62,24 @@ export class SpellDescriptorTarget extends BaseTarget {
         });
 
         return filteredSources;
+    }
+
+    /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} item
+     * @param {ArrayOrSelf<SpellDescriptor>} descriptors
+     * @returns {Promise<void>}
+     */
+    static async configure(item, descriptors) {
+        await item.update({
+            system: { flags: { boolean: { [this.key]: true } } },
+            flags: {
+                [MODULE_NAME]: {
+                    [this.key]: toArray(descriptors),
+                },
+            },
+        });
     }
 
     /**

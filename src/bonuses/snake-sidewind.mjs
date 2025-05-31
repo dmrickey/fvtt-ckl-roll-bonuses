@@ -1,35 +1,56 @@
 import { showEnabledLabel } from '../handlebars-handlers/enabled-label.mjs';
 import { getCachedBonuses } from '../util/get-cached-bonuses.mjs';
 import { getSkillFormula } from '../util/get-skill-formula.mjs';
-import { itemHasCompendiumId } from '../util/has-compendium-id.mjs';
 import { LocalHookHandler, localHooks } from '../util/hooks.mjs';
 import { registerItemHint } from '../util/item-hints.mjs';
 import { localizeBonusLabel, localizeBonusTooltip } from '../util/localize.mjs';
 import { LanguageSettings } from '../util/settings.mjs';
-import { SpecificBonuses } from './_all-specific-bonuses.mjs';
+import { SpecificBonus } from './_specific-bonus.mjs';
 
-const key = 'snake-sidewind';
-const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#snake-sidewind';
-const compendiumId = '6HVdbIFcRuTq8o7p';
+export class SnakeSidewind extends SpecificBonus {
+    /** @inheritdoc @override */
+    static get sourceKey() { return 'snake-sidewind'; }
 
-SpecificBonuses.registerSpecificBonus({ journal, key });
+    /** @inheritdoc @override */
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#snake-sidewind'; }
+
+    /** @inheritdoc @override @returns {CreateAndRender} */
+    static get configuration() {
+        return {
+            type: 'render-and-create',
+            compendiumId: 'Cvgd7Dehxxj6Muup',
+            isItemMatchFunc: (name) => name === Settings.name,
+            showInputsFunc: (item, html, isEditable) => {
+                showEnabledLabel({
+                    item,
+                    journal: this.journal,
+                    key: this.key,
+                    parent: html,
+                }, {
+                    canEdit: isEditable,
+                    inputType: 'specific-bonus',
+                });
+            },
+        };
+    }
+}
 
 class Settings {
-    static get snakeSidewind() { return LanguageSettings.getTranslation(key); }
+    static get name() { return LanguageSettings.getTranslation(SnakeSidewind.key); }
 
     static {
-        LanguageSettings.registerItemNameTranslation(key);
+        LanguageSettings.registerItemNameTranslation(SnakeSidewind.key);
     }
 }
 
 // register hint on source
 registerItemHint((hintcls, _actor, item, _data) => {
-    const has = !!item.hasItemBooleanFlag(key);
+    const has = !!item.hasItemBooleanFlag(SnakeSidewind.key);
     if (!has) {
         return;
     }
 
-    const hint = hintcls.create('', [], { hint: localizeBonusTooltip(key), icon: 'ra ra-snake' });
+    const hint = hintcls.create('', [], { hint: localizeBonusTooltip(SnakeSidewind.key), icon: 'ra ra-snake' });
     return hint;
 });
 
@@ -49,7 +70,7 @@ const getFormulaMax = (formula, rollData) => {
  * @returns {string | undefined}
  */
 const isSnakeSideWindCrit = (chatAttack) => {
-    const hasFlag = chatAttack.action?.actor.hasItemBooleanFlag(key);
+    const hasFlag = chatAttack.action?.actor.hasItemBooleanFlag(SnakeSidewind.key);
     if (!hasFlag) {
         return;
     }
@@ -114,59 +135,8 @@ async function addEffectNotes(chatAttack) {
     const { actor, attack, effectNotes } = chatAttack;
     if (attack?.isCrit) {
         if (isSnakeSideWindCrit(chatAttack)) {
-            effectNotes.push({ text: localizeBonusLabel(key), source: getCachedBonuses(actor, key)[0]?.name });
+            effectNotes.push({ text: localizeBonusLabel(SnakeSidewind.key), source: getCachedBonuses(actor, SnakeSidewind.key)[0]?.name });
         }
     }
 }
 LocalHookHandler.registerHandler(localHooks.chatAttackEffectNotes, addEffectNotes);
-
-Hooks.on('renderItemSheet', (
-    /** @type {ItemSheetPF} */ { isEditable, item },
-    /** @type {[HTMLElement]} */[html],
-    /** @type {unknown} */ _data
-) => {
-    if (!(item instanceof pf1.documents.item.ItemPF)) return;
-
-    const name = item?.name?.toLowerCase() ?? '';
-    const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
-
-    const hasFlag = item.hasItemBooleanFlag(key);
-    if (!hasFlag) {
-        if (isEditable && (name === Settings.snakeSidewind || hasCompendiumId)) {
-            item.addItemBooleanFlag(key);
-        }
-        return;
-    }
-
-    showEnabledLabel({
-        item,
-        journal,
-        key,
-        parent: html,
-    }, {
-        canEdit: isEditable,
-        inputType: 'specific-bonus',
-    });
-});
-
-/**
- * @param {ItemPF} item
- * @param {object} data
- * @param {{temporary: boolean}} param2
- * @param {string} id
- */
-const onCreate = (item, data, { temporary }, id) => {
-    if (!(item instanceof pf1.documents.item.ItemPF)) return;
-    if (temporary) return;
-
-    const name = item?.name?.toLowerCase() ?? '';
-    const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
-    const hasBonus = item.hasItemBooleanFlag(key);
-
-    if ((name === Settings.snakeSidewind || hasCompendiumId) && !hasBonus) {
-        item.updateSource({
-            [`system.flags.boolean.${key}`]: true,
-        });
-    }
-};
-Hooks.on('preCreateItem', onCreate);

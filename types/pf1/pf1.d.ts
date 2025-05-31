@@ -19,7 +19,7 @@ import {
     mythicWeaponFocusKey,
     racialWeaponFocusKey,
     weaponFocusKey,
-} from '../../src/bonuses/weapon-focus/ids.mjs';
+} from '../../src/bonuses/weapon-focus/weapon-focus.mjs';
 import { greaterWeaponSpecializationKey } from '../../src/bonuses/weapon-specialization/greater-weapon-specialization.mjs';
 import { weaponSpecializationKey } from '../../src/bonuses/weapon-specialization/weapon-specialization.mjs';
 import { MODULE_NAME } from '../../src/consts.mjs';
@@ -27,12 +27,16 @@ import { RangedIncrementPenaltyGlobalBonus } from '../../src/global-bonuses/atta
 import { BaseBonus } from '../../src/targeted/bonuses/_base-bonus.mjs';
 import { BaseTargetOverride } from '../../src/targeted/target-overides/_base-target-override.mjs';
 import { BaseTarget } from '../../src/targeted/targets/_base-target.mjs';
+import { SpellSubschoolTarget } from '../../src/targeted/targets/spell-subschool-target.mjs';
 import Document from '../foundry/common/abstract/document.mjs';
 
 export {};
 
 declare global {
     abstract class BaseDocument extends Document {
+        uuid: string;
+        ownership: Record<UUID, OwnerShipLevel> & { default: OwnerShipLevel };
+
         getRollData(): RollData;
         getFlag(moduleName: string, key: string): any;
         async setFlag<T>(
@@ -42,7 +46,6 @@ declare global {
         ): Promise<void>;
         async unsetFlag(moduleName: string, key: string): Promise<Document>;
         updateSource(changes: Record<string, any>, options?: object);
-        uuid: string;
         update(data: Record<string, any>);
         testUserPermission(user: User, OBSERVER: any): boolean;
         toObject(): any;
@@ -86,6 +89,9 @@ declare global {
         sheet: {
             render(force: boolean, { focus: boolean } = {});
         };
+
+        get hasPlayerOwner(): boolean;
+        prototypeToken: { disposition: DispositionLevel};
     }
 
     class Macro extends BaseDocument {
@@ -118,21 +124,28 @@ declare global {
         | ItemSpellPF
         | ItemWeaponPF;
 
+    type ItemTypeArrayCache<T> = T[] & { getId(string): T; getName(string): T };
+
     class ActorPF extends ActorBasePF {
+        id: string;
+
         allItems: ItemPF[];
-        race: ItemRacePF | null;
-        hasItemBooleanFlag(key: string): boolean;
-        hasWeaponProficiency(item: ItemPF, { override = true } = {}): boolean;
         allSkills: Array<SkillId>;
         changes?: Collection<ItemChange>;
-        get isOwner(): boolean;
-        itemTypes!: {
-            [T in Item as T['type']]: T[];
-        };
+        items: EmbeddedCollection<ItemPF>;
+        itemTypes!: { [T in Item as T['type']]: ItemTypeArrayCache<T>; };
+        name: string;
+        race: ItemRacePF | null;
+        statuses: { has(key: keyof Conditions): boolean; }
+        system: SystemActorData;
+        thumbnail: string;
+
         getActiveTokens(): Array<TokenPF>;
         getSkillInfo(skillId: string): SkillInfo;
+        hasItemBooleanFlag(key: string): boolean;
+        hasWeaponProficiency(item: ItemPF, { override = true } = {}): boolean;
+        get isOwner(): boolean;
 
-        statuses: { has(key: keyof Conditions): boolean; }
 
         /**
          * Gets the actor's roll data.
@@ -141,18 +154,10 @@ declare global {
          */
         getRollData(args?: { refresh?: boolean }): RollData;
 
-        id: string;
-
-        items: EmbeddedCollection<ItemPF>;
-
-        name: string;
-
         rollSkill(
             skillId: string,
             arg1: { skipDialog: boolean }
         ): Promise<ChatMessagePF>;
-
-        system: SystemActorData;
 
         updateEmbeddedDocuments(
             type: 'Item',
@@ -178,7 +183,7 @@ declare global {
     type ArmorType = 'lgt' | 'med' | 'hvy' | 'shl' | 'twr';
 
     type ConditionalPart = [
-        number | string,
+        Formula,
         ItemConditionalModifierSourceData['damageType'],
         false
     ];
@@ -233,6 +238,7 @@ declare global {
         fascinated: 'Fascintated';
     }
 
+    type SpellDescriptor = keyof SpellDescriptors;
     interface SpellDescriptors {
         acid: 'acid';
         air: 'air';
@@ -612,11 +618,15 @@ declare global {
 
         get enhancementBonus(): number;
         get hasSave(): boolean;
+        get uuid(): UUID;
 
         getRollData(): RollData;
         getRange({
-            type: string = 'single' | 'min' | 'max',
-            rollData: RollData = null,
+            type = 'single',
+            rollData = null,
+        }: {
+            type: 'single' | 'min' | 'max'
+            rollData: RollData | undefined,
         } = {}): number;
     }
 
@@ -626,9 +636,11 @@ declare global {
         base: T[];
         /** Traits added by the user */
         custom: Set<string>;
+        /** Translated names for standard plus custom */
         names: Array<string>;
         /** Traits defined by the system*/
         standard: Set<T>;
+        /** Combined set of both custom and standard */
         total: Set<string>;
     }
 
@@ -639,8 +651,8 @@ declare global {
         | /** neutral */ 0
         | /** friendly */ 1;
 
-    /** @see {CONST.DOCUMENT_PERMISSION_LEVELS} */
-    type PermissionLevel =
+    /** @see {CONST.DOCUMENT_OWNERSHIP_LEVELS} */
+    type OwnerShipLevel =
         | /** inherit */ -1
         | /** none */ 0
         | /** limited */ 1
@@ -666,7 +678,7 @@ declare global {
         };
     }
 
-    interface TokenPF {
+    class TokenPF {
         id: string;
         actor: ActorCharacterPF;
         document: TokenDocumentPF;
@@ -677,6 +689,9 @@ declare global {
         y: number;
         bounds: Rect;
         scene: Scene;
+
+        _onHoverIn(e: PointerEvent, arg1: { hoverOutOthers: boolean; });
+        _onHoverOut(e: PointerEvent);
     }
 
     class ItemPF<
@@ -780,7 +795,7 @@ declare global {
         setItemDictionaryFlag(key: string, value: FlagValue): Promise<void>;
 
         /**
-         * @param key - THe key for the boolean flag
+         * @param key - The key for the boolean flag
          * @returns True if the item has the boolean flag
          */
         hasItemBooleanFlag(key: string): boolean;
@@ -1185,7 +1200,7 @@ declare global {
             dictionary: DictionaryFlags;
         };
         masterwork: boolean;
-        subType: 'natural';
+        subType: 'natural' | 'classFeat';
         tag: string;
         tags: string[];
 
@@ -1240,13 +1255,13 @@ declare global {
         slot: string;
     }
     class SystemItemDataRacePF extends SystemItemData {
-        creatureSubtypes: TraitSelector;
-        creatureTypes: TraitSelector;
+        creatureSubtypes: TraitSelector<CreatureSubtype>;
+        creatureTypes: TraitSelector<CreatureType>;
     }
     class SystemItemDataSpellPF extends SystemItemData {
         descriptors: TraitSelector<keyof SpellDescriptors>;
-        school: keyof typeof pf1.config.spellSchools;
-        subschool: TraitSelector<keyof pf1['config']['spellSubschools']>;
+        school: SpellSchool;
+        subschool: TraitSelector<SpellSubschool>;
 
         /** @deprecated use until v10 (then use @see {descriptors} ) */
         types: string;
@@ -1631,7 +1646,7 @@ declare global {
             _id: string;
             ability: {
                 attack: keyof Abilities;
-                critMult: number | string;
+                critMult: Formula;
                 critRange: number;
                 damage: keyof Abilities;
                 damageMult: number;
@@ -1920,7 +1935,7 @@ declare global {
         priority: number;
         target: string;
         type?: Nullable<BonusTypes | DamageTypes | string>;
-        value: number | string;
+        value: Formula;
 
         get id(): string;
 
@@ -1930,7 +1945,6 @@ declare global {
             type: BonusTypes | DamageTypes | string;
             operator: '+' | '-';
             priority: number;
-            get subTarget(): string;
             target: BuffTarget = 'skill';
             value: number;
         };
@@ -2260,6 +2274,9 @@ declare global {
                 ): DamageTypeSelector;
             };
         };
+        canvas: {
+            TokenPF: typeof TokenPF;
+        }
         components: {
             ItemAction: typeof ItemAction;
             ItemChange: typeof ItemChange;
@@ -2303,8 +2320,8 @@ declare global {
                     _label: 'Size';
                 };
             };
-            creatureSubtypes: Record<string, string>;
-            creatureTypes: Record<string, string>;
+            creatureSubtypes: CreatureSubTypes;
+            creatureTypes: CreatureTypes;
             abilities: Abilities;
             bonusTypes: { [key in BonusTypes]: string };
             damageResistances: {
@@ -2370,18 +2387,7 @@ declare global {
                 umd: 'Use Magic Device';
             };
             spellDescriptors: SpellDescriptors;
-            spellSchools: {
-                abj: 'Abjuration';
-                con: 'Conjuration';
-                div: 'Divination';
-                enc: 'Enchantment';
-                evo: 'Evocation';
-                ill: 'Illusion';
-                misc: 'Miscellaneous';
-                nec: 'Necromancy';
-                trs: 'Transmutation';
-                uni: 'Universal';
-            };
+            spellSchools: SpellSchools;
             spellSubschools: SpellSubschools;
             weaponGroups: WeaponGroups;
         };
@@ -2466,12 +2472,132 @@ declare global {
     }
     class ScriptCallRegistry extends Collection<ScriptCallCategory> {}
 
+    type CreatureSubtype = keyof CreatureSubtypes;
+    type CreatureSubtypes = {
+        adlet: 'Adlet';
+        aeon: 'Aeon';
+        aether: 'Aether';
+        agathion: 'Agathion';
+        air: 'Air';
+        android: 'Android';
+        angel: 'Angel';
+        aquatic: 'Aquatic';
+        archon: 'Archon';
+        astomoi: 'Astomoi';
+        asura: 'Asura';
+        augmented: 'Augmented';
+        azata: 'Azata';
+        behemoth: 'Behemoth';
+        blight: 'Blight';
+        catfolk: 'Catfolk';
+        changeling: 'Changeling';
+        chaotic: 'Chaotic';
+        clockwork: 'Clockwork';
+        cold: 'Cold';
+        colossus: 'Colossus';
+        daemon: 'Daemon';
+        darkFolk: 'Dark Folk';
+        deepOne: 'Deep One';
+        demodand: 'Demodand';
+        demon: 'Demon';
+        derro: 'Derro';
+        devil: 'Devil';
+        div: 'Div';
+        dwarf: 'Dwarf';
+        earth: 'Earth';
+        elemental: 'Elemental';
+        elf: 'Elf';
+        evil: 'Evil';
+        extraplanar: 'Extraplanar';
+        fire: 'Fire';
+        giant: 'Giant';
+        gnome: 'Gnome';
+        goblinoid: 'Goblinoid';
+        good: 'Good';
+        gray: 'Gray';
+        greatOldOne: 'Great Old One';
+        grippli: 'Grippli';
+        halfling: 'Halfling';
+        herald: 'Herald';
+        hive: 'Hive';
+        human: 'Human';
+        incorporeal: 'Incorporeal';
+        inevitable: 'Inevitable';
+        kaiju: 'Kaiju';
+        kami: 'Kami';
+        kasatha: 'Kasatha';
+        kitsune: 'Kitsune';
+        kyton: 'Kyton';
+        lawful: 'Lawful';
+        leshy: 'Leshy';
+        manasaputra: 'Manasaputra';
+        mortic: 'Mortic';
+        munavri: 'Munavri';
+        mythic: 'Mythic';
+        native: 'Native';
+        nightshade: 'Nightshade';
+        oni: 'Oni';
+        orc: 'Orc';
+        phantom: 'Phantom';
+        protean: 'Protean';
+        psychopomp: 'Psychopomp';
+        qlippoth: 'Qlippoth';
+        rakshasa: 'Rakshasa';
+        ratfolk: 'Ratfolk';
+        reptilian: 'Reptilian';
+        robot: 'Robot';
+        sahkil: 'Sahkil';
+        samsaran: 'Samsaran';
+        sasquatch: 'Sasquatch';
+        shapechanger: 'Shapechanger';
+        skinwalker: 'Skinwalker';
+        spawnOfRovagug: 'Spawn of Rovagug';
+        swarm: 'Swarm';
+        troop: 'Troop';
+        vanara: 'Vanara';
+        vishkanya: 'Vishkanya';
+        water: 'Water';
+        wayang: 'Wayang';
+        wildHunt: 'Wild Hunt';
+    };
+    type CreatureType = keyof CreatureTypes;
+    type CreatureTypes = {
+        aberration: 'Aberration';
+        animal: 'Animal';
+        construct: 'Construct';
+        dragon: 'Dragon';
+        fey: 'Fey';
+        humanoid: 'Humanoid';
+        magicalBeast: 'Magical Beast';
+        monstrousHumanoid: 'Monstrous Humanoid';
+        ooze: 'Ooze';
+        outsider: 'Outsider';
+        plant: 'Plant';
+        undead: 'Undead';
+        vermin: 'Vermin';
+    };
+
     type SavingThrows = {
         fort: 'Fortitude';
         ref: 'Reflex';
         will: 'Will';
     };
 
+    type SpellSchool = keyof typeof pf1.config.spellSchools;
+    type SpellSchools = {
+        abj: 'Abjuration';
+        con: 'Conjuration';
+        div: 'Divination';
+        enc: 'Enchantment';
+        evo: 'Evocation';
+        ill: 'Illusion';
+        misc: 'Miscellaneous';
+        nec: 'Necromancy';
+        trs: 'Transmutation';
+        uni: 'Universal';
+    }
+
+    type SpellSubschool = keyof typeof pf1.config.spellSubschools;
     type SpellSubschools = {
         calling: 'Calling';
         charm: 'Charm';
@@ -2490,6 +2616,7 @@ declare global {
         teleportation: 'Teleportation';
     };
 
+    type WeaponGroup = keyof typeof pf1.config.weaponGroups;
     type WeaponGroups = {
         axes: 'Axes';
         bladesHeavy: 'Blades, Heavy';

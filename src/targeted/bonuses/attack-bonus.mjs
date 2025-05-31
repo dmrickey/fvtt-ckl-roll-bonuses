@@ -1,4 +1,4 @@
-import { SpecificBonuses } from '../../bonuses/_all-specific-bonuses.mjs';
+import { SpecificBonus } from '../../bonuses/_specific-bonus.mjs';
 import { MODULE_NAME } from '../../consts.mjs';
 import { checkboxInput } from '../../handlebars-handlers/bonus-inputs/chekbox-input.mjs';
 import { textInputAndKeyValueSelect } from '../../handlebars-handlers/bonus-inputs/text-input-and-key-value-select.mjs';
@@ -122,6 +122,48 @@ export class AttackBonus extends BaseBonus {
             ? `(${signed(value)})`
             : `(${formula})`;
         return `${part}[${source.name}]`;
+    }
+
+    /**
+     * @overload
+     * @param {ItemPF} item
+     * @param {Formula} formula
+     * @param {object} options
+     * @param {false | undefined} [options.critOnly]
+     * @param {BonusTypes} options.bonusType
+     * @returns {Promise<void>}
+     */
+
+    /**
+     * @overload
+     * @param {ItemPF} item
+     * @param {Formula} formula
+     * @param {object} options
+     * @param {true} options.critOnly
+     * @returns {Promise<void>}
+     */
+
+    /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} item
+     * @param {Formula} formula
+     * @param {object} options
+     * @param {boolean | undefined} [options.critOnly]
+     * @param {BonusTypes | undefined} [options.bonusType]
+     * @returns {Promise<void>}
+     */
+    static async configure(item, formula, { critOnly, bonusType }) {
+        await item.update({
+            system: { flags: { boolean: { [this.key]: true } } },
+            flags: {
+                [MODULE_NAME]: {
+                    [this.key]: (formula || '') + '',
+                    [this.#critOnlyKey]: !!critOnly,
+                    [this.#typeKey]: bonusType,
+                },
+            },
+        });
     }
 
     /**

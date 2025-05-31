@@ -5,41 +5,92 @@ import { MODULE_NAME } from '../../consts.mjs';
 import { stringSelect } from "../../handlebars-handlers/bonus-inputs/string-select.mjs";
 import { intersection, intersects } from "../../util/array-intersects.mjs";
 import { createChangeForTooltip } from '../../util/conditional-helpers.mjs';
-import { getCachedBonuses } from '../../util/get-cached-bonuses.mjs';
-import { itemHasCompendiumId } from '../../util/has-compendium-id.mjs';
+import { getDocFlags } from '../../util/flag-helpers.mjs';
 import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
-import { localize, localizeBonusLabel, localizeBonusTooltip } from "../../util/localize.mjs";
-import { SharedSettings, LanguageSettings } from '../../util/settings.mjs';
-import { uniqueArray } from '../../util/unique-array.mjs';
-import { SpecificBonuses } from '../_all-specific-bonuses.mjs';
-import { greaterWeaponFocusKey } from "../weapon-focus/ids.mjs";
-import { getFocusedWeapons } from '../weapon-focus/weapon-focus.mjs';
-import { WeaponSpecializationSettings, getSpecializedWeapons, weaponSpecializationKey } from "./weapon-specialization.mjs";
+import { localize } from "../../util/localize.mjs";
+import { LanguageSettings } from '../../util/settings.mjs';
+import { SpecificBonus } from '../_specific-bonus.mjs';
+import { WeaponSpecialization, WeaponSpecializationSettings } from './weapon-specialization.mjs';
 
-const key = 'weapon-specialization-greater';
-export { key as greaterWeaponSpecializationKey };
-const compendiumId = 'asmQDyDYTtuXg8b4';
-const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#weapon-specialization';
+export class WeaponSpecializationGreater extends SpecificBonus {
+    /** @inheritdoc @override */
+    static get sourceKey() { return 'weapon-specialization-greater'; }
 
-SpecificBonuses.registerSpecificBonus({ journal, key, parent: weaponSpecializationKey });
+    /** @inheritdoc @override */
+    static get journal() { return WeaponSpecialization.journal; }
 
-/**
- * @param { ActorPF } actor
- * @returns {string[]}
- */
-const getGreaterSpecializedWeapons = (actor) =>
-    uniqueArray(getCachedBonuses(actor, key)
-        .filter(x => x.hasItemBooleanFlag(key))
-        .flatMap(x => x.getFlag(MODULE_NAME, key))
-    );
+    /** @inheritdoc @override */
+    static get parent() { return WeaponSpecialization.key; }
+
+    /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} item
+     * @param {string} weaponType
+     * @returns {Promise<void>}
+     */
+    static async configure(item, weaponType) {
+        await item.update({
+            system: { flags: { boolean: { [this.key]: true } } },
+            flags: { [MODULE_NAME]: { [this.key]: weaponType } },
+        });
+    }
+
+    /** @inheritdoc @override @returns {CreateAndRender} */
+    static get configuration() {
+        return {
+            type: 'render-and-create',
+            compendiumId: 'asmQDyDYTtuXg8b4',
+            isItemMatchFunc: (name) => LanguageSettings.isGreater(name, WeaponSpecializationSettings.name),
+            showInputsFunc: (item, html, isEditable) => {
+                const actor = item.actor;
+                const choices = (actor && isEditable)
+                    ? WeaponSpecialization.getSpecializedWeapons(actor)
+                    : [];
+
+                stringSelect({
+                    choices,
+                    item,
+                    journal: this.journal,
+                    key: this.key,
+                    parent: html
+                }, {
+                    canEdit: isEditable,
+                    inputType: 'specific-bonus',
+                });
+            },
+            options: {
+                defaultFlagValuesFunc: (item) => {
+                    const actor = item?.actor;
+                    if (!actor) return;
+
+                    const choice = WeaponSpecialization.getSpecializedWeapons(actor)[0];
+                    if (choice.length) {
+                        return { [this.key]: choice };
+                    }
+                }
+            }
+        };
+    }
+
+    /**
+     * @param { ActorPF | ItemPF } doc
+     * @param {object} [options]
+     * @param {boolean} [options.onlyActive] Default true - if it should return when the bonus is active
+     * @returns {string[]}
+     */
+    static getGreaterSpecializedWeapons(doc, { onlyActive = true } = { onlyActive: true }) {
+        return getDocFlags(doc, this.key, { onlyActive });
+    }
+}
 
 // register hint on source feat
 registerItemHint((hintcls, _actor, item, _data) => {
-    const has = item.hasItemBooleanFlag(key);
-    const current = item.getFlag(MODULE_NAME, key);
+    const has = WeaponSpecializationGreater.has(item);
+    const current = WeaponSpecializationGreater.getGreaterSpecializedWeapons(item, { onlyActive: false })[0];
     if (has && current) {
-        return hintcls.create(`${current}`, [], { hint: localizeBonusTooltip(key) });
+        return hintcls.create(`${current}`, [], { hint: WeaponSpecializationGreater.tooltip });
     }
 });
 
@@ -52,9 +103,9 @@ registerItemHint((hintcls, actor, item, _data) => {
     const baseTypes = item.system.baseTypes;
     if (!baseTypes?.length) return;
 
-    const specializations = getGreaterSpecializedWeapons(actor);
+    const specializations = WeaponSpecializationGreater.getGreaterSpecializedWeapons(actor);
     if (intersects(baseTypes, specializations)) {
-        return hintcls.create(`+2 ${localize('PF1.Damage')}`, [], { hint: localizeBonusLabel(key) });
+        return hintcls.create(`+2 ${localize('PF1.Damage')}`, [], { hint: WeaponSpecializationGreater.label });
     }
 });
 
@@ -67,9 +118,9 @@ function addWeaponSpecialization({ actor, item, shared }) {
     }
 
     const baseTypes = item.system.baseTypes;
-    const specializations = getGreaterSpecializedWeapons(actor);
+    const specializations = WeaponSpecializationGreater.getGreaterSpecializedWeapons(actor);
     if (intersects(baseTypes, specializations)) {
-        shared.damageBonus.push(`${2}[${localizeBonusLabel(key)}]`);
+        shared.damageBonus.push(`${2}[${WeaponSpecializationGreater.label}]`);
     }
 }
 Hooks.on(customGlobalHooks.actionUseAlterRollData, addWeaponSpecialization);
@@ -85,10 +136,10 @@ export function getGreaterWeaponSpecializaitonConditional(item) {
         return;
     }
 
-    const specializations = getGreaterSpecializedWeapons(actor);
+    const specializations = WeaponSpecializationGreater.getGreaterSpecializedWeapons(actor);
     const overlap = intersection(baseTypes, specializations)
     if (overlap.length) {
-        const source = actor.itemFlags?.boolean[key]?.sources?.find((s) => overlap.includes(s.flags[MODULE_NAME]?.[key]));
+        const source = actor.itemFlags?.boolean[WeaponSpecializationGreater.key]?.sources?.find((s) => overlap.includes(s.flags[MODULE_NAME]?.[WeaponSpecializationGreater.key]));
         return new pf1.components.ItemConditional({
             default: true,
             name: source?.name ?? '',
@@ -112,12 +163,12 @@ function getDamageTooltipSources(item, sources) {
     const actor = item.actor;
     if (!actor) return sources;
 
-    const name = localizeBonusLabel(key);
+    const name = WeaponSpecializationGreater.label;
 
     const baseTypes = item.system.baseTypes;
     if (!baseTypes?.length) return sources;
 
-    const specializations = getGreaterSpecializedWeapons(actor);
+    const specializations = WeaponSpecializationGreater.getGreaterSpecializedWeapons(actor);
     if (intersects(baseTypes, specializations)) {
         const change = createChangeForTooltip({ name, value: 2 });
         return sources.push(change);
@@ -126,80 +177,3 @@ function getDamageTooltipSources(item, sources) {
     return sources;
 };
 Hooks.on(customGlobalHooks.getDamageTooltipSources, getDamageTooltipSources);
-
-Hooks.on('renderItemSheet', (
-    /** @type {ItemSheetPF} */ { actor, isEditable, item },
-    /** @type {[HTMLElement]} */[html],
-    /** @type {unknown} */ _data
-) => {
-    if (SharedSettings.elephantInTheRoom) return;
-    if (!(item instanceof pf1.documents.item.ItemPF)) return;
-
-    const name = item?.name?.toLowerCase() ?? '';
-    const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
-    if (!((name.includes(WeaponSpecializationSettings.weaponSpecialization) && name.includes(LanguageSettings.greater))
-        || item.hasItemBooleanFlag(key)
-        || hasCompendiumId)
-    ) {
-        return;
-    }
-
-    if (isEditable && !item.hasItemBooleanFlag(key)) {
-        item.addItemBooleanFlag(key);
-    }
-
-    /** @type {string[]} */
-    let choices = [];
-    if (isEditable && actor) {
-        const focuses = getFocusedWeapons(actor, greaterWeaponFocusKey);
-        const specs = getSpecializedWeapons(actor);
-        choices = intersection(focuses, specs).sort();
-    }
-
-    stringSelect({
-        choices,
-        item,
-        journal,
-        key,
-        parent: html
-    }, {
-        canEdit: isEditable,
-        inputType: 'specific-bonus',
-    });
-});
-
-/**
- * @param {ItemPF} item
- * @param {object} data
- * @param {{temporary: boolean}} param2
- * @param {string} id
- */
-const onCreate = (item, data, { temporary }, id) => {
-    if (!(item instanceof pf1.documents.item.ItemPF)) return;
-    if (temporary) return;
-
-    const name = item?.name?.toLowerCase() ?? '';
-    const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
-    const hasBonus = item.hasItemBooleanFlag(key);
-
-    let updated = false;
-    if (((name.includes(WeaponSpecializationSettings.weaponSpecialization) && name.includes(LanguageSettings.greater)) || hasCompendiumId) && !hasBonus) {
-        item.updateSource({
-            [`system.flags.boolean.${key}`]: true,
-        });
-        updated = true;
-    }
-
-    if (item.actor) {
-        const focuses = getFocusedWeapons(item.actor, greaterWeaponFocusKey);
-        const specs = getSpecializedWeapons(item.actor);
-        const choice = intersection(focuses, specs)[0] || '';
-
-        if ((hasBonus || updated) && !item.flags[MODULE_NAME]?.[key]) {
-            item.updateSource({
-                [`flags.${MODULE_NAME}.${key}`]: choice,
-            });
-        }
-    }
-};
-Hooks.on('preCreateItem', onCreate);

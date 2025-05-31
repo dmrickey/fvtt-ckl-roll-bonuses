@@ -9,22 +9,38 @@ import { truthiness } from "./truthiness.mjs";
  * Get the matching module flag from the given document
  *
  * @param {BaseDocument | undefined | null} doc - Item or Actor
- * @param {string} key
+ * @param {string} booleanFlag The base boolean flag to check for whether or not the bonus is active
+ * @param {object} [options]
+ * @param {boolean} [options.onlyActive] Default true - if it should return when the bonus is active
+ * @param {string} [options.key] The specific key for the flag to fetch if it differs from the boolean flag
  * @returns {any[]}
  */
-export const getDocFlags = (doc, key) => {
+export const getDocFlags = (
+    doc,
+    booleanFlag,
+    {
+        key,
+        onlyActive = true,
+    } = { onlyActive: true },
+) => {
+    key ||= booleanFlag;
+
     // if doc is an actor
     if (doc instanceof pf1.documents.actor.ActorPF) {
-        const flags = doc.items
-            .filter((item) => item.isActive)
-            .map(i => i.getFlag(MODULE_NAME, key))
+        const items = onlyActive
+            ? doc.itemFlags?.boolean[booleanFlag]?.sources ?? []
+            : doc.items.filter((item) => item.isActive);
+        const flags = items
+            .map((i) => i.getFlag(MODULE_NAME, key))
             .filter(truthiness);
         return flags;
     }
 
     // else read the flag off the item
-    if (doc instanceof pf1.documents.item.ItemPF && doc.isActive) {
-        return [doc.getFlag(MODULE_NAME, key)].filter(truthiness);
+    if (doc instanceof pf1.documents.item.ItemPF) {
+        return !onlyActive || (doc.isActive && doc.hasItemBooleanFlag(booleanFlag))
+            ? [doc.getFlag(MODULE_NAME, key)].filter(truthiness)
+            : [];
     }
 
     return [];
@@ -109,7 +125,7 @@ export class FormulaCacheHelper {
     /**
      * @param {ItemPF} item
      * @param {...string} keys
-     * @returns {Record<string, number | string>}}
+     * @returns {Record<string, Formula>}}
      */
     static getModuleFlagFormula(item, ...keys) {
         ifDebug(() => {

@@ -29,7 +29,7 @@ export class DiceTransformBonus extends BaseBonus {
         LocalHookHandler.registerHandler(localHooks.prepareData, (item, rollData) => {
             const modification = item.getFlag(MODULE_NAME, this.key);
             if (modification) {
-                item[MODULE_NAME][this.key] = Roll.replaceFormulaData(modification, rollData);
+                item[MODULE_NAME][this.key] = Roll.replaceFormulaData(modification, { item: rollData.item, class: rollData.class });
             }
         });
     }
@@ -109,6 +109,26 @@ export class DiceTransformBonus extends BaseBonus {
 
             return simplified.replace(/^(\d+)d(\d+)/, final);
         }
+    }
+
+    /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} item
+     * @param {string} formula
+     * @param {number} [priority]
+     * @returns {Promise<void>}
+     */
+    static async configure(item, formula, priority) {
+        await item.update({
+            system: { flags: { boolean: { [this.key]: true } } },
+            flags: {
+                [MODULE_NAME]: {
+                    [this.key]: formula,
+                    [this.#priorityKey]: priority,
+                },
+            },
+        });
     }
 
     /**

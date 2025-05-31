@@ -1,7 +1,46 @@
+## Roll Bonuses 2.21.0
+
+### New Bonuses
+- **Flanking**
+  - **Flanking** (Global Bonus)
+    - automatically pre-check Flanking in attack dialog - if attack dialog is skipped, flanking is automatically calculated
+    - Includes support for automatically increasing flank bonus with **Outflank** and **Menacing**
+  - **Is Flanking** (Conditional Target)
+    - Activates paired Bonuses when you're flanking your target, can further configure to only activate bonuses while flanking with a specific ally
+  - Supports 3-dimensional flanking
+  - **Flanking Immunity** (Specific Bonus)
+    - to cover abilities like All-Around Vision or creatures like Oozes or Elementals
+  - **Improved Uncanny Dodge** (Specific Bonus)
+    - to provide immunity when flanked by non-rogues. This must be configured on a class feature with a Class Assosiation properly configured.
+  - Multiple Specific Bonuses to further enhance how flanking works
+    - Supports various positional overrides like **Gang Up**, **Improved Outflank** Swashbuckler Mouser's **Underfoot Assault**, **Pack Flanking**, and Ratfolk **Swarming**
+    - **Outflank** and **Improved Outflank** are also supported by **Solo Tactics**
+- **While Adjacent To** (Target)
+  - Activates bonuses while adjacent to a chosen ally
+- **While Sharing Square With** (Target)
+  - Activates bonuses while sharing a square with a chosen ally
+
+### Misc
+- Completely refactored how Specific Bonuses are added to my framework. Unifying and simplifying a lot of duplicated logic.
+- All bonus classes now have a `configure` function so developers and/or advanced macro/script users can more easily programatically configure any bonus
+  - (as always, this isn't necessary for any new item that is simply "enabled" and has no choices to be made (e.g. Fate's Favored has no choices to make and is automatically turned on when added to an actor))
+- type docs improved for developers
+- Expandeded previous change to less aggressively cache formula to Dice Transform Bonus (see 2.20.2 below)
+- Actions with invalid ranges are now always assumed to threaten the target instead of treating its range as 0. Debug UI warning is now printed to console if console's debug setting is disabled.
+- Bonus Picker dialog improvements - searching, sticky headers, and sorted Improved before Greater in Specific Bonus tab
+- Token and Actor inputs - when hovering over the images, now highlight any tokens within the current scene
+
+### Bugfixes
+- `extraChanges` being added to attacks are no longer lost (e.g. the system's crit only attack changes now work as expected once again)
+- Vital Strike once again correctly adds Improved and Greater bonuses as expected
+- Fixed removing Bonuses via the picker in foundry v13 causing an error
+
+---
+
 ## Roll Bonuses 2.20.3
 
 ### Misc
-- Expandeded previous change to less aggressively cache formula to Conditional Bonus
+- Expandeded previous change to less aggressively cache formula to Conditional Bonus (see 2.20.2 below)
 
 ---
 

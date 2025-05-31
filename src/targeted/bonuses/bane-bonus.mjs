@@ -1,11 +1,14 @@
+import { MODULE_NAME } from '../../consts.mjs';
 import { showLabel } from '../../handlebars-handlers/bonus-inputs/show-label.mjs';
 import { traitInput } from '../../handlebars-handlers/trait-input.mjs';
 import { handleBonusesFor } from '../../target-and-bonus-join.mjs';
 import { intersects } from '../../util/array-intersects.mjs';
 import { getBaneLabelForTargetsFromSource } from '../../util/bane-helper.mjs';
+import { currentTargets } from '../../util/get-current-targets.mjs';
 import { getIdsFromItem, getTraitsFromItem } from '../../util/get-id-array-from-flag.mjs';
 import { listFormat } from '../../util/list-format.mjs';
 import { localize, localizeBonusTooltip } from '../../util/localize.mjs';
+import { toArray } from '../../util/to-array.mjs';
 import { BaseBonus } from './_base-bonus.mjs';
 
 export class BaneBonus extends BaseBonus {
@@ -35,7 +38,7 @@ export class BaneBonus extends BaseBonus {
         let isBaneTarget = false;
         const creatureTypes = getIdsFromItem(source, this.creatureTypeKey);
         const creatureSubtypes = getIdsFromItem(source, this.creatureSubtypeKey);
-        const targets = [...game.user.targets];
+        const targets = currentTargets();
         if (targets.length && (creatureTypes.length || creatureSubtypes.length)) {
             isBaneTarget = targets.map(x => x.actor).every((a) =>
                 (!creatureTypes.length || intersects(creatureTypes, a?.race?.system.creatureTypes.total))
@@ -100,6 +103,27 @@ export class BaneBonus extends BaseBonus {
         }
 
         return hints;
+    }
+
+    /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} item
+     * @param {object} options
+     * @param {ArrayOrSelf<CreatureType>} [options.creatureTypes]
+     * @param {ArrayOrSelf<CreatureSubtype>} [options.creatureSubtypes]
+     * @returns {Promise<void>}
+     */
+    static async configure(item, { creatureTypes, creatureSubtypes }) {
+        await item.update({
+            system: { flags: { boolean: { [this.key]: true } } },
+            flags: {
+                [MODULE_NAME]: {
+                    [this.creatureTypeKey]: toArray(creatureTypes),
+                    [this.creatureSubtypeKey]: toArray(creatureSubtypes),
+                },
+            },
+        });
     }
 
     /**

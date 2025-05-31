@@ -1,24 +1,26 @@
 import { MODULE_NAME } from "../../../consts.mjs";
 import { api } from '../../../util/api.mjs';
+import { currentTargets } from '../../../util/get-current-targets.mjs';
 import { getTokenDisplayName } from "../../../util/get-token-display-name.mjs";
 import { truthiness } from "../../../util/truthiness.mjs";
 import { uniqueArray } from "../../../util/unique-array.mjs";
 import { templates } from "../../templates.mjs";
 
 /**
- * @typedef {object} TokenActorSelectorOptions
+ * @typedef {object} TokenSelectorOptions
  * @property {string} key
 */
 
 // @ts-ignore
-/** @extends {DocumentSheet<TokenActorSelectorOptions, ItemPF>} */
+/** @extends {DocumentSheet<TokenSelectorOptions, ItemPF>} */
 export class TokenSelectorApp extends DocumentSheet {
     /** @override */
     static get defaultOptions() {
         const options = super.defaultOptions;
 
+        options.classes = ['token-based-list'];
         options.height = 'auto';
-        options.template = templates.tokenApp;
+        options.template = templates.tokenSelectApp;
 
         return options;
     }
@@ -37,6 +39,7 @@ export class TokenSelectorApp extends DocumentSheet {
             /** @this {HTMLElement} */
             function () {
                 const uuid = this.dataset.tokenUuid || '';
+                /** @type {TokenPF} */
                 const token = fromUuidSync(uuid)?.object;
                 if (!token) return;
 
@@ -62,8 +65,8 @@ export class TokenSelectorApp extends DocumentSheet {
         const getDispositionLabel = (disposition) =>
             game.i18n.localize('TOKEN.DISPOSITION.' + Object.entries(CONST.TOKEN_DISPOSITIONS).find(([ /** @type{string */_, value]) => value === disposition)?.[0] || '');
 
-        const currentTargetUuids = [...game.user.targets].map(x => x.document.uuid);
-        const availableTargets = game.scenes.get(game.user.viewedScene)?.tokens
+        const currentTargetUuids = currentTargets().map(x => x.document.uuid);
+        const availableTargets = game.scenes.viewed?.tokens
             .filter((token) => token.actor && token.object.isVisible && token.actor.id !== item.actor?.id)
             .map((token) => ({
                 id: token.id,

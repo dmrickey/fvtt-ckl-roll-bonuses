@@ -1,0 +1,61 @@
+{{!--
+const templateData = {
+    isGm: {boolean}
+    item: {ItemPF},
+    path: {string},
+    groupedActors: { label: '', actorTargetData: {}[] }[],
+};
+all of the classes are "token-..." because it uses the same styles as the token selector app
+--}}
+<form class="roll-bonuses roll-bonuses-form token-selector pf1">
+    <div class="form-body">
+        {{#if isGm}}
+        <div class="help-text">
+            <i class="help-icon fas fa-info-circle"></i>
+            {{localize "ckl-roll-bonuses.applications.actor.gm-hint"}}
+        </div>
+        {{/if}}
+        {{#each groupedActors}}
+        <h4 class="sticky-header">{{label}}</h4>
+        <div class="grouped-tokens">
+            {{#each actors}}
+            <div
+                class="individual-token"
+                data-tooltip="{{this.name}}"
+                data-token-uuid="{{this.uuid}}"
+            >
+                <input
+                    type="checkbox"
+                    name="{{../../path}}"
+                    {{#if this.checked}}checked{{/if}}
+                    value="{{this.uuid}}"
+                    id="token_{{../../item.id}}_{{this.id}}"
+                >
+                <label for="token_{{../../item.id}}_{{this.id}}">
+                    <div class="token-selector-contents">
+                        <img src="{{this.img}}">
+                        <div>{{this.name}}</div>
+                    </div>
+                </label>
+            </div>
+            {{else}}
+            <div class="no-tokens">
+                {{localize "ckl-roll-bonuses.applications.actor.no-actors"}}
+            </div>
+            {{/each}}
+        </div>
+        {{else}}
+        <div class="no-tokens">
+            {{localize "ckl-roll-bonuses.applications.actor.no-actors"}}
+        </div>
+        {{/each}}
+    </div>
+    <div class="control-group">
+        <button type="reset">
+            <i class="fas fa-rotate-left"></i> {{localize "ckl-roll-bonuses.cancel"}}
+        </button>
+        <button type="submit">
+            <i class="fas fa-save"></i> {{localize "ckl-roll-bonuses.ok"}}
+        </button>
+    </div>
+</form>

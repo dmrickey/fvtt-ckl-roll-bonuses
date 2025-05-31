@@ -75,7 +75,7 @@ export class BaseGlobalBonus {
     static get journal() { throw new Error('Must be overridden'); }
 
     /**
-     * Whether or not this bonus is disabled. Includes actor for cases when checking if it's disabled for a particular actor.
+     * Whether or not this bonus is disabled.
      *
      * @returns {boolean}
      */
@@ -84,15 +84,13 @@ export class BaseGlobalBonus {
     }
 
     /**
-     * Whether or not this bonus is disabled. Includes actor for cases when checking if it's disabled for a particular actor.
+     * Whether or not this bonus is disabled for a particular actor.
      *
      * @param {Nullable<ActorBasePF>} actor
      * @returns {boolean}
      */
     static isDisabledForActor(actor) {
-        if (!(actor instanceof pf1.documents.actor.ActorBasePF)) {
-            return true;
-        }
-        return !!actor.getFlag(MODULE_NAME, this.actorDisabledFlag);
+        return !(actor instanceof pf1.documents.actor.ActorBasePF)
+            || !!actor.getFlag(MODULE_NAME, this.actorDisabledFlag);
     }
 }

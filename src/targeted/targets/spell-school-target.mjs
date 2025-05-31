@@ -1,6 +1,7 @@
 import { MODULE_NAME } from '../../consts.mjs';
 import { traitInput } from '../../handlebars-handlers/trait-input.mjs';
 import { intersects } from '../../util/array-intersects.mjs';
+import { toArray } from '../../util/to-array.mjs';
 import { truthiness } from '../../util/truthiness.mjs';
 import { BaseTarget } from './_base-target.mjs';
 
@@ -27,7 +28,7 @@ export class SpellSchoolTarget extends BaseTarget {
         const groups = source.getFlag(MODULE_NAME, this.key) || [];
         const schools = groups
             .filter(truthiness)
-            .map((/** @type {keyof typeof pf1.config.spellSchools} */ school) => pf1.config.spellSchools[school] || school);
+            .map((/** @type {SpellSchool} */ school) => pf1.config.spellSchools[school] || school);
         return schools;
     }
 
@@ -57,6 +58,24 @@ export class SpellSchoolTarget extends BaseTarget {
         });
 
         return filteredSources;
+    }
+
+    /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} item
+     * @param {ArrayOrSelf<SpellSchool>} schools
+     * @returns {Promise<void>}
+     */
+    static async configure(item, schools) {
+        await item.update({
+            system: { flags: { boolean: { [this.key]: true } } },
+            flags: {
+                [MODULE_NAME]: {
+                    [this.key]: toArray(schools),
+                },
+            },
+        });
     }
 
     /**

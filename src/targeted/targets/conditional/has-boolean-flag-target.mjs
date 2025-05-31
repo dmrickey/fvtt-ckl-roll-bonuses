@@ -99,6 +99,26 @@ export class HasBooleanFlagTarget extends BaseTarget {
     static get isGenericTarget() { return true; }
 
     /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} item
+     * @param {string} flag
+     * @param {TargetOptions} [targetOrSelf]
+     * @returns {Promise<void>}
+     */
+    static async configure(item, flag, targetOrSelf = 'target') {
+        await item.update({
+            system: { flags: { boolean: { [this.key]: true } } },
+            flags: {
+                [MODULE_NAME]: {
+                    [this.key]: flag || '',
+                    [this.#targetKey]: targetOrSelf,
+                },
+            },
+        });
+    }
+
+    /**
      * @override
      * @inheritdoc
      * @param {object} options
@@ -112,7 +132,7 @@ export class HasBooleanFlagTarget extends BaseTarget {
         const choices = difference(
             flags,
             [
-                ...api.SpecificBonuses.allSpecificBonusKeys,
+                ...api.allSpecificBonusTypesKeys,
                 ...api.allBonusTypesKeys,
                 ...api.allGlobalTypesKeys,
                 ...api.allTargetTypesKeys,

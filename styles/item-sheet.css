@@ -72,6 +72,10 @@
     padding-inline-end: 0.25rem;
 }
 
+#ckl-roll-bonus-container .editable-icon-input li:hover {
+    cursor: pointer;
+}
+
 /* copied from apps.less in pf1 repo */
 .pf1.sheet .roll-bonuses .delete-change,
 .pf1.sheet .roll-bonuses .delete-damage {
@@ -175,6 +179,10 @@ form .versatile-performance-selector .form-fields {
     color: var(--pf1-tan);
     margin-block-start: 0.25rem;
     text-align: end;
+}
+
+#ckl-roll-bonus-container .bonuses .form-group.roll-bonuses {
+    border-bottom: 1px solid #37373711;
 }
 
 /* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs .conditionals {

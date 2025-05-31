@@ -1,3 +1,4 @@
+import { MODULE_NAME } from '../../consts.mjs';
 import { textInput } from '../../handlebars-handlers/bonus-inputs/text-input.mjs';
 import { FormulaCacheHelper } from '../../util/flag-helpers.mjs';
 import { localize } from '../../util/localize.mjs';
@@ -61,6 +62,22 @@ export class EffectiveSizeBonus extends BaseBonus {
         if (conditional) {
             return [conditional]
         }
+    }
+
+    /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} item
+     * @param {Formula} formula
+     * @returns {Promise<void>}
+     */
+    static async configure(item, formula) {
+        await item.update({
+            system: { flags: { boolean: { [this.key]: true } } },
+            flags: {
+                [MODULE_NAME]: { [this.key]: (formula || '') + '' },
+            },
+        });
     }
 
     /**

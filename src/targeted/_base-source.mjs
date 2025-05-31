@@ -74,4 +74,14 @@ export class BaseSource {
 
     /** @abstract @returns { string } */
     static get tooltip() { return localizeBonusTooltip(this.sourceKey); }
+
+    /**
+     * @abstract
+     * @param {ItemPF} item
+     * @param {...any} _options
+     * @returns {Promise<void>}
+     */
+    static async configure(item, ..._options) {
+        await item.addItemBooleanFlag(this.key);
+    }
 }

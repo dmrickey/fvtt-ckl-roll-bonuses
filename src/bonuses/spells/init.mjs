@@ -1,5 +1,4 @@
-import './elemental-cl.mjs';
-import './elemental-dc.mjs';
+import './base-elemental-cl-dc.mjs';
 import './elemental-focus.mjs';
 import './spell-focus.mjs';
 import './spell-specialization.mjs';

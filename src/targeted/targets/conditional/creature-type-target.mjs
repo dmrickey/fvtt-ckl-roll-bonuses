@@ -3,6 +3,7 @@ import { traitInput } from '../../../handlebars-handlers/trait-input.mjs';
 import { intersects } from '../../../util/array-intersects.mjs';
 import { currentTargetedActors } from '../../../util/get-current-targets.mjs';
 import { localize } from '../../../util/localize.mjs';
+import { toArray } from '../../../util/to-array.mjs';
 import { Trait } from '../../../util/trait-builder.mjs';
 import { BaseTarget } from '../_base-target.mjs';
 
@@ -68,23 +69,39 @@ export class CreatureTypeTarget extends BaseTarget {
     /**
      * @inheritdoc
      * @override
-     * @param {ItemPF & { actor: ActorPF }} item
-     * @param {ItemPF[]} _sources
+     * @param {ItemPF & { actor: ActorPF }} _item
+     * @param {ItemPF[]} sources
      * @returns {ItemPF[]}
      */
-    static _getSourcesFor(item, _sources) {
-        const { actor } = item;
-
+    static _getSourcesFor(_item, sources) {
         const currentTargets = currentTargetedActors();
         if (!currentTargets.length) return [];
 
-        const flaggedSources = actor.itemFlags?.boolean[this.key]?.sources ?? [];
+        const flaggedSources = sources;
         const bonusSources = flaggedSources.filter((source) => {
             const creatureTypes = this.#getCreatureTypes(source);
             return currentTargets.every((a) => intersects(creatureTypes.total, a.race?.system.creatureTypes.total));
         });
 
         return bonusSources;
+    }
+
+    /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} item
+     * @param {ArrayOrSelf<CreatureType>} creatureTypes
+     * @returns {Promise<void>}
+     */
+    static async configure(item, creatureTypes) {
+        await item.update({
+            system: { flags: { boolean: { [this.key]: true } } },
+            flags: {
+                [MODULE_NAME]: {
+                    [this.key]: toArray(creatureTypes),
+                },
+            },
+        });
     }
 
     /**

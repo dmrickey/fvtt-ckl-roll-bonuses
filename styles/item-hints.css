@@ -21,3 +21,32 @@
 .sheet .koboldworks.item-hints .hint.ckl-lucky-horseshoe {
     transform: rotate(180deg);
 }
+
+.pf1.sheet .koboldworks.item-hints .hint i {
+    vertical-align: middle;
+}
+
+.ckl-extra-fa-magnifying-glass::after {
+    content: "\f002";
+    margin-inline-start: -0.75em;
+}
+
+.ckl-extra-focus {
+    border-radius: 50%;
+    border-style: dotted;
+    border-color: yellow;
+}
+
+.ckl-fa-slash {
+    position: relative;
+}
+.ckl-fa-slash::after {
+    content: "\f715";
+    margin-inline-start: -116%;
+    position: absolute;
+    transform: scale(-0.8, 1);
+}
+
+.pf1.sheet .koboldworks.item-hints .hint i.improved-icon {
+    text-shadow: 0px 0px 1px red, 0px 0px 1px red;
+}

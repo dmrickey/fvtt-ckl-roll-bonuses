@@ -4,6 +4,7 @@ import { traitInput } from '../../handlebars-handlers/trait-input.mjs';
 import { isMelee, isNatural, isNaturalSecondary, isPhysical, isRanged, isSpell, isThrown, isWeapon } from '../../util/action-type-helpers.mjs';
 import { listFormat } from '../../util/list-format.mjs';
 import { localize, localizeBonusLabel } from '../../util/localize.mjs';
+import { toArray } from '../../util/to-array.mjs';
 import { truthiness } from '../../util/truthiness.mjs';
 import { BaseTarget } from './_base-target.mjs';
 
@@ -113,6 +114,26 @@ export class ActionTypeTarget extends BaseTarget {
 
         return filteredSources;
     };
+
+    /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} item
+     * @param {ArrayOrSelf<FilterType>} actionTypes
+     * @param {typeof any | typeof all} [anyOrAll]
+     * @returns {Promise<void>}
+     */
+    static async configure(item, actionTypes, anyOrAll) {
+        await item.update({
+            system: { flags: { boolean: { [this.key]: true } } },
+            flags: {
+                [MODULE_NAME]: {
+                    [this.#typesKey]: toArray(actionTypes),
+                    [this.#radioKey]: anyOrAll || any,
+                },
+            },
+        });
+    }
 
     /**
      * @override

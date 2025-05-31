@@ -53,6 +53,22 @@ export class WeaponBaseTypeOverride extends BaseTargetOverride {
     }
 
     /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} item
+     * @param {string} weaponType
+     * @returns {Promise<void>}
+     */
+    static async configure(item, weaponType) {
+        await item.update({
+            system: { flags: { boolean: { [this.key]: true } } },
+            flags: {
+                [MODULE_NAME]: { [this.key]: weaponType || '' },
+            },
+        });
+    }
+
+    /**
      * @override
      * @inheritdoc
      * @param {object} options

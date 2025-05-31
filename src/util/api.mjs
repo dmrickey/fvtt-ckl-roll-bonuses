@@ -1,30 +1,49 @@
-
 class Api {
+    sources = {};
+
+    bonusTypeMap = {};
     get allBonusTypes() { return Object.values(this.bonusTypeMap); }
     get allBonusTypesKeys() { return Object.keys(this.bonusTypeMap); }
+
+    targetTypeMap = {};
     get allTargetTypes() { return Object.values(this.targetTypeMap); }
     get allTargetTypesKeys() { return Object.keys(this.targetTypeMap); }
+
+    targetOverrideTypeMap = {};
     get allTargetOverrideTypes() { return Object.values(this.targetOverrideTypeMap); }
     get allTargetOverrideTypesKeys() { return Object.keys(this.targetOverrideTypeMap); }
+
+    globalTypeMap = {};
     get allGlobalTypes() { return Object.values(this.globalTypeMap); }
     get allGlobalTypesKeys() { return Object.keys(this.globalTypeMap); }
-    bonusTypeMap = {};
-    globalTypeMap = {};
-    sources = {};
-    targetTypeMap = {};
-    targetOverrideTypeMap = {};
+
+    specificBonusTypeMap = {};
+    get allSpecificBonusTypes() { return Object.values(this.specificBonusTypeMap); }
+    get allSpecificBonusTypesKeys() { return Object.keys(this.specificBonusTypeMap); }
 
     applications = {};
     showApplication = {};
     config = {
         elementalFocus: {},
+        knowledgeSkills: [],
+        rogueClasses: [],
         versatilePerformance: {},
         versatileTraining: {},
     }
 
     inputs = {};
 
-    SpecificBonuses = () => { };
+    /** @deprecated use root level properties instead */
+    SpecificBonuses = () => {
+        foundry.utils.logCompatibilityWarning('api.SpecificBonuses is deprecated. Access specificBonusTypeMap, allSpecificBonusTypes, or allSpecificBonusTypesKeys off of api directly');
+
+        return {
+            allSpecificBonuses: this.specificBonusTypeMap,
+            allSpecificBonusKeys: this.allSpecificBonusTypesKeys,
+
+            registerSpecificBonus: () => console.error('todo'),
+        }
+    };
 
     utils = {
         array: {},
@@ -34,5 +53,5 @@ class Api {
 }
 
 const _api = new Api();
-const api = /** @type {RollBonusesAPI} */ (/** @type {unknown} */ (_api))
+const api = /** @type {RollBonusesAPI} */ (/** @type {unknown} */ (_api));
 export { api };

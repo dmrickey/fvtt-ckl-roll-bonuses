@@ -1,52 +1,172 @@
 import { MODULE_NAME } from '../../consts.mjs';
 import { keyValueSelect } from "../../handlebars-handlers/bonus-inputs/key-value-select.mjs";
 import { intersects } from '../../util/array-intersects.mjs';
-import { getCachedBonuses } from '../../util/get-cached-bonuses.mjs';
-import { itemHasCompendiumId } from '../../util/has-compendium-id.mjs';
-import { LocalHookHandler, customGlobalHooks, localHooks } from "../../util/hooks.mjs";
+import { getIdsFromActor } from '../../util/get-id-array-from-flag.mjs';
+import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize, localizeBonusLabel, localizeBonusTooltip } from "../../util/localize.mjs";
 import { LanguageSettings } from "../../util/settings.mjs";
 import { signed } from "../../util/to-signed-string.mjs";
-import { truthiness } from '../../util/truthiness.mjs';
-import { uniqueArray } from '../../util/unique-array.mjs';
-import { SpecificBonuses } from '../_all-specific-bonuses.mjs';
+import { SpecificBonus } from '../_specific-bonus.mjs';
 
-export const spellFocusKey = 'spell-focus';
-export const greaterSpellFocusKey = 'spell-focus-greater';
-export const mythicSpellFocusKey = 'spell-focus-mythic';
+class BaseSpellFocus extends SpecificBonus {
+    /** @inheritdoc @override */
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#spell-focus'; }
 
-const allKeys = [spellFocusKey, greaterSpellFocusKey, mythicSpellFocusKey];
+    /**
+     * @param { ActorPF } actor
+     * @returns {string[]}
+     */
+    static getFocusedSchools(actor) {
+        return getIdsFromActor(actor, this.key);
+    }
 
-const spellFocusCompendiumId = 'V2zY7BltkpSXwejy';
-const greaterSpellFocusCompendiumId = 'LSykiaxYWzva2boF';
-const mythicSpellFocusCompendiumId = 'TOMEhAeZsgGHrSH6';
-
-const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#spell-focus';
-
-SpecificBonuses.registerSpecificBonus({ journal, key: spellFocusKey });
-SpecificBonuses.registerSpecificBonus({ journal, key: greaterSpellFocusKey, parent: spellFocusKey });
-SpecificBonuses.registerSpecificBonus({ journal, key: mythicSpellFocusKey, parent: spellFocusKey });
-
-class Settings {
-    static get spellFocus() { return LanguageSettings.getTranslation(spellFocusKey); }
-
-    static {
-        LanguageSettings.registerItemNameTranslation(spellFocusKey);
+    /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} item
+     * @param {SpellSchool} school
+     * @returns {Promise<void>}
+     */
+    static async configure(item, school) {
+        await item.update({
+            system: { flags: { boolean: { [this.key]: true } } },
+            flags: { [MODULE_NAME]: { [this.key]: school, } },
+        });
     }
 }
 
-/**
- * @param { ActorPF } actor
- * @param { spellFocusKey | greaterSpellFocusKey | mythicSpellFocusKey } [key]
- * @returns {string[]}
- */
-export const getFocusedSchools = (actor, key = spellFocusKey) =>
-    uniqueArray(getCachedBonuses(actor, key)
-        .filter(x => x.hasItemBooleanFlag(key))
-        .flatMap(x => x.getFlag(MODULE_NAME, key))
-        .filter(truthiness)
-    );
+export class SpellFocus extends BaseSpellFocus {
+    /** @inheritdoc @override */
+    static get sourceKey() { return 'spell-focus'; }
+
+    /** @inheritdoc @override @returns {CreateAndRender} */
+    static get configuration() {
+        return {
+            type: 'render-and-create',
+            compendiumId: 'V2zY7BltkpSXwejy',
+            isItemMatchFunc: (name) => name === Settings.name,
+            showInputsFunc: (item, html, isEditable) => {
+                const { spellSchools } = pf1.config;
+                const current = item.getFlag(MODULE_NAME, this.key);
+                const choices = Object.entries(spellSchools)
+                    .map(([key, label]) => ({ key, label }));
+
+                keyValueSelect({
+                    choices,
+                    current,
+                    item,
+                    journal: this.journal,
+                    key: this.key,
+                    parent: html
+                }, {
+                    canEdit: isEditable,
+                    inputType: 'specific-bonus',
+                });
+            },
+            options: {
+                defaultFlagValuesFunc: (item) => {
+                    const school = item.actor?.itemTypes.spell[0]?.system.school || Object.keys(pf1.config.spellSchools)[0];
+                    return { [this.key]: school, };
+                }
+            }
+        };
+    }
+}
+export class SpellFocusGreater extends BaseSpellFocus {
+    /** @inheritdoc @override */
+    static get sourceKey() { return 'spell-focus-greater'; }
+
+    /** @inheritdoc @override @returns {CreateAndRender} */
+    static get configuration() {
+        return {
+            type: 'render-and-create',
+            compendiumId: 'LSykiaxYWzva2boF',
+            isItemMatchFunc: (name) => name.includes(Settings.name) && name.includes(LanguageSettings.greater),
+            showInputsFunc: (item, html, isEditable) => {
+                const baseFocused = item.actor ? SpellFocus.getFocusedSchools(item.actor) : [];
+                const { spellSchools } = pf1.config;
+                const current = item.getFlag(MODULE_NAME, this.key);
+                const choices = Object.entries(spellSchools)
+                    .filter(([key]) => baseFocused.includes(key))
+                    .map(([key, label]) => ({ key, label }));
+
+                keyValueSelect({
+                    choices,
+                    current,
+                    item,
+                    journal: this.journal,
+                    key: this.key,
+                    parent: html
+                }, {
+                    canEdit: isEditable,
+                    inputType: 'specific-bonus',
+                });
+            },
+            options: {
+                defaultFlagValuesFunc: (item) => {
+                    const school = item.actor && SpellFocus.getFocusedSchools(item.actor)[0];
+                    return { [this.key]: school };
+                }
+            },
+        };
+    }
+
+    /** @inheritdoc @override */
+    static get parent() { return SpellFocus.key; }
+}
+export class SpellFocusMythic extends BaseSpellFocus {
+    /** @inheritdoc @override */
+    static get sourceKey() { return 'spell-focus-mythic'; }
+
+    /** @inheritdoc @override */
+    static get parent() { return SpellFocus.key; }
+
+    /** @inheritdoc @override @returns {CreateAndRender} */
+    static get configuration() {
+        return {
+            type: 'render-and-create',
+            compendiumId: 'TOMEhAeZsgGHrSH6',
+            isItemMatchFunc: (name) => name.includes(Settings.name) && name.includes(LanguageSettings.mythic),
+            showInputsFunc: (item, html, isEditable) => {
+                const baseFocused = item.actor ? SpellFocus.getFocusedSchools(item.actor) : [];
+                const { spellSchools } = pf1.config;
+                const current = item.getFlag(MODULE_NAME, this.key);
+                const choices = Object.entries(spellSchools)
+                    .filter(([key]) => baseFocused.includes(key))
+                    .map(([key, label]) => ({ key, label }));
+
+                keyValueSelect({
+                    choices,
+                    current,
+                    item,
+                    journal: this.journal,
+                    key: this.key,
+                    parent: html
+                }, {
+                    canEdit: isEditable,
+                    inputType: 'specific-bonus',
+                });
+            },
+            options: {
+                defaultFlagValuesFunc: (item) => {
+                    const school = item.actor && SpellFocus.getFocusedSchools(item.actor)[0];
+                    return { [this.key]: school };
+                }
+            },
+        };
+    }
+}
+
+const allKeys = [SpellFocus.key, SpellFocusGreater.key, SpellFocusMythic.key];
+
+class Settings {
+    static get name() { return LanguageSettings.getTranslation(SpellFocus.key); }
+
+    static {
+        LanguageSettings.registerItemNameTranslation(SpellFocus.key);
+    }
+}
 
 // add Info to chat card
 Hooks.on(customGlobalHooks.itemGetTypeChatData, (
@@ -63,16 +183,16 @@ Hooks.on(customGlobalHooks.itemGetTypeChatData, (
         return;
     }
 
-    const isFocused = intersects(item.system.school, getFocusedSchools(actor, spellFocusKey));
-    const isGreater = intersects(item.system.school, getFocusedSchools(actor, greaterSpellFocusKey));
-    const isMythic = intersects(item.system.school, getFocusedSchools(actor, mythicSpellFocusKey));
+    const isFocused = intersects(item.system.school, SpellFocus.getFocusedSchools(actor));
+    const isGreater = intersects(item.system.school, SpellFocusGreater.getFocusedSchools(actor));
+    const isMythic = intersects(item.system.school, SpellFocusMythic.getFocusedSchools(actor));
 
     if (isFocused || isGreater || isMythic) {
         let bonus = 0;
         if (isFocused) bonus += 1;
         if (isGreater) bonus += 1;
         if (isMythic) bonus *= 2;
-        props.push(localize('dc-label-mod', { mod: signed(bonus), label: localizeBonusLabel(spellFocusKey) }));
+        props.push(localize('dc-label-mod', { mod: signed(bonus), label: localizeBonusLabel(SpellFocus.key) }));
     }
 });
 
@@ -82,23 +202,23 @@ registerItemHint((hintcls, actor, item, _data) => {
         return;
     }
 
-    const isFocused = intersects(item.system.school, getFocusedSchools(actor, spellFocusKey));
-    const isGreater = intersects(item.system.school, getFocusedSchools(actor, greaterSpellFocusKey));
-    const isMythic = intersects(item.system.school, getFocusedSchools(actor, mythicSpellFocusKey));
+    const isFocused = intersects(item.system.school, SpellFocus.getFocusedSchools(actor));
+    const isGreater = intersects(item.system.school, SpellFocusGreater.getFocusedSchools(actor));
+    const isMythic = intersects(item.system.school, SpellFocusMythic.getFocusedSchools(actor));
 
     if (isFocused || isGreater || isMythic) {
         const tips = []
         let bonus = 0;
         if (isFocused) {
-            tips.push(localizeBonusLabel(spellFocusKey));
+            tips.push(SpellFocus.label);
             bonus += 1;
         }
         if (isGreater) {
-            tips.push(localizeBonusLabel(greaterSpellFocusKey));
+            tips.push(SpellFocusGreater.label);
             bonus += 1;
         }
         if (isMythic) {
-            tips.push(localizeBonusLabel(mythicSpellFocusKey));
+            tips.push(SpellFocusMythic.label);
             bonus *= 2;
         }
         tips.push(localize('dc-mod', { mod: signed(bonus) }));
@@ -113,7 +233,7 @@ registerItemHint((hintcls, _actor, item, _data) => {
         return;
     }
 
-    const currentSchool = /** @type {keyof typeof pf1.config.spellSchools} */ (item.getFlag(MODULE_NAME, key));
+    const currentSchool = /** @type {SpellSchool} */ (item.getFlag(MODULE_NAME, key));
     if (!currentSchool) {
         return;
     }
@@ -138,11 +258,11 @@ function getDcBonus(action) {
         return 0;
     }
 
-    const hasMythicFocus = intersects(item.system.school, getFocusedSchools(actor, mythicSpellFocusKey));
+    const hasMythicFocus = intersects(item.system.school, SpellFocusMythic.getFocusedSchools(actor));
 
     let bonus = 0;
-    const handleFocus = ( /** @type {spellFocusKey | greaterSpellFocusKey} */key) => {
-        const hasFocus = intersects(item.system.school, getFocusedSchools(actor, key));
+    const handleFocus = ( /** @type {typeof SpellFocus | typeof SpellFocusGreater} */ specific) => {
+        const hasFocus = intersects(item.system.school, specific.getFocusedSchools(actor));
         if (hasFocus) {
             bonus += 1;
 
@@ -152,8 +272,8 @@ function getDcBonus(action) {
         }
     }
 
-    handleFocus(spellFocusKey);
-    handleFocus(greaterSpellFocusKey);
+    handleFocus(SpellFocus);
+    handleFocus(SpellFocusGreater);
 
     return bonus;
 }
@@ -166,131 +286,3 @@ Hooks.on('pf1GetRollData', (
     rollData.dcBonus ||= 0;
     rollData.dcBonus += bonus;
 });
-
-Hooks.on('renderItemSheet', (
-    /** @type {ItemSheetPF} */ { actor, isEditable, item },
-    /** @type {[HTMLElement]} */[html],
-    /** @type {unknown} */ _data
-) => {
-    if (!(item instanceof pf1.documents.item.ItemPF)) return;
-
-    /**
-     * @type {string | undefined}
-     */
-    let key;
-    let { spellSchools } = pf1.config;
-
-    const name = item?.name?.toLowerCase() ?? '';
-    if (
-        item.hasItemBooleanFlag(spellFocusKey)
-        || name.includes(Settings.spellFocus)
-        || itemHasCompendiumId(item, spellFocusCompendiumId)
-    ) {
-        key = spellFocusKey;
-    }
-
-    const isGreater = item.hasItemBooleanFlag(greaterSpellFocusKey)
-        || (name.includes(Settings.spellFocus) && name.includes(LanguageSettings.greater))
-        || itemHasCompendiumId(item, greaterSpellFocusCompendiumId);
-    const isMythic = item.hasItemBooleanFlag(mythicSpellFocusKey)
-        || (name.includes(Settings.spellFocus) && name.includes(LanguageSettings.mythic))
-        || itemHasCompendiumId(item, mythicSpellFocusCompendiumId);
-
-    if (isGreater || isMythic) {
-        key = isGreater ? greaterSpellFocusKey : mythicSpellFocusKey;
-
-        if (actor) {
-            spellSchools = /** @type {any} */ ( /** @type {unknown} */ {});
-            const existingSpellFocuses = getFocusedSchools(actor, spellFocusKey);
-            existingSpellFocuses.forEach((focus) => {
-                // @ts-ignore
-                spellSchools[focus] = pf1.config.spellSchools[focus] || focus;
-            });
-        }
-    }
-
-    if (isEditable && key && !item.hasItemBooleanFlag(key)) {
-        item.addItemBooleanFlag(key);
-    }
-
-    if (!key) {
-        return;
-    }
-
-    const current = item.getFlag(MODULE_NAME, key);
-    const choices = Object.entries(spellSchools)
-        .map(([key, label]) => ({ key, label }));
-
-    keyValueSelect({
-        choices,
-        current,
-        item,
-        journal,
-        key,
-        parent: html
-    }, {
-        canEdit: isEditable,
-        inputType: 'specific-bonus',
-    });
-});
-
-/**
- * @param {ItemPF} item
- * @param {object} data
- * @param {{temporary: boolean}} param2
- * @param {string} id
- */
-const onCreate = (item, data, { temporary }, id) => {
-    if (!(item instanceof pf1.documents.item.ItemPF)) return;
-    if (temporary) return;
-
-    const name = item?.name?.toLowerCase() ?? '';
-
-    const isRegular = name === Settings.spellFocus
-        || itemHasCompendiumId(item, spellFocusCompendiumId);
-    const isGreater = (name.includes(Settings.spellFocus) && name.includes(LanguageSettings.greater))
-        || itemHasCompendiumId(item, greaterSpellFocusCompendiumId);
-    const isMythic = (name.includes(Settings.spellFocus) && name.includes(LanguageSettings.mythic))
-        || itemHasCompendiumId(item, mythicSpellFocusCompendiumId);
-
-    let focused = Object.keys(pf1.config.spellSchools)[0];
-    if (item.actor && (isGreater || isMythic)) {
-        focused = getFocusedSchools(item.actor, spellFocusKey)[0] || '';
-    }
-
-    if (isMythic) {
-        item.updateSource({
-            [`system.flags.boolean.${mythicSpellFocusKey}`]: true,
-        });
-
-        if (focused && !item.flags[MODULE_NAME]?.[mythicSpellFocusKey]) {
-            item.updateSource({
-                [`flags.${MODULE_NAME}.${mythicSpellFocusKey}`]: focused,
-            });
-        }
-    }
-    else if (isGreater) {
-        item.updateSource({
-            [`system.flags.boolean.${greaterSpellFocusKey}`]: true,
-        });
-
-        if (focused && !item.flags[MODULE_NAME]?.[greaterSpellFocusKey]) {
-            item.updateSource({
-                [`flags.${MODULE_NAME}.${greaterSpellFocusKey}`]: focused,
-            });
-        }
-    }
-    else if (isRegular) {
-        item.updateSource({
-            [`system.flags.boolean.${spellFocusKey}`]: true,
-        });
-
-        if (focused && !item.flags[MODULE_NAME]?.[spellFocusKey]) {
-            item.updateSource({
-                [`flags.${MODULE_NAME}.${spellFocusKey}`]: focused,
-            });
-        }
-    }
-
-};
-Hooks.on('preCreateItem', onCreate);

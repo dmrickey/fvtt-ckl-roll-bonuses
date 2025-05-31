@@ -81,8 +81,7 @@ export class ConditionTarget extends BaseTarget {
 
         const currentTargets = currentTargetedActors();
 
-        const flaggedSources = actor.itemFlags?.boolean[this.key]?.sources ?? [];
-        const bonusSources = flaggedSources.filter((source) => {
+        const bonusSources = sources.filter((source) => {
             const condition = source.getFlag(MODULE_NAME, this.key);
             if (!condition) return false;
 
@@ -97,6 +96,26 @@ export class ConditionTarget extends BaseTarget {
         });
 
         return bonusSources;
+    }
+
+    /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} item
+     * @param {keyof Conditions} condition
+     * @param {TargetOptions} [targetOrSelf]
+     * @returns {Promise<void>}
+     */
+    static async configure(item, condition, targetOrSelf = 'target') {
+        await item.update({
+            system: { flags: { boolean: { [this.key]: true } } },
+            flags: {
+                [MODULE_NAME]: {
+                    [this.key]: condition || '',
+                    [this.#targetKey]: targetOrSelf,
+                },
+            },
+        });
     }
 
     /**

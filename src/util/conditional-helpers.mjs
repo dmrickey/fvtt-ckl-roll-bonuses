@@ -47,10 +47,10 @@ export function conditionalModToItemChangeForDamageTooltip(conditional, modifier
 /**
  * @param {object} args
  * @param {string} [args.name]
- * @param {number | string} args.value
+ * @param {Formula} args.value
  * @param {BuffTarget} [args.target]
  * @param {BonusTypes} [args.type]
- * @param {number | string} [args.formula]
+ * @param {Formula} [args.formula]
  * @param {'add' | 'set'} [args.operator]
  * @param {string} [args.id]
  * @param {ItemChangeOptions} [options]
@@ -88,7 +88,7 @@ export function createChange({
 /**
  * @param {object} args
  * @param {string} args.name
- * @param {number | string} args.value
+ * @param {Formula} args.value
  * @param {BuffTarget} [args.target]
  * @param {BonusTypes} [args.type]
  * @return {ItemChange}

@@ -1,9 +1,10 @@
 
-import { SpecificBonuses } from '../bonuses/_all-specific-bonuses.mjs';
+import { SpecificBonus } from '../bonuses/_specific-bonus.mjs';
 import { api } from '../util/api.mjs';
 import { intersection } from '../util/array-intersects.mjs';
 import { handleJournalClick } from '../util/handle-journal-click.mjs';
 import { localize } from '../util/localize.mjs';
+import { LanguageSettings } from '../util/settings.mjs';
 import { templates } from './templates.mjs';
 
 /**
@@ -12,6 +13,8 @@ import { templates } from './templates.mjs';
  * @property {string} label
  * @property {string} tooltip
  * @property {boolean} value
+//  * @property {boolean} [searched]
+//  * @property {boolean} [unSearched]
  */
 
 /**
@@ -44,7 +47,7 @@ export function showBonusPicker({
     const allTargetOverrides = api.allTargetOverrideTypes
         .filter((source) => !source.gmOnlyForPicker || game.user.isGM)
         .sort((a, b) => a.label.localeCompare(b.label));
-    const specifics = Object.values(SpecificBonuses.allSpecificBonuses)
+    const specifics = api.allSpecificBonusTypes
         .sort((a, b) => a.label.localeCompare(b.label));
 
     const currentBonusSources = intersection(
@@ -64,7 +67,7 @@ export function showBonusPicker({
         currentBooleanKeys,
     );
     const currentSpecificBonuses = intersection(
-        SpecificBonuses.allSpecificBonusKeys,
+        api.allSpecificBonusTypesKeys,
         currentBooleanKeys,
     );
 
@@ -103,7 +106,7 @@ export function showBonusPicker({
             value: currentTargetOverrideSources.includes(source.key),
         })),
         specifics: specifics
-            .filter((bonus) => !bonus.parent)
+            .filter((bonus) => !bonus.parent || !specifics.find((parent) => parent.key === bonus.parent))
             .map((bonus, i) => ({
                 journal: bonus.journal,
                 key: bonus.key,
@@ -124,6 +127,18 @@ export function showBonusPicker({
             })),
     };
 
+    data.specifics.forEach(s => s.children?.sort((a, b) => {
+        const aImproved = a.label.toLocaleLowerCase().startsWith(LanguageSettings.improved);
+        const bGreater = b.label.toLocaleLowerCase().startsWith(LanguageSettings.greater);
+        if (aImproved && bGreater) return -1;
+
+        const aGreater = a.label.toLocaleLowerCase().startsWith(LanguageSettings.greater);
+        const bImproved = b.label.toLocaleLowerCase().startsWith(LanguageSettings.improved);
+        if (bImproved && aGreater) return 1;
+
+        return a.label.localeCompare(b.label);
+    }));
+
     const app = new BonusPickerApp(item, data);
     app.render(true);
 }
@@ -132,7 +147,26 @@ api.showApplication.showBonusPicker = showBonusPicker;
 
 /** @ts-ignore */
 /** @extends {DocumentSheet<BonusPickerData, ItemPF>} */
-class BonusPickerApp extends DocumentSheet {
+export class BonusPickerApp extends DocumentSheet {
+
+    #searchFilter;
+
+    /** @type {Record<string, PickerItemData>} */
+    #allBonuses = {};
+
+    /**
+     *
+     * @param {string} key
+     */
+    findData(key) {
+        return this.data.bonuses.find(x => x.key === key)
+            || this.data.targets.find(x => x.key === key)
+            || this.data.conditionalTargets.find(x => x.key === key)
+            || this.data.targetOverrides.find(x => x.key === key)
+            || this.data.specifics.find(x => x.key === key)
+
+    }
+
     /**
      * @param {ItemPF} item
      * @param {BonusPickerData} data
@@ -140,7 +174,52 @@ class BonusPickerApp extends DocumentSheet {
     constructor(item, data) {
         super(item, data);
         this.data = data;
+
+        data.bonuses.forEach(x => this.#allBonuses[x.key] = x);
+        data.targets.forEach(x => this.#allBonuses[x.key] = x);
+        data.conditionalTargets.forEach(x => this.#allBonuses[x.key] = x);
+        data.targetOverrides.forEach(x => this.#allBonuses[x.key] = x);
+        data.specifics.forEach((s) => {
+            this.#allBonuses[s.key] = s;
+            (s.children || []).forEach(x => this.#allBonuses[x.key] = x);
+        });
+
+        this.#searchFilter = new SearchFilter({
+            inputSelector: 'input[name="filter"]',
+            contentSelector: '.form-body',
+            callback: (
+                _event,
+                query,
+                rgx,
+                html,
+            ) => {
+                if (!html) return;
+
+                /** @type {NodeListOf<HTMLElement>} */
+                const elems = html.querySelectorAll('.checkbox-label[data-key]');
+                for (let elem of elems) {
+                    if (!query) {
+                        elem.classList.remove("searched");
+                        elem.classList.remove("un-searched");
+                        continue;
+                    }
+
+                    const key = elem.dataset.key;
+                    if (!key) continue;
+                    const bonus = this.#allBonuses[key];
+                    if (!bonus) continue;
+
+                    const nameMatch = () => rgx.test(SearchFilter.cleanQuery(bonus.label));
+                    const tipMatch = () => rgx.test(SearchFilter.cleanQuery(bonus.tooltip));
+
+                    const match = nameMatch() || tipMatch();
+                    elem.classList.toggle("searched", match);
+                    elem.classList.toggle("un-searched", !match);
+                }
+            },
+        });
     }
+
     /** @override */
     static get defaultOptions() {
         const options = super.defaultOptions;
@@ -172,6 +251,8 @@ class BonusPickerApp extends DocumentSheet {
     activateListeners(html) {
         super.activateListeners(html);
         html.find('button[type=reset]')?.click(this.close.bind(this));
+        // @ts-ignore
+        this.#searchFilter.bind(this.element[0]);
 
         const buttons = html.find('[data-journal]');
         buttons?.on(
@@ -202,6 +283,12 @@ class BonusPickerApp extends DocumentSheet {
                 /** @type {HTMLElement} */
                 const targetedBody = event.target.parentElement.parentElement.querySelector('.targeted-body');
                 targetedBody.classList.add('active');
+                /** @type {HTMLElement} */
+                const specificHint = event.target.parentElement.parentElement.querySelector('.tab-hint.help-text.specific');
+                specificHint.classList.remove('active');
+                /** @type {HTMLElement} */
+                const targetedHint = event.target.parentElement.parentElement.querySelector('.tab-hint.help-text.targeted');
+                targetedHint.classList.add('active');
                 refreshApp();
             }
         )
@@ -218,6 +305,12 @@ class BonusPickerApp extends DocumentSheet {
                 /** @type {HTMLElement} */
                 const targetedBody = event.target.parentElement.parentElement.querySelector('.targeted-body');
                 targetedBody.classList.remove('active');
+                /** @type {HTMLElement} */
+                const specificHint = event.target.parentElement.parentElement.querySelector('.tab-hint.help-text.specific');
+                specificHint.classList.add('active');
+                /** @type {HTMLElement} */
+                const targetedHint = event.target.parentElement.parentElement.querySelector('.tab-hint.help-text.targeted');
+                targetedHint.classList.remove('active');
                 refreshApp();
             }
         )
@@ -230,28 +323,38 @@ class BonusPickerApp extends DocumentSheet {
      */
     _getSubmitData(updateData) {
         const formData = super._getSubmitData(updateData);
+        delete formData.filter;
 
-        /** @type {Partial<ItemPF>} */ // @ts-ignore
+        /** @type {RecursivePartial<ItemPF> | null} */
         let updateObj = null;
         Object.entries(formData).forEach(([key, value]) => {
-            // @ts-ignore
-            const /** @type {[keyof BonusPickerData, string]} */[prop, index, childIndex] = key.split('.');
 
-            /** @type {PickerItemData} */ // @ts-ignore
-            const bonusData = this.data[prop][index].children?.[childIndex] || this.data[prop][index];
+            const [prop, index, childIndex] =  /** @type {[keyof BonusPickerData, number, number]} */ (key.split('.'));
+
+            /** @type {PickerItemData} */
+            const bonusData =
+                'children' in this.data[prop][index] && this.data[prop][index].children?.[childIndex] || this.data[prop][index];
 
             if (bonusData.value !== value) {
-                updateObj ||= {
-                    //@ts-ignore
-                    system: { flags: { boolean: {}, dictionary: {} } },
-                };
+                if (!updateObj?.system?.flags?.boolean) {
+                    updateObj = {};
+                    updateObj.system = {};
+                    updateObj.system.flags = {};
+                    updateObj.system.flags.boolean = {};
+                }
 
                 if (this.sources.includes(prop)
-                    || (prop === 'specifics' && SpecificBonuses.allSpecificBonusKeys.includes(bonusData.key))
+                    || (prop === 'specifics' && api.allSpecificBonusTypesKeys.includes(bonusData.key))
                 ) {
                     // set to true if value is true, delete if value is false
-                    // @ts-ignore
-                    updateObj.system.flags.boolean[`${(value ? '' : '-=')}${bonusData.key}`] = true;
+                    if (value) {
+                        updateObj.system.flags.boolean[bonusData.key] = true;
+                    }
+                    else {
+                        const _key = `-=${bonusData.key}`;
+                        const _value = /** @type {ItemPF['system']['flags']['boolean'][string]} */ (/** @type {unknown} */  (null));
+                        updateObj.system.flags.boolean[_key] = _value;
+                    }
                 }
                 else {
                     throw new Error("should never happen");

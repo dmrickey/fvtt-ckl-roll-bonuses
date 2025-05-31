@@ -20,6 +20,10 @@ export const addCheckToAttackDialog = (
         isConditional = false,
     } = {},
 ) => {
+    if (!(dialog instanceof pf1.applications.AttackDialog)) {
+        return;
+    }
+
     if (label === undefined) {
         label = localize(key);
     }

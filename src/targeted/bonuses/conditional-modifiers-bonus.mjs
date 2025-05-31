@@ -156,6 +156,22 @@ export class ConditionalModifiersBonus extends BaseBonus {
     }
 
     /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} item
+     * @param {ItemConditionalSourceData[]} conditionals
+     * @returns {Promise<void>}
+     */
+    static async configure(item, conditionals) {
+        await item.update({
+            system: { flags: { boolean: { [this.key]: true } } },
+            flags: {
+                [MODULE_NAME]: { [this.key]: conditionals },
+            },
+        });
+    }
+
+    /**
      * @override
      * @param {object} options
      * @param {ActorPF | null} options.actor

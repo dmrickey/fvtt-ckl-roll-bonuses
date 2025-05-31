@@ -121,7 +121,7 @@ export class LocalHookHandler {
     /**
      * @overload
      * @param {typeof localHooks.patchChangeValue} hook
-     * @param {(value: number | string, type: BonusTypes, actor: Nullable<ActorPF>) => number | string} func
+     * @param {(value: Formula, type: BonusTypes, actor: Nullable<ActorPF>) => Formula} func
      * @returns {void}
      */
 
@@ -195,7 +195,7 @@ export class LocalHookHandler {
     /**
      * @overload
      * @param {typeof localHooks.itemActionCritRangeWrapper} hook
-     * @param {number | string} seed
+     * @param {Formula} seed
      * @param {ItemAction} action
      * @returns {number}
      */
@@ -203,10 +203,10 @@ export class LocalHookHandler {
     /**
      * @overload
      * @param {typeof localHooks.patchChangeValue} hook
-     * @param {number | string} seed
+     * @param {Formula} seed
      * @param {BonusTypes} type
      * @param {Nullable<ActorPF>} actor
-     * @returns {number | string}
+     * @returns {Formula}
      */
 
     /**

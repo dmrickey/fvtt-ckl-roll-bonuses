@@ -1,5 +1,6 @@
 import { MODULE_NAME } from "../../../consts.mjs";
 import { showItemInput } from "../../../handlebars-handlers/targeted/targets/item-input.mjs";
+import { toArray } from '../../../util/to-array.mjs';
 import { truthiness } from "../../../util/truthiness.mjs";
 import { BaseTarget } from "../_base-target.mjs";
 
@@ -70,6 +71,24 @@ export class SpecificItemTarget extends BaseTarget {
             return ids.includes(item.id) || !!item.links.parent && ids.includes(item.links.parent.id);
         });
         return bonusSources;
+    }
+
+    /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} item
+     * @param {ArrayOrSelf<string>} ids - Ids, not uuids
+     * @returns {Promise<void>}
+     */
+    static async configure(item, ids) {
+        await item.update({
+            system: { flags: { boolean: { [this.key]: true } } },
+            flags: {
+                [MODULE_NAME]: {
+                    [this.key]: toArray(ids),
+                },
+            },
+        });
     }
 
     /**

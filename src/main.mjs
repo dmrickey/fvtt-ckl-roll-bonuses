@@ -153,6 +153,17 @@ function prepareItemData(wrapped, final) {
     const rollData = item.getRollData();
     FormulaCacheHelper.cacheFormulas(item, rollData);
     LocalHookHandler.fireHookNoReturnSync(localHooks.prepareData, item, rollData);
+
+    // cache range so it can be used within the getRollData hook
+    item.actions.forEach((action) => {
+        const rd = action.getRollData();
+        action[MODULE_NAME] ||= {};
+        action[MODULE_NAME].range ||= {};
+        action[MODULE_NAME].range.min = action.getRange({ type: 'min', rollData: rd });
+        action[MODULE_NAME].range.max = action.getRange({ type: 'max', rollData: rd });
+        action[MODULE_NAME].range.single = action.getRange({ type: 'single', rollData: rd });
+    })
+
     ifDebug(() => {
         if (!foundry.utils.objectsEqual(
             { bonuses: [], targets: [] },
@@ -442,7 +453,7 @@ function onGetRollData(thing, rollData) {
 }
 
 /**
- * @typedef {{data: RollData?, extraParts: unknown[], bonus:unknown, primary: boolean}} RollAttackArgs
+ * @typedef {{data: RollData?, extraParts: unknown[], bonus:unknown, primary: boolean, extraChanges: ItemChange[]}} RollAttackArgs
  */ /**
 * Place an attack roll using an item (weapon, feat, spell, or equipment)
 *
@@ -451,14 +462,21 @@ function onGetRollData(thing, rollData) {
 * @param {object} [args]
 * @param {RollData?} [args.data]
 * @param {unknown[]} [args.extraParts]
+* @param {ItemChange[]} [args.extraChanges] - Additional changes
 * @param {unknown} [args.bonus]
 * @param {boolean} [args.primary]
 */
-async function itemActionRollAttack(
+async function itemAction_RollAttack(
     wrapped,
-    { data = null, extraParts = [], bonus = null, primary = true } = {}
+    { data = null, extraParts = [], extraChanges = [], bonus = null, primary = true } = {}
 ) {
-    const roll = await wrapped({ data, extraParts, bonus, primary });
+    data ||= null;
+    extraParts ||= [];
+    extraChanges ||= [];
+    bonus ||= null;
+    if (primary !== false) primary = true;
+
+    const roll = await wrapped({ data, extraParts, bonus, primary, extraChanges });
 
     const formula = roll.formula;
     const options = roll.options;
@@ -637,7 +655,7 @@ Hooks.once('init', () => {
     libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.damageSources', itemAction_damageSources, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.enhancementBonus', itemActionEnhancementBonus, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.getLabels', itemAction_getLabels, libWrapper.WRAPPER);
-    libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.rollAttack', itemActionRollAttack, libWrapper.WRAPPER);
+    libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.rollAttack', itemAction_RollAttack, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.components.ItemAction.prototype.rollDamage', itemActionRollDamage, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.dice.d20Roll', async_d20RollWrapper, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorPF.prototype.getSkillInfo', actorGetSkillInfo, libWrapper.WRAPPER);

@@ -170,6 +170,27 @@ export class DamageBonus extends BaseBonus {
     }
 
     /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} item
+     * @param {object} options
+     * @param {{formula: string, type: BonusTypes}[]} [options.changes]
+     * @param {DamageInputModel[]} [options.damages]
+     * @returns {Promise<void>}
+     */
+    static async configure(item, { changes, damages }) {
+        await item.update({
+            system: { flags: { boolean: { [this.key]: true } } },
+            flags: {
+                [MODULE_NAME]: {
+                    [this.key]: damages || [],
+                    [this.#changeKey]: changes || [],
+                },
+            },
+        });
+    }
+
+    /**
      * @override
      * @inheritdoc
      * @param {object} options

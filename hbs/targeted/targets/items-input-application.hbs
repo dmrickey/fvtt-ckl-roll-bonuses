@@ -4,13 +4,14 @@
         {{this.description}}
     </div>
     <div class="search-container">
+        <i class="fas fa-magnifying-glass"></i>
         <input name="filter" type="search" />
     </div>
     <div class="form-body">
         <div class="all-entities">
             {{#each groupedItems}}
             <section class="type-section">
-                <h4 class="type-header" data-type="{{@key}}">{{@key}}</h4>
+                <h4 class="type-header sticky-header" data-type="{{@key}}">{{@key}}</h4>
                 <div class="entities">
                     {{#each this}}
                     <div

@@ -48,9 +48,10 @@
 - [Skills](#skills)
 - [in pf1 V10](#in-pf1-v10)
 - [Not Possible](#not-possible)
-- [Range/Positional ideas](#rangepositional-ideas)
 - [Other Ideas](#other-ideas)
 - [vnext](#vnext)
+    - [Specific Bonuses](#specific-bonuses)
+    - [Idea](#idea)
 
 # TODO
 - Figure out a way to support multiple target groups on a single Item (so I can add `Favored Enemy (Human) +4` and `Favored Enemy (goblin) +2` on a single Item)
@@ -188,16 +189,6 @@
 - Custom changes that effect only specific targets :(
   - changes are generated and applied too early and too broadly in the system prep. I can either create a change that applies to everything (pointless) or I can create a specific change that exists for the specified target, but it's created too late to both be reduced to the best bonus type and actually be added to the roll
 
-# Range/Positional ideas
-- Flank
-  - Also includes a "cannot be flanked" flag that would go on an Item to signify when an actor can't be flanked
-  - has to do with melee
-  - Needs a "Target" so that I can give out extra bonuses when flanking
-    - Dirty Fighter Trait
-    - Outflank (would need extra info about flank target) 
-- IsAdjacent
-- IsSharingSquare
-
 # Other Ideas
 - Add Concealment
   - This would allow me to automatically add effect notes for each roll to automatically roll for concealment
@@ -210,15 +201,15 @@
       - or when targeted by any enemy except specified enemy
 - Initial popup with brief tutorial/explanation 
   - Specifically include "automatic" things like Global Bonuses
-
-# vnext
+- Alignment Target
+  - Refactor so that it's an array
+  - allow neutral to be chosen
 - Create new "Roll Bonuses" section for attack dialog inputs
 - Add "Fortune configuration app" to help with configuring specific fortune abilities
 - Targeting
   - Add a configuration error if "this target is not configured"
 - Roll Bonuses button in header that goes "show me a list of items with bonuses". This can also have a button to auto-populate any that it thinks should have bonuses added
   - See example [https://gitlab.com/mxzf/adventure-uninstaller/-/blob/master/adventure-uninstaller.mjs](here)
-
 - Add "Weapon Focus" hint hook so Weapon Focus, Weapon Specialization, and Martial Focus can all use the sword icon hint
 - Add "ignore me" boolean flag to turn off auto configuration (stronger "hammer" for EitR-type stuff where it incorrectly makes assumptions)
   - Or possibly just add a flag that says "this has already been configured" and then don't do it again
@@ -228,10 +219,22 @@
     - IAF - `-1` untyped ACP (Armor)
   - CL
   - DC
+
+# vnext
 - Add Fortune/Misfortune checkboxes to attack/roll dialogs
 
-- Add `getSourceFlag` to api so mod authors don't have to save my mod id
-  - e.g. no `source.getFlag("ckl-roll-bonuses", this.key)`
-  - but instead `getSourceFlag(source, this.key)`
-  - Add traits and 'get ids' to API
-  - remove `Record<any, any>` from API type definition and make sure all individual references are imported
+- Remove `greater`/`improved`/`mythic` getters from LanguageSettings and use the new `is` methods
+
+### Specific Bonuses
+- ~~Migrate all keys to start with `specific_`~~ Do this later after SBC has a chance to update to only use the API
+  - update all journal entries to indicate what the key is
+- Add "get item hint" function to base class
+
+### Idea
+- turn `LanguageSettings` into a base class that other classes extend (or create a base class that has shared logic)
+- **System Changes Bonus**
+  - Define system changes as a bonus - mirror the inputs for Changes and then when the targets are correct, add those changes into the actor's prepped data (may possibly need to remove them if the targeting criteria is somehow lost without data prep triggering -- need to investigate)
+    - These would essentially work only with Conditional Targets (and self/all)
+    - This would allow for things like "+4 intimidate when targeting a creature type"
+      - or "+4 initiative when in a city (using Fair's target)"
+      - or possibly literally any change ¯\_(ツ)_/¯

@@ -2,7 +2,7 @@ import { PositionalHelper } from '../util/positional-helper.mjs';
 import { currentTargets } from '../util/get-current-targets.mjs';
 import { customGlobalHooks } from '../util/hooks.mjs'
 import { BaseGlobalBonus } from './base-global-bonus.mjs';
-import * as PreciseShot from './specific/bonuses/precise-shot-bonus.mjs';
+import { PreciseShot } from './specific/bonuses/precise-shot-bonus.mjs';
 
 /** @type {ActionType[]} */
 const rangedTypes = ['rwak', 'rcman', 'rsak', 'twak'];
@@ -28,7 +28,7 @@ export class ShootIntoMeleeGlobalBonus extends BaseGlobalBonus {
      * @override
      */
     static registerBonuses() {
-        PreciseShot.init();
+        PreciseShot.register();
     }
 
     /**
@@ -36,10 +36,10 @@ export class ShootIntoMeleeGlobalBonus extends BaseGlobalBonus {
      */
     static addPenalty(actionUse) {
         const { action, actor, shared } = actionUse;
-        if (ShootIntoMeleeGlobalBonus.isDisabled() || ShootIntoMeleeGlobalBonus.isDisabledForActor(actor)) {
+        if (this.isDisabled() || this.isDisabledForActor(actor)) {
             return;
         }
-        if (!actor || actor.hasItemBooleanFlag(PreciseShot.key)) {
+        if (!actor || PreciseShot.has(actor)) {
             return;
         }
 
@@ -56,17 +56,17 @@ export class ShootIntoMeleeGlobalBonus extends BaseGlobalBonus {
         }
 
         const penalties = targets.map((target) => {
-            const penalty = new PositionalHelper(actorToken, target);
-            return penalty.getShootingIntoMeleePenalty();
+            const helper = new PositionalHelper(actorToken, target);
+            return helper.getShootingIntoMeleePenalty();
         });
 
         const penalty = Math.max(...penalties);
         if (penalty) {
-            shared.attackBonus.push(`-${penalty}[${ShootIntoMeleeGlobalBonus.attackLabel}]`);
+            shared.attackBonus.push(`-${penalty}[${this.attackLabel}]`);
         }
     }
 
     static {
-        Hooks.on(customGlobalHooks.actionUseAlterRollData, ShootIntoMeleeGlobalBonus.addPenalty);
+        Hooks.on(customGlobalHooks.actionUseAlterRollData, this.addPenalty.bind(this));
     }
 }

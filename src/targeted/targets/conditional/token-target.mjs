@@ -1,10 +1,12 @@
 import { MODULE_NAME } from "../../../consts.mjs";
 import { checkboxInput } from '../../../handlebars-handlers/bonus-inputs/chekbox-input.mjs';
 import { showTokenInput } from "../../../handlebars-handlers/targeted/targets/token-input.mjs";
-import { TokenSelectorApp } from "../../../handlebars-handlers/targeted/targets/token-selector-app.mjs";
+import { TokenSelectorApp } from "../../../handlebars-handlers/targeted/targets/token-select-app.mjs";
 import { difference, intersection, intersects } from "../../../util/array-intersects.mjs";
+import { currentTargets } from '../../../util/get-current-targets.mjs';
 import { localize } from '../../../util/localize.mjs';
 import { registerSetting } from "../../../util/settings.mjs";
+import { toArray } from '../../../util/to-array.mjs';
 import { truthiness } from "../../../util/truthiness.mjs";
 import { BaseTarget } from "../_base-target.mjs";
 
@@ -25,7 +27,7 @@ class Settings {
 
 export class TokenTarget extends BaseTarget {
 
-    static get #currentTargetUuids() { return [...game.user.targets].map(x => x.document?.uuid).filter(truthiness); }
+    static get #currentTargetUuids() { return currentTargets().map(x => x.document?.uuid).filter(truthiness); }
 
     /**
      * @override
@@ -105,6 +107,27 @@ export class TokenTarget extends BaseTarget {
     static get isGenericTarget() { return true; }
 
     /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} item
+     * @param {object} options
+     * @param {boolean} [options.inverted]
+     * @param {ArrayOrSelf<string>} [options.tokenUuids]
+     * @returns {Promise<void>}
+     */
+    static async configure(item, { inverted, tokenUuids }) {
+        await item.update({
+            system: { flags: { boolean: { [this.key]: true } } },
+            flags: {
+                [MODULE_NAME]: {
+                    [this.#inversionKey]: !!inverted,
+                    [this.key]: toArray(tokenUuids),
+                },
+            },
+        });
+    }
+
+    /**
      * @override
      * @inheritdoc
      * @param {object} options
@@ -153,7 +176,7 @@ export class TokenTarget extends BaseTarget {
      */
     static showTargetEditor(item) {
         if (Settings.shouldAutoTarget) {
-            const currentTargetUuids = [...game.user.targets].map(x => x.document.uuid);
+            const currentTargetUuids = currentTargets().map(x => x.document.uuid);
             if (currentTargetUuids.length) {
                 item.setFlag(MODULE_NAME, this.key, currentTargetUuids);
                 return;

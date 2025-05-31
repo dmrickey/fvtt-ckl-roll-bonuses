@@ -1,62 +1,197 @@
-import { MODULE_NAME } from '../consts.mjs';
-import { checkboxInput } from '../handlebars-handlers/bonus-inputs/chekbox-input.mjs';
-import { showEnabledLabel } from '../handlebars-handlers/enabled-label.mjs';
-import { isWeapon } from '../util/action-type-helpers.mjs';
-import { api } from '../util/api.mjs';
-import { addCheckToAttackDialog, getFormData } from '../util/attack-dialog-helper.mjs';
-import { getCachedBonuses } from '../util/get-cached-bonuses.mjs';
-import { itemHasCompendiumId } from '../util/has-compendium-id.mjs';
-import { LocalHookHandler, localHooks } from '../util/hooks.mjs';
-import { registerItemHint } from '../util/item-hints.mjs';
-import { localize, localizeBonusLabel, localizeBonusTooltip } from '../util/localize.mjs';
-import { LanguageSettings } from '../util/settings.mjs';
-import { truthiness } from '../util/truthiness.mjs';
-import { SpecificBonuses } from './_all-specific-bonuses.mjs';
-import { devastatingStrikeImprovedKey, devastatingStrikeKey } from './devastating-strike.mjs';
+import { MODULE_NAME } from '../../consts.mjs';
+import { checkboxInput } from '../../handlebars-handlers/bonus-inputs/chekbox-input.mjs';
+import { showEnabledLabel } from '../../handlebars-handlers/enabled-label.mjs';
+import { isWeapon } from '../../util/action-type-helpers.mjs';
+import { api } from '../../util/api.mjs';
+import { addCheckToAttackDialog, getFormData } from '../../util/attack-dialog-helper.mjs';
+import { getCachedBonuses } from '../../util/get-cached-bonuses.mjs';
+import { LocalHookHandler, localHooks } from '../../util/hooks.mjs';
+import { registerItemHint } from '../../util/item-hints.mjs';
+import { localize, localizeBonusLabel, localizeBonusTooltip } from '../../util/localize.mjs';
+import { LanguageSettings } from '../../util/settings.mjs';
+import { truthiness } from '../../util/truthiness.mjs';
+import { SpecificBonus } from '../_specific-bonus.mjs';
+import { DevastatingStrike, DevastatingStrikeImproved } from './devastating-strike.mjs';
 
-
-const vitalStrike = 'vital-strike';
-const vitalStrikeImproved = 'vital-strike-improved';
-const vitalStrikeGreater = 'vital-strike-greater';
-const vitalStrikeMythic = 'vital-strike-mythic';
-
-const vitalStrikeCompendiumId = '26k1Gi7t5BoqxhIj';
-const vitalStrikeImprovedCompendiumId = 'DorPGQ2mifJbMKH8';
-const vitalStrikeGreaterCompendiumId = 'zKNk7a4XxXsygJ67';
-const vitalStrikeMythicCompendiumId = 'rYLOl3zfFt3by3CE';
+/**
+ * @typedef {Object} VSHintIcon
+ * @property {string} icon
+ * @property {''} multiplier
+ *
+ * @typedef {object} VSHintMultiplier
+ * @property {undefined} [icon]
+ * @property {string} multiplier
+ *
+ * @typedef {VSHintIcon | VSHintMultiplier} VSHintInfo
+ */
 
 const vitalStrikeEnabled = 'vital-strike-enabled';
 
-const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#vital-strike';
+class VitalBase extends SpecificBonus {
 
-SpecificBonuses.registerSpecificBonus({ journal, key: vitalStrike });
-SpecificBonuses.registerSpecificBonus({ journal, key: vitalStrikeImproved, parent: vitalStrike, tooltipKey: vitalStrike });
-SpecificBonuses.registerSpecificBonus({ journal, key: vitalStrikeGreater, parent: vitalStrike, tooltipKey: vitalStrike });
-SpecificBonuses.registerSpecificBonus({ journal, key: vitalStrikeMythic, parent: vitalStrike });
+    /** @inheritdoc @override */
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#vital-strike'; }
 
-const hintInfo = /** @type {const} */ ({
-    [vitalStrike]: { label: '×2', tooltipKey: vitalStrike, icon: undefined },
-    [vitalStrikeImproved]: { label: '×3', tooltipKey: vitalStrike, icon: undefined },
-    [vitalStrikeGreater]: { label: '×4', tooltipKey: vitalStrike, icon: undefined },
-    [vitalStrikeMythic]: { label: '', tooltipKey: vitalStrikeMythic, icon: 'ra ra-croc-sword' },
-});
-const allKeys = /** @type {const} */ ([
-    vitalStrike,
-    vitalStrikeImproved,
-    vitalStrikeGreater,
-    vitalStrikeMythic,
+    /** @type {ShowInputsFunc} */
+    static showVitalStrikeInputs(item, html, isEditable) {
+        showEnabledLabel({
+            item,
+            journal: this.journal,
+            key: this.key,
+            parent: html,
+            tooltip: this.tooltip,
+        }, {
+            canEdit: isEditable,
+            inputType: 'specific-bonus',
+        });
+
+        checkboxInput({
+            item,
+            journal: this.journal,
+            key: vitalStrikeEnabled,
+            parent: html,
+            tooltip: localizeBonusTooltip(vitalStrikeEnabled),
+        }, {
+            canEdit: isEditable,
+            inputType: 'specific-bonus',
+            isSubLabel: true,
+        });
+    }
+
+    /**
+     * @param {ItemPF} item
+     * @returns {boolean}
+     */
+    static enabledByDefault(item) {
+        return item.getFlag(MODULE_NAME, vitalStrikeEnabled);
+    }
+}
+
+export class VitalStrike extends VitalBase {
+    /** @inheritdoc @override */
+    static get sourceKey() { return 'vital-strike'; }
+
+    /** @inheritdoc @override @returns {CreateAndRender} */
+    static get configuration() {
+        return {
+            type: 'render-and-create',
+            compendiumId: '26k1Gi7t5BoqxhIj',
+            isItemMatchFunc: (name) => name === Settings.name,
+            showInputsFunc: this.showVitalStrikeInputs.bind(this),
+            options: {
+                defaultFlagValuesFunc: () => ({ [vitalStrikeEnabled]: true }),
+            },
+        };
+    }
+
+    /** @type {VSHintInfo} */
+    static get vsHintInfo() { return { multiplier: '×2' }; }
+}
+export class VitalStrikeImproved extends VitalBase {
+    /** @inheritdoc @override */
+    static get sourceKey() { return `vital-strike-improved`; }
+
+    /** @inheritdoc @override */
+    static get parent() { return VitalStrike.key; }
+
+    /** @inheritdoc @override */
+    static get tooltip() { return VitalStrike.tooltip; }
+
+    /** @inheritdoc @override @returns {CreateAndRender} */
+    static get configuration() {
+        return {
+            type: 'render-and-create',
+            compendiumId: 'DorPGQ2mifJbMKH8',
+            isItemMatchFunc: (name) => LanguageSettings.isImproved(name, Settings.name),
+            showInputsFunc: this.showVitalStrikeInputs.bind(this),
+            options: {
+                defaultFlagValuesFunc: () => ({ [vitalStrikeEnabled]: true }),
+            },
+        };
+    }
+
+    /** @type {VSHintInfo} */
+    static get vsHintInfo() { return { multiplier: '×3' }; }
+}
+export class VitalStrikeGreater extends VitalBase {
+    /** @inheritdoc @override */
+    static get sourceKey() { return `vital-strike-greater`; }
+
+    /** @inheritdoc @override */
+    static get parent() { return VitalStrike.key; }
+
+    /** @inheritdoc @override */
+    static get tooltip() { return VitalStrike.tooltip; }
+
+    /** @inheritdoc @override @returns {CreateAndRender} */
+    static get configuration() {
+        return {
+            type: 'render-and-create',
+            compendiumId: 'zKNk7a4XxXsygJ67',
+            isItemMatchFunc: (name) => LanguageSettings.isGreater(name, Settings.name),
+            showInputsFunc: this.showVitalStrikeInputs.bind(this),
+            options: {
+                defaultFlagValuesFunc: () => ({ [vitalStrikeEnabled]: true }),
+            },
+        };
+    }
+
+    /** @type {VSHintInfo} */
+    static get vsHintInfo() { return { multiplier: '×4' }; }
+}
+export class VitalStrikeMythic extends VitalBase {
+    /** @inheritdoc @override */
+    static get sourceKey() { return `vital-strike-mythic`; }
+
+    /** @inheritdoc @override */
+    static get parent() { return VitalStrike.key; }
+
+    /** @inheritdoc @override @returns {CreateAndRender} */
+    static get configuration() {
+        return {
+            type: 'render-and-create',
+            compendiumId: 'rYLOl3zfFt3by3CE',
+            isItemMatchFunc: (name) => LanguageSettings.isMythic(name, Settings.name),
+            showInputsFunc: (item, html, isEditable) => {
+                showEnabledLabel({
+                    item,
+                    journal: this.key,
+                    key: this.key,
+                    parent: html,
+                }, {
+                    canEdit: isEditable,
+                    inputType: 'specific-bonus',
+                });
+            },
+        };
+    }
+
+    /** @type {VSHintInfo} */
+    static get vsHintInfo() { return { multiplier: '', icon: 'ra ra-croc-sword' }; }
+}
+
+const allBonuses = /** @type {const} */ ([
+    VitalStrike,
+    VitalStrikeImproved,
+    VitalStrikeGreater,
+    VitalStrikeMythic,
 ]);
 
 // register hint on source
 registerItemHint((hintcls, _actor, item, _data) => {
-    const keys = allKeys.filter((k) => !!item.hasItemBooleanFlag(k));
-    if (!keys.length) {
+    const bonuses = allBonuses.filter((bonus) => bonus.has(item));
+    if (!bonuses.length) {
         return;
     }
 
-    return keys.map((k) => {
-        const info = hintInfo[k];
-        return hintcls.create(info.label, [], { hint: localizeBonusTooltip(info.tooltipKey), icon: info.icon });
+    return bonuses.map((bonus) => {
+        let hint = bonus.tooltip;
+        if (VitalStrike.enabledByDefault(item)) {
+            hint += '\n\n';
+            hint += localize('vital-strike-enabled-current');
+        }
+
+        return hintcls.create(bonus.vsHintInfo.multiplier, [], { hint, icon: bonus.vsHintInfo.icon })
     });
 });
 
@@ -98,10 +233,10 @@ const getFirstTermFormula = (formula) => {
 }
 
 class Settings {
-    static get vitalStrike() { return LanguageSettings.getTranslation(vitalStrike); }
+    static get name() { return LanguageSettings.getTranslation(VitalStrike.key); }
 
     static {
-        LanguageSettings.registerItemNameTranslation(vitalStrike);
+        LanguageSettings.registerItemNameTranslation(VitalStrike.key);
     }
 }
 
@@ -109,9 +244,9 @@ export class VitalStrikeData {
     /** @type {boolean} */
     get hasVitalStrike() { return !!this.key; }
 
-    get isVital() { return this.key === vitalStrike; }
-    get isImproved() { return this.key === vitalStrikeImproved; }
-    get isGreater() { return this.key === vitalStrikeGreater; }
+    get isVital() { return this.key === VitalStrike.key; }
+    get isImproved() { return this.key === VitalStrikeImproved.key; }
+    get isGreater() { return this.key === VitalStrikeGreater.key; }
 
     /** @type {Nullable<ActionUse>} */
     actionUse;
@@ -130,8 +265,8 @@ export class VitalStrikeData {
      */
     constructor(actor, { actionUse = null } = {}) {
         this.actionUse = actionUse;
-        this.hasDevastating = actor.hasItemBooleanFlag(devastatingStrikeKey);
-        this.hasDevastatingImproved = actor.hasItemBooleanFlag(devastatingStrikeImprovedKey);
+        this.hasDevastating = actor.hasItemBooleanFlag(DevastatingStrike.key);
+        this.hasDevastatingImproved = actor.hasItemBooleanFlag(DevastatingStrikeImproved.key);
         this.mythic = this.#hasVitalStrikeMythic(actor);
 
         /**
@@ -159,9 +294,9 @@ export class VitalStrikeData {
 
                     if (firstDice) {
                         const formula =
-                            this.isGreater ? `${firstDice}[${localizeBonusLabel(vitalStrike)}] + ${firstDice}[${localizeBonusLabel(vitalStrikeImproved)}] + ${firstDice}[${localizeBonusLabel(vitalStrikeGreater)}]`
-                                : this.isImproved ? `${firstDice}[${localizeBonusLabel(vitalStrike)}] + ${firstDice}[${localizeBonusLabel(vitalStrikeImproved)}]`
-                                    : `${firstDice}[${localizeBonusLabel(vitalStrike)}]`;
+                            this.isGreater ? `${firstDice}[${VitalStrike.label}] + ${firstDice}[${VitalStrikeImproved.label}] + ${firstDice}[${VitalStrikeGreater.label}]`
+                                : this.isImproved ? `${firstDice}[${VitalStrike.label}] + ${firstDice}[${VitalStrikeImproved.label}]`
+                                    : `${firstDice}[${VitalStrike.label}]`;
 
                         const formData = getFormData(actionUse, key);
                         this.enabled = typeof formData === 'boolean'
@@ -188,11 +323,11 @@ export class VitalStrikeData {
                         if (this.hasDevastating) {
                             const conditional = new pf1.components.ItemConditional({
                                 default: true,
-                                name: localizeBonusLabel(devastatingStrikeKey),
+                                name: localizeBonusLabel(DevastatingStrike.key),
                                 modifiers: [{
                                     _id: foundry.utils.randomID(),
                                     critical: 'normal',
-                                    formula: `${amount * 2}[${localizeBonusLabel(devastatingStrikeKey)}]`,
+                                    formula: `${amount * 2}[${localizeBonusLabel(DevastatingStrike.key)}]`,
                                     subTarget: 'attack_0',
                                     target: 'damage',
                                     type: '',
@@ -205,11 +340,11 @@ export class VitalStrikeData {
                         if (this.hasDevastatingImproved) {
                             const conditional = new pf1.components.ItemConditional({
                                 default: true,
-                                name: localizeBonusLabel(devastatingStrikeImprovedKey),
+                                name: localizeBonusLabel(DevastatingStrikeImproved.key),
                                 modifiers: [{
                                     _id: foundry.utils.randomID(),
                                     critical: 'crit',
-                                    formula: `${amount * 2}[${localizeBonusLabel(devastatingStrikeImprovedKey)}]`,
+                                    formula: `${amount * 2}[${localizeBonusLabel(DevastatingStrikeImproved.key)}]`,
                                     subTarget: 'attack_0',
                                     target: 'attack',
                                     type: '',
@@ -227,9 +362,9 @@ export class VitalStrikeData {
         }
 
         // simple hack for making sure the best is handled and not the remaining
-        setupVitalStrike(vitalStrikeGreater, 3)
-            || setupVitalStrike(vitalStrikeImproved, 2)
-            || setupVitalStrike(vitalStrike, 1);
+        setupVitalStrike(VitalStrikeGreater.key, 3)
+            || setupVitalStrike(VitalStrikeImproved.key, 2)
+            || setupVitalStrike(VitalStrike.key, 1);
     }
 
     /**
@@ -296,11 +431,11 @@ export class VitalStrikeData {
 
         const conditional = new pf1.components.ItemConditional({
             default: true,
-            name: localizeBonusLabel(vitalStrikeMythic),
+            name: VitalStrikeMythic.label,
             modifiers: [{
                 _id: foundry.utils.randomID(),
                 critical: 'nonCrit',
-                formula: `{${formulaParts.join(', ')}}[${localizeBonusLabel(vitalStrikeMythic)}]`,
+                formula: `{${formulaParts.join(', ')}}[${VitalStrikeMythic.label}]`,
                 subTarget: 'attack_0',
                 target: 'damage',
                 type: '',
@@ -318,7 +453,7 @@ export class VitalStrikeData {
         return { has: !!items.length, enabled: enabledByDefault };
     }
     /** @param {ActorPF} actor * @returns {boolean} */
-    #hasVitalStrikeMythic = (actor) => actor.hasItemBooleanFlag(vitalStrikeMythic);
+    #hasVitalStrikeMythic = (actor) => VitalStrikeMythic.has(actor);
 }
 api.utils.VitalStrikeData = VitalStrikeData;
 
@@ -378,113 +513,3 @@ function actionUseHandleConditionals(actionUse, conditionals) {
     conditionals.push(...vital.conditionals);
 }
 LocalHookHandler.registerHandler(localHooks.actionUse_handleConditionals, actionUseHandleConditionals);
-
-Hooks.on('renderItemSheet', (
-    /** @type {ItemSheetPF} */ { actor, isEditable, item },
-    /** @type {[HTMLElement]} */[html],
-    /** @type {unknown} */ _data
-) => {
-    if (!(item instanceof pf1.documents.item.ItemPF)) return;
-
-    if (isEditable) {
-        configureIfNecesary(item);
-    }
-
-    const isVital = item.hasItemBooleanFlag(vitalStrike);
-    const isImproved = item.hasItemBooleanFlag(vitalStrikeImproved);
-    const isGreater = item.hasItemBooleanFlag(vitalStrikeGreater);
-    const isMythic = item.hasItemBooleanFlag(vitalStrikeMythic);
-
-    /**
-     * @param {string} key
-     * @param {string} [tooltip]
-     */
-    const showVitalStrike = (key, tooltip) => {
-        showEnabledLabel({
-            item,
-            journal,
-            key,
-            parent: html,
-            tooltip: localizeBonusTooltip(tooltip || vitalStrike),
-        }, {
-            canEdit: isEditable,
-            inputType: 'specific-bonus',
-        });
-    }
-    vitalStrikeEnabled
-
-    if (isGreater) {
-        showVitalStrike(vitalStrikeGreater);
-    }
-    if (isImproved) {
-        showVitalStrike(vitalStrikeImproved);
-    }
-    if (isVital) {
-        showVitalStrike(vitalStrike);
-    }
-    if (isMythic) {
-        showVitalStrike(vitalStrikeMythic, vitalStrikeMythic);
-    }
-
-    if (isVital || isImproved || isGreater) {
-        checkboxInput({
-            item,
-            journal,
-            key: vitalStrikeEnabled,
-            parent: html,
-        }, {
-            canEdit: isEditable,
-            inputType: 'specific-bonus',
-            isSubLabel: true,
-        });
-    }
-});
-
-/**
- * @param {ItemPF} item
- * @param {object} data
- * @param {{temporary: boolean}} param2
- * @param {string} id
- */
-const onCreate = (item, data, { temporary }, id) => {
-    if (!(item instanceof pf1.documents.item.ItemPF)) return;
-    if (temporary) return;
-
-    configureIfNecesary(item, { onCreate: true })
-}
-Hooks.on('preCreateItem', onCreate);
-
-/**
- * @param {ItemPF} item
- * @param {object} [options]
- * @param {boolean} [options.onCreate]
- */
-const configureIfNecesary = (item, { onCreate = false } = {}) => {
-    const name = item?.name?.toLowerCase() ?? '';
-    const isRegular = name === Settings.vitalStrike
-        || itemHasCompendiumId(item, vitalStrikeCompendiumId);
-    const isImproved = (name.includes(Settings.vitalStrike) && name.includes(LanguageSettings.improved))
-        || itemHasCompendiumId(item, vitalStrikeImprovedCompendiumId);
-    const isGreater = (name.includes(Settings.vitalStrike) && name.includes(LanguageSettings.greater))
-        || itemHasCompendiumId(item, vitalStrikeGreaterCompendiumId);
-    const isMythic = (name.includes(Settings.vitalStrike) && name.includes(LanguageSettings.mythic))
-        || itemHasCompendiumId(item, vitalStrikeMythicCompendiumId);
-
-    const addFlag = (/** @type {string} */flag) =>
-        onCreate
-            ? item.updateSource({ [`system.flags.boolean.${flag}`]: true })
-            : item.addItemBooleanFlag(flag);
-
-    if (isMythic && !item.hasItemBooleanFlag(vitalStrikeMythic)) {
-        addFlag(vitalStrikeMythic);
-    }
-    else if (isGreater && !item.hasItemBooleanFlag(vitalStrikeGreater)) {
-        addFlag(vitalStrikeGreater);
-    }
-    else if (isImproved && !item.hasItemBooleanFlag(vitalStrikeImproved)) {
-        addFlag(vitalStrikeImproved);
-    }
-    else if (isRegular && !item.hasItemBooleanFlag(vitalStrike)) {
-        addFlag(vitalStrike);
-    }
-}

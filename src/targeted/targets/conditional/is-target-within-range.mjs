@@ -1,11 +1,13 @@
-import { textInput } from '../../../handlebars-handlers/bonus-inputs/text-input.mjs';
-import { PositionalHelper } from '../../../util/positional-helper.mjs';
-import { FormulaCacheHelper } from '../../../util/flag-helpers.mjs';
-import { localizeBonusLabel } from '../../../util/localize.mjs';
-import { BaseTarget } from '../_base-target.mjs';
+import { MODULE_NAME } from '../../../consts.mjs';
 import { showLabel } from '../../../handlebars-handlers/bonus-inputs/show-label.mjs';
+import { textInput } from '../../../handlebars-handlers/bonus-inputs/text-input.mjs';
+import { FormulaCacheHelper } from '../../../util/flag-helpers.mjs';
+import { currentTargets } from '../../../util/get-current-targets.mjs';
+import { localizeBonusLabel } from '../../../util/localize.mjs';
+import { PositionalHelper } from '../../../util/positional-helper.mjs';
+import { BaseTarget } from '../_base-target.mjs';
 
-export class WhenTargetInRange extends BaseTarget {
+export class WhenTargetInRangeTarget extends BaseTarget {
 
     /**
      * @override
@@ -75,13 +77,13 @@ export class WhenTargetInRange extends BaseTarget {
         }
 
         /** @type {TokenPF[]} */
-        const targets = [...game.user.targets];
+        const targets = currentTargets();
         if (!targets.length) {
             return [];
         }
 
         const filtered = sources.filter((source) => {
-            // pf1 system believe "minRange" is not inclusive, so it reports "minRange" as "squares one closer".
+            // pf1 system believes "minRange" is not inclusive, so it reports "minRange" as "squares one closer".
             // The distance logic is now set up for that so reducing this by Infinitesimally small amount accounts for their error
             const min = (this.#min(source) || 0) - .0001;
             const max = this.#max(source);
@@ -101,6 +103,27 @@ export class WhenTargetInRange extends BaseTarget {
      * @inheritdoc
      */
     static get isGenericTarget() { return true; }
+
+    /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} item
+     * @param {object} options
+     * @param {Formula} [options.min]
+     * @param {Formula} [options.max]
+     * @returns {Promise<void>}
+     */
+    static async configure(item, { min, max }) {
+        await item.update({
+            system: { flags: { boolean: { [this.key]: true } } },
+            flags: {
+                [MODULE_NAME]: {
+                    [this.#minKey]: (min || '') + '',
+                    [this.#maxKey]: (max || '') + '',
+                },
+            },
+        });
+    }
 
     /**
      * @inheritdoc

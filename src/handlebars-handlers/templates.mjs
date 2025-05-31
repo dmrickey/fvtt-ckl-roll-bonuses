@@ -28,11 +28,12 @@ export const templates = /** @type {const} */ ({
 
     // targeted - targets
     actionsApp: `modules/${MODULE_NAME}/hbs/targeted/targets/actions-input-application.hbs`,
+    actorSelectApp: `modules/${MODULE_NAME}/hbs/targeted/targets/actor-select-application.hbs`,
     checklist: `modules/${MODULE_NAME}/hbs/targeted/targets/checklist.hbs`,
     editableIcons: `modules/${MODULE_NAME}/hbs/targeted/targets/editable-icons.hbs`,
     itemsApp: `modules/${MODULE_NAME}/hbs/targeted/targets/items-input-application.hbs`,
     targetWeaponGroup: `modules/${MODULE_NAME}/hbs/targeted/targets/weapon-group-input.hbs`,
-    tokenApp: `modules/${MODULE_NAME}/hbs/targeted/targets/token-application.hbs`,
+    tokenSelectApp: `modules/${MODULE_NAME}/hbs/targeted/targets/token-select-application.hbs`,
     traitInput: `modules/${MODULE_NAME}/hbs/targeted/targets/trait-input.hbs`,
 
     /** bonus picker application */

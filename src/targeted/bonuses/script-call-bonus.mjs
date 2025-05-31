@@ -146,6 +146,22 @@ export class ScriptCallBonus extends BaseBonus {
     }
 
     /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} item
+     * @param {ItemScriptCallData[]} scriptCalls
+     * @returns {Promise<void>}
+     */
+    static async configure(item, scriptCalls) {
+        await item.update({
+            system: { flags: { boolean: { [this.key]: true } } },
+            flags: {
+                [MODULE_NAME]: { [this.key]: scriptCalls || [] },
+            },
+        });
+    }
+
+    /**
      * @override
      * @inheritdoc
      * @param {object} options

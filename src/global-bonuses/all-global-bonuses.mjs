@@ -10,7 +10,6 @@ export class GlobalBonuses {
      * @param {typeof BaseGlobalBonus} bonus
      */
     static registerBonus(bonus) {
-        GlobalBonuses.allBonuses.push(bonus);
         GlobalBonusSettings.registerKey(bonus);
 
         // settings are ready after `i18nInit` hook
@@ -20,13 +19,15 @@ export class GlobalBonuses {
             }
         });
 
-        api.globalTypeMap[bonus.key] = bonus;
-    }
+        const key = /** @type {keyof RollBonusesAPI['globalTypeMap']} */ (bonus.key);
+        if (!!api.globalTypeMap[key]) {
+            console.error(`Roll Bonus for key '${key}' (${bonus.label}) has already been registered. This is not a user error. Report this to the mod author adding this bonus.`);
+            return;
+        }
 
-    /**
-     * @type {Array<typeof BaseGlobalBonus>}}
-     */
-    static allBonuses = [];
+        // @ts-ignore
+        api.globalTypeMap[key] = bonus;
+    }
 }
 
 /**
@@ -34,7 +35,7 @@ export class GlobalBonuses {
  * @param {RollData} rollData
  */
 function initRollData(action, rollData) {
-    GlobalBonuses.allBonuses.forEach((bonus) => {
+    api.allGlobalTypes.forEach((bonus) => {
         const { actor } = action;
         if (bonus.isDisabled() || bonus.isDisabledForActor(actor)) {
             return;
@@ -50,7 +51,7 @@ Hooks.on('renderActorSheet', (
     /** @type {[HTMLElement]} */[html],
     /** @type {unknown} */ _data
 ) => {
-    const bonuses = GlobalBonuses.allBonuses
+    const bonuses = api.allGlobalTypes
         .filter((b) => !b.isDisabled());
     const settings = bonuses.map((b) => ({
         checked: b.isDisabledForActor(actor),

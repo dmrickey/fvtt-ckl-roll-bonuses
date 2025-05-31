@@ -29,7 +29,7 @@ function actionDamage(action, { simplify = true, strict = true } = {}) {
     const actionDamageNonCritParts = [...actionData.damage.nonCritParts];
     /** END OVERRIDE */
 
-    /** @type {(number | string)[]} */
+    /** @type {Formula[]} */
     const parts = [];
 
     const lazy = {
@@ -56,6 +56,7 @@ function actionDamage(action, { simplify = true, strict = true } = {}) {
                 action[MODULE_NAME].conditionals?.push(...conditionals);
             }
         );
+        // todo turn this into a hook instead of calling these specific pieces of code
         const extras = [
             getWeaponSpecializaitonConditional(item)?.modifiers.find(x => !!x)?._source,
             getGreaterWeaponSpecializaitonConditional(item)?.modifiers.find(x => !!x)?._source,

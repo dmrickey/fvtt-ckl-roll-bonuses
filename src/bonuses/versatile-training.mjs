@@ -1,32 +1,149 @@
 import { MODULE_NAME } from "../consts.mjs";
+import { keyValueSelect } from '../handlebars-handlers/bonus-inputs/key-value-select.mjs';
+import { traitInput } from '../handlebars-handlers/trait-input.mjs';
+import { api } from '../util/api.mjs';
+import { intersection } from '../util/array-intersects.mjs';
+import { createChange } from '../util/conditional-helpers.mjs';
+import { getDocFlags } from '../util/flag-helpers.mjs';
+import { getSkillName } from '../util/get-skill-name.mjs';
+import { LocalHookHandler, localHooks } from '../util/hooks.mjs';
 import { registerItemHint } from "../util/item-hints.mjs";
-import { localize, localizeBonusTooltip } from "../util/localize.mjs";
+import { listFormat } from '../util/list-format.mjs';
+import { localize } from "../util/localize.mjs";
 import { LanguageSettings } from "../util/settings.mjs";
 import { truthiness } from "../util/truthiness.mjs";
-import { SpecificBonuses } from './_all-specific-bonuses.mjs';
-import { api } from '../util/api.mjs';
-import { keyValueSelect } from '../handlebars-handlers/bonus-inputs/key-value-select.mjs';
-import { getDocFlags } from '../util/flag-helpers.mjs';
-import { LocalHookHandler, localHooks } from '../util/hooks.mjs';
-import { getSkillName } from '../util/get-skill-name.mjs';
-import { intersection } from '../util/array-intersects.mjs';
-import { itemHasCompendiumId } from '../util/has-compendium-id.mjs';
-import { createChange } from '../util/conditional-helpers.mjs';
-import { getCachedBonuses } from '../util/get-cached-bonuses.mjs';
-import { traitInput } from '../handlebars-handlers/trait-input.mjs';
+import { SpecificBonus } from './_specific-bonus.mjs';
 
-const key = 'versatile-training';
-const selectedKey = 'versatile-training-selected';
-const journal = 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#versatile-training';
-const compendiumId = 'ORQUp9lBAMxPhRVu';
+export class VersatileTraining extends SpecificBonus {
+    /** @inheritdoc @override */
+    static get sourceKey() { return 'versatile-training'; }
+    static get selectedKey() { return `${this.key}-selected`; }
 
-SpecificBonuses.registerSpecificBonus({ journal, key });
+    /** @inheritdoc @override */
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#versatile-training'; }
+
+    /**
+     * @param { ActorPF | ItemPF } doc
+     * @returns {SkillId[]}
+     * @param {object} [options]
+     * @param {boolean} [options.onlyActive] Default true - if it should return when the bonus is active
+     */
+    static getTrainingSkills(doc, { onlyActive = true } = { onlyActive: true }) {
+        return getDocFlags(doc, this.key, { key: this.selectedKey, onlyActive })
+            .flatMap((skillIds) => skillIds)
+            .filter(truthiness);
+    }
+
+    /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} item
+     * @param {WeaponGroup} weaponGroup
+     * @param {SkillId[]} skillIds
+     * @returns {Promise<void>}
+     */
+    static async configure(item, weaponGroup, skillIds) {
+        await item.update({
+            system: { flags: { boolean: { [this.key]: true } } },
+            flags: {
+                [MODULE_NAME]: {
+                    [this.key]: weaponGroup,
+                    [this.selectedKey]: skillIds,
+                }
+            },
+        });
+    }
+
+    /** @inheritdoc @override @returns {CreateAndRender} */
+    static get configuration() {
+        return {
+            type: 'render-and-create',
+            compendiumId: 'ORQUp9lBAMxPhRVu',
+            isItemMatchFunc: (name) => name === Settings.name,
+            showInputsFunc: (item, html, isEditable) => {
+                let currentGroup = /** @type {WeaponGroup} */ (item.getFlag(MODULE_NAME, this.key));
+
+                /** @type {{[key: string]: string}} */
+                const skillChoices = {};
+                /** @type {{[key: string]: string}} */
+                const groupChoices = { ...pf1.config.weaponGroups };
+                if (isEditable && item.actor) {
+                    if (!currentGroup) {
+                        currentGroup =  /** @type {WeaponGroup} */ (Object.keys(api.config.versatileTraining.mapping)[0]);
+                        item.setFlag(MODULE_NAME, this.key, currentGroup);
+                        return;
+                    }
+
+                    const getName = (/** @type {SkillId} */ skillId) => isDriver(skillId)
+                        ? localize('driver')
+                        : getSkillName(item.actor, skillId);
+                    api.config.versatileTraining.mapping[currentGroup].forEach((skillId) => skillChoices[skillId] = getName(skillId));
+                    Object.entries(api.config.versatileTraining.mapping).forEach(([_group, skills]) => {
+                        const group = /** @type {WeaponGroup} */ (_group);
+                        if (groupChoices[group]) {
+                            groupChoices[group] = `${groupChoices[group]}: ${skills.map((skillId) => getName(skillId)).join(', ')}`;
+                        }
+                    });
+
+                    const currentSkills = item.getFlag(MODULE_NAME, this.selectedKey) || [];
+                    const validSkills = intersection(
+                        currentSkills,
+                        api.config.versatileTraining.mapping[currentGroup],
+                    );
+                    if (currentSkills.length !== validSkills.length) {
+                        item.setFlag(MODULE_NAME, this.selectedKey, validSkills);
+                    }
+                }
+
+                keyValueSelect({
+                    choices: groupChoices,
+                    current: currentGroup,
+                    item,
+                    journal: this.journal,
+                    key: this.key,
+                    parent: html
+                }, {
+                    canEdit: isEditable,
+                    inputType: 'specific-bonus',
+                });
+                traitInput({
+                    choices: skillChoices,
+                    description: localize('versatile-training.description'),
+                    hasCustom: false,
+                    item,
+                    journal: this.journal,
+                    key: this.selectedKey,
+                    limit: 2,
+                    parent: html,
+                }, {
+                    canEdit: isEditable,
+                    inputType: 'specific-bonus',
+                });
+            },
+            options: {
+                defaultFlagValuesFunc: (item) => {
+                    if (!item?.actor) return;
+
+                    const group = /** @type {WeaponGroup} */
+                        ([...item.actor.itemTypes.weapon, ...item.actor.itemTypes.attack]
+                            .flatMap(x => [...x.system.weaponGroups.total])[0]);
+                    if (group) {
+                        return {
+                            [this.key]: group,
+                            [this.selectedKey]: api.config.versatileTraining.mapping[group].slice(0, 2)
+                        }
+                    }
+                }
+            },
+        };
+    }
+}
 
 class Settings {
-    static get versatileTraining() { return LanguageSettings.getTranslation(key); }
+    static get name() { return LanguageSettings.getTranslation(VersatileTraining.key); }
 
     static {
-        LanguageSettings.registerItemNameTranslation(key);
+        LanguageSettings.registerItemNameTranslation(VersatileTraining.key);
     }
 }
 
@@ -56,30 +173,17 @@ class Settings {
     };
 }
 
-/**
- *
- * @param {ActorPF} actor
- */
-const getActorVTSkills = (actor) => {
-    const sources = getCachedBonuses(actor, key);
-    const selectedSkills = sources.flatMap((source) => getDocFlags(source, selectedKey))
-        .filter(truthiness);
-    return selectedSkills;
-}
-
 registerItemHint((hintcls, actor, item, _data) => {
-    if (!item.hasItemBooleanFlag(key)) return;
+    if (!VersatileTraining.has(item)) return;
 
-    const selectedSkills = getDocFlags(item, selectedKey)
-        .flatMap(x => x)
-        .filter(truthiness);
+    const selectedSkills = VersatileTraining.getTrainingSkills(item, { onlyActive: false });
 
     if (!selectedSkills.length) {
         return;
     }
 
-    const skills = selectedSkills.map((id) => getSkillName(actor, id)).join(', ');
-    const hint = hintcls.create(localize('versatile-training.hint', { skills }), [], { hint: localizeBonusTooltip(key) });
+    const skills = listFormat(selectedSkills.map((id) => getSkillName(actor, id)), 'and');
+    const hint = hintcls.create(localize('versatile-training.hint', { skills }), [], { hint: VersatileTraining.tooltip });
     return hint;
 });
 
@@ -104,17 +208,18 @@ Hooks.on('renderActorSheetPF', (
     /** @type {{ find: (arg0: string) => { (): any; new (): any; each: { (arg0: { (_: any, element: HTMLElement): void; }): void; new (): any; }; }; }} */ html,
     /** @type {{ actor: ActorPF; }} */ { actor }
 ) => {
-    const selectedSkills = getActorVTSkills(actor);
+    const selectedSkills = VersatileTraining.getTrainingSkills(actor);
 
     if (!selectedSkills?.length) return;
 
     html.find('.tab.skills .skills-list li.skill, .tab.skills .skills-list li.sub-skill').each((_, li) => {
+        /** @returns {SkillId} */
         const getSkillId = () => {
             const skillId = li.getAttribute('data-skill');
             const subId = li.getAttribute('data-sub-skill');
-            return subId
+            return /** @type {SkillId} */ (subId
                 ? `${skillId}.${subId}`
-                : skillId;
+                : skillId);
         }
 
         const skillId = getSkillId();
@@ -133,7 +238,7 @@ Hooks.on('renderActorSheetPF', (
  * @returns {void}
  */
 function versatileRollSkill(seed, actor) {
-    const selectedSkills = getActorVTSkills(actor);
+    const selectedSkills = VersatileTraining.getTrainingSkills(actor);
 
     if (selectedSkills.includes(seed.skillId)) {
         Hooks.once('preCreateChatMessage', (
@@ -158,7 +263,7 @@ function versatileRollSkill(seed, actor) {
  * @param {RollData} rollData
  */
 function getSkillInfo(skillInfo, actor, rollData) {
-    const selectedSkills = getActorVTSkills(actor);
+    const selectedSkills = VersatileTraining.getTrainingSkills(actor);
     if (selectedSkills.includes(skillInfo.id)) {
         skillInfo.rank = rollData.attributes.bab.total;
         skillInfo.cs = true;
@@ -170,20 +275,22 @@ function getSkillInfo(skillInfo, actor, rollData) {
  * @param {RollData} rollData
  */
 function prepareData(item, rollData) {
-    if (!item.isActive || !item.actor || !item.hasItemBooleanFlag(key)) return;
+    if (!item.isActive || !item.actor || !VersatileTraining.has(item)) return;
 
     /** @type {Array<SkillId>} */
-    const keys = item.getFlag(MODULE_NAME, selectedKey) ?? [];
+    const keys = item.getFlag(MODULE_NAME, VersatileTraining.selectedKey) ?? [];
     if (keys.length && item.actor) {
+        if (!rollData.attributes.bab) return;
+
+        const rank = rollData.attributes.bab.total;
         keys.forEach((skillKey) => {
-            const rank = rollData.attributes.bab.total;
             const change = createChange({
                 name: `${game.i18n.localize("PF1.SkillRankPlural")} (${item.name})`,
                 value: rank,
                 formula: rank,
                 type: 'base',
                 target: `skill.~${skillKey}`,
-                id: `${item.id}_${key}_${skillKey}`,
+                id: `${item.id}_${VersatileTraining.key}_${skillKey}`,
                 operator: 'set',
             });
 
@@ -204,7 +311,7 @@ function prepareData(item, rollData) {
                     type: "untyped",
                     operator: "add",
                     name: game.i18n.localize("PF1.CSTooltip"),
-                    id: `${item.id}_${key}_${skillKey}_cs`,
+                    id: `${item.id}_${VersatileTraining.key}_${skillKey}_cs`,
                 });
                 item.actor.changes.set(csChange.id, csChange);
             }
@@ -225,102 +332,3 @@ Hooks.once('init', () => {
 
 /** @param {string} id  @returns {boolean} */
 const isDriver = (id) => id === 'pro.driver';
-
-Hooks.on('renderItemSheet', (
-    /** @type {ItemSheetPF} */ { actor, isEditable, item },
-    /** @type {[HTMLElement]} */[html],
-    /** @type {unknown} */ _data
-) => {
-    if (!(item instanceof pf1.documents.item.ItemPF)) return;
-
-    const hasKey = item.hasItemBooleanFlag(key);
-    if (!hasKey) {
-        const name = item?.name?.toLowerCase() ?? '';
-        const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
-        if (isEditable && (name === Settings.versatileTraining || hasCompendiumId)) {
-            item.addItemBooleanFlag(key);
-        }
-        return;
-    }
-
-    let currentGroup = /** @type {keyof typeof pf1.config.weaponGroups} */ (item.getFlag(MODULE_NAME, key));
-
-    /** @type {{[key: string]: string}} */
-    const skillChoices = {};
-    /** @type {{[key: string]: string}} */
-    const groupChoices = { ...pf1.config.weaponGroups };
-    if (isEditable && actor) {
-        if (!currentGroup) {
-            currentGroup =  /** @type {keyof typeof pf1.config.weaponGroups} */ (Object.keys(api.config.versatileTraining.mapping)[0]);
-            item.setFlag(MODULE_NAME, key, currentGroup);
-            return;
-        }
-
-        const getName = (/** @type {SkillId} */ skillId) => isDriver(skillId)
-            ? localize('driver')
-            : getSkillName(actor, skillId);
-        api.config.versatileTraining.mapping[currentGroup].forEach((skillId) => skillChoices[skillId] = getName(skillId));
-        Object.entries(api.config.versatileTraining.mapping).forEach(([_group, skills]) => {
-            const group = /** @type {keyof typeof pf1.config.weaponGroups} */ (_group);
-            if (groupChoices[group]) {
-                groupChoices[group] = `${groupChoices[group]}: ${skills.map((skillId) => getName(skillId)).join(', ')}`;
-            }
-        });
-
-        const currentSkills = item.getFlag(MODULE_NAME, selectedKey) || [];
-        const validSkills = intersection(
-            currentSkills,
-            api.config.versatileTraining.mapping[currentGroup],
-        );
-        if (currentSkills.length !== validSkills.length) {
-            item.setFlag(MODULE_NAME, selectedKey, validSkills);
-        }
-    }
-
-    keyValueSelect({
-        choices: groupChoices,
-        current: currentGroup,
-        item,
-        journal,
-        key,
-        parent: html
-    }, {
-        canEdit: isEditable,
-        inputType: 'specific-bonus',
-    });
-    traitInput({
-        choices: skillChoices,
-        description: localize('versatile-training.description'),
-        hasCustom: false,
-        item,
-        journal,
-        key: selectedKey,
-        limit: 2,
-        parent: html,
-    }, {
-        canEdit: isEditable,
-        inputType: 'specific-bonus',
-    });
-});
-
-/**
- * @param {ItemPF} item
- * @param {object} data
- * @param {{temporary: boolean}} param2
- * @param {string} id
- */
-const onCreate = (item, data, { temporary }, id) => {
-    if (!(item instanceof pf1.documents.item.ItemPF)) return;
-    if (temporary) return;
-
-    const name = item?.name?.toLowerCase() ?? '';
-    const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
-    const hasBonus = item.hasItemBooleanFlag(key);
-
-    if ((name === Settings.versatileTraining || hasCompendiumId) && !hasBonus) {
-        item.updateSource({
-            [`system.flags.boolean.${key}`]: true,
-        });
-    }
-};
-Hooks.on('preCreateItem', onCreate);
