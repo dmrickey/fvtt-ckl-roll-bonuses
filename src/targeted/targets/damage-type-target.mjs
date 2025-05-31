@@ -2,6 +2,7 @@ import { MODULE_NAME } from '../../consts.mjs';
 import { traitInput } from '../../handlebars-handlers/trait-input.mjs';
 import { intersects } from "../../util/array-intersects.mjs";
 import { getActionDamageTypes } from '../../util/get-damage-types.mjs';
+import { toArray } from '../../util/to-array.mjs';
 import { truthiness } from "../../util/truthiness.mjs";
 import { uniqueArray } from "../../util/unique-array.mjs";
 import { BaseTarget } from "./_base-target.mjs";
@@ -47,6 +48,24 @@ export class DamageTypeTarget extends BaseTarget {
         });
 
         return filteredSources;
+    }
+
+    /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} item
+     * @param {ArrayOrSelf<keyof DamageTypes>} damageTypes
+     * @returns {Promise<void>}
+     */
+    static async configure(item, damageTypes) {
+        await item.update({
+            system: { flags: { boolean: { [this.key]: true } } },
+            flags: {
+                [MODULE_NAME]: {
+                    [this.key]: toArray(damageTypes),
+                },
+            },
+        });
     }
 
     /**

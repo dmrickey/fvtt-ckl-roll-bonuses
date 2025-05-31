@@ -78,6 +78,26 @@ export class FunctionTarget extends BaseTarget {
     /**
      * @inheritdoc
      * @override
+     * @param {ItemPF} item
+     * @param {string} func
+     * @param {string} [label]
+     * @returns {Promise<void>}
+     */
+    static async configure(item, func, label) {
+        await item.update({
+            system: { flags: { boolean: { [this.key]: true } } },
+            flags: {
+                [MODULE_NAME]: {
+                    [this.key]: func,
+                    [this.#playerLabelKey]: label || this.label,
+                },
+            },
+        });
+    }
+
+    /**
+     * @inheritdoc
+     * @override
      * @param {object} options
      * @param {ActorPF | null | undefined} options.actor
      * @param {HTMLElement} options.html

@@ -1,5 +1,6 @@
 import { MODULE_NAME } from '../../consts.mjs';
 import { showActionInput } from '../../handlebars-handlers/targeted/targets/action-input.mjs';
+import { toArray } from '../../util/to-array.mjs';
 import { truthiness } from '../../util/truthiness.mjs';
 import { BaseTarget } from "./_base-target.mjs";
 
@@ -62,6 +63,24 @@ export class ActionTarget extends BaseTarget {
             if (!item || !action) return;
             return `${item.name} - ${action.name}`;
         }).filter(truthiness);
+    }
+
+    /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} item
+     * @param {`${ItemPF['id']}.${ItemAction['id']}`[]} actionIds
+     * @returns {Promise<void>}
+     */
+    static async configure(item, actionIds) {
+        await item.update({
+            system: { flags: { boolean: { [this.key]: true } } },
+            flags: {
+                [MODULE_NAME]: {
+                    [this.key]: toArray(actionIds),
+                },
+            },
+        });
     }
 
     /**

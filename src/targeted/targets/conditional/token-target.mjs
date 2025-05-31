@@ -120,7 +120,7 @@ export class TokenTarget extends BaseTarget {
             flags: {
                 [MODULE_NAME]: {
                     [this.#inversionKey]: !!inverted,
-                    [this.key]: toArray(tokenUuids || []),
+                    [this.key]: toArray(tokenUuids),
                 },
             },
         });

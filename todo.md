@@ -225,12 +225,6 @@
 - Add Fortune/Misfortune checkboxes to attack/roll dialogs
 
 - Remove `greater`/`improved`/`mythic` getters from LanguageSettings and use the new `is` methods
-- Add "configure" method to each bonus and target that takes whatever args it needs to save itself
-  - ~~Bonuses~~
-  - ~~Specific Bonuses~~
-  - Targets
-  - ~~Conditional Targets~~
-  - ~~Targetable Overrides~~
 - Flanking
   - Add hints for new bonuses
   - disable or hijack system's checkbox in attack dialog

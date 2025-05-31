@@ -141,7 +141,7 @@ export class IsFlankingTarget extends BaseTarget {
         await item.update({
             system: { flags: { boolean: { [this.key]: true } } },
             flags: {
-                [MODULE_NAME]: { [this.#withActorAlliesKey]: toArray(actorUuids || []) },
+                [MODULE_NAME]: { [this.#withActorAlliesKey]: toArray(actorUuids) },
             },
         });
     }

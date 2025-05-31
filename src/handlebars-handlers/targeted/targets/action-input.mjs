@@ -112,8 +112,7 @@ export function showActionInput({
     div.querySelectorAll('li').forEach((element) => {
         element.addEventListener('contextmenu', (event) => {
             event.preventDefault();
-            // @ts-ignore
-            const /** @type {HTMLElement?} */ target = event.target;
+            const target =  /** @type {HTMLElement?} */ (event.target);
 
             let parent = target;
             while (parent && !parent.dataset.uuid) { parent = parent.parentElement }
@@ -201,8 +200,7 @@ export class ActionSelector extends DocumentSheet {
      */
     rightClick(event) {
         event.preventDefault();
-        // @ts-ignore
-        const  /** @type {HTMLElement?} */ target = event.target;
+        const target = /** @type {HTMLElement?} */ (event.target);
         let parent = target;
         while (parent && !parent.dataset.itemId) { parent = parent.parentElement }
         const itemId = parent?.dataset.itemId;

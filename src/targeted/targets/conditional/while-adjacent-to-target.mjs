@@ -112,7 +112,7 @@ export class WhileAdjacentToTarget extends BaseTarget {
             system: { flags: { boolean: { [this.key]: true } } },
             flags: {
                 [MODULE_NAME]: {
-                    [this.key]: toArray(actorUuids || []),
+                    [this.key]: toArray(actorUuids),
                 },
             },
         });

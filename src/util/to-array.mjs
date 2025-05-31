@@ -5,6 +5,8 @@ import { api } from './api.mjs';
  * @param {ArrayOrSelf<T>} obj
  * @returns {T[]}
  */
-export const toArray = (obj) => Array.isArray(obj) ? obj : [obj];
+export const toArray = (obj) => obj
+    ? (Array.isArray(obj) ? obj : [obj])
+    : [];
 
 api.utils.toArray = toArray;

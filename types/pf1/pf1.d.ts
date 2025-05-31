@@ -238,6 +238,7 @@ declare global {
         fascinated: 'Fascintated';
     }
 
+    type SpellDescriptor = keyof SpellDescriptors;
     interface SpellDescriptors {
         acid: 'acid';
         air: 'air';

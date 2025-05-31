@@ -1,6 +1,7 @@
 import { MODULE_NAME } from '../../consts.mjs';
 import { traitInput } from '../../handlebars-handlers/trait-input.mjs';
 import { intersects } from '../../util/array-intersects.mjs';
+import { toArray } from '../../util/to-array.mjs';
 import { Trait } from '../../util/trait-builder.mjs';
 import { BaseTarget } from './_base-target.mjs';
 
@@ -62,6 +63,24 @@ export class SpellSubschoolTarget extends BaseTarget {
         });
 
         return filteredSources;
+    }
+
+    /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} item
+     * @param {ArrayOrSelf<SpellSubschool>} subSchools
+     * @returns {Promise<void>}
+     */
+    static async configure(item, subSchools) {
+        await item.update({
+            system: { flags: { boolean: { [this.key]: true } } },
+            flags: {
+                [MODULE_NAME]: {
+                    [this.key]: toArray(subSchools),
+                },
+            },
+        });
     }
 
     /**

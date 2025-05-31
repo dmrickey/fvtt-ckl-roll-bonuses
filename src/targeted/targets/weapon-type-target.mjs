@@ -2,6 +2,7 @@ import { MODULE_NAME } from "../../consts.mjs";
 import { traitInput } from '../../handlebars-handlers/trait-input.mjs';
 import { intersects } from "../../util/array-intersects.mjs";
 import { getActorItemsByTypes } from '../../util/get-actor-items-by-type.mjs';
+import { toArray } from '../../util/to-array.mjs';
 import { truthiness } from "../../util/truthiness.mjs";
 import { uniqueArray } from "../../util/unique-array.mjs";
 import { WeaponBaseTypeOverride } from '../target-overides/weapon-type-override.mjs';
@@ -58,6 +59,24 @@ export class WeaponTypeTarget extends BaseTarget {
         });
 
         return bonusSources;
+    }
+
+    /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} item
+     * @param {ArrayOrSelf<string>} weaponTypes
+     * @returns {Promise<void>}
+     */
+    static async configure(item, weaponTypes) {
+        await item.update({
+            system: { flags: { boolean: { [this.key]: true } } },
+            flags: {
+                [MODULE_NAME]: {
+                    [this.key]: toArray(weaponTypes),
+                },
+            },
+        });
     }
 
     /**
