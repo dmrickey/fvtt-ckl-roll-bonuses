@@ -49,6 +49,14 @@ export class FlankHelper {
         return parts.join(' + ');
     }
 
+    /** @returns {string} */
+    get formulaWithoutBase() {
+        const parts = [];
+        if (this.isOutflanking) parts.push(`2[${Outflank.label}]`);
+        if (this.targetIsBeingMenaced) parts.push(`2[${MenacingBonus.label}]`);
+        return parts.join(' + ');
+    }
+
     /** @returns {number} */
     get totalBonus() { return (this.isFlanking ? 2 : 0) + (this.isOutflanking ? 2 : 0) + (this.targetIsBeingMenaced ? 2 : 0); }
 

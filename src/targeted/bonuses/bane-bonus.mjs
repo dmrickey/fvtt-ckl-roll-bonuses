@@ -4,6 +4,7 @@ import { traitInput } from '../../handlebars-handlers/trait-input.mjs';
 import { handleBonusesFor } from '../../target-and-bonus-join.mjs';
 import { intersects } from '../../util/array-intersects.mjs';
 import { getBaneLabelForTargetsFromSource } from '../../util/bane-helper.mjs';
+import { currentTargets } from '../../util/get-current-targets.mjs';
 import { getIdsFromItem, getTraitsFromItem } from '../../util/get-id-array-from-flag.mjs';
 import { listFormat } from '../../util/list-format.mjs';
 import { localize, localizeBonusTooltip } from '../../util/localize.mjs';
@@ -37,7 +38,7 @@ export class BaneBonus extends BaseBonus {
         let isBaneTarget = false;
         const creatureTypes = getIdsFromItem(source, this.creatureTypeKey);
         const creatureSubtypes = getIdsFromItem(source, this.creatureSubtypeKey);
-        const targets = [...game.user.targets];
+        const targets = currentTargets();
         if (targets.length && (creatureTypes.length || creatureSubtypes.length)) {
             isBaneTarget = targets.map(x => x.actor).every((a) =>
                 (!creatureTypes.length || intersects(creatureTypes, a?.race?.system.creatureTypes.total))

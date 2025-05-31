@@ -3,6 +3,7 @@ import { showEnabledLabel } from '../../../handlebars-handlers/enabled-label.mjs
 import { showActorInput } from '../../../handlebars-handlers/targeted/targets/actor-input.mjs';
 import { isMelee } from '../../../util/action-type-helpers.mjs';
 import { FlankHelper } from '../../../util/flank-helper.mjs';
+import { currentTargets } from '../../../util/get-current-targets.mjs';
 import { listFormat } from '../../../util/list-format.mjs';
 import { localize, localizeBonusLabel, localizeBonusTooltip } from '../../../util/localize.mjs';
 import { toArray } from '../../../util/to-array.mjs';
@@ -10,8 +11,6 @@ import { truthiness } from "../../../util/truthiness.mjs";
 import { BaseTarget } from "../_base-target.mjs";
 
 export class IsFlankingTarget extends BaseTarget {
-
-    static get #currentTargets() { return [...game.user.targets]; }
 
     /**
      * @override
@@ -88,7 +87,7 @@ export class IsFlankingTarget extends BaseTarget {
      * @returns {ItemPF[]}
      */
     static _getSourcesFor(item, sources, doc) {
-        if (!this.#currentTargets.length) {
+        if (!currentTargets().length) {
             return [];
         }
 
@@ -107,7 +106,7 @@ export class IsFlankingTarget extends BaseTarget {
 
         const bonusSources = sources.filter((source) =>
             self.some((meToken) =>
-                [...this.#currentTargets].every((target) => {
+                currentTargets().every((target) => {
                     const helper = new FlankHelper(meToken, target, { action, flankingWith: this.#potentialFlankTokens(source) });
                     return helper.isFlanking;
                 })

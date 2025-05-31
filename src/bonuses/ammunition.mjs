@@ -6,6 +6,7 @@ import { traitInput } from '../handlebars-handlers/trait-input.mjs';
 import { getBaneLabelForTargetsFromSource } from '../util/bane-helper.mjs';
 import { getEnhancementBonusForAction } from '../util/enhancement-bonus-helper.mjs';
 import { FormulaCacheHelper } from '../util/flag-helpers.mjs';
+import { currentTargets } from '../util/get-current-targets.mjs';
 import { LocalHookHandler, customGlobalHooks, localHooks } from "../util/hooks.mjs";
 import { localize, localizeBonusLabel, localizeBonusTooltip } from "../util/localize.mjs";
 import { ammoBaneCreatureSubtype, ammoBaneCreatureType, ammoEnhancementKey, ammoEnhancementStacksKey } from './ammunition-shared-keys.mjs';
@@ -44,7 +45,7 @@ function getConditionalParts(actionUse, result, atk, index) {
         const enhData = getEnhancementBonusForAction({
             action: actionUse.action,
             ammo,
-            targets: [...game.user.targets],
+            targets: currentTargets(),
         });
 
         const hasEnhBonus = itemEnh || enhData.total;

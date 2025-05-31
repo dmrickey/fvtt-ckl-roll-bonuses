@@ -1,10 +1,11 @@
-import { textInput } from '../../../handlebars-handlers/bonus-inputs/text-input.mjs';
-import { PositionalHelper } from '../../../util/positional-helper.mjs';
-import { FormulaCacheHelper } from '../../../util/flag-helpers.mjs';
-import { localizeBonusLabel } from '../../../util/localize.mjs';
-import { BaseTarget } from '../_base-target.mjs';
-import { showLabel } from '../../../handlebars-handlers/bonus-inputs/show-label.mjs';
 import { MODULE_NAME } from '../../../consts.mjs';
+import { showLabel } from '../../../handlebars-handlers/bonus-inputs/show-label.mjs';
+import { textInput } from '../../../handlebars-handlers/bonus-inputs/text-input.mjs';
+import { FormulaCacheHelper } from '../../../util/flag-helpers.mjs';
+import { currentTargets } from '../../../util/get-current-targets.mjs';
+import { localizeBonusLabel } from '../../../util/localize.mjs';
+import { PositionalHelper } from '../../../util/positional-helper.mjs';
+import { BaseTarget } from '../_base-target.mjs';
 
 export class WhenTargetInRangeTarget extends BaseTarget {
 
@@ -76,7 +77,7 @@ export class WhenTargetInRangeTarget extends BaseTarget {
         }
 
         /** @type {TokenPF[]} */
-        const targets = [...game.user.targets];
+        const targets = currentTargets();
         if (!targets.length) {
             return [];
         }

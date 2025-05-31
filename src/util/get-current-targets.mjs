@@ -3,7 +3,7 @@ import { truthiness } from './truthiness.mjs';
 
 /** @return {ActorPF[]} */
 export const currentTargetedActors = () => {
-    return [...game.user.targets]
+    return currentTargets()
         .map(x => x.actor)
         .filter(truthiness);
 }

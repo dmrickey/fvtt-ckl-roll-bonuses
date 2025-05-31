@@ -3,6 +3,7 @@ import { checkboxInput } from '../../../handlebars-handlers/bonus-inputs/chekbox
 import { showTokenInput } from "../../../handlebars-handlers/targeted/targets/token-input.mjs";
 import { TokenSelectorApp } from "../../../handlebars-handlers/targeted/targets/token-select-app.mjs";
 import { difference, intersection, intersects } from "../../../util/array-intersects.mjs";
+import { currentTargets } from '../../../util/get-current-targets.mjs';
 import { localize } from '../../../util/localize.mjs';
 import { registerSetting } from "../../../util/settings.mjs";
 import { toArray } from '../../../util/to-array.mjs';
@@ -26,7 +27,7 @@ class Settings {
 
 export class TokenTarget extends BaseTarget {
 
-    static get #currentTargetUuids() { return [...game.user.targets].map(x => x.document?.uuid).filter(truthiness); }
+    static get #currentTargetUuids() { return currentTargets().map(x => x.document?.uuid).filter(truthiness); }
 
     /**
      * @override
@@ -175,7 +176,7 @@ export class TokenTarget extends BaseTarget {
      */
     static showTargetEditor(item) {
         if (Settings.shouldAutoTarget) {
-            const currentTargetUuids = [...game.user.targets].map(x => x.document.uuid);
+            const currentTargetUuids = currentTargets().map(x => x.document.uuid);
             if (currentTargetUuids.length) {
                 item.setFlag(MODULE_NAME, this.key, currentTargetUuids);
                 return;

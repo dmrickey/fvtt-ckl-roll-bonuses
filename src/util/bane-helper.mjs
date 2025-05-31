@@ -1,4 +1,5 @@
 import { intersection } from './array-intersects.mjs';
+import { currentTargets } from './get-current-targets.mjs';
 import { getIdsFromItem } from './get-id-array-from-flag.mjs';
 import { localize } from './localize.mjs';
 import { truthiness } from './truthiness.mjs';
@@ -10,7 +11,7 @@ import { truthiness } from './truthiness.mjs';
  * @returns {string | undefined}
  */
 export const getBaneLabelForTargetsFromSource = (source, creatureTypeKey, creatureSubtypeKey) => {
-    const targets = [...game.user.targets];
+    const targets = currentTargets();
     if (!targets.length) {
         return;
     }

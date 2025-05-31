@@ -224,8 +224,6 @@
 - Add Fortune/Misfortune checkboxes to attack/roll dialogs
 
 - Remove `greater`/`improved`/`mythic` getters from LanguageSettings and use the new `is` methods
-- Flanking
-  - disable or hijack system's checkbox in attack dialog
 
 ### Specific Bonuses
 - ~~Migrate all keys to start with `specific_`~~ Do this later after SBC has a chance to update to only use the API

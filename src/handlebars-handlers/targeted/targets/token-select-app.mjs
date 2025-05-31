@@ -1,5 +1,6 @@
 import { MODULE_NAME } from "../../../consts.mjs";
 import { api } from '../../../util/api.mjs';
+import { currentTargets } from '../../../util/get-current-targets.mjs';
 import { getTokenDisplayName } from "../../../util/get-token-display-name.mjs";
 import { truthiness } from "../../../util/truthiness.mjs";
 import { uniqueArray } from "../../../util/unique-array.mjs";
@@ -64,7 +65,7 @@ export class TokenSelectorApp extends DocumentSheet {
         const getDispositionLabel = (disposition) =>
             game.i18n.localize('TOKEN.DISPOSITION.' + Object.entries(CONST.TOKEN_DISPOSITIONS).find(([ /** @type{string */_, value]) => value === disposition)?.[0] || '');
 
-        const currentTargetUuids = [...game.user.targets].map(x => x.document.uuid);
+        const currentTargetUuids = currentTargets().map(x => x.document.uuid);
         const availableTargets = game.scenes.viewed?.tokens
             .filter((token) => token.actor && token.object.isVisible && token.actor.id !== item.actor?.id)
             .map((token) => ({

@@ -2,19 +2,18 @@
 
 ### New Bonuses
 - **Flanking**
-  - **Is Flanking** (Conditional Target)
-    - Activates bonuses when you're flanking your target, can further configure to only activate bonuses while flanking with a specific ally
   - **Flanking** (Global Bonus)
-    - automatically add flanking bonuses to attack rolls
+    - automatically pre-check Flanking in attack dialog - if attack dialog is skipped, flanking is automatically calculated
     - Includes support for automatically increasing flank bonus with **Outflank** and **Menacing**
+  - **Is Flanking** (Conditional Target)
+    - Activates paired Bonuses when you're flanking your target, can further configure to only activate bonuses while flanking with a specific ally
   - Supports 3-dimensional flanking
-  - **Flanking Immunity** (Bonus)
-    - to cover abilities like All-Around Vision
-  - **Improved Uncanny Dodge** (Bonus)
+  - **Flanking Immunity** (Specific Bonus)
+    - to cover abilities like All-Around Vision or creatures like Oozes or Elementals
+  - **Improved Uncanny Dodge** (Specific Bonus)
     - to provide immunity when flanked by non-rogues. This must be configured on a class feature with a Class Assosiation properly configured.
   - Multiple Specific Bonuses to further enhance how flanking works
     - Supports various positional overrides like **Gang Up**, **Improved Outflank** Swashbuckler Mouser's **Underfoot Assault**, **Pack Flanking**, and Ratfolk **Swarming**
-    - Actors can be immune to flanking with **Flanking Immunity** to support abilities like All-Around Vision or creatures like Oozes or Elementals
     - **Outflank** and **Improved Outflank** are also supported by **Solo Tactics**
 - **While Adjacent To** (Target)
   - Activates bonuses while adjacent to a chosen ally
@@ -28,13 +27,13 @@
 - type docs improved for developers
 - Expandeded previous change to less aggressively cache formula to Dice Transform Bonus (see 2.20.2 below)
 - Actions with invalid ranges are now always assumed to threaten the target instead of treating its range as 0. Debug UI warning is now printed to console if console's debug setting is disabled.
-- Bonus Picker dialog improvements - searching, sticky headers, and put Improved before Greater in Specific Bonus tab
+- Bonus Picker dialog improvements - searching, sticky headers, and sorted Improved before Greater in Specific Bonus tab
 - Token and Actor inputs - when hovering over the images, now highlight any tokens within the current scene
-- Fixed removing Bonuses via the picker in foundry v13
 
 ### Bugfixes
 - `extraChanges` being added to attacks are no longer lost (e.g. the system's crit only attack changes now work as expected once again)
 - Vital Strike once again correctly adds Improved and Greater bonuses as expected
+- Fixed removing Bonuses via the picker in foundry v13 causing an error
 
 ---
 

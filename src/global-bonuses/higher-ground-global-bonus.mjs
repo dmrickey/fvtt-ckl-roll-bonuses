@@ -1,6 +1,5 @@
-import { PositionalHelper } from '../util/positional-helper.mjs';
 import { currentTargets } from '../util/get-current-targets.mjs';
-import { customGlobalHooks } from '../util/hooks.mjs'
+import { PositionalHelper } from '../util/positional-helper.mjs';
 import { BaseGlobalBonus } from './base-global-bonus.mjs';
 
 /** @extends {BaseGlobalBonus} */
@@ -53,14 +52,14 @@ export class HigherGroundGlobalBonus extends BaseGlobalBonus {
         return isHigher;
     }
 
-    static {
-        /** @param {ActionUse} actionUse */
-        function addHigherGroundOption(actionUse) {
-            if (HigherGroundGlobalBonus.isHigher(actionUse)) {
-                actionUse.shared.useOptions.highGround = true;
-            }
+    /** @param {ActionUse} actionUse */
+    static preEnableHigherGroundCheck(actionUse) {
+        if (this.isHigher(actionUse)) {
+            actionUse.shared.useOptions.highGround = true;
         }
+    }
 
-        Hooks.on('pf1CreateActionUse', addHigherGroundOption);
+    static {
+        Hooks.on('pf1CreateActionUse', this.preEnableHigherGroundCheck.bind(this));
     }
 }
