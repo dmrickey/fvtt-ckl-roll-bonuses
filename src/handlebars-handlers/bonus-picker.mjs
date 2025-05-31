@@ -351,7 +351,7 @@ export class BonusPickerApp extends DocumentSheet {
                         updateObj.system.flags.boolean[bonusData.key] = true;
                     }
                     else {
-                        const _key = `${'-='}bonusData.key`;
+                        const _key = `-=${bonusData.key}`;
                         const _value = /** @type {ItemPF['system']['flags']['boolean'][string]} */ (/** @type {unknown} */  (null));
                         updateObj.system.flags.boolean[_key] = _value;
                     }
