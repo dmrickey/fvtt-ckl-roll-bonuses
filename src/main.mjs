@@ -690,7 +690,7 @@ Hooks.once('init', () => {
     console.log(`${FRIENDLY_MODULE_NAME} loaded`);
     game.modules.get(MODULE_NAME).api = api;
     game.modules.get(MODULE_NAME).ready = true;
-    Hooks.callAll(`${MODULE_NAME}.ready`)
+    Hooks.callAll(`${MODULE_NAME}.ready`, api);
 });
 
 /**

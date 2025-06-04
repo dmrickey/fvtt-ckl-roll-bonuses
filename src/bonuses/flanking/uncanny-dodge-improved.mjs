@@ -112,7 +112,7 @@ export class UncannyDodgeImproved extends SpecificBonus {
         const attackerDodgeLevel = getDodgeLevel(attacker);
         const targetDodgeLevel = getDodgeLevel(target);
 
-        return attackerDodgeLevel - 4 < targetDodgeLevel;
+        return !!targetDodgeLevel && attackerDodgeLevel - 4 < targetDodgeLevel;
     }
 }
 
