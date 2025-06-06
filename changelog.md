@@ -1,8 +1,8 @@
 ## Roll Bonuses 2.21.1
 
 ### Bugfixes
-- Fixed flank detection requiring the attackerw has Improved Uncanny Dodge
-- Fixed Pack Flanking only checking if the attack has Pack Flanking and not checking if the "flank partner" also has it
+- Fixed flank detection requiring the attacker has Improved Uncanny Dodge
+- Fixed Pack Flanking checking the attacker twice for Pack Flanking and not checking if the "flank partner" also has it
 
 ---
 

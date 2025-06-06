@@ -34,35 +34,34 @@ export class DamageBonus extends BaseBonus {
     /**
      * @override
      * @inheritdoc
+     * @param {ItemPF} item
+     * @param {RollData} rollData
      */
-    static init() {
-        // cache damages on the item
-        LocalHookHandler.registerHandler(localHooks.prepareData, (item, rollData) => {
-            const damages = item.getFlag(MODULE_NAME, this.key) || [];
-            damages.forEach((/** @type {DamageInputModel}*/ damage) => {
-                item[MODULE_NAME][this.key] ||= [];
-                try {
-                    const formula = Roll.replaceFormulaData(damage.formula, { item: rollData.item, class: rollData.class });
-                    item[MODULE_NAME][this.key].push(formula);
-                }
-                catch {
-                    console.error('Problem with formula', damage.formula, this.key, item);
-                    item[MODULE_NAME][this.key].push('0');
-                }
-            });
+    static prepareSourceData(item, rollData) {
+        const damages = item.getFlag(MODULE_NAME, this.key) || [];
+        damages.forEach((/** @type {DamageInputModel}*/ damage) => {
+            item[MODULE_NAME][this.key] ||= [];
+            try {
+                const formula = Roll.replaceFormulaData(damage.formula, { item: rollData.item, class: rollData.class });
+                item[MODULE_NAME][this.key].push(formula);
+            }
+            catch {
+                console.error('Problem with formula', damage.formula, this.key, item);
+                item[MODULE_NAME][this.key].push('0');
+            }
+        });
 
-            const changes = item.getFlag(MODULE_NAME, this.#changeKey) || [];
-            changes.forEach((/** @type {{formula: string, type: BonusTypes}}*/ change) => {
-                item[MODULE_NAME][this.#changeKey] ||= [];
-                try {
-                    const formula = Roll.replaceFormulaData(change.formula, { item: rollData.item, class: rollData.class });
-                    item[MODULE_NAME][this.#changeKey].push(formula);
-                }
-                catch {
-                    console.error('Problem with formula', change.formula, this.#changeKey, item);
-                    item[MODULE_NAME][this.#changeKey].push('0');
-                }
-            });
+        const changes = item.getFlag(MODULE_NAME, this.#changeKey) || [];
+        changes.forEach((/** @type {{formula: string, type: BonusTypes}}*/ change) => {
+            item[MODULE_NAME][this.#changeKey] ||= [];
+            try {
+                const formula = Roll.replaceFormulaData(change.formula, { item: rollData.item, class: rollData.class });
+                item[MODULE_NAME][this.#changeKey].push(formula);
+            }
+            catch {
+                console.error('Problem with formula', change.formula, this.#changeKey, item);
+                item[MODULE_NAME][this.#changeKey].push('0');
+            }
         });
     }
 

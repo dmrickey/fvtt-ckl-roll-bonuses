@@ -408,19 +408,23 @@ const prepare = (item, rollData) => {
     api.allBonusTypes.forEach((bonusType) => {
         if (bonusType.isSource(item)) {
             item[MODULE_NAME].bonuses.push(bonusType);
-            bonusType.prepareSourceData(item, rollData);
+            if (item.isActive) {
+                bonusType.prepareSourceData(item, rollData);
+            }
         }
     });
     api.allTargetTypes.forEach((targetType) => {
         if (targetType.isSource(item)) {
             item[MODULE_NAME].targets.push(targetType);
-            targetType.prepareSourceData(item, rollData);
+            if (item.isActive) {
+                targetType.prepareSourceData(item, rollData);
+            }
         }
     });
     api.allTargetOverrideTypes.forEach((overrideType) => {
         if (overrideType.isSource(item)) {
             item[MODULE_NAME].targetOverrides.push(overrideType);
-            if (!overrideType.isInvalidItemType(item)) {
+            if (item.isActive && !overrideType.isInvalidItemType(item)) {
                 overrideType.prepareSourceData(item, rollData);
             }
         }

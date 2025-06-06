@@ -1,7 +1,6 @@
 import { MODULE_NAME } from '../../consts.mjs';
 import { textInput } from '../../handlebars-handlers/bonus-inputs/text-input.mjs';
 import { handleBonusesFor } from '../../target-and-bonus-join.mjs';
-import { LocalHookHandler, localHooks } from '../../util/hooks.mjs';
 import { localizeBonusTooltip } from '../../util/localize.mjs';
 import { simplify } from '../../util/simplify-roll-formula.mjs';
 import { BaseBonus } from './_base-bonus.mjs';
@@ -24,14 +23,14 @@ export class DiceTransformBonus extends BaseBonus {
     /**
      * @override
      * @inheritdoc
+     * @param {ItemPF} item
+     * @param {RollData} rollData
      */
-    static init() {
-        LocalHookHandler.registerHandler(localHooks.prepareData, (item, rollData) => {
-            const modification = item.getFlag(MODULE_NAME, this.key);
-            if (modification) {
-                item[MODULE_NAME][this.key] = Roll.replaceFormulaData(modification, { item: rollData.item, class: rollData.class });
-            }
-        });
+    static prepareSourceData(item, rollData) {
+        const modification = item.getFlag(MODULE_NAME, this.key);
+        if (modification) {
+            item[MODULE_NAME][this.key] = Roll.replaceFormulaData(modification, { item: rollData.item, class: rollData.class });
+        }
     }
 
     /**
@@ -104,8 +103,13 @@ export class DiceTransformBonus extends BaseBonus {
         if (match) {
             const quantity = +match[1];
             const faces = +match[2];
+            const base = `${quantity}d${faces}`;
+            const f = faces;
+            const q = quantity;
+            const qty = quantity;
+            const b = base;
 
-            const final = Roll.replaceFormulaData(modification, { ...rollData, quantity, faces, base: `${quantity}d${faces}` });
+            const final = Roll.replaceFormulaData(modification, { ...rollData, f, q, qty, b, quantity, faces, base });
 
             return simplified.replace(/^(\d+)d(\d+)/, final);
         }
