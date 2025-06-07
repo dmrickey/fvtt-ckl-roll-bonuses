@@ -5,14 +5,13 @@ import { MODULE_NAME } from '../consts.mjs';
 import { keyValueSelect } from "../handlebars-handlers/bonus-inputs/key-value-select.mjs";
 import { intersects } from "../util/array-intersects.mjs";
 import { createChangeForTooltip } from '../util/conditional-helpers.mjs';
-import { getActorItemsByTypes } from '../util/get-actor-items-by-type.mjs';
 import { getCachedBonuses } from '../util/get-cached-bonuses.mjs';
+import { getWeaponGroupChoicesFromActor, getWeaponGroupsFromActor } from '../util/get-weapon-groups-from-actor.mjs';
 import { customGlobalHooks } from "../util/hooks.mjs";
 import { registerItemHint } from "../util/item-hints.mjs";
 import { localize, localizeBonusLabel, localizeBonusTooltip } from "../util/localize.mjs";
 import { LanguageSettings } from "../util/settings.mjs";
 import { truthiness } from "../util/truthiness.mjs";
-import { uniqueArray } from "../util/unique-array.mjs";
 import { SpecificBonus } from './_specific-bonus.mjs';
 
 export class MartialFocus extends SpecificBonus {
@@ -43,18 +42,8 @@ export class MartialFocus extends SpecificBonus {
             compendiumId: 'W1eDSqiwljxDe0zl',
             isItemMatchFunc: (name) => name === Settings.name,
             showInputsFunc: (item, html, isEditable) => {
+                const choices = getWeaponGroupChoicesFromActor(item.actor);
                 const current = item.getFlag(MODULE_NAME, MartialFocus.key);
-                const customs =
-                    !item?.actor || !isEditable
-                        ? []
-                        : uniqueArray(
-                            getActorItemsByTypes(item.actor, 'attack', 'weapon')
-                                .flatMap((i) => ([...(i.system.weaponGroups?.custom ?? [])]))
-                                .filter(truthiness)
-                        ).map((i) => ({ key: i, label: i }));
-
-                const groups = Object.entries(pf1.config.weaponGroups).map(([key, label]) => ({ key, label }));
-                const choices = [...groups, ...customs].sort((a, b) => a.label.localeCompare(b.label));
 
                 keyValueSelect({
                     choices,
@@ -70,19 +59,11 @@ export class MartialFocus extends SpecificBonus {
             },
             options: {
                 defaultFlagValuesFunc: (item) => {
-                    const onActor =
-                        !item?.actor
-                            ? []
-                            : uniqueArray(
-                                getActorItemsByTypes(item.actor, 'attack', 'weapon')
-                                    .flatMap((i) => ([...(i.system.weaponGroups?.total ?? [])]))
-                                    .filter(truthiness)
-                            );
-
-                    const groups = Object.keys(pf1.config.weaponGroups);
-                    const choices = [...onActor, ...groups];
+                    const systemGroupKeys = Object.keys(pf1.config.weaponGroups);
+                    const choices = getWeaponGroupsFromActor(item.actor, false);
+                    const choice = choices[0] || systemGroupKeys[0];
                     return {
-                        [this.key]: choices[0],
+                        [this.key]: choice,
                     }
                 }
             }

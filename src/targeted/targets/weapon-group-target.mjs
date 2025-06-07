@@ -1,10 +1,9 @@
 import { MODULE_NAME } from "../../consts.mjs";
 import { traitInput } from '../../handlebars-handlers/trait-input.mjs';
-import { difference, intersects } from "../../util/array-intersects.mjs";
-import { getActorItemsByTypes } from '../../util/get-actor-items-by-type.mjs';
+import { intersects } from "../../util/array-intersects.mjs";
+import { getWeaponGroupChoicesFromActor } from '../../util/get-weapon-groups-from-actor.mjs';
 import { toArray } from '../../util/to-array.mjs';
 import { truthiness } from "../../util/truthiness.mjs";
-import { uniqueArray } from "../../util/unique-array.mjs";
 import { BaseTarget } from "./_base-target.mjs";
 
 /**
@@ -86,23 +85,7 @@ export class WeaponGroupTarget extends BaseTarget {
      * @param {ItemPF} options.item
      */
     static showInputOnItemSheet({ actor, html, isEditable, item }) {
-        const actorGroups = getActorItemsByTypes(actor, 'attack', 'weapon')
-            .flatMap((i) => [...i.system.weaponGroups.custom])
-            .filter(truthiness);
-        const targetedGroups = item.getFlag(MODULE_NAME, this.key) || [];
-        const custom = difference(
-            uniqueArray([
-                ...targetedGroups,
-                ...actorGroups,
-            ]),
-            Object.keys(pf1.config.weaponGroups),
-        );
-        custom.sort();
-
-        const choices = {
-            ...pf1.config.weaponGroups,
-            ...custom.reduce((acc, curr) => ({ ...acc, [curr]: curr, }), {}),
-        };
+        const choices = getWeaponGroupChoicesFromActor(actor);
 
         traitInput({
             choices,

@@ -50,6 +50,8 @@
 - [Not Possible](#not-possible)
 - [Other Ideas](#other-ideas)
 - [vnext](#vnext)
+    - [Global Bonuses](#global-bonuses)
+    - [Target](#target)
     - [Specific Bonuses](#specific-bonuses)
     - [Idea](#idea)
 
@@ -225,10 +227,26 @@
 
 - Remove `greater`/`improved`/`mythic` getters from LanguageSettings and use the new `is` methods
 
+### Global Bonuses
+- Mounted Charge Global Bonus
+  - Refactor `VitalStrikeData.buildMythicConditional` because that already has the logic necessary
+  - Include Spirited Charge Specific Bonus (when global bonus is enabled) to double damage
+  - Detect "lance" weapon type and double damage
+  - Global Bonus will need to add a "mounted" checkbox
+  - Global Bonus kicks off when both "mounted" and "charge" is checked
+
+### Target
+- `Size Target` (trait target) kicks in if target is a given size
+- `Relative Size` (kicks in if target is at least or exactly _N_ steps different from you larger/smaller)
+
 ### Specific Bonuses
 - ~~Migrate all keys to start with `specific_`~~ Do this later after SBC has a chance to update to only use the API
   - update all journal entries to indicate what the key is
 - Add "get item hint" function to base class
+- **Damage Multiplier**
+  - Brace - adhoc situations like the global charge bonus above
+  - Litany of Righteousness (probably can't do but putting here for reference)
+  - 
 
 ### Idea
 - turn `LanguageSettings` into a base class that other classes extend (or create a base class that has shared logic)

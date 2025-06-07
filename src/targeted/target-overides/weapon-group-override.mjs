@@ -1,9 +1,7 @@
 import { MODULE_NAME } from '../../consts.mjs';
 import { traitInput } from '../../handlebars-handlers/trait-input.mjs';
 import { difference } from '../../util/array-intersects.mjs';
-import { getActorItemsByTypes } from '../../util/get-actor-items-by-type.mjs';
-import { truthiness } from '../../util/truthiness.mjs';
-import { uniqueArray } from '../../util/unique-array.mjs';
+import { getWeaponGroupChoicesFromActor } from '../../util/get-weapon-groups-from-actor.mjs';
 import { BaseTargetOverride } from './_base-target-override.mjs';
 
 /** @extends {BaseTargetOverride} */
@@ -108,23 +106,7 @@ export class WeaponGroupOverride extends BaseTargetOverride {
      * @param {ItemPF} options.item
      */
     static showInputOnItemSheet({ actor, html, isEditable, item }) {
-        const actorGroups = getActorItemsByTypes(actor, 'attack', 'weapon')
-            .flatMap((i) => [...i.system.weaponGroups.custom])
-            .filter(truthiness);
-        const targetedGroups = item.getFlag(MODULE_NAME, this.key) || [];
-        const custom = difference(
-            uniqueArray([
-                ...targetedGroups,
-                ...actorGroups,
-            ]),
-            Object.keys(pf1.config.weaponGroups),
-        );
-        custom.sort();
-
-        const choices = {
-            ...pf1.config.weaponGroups,
-            ...custom.reduce((acc, curr) => ({ ...acc, [curr]: curr, }), {}),
-        };
+        const choices = getWeaponGroupChoicesFromActor(actor);
 
         traitInput({
             choices,

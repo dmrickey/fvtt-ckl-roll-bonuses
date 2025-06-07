@@ -1,8 +1,18 @@
+## Roll Bonuses 2.21.2
+
+### Bugfixes
+- Fixed issue collecting weapon groups and equipment types from some items. This largely showed up when trying to use Weapon Focus with Attacks and other less common cases
+
+### Misc
+- Dice Transform Bonus now accepts `@q`/`@qty` for `@quantity`, `@f` for `@faces`, and `@b` for `@base`
+
+---
+
 ## Roll Bonuses 2.21.1
 
 ### Bugfixes
-- Fixed flank detection requiring the attackerw has Improved Uncanny Dodge
-- Fixed Pack Flanking only checking if the attack has Pack Flanking and not checking if the "flank partner" also has it
+- Fixed flank detection requiring the attacker has Improved Uncanny Dodge
+- Fixed Pack Flanking checking the attacker twice for Pack Flanking and not checking if the "flank partner" also has it
 
 ---
 

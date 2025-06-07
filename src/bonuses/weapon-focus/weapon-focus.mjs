@@ -2,8 +2,8 @@ import { MODULE_NAME } from '../../consts.mjs';
 import { stringSelect } from '../../handlebars-handlers/bonus-inputs/string-select.mjs';
 import { textInput } from '../../handlebars-handlers/bonus-inputs/text-input.mjs';
 import { getDocFlags } from '../../util/flag-helpers.mjs';
+import { getWeaponTypesFromActor } from '../../util/get-weapon-types-from-actor.mjs';
 import { LanguageSettings, registerSetting } from '../../util/settings.mjs';
-import { uniqueArray } from '../../util/unique-array.mjs';
 import { SpecificBonus } from '../_specific-bonus.mjs';
 
 class BaseWeaponFocus extends SpecificBonus {
@@ -47,9 +47,8 @@ export class WeaponFocus extends BaseWeaponFocus {
             isItemMatchFunc: (name) => name === Settings.name,
             showInputsFunc: (item, html, isEditable) => {
                 const actor = item.actor;
-                const choices = (isEditable && actor)
-                    ? uniqueArray(actor.itemTypes.weapon
-                        .flatMap((item) => item.system.baseTypes ?? []))
+                const choices = isEditable
+                    ? getWeaponTypesFromActor(actor)
                     : [];
 
                 stringSelect({
@@ -68,8 +67,7 @@ export class WeaponFocus extends BaseWeaponFocus {
                     const actor = item?.actor;
                     if (!actor) return;
 
-                    const choices = uniqueArray(actor.itemTypes.weapon
-                        .flatMap((item) => item.system.baseTypes ?? []));
+                    const choices = getWeaponTypesFromActor(actor);
                     if (choices.length) {
                         return { [this.key]: choices[0] };
                     }

@@ -6,6 +6,7 @@ import { intersection } from '../util/array-intersects.mjs';
 import { createChange } from '../util/conditional-helpers.mjs';
 import { getDocFlags } from '../util/flag-helpers.mjs';
 import { getSkillName } from '../util/get-skill-name.mjs';
+import { getWeaponGroupsFromActor } from '../util/get-weapon-groups-from-actor.mjs';
 import { LocalHookHandler, localHooks } from '../util/hooks.mjs';
 import { registerItemHint } from "../util/item-hints.mjs";
 import { listFormat } from '../util/list-format.mjs';
@@ -124,9 +125,7 @@ export class VersatileTraining extends SpecificBonus {
                 defaultFlagValuesFunc: (item) => {
                     if (!item?.actor) return;
 
-                    const group = /** @type {WeaponGroup} */
-                        ([...item.actor.itemTypes.weapon, ...item.actor.itemTypes.attack]
-                            .flatMap(x => [...x.system.weaponGroups.total])[0]);
+                    const group = getWeaponGroupsFromActor(item.actor)[0];
                     if (group) {
                         return {
                             [this.key]: group,

@@ -3,7 +3,6 @@ import { modifiersInput } from "../../handlebars-handlers/targeted/bonuses/condi
 import { handleBonusesFor } from '../../target-and-bonus-join.mjs';
 import { addCheckToAttackDialog, getFormData } from '../../util/attack-dialog-helper.mjs';
 import { conditionalAttackTooltipModSource, conditionalModToItemChangeForDamageTooltip, loadConditionals } from "../../util/conditional-helpers.mjs";
-import { LocalHookHandler, localHooks } from '../../util/hooks.mjs';
 import { truthiness } from "../../util/truthiness.mjs";
 import { uniqueArray } from '../../util/unique-array.mjs';
 import { BaseBonus } from "./_base-bonus.mjs";
@@ -28,20 +27,20 @@ export class ConditionalModifiersBonus extends BaseBonus {
     /**
      * @override
      * @inheritdoc
+     * @param {ItemPF} item
+     * @param {RollData} rollData
      */
-    static init() {
-        LocalHookHandler.registerHandler(localHooks.prepareData, (item, rollData) => {
-            let conditionals = loadConditionals(item, this.key);
-            conditionals = conditionals.filter(x => x._source.modifiers.length && x._source.modifiers.find((m) => !!m.formula && !!m.target));
-            conditionals.forEach((c) => {
-                c._source.modifiers.forEach((m) => {
-                    item[MODULE_NAME][this.key] ||= [];
-                    item[MODULE_NAME][this.key].conditionals ||= {};
-                    item[MODULE_NAME][this.key].conditionals[c.id] ||= {};
+    static prepareSourceData(item, rollData) {
+        let conditionals = loadConditionals(item, this.key);
+        conditionals = conditionals.filter(x => x._source.modifiers.length && x._source.modifiers.find((m) => !!m.formula && !!m.target));
+        conditionals.forEach((c) => {
+            c._source.modifiers.forEach((m) => {
+                item[MODULE_NAME][this.key] ||= [];
+                item[MODULE_NAME][this.key].conditionals ||= {};
+                item[MODULE_NAME][this.key].conditionals[c.id] ||= {};
 
-                    const formula = Roll.replaceFormulaData(m.formula, { item: rollData.item, class: rollData.class });
-                    item[MODULE_NAME][this.key].conditionals[c.id][m._id] = formula;
-                });
+                const formula = Roll.replaceFormulaData(m.formula, { item: rollData.item, class: rollData.class });
+                item[MODULE_NAME][this.key].conditionals[c.id][m._id] = formula;
             });
         });
     }
