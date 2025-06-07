@@ -187,6 +187,8 @@ import {
 } from '../src/util/get-id-array-from-flag.mjs';
 import { getSkillFormula } from '../src/util/get-skill-formula.mjs';
 import { getSourceFlag } from '../src/util/get-source-flag.mjs';
+import { getWeaponGroupsFromActor } from '../src/util/get-weapon-groups-from-actor.mjs';
+import { getWeaponTypesFromActor } from '../src/util/get-weapon-types-from-actor.mjs';
 import { itemHasCompendiumId } from '../src/util/has-compendium-id.mjs';
 import { ifDebug } from '../src/util/if-debug.mjs';
 import { isActorInCombat } from '../src/util/is-actor-in-combat.mjs';
@@ -463,6 +465,8 @@ declare global {
             getEnhancementBonusForAction: typeof getEnhancementBonusForAction;
             getSkillFormula: typeof getSkillFormula;
             getSourceFlag: typeof getSourceFlag;
+            getWeaponGroupsFromActor: typeof getWeaponGroupsFromActor;
+            getWeaponTypesFromActor: typeof getWeaponTypesFromActor;
             handleBonusesFor: typeof handleBonusesFor;
             ifDebug: typeof ifDebug;
             isActorInCombat: typeof isActorInCombat;

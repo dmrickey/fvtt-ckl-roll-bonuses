@@ -1,11 +1,10 @@
 import { MODULE_NAME } from "../../consts.mjs";
 import { traitInput } from '../../handlebars-handlers/trait-input.mjs';
 import { intersects } from "../../util/array-intersects.mjs";
-import { getActorItemsByTypes } from '../../util/get-actor-items-by-type.mjs';
+import { getWeaponTypesFromActor } from '../../util/get-weapon-types-from-actor.mjs';
 import { toArray } from '../../util/to-array.mjs';
 import { truthiness } from "../../util/truthiness.mjs";
 import { uniqueArray } from "../../util/unique-array.mjs";
-import { WeaponBaseTypeOverride } from '../target-overides/weapon-type-override.mjs';
 import { BaseTarget } from "./_base-target.mjs";
 
 export class WeaponTypeTarget extends BaseTarget {
@@ -89,15 +88,9 @@ export class WeaponTypeTarget extends BaseTarget {
      * @param {ItemPF} options.item
      */
     static showInputOnItemSheet({ html, isEditable, item }) {
-        const actorItems = getActorItemsByTypes(item?.actor, 'attack', 'weapon');
-        const typesOnActor = actorItems
-            .flatMap((_item) => _item.system.baseTypes ?? [])
-            ?? [];
+        const typesOnActor = getWeaponTypesFromActor(item?.actor);
         const currentTypes = this.#getTypes(item);
-        const overrides = (item?.actor?.itemFlags?.boolean[WeaponBaseTypeOverride.key]?.sources ?? [])
-            .flatMap((_item) => _item.system.baseTypes ?? [])
-            ?? [];
-        const choices = uniqueArray([...typesOnActor, ...currentTypes, ...overrides]);
+        const choices = uniqueArray([...typesOnActor, ...currentTypes]);
         choices.sort();
 
         traitInput({
