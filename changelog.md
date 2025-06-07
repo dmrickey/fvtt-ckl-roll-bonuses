@@ -1,3 +1,13 @@
+## Roll Bonuses 2.21.2
+
+### Bugfixes
+- Fixed issue collecting weapon groups and equipment types from some items. This largely showed up when trying to use Weapon Focus with Attacks and other less common cases
+
+### Misc
+- Dice Transform Bonus now accepts `@q`/`@qty` for `@quantity`, `@f` for `@faces`, and `@b` for `@base`
+
+---
+
 ## Roll Bonuses 2.21.1
 
 ### Bugfixes
