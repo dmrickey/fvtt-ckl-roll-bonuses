@@ -1,8 +1,11 @@
 import { MODULE_NAME } from "../consts.mjs";
+import { api } from './api.mjs';
 import { ifDebug } from './if-debug.mjs';
 import { isEmptyObject } from "./is-empty-object.mjs";
 
 /**
+ * Looks up a localized string. Outputs a warning if there is no corresponding key.
+ *
  * @param {string} key
  * @param {Record<string, unknown>} [opts]
  * @returns
@@ -63,3 +66,5 @@ export {
     localizeBonusTooltip,
     localizeItemHint,
 };
+
+api.utils.localize = localize;

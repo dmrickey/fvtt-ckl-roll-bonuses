@@ -130,8 +130,8 @@ import { WeaponBaseTypeOverride } from '../src/targeted/target-overides/weapon-t
 import { BaseTarget } from '../src/targeted/targets/_base-target.mjs';
 import { ActionTarget } from '../src/targeted/targets/action-target.mjs';
 import { ActionTypeTarget } from '../src/targeted/targets/action-type-target.mjs';
-import { AllTarget } from '../src/targeted/targets/all-target.mjs';
 import { AlignmentTarget } from '../src/targeted/targets/conditional/alignment-target.mjs';
+import { AllTarget } from '../src/targeted/targets/conditional/all-target.mjs';
 import { ConditionTarget } from '../src/targeted/targets/conditional/condition-target.mjs';
 import { CreatureSubtypeTarget } from '../src/targeted/targets/conditional/creature-subtype-target.mjs';
 import { CreatureTypeTarget } from '../src/targeted/targets/conditional/creature-type-target.mjs';
@@ -195,6 +195,7 @@ import { isActorInCombat } from '../src/util/is-actor-in-combat.mjs';
 import { isNotEmptyObject } from '../src/util/is-empty-object.mjs';
 import { registerItemHint } from '../src/util/item-hints.mjs';
 import { listFormat } from '../src/util/list-format.mjs';
+import { localize } from '../src/util/localize.mjs';
 import { onCreate, onRenderCreate } from '../src/util/on-create.mjs';
 import { onSkillSheetRender } from '../src/util/on-skill-sheet-render-handler.mjs';
 import { PositionalHelper } from '../src/util/positional-helper.mjs';
@@ -473,6 +474,7 @@ declare global {
             isEmptyObject: typeof isEmptyObject;
             isNotEmptyObject: typeof isNotEmptyObject;
             itemHasCompendiumId: typeof itemHasCompendiumId;
+            localize: typeof localize;
             onCreate: typeof onCreate;
             onRenderCreate: typeof onRenderCreate;
             onSkillSheetRender: typeof onSkillSheetRender;
