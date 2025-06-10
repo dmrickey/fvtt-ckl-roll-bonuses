@@ -5,12 +5,12 @@ import { currentTargetedActors } from '../../../util/get-current-targets.mjs';
 import { localize } from '../../../util/localize.mjs';
 import { toArray } from '../../../util/to-array.mjs';
 import { Trait } from '../../../util/trait-builder.mjs';
-import { BaseTarget } from '../_base-target.mjs';
+import { BaseConditionalTarget } from './_base-condtional.target.mjs';
 
 /**
- * @extends BaseTarget
+ * @extends BaseConditionalTarget
  */
-export class CreatureTypeTarget extends BaseTarget {
+export class CreatureTypeTarget extends BaseConditionalTarget {
     /**
      * @inheritdoc
      * @override
@@ -23,24 +23,11 @@ export class CreatureTypeTarget extends BaseTarget {
      * @returns {string}
      */
     static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.IpRhJqZEX2TUarSX#creature-type'; }
-
-    /**
-     * @override
-     * @inheritdoc
-     */
-    static get isConditionalTarget() { return true; }
-
     /**
      * @override
      * @inheritdoc
      */
     static get label() { return localize('PF1.CreatureType'); }
-
-    /**
-     * @override
-     * @inheritdoc
-     */
-    static get isGenericTarget() { return true; }
 
     /**
      * @param {ItemPF} source
@@ -69,11 +56,11 @@ export class CreatureTypeTarget extends BaseTarget {
     /**
      * @inheritdoc
      * @override
-     * @param {ItemPF & { actor: ActorPF }} _item
+     * @param {ActorPF} _actor
      * @param {ItemPF[]} sources
      * @returns {ItemPF[]}
      */
-    static _getSourcesFor(_item, sources) {
+    static _getConditionalActorSourcesFor(_actor, sources) {
         const currentTargets = currentTargetedActors();
         if (!currentTargets.length) return [];
 

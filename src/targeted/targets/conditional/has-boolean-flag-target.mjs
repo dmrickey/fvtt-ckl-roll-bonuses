@@ -5,7 +5,7 @@ import { api } from '../../../util/api.mjs';
 import { difference } from '../../../util/array-intersects.mjs';
 import { currentTargetedActors } from '../../../util/get-current-targets.mjs';
 import { localize } from '../../../util/localize.mjs';
-import { BaseTarget } from '../_base-target.mjs';
+import { BaseConditionalTarget } from './_base-condtional.target.mjs';
 
 const targetChoices =  /** @type {const} */ ({
     self: 'target-choice.self',
@@ -17,9 +17,9 @@ const targetChoices =  /** @type {const} */ ({
  */
 
 /**
- * @extends {BaseTarget}
+ * @extends {BaseConditionalTarget}
  */
-export class HasBooleanFlagTarget extends BaseTarget {
+export class HasBooleanFlagTarget extends BaseConditionalTarget {
     /**
      * @override
      * @inheritdoc
@@ -58,13 +58,13 @@ export class HasBooleanFlagTarget extends BaseTarget {
     }
 
     /**
-     * @override
      * @inheritdoc
-     * @param {ItemPF & { actor: ActorPF }} item
+     * @override
+     * @param {ActorPF} actor
      * @param {ItemPF[]} sources
      * @returns {ItemPF[]}
      */
-    static _getSourcesFor(item, sources) {
+    static _getConditionalActorSourcesFor(actor, sources) {
         const currentTargets = currentTargetedActors();
 
         const filteredSources = sources.filter((source) => {
@@ -75,7 +75,7 @@ export class HasBooleanFlagTarget extends BaseTarget {
                 return false;
             }
             else if (targetOrSelf === 'self') {
-                return item.actor.hasItemBooleanFlag(value);
+                return actor.hasItemBooleanFlag(value);
             }
             else {
                 return currentTargets.length
@@ -85,18 +85,6 @@ export class HasBooleanFlagTarget extends BaseTarget {
 
         return filteredSources;
     }
-
-    /**
-     * @override
-     * @inheritdoc
-     */
-    static get isConditionalTarget() { return true; }
-
-    /**
-     * @override
-     * @inheritdoc
-     */
-    static get isGenericTarget() { return true; }
 
     /**
      * @inheritdoc

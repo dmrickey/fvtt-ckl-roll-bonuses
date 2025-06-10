@@ -246,7 +246,8 @@
 - **Damage Multiplier**
   - Brace - adhoc situations like the global charge bonus above
   - Litany of Righteousness (probably can't do but putting here for reference)
-  - 
+
+Add journal links to target/bonus headers within item sheet
 
 ### Idea
 - turn `LanguageSettings` into a base class that other classes extend (or create a base class that has shared logic)

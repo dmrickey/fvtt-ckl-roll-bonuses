@@ -1,8 +1,9 @@
 import { showEnabledLabel } from '../../../handlebars-handlers/enabled-label.mjs';
 import { isActorInCombat } from '../../../util/is-actor-in-combat.mjs';
-import { BaseTarget } from '../_base-target.mjs';
+import { BaseConditionalTarget } from './_base-condtional.target.mjs';
 
-export class WhenInCombatTarget extends BaseTarget {
+/** @extends {BaseConditionalTarget} */
+export class WhenInCombatTarget extends BaseConditionalTarget {
 
     /**
      * @override
@@ -28,30 +29,19 @@ export class WhenInCombatTarget extends BaseTarget {
     }
 
     /**
+     * @inheritdoc
      * @override
-     * @param {ItemPF & { actor: ActorPF }} item
+     * @param {ActorPF} actor
      * @param {ItemPF[]} sources
      * @returns {ItemPF[]}
      */
-    static _getSourcesFor(item, sources) {
-        if (!isActorInCombat(item.actor)) {
+    static _getConditionalActorSourcesFor(actor, sources) {
+        if (!isActorInCombat(actor)) {
             return [];
         }
 
         return sources;
     }
-
-    /**
-     * @override
-     * @inheritdoc
-     */
-    static get isConditionalTarget() { return true; }
-
-    /**
-     * @override
-     * @inheritdoc
-     */
-    static get isGenericTarget() { return true; }
 
     /**
      * @inheritdoc

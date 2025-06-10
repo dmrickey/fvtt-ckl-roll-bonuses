@@ -1,8 +1,8 @@
 import { Sources } from '../source-registration.mjs';
 import { ActionTarget } from "./action-target.mjs";
 import { ActionTypeTarget } from './action-type-target.mjs';
-import { AllTarget } from './all-target.mjs';
 import { AlignmentTarget } from './conditional/alignment-target.mjs';
+import { AllTarget } from './conditional/all-target.mjs';
 import { ConditionTarget } from './conditional/condition-target.mjs';
 import { CreatureSubtypeTarget } from './conditional/creature-subtype-target.mjs';
 import { CreatureTypeTarget } from './conditional/creature-type-target.mjs';

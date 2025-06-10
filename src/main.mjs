@@ -525,9 +525,18 @@ async function itemActionRollDamage(wrapped, ...args) {
  * @returns {ChatMessagePF|object|void} The chat message if one was created, or its data if not. `void` if the roll was cancelled.
  */
 function actorRollSkill(wrapped, skillId, options) {
+    const extraChanges = LocalHookHandler.fireHookWithReturnSync(localHooks.getActorSkillChanges, [], this, skillId);
+    this.changes ||= new Collection();
+    extraChanges.forEach((c) => this.changes?.set(c.id, c))
+
     const seed = { skillId, options };
     LocalHookHandler.fireHookNoReturnSync(localHooks.actorRollSkill, seed, this);
-    return wrapped(seed.skillId, seed.options);
+    const result = wrapped(seed.skillId, seed.options);
+
+    // remove those extra changes
+    extraChanges.forEach((c) => this.changes?.delete(c.id));
+
+    return result;
 }
 
 /**

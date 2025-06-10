@@ -1,10 +1,10 @@
-import { showEnabledLabel } from '../../handlebars-handlers/enabled-label.mjs';
-import { BaseTarget } from './_base-target.mjs';
+import { showEnabledLabel } from '../../../handlebars-handlers/enabled-label.mjs';
+import { BaseConditionalTarget } from './_base-condtional.target.mjs';
 
 /**
- * @abstract
+ * @extends BaseConditionalTarget
  */
-export class AllTarget extends BaseTarget {
+export class AllTarget extends BaseConditionalTarget {
 
     /**
      * @override
@@ -31,18 +31,6 @@ export class AllTarget extends BaseTarget {
     }
 
     /**
-     * @override
-     * @inheritdoc
-     */
-    static get isConditionalTarget() { return true; }
-
-    /**
-     * @override
-     * @inheritdoc
-     */
-    static get isGenericTarget() { return true; }
-
-    /**
      * @inheritdoc
      * @override
      * @param {object} options
@@ -67,11 +55,11 @@ export class AllTarget extends BaseTarget {
     /**
      * @inheritdoc
      * @override
-     * @param {ItemPF & { actor: ActorPF }} _item
+     * @param {ActorPF} _actor
      * @param {ItemPF[]} sources
      * @returns {ItemPF[]}
      */
-    static _getSourcesFor(_item, sources) {
+    static _getConditionalActorSourcesFor(_actor, sources) {
         return sources;
     };
 }

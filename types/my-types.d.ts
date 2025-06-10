@@ -205,6 +205,7 @@ import { signed } from '../src/util/to-signed-string.mjs';
 import { Trait } from '../src/util/trait-builder.mjs';
 import { truthiness } from '../src/util/truthiness.mjs';
 import { distinct, uniqueArray } from '../src/util/unique-array.mjs';
+import { BaseConditionalTarget } from '../src/targeted/targets/conditional/_base-condtional.target.mjs';
 
 export {};
 
@@ -320,6 +321,8 @@ declare global {
         get allTargetTypes(): (typeof BaseTarget)[];
         get allTargetTypesKeys(): string[];
 
+        get allTargetTypesKeys(): (typeof BaseConditionalTarget)[];
+
         /** map of every target override from its key to its type */
         targetOverrideTypeMap: {
             ['target-override_finesse-override']: typeof FinesseOverride;
@@ -425,6 +428,7 @@ declare global {
             BaseBonus: typeof BaseBonus;
             BaseSource: typeof BaseSource;
             BaseTarget: typeof BaseTarget;
+            BaseConditionalTarget: typeof BaseConditionalTarget;
             BaseTargetOverride: typeof BaseTargetOverride;
         };
         BaseGlobalBonus: typeof BaseGlobalBonus;

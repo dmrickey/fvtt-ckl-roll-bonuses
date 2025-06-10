@@ -5,9 +5,10 @@ import { localize } from '../../../util/localize.mjs';
 import { PositionalHelper } from '../../../util/positional-helper.mjs';
 import { toArray } from '../../../util/to-array.mjs';
 import { truthiness } from '../../../util/truthiness.mjs';
-import { BaseTarget } from '../_base-target.mjs';
+import { BaseConditionalTarget } from './_base-condtional.target.mjs';
 
-export class WhileAdjacentToTarget extends BaseTarget {
+/** @extends {BaseConditionalTarget} */
+export class WhileAdjacentToTarget extends BaseConditionalTarget {
     /**
      * @override
      * @inheritdoc
@@ -62,17 +63,17 @@ export class WhileAdjacentToTarget extends BaseTarget {
     }
 
     /**
-     * @override
      * @inheritdoc
-     * @param {ItemPF & { actor: ActorPF }} item
+     * @override
+     * @param {ActorPF} actor
      * @param {ItemPF[]} sources
      * @param {ItemPF | ActionUse | ItemAction} doc - originating doc event in case a specific action is needed
      * @returns {ItemPF[]}
      */
-    static _getSourcesFor(item, sources, doc) {
+    static _getConditionalActorSourcesFor(actor, sources, doc) {
         let token;
-        if (doc instanceof pf1.documents.item.ItemPF) token = item.actor.getActiveTokens()[0];
-        else if (doc instanceof pf1.components.ItemAction) token = item.actor.getActiveTokens()[0];
+        if (doc instanceof pf1.documents.item.ItemPF) token = actor.getActiveTokens()[0];
+        else if (doc instanceof pf1.components.ItemAction) token = actor.getActiveTokens()[0];
         else token = doc.token.object;
 
         if (token?.scene !== game.scenes.viewed) {
@@ -86,19 +87,6 @@ export class WhileAdjacentToTarget extends BaseTarget {
 
         return filtered;
     }
-
-    /**
-     * @override
-     * @inheritdoc
-     */
-    static get isConditionalTarget() { return true; }
-
-    /**
-     * @override
-     * @inheritdoc
-     * @returns {boolean}
-     */
-    static get isGenericTarget() { return true; }
 
     /**
      * @inheritdoc

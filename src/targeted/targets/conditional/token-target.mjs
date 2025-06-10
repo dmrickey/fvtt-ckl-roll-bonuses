@@ -8,7 +8,7 @@ import { localize } from '../../../util/localize.mjs';
 import { registerSetting } from "../../../util/settings.mjs";
 import { toArray } from '../../../util/to-array.mjs';
 import { truthiness } from "../../../util/truthiness.mjs";
-import { BaseTarget } from "../_base-target.mjs";
+import { BaseConditionalTarget } from './_base-condtional.target.mjs';
 
 class Settings {
     static get #tokenSettingKey() { return 'should-auto-target-tokens'; }
@@ -25,7 +25,8 @@ class Settings {
     }
 }
 
-export class TokenTarget extends BaseTarget {
+/** @extends {BaseConditionalTarget} */
+export class TokenTarget extends BaseConditionalTarget {
 
     static get #currentTargetUuids() { return currentTargets().map(x => x.document?.uuid).filter(truthiness); }
 
@@ -70,13 +71,13 @@ export class TokenTarget extends BaseTarget {
     }
 
     /**
-     * @override
      * @inheritdoc
-     * @param {ItemPF & { actor: ActorPF }} _item
+     * @override
+     * @param {ActorPF} _actor
      * @param {ItemPF[]} sources
      * @returns {ItemPF[]}
      */
-    static _getSourcesFor(_item, sources) {
+    static _getConditionalActorSourcesFor(_actor, sources) {
         if (!this.#currentTargetUuids.length) {
             return [];
         }
@@ -92,19 +93,6 @@ export class TokenTarget extends BaseTarget {
 
         return bonusSources;
     }
-
-    /**
-     * @override
-     * @inheritdoc
-     */
-    static get isConditionalTarget() { return true; }
-
-    /**
-     * @override
-     * @inheritdoc
-     * @returns {boolean}
-     */
-    static get isGenericTarget() { return true; }
 
     /**
      * @inheritdoc

@@ -8,9 +8,10 @@ import { listFormat } from '../../../util/list-format.mjs';
 import { localize, localizeBonusLabel, localizeBonusTooltip } from '../../../util/localize.mjs';
 import { toArray } from '../../../util/to-array.mjs';
 import { truthiness } from "../../../util/truthiness.mjs";
-import { BaseTarget } from "../_base-target.mjs";
+import { BaseConditionalTarget } from './_base-condtional.target.mjs';
 
-export class IsFlankingTarget extends BaseTarget {
+/** @extends {BaseConditionalTarget} */
+export class IsFlankingTarget extends BaseConditionalTarget {
 
     /**
      * @override
@@ -79,22 +80,22 @@ export class IsFlankingTarget extends BaseTarget {
     }
 
     /**
-     * @override
      * @inheritdoc
-     * @param {ItemPF & { actor: ActorPF }} item
+     * @override
+     * @param {ActorPF} actor
      * @param {ItemPF[]} sources
      * @param {ItemPF | ActionUse | ItemAction} doc - originating doc event in case a specific action is needed
      * @returns {ItemPF[]}
      */
-    static _getSourcesFor(item, sources, doc) {
+    static _getConditionalActorSourcesFor(actor, sources, doc) {
         if (!currentTargets().length) {
             return [];
         }
 
-        let current = canvas.tokens.controlled.find((token) => token.actor?.uuid === item.actor.uuid);
+        let current = canvas.tokens.controlled.find((token) => token.actor?.uuid === actor.uuid);
         const self = current
             ? [current]
-            : item.actor.getActiveTokens();
+            : actor.getActiveTokens();
 
         const action = doc instanceof pf1.documents.item.ItemPF
             ? undefined
@@ -102,7 +103,7 @@ export class IsFlankingTarget extends BaseTarget {
                 ? doc.action
                 : doc;
 
-        if (!isMelee(item, action)) return [];
+        if (!isMelee(/** @type {ItemPF}*/ /** @type {any} */(null), action)) return [];
 
         const bonusSources = sources.filter((source) =>
             self.some((meToken) =>
@@ -115,19 +116,6 @@ export class IsFlankingTarget extends BaseTarget {
 
         return bonusSources;
     }
-
-    /**
-     * @override
-     * @inheritdoc
-     */
-    static get isConditionalTarget() { return true; }
-
-    /**
-     * @override
-     * @inheritdoc
-     * @returns {boolean}
-     */
-    static get isGenericTarget() { return true; }
 
     /**
      * @inheritdoc

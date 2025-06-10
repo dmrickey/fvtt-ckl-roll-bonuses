@@ -1315,6 +1315,7 @@ declare global {
             encumbrance: number;
             gear: number;
             shieldBonus: number;
+            skill: number;
             total: number;
         };
         attack: {

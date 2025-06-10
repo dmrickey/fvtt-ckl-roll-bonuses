@@ -20,6 +20,7 @@ export const localHooks = /** @type {const} */ ({
     chatAttackAddAttack: `${MODULE_NAME}_chatAttackAddAttack`,
     preRollChatAttackAddAttack: `${MODULE_NAME}_preRollChatAttackAddAttack`,
     chatAttackEffectNotes: `${MODULE_NAME}_chatAttackEffectNotes`,
+    getActorSkillChanges: `${MODULE_NAME}_getActorSkillChanges`,
     initItemActionRollData: `${MODULE_NAME}_initItemActionRollData`,
     itemActionCritRangeWrapper: `${MODULE_NAME}_itemActionCritRangeWrapper`,
     itemAction_damageSources: `${MODULE_NAME}_itemAction_damageSources`,
@@ -120,6 +121,13 @@ export class LocalHookHandler {
 
     /**
      * @overload
+     * @param {typeof localHooks.getActorSkillChanges} hook
+     * @param {(changes: ItemChange[], actor: ActorPF, skillId: string) => ItemChange[]} func
+     * @returns {void}
+     */
+
+    /**
+     * @overload
      * @param {typeof localHooks.patchChangeValue} hook
      * @param {(value: Formula, type: BonusTypes, actor: Nullable<ActorPF>) => Formula} func
      * @returns {void}
@@ -207,6 +215,15 @@ export class LocalHookHandler {
      * @param {BonusTypes} type
      * @param {Nullable<ActorPF>} actor
      * @returns {Formula}
+     */
+
+    /**
+     * @overload
+     * @param {typeof localHooks.getActorSkillChanges} hook
+     * @param {ItemChange[]} changes
+     * @param {ActorPF} actor
+     * @param {string} skillId
+     * @returns {ItemChange[]}
      */
 
     /**

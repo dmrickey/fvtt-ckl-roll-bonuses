@@ -5,9 +5,10 @@ import { FormulaCacheHelper } from '../../../util/flag-helpers.mjs';
 import { currentTargets } from '../../../util/get-current-targets.mjs';
 import { localizeBonusLabel } from '../../../util/localize.mjs';
 import { PositionalHelper } from '../../../util/positional-helper.mjs';
-import { BaseTarget } from '../_base-target.mjs';
+import { BaseConditionalTarget } from './_base-condtional.target.mjs';
 
-export class WhenTargetInRangeTarget extends BaseTarget {
+/** @extends {BaseConditionalTarget} */
+export class WhenTargetInRangeTarget extends BaseConditionalTarget {
 
     /**
      * @override
@@ -65,13 +66,14 @@ export class WhenTargetInRangeTarget extends BaseTarget {
     }
 
     /**
+     * @inheritdoc
      * @override
-     * @param {ItemPF & { actor: ActorPF }} item
+     * @param {ActorPF} actor
      * @param {ItemPF[]} sources
      * @returns {ItemPF[]}
      */
-    static _getSourcesFor(item, sources) {
-        const token = item.actor?.getActiveTokens()[0];
+    static _getConditionalActorSourcesFor(actor, sources) {
+        const token = actor.getActiveTokens()[0];
         if (!token) {
             return [];
         }
@@ -91,18 +93,6 @@ export class WhenTargetInRangeTarget extends BaseTarget {
         });
         return filtered;
     }
-
-    /**
-     * @override
-     * @inheritdoc
-     */
-    static get isConditionalTarget() { return true; }
-
-    /**
-     * @override
-     * @inheritdoc
-     */
-    static get isGenericTarget() { return true; }
 
     /**
      * @inheritdoc
