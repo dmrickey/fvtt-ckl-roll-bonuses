@@ -82,7 +82,7 @@ export class WhileAdjacentToTarget extends BaseConditionalTarget {
 
         const filtered = sources.filter((source) => {
             const allies = this.#allyTokens(source);
-            return allies.every((ally) => new PositionalHelper(token, ally).isAdjacent());
+            return allies.some((ally) => new PositionalHelper(token, ally).isAdjacent());
         })
 
         return filtered;
