@@ -1,4 +1,6 @@
 import { api } from './api.mjs'
+import { getActorItemsByTypes } from './get-actor-items-by-type.mjs';
+import { truthiness } from './truthiness.mjs';
 import { uniqueArray } from './unique-array.mjs'
 
 /**
@@ -10,7 +12,12 @@ export const getWeaponTypesFromActor = (actor) => {
         return [];
     }
 
-    const types = uniqueArray([...actor.items].flatMap((item) => item.system.baseTypes ?? []));
+    const types = uniqueArray(
+        [
+            ...getActorItemsByTypes(actor, 'weapon', 'attack'),
+            ...(actor.itemFlags?.boolean[api.targetOverrideTypeMap['target-override_weapon-type-override'].key].sources ?? []),
+        ].flatMap(x => x.system.baseTypes)
+    ).filter(truthiness);
     types.sort();
     return types;
 }
