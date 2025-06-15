@@ -15,6 +15,7 @@ import { FootnoteBonus } from './footnote-bonus.mjs';
 import { FortuneBonus } from './fortune-bonus.mjs';
 import { MaximizeDamageBonus } from './maximize-damage-bonus.mjs';
 import { MisfortuneBonus } from './misfortune-bonus.mjs';
+import { SaveBonus } from './save-bonus.mjs';
 import { ScriptCallBonus } from './script-call-bonus.mjs';
 import { SkillBonus } from './skill-bonus.mjs';
 
@@ -38,6 +39,7 @@ export const registerBonuses = () => [
     ScriptCallBonus,
 
     // conditional bonuses
+    SaveBonus,
     SkillBonus,
 
     // Specifically last so it'll include other damage bonuses in its tooltip

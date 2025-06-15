@@ -54,6 +54,9 @@
     - [Target](#target)
     - [Specific Bonuses](#specific-bonuses)
     - [Idea](#idea)
+    - [Bugs](#bugs)
+  - [Conditional Bonuses](#conditional-bonuses)
+    - [Bonus Types](#bonus-types)
 
 # TODO
 - Figure out a way to support multiple target groups on a single Item (so I can add `Favored Enemy (Human) +4` and `Favored Enemy (goblin) +2` on a single Item)
@@ -257,3 +260,18 @@ Add journal links to target/bonus headers within item sheet
     - This would allow for things like "+4 intimidate when targeting a creature type"
       - or "+4 initiative when in a city (using Fair's target)"
       - or possibly literally any change ¯\_(ツ)_/¯
+
+### Bugs
+- [breaks duration in compendium items](https://discord.com/channels/852297995907366922/1134212644392423515/1383830649240158229)
+
+
+## Conditional Bonuses
+- add dedicated section in picker
+- hijack tooltips and make tooltips for all bonuses
+### Bonus Types
+- AC
+- Initiative
+- ~~Save~~
+- ~~Skill~~
+  - Add actor inline hint for conditionally targeted skills
+  - 

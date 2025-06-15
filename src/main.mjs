@@ -541,6 +541,25 @@ async function actorRollSkill(wrapped, skillId, options) {
 
 /**
  * @this {ActorPF}
+ * @param {(id: SavingThrow, options: object) => Promise<ChatMessagePF|object|void>} wrapped
+ * @param {*} savingThrowId
+ * @param {*} options
+ */
+async function actorRollSavingThrow(wrapped, savingThrowId, options = {}) {
+    const extraChanges = LocalHookHandler.fireHookWithReturnSync(localHooks.getActorSaveChanges, [], this, savingThrowId);
+    this.changes ||= new Collection();
+    extraChanges.forEach((c) => this.changes?.set(c.id, c))
+
+    const result = await wrapped(savingThrowId, options);
+
+    // remove those extra changes
+    extraChanges.forEach((c) => this.changes?.delete(c.id));
+
+    return result;
+}
+
+/**
+ * @this {ActorPF}
  * @param {(skillId: string, options?: { rollData?: RollData }) => SkillInfo} wrapped
  * @param {SkillId} skillId
  * @param {object} [options]
@@ -669,6 +688,7 @@ Hooks.once('init', () => {
     libWrapper.register(MODULE_NAME, 'pf1.dice.d20Roll', async_d20RollWrapper, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorPF.prototype.getSkillInfo', actorGetSkillInfo, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorPF.prototype.rollSkill', actorRollSkill, libWrapper.WRAPPER);
+    libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorPF.prototype.rollSavingThrow', actorRollSavingThrow, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemAttackPF.fromItem', itemAttackFromItem, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype.getAttackSources', itemGetAttackSources, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype.getTypeChatData', itemGetTypeChatData, libWrapper.WRAPPER);

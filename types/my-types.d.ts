@@ -71,6 +71,7 @@ import { ShootIntoMeleeGlobalBonus } from '../src/global-bonuses/shoot-into-mele
 import { Outflank } from '../src/global-bonuses/specific/bonuses/flanking/outflank.mjs';
 import { PreciseShot } from '../src/global-bonuses/specific/bonuses/precise-shot-bonus.mjs';
 import { MenacingBonus } from '../src/global-bonuses/targeted/bonuses/menacing.mjs';
+import { RangedIncrementPenaltyBonus } from '../src/global-bonuses/targeted/bonuses/ranged-increment-penalty-bonus.mjs';
 import { addNodeToRollBonus } from '../src/handlebars-handlers/add-bonus-to-item-sheet.mjs';
 import { checkboxInput } from '../src/handlebars-handlers/bonus-inputs/chekbox-input.mjs';
 import { errorMessage } from '../src/handlebars-handlers/bonus-inputs/error-message.mjs';
@@ -120,7 +121,9 @@ import { FinesseBonus } from '../src/targeted/bonuses/finesse-bonus.mjs';
 import { FootnoteBonus } from '../src/targeted/bonuses/footnote-bonus.mjs';
 import { FortuneBonus } from '../src/targeted/bonuses/fortune-bonus.mjs';
 import { MisfortuneBonus } from '../src/targeted/bonuses/misfortune-bonus.mjs';
+import { SaveBonus } from '../src/targeted/bonuses/save-bonus.mjs';
 import { ScriptCallBonus } from '../src/targeted/bonuses/script-call-bonus.mjs';
+import { SkillBonus } from '../src/targeted/bonuses/skill-bonus.mjs';
 import { Sources } from '../src/targeted/source-registration.mjs';
 import { BaseTargetOverride } from '../src/targeted/target-overides/_base-target-override.mjs';
 import { FinesseOverride } from '../src/targeted/target-overides/finesse-override.mjs';
@@ -130,11 +133,13 @@ import { WeaponBaseTypeOverride } from '../src/targeted/target-overides/weapon-t
 import { BaseTarget } from '../src/targeted/targets/_base-target.mjs';
 import { ActionTarget } from '../src/targeted/targets/action-target.mjs';
 import { ActionTypeTarget } from '../src/targeted/targets/action-type-target.mjs';
+import { BaseConditionalTarget } from '../src/targeted/targets/conditional/_base-condtional.target.mjs';
 import { AlignmentTarget } from '../src/targeted/targets/conditional/alignment-target.mjs';
 import { AllTarget } from '../src/targeted/targets/conditional/all-target.mjs';
 import { ConditionTarget } from '../src/targeted/targets/conditional/condition-target.mjs';
 import { CreatureSubtypeTarget } from '../src/targeted/targets/conditional/creature-subtype-target.mjs';
 import { CreatureTypeTarget } from '../src/targeted/targets/conditional/creature-type-target.mjs';
+import { FunctionTarget } from '../src/targeted/targets/conditional/function-target.mjs';
 import { HasBooleanFlagTarget } from '../src/targeted/targets/conditional/has-boolean-flag-target.mjs';
 import { IsFlankingTarget } from '../src/targeted/targets/conditional/is-flanking-target.mjs';
 import { WhenTargetInRangeTarget } from '../src/targeted/targets/conditional/is-target-within-range.mjs';
@@ -145,7 +150,6 @@ import { WhileAdjacentToTarget } from '../src/targeted/targets/conditional/while
 import { WhileSharingSquareWithTarget } from '../src/targeted/targets/conditional/while-sharing-square-with-target.mjs';
 import { DamageTypeTarget } from '../src/targeted/targets/damage-type-target.mjs';
 import { FinesseTarget } from '../src/targeted/targets/finesse-target.mjs';
-import { FunctionTarget } from '../src/targeted/targets/conditional/function-target.mjs';
 import { SelfTarget } from '../src/targeted/targets/self-target.mjs';
 import { SpecificItemTarget } from '../src/targeted/targets/specific-item-target/specific-item-target.mjs';
 import { SpellTarget } from '../src/targeted/targets/specific-item-target/spell-target.mjs';
@@ -191,6 +195,7 @@ import { getWeaponGroupsFromActor } from '../src/util/get-weapon-groups-from-act
 import { getWeaponTypesFromActor } from '../src/util/get-weapon-types-from-actor.mjs';
 import { itemHasCompendiumId } from '../src/util/has-compendium-id.mjs';
 import { ifDebug } from '../src/util/if-debug.mjs';
+import { includes } from '../src/util/includes.mjs';
 import { isActorInCombat } from '../src/util/is-actor-in-combat.mjs';
 import { isNotEmptyObject } from '../src/util/is-empty-object.mjs';
 import { registerItemHint } from '../src/util/item-hints.mjs';
@@ -205,9 +210,6 @@ import { signed } from '../src/util/to-signed-string.mjs';
 import { Trait } from '../src/util/trait-builder.mjs';
 import { truthiness } from '../src/util/truthiness.mjs';
 import { distinct, uniqueArray } from '../src/util/unique-array.mjs';
-import { BaseConditionalTarget } from '../src/targeted/targets/conditional/_base-condtional.target.mjs';
-import { RangedIncrementPenaltyBonus } from '../src/global-bonuses/targeted/bonuses/ranged-increment-penalty-bonus.mjs';
-import { includes } from '../src/util/includes.mjs';
 
 export {};
 
@@ -270,6 +272,11 @@ declare global {
             ['bonus_misfortune']: typeof MisfortuneBonus;
             ['bonus_script-call']: typeof ScriptCallBonus;
 
+            // conditional bonuses
+            ['bonus_skill']: typeof SkillBonus;
+            ['bonus_save']: typeof SaveBonus;
+
+            // bonuses that are only available when a global bonus is enabled
             ['bonus_menacing']?: typeof MenacingBonus;
             ['bonus_ranged-increment-penalty']?: typeof RangedIncrementPenaltyBonus;
         };

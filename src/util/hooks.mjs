@@ -20,6 +20,7 @@ export const localHooks = /** @type {const} */ ({
     chatAttackAddAttack: `${MODULE_NAME}_chatAttackAddAttack`,
     preRollChatAttackAddAttack: `${MODULE_NAME}_preRollChatAttackAddAttack`,
     chatAttackEffectNotes: `${MODULE_NAME}_chatAttackEffectNotes`,
+    getActorSaveChanges: `${MODULE_NAME}_getActorSaveChanges`,
     getActorSkillChanges: `${MODULE_NAME}_getActorSkillChanges`,
     initItemActionRollData: `${MODULE_NAME}_initItemActionRollData`,
     itemActionCritRangeWrapper: `${MODULE_NAME}_itemActionCritRangeWrapper`,
@@ -121,6 +122,13 @@ export class LocalHookHandler {
 
     /**
      * @overload
+     * @param {typeof localHooks.getActorSaveChanges} hook
+     * @param {(changes: ItemChange[], actor: ActorPF, id: SavingThrow) => ItemChange[]} func
+     * @returns {void}
+     */
+
+    /**
+     * @overload
      * @param {typeof localHooks.getActorSkillChanges} hook
      * @param {(changes: ItemChange[], actor: ActorPF, skillId: SkillId) => ItemChange[]} func
      * @returns {void}
@@ -215,6 +223,15 @@ export class LocalHookHandler {
      * @param {BonusTypes} type
      * @param {Nullable<ActorPF>} actor
      * @returns {Formula}
+     */
+
+    /**
+     * @overload
+     * @param {typeof localHooks.getActorSaveChanges} hook
+     * @param {ItemChange[]} changes
+     * @param {ActorPF} actor
+     * @param {SavingThrow} id
+     * @returns {ItemChange[]}
      */
 
     /**

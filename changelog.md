@@ -5,6 +5,8 @@
   - Until now, every bonus has applied only to a specific action (more damage, different size, increased DC, etc). Now I've added these new "Conditional Bonuses" that grant bonuses to more generic actor actions that aren't just "attacks" or "spells". These bonuses work alongside any "Conditional Target" to enable those bonuses. Conditional Targets still work alongside all bonuses as before, they just also now work for Conditional Bonuses.
 
 ### New Bonuses
+- **Save Conditional Bonus**
+  - When the specified Conditional Targets are met, get a bonus to the chosen saving throws.
 - **Skill Conditional Bonus**
   - When the specified Conditional Targets are met, the rolled skills will receive the given bonus.
 

@@ -24,6 +24,10 @@ api.config.knowledgeSkills = [
 ];
 
 /**
+ * @typedef {SkillId | 'all-knowledges'} SkillIdChoices
+ */
+
+/**
  * @param {Nullable<ActorPF>} actor
  * @param {object} options
  * @param {boolean} [options.includeAll]
@@ -45,7 +49,7 @@ export const getSkillChoices = (
     /** @type {boolean} */
     const backgroundEnabled = !!game.settings.get('pf1', 'allowBackgroundSkills');
 
-    /** @type {Partial<Record<SkillId | 'all-knowledges', string>>} */
+    /** @type {Partial<Record<SkillIdChoices, string>>} */
     let skills;
     if (actor) {
         let allSkills = actor.allSkills;
@@ -91,7 +95,7 @@ export const getSkillChoices = (
  * @returns {string}
  */
 export const getSkillHints = (actor, item, flag) => {
-    /** @type {(SkillId | 'all-knowledges')[]} */
+    /** @type {(SkillIdChoices)[]} */
     const ids = foundry.utils.deepClone(getIdsFromItem(item, flag));
 
     const names = ids.map((id) => {
@@ -117,7 +121,7 @@ export const getSkillHints = (actor, item, flag) => {
  * @returns {SkillId[]}
  */
 export const getFlaggedSkillIdsFromItem = (actor, item, flag) => {
-    /** @type {(SkillId | 'all-knowledges')[]} */
+    /** @type {(SkillIdChoices)[]} */
     var skills = foundry.utils.deepClone(getIdsFromItem(item, flag));
 
     {

@@ -2578,6 +2578,7 @@ declare global {
         vermin: 'Vermin';
     };
 
+    type SavingThrow = keyof SavingThrows;
     type SavingThrows = {
         fort: 'Fortitude';
         ref: 'Reflex';
