@@ -1,15 +1,13 @@
 import { MODULE_NAME } from '../../consts.mjs';
 import { showLabel } from '../../handlebars-handlers/bonus-inputs/show-label.mjs';
+import { textInputAndKeyValueSelect } from '../../handlebars-handlers/bonus-inputs/text-input-and-key-value-select.mjs';
 import { traitInput } from '../../handlebars-handlers/trait-input.mjs';
-import { handleBonusesFor } from '../../target-and-bonus-join.mjs';
-import { intersects } from '../../util/array-intersects.mjs';
-import { getBaneLabelForTargetsFromSource } from '../../util/bane-helper.mjs';
+import { handleConditionalBonusesFor } from '../../target-and-bonus-join.mjs';
 import { createChange } from '../../util/conditional-helpers.mjs';
-import { currentTargets } from '../../util/get-current-targets.mjs';
-import { getIdsFromItem, getTraitsFromItem } from '../../util/get-id-array-from-flag.mjs';
+import { FormulaCacheHelper } from '../../util/flag-helpers.mjs';
+import { getFlaggedSkillIdsFromItem, getSkillChoices, getSkillHints } from '../../util/get-skills.mjs';
 import { LocalHookHandler, localHooks } from '../../util/hooks.mjs';
-import { listFormat } from '../../util/list-format.mjs';
-import { localize, localizeBonusTooltip } from '../../util/localize.mjs';
+import { localizeBonusLabel, localizeBonusTooltip } from '../../util/localize.mjs';
 import { toArray } from '../../util/to-array.mjs';
 import { BaseBonus } from './_base-bonus.mjs';
 
@@ -20,12 +18,15 @@ export class SkillBonus extends BaseBonus {
      * @inheritdoc
      */
     static get sourceKey() { return 'skill'; }
+    static get chosenKey() { return `${this.key}-chosen`; }
+    static get formulaKey() { return `${this.key}-formula`; }
+    static get typeKey() { return `${this.key}-type`; }
 
     /**
      * @override
      * @returns {string}
      */
-    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.PiyJbkTuzKHugPSk#skill'; }
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.VlFEvwU7m3nbjy5d#skill'; }
 
     /**
      * @override
@@ -34,70 +35,97 @@ export class SkillBonus extends BaseBonus {
      * @returns {Nullable<string[]>}
      */
     static getHints(source) {
-        return [localize('todo - skill bonus hint')];
+        if (!source.actor) return;
+
+        let hintText = localizeBonusTooltip(this.key) + ': ' + FormulaCacheHelper.getHint(source, this.formulaKey);
+        const skills = getSkillHints(source.actor, source, this.chosenKey);
+        if (skills.length) {
+            hintText += '<br>' + skills;
+        }
+
+        return [hintText];
     }
 
-    // /**
-    //  * @override
-    //  * @inheritdoc
-    //  * @param {ItemPF} item
-    //  * @param {RollData} rollData
-    //  */
-    // static prepareSourceData(item, rollData) {
-    //     const { actor } = item;
-    //     if (!actor?.changes) return;
-    // }
+    /**
+     * @override
+     * @inheritdoc
+     */
+    static init() {
+        FormulaCacheHelper.registerModuleFlag(this.formulaKey);
+    }
 
     /**
-     * @param {ActorPF} actor
+     * @param {ItemPF} item
+     * @param {SkillId} skillId
+     * @returns {ItemChange | undefined}
      */
-    static createChange(actor) {
+    static createChange(item, skillId) {
+        const { actor } = item;
+        if (!actor) return;
+
+        const targetedIds = getFlaggedSkillIdsFromItem(actor, item, this.chosenKey);
+        if (!targetedIds.includes(skillId)) return;
+
+        const formula = FormulaCacheHelper.getModuleFlagFormula(item, this.formulaKey)[this.formulaKey];
+        if (!formula) return;
+
         const change = createChange({
-            value: 100,
-            formula: '2[test]',
-            target: 'skill.acr',
+            value: FormulaCacheHelper.getModuleFlagValue(item, this.formulaKey),
+            formula: formula,
+            target: `skill.${skillId}`,
             id: 'test',
-        })
-        if (!actor?.changes) return;
-        actor.changes.set(change.id, change);
+            type: item.getFlag(MODULE_NAME, this.typeKey),
+            name: item.name,
+        });
+        return change;
     }
 
     /**
      *
      * @param {ItemChange[]} changes
      * @param {ActorPF} actor
-     * @param {string} skillId
+     * @param {SkillId} skillId
      * @returns {ItemChange[]}
      */
     static getActorSkillChanges(changes, actor, skillId) {
-        handleBonusesFor(
+        handleConditionalBonusesFor(
             actor,
-        )
+            SkillBonus,
+            (bonus, item) => {
+                const change = bonus.createChange(item, skillId);
+                if (change) {
+                    changes.push(change);
+                }
+            }
+        );
+        return changes;
     }
     static {
         LocalHookHandler.registerHandler(localHooks.getActorSkillChanges, this.getActorSkillChanges.bind(this));
     }
 
-    // /**
-    //  * @inheritdoc
-    //  * @override
-    //  * @param {ItemPF} item
-    //  * @param {object} options
-    //  * @param {ArrayOrSelf<CreatureType>} [options.creatureTypes]
-    //  * @param {ArrayOrSelf<CreatureSubtype>} [options.creatureSubtypes]
-    //  * @returns {Promise<void>}
-    //  */
-    // static async configure(item, { creatureTypes, creatureSubtypes }) {
-    //     await item.update({
-    //         system: { flags: { boolean: { [this.key]: true } } },
-    //         flags: {
-    //             [MODULE_NAME]: {
-    //                 [this.creatureTypeKey]: toArray(creatureTypes),
-    //                 [this.creatureSubtypeKey]: toArray(creatureSubtypes),
-    //             },
-    //         },
-    //     });
-    // }
+    /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} item
+     * @param {object} options
+     * @param {string} [options.formula]
+     * @param {BonusTypes} [options.changeType]
+     * @param {ArrayOrSelf<SkillId>} [options.skillIds]
+     * @returns {Promise<void>}
+     */
+    static async configure(item, { formula, changeType, skillIds }) {
+        await item.update({
+            system: { flags: { boolean: { [this.key]: true } } },
+            flags: {
+                [MODULE_NAME]: {
+                    [this.chosenKey]: toArray(skillIds),
+                    [this.typeKey]: changeType,
+                    [this.formulaKey]: formula,
+                },
+            },
+        });
+    }
 
     /**
      * @override
@@ -108,13 +136,50 @@ export class SkillBonus extends BaseBonus {
      * @param {ItemPF} options.item
      */
     static showInputOnItemSheet({ html, isEditable, item }) {
+        const { bonusTypes } = pf1.config;
+        const skillChoices = getSkillChoices(item.actor, { isEditable });
+        const typeChoices = Object.entries(bonusTypes)
+            .map(([key, label]) => ({ key, label }));
+
         showLabel({
             item,
             journal: this.journal,
             key: this.key,
             parent: html,
         }, {
-            inputType: 'bonus',
+            inputType: 'conditional-bonus',
+        });
+        textInputAndKeyValueSelect({
+            item,
+            journal: this.journal,
+            label: localizeBonusLabel(`${this.key}-input`),
+            parent: html,
+            select: {
+                choices: typeChoices,
+                key: this.typeKey,
+            },
+            text: {
+                key: this.formulaKey,
+            },
+            tooltip: this.tooltip,
+        }, {
+            canEdit: isEditable,
+            inputType: 'conditional-bonus',
+            isSubLabel: true,
+        });
+        traitInput({
+            choices: skillChoices,
+            hasCustom: false,
+            item,
+            journal: this.journal,
+            key: this.chosenKey,
+            label: localizeBonusLabel(this.chosenKey),
+            parent: html,
+            tooltip: this.tooltip,
+        }, {
+            canEdit: isEditable,
+            inputType: 'conditional-bonus',
+            isSubLabel: true,
         });
     }
 }

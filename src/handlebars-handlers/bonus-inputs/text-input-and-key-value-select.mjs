@@ -16,6 +16,7 @@ import { MODULE_NAME } from '../../consts.mjs';
  * @param {object} options
  * @param {boolean} options.canEdit
  * @param {InputType} options.inputType
+ * @param {boolean} [options.isSubLabel]
  */
 export function textInputAndKeyValueSelect({
     item,
@@ -28,6 +29,7 @@ export function textInputAndKeyValueSelect({
 }, {
     canEdit,
     inputType,
+    isSubLabel = false,
 }) {
     label ||= localizeBonusLabel(select.key);
     tooltip ||= localizeBonusTooltip(select.key);
@@ -55,6 +57,7 @@ export function textInputAndKeyValueSelect({
             choices,
             current: select.current,
             formula: text.current,
+            isSubLabel,
             journal,
             label,
             placeholder: text.placeholder || localize('PF1.Formula'),

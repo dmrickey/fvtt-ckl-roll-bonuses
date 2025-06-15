@@ -16,7 +16,7 @@ import { WhileAdjacentToTarget } from './conditional/while-adjacent-to-target.mj
 import { WhileSharingSquareWithTarget } from './conditional/while-sharing-square-with-target.mjs';
 import { DamageTypeTarget } from "./damage-type-target.mjs";
 import { FinesseTarget } from './finesse-target.mjs';
-import { FunctionTarget } from './function-target.mjs';
+import { FunctionTarget } from './conditional/function-target.mjs';
 import { SelfTarget } from './self-target.mjs';
 import { SpecificItemTarget } from "./specific-item-target/specific-item-target.mjs";
 import { SpellTarget } from "./specific-item-target/spell-target.mjs";

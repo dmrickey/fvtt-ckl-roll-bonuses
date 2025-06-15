@@ -7,6 +7,9 @@ import { truthiness } from "./util/truthiness.mjs";
 import { initSources } from './targeted/init-sources.mjs';
 import { api } from './util/api.mjs';
 import { registerGlobalBonuses } from './global-bonuses/_init-global-bonuses.mjs';
+import { BaseConditionalBonus } from './targeted/bonuses/conditional-bonuses.mjs/_base-conditional-bonus.mjs';
+import { BaseConditionalTarget } from './targeted/targets/conditional/_base-condtional.target.mjs';
+import { BaseTarget } from './targeted/targets/_base-target.mjs';
 
 initSources();
 
@@ -109,7 +112,6 @@ registerItemHint((hintcls, actor, item, _data) => {
  * @param {ArrayOrSelf<ArrayOrSelf<ActionUse | ItemPF | ItemAction>>} things
  * @param {(bonusType: typeof BaseBonus, sourceItem: ItemPF) => void} func The type providing the bonus, and the Item providing the bonus
  * @param {object} [options]
- * @param {boolean} [options.onlyConditionalTargets]
  * @param {boolean} [options.skipGenericTarget]
  * @param {never} [options.specificBonusType]
  * @param {'some' | 'every'} [options.thingsFilter]
@@ -123,7 +125,6 @@ registerItemHint((hintcls, actor, item, _data) => {
  * @param {(bonusType: T, sourceItem: ItemPF) => void} func The type providing the bonus, and the Item providing the bonus
  * @param {object} [options]
  * @param {boolean} [options.skipGenericTarget]
- * @param {boolean} [options.onlyConditionalTargets]
  * @param {T} [options.specificBonusType]
  * @param {'some' | 'every'} [options.thingsFilter]
  * @returns {void}
@@ -134,7 +135,6 @@ registerItemHint((hintcls, actor, item, _data) => {
  * @param {ArrayOrSelf<ActionUse | ItemPF | ItemAction>} things
  * @param {(bonusType: T | typeof BaseBonus, sourceItem: ItemPF) => void} func The type providing the bonus, and the Item providing the bonus
  * @param {object} [options]
- * @param {boolean} [options.onlyConditionalTargets]
  * @param {boolean} [options.skipGenericTarget]
  * @param {T | never} [options.specificBonusType]
  * @param {'some' | 'every'} [options.thingsFilter]
@@ -143,7 +143,6 @@ export const handleBonusesFor = (
     things,
     func,
     {
-        onlyConditionalTargets = false,
         skipGenericTarget = false,
         specificBonusType = undefined,
         thingsFilter = 'some',
@@ -175,11 +174,10 @@ export const handleBonusesFor = (
     sources
         .filter((sourceItem) => {
             const targets = sourceItem[MODULE_NAME].targets
-                .filter((targetType) =>
-                    (!onlyConditionalTargets || targetType.prototype instanceof api.sources.BaseConditionalTarget) && (!skipGenericTarget || !targetType.isGenericTarget));
-            const func = sourceItem.getFlag(MODULE_NAME, 'target-toggle') === 'all' ? 'every' : 'some';
+                .filter((targetType) => !skipGenericTarget || !targetType.isGenericTarget);
+            const someOrEvery = sourceItem.getFlag(MODULE_NAME, 'target-toggle') === 'all' ? 'every' : 'some';
             return !!targets.length
-                && targets[func]((sourceTarget) => things[thingsFilter]((thing) => sourceTarget.doesTargetInclude(sourceItem, thing)));
+                && targets[someOrEvery]((sourceTarget) => things[thingsFilter]((thing) => sourceTarget.doesTargetInclude(sourceItem, thing)));
         })
         .forEach((sourceItem) => sourceItem[MODULE_NAME].bonuses.forEach((bonusType) => {
             if (!specificBonusType || bonusType === specificBonusType) {
@@ -187,6 +185,148 @@ export const handleBonusesFor = (
             }
         }));
 }
+
+/**
+ * @template {typeof BaseConditionalBonus} t
+ * @param {typeof BaseBonus} bonusType
+ * @param {t} specificBonusType
+ * @returns {bonusType is t}
+ */
+const isSpecifiedConditionalBonus = (bonusType, specificBonusType) => bonusType.key === specificBonusType.key;
+/**
+ * @param {typeof BaseTarget} targetType
+ * @returns {targetType is typeof BaseConditionalTarget}
+ */
+const isBaseConditionalTarget = (targetType) => targetType.prototype instanceof BaseConditionalTarget;
+
+/**
+ * @template {typeof BaseConditionalBonus} T
+ * @param {ActorPF} actor
+ * @param {T} specificBonusType
+ * @param {(bonusType: T, sourceItem: ItemPF) => void} func The type providing the bonus, and the Item providing the bonus
+ */
+export const handleConditionalBonusesFor = (
+    actor,
+    specificBonusType,
+    func,
+) => {
+    if (!actor || !actor.itemFlags?.boolean) return;
+
+    let sources = actor.itemFlags?.boolean[specificBonusType.key]?.sources || [];
+    sources
+        .filter((sourceItem) => {
+            const targets = sourceItem[MODULE_NAME].targets
+                .filter(isBaseConditionalTarget);
+            const someOrEvery = sourceItem.getFlag(MODULE_NAME, 'target-toggle') === 'all' ? 'every' : 'some';
+            return !!targets.length
+                && targets[someOrEvery]((sourceTarget) => sourceTarget.doesConditionalTargetInclude(sourceItem, actor));
+        })
+        .forEach((sourceItem) => sourceItem[MODULE_NAME].bonuses
+            .filter((bonusType) => isSpecifiedConditionalBonus(bonusType, specificBonusType))
+            .forEach((bonusType) => func(bonusType, sourceItem)));
+}
+
+// /**
+//  * @overload
+//  * @param {ArrayOrSelf<ArrayOrSelf<ActionUse | ItemPF | ItemAction>>} things
+//  * @param {(bonusType: typeof BaseBonus, sourceItem: ItemPF) => void} func The type providing the bonus, and the Item providing the bonus
+//  * @param {object} [options]
+//  * @param {never} [options.actor]
+//  * @param {false | undefined} [options.onlyConditionalTargets]
+//  * @param {boolean} [options.skipGenericTarget]
+//  * @param {never} [options.specificBonusType]
+//  * @param {'some' | 'every'} [options.thingsFilter]
+//  * @returns {void}
+//  */
+//
+// /**
+//  * @template {typeof BaseBonus} T
+//  * @overload
+//  * @param {ArrayOrSelf<ActionUse | ItemPF | ItemAction>} things
+//  * @param {(bonusType: T, sourceItem: ItemPF) => void} func The type providing the bonus, and the Item providing the bonus
+//  * @param {object} [options]
+//  * @param {ActorPF} [options.actor]
+//  * @param {true} [options.onlyConditionalTargets]
+//  * @param {false} [options.skipGenericTarget]
+//  * @param {T} [options.specificBonusType]
+//  * @param {'some' | 'every'} [options.thingsFilter]
+//  * @returns {void}
+//  */
+//
+// /**
+//  * @template {typeof BaseBonus} T
+//  * @overload
+//  * @param {null | undefined} things
+//  * @param {(bonusType: T, sourceItem: ItemPF) => void} func The type providing the bonus, and the Item providing the bonus
+//  * @param {object} [options]
+//  * @param {never} [options.actor]
+//  * @param {false | undefined} [options.onlyConditionalTargets]
+//  * @param {false} [options.skipGenericTarget]
+//  * @param {T} [options.specificBonusType]
+//  * @param {'some' | 'every'} [options.thingsFilter]
+//  * @returns {void}
+//  */
+//
+// /**
+//  * @template {typeof BaseBonus} T
+//  * @param {ArrayOrSelf<ActionUse | ItemPF | ItemAction | null | undefined>} things
+//  * @param {(bonusType: T | typeof BaseBonus, sourceItem: ItemPF) => void} func The type providing the bonus, and the Item providing the bonus
+//  * @param {object} [options]
+//  * @param {ActorPF} [options.actor]
+//  * @param {false | undefined} [options.onlyConditionalTargets]
+//  * @param {boolean} [options.skipGenericTarget]
+//  * @param {T | never} [options.specificBonusType]
+//  * @param {'some' | 'every'} [options.thingsFilter]
+//  */
+// export const handleBonusesFor = (
+//     things,
+//     func,
+//     {
+//         actor = undefined,
+//         onlyConditionalTargets = false,
+//         skipGenericTarget = false,
+//         specificBonusType = undefined,
+//         thingsFilter = 'some',
+//     } = {}
+// ) => {
+//     if (!Array.isArray(things)) {
+//         things = [things];
+//     }
+//
+//     actor ||= things.find(x => !!x?.actor)?.actor;
+//     if (!actor || !actor.itemFlags?.boolean) return;
+//
+//     let sources = [];
+//     if (specificBonusType) {
+//         sources = actor.itemFlags?.boolean[specificBonusType.key]?.sources || [];
+//     } else {
+//         const targetKeys = api.allTargetTypes
+//             .filter((targetType) => !skipGenericTarget || !targetType.isGenericTarget)
+//             .map((targetType) => targetType.key);
+//
+//         sources = Object.keys(actor.itemFlags.boolean)
+//             .filter((key) => key.startsWith('target_') && targetKeys.includes(key))
+//             .flatMap((key) => actor.itemFlags?.boolean[key].sources)
+//             .filter(truthiness)
+//             // filter down to unique items in case one source item is affecting this target item through multiple "targets"
+//             .filter((sourceItem, i, self) => self.findIndex((nestedTarget) => sourceItem.id === nestedTarget.id) === i);
+//     }
+//
+//     sources
+//         .filter((sourceItem) => {
+//             const targets = sourceItem[MODULE_NAME].targets
+//                 .filter((targetType) =>
+//                     (!onlyConditionalTargets || targetType.prototype instanceof api.sources.BaseConditionalTarget) && (!skipGenericTarget || !targetType.isGenericTarget));
+//             const func = sourceItem.getFlag(MODULE_NAME, 'target-toggle') === 'all' ? 'every' : 'some';
+//             return !!targets.length
+//                 && targets[func]((sourceTarget) => things[thingsFilter]((thing) => sourceTarget.doesTargetInclude(sourceItem, thing)));
+//         })
+//         .forEach((sourceItem) => sourceItem[MODULE_NAME].bonuses.forEach((bonusType) => {
+//             if (!specificBonusType || bonusType === specificBonusType) {
+//                 func(bonusType, sourceItem);
+//             }
+//         }));
+// }
 
 api.utils.handleBonusesFor = handleBonusesFor;
 

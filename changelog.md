@@ -1,3 +1,21 @@
+## Roll Bonuses 2.22.0
+
+### New Bonus Types
+- Conditional Bonuses
+  - Until now, every bonus has applied only to a specific action (more damage, different size, increased DC, etc). Now I've added these new "Conditional Bonuses" that grant bonuses to more generic actor actions that aren't just "attacks" or "spells". These bonuses work alongside any "Conditional Target" to enable those bonuses. Conditional Targets still work alongside all bonuses as before, they just also now work for Conditional Bonuses.
+
+### New Bonuses
+- **Skill Conditional Bonus**
+  - When the specified Conditional Targets are met, the rolled skills will receive the given bonus.
+
+### Bugfixes
+- Fixed Weapon Type selection so that it no longer shows armor types as options
+
+### Misc
+- More fleshed out type api for developers
+
+---
+
 ## Roll Bonuses 2.21.2
 
 ### Bugfixes

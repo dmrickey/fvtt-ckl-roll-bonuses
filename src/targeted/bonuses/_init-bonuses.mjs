@@ -19,6 +19,7 @@ import { ScriptCallBonus } from './script-call-bonus.mjs';
 import { SkillBonus } from './skill-bonus.mjs';
 
 export const registerBonuses = () => [
+    // action bonuses
     AgileBonus,
     AttackBonus,
     BaneBonus,
@@ -35,7 +36,9 @@ export const registerBonuses = () => [
     FortuneBonus,
     MisfortuneBonus,
     ScriptCallBonus,
-    // SkillBonus,
+
+    // conditional bonuses
+    SkillBonus,
 
     // Specifically last so it'll include other damage bonuses in its tooltip
     MaximizeDamageBonus,

@@ -1,10 +1,9 @@
 /**
+ * @this {RollBonusesAPI}
  * @param {{ prototype: any}} x
- * @param {RollBonusesAPI} a
  * @returns {x is RollBonusesAPI['sources']['BaseConditionalTarget']}
  */
-const isConditionalTarget = (x, a) => x.prototype instanceof a['sources']['BaseConditionalTarget'];
-
+function isConditionalTarget(x) { return x.prototype instanceof this['sources']['BaseConditionalTarget']; }
 
 class Api {
     sources = {};
@@ -19,7 +18,7 @@ class Api {
 
     get allConditionalTargetTypes() {
         return this.allTargetTypes
-            .filter(x => isConditionalTarget(x, ( /** @type {RollBonusesAPI} *//** @type {any} */(this))));
+            .filter(x => isConditionalTarget.bind(/** @type {RollBonusesAPI} *//** @type {any} */(this))(x));
     }
 
     targetOverrideTypeMap = {};

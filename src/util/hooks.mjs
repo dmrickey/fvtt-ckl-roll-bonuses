@@ -122,7 +122,7 @@ export class LocalHookHandler {
     /**
      * @overload
      * @param {typeof localHooks.getActorSkillChanges} hook
-     * @param {(changes: ItemChange[], actor: ActorPF, skillId: string) => ItemChange[]} func
+     * @param {(changes: ItemChange[], actor: ActorPF, skillId: SkillId) => ItemChange[]} func
      * @returns {void}
      */
 
@@ -222,7 +222,7 @@ export class LocalHookHandler {
      * @param {typeof localHooks.getActorSkillChanges} hook
      * @param {ItemChange[]} changes
      * @param {ActorPF} actor
-     * @param {string} skillId
+     * @param {SkillId} skillId
      * @returns {ItemChange[]}
      */
 

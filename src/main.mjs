@@ -519,19 +519,19 @@ async function itemActionRollDamage(wrapped, ...args) {
 
 /**
  * @this {ActorPF}
- * @param {(skillId: SkillId, options: object) => ChatMessagePF|object|void} wrapped
+ * @param {(skillId: SkillId, options: object) => Promise<ChatMessagePF|object|void>} wrapped
  * @param {SkillId} skillId
  * @param {Object} options
- * @returns {ChatMessagePF|object|void} The chat message if one was created, or its data if not. `void` if the roll was cancelled.
+ * @returns {Promise<ChatMessagePF|object|void>} The chat message if one was created, or its data if not. `void` if the roll was cancelled.
  */
-function actorRollSkill(wrapped, skillId, options) {
+async function actorRollSkill(wrapped, skillId, options) {
     const extraChanges = LocalHookHandler.fireHookWithReturnSync(localHooks.getActorSkillChanges, [], this, skillId);
     this.changes ||= new Collection();
     extraChanges.forEach((c) => this.changes?.set(c.id, c))
 
     const seed = { skillId, options };
     LocalHookHandler.fireHookNoReturnSync(localHooks.actorRollSkill, seed, this);
-    const result = wrapped(seed.skillId, seed.options);
+    const result = await wrapped(seed.skillId, seed.options);
 
     // remove those extra changes
     extraChanges.forEach((c) => this.changes?.delete(c.id));

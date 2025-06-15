@@ -84,7 +84,7 @@ export class IsFlankingTarget extends BaseConditionalTarget {
      * @override
      * @param {ActorPF} actor
      * @param {ItemPF[]} sources
-     * @param {ItemPF | ActionUse | ItemAction} doc - originating doc event in case a specific action is needed
+     * @param {ItemPF | ActionUse | ItemAction | undefined} doc - originating doc event in case a specific action is needed
      * @returns {ItemPF[]}
      */
     static _getConditionalActorSourcesFor(actor, sources, doc) {
@@ -103,7 +103,7 @@ export class IsFlankingTarget extends BaseConditionalTarget {
                 ? doc.action
                 : doc;
 
-        if (!isMelee(/** @type {ItemPF}*/ /** @type {any} */(null), action)) return [];
+        if (action && !isMelee(/** @type {ItemPF}*/ /** @type {any} */(null), action)) return [];
 
         const bonusSources = sources.filter((source) =>
             self.some((meToken) =>

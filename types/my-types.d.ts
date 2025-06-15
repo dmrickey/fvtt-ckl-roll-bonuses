@@ -145,7 +145,7 @@ import { WhileAdjacentToTarget } from '../src/targeted/targets/conditional/while
 import { WhileSharingSquareWithTarget } from '../src/targeted/targets/conditional/while-sharing-square-with-target.mjs';
 import { DamageTypeTarget } from '../src/targeted/targets/damage-type-target.mjs';
 import { FinesseTarget } from '../src/targeted/targets/finesse-target.mjs';
-import { FunctionTarget } from '../src/targeted/targets/function-target.mjs';
+import { FunctionTarget } from '../src/targeted/targets/conditional/function-target.mjs';
 import { SelfTarget } from '../src/targeted/targets/self-target.mjs';
 import { SpecificItemTarget } from '../src/targeted/targets/specific-item-target/specific-item-target.mjs';
 import { SpellTarget } from '../src/targeted/targets/specific-item-target/spell-target.mjs';
@@ -206,11 +206,13 @@ import { Trait } from '../src/util/trait-builder.mjs';
 import { truthiness } from '../src/util/truthiness.mjs';
 import { distinct, uniqueArray } from '../src/util/unique-array.mjs';
 import { BaseConditionalTarget } from '../src/targeted/targets/conditional/_base-condtional.target.mjs';
+import { RangedIncrementPenaltyBonus } from '../src/global-bonuses/targeted/bonuses/ranged-increment-penalty-bonus.mjs';
+import { includes } from '../src/util/includes.mjs';
 
 export {};
 
 declare global {
-    interface RollBonusesAPI {
+    class RollBonusesAPI {
         /** Applications that the app uses that are used by various inputs */
         applications: {
             ActionSelector: typeof ActionSelector;
@@ -269,11 +271,11 @@ declare global {
             ['bonus_script-call']: typeof ScriptCallBonus;
 
             ['bonus_menacing']?: typeof MenacingBonus;
-            ['bonus_ranged-increment-penalty']?: typeof RangedIncrementPenaltyGlobalBonus;
+            ['bonus_ranged-increment-penalty']?: typeof RangedIncrementPenaltyBonus;
         };
         /** Array of all targeted bonuses */
-        get allBonusTypes(): (typeof BaseBonus)[];
-        get allBonusTypesKeys(): string[];
+        get allBonusTypes(): ValueOf<RollBonusesAPI['bonusTypeMap']>[];
+        get allBonusTypesKeys(): Array<keyof RollBonusesAPI['bonusTypeMap']>;
 
         /** map of every targeted bonus from its key to its type */
         globalTypeMap: {
@@ -284,8 +286,8 @@ declare global {
             ['global-bonus_shoot-into-melee']: typeof ShootIntoMeleeGlobalBonus;
         };
         /** Array of all global bonuses */
-        get allGlobalTypes(): (typeof BaseGlobalBonus)[];
-        get allGlobalTypesKeys(): string[];
+        get allGlobalTypes(): ValueOf<RollBonusesAPI['globalTypeMap']>[];
+        get allGlobalTypesKeys(): Array<keyof RollBonusesAPI['globalTypeMap']>;
 
         /** map of every targeted target from its key to its type */
         targetTypeMap: {
@@ -318,10 +320,10 @@ declare global {
             ['target_while-sharing-with']: typeof WhileSharingSquareWithTarget;
         };
         /** Array of all targeted targets */
-        get allTargetTypes(): (typeof BaseTarget)[];
-        get allTargetTypesKeys(): string[];
+        get allTargetTypes(): ValueOf<RollBonusesAPI['targetTypeMap']>[];
+        get allTargetTypesKeys(): Array<keyof RollBonusesAPI['targetTypeMap']>;
 
-        get allTargetTypesKeys(): (typeof BaseConditionalTarget)[];
+        get allConditionalTargetTypes(): (typeof BaseConditionalTarget)[];
 
         /** map of every target override from its key to its type */
         targetOverrideTypeMap: {
@@ -331,8 +333,12 @@ declare global {
             ['target-override_weapon-group-override']: typeof WeaponGroupOverride;
         };
         /** Array of all targeted targets */
-        get allTargetOverrideTypes(): (typeof BaseTargetOverride)[];
-        get allTargetOverrideTypesKeys(): string[];
+        get allTargetOverrideTypes(): ValueOf<
+            RollBonusesAPI['targetOverrideTypeMap']
+        >[];
+        get allTargetOverrideTypesKeys(): Array<
+            keyof RollBonusesAPI['targetOverrideTypeMap']
+        >;
 
         specificBonusTypeMap: {
             ['armor-focus']: typeof ArmorFocus;
@@ -387,8 +393,12 @@ declare global {
             ['precise-shot']?: typeof PreciseShot;
         };
         /** Array of all targeted targets */
-        get allSpecificBonusTypes(): (typeof SpecificBonus)[];
-        get allSpecificBonusTypesKeys(): string[];
+        get allSpecificBonusTypes(): ValueOf<
+            RollBonusesAPI['specificBonusTypeMap']
+        >[];
+        get allSpecificBonusTypesKeys(): Array<
+            keyof RollBonusesAPI['specificBonusTypeMap']
+        >;
 
         /** all the input helpers for adding various inputs for bonusees */
         inputs: {
@@ -449,6 +459,7 @@ declare global {
             array: {
                 difference: typeof difference;
                 distinct: typeof distinct;
+                includes: typeof includes;
                 intersection: typeof intersection;
                 intersects: typeof intersects;
                 listFormat: typeof listFormat;
@@ -502,6 +513,7 @@ declare global {
 
     type InputType =
         | 'bonus'
+        | 'conditional-bonus'
         | 'target'
         | 'target-override'
         | 'specific-bonus'
@@ -527,17 +539,17 @@ declare global {
 
     type Nullable<T> = T | null | undefined;
 
-    declare type DamageInputModel = {
+    type DamageInputModel = {
         crit: Nullable<'crit' | 'nonCrit' | 'normal'>;
         formula: string;
         types: Array<string>;
     };
 
-    declare type RecursivePartial<T> = {
+    type RecursivePartial<T> = {
         [P in keyof T]?: RecursivePartial<T[P]>;
     };
 
-    declare type ActionTypeFilterFunc = {
+    type ActionTypeFilterFunc = {
         (
             item?: ItemPF,
             action?: ItemAction,
@@ -545,13 +557,13 @@ declare global {
         ): boolean;
     };
 
-    declare type ShowInputsFunc = (
+    type ShowInputsFunc = (
         item: ItemPF,
         html: HTMLElement,
         isEditable: boolean
     ) => void;
 
-    declare type JustCreate = {
+    type JustCreate = {
         type: 'just-create';
         compendiumId: string;
         isItemMatchFunc: (name: string, item?: ItemPF) => boolean;
@@ -563,15 +575,16 @@ declare global {
         };
     };
 
-    declare type JustRender = {
+    type JustRender = {
         type: 'just-render';
         showInputsFunc: ShowInputsFunc;
     };
 
-    declare type CreateAndRender = Omit<JustCreate, 'type'> &
+    type ValueOf<T> = NonNullable<T[keyof T]>;
+    type CreateAndRender = Omit<JustCreate, 'type'> &
         Omit<JustRender, 'type'> & { type: 'render-and-create' };
 
-    declare type ArrayOrSelf<T> = T | T[];
+    type ArrayOrSelf<T> = T | T[];
 
     interface Function {
         /** @deprecated Don't use this */

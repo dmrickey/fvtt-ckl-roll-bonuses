@@ -67,14 +67,13 @@ export class WhileAdjacentToTarget extends BaseConditionalTarget {
      * @override
      * @param {ActorPF} actor
      * @param {ItemPF[]} sources
-     * @param {ItemPF | ActionUse | ItemAction} doc - originating doc event in case a specific action is needed
+     * @param {ItemPF | ActionUse | ItemAction | undefined} doc - originating doc event in case a specific action is needed
      * @returns {ItemPF[]}
      */
     static _getConditionalActorSourcesFor(actor, sources, doc) {
-        let token;
-        if (doc instanceof pf1.documents.item.ItemPF) token = actor.getActiveTokens()[0];
-        else if (doc instanceof pf1.components.ItemAction) token = actor.getActiveTokens()[0];
-        else token = doc.token.object;
+        const token = doc instanceof pf1.actionUse.ActionUse
+            ? doc.token.object
+            : actor.getActiveTokens()[0];
 
         if (token?.scene !== game.scenes.viewed) {
             return [];
