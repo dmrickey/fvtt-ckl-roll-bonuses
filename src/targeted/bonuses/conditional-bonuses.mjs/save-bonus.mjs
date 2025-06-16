@@ -1,18 +1,18 @@
-import { MODULE_NAME } from '../../consts.mjs';
-import { showLabel } from '../../handlebars-handlers/bonus-inputs/show-label.mjs';
-import { textInputAndKeyValueSelect } from '../../handlebars-handlers/bonus-inputs/text-input-and-key-value-select.mjs';
-import { traitInput } from '../../handlebars-handlers/trait-input.mjs';
-import { handleConditionalBonusesFor } from '../../target-and-bonus-join.mjs';
-import { createChange } from '../../util/conditional-helpers.mjs';
-import { FormulaCacheHelper } from '../../util/flag-helpers.mjs';
-import { getKeyedHintList } from '../../util/get-keyed-hint-list.mjs';
-import { getSourceFlag } from '../../util/get-source-flag.mjs';
-import { LocalHookHandler, localHooks } from '../../util/hooks.mjs';
-import { localizeBonusLabel, localizeBonusTooltip } from '../../util/localize.mjs';
-import { toArray } from '../../util/to-array.mjs';
-import { BaseBonus } from './_base-bonus.mjs';
+import { MODULE_NAME } from '../../../consts.mjs';
+import { showLabel } from '../../../handlebars-handlers/bonus-inputs/show-label.mjs';
+import { textInputAndKeyValueSelect } from '../../../handlebars-handlers/bonus-inputs/text-input-and-key-value-select.mjs';
+import { traitInput } from '../../../handlebars-handlers/trait-input.mjs';
+import { handleConditionalBonusesFor } from '../../../target-and-bonus-join.mjs';
+import { createChange } from '../../../util/conditional-helpers.mjs';
+import { FormulaCacheHelper } from '../../../util/flag-helpers.mjs';
+import { getKeyedHintList } from '../../../util/get-keyed-hint-list.mjs';
+import { getSourceFlag } from '../../../util/get-source-flag.mjs';
+import { LocalHookHandler, localHooks } from '../../../util/hooks.mjs';
+import { localizeBonusLabel, localizeBonusTooltip } from '../../../util/localize.mjs';
+import { toArray } from '../../../util/to-array.mjs';
+import { BaseConditionalBonus } from './_base-conditional-bonus.mjs';
 
-export class SaveBonus extends BaseBonus {
+export class SaveBonus extends BaseConditionalBonus {
 
     /**
      * @override
@@ -38,7 +38,9 @@ export class SaveBonus extends BaseBonus {
     static getHints(source) {
         if (!source.actor) return;
 
-        let hintText = localizeBonusTooltip(this.key) + ': ' + FormulaCacheHelper.getHint(source, this.formulaKey);
+        let hintText = localizeBonusTooltip(this.key);
+
+        hintText += '<br>' + FormulaCacheHelper.getHint(source, this.formulaKey);
         const chosen = /** @type {SavingThrow[]} */ (getSourceFlag(source, this.chosenKey)) || [];
         if (chosen.length) {
             hintText += '<br>' + getKeyedHintList(chosen, pf1.config.savingThrows);

@@ -121,7 +121,7 @@ import { FinesseBonus } from '../src/targeted/bonuses/finesse-bonus.mjs';
 import { FootnoteBonus } from '../src/targeted/bonuses/footnote-bonus.mjs';
 import { FortuneBonus } from '../src/targeted/bonuses/fortune-bonus.mjs';
 import { MisfortuneBonus } from '../src/targeted/bonuses/misfortune-bonus.mjs';
-import { SaveBonus } from '../src/targeted/bonuses/save-bonus.mjs';
+import { SaveBonus } from '../src/targeted/bonuses/conditional-bonuses.mjs/save-bonus.mjs';
 import { ScriptCallBonus } from '../src/targeted/bonuses/script-call-bonus.mjs';
 import { SkillBonus } from '../src/targeted/bonuses/skill-bonus.mjs';
 import { Sources } from '../src/targeted/source-registration.mjs';
