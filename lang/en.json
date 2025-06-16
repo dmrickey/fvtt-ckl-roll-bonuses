@@ -28,6 +28,7 @@
         },
         "bonuses": {
             "label": {
+                "ac": "Armor Class",
                 "action": "Specific Actions",
                 "action-type": "Action Type",
                 "action-type-radio": "Action Types Join",
@@ -173,6 +174,7 @@
                 "while-sharing-with": "While Sharing Square With"
             },
             "tooltip": {
+                "ac": "Adds a conditional bonus to the actor's Armor Class.",
                 "action": "Grant bonuses to specific actions.",
                 "action-type": "Activates bonus whenever the given action types are matched.",
                 "action-type-radio": "Selects if the action types are evaluated as a group or individually.<br><br>All: Bonuses will be applied only if all action types are matched.<br><br>Any: Bonuses will be applied if any action type is matched.",

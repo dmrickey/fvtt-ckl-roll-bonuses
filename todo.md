@@ -268,6 +268,7 @@ Add journal links to target/bonus headers within item sheet
 ## Conditional Bonuses
 - add dedicated section in picker
 - hijack tooltips and make tooltips for all bonuses
+- figure out appropriate way to apply AC bonus
 ### Bonus Types
 - AC
 - Initiative

@@ -1,24 +1,19 @@
 import { MODULE_NAME } from '../../../consts.mjs';
 import { showLabel } from '../../../handlebars-handlers/bonus-inputs/show-label.mjs';
 import { textInputAndKeyValueSelect } from '../../../handlebars-handlers/bonus-inputs/text-input-and-key-value-select.mjs';
-import { traitInput } from '../../../handlebars-handlers/trait-input.mjs';
 import { handleConditionalBonusesFor } from '../../../target-and-bonus-join.mjs';
 import { createChange } from '../../../util/conditional-helpers.mjs';
 import { FormulaCacheHelper } from '../../../util/flag-helpers.mjs';
-import { getFlaggedSkillIdsFromItem, getSkillChoices, getSkillHints } from '../../../util/get-skills.mjs';
-import { LocalHookHandler, localHooks } from '../../../util/hooks.mjs';
 import { localizeBonusLabel, localizeBonusTooltip } from '../../../util/localize.mjs';
-import { toArray } from '../../../util/to-array.mjs';
 import { BaseConditionalBonus } from './_base-conditional-bonus.mjs';
 
-export class SkillBonus extends BaseConditionalBonus {
+export class SaveBonus extends BaseConditionalBonus {
 
     /**
      * @override
      * @inheritdoc
      */
-    static get sourceKey() { return 'skill'; }
-    static get chosenKey() { return `${this.key}-chosen`; }
+    static get sourceKey() { return 'ac'; }
     static get formulaKey() { return `${this.key}-formula`; }
     static get typeKey() { return `${this.key}-type`; }
 
@@ -26,7 +21,7 @@ export class SkillBonus extends BaseConditionalBonus {
      * @override
      * @returns {string}
      */
-    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.VlFEvwU7m3nbjy5d#skill'; }
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.VlFEvwU7m3nbjy5d#armor-class'; }
 
     /**
      * @override
@@ -39,10 +34,6 @@ export class SkillBonus extends BaseConditionalBonus {
 
         let hintText = localizeBonusTooltip(this.key);
         hintText += '<br>' + FormulaCacheHelper.getHint(source, this.formulaKey);
-        const skills = getSkillHints(source.actor, source, this.chosenKey);
-        if (skills.length) {
-            hintText += '<br>' + skills;
-        }
 
         return [hintText];
     }
@@ -57,24 +48,17 @@ export class SkillBonus extends BaseConditionalBonus {
 
     /**
      * @param {ItemPF} item
-     * @param {SkillId} skillId
      * @returns {ItemChange | undefined}
      */
-    static createChange(item, skillId) {
-        const { actor } = item;
-        if (!actor) return;
-
-        const targetedIds = getFlaggedSkillIdsFromItem(actor, item, this.chosenKey);
-        if (!targetedIds.includes(skillId)) return;
-
+    static createChange(item) {
         const formula = FormulaCacheHelper.getModuleFlagFormula(item, this.formulaKey)[this.formulaKey];
         if (!formula) return;
 
         const change = createChange({
             value: FormulaCacheHelper.getModuleFlagValue(item, this.formulaKey),
             formula: formula,
-            target: `skill.${skillId}`,
-            id: `${this.key}_${item.id}_${skillId}`,
+            target: "aac",
+            id: `${this.key}_${item.id}`,
             type: item.getFlag(MODULE_NAME, this.typeKey),
             name: item.name,
         });
@@ -85,15 +69,14 @@ export class SkillBonus extends BaseConditionalBonus {
      *
      * @param {ItemChange[]} changes
      * @param {ActorPF} actor
-     * @param {SkillId} skillId
      * @returns {ItemChange[]}
      */
-    static getActorSkillChanges(changes, actor, skillId) {
+    static getActorSaveChanges(changes, actor) {
         handleConditionalBonusesFor(
             actor,
-            SkillBonus,
+            SaveBonus,
             (bonus, item) => {
-                const change = bonus.createChange(item, skillId);
+                const change = bonus.createChange(item);
                 if (change) {
                     changes.push(change);
                 }
@@ -102,7 +85,7 @@ export class SkillBonus extends BaseConditionalBonus {
         return changes;
     }
     static {
-        LocalHookHandler.registerHandler(localHooks.getActorSkillChanges, this.getActorSkillChanges.bind(this));
+        // LocalHookHandler.registerHandler(localHooks.getActorSaveChanges, this.getActorSaveChanges.bind(this));
     }
 
     /**
@@ -112,15 +95,14 @@ export class SkillBonus extends BaseConditionalBonus {
      * @param {object} options
      * @param {string} [options.formula]
      * @param {BonusTypes} [options.changeType]
-     * @param {ArrayOrSelf<SkillId>} [options.skillIds]
+     * @param {ArrayOrSelf<SavingThrow>} [options.savingThrows]
      * @returns {Promise<void>}
      */
-    static async configure(item, { formula, changeType, skillIds }) {
+    static async configure(item, { formula, changeType, savingThrows }) {
         await item.update({
             system: { flags: { boolean: { [this.key]: true } } },
             flags: {
                 [MODULE_NAME]: {
-                    [this.chosenKey]: toArray(skillIds),
                     [this.typeKey]: changeType,
                     [this.formulaKey]: formula,
                 },
@@ -138,7 +120,7 @@ export class SkillBonus extends BaseConditionalBonus {
      */
     static showInputOnItemSheet({ html, isEditable, item }) {
         const { bonusTypes } = pf1.config;
-        const skillChoices = getSkillChoices(item.actor, { isEditable });
+        const skillChoices = pf1.config.savingThrows;
         const typeChoices = Object.entries(bonusTypes)
             .map(([key, label]) => ({ key, label }));
 
@@ -162,20 +144,6 @@ export class SkillBonus extends BaseConditionalBonus {
             text: {
                 key: this.formulaKey,
             },
-            tooltip: this.tooltip,
-        }, {
-            canEdit: isEditable,
-            inputType: 'conditional-bonus',
-            isSubLabel: true,
-        });
-        traitInput({
-            choices: skillChoices,
-            hasCustom: false,
-            item,
-            journal: this.journal,
-            key: this.chosenKey,
-            label: localizeBonusLabel(this.chosenKey),
-            parent: html,
             tooltip: this.tooltip,
         }, {
             canEdit: isEditable,

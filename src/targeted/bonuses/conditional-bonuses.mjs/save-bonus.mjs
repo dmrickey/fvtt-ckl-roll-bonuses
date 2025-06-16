@@ -59,12 +59,12 @@ export class SaveBonus extends BaseConditionalBonus {
 
     /**
      * @param {ItemPF} item
-     * @param {SavingThrow} id
+     * @param {SavingThrow} savingThrow
      * @returns {ItemChange | undefined}
      */
-    static createChange(item, id) {
+    static createChange(item, savingThrow) {
         const targetedIds = getSourceFlag(item, this.chosenKey);
-        if (!targetedIds.includes(id)) return;
+        if (!targetedIds.includes(savingThrow)) return;
 
         const formula = FormulaCacheHelper.getModuleFlagFormula(item, this.formulaKey)[this.formulaKey];
         if (!formula) return;
@@ -72,8 +72,8 @@ export class SaveBonus extends BaseConditionalBonus {
         const change = createChange({
             value: FormulaCacheHelper.getModuleFlagValue(item, this.formulaKey),
             formula: formula,
-            target: id,
-            id: 'test',
+            target: savingThrow,
+            id: `${this.key}_${item.id}_${savingThrow}`,
             type: item.getFlag(MODULE_NAME, this.typeKey),
             name: item.name,
         });
