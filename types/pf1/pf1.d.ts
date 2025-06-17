@@ -127,6 +127,7 @@ declare global {
     type ItemTypeArrayCache<T> = T[] & { getId(string): T; getName(string): T };
 
     class ActorPF extends ActorBasePF {
+        getInitiativeOptions(): { check?: boolean };
         id: string;
 
         allItems: ItemPF[];
@@ -464,6 +465,7 @@ declare global {
 
     interface CombatantPF {
         actorId: string;
+        _getInitiativeFormula: (d20?: string) => string;
     }
 
     class Die {
@@ -1632,6 +1634,9 @@ declare global {
         spells: Record<string, SpellBookRollData>;
         traits: TraitsRollData;
         // [key: string]: any,
+
+        // bonus built up during initiative rolls
+        bonus?: number;
 
         // item roll data
         dFlags?: DictionaryFlags;

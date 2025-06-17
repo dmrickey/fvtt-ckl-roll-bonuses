@@ -121,8 +121,8 @@ export class SkillBonus extends BaseConditionalBonus {
             flags: {
                 [MODULE_NAME]: {
                     [this.chosenKey]: toArray(skillIds),
-                    [this.typeKey]: changeType,
                     [this.formulaKey]: formula,
+                    [this.typeKey]: changeType,
                 },
             },
         });

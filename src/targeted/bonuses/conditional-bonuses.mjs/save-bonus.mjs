@@ -120,8 +120,8 @@ export class SaveBonus extends BaseConditionalBonus {
             flags: {
                 [MODULE_NAME]: {
                     [this.chosenKey]: toArray(savingThrows),
-                    [this.typeKey]: changeType,
                     [this.formulaKey]: formula,
+                    [this.typeKey]: changeType,
                 },
             },
         });
