@@ -185,45 +185,51 @@ export const handleFortune = (options) => {
 };
 
 /**
- * @param {string} formula
  * @this {CombatantPF}
- * @returns
+ * @param {string} d20
+ * @returns {string}
  */
-function handleInitiative(formula) {
-    formula ||= '1d20';
+function handleInitiative(d20) {
+    const defaultParts = [];
+
     const actor = this.actor;
 
-    /** BEGIN OVERRIDE */
-    // this gets the original formula before "extra" stuff that's this base method adds in case something else is wrapping this method
-    formula = formula.split('@attributes.init.total[')[0];
+    const options = this.actor?.getInitiativeOptions?.() ?? {};
+    if (options.check !== false) {
+        d20 ||= pf1.dice.D20RollPF.standardRoll;
+        // #region MY OVERRIDE
+        if (actor?.items?.size) {
+            const options = {
+                dice: d20,
+                fortuneCount: 0,
+                misfortuneCount: 0,
+            };
 
-    if (actor?.items?.size) {
-        const options = {
-            dice: formula,
-            fortuneCount: 0,
-            misfortuneCount: 0,
-        };
+            const count = countBFlags(actor.items, fortune, misfortune, initFortune, initMisfortune, initWarsightFortune);
 
-        const count = countBFlags(actor.items, fortune, misfortune, initFortune, initMisfortune, initWarsightFortune);
+            options.fortuneCount += count[fortune];
+            options.misfortuneCount += count[misfortune];
 
-        options.fortuneCount += count[fortune];
-        options.misfortuneCount += count[misfortune];
+            options.fortuneCount += count[initFortune];
+            options.misfortuneCount += count[initMisfortune];
 
-        options.fortuneCount += count[initFortune];
-        options.misfortuneCount += count[initMisfortune];
+            if (count[initWarsightFortune]) {
+                options.fortuneCount += 2;
+            }
 
-        if (count[initWarsightFortune]) {
-            options.fortuneCount += 2;
+            handleFortune(options);
+            d20 = options.dice;
         }
 
-        handleFortune(options);
-        formula = options.dice;
+        defaultParts.push(d20);
     }
-    /** END OVERRIDE */
 
-    const defaultParts = [formula, `@attributes.init.total[${game.i18n.localize("PF1.Initiative")}]`];
-    if (actor && game.settings.get("pf1", "initiativeTiebreaker"))
-        defaultParts.push(`(@attributes.init.total / 100)[${game.i18n.localize("PF1.Tiebreaker")}]`);
+    // #region REMOVE LABEL so initiative bonus works
+    defaultParts.push(`@attributes.init.total`);
+    if (actor && game.settings.get("pf1", "initiativeTiebreaker")) {
+        // #region wrap init in parens so init bonus works
+        defaultParts.push(`((@attributes.init.total) / 100)[${game.i18n.localize("PF1.Tiebreaker")}]`);
+    }
     const parts = CONFIG.Combat.initiative.formula ? CONFIG.Combat.initiative.formula.split(/\s*\+\s*/) : defaultParts;
     if (!actor) return parts[0] || "0";
     // @ts-ignore

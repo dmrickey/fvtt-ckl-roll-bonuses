@@ -3,6 +3,7 @@ import { AgileBonus } from './agile.mjs';
 import { AttackBonus } from "./attack-bonus.mjs";
 import { BaneBonus } from './bane-bonus.mjs';
 import { CasterLevelBonus } from './caster-level-bonus.mjs';
+import { InitiativeBonus } from './conditional-bonuses.mjs/initiative-bonus.mjs';
 import { SaveBonus } from './conditional-bonuses.mjs/save-bonus.mjs';
 import { SkillBonus } from './conditional-bonuses.mjs/skill-bonus.mjs';
 import { ConditionalModifiersBonus } from './conditional-modifiers-bonus.mjs';
@@ -39,6 +40,7 @@ export const registerBonuses = () => [
     ScriptCallBonus,
 
     // conditional bonuses
+    InitiativeBonus,
     SaveBonus,
     SkillBonus,
 
