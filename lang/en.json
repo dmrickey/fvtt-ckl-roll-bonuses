@@ -169,7 +169,7 @@
                 "weapon-type": "Weapon Type",
                 "weapon-type-override": "Weapon Type",
                 "weapon": "Specific Weapons and Attacks",
-                "when-active": "When Item Is Active",
+                "when-active": "When Item Is Active/Equipped",
                 "when-in-combat": "When in Combat",
                 "while-adjacent-to": "While Adjacent To",
                 "while-sharing-with": "While Sharing Square With"
@@ -299,7 +299,7 @@
                 "weapon-type": "Apply bonuses when using the chosen Weapon. Attacks and Weapons must be properly configured with Equipment Base Types.",
                 "weapon-type-override": "Adds a Weapon Type to an Item that normally can't have one. This is equivalent to a weapon's Equipment Base Type.",
                 "weapon": "Choose specific Attacks and Weapons for bonuses.",
-                "when-active": "Apply bonuses when specified Buff/Weapon/Feat/etc is active.",
+                "when-active": "Apply bonuses when specified Buff/Gear/Feat/etc is active or equipped.",
                 "when-in-combat": "Active when this actor is in combat.",
                 "while-adjacent-to": "Activates bonuses while adjacent to any of the specified allies.",
                 "while-sharing-with": "Activates bonuses while sharing a square with any of the specified allies."
@@ -412,7 +412,7 @@
         "item-app": {
             "description": "Bonuses will apply only when using the selected items. Right click on any row to open that Item's sheet for further verification.",
             "description-actions": "Bonuses will apply only when using the selected actions. Right click on any row to open that action's sheet for further verification (or header to open the item).",
-            "description-when-active": "These bonuses will only be active when the targeted item is also active. For example, secondary bonuses that apply only while raging.",
+            "description-when-active": "These bonuses will only be active when the targeted item is enabled or equipped. For example, secondary bonuses that apply only while raging.",
             "title": "Item Selector"
         },
         "item-hints": {
