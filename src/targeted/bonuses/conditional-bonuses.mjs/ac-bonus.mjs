@@ -71,7 +71,7 @@ export class SaveBonus extends BaseConditionalBonus {
      * @param {ActorPF} actor
      * @returns {ItemChange[]}
      */
-    static getActorSaveChanges(changes, actor) {
+    static getActorACChanges(changes, actor) {
         handleConditionalBonusesFor(
             actor,
             SaveBonus,
@@ -85,7 +85,7 @@ export class SaveBonus extends BaseConditionalBonus {
         return changes;
     }
     static {
-        // LocalHookHandler.registerHandler(localHooks.getActorSaveChanges, this.getActorSaveChanges.bind(this));
+        // LocalHookHandler.registerHandler(localHooks.getActorACChanges, this.getActorACChanges.bind(this));
     }
 
     /**
@@ -95,16 +95,15 @@ export class SaveBonus extends BaseConditionalBonus {
      * @param {object} options
      * @param {string} [options.formula]
      * @param {BonusTypes} [options.changeType]
-     * @param {ArrayOrSelf<SavingThrow>} [options.savingThrows]
      * @returns {Promise<void>}
      */
-    static async configure(item, { formula, changeType, savingThrows }) {
+    static async configure(item, { formula, changeType }) {
         await item.update({
             system: { flags: { boolean: { [this.key]: true } } },
             flags: {
                 [MODULE_NAME]: {
-                    [this.typeKey]: changeType,
                     [this.formulaKey]: formula,
+                    [this.typeKey]: changeType,
                 },
             },
         });
