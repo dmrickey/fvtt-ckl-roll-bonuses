@@ -12,6 +12,7 @@
 
 ### Bugfixes
 - Fixed Weapon Type selection so that it no longer shows armor types as options
+- Fixed duration for spells in compendiums. Now shows full range instead of just smallest value
 
 ### Misc
 - More fleshed out type api for developers

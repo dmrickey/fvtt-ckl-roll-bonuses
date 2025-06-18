@@ -398,13 +398,14 @@ function itemActionEnhancementBonus(wrapped) {
 
 /**
  * @this {ItemAction}
- * @param {(args: { rollData?: RollData}) => Record<string, string>} wrapped
+ * @param {(args: { rollData?: RollData, isolated?: boolean }) => Record<string, string>} wrapped
  * @param {object} [options]
+ * @param {boolean} [options.isolated] - Are these labels generated for isolated information (that is, need more details)
  * @param {RollData} [options.rollData] - Pre-determined roll data. If not provided, finds the action's own roll data.
  * @returns {Record<string, string>} This action's labels
  */
-function itemAction_getLabels(wrapped, { rollData } = {}) {
-    const labels = wrapped({ rollData });
+function itemAction_getLabels(wrapped, { rollData, isolated = false } = {}) {
+    const labels = wrapped({ rollData, isolated });
 
     // has been previously calculated if conditionals are already included
     const shouldSkip = !!rollData?.conditionals;
