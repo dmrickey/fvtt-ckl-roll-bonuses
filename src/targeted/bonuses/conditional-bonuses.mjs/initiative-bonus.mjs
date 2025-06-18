@@ -166,18 +166,10 @@ export class InitiativeBonus extends BaseConditionalBonus {
         const typeChoices = Object.entries(bonusTypes)
             .map(([key, label]) => ({ key, label }));
 
-        showLabel({
-            item,
-            journal: this.journal,
-            key: this.key,
-            parent: html,
-        }, {
-            inputType: 'conditional-bonus',
-        });
         textInputAndKeyValueSelect({
             item,
             journal: this.journal,
-            label: localizeBonusLabel(`${this.key}-input`),
+            label: localizeBonusLabel(this.key),
             parent: html,
             select: {
                 choices: typeChoices,
@@ -190,7 +182,6 @@ export class InitiativeBonus extends BaseConditionalBonus {
         }, {
             canEdit: isEditable,
             inputType: 'conditional-bonus',
-            isSubLabel: true,
         });
     }
 }
