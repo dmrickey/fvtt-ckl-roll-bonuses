@@ -56,7 +56,6 @@
     - [Idea](#idea)
   - [Conditional Bonuses](#conditional-bonuses)
     - [Bonus Types](#bonus-types)
-  - [Bugs](#bugs)
 
 # TODO
 - Figure out a way to support multiple target groups on a single Item (so I can add `Favored Enemy (Human) +4` and `Favored Enemy (goblin) +2` on a single Item)
@@ -273,6 +272,3 @@ Add journal links to target/bonus headers within item sheet
   - Add actor inline hint for conditionally targeted skills
 
 Expand "Action Type Target" to include CMB
-
-## Bugs
-- Elemental Focus is not increasing DC on spell chat cards
