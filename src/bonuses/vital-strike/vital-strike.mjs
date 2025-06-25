@@ -4,6 +4,7 @@ import { showEnabledLabel } from '../../handlebars-handlers/enabled-label.mjs';
 import { isWeapon } from '../../util/action-type-helpers.mjs';
 import { api } from '../../util/api.mjs';
 import { addCheckToAttackDialog, getFormData } from '../../util/attack-dialog-helper.mjs';
+import { buildDamageMultiplierConditional } from '../../util/damage-multiplier-conditional.mjs';
 import { getCachedBonuses } from '../../util/get-cached-bonuses.mjs';
 import { LocalHookHandler, localHooks } from '../../util/hooks.mjs';
 import { registerItemHint } from '../../util/item-hints.mjs';
@@ -276,7 +277,7 @@ export class VitalStrikeData {
          */
         const setupVitalStrike = (key, amount) => {
             const vital = this.#getVitalStrikeData(actor, key);
-            if (vital.has) {
+            if (vital.has && !this.key) {
                 this.key = key;
                 this.label = localizeBonusLabel(key);
                 this.enabledByDefault = vital.enabled;
@@ -376,74 +377,12 @@ export class VitalStrikeData {
             return;
         };
 
-        const formulaParts = [];
-
-        /**
-         * @param {string | number} f
-         * @param {string?} [l]
-         * @returns {string}
-        */
-        const toFormula = (f, l) => `{${new Array(this.multiplier).fill(f).join(', ')}}${(l ? `[${l}]` : '')}`;
-
-        // this.action.allDamageSources
-        formulaParts.push(...this.actionUse.action.allDamageSources.map(x => toFormula(x.formula, x.flavor)));
-
-        // and ability source
-        const abl = this.actionUse.shared.rollData.action?.ability.damage;
-        const ability = abl && this.actionUse.shared.rollData.abilities?.[abl];
-        if (ability) {
-            const isNatural = this.actionUse.shared.rollData.item.subType === "natural";
-            const held = this.actionUse.shared.rollData.action?.held || '1h';
-            const ablMult =
-                this.actionUse.shared.rollData.action?.ability.damageMult ?? (isNatural ? null : pf1.config.abilityDamageHeldMultipliers[held]) ?? 1;
-            // Determine ability score bonus
-            const max = this.actionUse.action.ability?.max ?? Infinity;
-            const ablDamage = (ability.mod < 0)
-                ? Math.min(max, ability.mod)
-                : Math.floor(Math.min(max, ability.mod) * ablMult);
-
-            if (ablDamage) {
-                formulaParts.push(toFormula(ablDamage, pf1.config.abilities[abl]));
-            }
-        }
-
-        // this.actionUse.shared.damageBonus
-        formulaParts.push(...this.actionUse.shared.damageBonus.map(x => toFormula(x)));
-
-        // filter all conditions // conditions.where target = damage and critial = normal
-        formulaParts.push(...conditionals
-            .filter(truthiness)
-            .flatMap((c) => [...c.modifiers])
-            .filter((m) => m.target === 'damage' && m.critical === 'normal')
-            .map((m) => toFormula(m.formula))
+        return buildDamageMultiplierConditional(
+            this.actionUse,
+            conditionals,
+            VitalStrikeMythic.label,
+            this.multiplier
         );
-
-        if (this.actionUse.shared.rollData.powerAttackBonus) {
-            const label = ["rwak", "twak", "rsak"].includes(this.actionUse.shared.action.actionType)
-                ? localize("PF1.DeadlyAim")
-                : localize("PF1.PowerAttack");
-            formulaParts.push(toFormula(this.actionUse.shared.rollData.powerAttackBonus, label));
-        }
-
-        if (!formulaParts.length) {
-            return;
-        }
-
-        const conditional = new pf1.components.ItemConditional({
-            default: true,
-            name: VitalStrikeMythic.label,
-            modifiers: [{
-                _id: foundry.utils.randomID(),
-                critical: 'nonCrit',
-                formula: `{${formulaParts.join(', ')}}[${VitalStrikeMythic.label}]`,
-                subTarget: 'attack_0',
-                target: 'damage',
-                type: '',
-                damageType: [...this.actionUse.action.damage?.parts[0]?.types],
-            }],
-        });
-
-        return conditional;
     }
 
     /** @param {ActorPF} actor @param {string} key @returns {{ has: boolean, enabled: boolean }} */

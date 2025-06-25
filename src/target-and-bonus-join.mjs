@@ -507,7 +507,7 @@ Hooks.on('updateItem', (
         return;
     }
 
-    if (!change?.system?.active || change?.system?.disabled === true) {
+    if (!change?.system?.active === false || change?.system?.disabled === true) {
         return;
     }
 

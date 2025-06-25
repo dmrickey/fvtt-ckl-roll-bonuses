@@ -13,6 +13,8 @@
 ### Bugfixes
 - Fixed Weapon Type selection so that it no longer shows armor types as options
 - Fixed duration for spells in compendiums. Now shows full range instead of just smallest value
+- Token Target picker now shows up again when enabling a buff
+- Fixed Vital Strike label on attack dialog inconsistently matching which Vital Strike feat being used
 
 ### Misc
 - More fleshed out type api for developers
