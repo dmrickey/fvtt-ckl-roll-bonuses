@@ -6,7 +6,7 @@ const hovered = [CONST.TOKEN_DISPLAY_MODES.HOVER, CONST.TOKEN_DISPLAY_MODES.ALWA
  */
 export const getTokenDisplayName = (token) => {
     const tokenName = token.name;
-    const actorName = token.actor.name;
+    const actorName = token.actor?.name;
 
     const name = tokenName === actorName
         ? tokenName

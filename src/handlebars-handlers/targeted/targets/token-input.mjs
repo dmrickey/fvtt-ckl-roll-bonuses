@@ -85,7 +85,7 @@ export function showTokenInput({
             if (doc?.actor?.testUserPermission(game.user, CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER)) {
                 li.addEventListener('contextmenu', (event) => {
                     event.preventDefault();
-                    doc.actor.sheet.render(true);
+                    doc.actor?.sheet.render(true);
                 });
             }
         }

@@ -663,7 +663,7 @@ declare global {
 
     interface TokenDocumentPF extends ItemDocument {
         id: string;
-        actor: ActorCharacterPF;
+        actor?: ActorCharacterPF;
         displayName: TOKEN_DISPLAY_MODES;
         disposition: DispositionLevel;
         elevation: number;

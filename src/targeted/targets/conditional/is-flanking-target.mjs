@@ -54,7 +54,7 @@ export class IsFlankingTarget extends BaseConditionalTarget {
         }
 
         const tokens = game.scenes.viewed?.tokens
-            .filter((token) => uuids.includes(token.actor.uuid))
+            .filter((token) => uuids.includes(token.actor?.uuid ?? '-1'))
             .map((token) => token.object);
         return tokens || [];
     }
