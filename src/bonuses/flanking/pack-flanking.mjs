@@ -71,6 +71,7 @@ export class PackFlanking extends SpecificBonus {
                     parent: html,
                 }, {
                     canEdit: isEditable,
+                    inputType: 'specific-bonus',
                 });
             },
         };
