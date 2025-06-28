@@ -10,12 +10,16 @@
 - **Skill Conditional Bonus**
   - When the specified Conditional Targets are met, the rolled skills will receive the given bonus.
 
+### Misc
+- **Solo Tactics** now supports an optional "with allies" input so that it can work only with those specified actors
+
 ### Bugfixes
 - Fixed Weapon Type selection so that it no longer shows armor types as options
 - Fixed duration for spells in compendiums. Now shows full range instead of just smallest value
 - Token Target picker now shows up again when enabling a buff
 - Fixed Vital Strike label on attack dialog inconsistently matching which Vital Strike feat being used
 - Fixed Elemental Focus not updating spell roll data (specifically noticed by the chat card DC not being updated)
+- Better handling for tokens without actors when calculating certain features
 
 ### Misc
 - More fleshed out type api for developers

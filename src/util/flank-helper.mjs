@@ -13,6 +13,7 @@ import { isMelee } from './action-type-helpers.mjs';
 import { difference } from './array-intersects.mjs';
 import { localize } from './localize.mjs';
 import { PositionalHelper } from './positional-helper.mjs';
+import { toArray } from './to-array.mjs';
 import { truthiness } from './truthiness.mjs';
 
 export class FlankHelper {
@@ -35,7 +36,7 @@ export class FlankHelper {
     };
     get isOutflanking() {
         return this.#hasOutflank(this.attacker)
-            && (this.#hasSoloTactics(this.attacker) || !!this.outflankBuddies.length);
+            && (this.#hasSoloTactics(this.attacker, this.allFlankBuddies) || !!this.outflankBuddies.length);
     }
 
     targetIsBeingMenaced = false;
@@ -172,7 +173,7 @@ export class FlankHelper {
         //Improved Outflank
         if (this.#hasImprovedOutflank(this.attacker)) {
             this.allFlankBuddies.push(...threateningAllies.filter((ally) =>
-                (this.#hasImprovedOutflank(ally) || this.#hasSoloTactics(this.attacker))
+                (this.#hasImprovedOutflank(ally) || this.#hasSoloTactics(this.attacker, ally))
                 && attackerAndTarget.isFlankingWith(ally, { hasImprovedOutflank: true, specificAction: action })
             ));
 
@@ -221,10 +222,14 @@ export class FlankHelper {
 
     /**
      * @param {TokenPF} token
+     * @param {ArrayOrSelf<TokenPF>} allies
      * @returns {boolean}
      */
-    #hasSoloTactics(token) {
-        return SoloTactics.has(token);
+    #hasSoloTactics(token, allies) {
+        allies = toArray(allies);
+        return allies.length
+            ? allies.some((ally) => SoloTactics.hasSoloTacticsWith(token, ally))
+            : SoloTactics.hasSoloTacticsWith(token);
     }
 
     /**
