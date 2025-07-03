@@ -30,7 +30,7 @@ const skillFortune = 'fortune-skill';
 const skillMisfortune = 'misfortune-skill';
 
 /**
- * @type {{[key: string]: (key?: string, actor?: ActorPF) => string}}
+ * @type {{[key: string]: (key?: string, actor?: Nullable<ActorPF>) => string}}
  */
 let fortuneHintLookup = {};
 

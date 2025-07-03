@@ -2,7 +2,7 @@ export {};
 declare global {
     function hintFunc(
         hintcls: typeof Hint,
-        actor: ActorPF,
+        actor: Nullable<ActorPF>,
         item: ItemPF,
         data: any
     ): undefined | Hint | Hint[];
@@ -17,7 +17,7 @@ declare global {
 
     type hintFunc = (
         hintCls: ItemHintsAPI['HintClass'],
-        actor: ActorPF,
+        actor: Nullable<ActorPF>,
         item: ItemPF,
         data: ItemHintData
     ) => Hint | Hint[] | undefined;
@@ -33,7 +33,7 @@ declare global {
         HintClass: typeof Hint;
         addHandler: (
             arg0: (
-                actor: ActorPF,
+                actor: Nullable<ActorPF>,
                 item: ItemPF,
                 data: ItemHintData
             ) => Hint[] | undefined

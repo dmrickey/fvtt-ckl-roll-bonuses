@@ -16,6 +16,7 @@
 
 ### Misc
 - **Solo Tactics** now supports an optional "with allies" input so that it can work only with those specified actors
+- Updated Item Hints so that they still work in cases where there is no actor
 
 ### Bugfixes
 - Fixed Weapon Type selection so that it no longer shows armor types as options

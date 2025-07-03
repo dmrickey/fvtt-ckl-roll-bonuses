@@ -31,6 +31,8 @@ registerItemHint((hintcls, _actor, item, _data) => {
 
 // register hint on focused weapon/attack
 registerItemHint((hintcls, actor, item, _data) => {
+    if (!actor) return;
+
     const baseTypes = item.system.baseTypes;
     if (!baseTypes?.length) return;
 

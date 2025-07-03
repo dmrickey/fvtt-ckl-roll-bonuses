@@ -12,7 +12,7 @@ let itemHintsAPI;
 const funcs = [];
 
 /**
- * @param {ActorPF} actor
+ * @param {Nullable<ActorPF>} actor
  * @param {ItemPF} item
  * @param {ItemHintData} data
  * @returns {Hint[]}

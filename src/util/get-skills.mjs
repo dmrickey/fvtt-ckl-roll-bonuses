@@ -89,7 +89,7 @@ export const getSkillChoices = (
 };
 
 /**
- * @param {ActorPF} actor
+ * @param {Nullable<ActorPF>} actor
  * @param {ItemPF} item
  * @param {string} flag
  * @returns {string}
@@ -105,7 +105,7 @@ export const getSkillHints = (actor, item, flag) => {
             case 'pro': return localize(allProfessions);
             case allKnowledges: return localize(allKnowledges);
             default:
-                try { return actor.getSkillInfo(id).fullName; }
+                try { return getSkillName(actor, id, 'fullName'); }
                 catch { return id; }
         }
     });

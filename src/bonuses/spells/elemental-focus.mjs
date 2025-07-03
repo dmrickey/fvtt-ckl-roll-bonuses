@@ -222,7 +222,7 @@ Hooks.on(customGlobalHooks.itemGetTypeChatData, (
 
 // register on focused spell
 registerItemHint((hintcls, actor, item, _data) => {
-    if (!(item instanceof pf1.documents.item.ItemSpellPF)) {
+    if (!(item instanceof pf1.documents.item.ItemSpellPF) || !actor) {
         return;
     }
 

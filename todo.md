@@ -279,3 +279,4 @@ Expand "Action Type Target" to include CMB
 
 ## BugFixes
 - Fate's Favored is adding Snake Sidewind (so look at Snake Sidewind configuration - it currently has the wrong compendium id)
+- EitR toggle was forgotten about in the last big refactor
