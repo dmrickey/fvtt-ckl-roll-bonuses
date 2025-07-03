@@ -56,6 +56,8 @@
     - [Idea](#idea)
   - [Conditional Bonuses](#conditional-bonuses)
     - [Bonus Types](#bonus-types)
+  - [Add included macros to documentation](#add-included-macros-to-documentation)
+  - [BugFixes](#bugfixes)
 
 # TODO
 - Figure out a way to support multiple target groups on a single Item (so I can add `Favored Enemy (Human) +4` and `Favored Enemy (goblin) +2` on a single Item)
@@ -272,3 +274,8 @@ Add journal links to target/bonus headers within item sheet
   - Add actor inline hint for conditionally targeted skills
 
 Expand "Action Type Target" to include CMB
+
+## Add included macros to documentation
+
+## BugFixes
+- Fate's Favored is adding Snake Sidewind (so look at Snake Sidewind configuration - it currently has the wrong compendium id)

@@ -124,7 +124,7 @@ registerItemHint((hintcls, _actor, item, _data) => {
     }
 
     if (item.hasItemBooleanFlag(UncannyDodgeImproved.key)) {
-        return hintcls.create(UncannyDodgeImproved.label, ['error'], { hint: localize('warnings.uncanny-dodge-improved') });
+        return hintcls.create(UncannyDodgeImproved.label, ['error'], { hint: localize('warning.uncanny-dodge-improved') });
     }
 });
 

@@ -10,6 +10,10 @@
 - **Skill Conditional Bonus**
   - When the specified Conditional Targets are met, the rolled skills will receive the given bonus.
 
+### New Macros
+- **Flank Finder**
+  - Helper macro to fully explain why tokens are considered flanking or not.
+
 ### Misc
 - **Solo Tactics** now supports an optional "with allies" input so that it can work only with those specified actors
 

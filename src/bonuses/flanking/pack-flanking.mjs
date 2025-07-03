@@ -99,7 +99,7 @@ registerItemHint((hintcls, _actor, item, _data) => {
             });
     }
     else {
-        return hintcls.create(PackFlanking.label, ['error'], { hint: localize('warnings.pack-flanking') });
+        return hintcls.create(PackFlanking.label, ['error'], { hint: localize('warning.pack-flanking') });
     }
 });
 

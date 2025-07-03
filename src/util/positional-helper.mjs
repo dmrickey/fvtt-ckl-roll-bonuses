@@ -201,7 +201,7 @@ export class PositionalHelper {
 
             if ((single && !max)) {
                 if (specificAction && !errorCache.includes(action.uuid)) {
-                    const error = localize('warnings.range-misconfigured', {
+                    const error = localize('warning.range-misconfigured', {
                         actionName: action.name,
                         itemName: action.item.name,
                         actionUuid: action.uuid,
