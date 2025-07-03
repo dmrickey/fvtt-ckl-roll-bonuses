@@ -1,6 +1,8 @@
 .roll-bonuses-form .sticky-header {
-    background-color: rgb(178, 178, 178);
+    background-color: #888;
+    color: var(--color-text-primary);
     position: sticky;
+    text-shadow: unset;
     top: 0;
     z-index: 1;
 }
@@ -27,8 +29,24 @@
 }
 
 .token-based-list.window-app .window-content,
-.item-based-list.window-app .window-content {
+.item-based-list.window-app .window-content,
+.token-based-list.application .window-content,
+.item-based-list.application .window-content {
     padding: 0;
+}
+.token-based-list.application .window-content footer,
+.item-based-list.application .window-content footer {
+    padding-inline: 0.25rem;
+    padding-block-end: 0.25rem;
+}
+.token-based-list.application .window-content footer > *:not(:last-child),
+.item-based-list.application .window-content footer > *:not(:last-child) {
+    margin-block-end: 0.25rem;
+}
+
+.token-based-list.application .window-content h4,
+.item-based-list.application .window-content h4 {
+    margin-block-end: 0.5rem;
 }
 
 .item-based-list .roll-bonuses-form {
@@ -45,7 +63,6 @@
     .roll-bonuses-form
     div.entity-selector-row
     > *:hover:not(.only-name) {
-    color: var(--pf1-item-hover-text);
     text-shadow: var(--pf1-item-hover-shadow);
     cursor: pointer;
 }
@@ -75,13 +92,14 @@
 }
 
 .item-based-list .roll-bonuses-form .help-text {
-    margin: 0.5rem;
+    margin-block-start: 0.5rem;
+    margin-inline: 0.5rem;
 }
 
 .item-based-list .roll-bonuses-form .search-container {
     align-items: center;
     display: flex;
-    margin: 0 0.5rem 0.5rem 0.5rem;
+    margin: 0.5rem;
 }
 .roll-bonuses-form .search-container .fa-magnifying-glass {
     margin-inline-end: 0.5rem;

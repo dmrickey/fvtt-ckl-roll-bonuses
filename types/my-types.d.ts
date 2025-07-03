@@ -90,7 +90,7 @@ import { modifiersInput } from '../src/handlebars-handlers/targeted/bonuses/cond
 import { damageInput } from '../src/handlebars-handlers/targeted/bonuses/damage.mjs';
 import { showScriptBonusEditor } from '../src/handlebars-handlers/targeted/bonuses/script-call-bonus-input.mjs';
 import {
-    ActionSelector,
+    ActionSelect,
     showActionInput,
 } from '../src/handlebars-handlers/targeted/targets/action-input.mjs';
 import { showActorInput } from '../src/handlebars-handlers/targeted/targets/actor-input.mjs';
@@ -110,6 +110,7 @@ import { AgileBonus } from '../src/targeted/bonuses/agile.mjs';
 import { AttackBonus } from '../src/targeted/bonuses/attack-bonus.mjs';
 import { BaneBonus } from '../src/targeted/bonuses/bane-bonus.mjs';
 import { CasterLevelBonus } from '../src/targeted/bonuses/caster-level-bonus.mjs';
+import { SaveBonus } from '../src/targeted/bonuses/conditional-bonuses.mjs/save-bonus.mjs';
 import { ConditionalModifiersBonus } from '../src/targeted/bonuses/conditional-modifiers-bonus.mjs';
 import { CritBonus } from '../src/targeted/bonuses/crit-bonus.mjs';
 import { DamageBonus } from '../src/targeted/bonuses/damage-bonus.mjs';
@@ -121,7 +122,6 @@ import { FinesseBonus } from '../src/targeted/bonuses/finesse-bonus.mjs';
 import { FootnoteBonus } from '../src/targeted/bonuses/footnote-bonus.mjs';
 import { FortuneBonus } from '../src/targeted/bonuses/fortune-bonus.mjs';
 import { MisfortuneBonus } from '../src/targeted/bonuses/misfortune-bonus.mjs';
-import { SaveBonus } from '../src/targeted/bonuses/conditional-bonuses.mjs/save-bonus.mjs';
 import { ScriptCallBonus } from '../src/targeted/bonuses/script-call-bonus.mjs';
 import { SkillBonus } from '../src/targeted/bonuses/skill-bonus.mjs';
 import { Sources } from '../src/targeted/source-registration.mjs';
@@ -178,6 +178,7 @@ import { addCheckToAttackDialog } from '../src/util/attack-dialog-helper.mjs';
 import { confirmationDialog } from '../src/util/confirmation-dialog.mjs';
 import { getEnhancementBonusForAction } from '../src/util/enhancement-bonus-helper.mjs';
 import { FormulaCacheHelper, getDocFlags } from '../src/util/flag-helpers.mjs';
+import { FlankHelper } from '../src/util/flank-helper.mjs';
 import {
     currentTargetedActors,
     currentTargets,
@@ -217,7 +218,7 @@ declare global {
     class RollBonusesAPI {
         /** Applications that the app uses that are used by various inputs */
         applications: {
-            ActionSelector: typeof ActionSelector;
+            ActionSelect: typeof ActionSelect;
             ActorSelectorApp: typeof ActorSelectorApp;
             BonusPickerApp: typeof BonusPickerApp;
             ItemSelector: typeof ItemSelector;
@@ -507,6 +508,7 @@ declare global {
             toArray: typeof toArray;
             truthiness: typeof truthiness;
 
+            FlankHelper: typeof FlankHelper;
             FormulaCacheHelper: typeof FormulaCacheHelper;
             PositionalHelper: typeof PositionalHelper;
             Trait: typeof Trait;

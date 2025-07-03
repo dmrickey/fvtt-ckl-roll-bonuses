@@ -415,7 +415,8 @@
             "description": "Bonuses will apply only when using the selected items. Right click on any row to open that Item's sheet for further verification.",
             "description-actions": "Bonuses will apply only when using the selected actions. Right click on any row to open that action's sheet for further verification (or header to open the item).",
             "description-when-active": "These bonuses will only be active when the targeted item is enabled or equipped. For example, secondary bonuses that apply only while raging.",
-            "title": "Item Selector"
+            "title": "Item Selector",
+            "title-action": "Action Selector - {name}"
         },
         "item-hints": {
             "skill-rank-override": "{skills} (->{rank})"

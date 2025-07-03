@@ -1,16 +1,19 @@
-<form class="roll-bonuses roll-bonuses-form pf1">
+<div class="roll-bonuses roll-bonuses-form pf1">
+    {{#if hint}}
     <div class="help-text">
         <i class="help-icon fas fa-info-circle"></i>
-        {{localize 'ckl-roll-bonuses.item-app.description-actions'}}
+        {{ hint }}
     </div>
+    {{/if}}
     <div class="search-container">
-        <input name="filter" type="search" />
+        <i class="fas fa-magnifying-glass"></i>
+        <input type="search" />
     </div>
     <div class="form-body">
         <div class="all-entities">
             {{#each groupedItems}}
             <section class="type-section">
-                <h4 class="type-header" data-type="{{@key}}">{{@key}}</h4>
+                <h4 class="type-header sticky-header" data-type="{{@key}}">{{@key}}</h4>
                 <div class="entities">
                     {{#each this}}
                     <div
@@ -30,7 +33,7 @@
                     >
                         <input
                             type="checkbox"
-                            name="{{../../../path}}"
+                            name="{{../id}}.{{this.id}}"
                             {{#if this.checked}}checked{{/if}}
                             value="{{../id}}.{{this.id}}"
                             id="action_{{../../../item.id}}_{{../id}}_.{{this.id}}"
@@ -49,12 +52,4 @@
             {{/each}}
         </div>
     </div>
-    <div class="control-group">
-        <button type="reset">
-            <i class="fas fa-rotate-left"></i> {{localize "ckl-roll-bonuses.cancel"}}
-        </button>
-        <button type="submit">
-            <i class="fas fa-save"></i> {{localize "ckl-roll-bonuses.ok"}}
-        </button>
-    </div>
-</form>
+</div>
