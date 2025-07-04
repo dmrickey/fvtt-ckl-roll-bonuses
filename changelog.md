@@ -25,6 +25,7 @@
 - Fixed Vital Strike label on attack dialog inconsistently matching which Vital Strike feat being used
 - Fixed Elemental Focus not updating spell roll data (specifically noticed by the chat card DC not being updated)
 - Better handling for tokens without actors when calculating certain features
+- Weapon Focus and Weapon Specialization once again respect the EitR setting
 
 ### Misc
 - More fleshed out type api for developers

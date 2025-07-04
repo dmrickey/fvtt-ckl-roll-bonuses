@@ -3,7 +3,7 @@ import { stringSelect } from '../../handlebars-handlers/bonus-inputs/string-sele
 import { textInput } from '../../handlebars-handlers/bonus-inputs/text-input.mjs';
 import { getDocFlags } from '../../util/flag-helpers.mjs';
 import { getWeaponTypesFromActor } from '../../util/get-weapon-types-from-actor.mjs';
-import { LanguageSettings, registerSetting } from '../../util/settings.mjs';
+import { LanguageSettings, registerSetting, SharedSettings } from '../../util/settings.mjs';
 import { SpecificBonus } from '../_specific-bonus.mjs';
 
 class BaseWeaponFocus extends SpecificBonus {
@@ -44,6 +44,7 @@ export class WeaponFocus extends BaseWeaponFocus {
         return {
             type: 'render-and-create',
             compendiumId: 'n250dFlbykAIAg5Z',
+            ignoreFunc: (_item) => SharedSettings.elephantInTheRoom,
             isItemMatchFunc: (name) => name === Settings.name,
             showInputsFunc: (item, html, isEditable) => {
                 const actor = item.actor;
@@ -88,6 +89,7 @@ export class WeaponFocusGreater extends BaseWeaponFocus {
         return {
             type: 'render-and-create',
             compendiumId: 'IER2MzJrjSvxMlNS',
+            ignoreFunc: (_item) => SharedSettings.elephantInTheRoom,
             isItemMatchFunc: (name) => LanguageSettings.isGreater(name, Settings.name),
             showInputsFunc: (item, html, isEditable) => {
                 const actor = item.actor;
@@ -134,6 +136,7 @@ export class WeaponFocusMythic extends BaseWeaponFocus {
         return {
             type: 'render-and-create',
             compendiumId: 'stJ6Jp1ALN6qgGBr',
+            ignoreFunc: (_item) => SharedSettings.elephantInTheRoom,
             isItemMatchFunc: (name) => LanguageSettings.isMythic(name, Settings.name),
             showInputsFunc: (item, html, isEditable) => {
                 const actor = item.actor;
@@ -181,6 +184,7 @@ export class WeaponFocusRacial extends SpecificBonus {
         return {
             type: 'render-and-create',
             compendiumId: '8RzIeYtbx0UtXUge',
+            ignoreFunc: (_item) => SharedSettings.elephantInTheRoom,
             isItemMatchFunc: (name) => name === Settings.racialWeaponFocus,
             showInputsFunc: (item, html, isEditable) => {
                 const current = item.getFlag(MODULE_NAME, WeaponFocusRacial.key);

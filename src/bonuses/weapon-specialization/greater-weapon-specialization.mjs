@@ -9,7 +9,7 @@ import { getDocFlags } from '../../util/flag-helpers.mjs';
 import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize } from "../../util/localize.mjs";
-import { LanguageSettings } from '../../util/settings.mjs';
+import { LanguageSettings, SharedSettings } from '../../util/settings.mjs';
 import { SpecificBonus } from '../_specific-bonus.mjs';
 import { WeaponSpecialization, WeaponSpecializationSettings } from './weapon-specialization.mjs';
 
@@ -60,6 +60,7 @@ export class WeaponSpecializationGreater extends SpecificBonus {
                     inputType: 'specific-bonus',
                 });
             },
+            ignoreFunc: (_item) => SharedSettings.elephantInTheRoom,
             options: {
                 defaultFlagValuesFunc: (item) => {
                     const actor = item?.actor;

@@ -19,6 +19,7 @@ export const initConfiguration = (bonus) => {
                         defaultFlagValuesFunc: config.options?.defaultFlagValuesFunc,
                         extraBooleanFlags: config.options?.extraBooleanFlags,
                         showInputsFunc: config.showInputsFunc,
+                        ignoreFunc: config.ignoreFunc,
                     }
                 );
                 break;

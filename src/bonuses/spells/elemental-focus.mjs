@@ -45,6 +45,7 @@ export class ElementalFocus extends BaseFocus {
         return {
             type: 'render-and-create',
             compendiumId: '1frgqDSnQFiTq0MC',
+            ignoreFunc: (item) => item.type !== 'feat' || item.subType !== 'feat',
             isItemMatchFunc: (name) => name === Settings.elementalFocus,
             showInputsFunc: (item, html, isEditable) => {
                 const elements = Object.fromEntries(damageElements.map(k => [k, pf1.registry.damageTypes.get(k)]));

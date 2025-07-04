@@ -15,7 +15,7 @@ export const getWeaponTypesFromActor = (actor) => {
     const types = uniqueArray(
         [
             ...getActorItemsByTypes(actor, 'weapon', 'attack'),
-            ...(actor.itemFlags?.boolean[api.targetOverrideTypeMap['target-override_weapon-type-override'].key].sources ?? []),
+            ...(actor.itemFlags?.boolean[api.targetOverrideTypeMap['target-override_weapon-type-override'].key]?.sources ?? []),
         ].flatMap(x => x.system.baseTypes)
     ).filter(truthiness);
     types.sort();

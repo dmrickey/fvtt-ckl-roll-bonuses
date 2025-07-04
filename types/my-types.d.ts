@@ -576,6 +576,7 @@ declare global {
         type: 'just-create';
         compendiumId: string;
         isItemMatchFunc: (name: string, item?: ItemPF) => boolean;
+        ignoreFunc?: (item: ItemPF) => boolean;
         options?: {
             extraBooleanFlags?: string[];
             defaultFlagValuesFunc?: (

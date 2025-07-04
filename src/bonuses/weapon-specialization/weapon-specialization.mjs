@@ -9,7 +9,7 @@ import { getDocFlags } from '../../util/flag-helpers.mjs';
 import { customGlobalHooks } from "../../util/hooks.mjs";
 import { registerItemHint } from "../../util/item-hints.mjs";
 import { localize } from "../../util/localize.mjs";
-import { LanguageSettings } from "../../util/settings.mjs";
+import { LanguageSettings, SharedSettings } from "../../util/settings.mjs";
 import { SpecificBonus } from '../_specific-bonus.mjs';
 import { WeaponFocus } from '../weapon-focus/weapon-focus.mjs';
 
@@ -39,6 +39,7 @@ export class WeaponSpecialization extends SpecificBonus {
         return {
             type: 'render-and-create',
             compendiumId: 'YLCvMNeAF9V31m1h',
+            ignoreFunc: (_item) => SharedSettings.elephantInTheRoom,
             isItemMatchFunc: (name) => name === Settings.name,
             showInputsFunc: (item, html, isEditable) => {
                 const actor = item.actor;
