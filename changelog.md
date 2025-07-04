@@ -27,6 +27,7 @@
 - Better handling for tokens without actors when calculating certain features
 - Weapon Focus and Weapon Specialization once again respect the EitR setting
 - Fixed Snake Sidewind auto-configuring to Fate's Favored
+- Restored functionality for ammo bonuses
 
 ### Misc
 - More fleshed out type api for developers

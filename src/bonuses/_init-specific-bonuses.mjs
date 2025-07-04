@@ -1,4 +1,3 @@
-import { SpecificBonus } from './_specific-bonus.mjs';
 import { ArmorFocus } from './armor-focus/armor-focus.mjs';
 import { ArmorFocusImproved } from './armor-focus/improved-armor-focus.mjs';
 import { ChangeTypeModification } from './change-type-modification.mjs';
