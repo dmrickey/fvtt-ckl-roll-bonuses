@@ -773,12 +773,13 @@
             "flank-detector": "Flank Detector"
         },
         "info": {
-            "is-flanking": "'{meToken}' and '{allyToken}' are flanking '{targetToken}'.",
-            "is-not-flanking": "'{meToken}' is not flanking '{targetToken}'.",
-            "is-not-flanking-with-ally": "'{meToken}' and '{allyToken}' are not flanking '{targetToken}'.",
+            "is-flanking": "'{meToken}' and '{allyToken}' are flanking '{targetToken}' with '{action}'.",
+            "is-not-flanking": "'{meToken}' is not flanking '{targetToken}' with '{action}'.",
+            "is-not-flanking-with-ally": "'{meToken}' and '{allyToken}' are not flanking '{targetToken}' with '{action}'.",
             "token-distance": "Distance between '{first}' and '{second}': {distance}"
         },
         "warning": {
+            "action-is-not-melee": "'{action}' is not a melee action.",
             "invalid-token-disposition": "Token dispositions incompatible for flanking.",
             "invalid-token-selection": "Invalid tokens selected.",
             "no-actor": "You must select a token or use this macro in a script call.",
