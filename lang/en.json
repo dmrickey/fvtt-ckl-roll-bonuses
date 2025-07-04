@@ -436,6 +436,7 @@
         "maximized-total": "Maximized: {total}",
         "misfortune": "Misfortune",
         "missing-bonuses": "There are no Bonuses configured.",
+        "missing-conditional-target": "'{bonus}' bonus requires a Conditional Target to function properly.",
         "missing-targets": "There are no Targets configured.",
         "modifiers": "Modifiers",
         "ok": "OK",

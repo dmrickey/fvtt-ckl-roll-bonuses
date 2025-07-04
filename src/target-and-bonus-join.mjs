@@ -94,12 +94,17 @@ registerItemHint((hintcls, actor, item, _data) => {
             .forEach(([name, hint]) => allHints.push(hintcls.create(name, [], { hint })))
     }
 
-    if (item[MODULE_NAME].bonuses.length && !item[MODULE_NAME].targets.length) {
-        const hint = hintcls.create(localize('missing-targets'), ['ckl-missing-source'], { icon: 'fas fa-circle-exclamation' });
+    if (item[MODULE_NAME].bonuses.some(x => x.isConditionalBonus) && !item[MODULE_NAME].targets.some(x => x.isConditionalTarget)) {
+        const bonus = item[MODULE_NAME].bonuses.find(x => x.isConditionalBonus);
+        const hint = hintcls.create(localize('missing-conditional-target', { bonus: bonus?.label }), ['ckl-missing-source'], { icon: 'fas fa-circle-exclamation' });
         return [hint, ...allHints];
     }
     else if (item[MODULE_NAME].targets.length && !item[MODULE_NAME].bonuses.length) {
         const hint = hintcls.create(localize('missing-bonuses'), ['ckl-missing-source'], { icon: 'fas fa-circle-exclamation' });
+        return [hint, ...allHints];
+    }
+    else if (item[MODULE_NAME].bonuses.length && !item[MODULE_NAME].targets.length) {
+        const hint = hintcls.create(localize('missing-targets'), ['ckl-missing-source'], { icon: 'fas fa-circle-exclamation' });
         return [hint, ...allHints];
     }
     else {

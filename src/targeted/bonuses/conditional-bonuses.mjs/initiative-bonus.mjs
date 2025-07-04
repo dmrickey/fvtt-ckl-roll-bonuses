@@ -1,5 +1,4 @@
 import { MODULE_NAME } from '../../../consts.mjs';
-import { showLabel } from '../../../handlebars-handlers/bonus-inputs/show-label.mjs';
 import { textInputAndKeyValueSelect } from '../../../handlebars-handlers/bonus-inputs/text-input-and-key-value-select.mjs';
 import { handleConditionalBonusesFor } from '../../../target-and-bonus-join.mjs';
 import { createChange } from '../../../util/conditional-helpers.mjs';

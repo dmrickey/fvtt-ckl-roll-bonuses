@@ -242,6 +242,8 @@
 ### Target
 - `Size Target` (trait target) kicks in if target is a given size
 - `Relative Size` (kicks in if target is at least or exactly _N_ steps different from you larger/smaller)
+- While "Equipment Type" is equipped
+- While "Weapon Group" is equipped
 
 ### Specific Bonuses
 - ~~Migrate all keys to start with `specific_`~~ Do this later after SBC has a chance to update to only use the API
