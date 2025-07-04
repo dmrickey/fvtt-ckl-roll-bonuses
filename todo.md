@@ -278,4 +278,3 @@ Expand "Action Type Target" to include CMB
 ## Add included macros to documentation
 
 ## BugFixes
-- Fate's Favored is adding Snake Sidewind (so look at Snake Sidewind configuration - it currently has the wrong compendium id)

@@ -26,6 +26,7 @@
 - Fixed Elemental Focus not updating spell roll data (specifically noticed by the chat card DC not being updated)
 - Better handling for tokens without actors when calculating certain features
 - Weapon Focus and Weapon Specialization once again respect the EitR setting
+- Fixed Snake Sidewind auto-configuring to Fate's Favored
 
 ### Misc
 - More fleshed out type api for developers
