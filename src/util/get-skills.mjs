@@ -152,13 +152,14 @@ export const getFlaggedSkillIdsFromItem = (actor, item, flag) => {
 /**
  * @param {ActorPF} actor
  * @param {string} flag
+ * @param {string} [skillKey]
  * @returns {{ source: ItemPF, ids: SkillId[]}[]}
  */
-export const getFlaggedSkillIdsBySourceFromActor = (actor, flag) => {
+export const getFlaggedSkillIdsBySourceFromActor = (actor, flag, skillKey = undefined) => {
     const sources = actor.itemFlags?.boolean[flag]?.sources ?? [];
     const mapped = sources.map((source) => ({
         source,
-        ids: getFlaggedSkillIdsFromItem(actor, source, flag),
+        ids: getFlaggedSkillIdsFromItem(actor, source, skillKey || flag),
     }))
     return mapped;
 }

@@ -7,7 +7,8 @@ import { createChange } from '../../../util/conditional-helpers.mjs';
 import { FormulaCacheHelper } from '../../../util/flag-helpers.mjs';
 import { getFlaggedSkillIdsFromItem, getSkillChoices, getSkillHints } from '../../../util/get-skills.mjs';
 import { LocalHookHandler, localHooks } from '../../../util/hooks.mjs';
-import { localizeBonusLabel, localizeBonusTooltip } from '../../../util/localize.mjs';
+import { localize, localizeBonusLabel, localizeBonusTooltip } from '../../../util/localize.mjs';
+import { onSkillSheetRender } from '../../../util/on-skill-sheet-render-handler.mjs';
 import { toArray } from '../../../util/to-array.mjs';
 import { BaseConditionalBonus } from './_base-conditional-bonus.mjs';
 
@@ -101,8 +102,78 @@ export class SkillBonus extends BaseConditionalBonus {
         );
         return changes;
     }
+
+    /**
+     * @param {{ actor: ActorCharacterPF }} actorSheet
+     * @param {`skill.${SkillId}` | undefined} key
+     * @param {{ content: HTMLElement }} html
+     */
+    static onTooltipRender({ actor }, key, html) {
+        if (!key?.startsWith('skill') || !actor) return;
+
+        const skillId = /** @type {SkillId} */ (key.slice(6));
+
+        const sources = actor.itemFlags?.boolean?.[this.key]?.sources ?? [];
+        if (!sources.length) return;
+
+        const ul = document.createElement('ul');
+        ul.classList.add('notes');
+
+        const header = document.createElement('h4');
+        header.textContent = localize('bonus-header-labels.conditional-bonus');
+
+        ul.appendChild(header);
+
+        let found = false;
+        sources.forEach((source) => {
+            const conditionalTargets = /** @type {Array<RollBonusesAPI['sources']['BaseConditionalTarget']>} */((source[MODULE_NAME]?.targets ?? []).filter(t => t.isConditionalTarget));
+
+            const targetedIds = getFlaggedSkillIdsFromItem(actor, source, this.chosenKey);
+            if (!targetedIds.includes(skillId)) return;
+
+            let bonusValue = this.isSource(source) && FormulaCacheHelper.getHint(source, this.formulaKey);
+            if (!conditionalTargets.length || !bonusValue) return;
+
+            const changeType = /** @type {BonusTypes} */ (source.getFlag(MODULE_NAME, this.typeKey));
+            bonusValue += ' ' + pf1.config.bonusTypes[changeType] || changeType;
+
+            const hints = [source.name, ...conditionalTargets.map(t => t.fluentDescription(source)), bonusValue];
+            hints.forEach((hint) => {
+                const li = document.createElement('li');
+                li.classList.add('note');
+                li.innerHTML = hint;
+                ul.appendChild(li);
+            });
+            found = true;
+        });
+
+        if (found) {
+            html.content.append(ul);
+        }
+    }
+
     static {
         LocalHookHandler.registerHandler(localHooks.getActorSkillChanges, this.getActorSkillChanges.bind(this));
+        Hooks.on('renderPF1ExtendedTooltip', this.onTooltipRender.bind(this));
+
+        onSkillSheetRender({
+            key: this.key,
+            skillKey: this.chosenKey,
+        }, {
+            classes: () => ['fas', 'fa-star-of-life', 'ckl-skill-icon'],
+            getText: (_actor, _skillId, source) => {
+                let bonusValue = this.isSource(source) && FormulaCacheHelper.getHint(source, this.formulaKey);
+
+                const conditionalTargets = /** @type {Array<RollBonusesAPI['sources']['BaseConditionalTarget']>} */((source[MODULE_NAME]?.targets ?? []).filter(t => t.isConditionalTarget));
+                if (!conditionalTargets.length || !bonusValue) return '';
+
+                const changeType = /** @type {BonusTypes} */ (source.getFlag(MODULE_NAME, this.typeKey));
+                bonusValue += ' ' + pf1.config.bonusTypes[changeType] || changeType;
+
+                const hints = [source.name, ...conditionalTargets.map(t => t.fluentDescription(source)), bonusValue];
+                return hints.join('<br>');
+            },
+        });
     }
 
     /**

@@ -3,8 +3,9 @@ import { getFlaggedSkillIdsBySourceFromActor } from './get-skills.mjs';
 
 /**
  * @param {object} args
- * @param {(actor: ActorPF, flag: string) => { source: ItemPF, ids: string[]}[]} [args.getSkillIds]
+ * @param {(actor: ActorPF, flag: string, skillKey?: string) => { source: ItemPF, ids: string[]}[]} [args.getSkillIds]
  * @param {string} args.key
+ * @param {string} [args.skillKey]
  * @param {(id: SkillId, listItem: HTMLElement ) => void} [args.rowCallback]
  * @param {object} [tooltip]
  * @param {(actor: ActorPF, skillId: SkillId, source: ItemPF) => string} tooltip.getText
@@ -14,6 +15,7 @@ import { getFlaggedSkillIdsBySourceFromActor } from './get-skills.mjs';
 export const onSkillSheetRender = ({
     key,
     getSkillIds = getFlaggedSkillIdsBySourceFromActor,
+    skillKey = undefined,
     rowCallback = undefined
 }, tooltip) => {
     Hooks.on('renderActorSheetPF', (
@@ -21,7 +23,7 @@ export const onSkillSheetRender = ({
     /** @type {{ find: (arg0: string) => { (): any; new (): any; each: { (arg0: { (_: any, element: HTMLElement): void; }): void; new (): any; }; }; }} */ html,
     /** @type {{ actor: ActorPF; }} */ { actor }
     ) => {
-        const sourceItems = getSkillIds(actor, key);
+        const sourceItems = getSkillIds(actor, key, skillKey);
 
         if (!sourceItems?.length) return;
 

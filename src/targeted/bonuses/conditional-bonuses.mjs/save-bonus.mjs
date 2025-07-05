@@ -8,7 +8,7 @@ import { FormulaCacheHelper } from '../../../util/flag-helpers.mjs';
 import { getKeyedHintList } from '../../../util/get-keyed-hint-list.mjs';
 import { getSourceFlag } from '../../../util/get-source-flag.mjs';
 import { LocalHookHandler, localHooks } from '../../../util/hooks.mjs';
-import { localizeBonusLabel, localizeBonusTooltip } from '../../../util/localize.mjs';
+import { localize, localizeBonusLabel, localizeBonusTooltip } from '../../../util/localize.mjs';
 import { toArray } from '../../../util/to-array.mjs';
 import { BaseConditionalBonus } from './_base-conditional-bonus.mjs';
 
@@ -28,6 +28,55 @@ export class SaveBonus extends BaseConditionalBonus {
      * @returns {string}
      */
     static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.VlFEvwU7m3nbjy5d#saving-throw'; }
+
+    /**
+     * @param {{ actor: ActorCharacterPF }} actorSheet
+     * @param {`save.${SavingThrow}` | undefined} key
+     * @param {{ content: HTMLElement }} html
+     */
+    static onTooltipRender({ actor }, key, html) {
+        if (!key?.startsWith('save') || !actor) return;
+
+        const savingThrow = /** @type {SavingThrow} */ (key.split('.')[1]);
+
+        const sources = actor.itemFlags?.boolean?.[this.key]?.sources ?? [];
+        if (!sources.length) return;
+
+        const ul = document.createElement('ul');
+        ul.classList.add('notes');
+
+        const header = document.createElement('h4');
+        header.textContent = localize('bonus-header-labels.conditional-bonus');
+
+        ul.appendChild(header);
+
+        let found = false;
+        sources.forEach((source) => {
+            const conditionalTargets = /** @type {Array<RollBonusesAPI['sources']['BaseConditionalTarget']>} */((source[MODULE_NAME]?.targets ?? []).filter(t => t.isConditionalTarget));
+
+            const targetedIds = /** @type {SavingThrow[]} */  (getSourceFlag(source, this.chosenKey)) || [];
+            if (!targetedIds.includes(savingThrow)) return;
+
+            let bonusValue = this.isSource(source) && FormulaCacheHelper.getHint(source, this.formulaKey);
+            if (!conditionalTargets.length || !bonusValue) return;
+
+            const changeType = /** @type {BonusTypes} */ (source.getFlag(MODULE_NAME, this.typeKey));
+            bonusValue += ' ' + pf1.config.bonusTypes[changeType] || changeType;
+
+            const hints = [...conditionalTargets.map(t => t.fluentDescription(source)), bonusValue];
+            hints.forEach((hint) => {
+                const li = document.createElement('li');
+                li.classList.add('note');
+                li.innerHTML = hint;
+                ul.appendChild(li);
+            });
+            found = true;
+        });
+
+        if (found) {
+            html.content.append(ul);
+        }
+    }
 
     /**
      * @override
@@ -102,6 +151,8 @@ export class SaveBonus extends BaseConditionalBonus {
     }
     static {
         LocalHookHandler.registerHandler(localHooks.getActorSaveChanges, this.getActorSaveChanges.bind(this));
+
+        Hooks.on('renderPF1ExtendedTooltip', this.onTooltipRender.bind(this));
     }
 
     /**

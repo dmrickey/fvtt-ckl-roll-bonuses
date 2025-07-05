@@ -134,7 +134,7 @@ export class InitiativeBonus extends BaseConditionalBonus {
     static onTooltipRender({ actor }, key, html) {
         if (key !== 'init' || !actor) return;
 
-        const sources = actor.itemFlags?.boolean?.[InitiativeBonus.key]?.sources ?? [];
+        const sources = actor.itemFlags?.boolean?.[this.key]?.sources ?? [];
         if (!sources.length) return;
 
         const ul = document.createElement('ul');
@@ -147,8 +147,11 @@ export class InitiativeBonus extends BaseConditionalBonus {
 
         sources.forEach((source) => {
             const conditionalTargets = /** @type {Array<RollBonusesAPI['sources']['BaseConditionalTarget']>} */((source[MODULE_NAME]?.targets ?? []).filter(t => t.isConditionalTarget));
-            const init = InitiativeBonus.isSource(source) && FormulaCacheHelper.getHint(source, InitiativeBonus.formulaKey);
+            let init = this.isSource(source) && FormulaCacheHelper.getHint(source, this.formulaKey);
             if (!conditionalTargets.length || !init) return;
+
+            const changeType = /** @type {BonusTypes} */ (source.getFlag(MODULE_NAME, this.typeKey));
+            init += ' ' + pf1.config.bonusTypes[changeType] || changeType;
 
             const hints = [...conditionalTargets.map(t => t.fluentDescription(source)), init];
             hints.forEach((hint) => {
@@ -167,7 +170,7 @@ export class InitiativeBonus extends BaseConditionalBonus {
             libWrapper.register(MODULE_NAME, 'pf1.documents.CombatantPF.prototype.getInitiativeRoll', InitiativeBonus.getInitiativeRoll, libWrapper.OVERRIDE)
         });
 
-        Hooks.on('renderPF1ExtendedTooltip', InitiativeBonus.onTooltipRender);
+        Hooks.on('renderPF1ExtendedTooltip', this.onTooltipRender.bind(this));
     }
 
     /**
