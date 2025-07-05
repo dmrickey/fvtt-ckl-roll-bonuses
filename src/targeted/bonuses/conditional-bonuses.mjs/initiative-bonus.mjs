@@ -4,7 +4,6 @@ import { handleConditionalBonusesFor } from '../../../target-and-bonus-join.mjs'
 import { createChange } from '../../../util/conditional-helpers.mjs';
 import { FormulaCacheHelper } from '../../../util/flag-helpers.mjs';
 import { localize, localizeBonusLabel, localizeBonusTooltip } from '../../../util/localize.mjs';
-import { distinct } from '../../../util/unique-array.mjs';
 import { BaseConditionalBonus } from './_base-conditional-bonus.mjs';
 
 export class InitiativeBonus extends BaseConditionalBonus {
@@ -34,6 +33,9 @@ export class InitiativeBonus extends BaseConditionalBonus {
 
         let hintText = localizeBonusTooltip(this.key);
         hintText += '<br>' + FormulaCacheHelper.getHint(source, this.formulaKey);
+
+        const changeType = /** @type {BonusTypes} */ (source.getFlag(MODULE_NAME, this.typeKey));
+        hintText += ' ' + pf1.config.bonusTypes[changeType] || changeType;
 
         return [hintText];
     }

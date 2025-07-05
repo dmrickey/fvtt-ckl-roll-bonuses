@@ -90,6 +90,10 @@ export class SaveBonus extends BaseConditionalBonus {
         let hintText = localizeBonusTooltip(this.key);
 
         hintText += '<br>' + FormulaCacheHelper.getHint(source, this.formulaKey);
+
+        const changeType = /** @type {BonusTypes} */ (source.getFlag(MODULE_NAME, this.typeKey));
+        hintText += ' ' + pf1.config.bonusTypes[changeType] || changeType;
+
         const chosen = /** @type {SavingThrow[]} */ (getSourceFlag(source, this.chosenKey)) || [];
         if (chosen.length) {
             hintText += '<br>' + getKeyedHintList(chosen, pf1.config.savingThrows);

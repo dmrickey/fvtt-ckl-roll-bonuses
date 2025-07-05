@@ -40,6 +40,10 @@ export class SkillBonus extends BaseConditionalBonus {
 
         let hintText = localizeBonusTooltip(this.key);
         hintText += '<br>' + FormulaCacheHelper.getHint(source, this.formulaKey);
+
+        const changeType = /** @type {BonusTypes} */ (source.getFlag(MODULE_NAME, this.typeKey));
+        hintText += ' ' + pf1.config.bonusTypes[changeType] || changeType;
+
         const skills = getSkillHints(source.actor, source, this.chosenKey);
         if (skills.length) {
             hintText += '<br>' + skills;
