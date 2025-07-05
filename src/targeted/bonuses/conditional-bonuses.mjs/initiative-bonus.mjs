@@ -3,7 +3,8 @@ import { textInputAndKeyValueSelect } from '../../../handlebars-handlers/bonus-i
 import { handleConditionalBonusesFor } from '../../../target-and-bonus-join.mjs';
 import { createChange } from '../../../util/conditional-helpers.mjs';
 import { FormulaCacheHelper } from '../../../util/flag-helpers.mjs';
-import { localizeBonusLabel, localizeBonusTooltip } from '../../../util/localize.mjs';
+import { localize, localizeBonusLabel, localizeBonusTooltip } from '../../../util/localize.mjs';
+import { distinct } from '../../../util/unique-array.mjs';
 import { BaseConditionalBonus } from './_base-conditional-bonus.mjs';
 
 export class InitiativeBonus extends BaseConditionalBonus {
@@ -125,10 +126,48 @@ export class InitiativeBonus extends BaseConditionalBonus {
         return new pf1.dice.D20RollPF(formula, rollData);
     }
 
+    /**
+     * @param {{ actor: ActorCharacterPF }} actorSheet
+     * @param {'init' | undefined} key
+     * @param {{ content: HTMLElement }} html
+     */
+    static onTooltipRender({ actor }, key, html) {
+        if (key !== 'init' || !actor) return;
+
+        const sources = actor.itemFlags?.boolean?.[InitiativeBonus.key]?.sources ?? [];
+        if (!sources.length) return;
+
+        const ul = document.createElement('ul');
+        ul.classList.add('notes');
+
+        const header = document.createElement('h4');
+        header.textContent = localize('bonus-header-labels.conditional-bonus');
+
+        ul.appendChild(header);
+
+        sources.forEach((source) => {
+            const conditionalTargets = (source[MODULE_NAME]?.targets ?? []).filter(t => t.isConditionalTarget);
+            const init = InitiativeBonus.isSource(source) && FormulaCacheHelper.getHint(source, InitiativeBonus.formulaKey);
+            if (!conditionalTargets.length || !init) return;
+
+            const hints = distinct([...conditionalTargets.flatMap(t => [t.label, ...(t.getHints(source) || [])]), init]);
+            hints.forEach((hint) => {
+                const li = document.createElement('li');
+                li.classList.add('note');
+                li.innerHTML = hint;
+                ul.appendChild(li);
+            });
+        });
+
+        html.content.append(ul);
+    }
+
     static {
         Hooks.once('init', () => {
             libWrapper.register(MODULE_NAME, 'pf1.documents.CombatantPF.prototype.getInitiativeRoll', InitiativeBonus.getInitiativeRoll, libWrapper.OVERRIDE)
         });
+
+        Hooks.on('renderPF1ExtendedTooltip', InitiativeBonus.onTooltipRender);
     }
 
     /**
