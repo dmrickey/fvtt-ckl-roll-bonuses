@@ -1,29 +1,25 @@
-.sheet .koboldworks.item-hints .hint.ckl-acid-green {
+.sheet .koboldworks.item-hints .item-hint.ckl-acid-green {
     color: #53c544;
 }
 
-.sheet .koboldworks.item-hints .hint.ckl-cold-blue {
+.sheet .koboldworks.item-hints .item-hint.ckl-cold-blue {
     color: #6897e8;
 }
 
-.sheet .koboldworks.item-hints .hint.ckl-electric-yellow {
+.sheet .koboldworks.item-hints .item-hint.ckl-electric-yellow {
     color: #999900;
 }
 
-.sheet .koboldworks.item-hints .hint.ckl-fire-red {
+.sheet .koboldworks.item-hints .item-hint.ckl-fire-red {
     color: #ff0000;
 }
 
-.sheet .koboldworks.item-hints .hint.ckl-missing-source {
+.sheet .koboldworks.item-hints .item-hint.ckl-missing-source {
     color: #dd0000;
 }
 
-.sheet .koboldworks.item-hints .hint.ckl-lucky-horseshoe {
+.sheet .koboldworks.item-hints .item-hint.ckl-lucky-horseshoe {
     transform: rotate(180deg);
-}
-
-.pf1.sheet .koboldworks.item-hints .hint i {
-    vertical-align: middle;
 }
 
 .ckl-extra-fa-magnifying-glass::after {
@@ -47,6 +43,6 @@
     transform: scale(-0.8, 1);
 }
 
-.pf1.sheet .koboldworks.item-hints .hint i.improved-icon {
+.sheet .koboldworks.item-hints .item-hint i.improved-icon {
     text-shadow: 0px 0px 1px red, 0px 0px 1px red;
 }
