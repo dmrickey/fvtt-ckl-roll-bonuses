@@ -1,5 +1,5 @@
 import { showEnabledLabel } from '../../../handlebars-handlers/enabled-label.mjs';
-import { BaseConditionalTarget } from './_base-condtional.target.mjs';
+import { BaseConditionalTarget } from './_base-conditional.target.mjs';
 
 /**
  * @extends BaseConditionalTarget

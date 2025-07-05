@@ -5,7 +5,7 @@ import { api } from '../../../util/api.mjs';
 import { difference } from '../../../util/array-intersects.mjs';
 import { currentTargetedActors } from '../../../util/get-current-targets.mjs';
 import { localize } from '../../../util/localize.mjs';
-import { BaseConditionalTarget } from './_base-condtional.target.mjs';
+import { BaseConditionalTarget } from './_base-conditional.target.mjs';
 
 const targetChoices =  /** @type {const} */ ({
     self: 'target-choice.self',

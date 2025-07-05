@@ -133,7 +133,7 @@ import { WeaponBaseTypeOverride } from '../src/targeted/target-overides/weapon-t
 import { BaseTarget } from '../src/targeted/targets/_base-target.mjs';
 import { ActionTarget } from '../src/targeted/targets/action-target.mjs';
 import { ActionTypeTarget } from '../src/targeted/targets/action-type-target.mjs';
-import { BaseConditionalTarget } from '../src/targeted/targets/conditional/_base-condtional.target.mjs';
+import { BaseConditionalTarget } from '../src/targeted/targets/conditional/_base-conditional.target.mjs';
 import { AlignmentTarget } from '../src/targeted/targets/conditional/alignment-target.mjs';
 import { AllTarget } from '../src/targeted/targets/conditional/all-target.mjs';
 import { ConditionTarget } from '../src/targeted/targets/conditional/condition-target.mjs';

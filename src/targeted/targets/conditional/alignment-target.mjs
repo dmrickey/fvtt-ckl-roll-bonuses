@@ -2,7 +2,7 @@ import { MODULE_NAME } from "../../../consts.mjs";
 import { keyValueSelect } from '../../../handlebars-handlers/bonus-inputs/key-value-select.mjs';
 import { currentTargetedActors } from '../../../util/get-current-targets.mjs';
 import { localize } from '../../../util/localize.mjs';
-import { BaseConditionalTarget } from './_base-condtional.target.mjs';
+import { BaseConditionalTarget } from './_base-conditional.target.mjs';
 
 const choices =  /** @type {const} */ ({
     lawful: 'alignment.lawful',

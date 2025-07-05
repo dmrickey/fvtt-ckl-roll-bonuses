@@ -1,7 +1,7 @@
 import { MODULE_NAME } from '../../../consts.mjs';
 import { showItemInput } from '../../../handlebars-handlers/targeted/targets/item-input.mjs';
 import { truthiness } from '../../../util/truthiness.mjs';
-import { BaseConditionalTarget } from './_base-condtional.target.mjs';
+import { BaseConditionalTarget } from './_base-conditional.target.mjs';
 
 /**
  * When Specific item is equipped / enabled / active

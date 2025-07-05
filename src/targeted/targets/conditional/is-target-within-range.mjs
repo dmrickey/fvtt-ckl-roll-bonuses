@@ -5,7 +5,7 @@ import { FormulaCacheHelper } from '../../../util/flag-helpers.mjs';
 import { currentTargets } from '../../../util/get-current-targets.mjs';
 import { localizeBonusLabel } from '../../../util/localize.mjs';
 import { PositionalHelper } from '../../../util/positional-helper.mjs';
-import { BaseConditionalTarget } from './_base-condtional.target.mjs';
+import { BaseConditionalTarget } from './_base-conditional.target.mjs';
 
 /** @extends {BaseConditionalTarget} */
 export class WhenTargetInRangeTarget extends BaseConditionalTarget {

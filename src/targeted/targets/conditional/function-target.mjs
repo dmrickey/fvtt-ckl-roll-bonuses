@@ -3,7 +3,7 @@ import { showLabel } from '../../../handlebars-handlers/bonus-inputs/show-label.
 import { textInput } from '../../../handlebars-handlers/bonus-inputs/text-input.mjs';
 import { showEnabledLabel } from '../../../handlebars-handlers/enabled-label.mjs';
 import { localizeBonusTooltip } from '../../../util/localize.mjs';
-import { BaseConditionalTarget } from './_base-condtional.target.mjs';
+import { BaseConditionalTarget } from './_base-conditional.target.mjs';
 
 /**
  *

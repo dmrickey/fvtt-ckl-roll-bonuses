@@ -8,7 +8,7 @@ import { initSources } from './targeted/init-sources.mjs';
 import { api } from './util/api.mjs';
 import { registerGlobalBonuses } from './global-bonuses/_init-global-bonuses.mjs';
 import { BaseConditionalBonus } from './targeted/bonuses/conditional-bonuses.mjs/_base-conditional-bonus.mjs';
-import { BaseConditionalTarget } from './targeted/targets/conditional/_base-condtional.target.mjs';
+import { BaseConditionalTarget } from './targeted/targets/conditional/_base-conditional.target.mjs';
 import { BaseTarget } from './targeted/targets/_base-target.mjs';
 
 initSources();

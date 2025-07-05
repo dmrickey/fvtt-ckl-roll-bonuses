@@ -5,7 +5,7 @@ import { localize } from '../../../util/localize.mjs';
 import { PositionalHelper } from '../../../util/positional-helper.mjs';
 import { toArray } from '../../../util/to-array.mjs';
 import { truthiness } from '../../../util/truthiness.mjs';
-import { BaseConditionalTarget } from './_base-condtional.target.mjs';
+import { BaseConditionalTarget } from './_base-conditional.target.mjs';
 
 /** @extends {BaseConditionalTarget} */
 export class WhileAdjacentToTarget extends BaseConditionalTarget {

@@ -8,7 +8,7 @@ import { localize } from '../../../util/localize.mjs';
 import { registerSetting } from "../../../util/settings.mjs";
 import { toArray } from '../../../util/to-array.mjs';
 import { truthiness } from "../../../util/truthiness.mjs";
-import { BaseConditionalTarget } from './_base-condtional.target.mjs';
+import { BaseConditionalTarget } from './_base-conditional.target.mjs';
 
 class Settings {
     static get #tokenSettingKey() { return 'should-auto-target-tokens'; }
