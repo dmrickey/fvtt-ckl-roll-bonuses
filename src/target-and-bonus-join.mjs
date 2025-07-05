@@ -402,15 +402,18 @@ Hooks.on('renderItemSheet', (
 
 Hooks.on('updateItem', (
     /** @type {ItemPF} */ item,
-    /** @type {{ system?: { active?: boolean, disabled?: boolean} }} */ change,
+    /** @type {{ system?: { equipped?: boolean, disabled?: boolean, active?: boolean } }} */ change,
     /** @type {object} */ _options,
     /** @type {string} */ userId,
 ) => {
-    if (game.userId !== userId) {
+    if (game.userId !== userId || !change.system) {
         return;
     }
 
-    if (!change?.system?.active === false || change?.system?.disabled === true) {
+    if (!('equipped' in change.system && change.system.equipped === true
+        || 'disabled' in change.system && change.system.disabled === false
+        || 'active' in change.system && change.system.active === true
+    )) {
         return;
     }
 
