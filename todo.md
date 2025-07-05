@@ -54,7 +54,6 @@
     - [Target](#target)
     - [Specific Bonuses](#specific-bonuses)
     - [Idea](#idea)
-  - [Conditional Bonuses](#conditional-bonuses)
     - [Bonus Types](#bonus-types)
   - [Add included macros to documentation](#add-included-macros-to-documentation)
   - [BugFixes](#bugfixes)
@@ -263,17 +262,9 @@ Add journal links to target/bonus headers within item sheet
       - or "+4 initiative when in a city (using Fair's target)"
       - or possibly literally any change ¯\_(ツ)_/¯
 
-## Conditional Bonuses
-- add dedicated section in picker
-- hijack tooltips and make tooltips for all bonuses
 ### Bonus Types
 - AC
   - figure out appropriate way to apply AC bonus
-  - documentation
-- Initiative
-- ~~Save~~
-- ~~Skill~~
-  - Add actor inline hint for conditionally targeted skills
 
 Expand "Action Type Target" to include CMB
 
