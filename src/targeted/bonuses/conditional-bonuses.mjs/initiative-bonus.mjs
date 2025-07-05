@@ -100,7 +100,7 @@ export class InitiativeBonus extends BaseConditionalBonus {
      */
     static getInitiativeRoll(formula, d20 = undefined, bonus = undefined) {
         formula ||= this._getInitiativeFormula(d20);
-        const rollData = this.actor?.getRollData() || {};
+        const rollData = this.actor?.getRollData({ refresh: true }) || {};
         if (bonus) {
             rollData.bonus = bonus;
             formula += " + @bonus";
