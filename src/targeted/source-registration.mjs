@@ -27,6 +27,11 @@ export class Sources {
             }
             // @ts-ignore
             api.targetTypeMap[key] = target;
+
+            if (target.isConditionalTarget) {
+                // @ts-ignore
+                api.conditionalTargetTypeMap[key] = target;
+            }
         }
         else if (source.prototype instanceof api.sources.BaseTargetOverride) {
             const targetOverride = /** @type {RollBonusesAPI['sources']['BaseTargetOverride']} */ (source);

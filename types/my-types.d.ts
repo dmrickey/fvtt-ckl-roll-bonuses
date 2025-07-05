@@ -331,7 +331,28 @@ declare global {
         get allTargetTypes(): ValueOf<RollBonusesAPI['targetTypeMap']>[];
         get allTargetTypesKeys(): Array<keyof RollBonusesAPI['targetTypeMap']>;
 
-        get allConditionalTargetTypes(): (typeof BaseConditionalTarget)[];
+        conditionalTargetTypeMap: {
+            ['alignment']: typeof AlignmentTarget;
+            ['all']: typeof AllTarget;
+            ['condition']: typeof ConditionTarget;
+            ['creature-subtype']: typeof CreatureSubtypeTarget;
+            ['creature-type']: typeof CreatureTypeTarget;
+            ['function']: typeof FunctionTarget;
+            ['has-boolean-flag']: typeof HasBooleanFlagTarget;
+            ['is-flanking']: typeof IsFlankingTarget;
+            ['is-target-within-range']: typeof WhenTargetInRangeTarget;
+            ['token']: typeof TokenTarget;
+            ['when-active']: typeof WhenActiveTarget;
+            ['when-in-combat']: typeof WhenInCombatTarget;
+            ['while-adjacent-to']: typeof WhileAdjacentToTarget;
+            ['while-sharing-with']: typeof WhileSharingSquareWithTarget;
+        };
+        get allConditionalTargetTypes(): ValueOf<
+            RollBonusesAPI['conditionalTargetTypeMap']
+        >[];
+        get allConditionalTargetTypesKeys(): Array<
+            keyof RollBonusesAPI['conditionalTargetTypeMap']
+        >;
 
         /** map of every target override from its key to its type */
         targetOverrideTypeMap: {

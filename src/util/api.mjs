@@ -16,10 +16,9 @@ class Api {
     get allTargetTypes() { return Object.values(this.targetTypeMap); }
     get allTargetTypesKeys() { return Object.keys(this.targetTypeMap); }
 
-    get allConditionalTargetTypes() {
-        return this.allTargetTypes
-            .filter(x => isConditionalTarget.bind(/** @type {RollBonusesAPI} *//** @type {any} */(this))(x));
-    }
+    conditionalTargetTypeMap = {};
+    get allConditionalTargetTypes() { return Object.values(this.conditionalTargetTypeMap); }
+    get allConditionalTargetTypesKeys() { return Object.keys(this.conditionalTargetTypeMap); }
 
     targetOverrideTypeMap = {};
     get allTargetOverrideTypes() { return Object.values(this.targetOverrideTypeMap); }
