@@ -3,22 +3,20 @@
 ### New Bonus Types
 - Conditional Bonuses
   - Until now, every bonus has applied only to a specific action (more damage, different size, increased DC, etc). Now I've added these new "Conditional Bonuses" that grant bonuses to more generic actor actions that aren't just "attacks" or "spells". These bonuses work alongside any "Conditional Target" to enable those bonuses. Conditional Targets still work alongside all bonuses as before, they just also now work for Conditional Bonuses.
-
-### New Bonuses
-- **Initiatve Bonus**
-  - When the specified Conditional Targets are met, get a bonus to initiative rolls.
-- **Saving Throw Conditional Bonus**
-  - When the specified Conditional Targets are met, get a bonus to the chosen saving throws.
-- **Skill Conditional Bonus**
-  - When the specified Conditional Targets are met, the rolled skills will receive the given bonus.
+  - **Initiatve Bonus**
+    - When the specified Conditional Targets are met, get a bonus to initiative rolls.
+  - **Saving Throw Conditional Bonus**
+    - When the specified Conditional Targets are met, get a bonus to the chosen saving throws.
+  - **Skill Conditional Bonus**
+    - When the specified Conditional Targets are met, the rolled skills will receive the given bonus.
 
 ### New Macros
 - **Flank Finder**
-  - Helper macro to fully explain why tokens are considered flanking or not.
+  - Helper macro to better explain why tokens are considered flanking or not.
 
 ### Misc
 - **Solo Tactics** now supports an optional "with allies" input so that it can work only with those specified actors
-- Updated Item Hints so that they still work in cases where there is no actor
+- Updates to Item Hint integration for new versions
 
 ### Bugfixes
 - Fixed Weapon Type selection so that it no longer shows armor types as options
