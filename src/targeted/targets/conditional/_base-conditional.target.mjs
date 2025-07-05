@@ -40,6 +40,14 @@ export class BaseConditionalTarget extends BaseTarget {
     }
 
     /**
+     * Description used in the system's tooltips for conditional bonuses
+     * @abstract
+     * @param {ItemPF} source
+     * @returns {string}
+     */
+    static fluentDescription(source) { throw new Error('must be overridden'); }
+
+    /**
      * If the doc is targeted by this
      *
      * @virtual

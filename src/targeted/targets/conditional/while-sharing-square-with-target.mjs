@@ -1,7 +1,7 @@
 import { MODULE_NAME } from '../../../consts.mjs';
 import { showActorInput } from '../../../handlebars-handlers/targeted/targets/actor-input.mjs';
 import { listFormat } from '../../../util/list-format.mjs';
-import { localize } from '../../../util/localize.mjs';
+import { localize, localizeConditionalTargetTooltipHint } from '../../../util/localize.mjs';
 import { PositionalHelper } from '../../../util/positional-helper.mjs';
 import { toArray } from '../../../util/to-array.mjs';
 import { truthiness } from '../../../util/truthiness.mjs';
@@ -48,6 +48,18 @@ export class WhileSharingSquareWithTarget extends BaseConditionalTarget {
      * @returns {string}
      */
     static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.IpRhJqZEX2TUarSX#while-sharing-square-with'; }
+
+    /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} source
+     * @returns {string}
+     */
+    static fluentDescription(source) {
+        const buddies = this.#withAllies(source);
+        const names = listFormat(buddies?.map(x => x.name) || [], 'or');
+        return localizeConditionalTargetTooltipHint(this, { ally: names });
+    }
 
     /**
      * @override

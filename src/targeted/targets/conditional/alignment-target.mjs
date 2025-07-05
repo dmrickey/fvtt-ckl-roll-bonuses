@@ -1,7 +1,7 @@
 import { MODULE_NAME } from "../../../consts.mjs";
 import { keyValueSelect } from '../../../handlebars-handlers/bonus-inputs/key-value-select.mjs';
 import { currentTargetedActors } from '../../../util/get-current-targets.mjs';
-import { localize } from '../../../util/localize.mjs';
+import { localize, localizeConditionalTargetTooltipHint } from '../../../util/localize.mjs';
 import { BaseConditionalTarget } from './_base-conditional.target.mjs';
 
 const choices =  /** @type {const} */ ({
@@ -31,6 +31,14 @@ export class AlignmentTarget extends BaseConditionalTarget {
      * @returns {string}
      */
     static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.IpRhJqZEX2TUarSX#alignment'; }
+
+    /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} source
+     * @returns {string}
+     */
+    static fluentDescription(source) { return localizeConditionalTargetTooltipHint(this, { alignment: this.getHints(source)?.[0] || '' }); }
 
     /**
      * @inheritdoc

@@ -1,4 +1,5 @@
 import { showEnabledLabel } from '../../../handlebars-handlers/enabled-label.mjs';
+import { localizeConditionalTargetTooltipHint } from '../../../util/localize.mjs';
 import { BaseConditionalTarget } from './_base-conditional.target.mjs';
 
 /**
@@ -19,6 +20,13 @@ export class AllTarget extends BaseConditionalTarget {
      * @returns {string}
      */
     static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.IpRhJqZEX2TUarSX#all'; }
+
+    /**
+     * @inheritdoc
+     * @override
+     * @returns {string}
+     */
+    static fluentDescription() { return localizeConditionalTargetTooltipHint(this); }
 
     /**
      * @inheritdoc

@@ -1,5 +1,6 @@
 import { showEnabledLabel } from '../../../handlebars-handlers/enabled-label.mjs';
 import { isActorInCombat } from '../../../util/is-actor-in-combat.mjs';
+import { localizeConditionalTargetTooltipHint } from '../../../util/localize.mjs';
 import { BaseConditionalTarget } from './_base-conditional.target.mjs';
 
 /** @extends {BaseConditionalTarget} */
@@ -17,6 +18,15 @@ export class WhenInCombatTarget extends BaseConditionalTarget {
      * @returns {string}
      */
     static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.IpRhJqZEX2TUarSX#when-in-combat'; }
+
+    /**
+     * @inheritdoc
+     * @override
+     * @returns {string}
+     */
+    static fluentDescription() {
+        return localizeConditionalTargetTooltipHint(this);
+    }
 
     /**
      * @override

@@ -146,11 +146,11 @@ export class InitiativeBonus extends BaseConditionalBonus {
         ul.appendChild(header);
 
         sources.forEach((source) => {
-            const conditionalTargets = (source[MODULE_NAME]?.targets ?? []).filter(t => t.isConditionalTarget);
+            const conditionalTargets = /** @type {Array<RollBonusesAPI['sources']['BaseConditionalTarget']>} */((source[MODULE_NAME]?.targets ?? []).filter(t => t.isConditionalTarget));
             const init = InitiativeBonus.isSource(source) && FormulaCacheHelper.getHint(source, InitiativeBonus.formulaKey);
             if (!conditionalTargets.length || !init) return;
 
-            const hints = distinct([...conditionalTargets.flatMap(t => [t.label, ...(t.getHints(source) || [])]), init]);
+            const hints = [...conditionalTargets.map(t => t.fluentDescription(source)), init];
             hints.forEach((hint) => {
                 const li = document.createElement('li');
                 li.classList.add('note');

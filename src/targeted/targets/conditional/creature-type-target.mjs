@@ -2,7 +2,8 @@ import { MODULE_NAME } from '../../../consts.mjs';
 import { traitInput } from '../../../handlebars-handlers/trait-input.mjs';
 import { intersects } from '../../../util/array-intersects.mjs';
 import { currentTargetedActors } from '../../../util/get-current-targets.mjs';
-import { localize } from '../../../util/localize.mjs';
+import { listFormat } from '../../../util/list-format.mjs';
+import { localize, localizeConditionalTargetTooltipHint } from '../../../util/localize.mjs';
 import { toArray } from '../../../util/to-array.mjs';
 import { Trait } from '../../../util/trait-builder.mjs';
 import { BaseConditionalTarget } from './_base-conditional.target.mjs';
@@ -23,6 +24,18 @@ export class CreatureTypeTarget extends BaseConditionalTarget {
      * @returns {string}
      */
     static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.IpRhJqZEX2TUarSX#creature-type'; }
+
+    /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} source
+     * @returns {string}
+     */
+    static fluentDescription(source) {
+        const hints = this.getHints(source);
+        return localizeConditionalTargetTooltipHint(this, { type: hints?.[0] || '' });
+    }
+
     /**
      * @override
      * @inheritdoc
@@ -48,7 +61,7 @@ export class CreatureTypeTarget extends BaseConditionalTarget {
     static getHints(source) {
         const creatureTypes = this.#getCreatureTypes(source);
         if (creatureTypes.names.length) {
-            const hint = pf1.utils.i18n.join(creatureTypes.names, 'd', false);
+            const hint = listFormat(creatureTypes.names, 'or');
             return [hint];
         }
     }

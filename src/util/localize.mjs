@@ -1,4 +1,5 @@
 import { MODULE_NAME } from "../consts.mjs";
+import { BaseConditionalTarget } from '../targeted/targets/conditional/_base-conditional.target.mjs';
 import { api } from './api.mjs';
 import { ifDebug } from './if-debug.mjs';
 import { isEmptyObject } from "./is-empty-object.mjs";
@@ -50,6 +51,18 @@ const localizeBonusTooltip = (key, opts = {}) => {
 };
 
 /**
+ * @param {string | typeof BaseConditionalTarget} target
+ * @param {Record<string, unknown>} [opts]
+ * @returns {string}
+ */
+const localizeConditionalTargetTooltipHint = (target, opts = {}) => {
+    let key = typeof target === 'string' ? target : target.key;
+    const split = key.split('_');
+    key = split[1] || split[0];
+    return localize(`conditional-target-hint.${key}`, opts);
+};
+
+/**
  * @param {string} key
  * @param {Record<string, unknown>} [opts]
  * @returns {string}
@@ -64,6 +77,7 @@ export {
     localize,
     localizeBonusLabel,
     localizeBonusTooltip,
+    localizeConditionalTargetTooltipHint,
     localizeItemHint,
 };
 

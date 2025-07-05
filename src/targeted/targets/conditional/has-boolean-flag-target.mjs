@@ -4,7 +4,7 @@ import { textInput } from '../../../handlebars-handlers/bonus-inputs/text-input.
 import { api } from '../../../util/api.mjs';
 import { difference } from '../../../util/array-intersects.mjs';
 import { currentTargetedActors } from '../../../util/get-current-targets.mjs';
-import { localize } from '../../../util/localize.mjs';
+import { localize, localizeConditionalTargetTooltipHint } from '../../../util/localize.mjs';
 import { BaseConditionalTarget } from './_base-conditional.target.mjs';
 
 const targetChoices =  /** @type {const} */ ({
@@ -32,6 +32,18 @@ export class HasBooleanFlagTarget extends BaseConditionalTarget {
      * @returns {string}
      */
     static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.IpRhJqZEX2TUarSX#has-boolean-flag'; }
+
+    /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} source
+     * @returns {string}
+     */
+    static fluentDescription(source) {
+        const key = this.#getTargetType(source) === 'self' ? 'has-boolean-flag-self' : 'has-boolean-flag-target';
+        const flag = source.getFlag(MODULE_NAME, this.key);
+        return localizeConditionalTargetTooltipHint(key, { flag });
+    }
 
     /**
      * @inheritdoc

@@ -4,8 +4,9 @@ import { showActorInput } from '../../../handlebars-handlers/targeted/targets/ac
 import { isMelee } from '../../../util/action-type-helpers.mjs';
 import { FlankHelper } from '../../../util/flank-helper.mjs';
 import { currentTargets } from '../../../util/get-current-targets.mjs';
+import { getTokenDisplayName } from '../../../util/get-token-display-name.mjs';
 import { listFormat } from '../../../util/list-format.mjs';
-import { localize, localizeBonusLabel, localizeBonusTooltip } from '../../../util/localize.mjs';
+import { localize, localizeBonusLabel, localizeBonusTooltip, localizeConditionalTargetTooltipHint } from '../../../util/localize.mjs';
 import { toArray } from '../../../util/to-array.mjs';
 import { truthiness } from "../../../util/truthiness.mjs";
 import { BaseConditionalTarget } from './_base-conditional.target.mjs';
@@ -65,6 +66,28 @@ export class IsFlankingTarget extends BaseConditionalTarget {
      * @returns {string}
      */
     static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.IpRhJqZEX2TUarSX#is-flanking'; }
+
+    /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} source
+     * @returns {string}
+     */
+    static fluentDescription(source) {
+        const tokens = this.#potentialFlankTokens(source);
+        let key;
+        /** @type {string[]} */
+        let names = [];
+        if (tokens) {
+            names = tokens.map((token) => getTokenDisplayName(token.document));
+            names[0] ||= '???';
+            key = 'is-flanking-with';
+        }
+        else {
+            key = 'is-flanking';
+        }
+        return localizeConditionalTargetTooltipHint(key, { ally: listFormat(names, 'or') });
+    }
 
     /**
      * @override

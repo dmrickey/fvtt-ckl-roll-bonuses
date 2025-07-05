@@ -33,6 +33,16 @@ export class FunctionTarget extends BaseConditionalTarget {
      * @inheritdoc
      * @override
      * @param {ItemPF} source
+     * @returns {string}
+     */
+    static fluentDescription(source) {
+        return this.getHints(source)?.[0] || '';
+    }
+
+    /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} source
      * @returns {Nullable<string[]>}
      */
     static getHints(source) {

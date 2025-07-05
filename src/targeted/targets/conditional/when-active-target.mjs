@@ -1,5 +1,7 @@
 import { MODULE_NAME } from '../../../consts.mjs';
 import { showItemInput } from '../../../handlebars-handlers/targeted/targets/item-input.mjs';
+import { listFormat } from '../../../util/list-format.mjs';
+import { localizeConditionalTargetTooltipHint } from '../../../util/localize.mjs';
 import { truthiness } from '../../../util/truthiness.mjs';
 import { BaseConditionalTarget } from './_base-conditional.target.mjs';
 
@@ -20,6 +22,33 @@ export class WhenActiveTarget extends BaseConditionalTarget {
      * @returns {string}
      */
     static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.IpRhJqZEX2TUarSX#when-active/equipped'; }
+
+    /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} source
+     * @returns {string}
+     */
+    static fluentDescription(source) {
+        const ids = this._getIdsFromItem(source);
+        const items = ids.map((id) => source.actor?.items.get(id)).filter(truthiness);
+
+        /** @type {ItemType[]} */
+        const equipmentTypes = ['consumable', 'container', 'equipment', 'implant', 'loot', 'weapon'];
+        const equipment = [];
+        const others = [];
+        items.forEach((item) => {
+            if (equipmentTypes.includes(item.type)) {
+                equipment.push(item);
+            } else {
+                others.push(item);
+            }
+        });
+
+        const names = listFormat(items.map(x => x.name), 'or');
+        const key = others.length ? 'when-active-feature' : 'when-active-equipment';
+        return localizeConditionalTargetTooltipHint(key, { item: names });
+    }
 
     /**
      * @returns {string}

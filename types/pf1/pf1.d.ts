@@ -2439,17 +2439,6 @@ declare global {
             type: SpellcastingType;
         };
         utils: {
-            i18n: {
-                /**
-                 * Convert string array into joined string according to current language.
-                 *
-                 * @param {Array<string>} strings - Array of strings to join
-                 * @param {"c"|"d"|"u"} [type] - conjunction = and, disjunction = or, unit = neither. Only the first letter matters.
-                 * @param {boolean} [short] - If true, effectively same as type being set to "u"
-                 * @returns {string} - Formatted string of all traits.
-                 */
-                join(strings, type = "u", short = true): string;
-            };
             formula: {
                 actionDamage: (action: ItemAction, { simplify, strict }?: {
                     simplify?: boolean | undefined;
