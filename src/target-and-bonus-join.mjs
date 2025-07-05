@@ -1,15 +1,15 @@
 import { MODULE_NAME } from './consts.mjs';
+import { registerGlobalBonuses } from './global-bonuses/_init-global-bonuses.mjs';
 import { BaseBonus } from './targeted/bonuses/_base-bonus.mjs';
+import { BaseConditionalBonus } from './targeted/bonuses/conditional-bonuses.mjs/_base-conditional-bonus.mjs';
+import { initSources } from './targeted/init-sources.mjs';
+import { BaseTarget } from './targeted/targets/_base-target.mjs';
+import { BaseConditionalTarget } from './targeted/targets/conditional/_base-conditional.target.mjs';
+import { api } from './util/api.mjs';
 import { LocalHookHandler, customGlobalHooks, localHooks } from "./util/hooks.mjs";
 import { registerItemHint } from "./util/item-hints.mjs";
 import { localize } from "./util/localize.mjs";
 import { truthiness } from "./util/truthiness.mjs";
-import { initSources } from './targeted/init-sources.mjs';
-import { api } from './util/api.mjs';
-import { registerGlobalBonuses } from './global-bonuses/_init-global-bonuses.mjs';
-import { BaseConditionalBonus } from './targeted/bonuses/conditional-bonuses.mjs/_base-conditional-bonus.mjs';
-import { BaseConditionalTarget } from './targeted/targets/conditional/_base-conditional.target.mjs';
-import { BaseTarget } from './targeted/targets/_base-target.mjs';
 
 initSources();
 
@@ -480,17 +480,6 @@ const prepare = (item, rollData) => {
             }
         }
     });
-
-    // const { actor } = item;
-    // if (!actor?.changes) return;
-    // handleBonusesFor(
-    //     item,
-    //     (bonusType, sourceItem) => {
-    //         if (!actor?.changes) return;
-    //         bonusType.createChange(actor);
-    //     },
-    //     { specificBonusType: api.bonusTypeMap.bonus_change },
-    // )
 };
 LocalHookHandler.registerHandler(localHooks.prepareData, prepare);
 

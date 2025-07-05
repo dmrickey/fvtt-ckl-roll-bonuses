@@ -4,7 +4,7 @@ import { textInput } from '../../../handlebars-handlers/bonus-inputs/text-input.
 import { api } from '../../../util/api.mjs';
 import { difference } from '../../../util/array-intersects.mjs';
 import { currentTargetedActors } from '../../../util/get-current-targets.mjs';
-import { localize, localizeConditionalTargetTooltipHint } from '../../../util/localize.mjs';
+import { localize, localizeFluentDescription } from '../../../util/localize.mjs';
 import { BaseConditionalTarget } from './_base-conditional.target.mjs';
 
 const targetChoices =  /** @type {const} */ ({
@@ -42,7 +42,7 @@ export class HasBooleanFlagTarget extends BaseConditionalTarget {
     static fluentDescription(source) {
         const key = this.#getTargetType(source) === 'self' ? 'has-boolean-flag-self' : 'has-boolean-flag-target';
         const flag = source.getFlag(MODULE_NAME, this.key);
-        return localizeConditionalTargetTooltipHint(key, { flag });
+        return localizeFluentDescription(key, { flag });
     }
 
     /**

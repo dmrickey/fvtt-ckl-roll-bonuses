@@ -7,7 +7,7 @@ import { FormulaCacheHelper } from '../../../util/flag-helpers.mjs';
 import { localizeBonusLabel, localizeBonusTooltip } from '../../../util/localize.mjs';
 import { BaseConditionalBonus } from './_base-conditional-bonus.mjs';
 
-export class SaveBonus extends BaseConditionalBonus {
+export class ACBonus extends BaseConditionalBonus {
 
     /**
      * @override
@@ -74,7 +74,7 @@ export class SaveBonus extends BaseConditionalBonus {
     static getActorACChanges(changes, actor) {
         handleConditionalBonusesFor(
             actor,
-            SaveBonus,
+            ACBonus,
             (bonus, item) => {
                 const change = bonus.createChange(item);
                 if (change) {

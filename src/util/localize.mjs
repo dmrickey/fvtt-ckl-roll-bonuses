@@ -55,11 +55,11 @@ const localizeBonusTooltip = (key, opts = {}) => {
  * @param {Record<string, unknown>} [opts]
  * @returns {string}
  */
-const localizeConditionalTargetTooltipHint = (target, opts = {}) => {
+const localizeFluentDescription = (target, opts = {}) => {
     let key = typeof target === 'string' ? target : target.key;
     const split = key.split('_');
     key = split[1] || split[0];
-    return localize(`conditional-target-hint.${key}`, opts);
+    return localize(`fluent-description.${key}`, opts);
 };
 
 /**
@@ -77,7 +77,7 @@ export {
     localize,
     localizeBonusLabel,
     localizeBonusTooltip,
-    localizeConditionalTargetTooltipHint,
+    localizeFluentDescription,
     localizeItemHint,
 };
 

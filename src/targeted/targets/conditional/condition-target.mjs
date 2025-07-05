@@ -1,7 +1,7 @@
 import { MODULE_NAME } from '../../../consts.mjs';
 import { keyValueSelect } from '../../../handlebars-handlers/bonus-inputs/key-value-select.mjs';
 import { currentTargetedActors } from '../../../util/get-current-targets.mjs';
-import { localize, localizeConditionalTargetTooltipHint } from '../../../util/localize.mjs';
+import { localize, localizeFluentDescription } from '../../../util/localize.mjs';
 import { BaseConditionalTarget } from './_base-conditional.target.mjs';
 
 const targetChoices =  /** @type {const} */ ({
@@ -39,7 +39,7 @@ export class ConditionTarget extends BaseConditionalTarget {
     static fluentDescription(source) {
         const key = this.#getTargetType(source) === 'self' ? 'condition-self' : 'condition-target';
         const condition = source.getFlag(MODULE_NAME, this.key);
-        return localizeConditionalTargetTooltipHint(key, { condition: condition ? pf1.registry.conditions.get(condition)?.name : '' });
+        return localizeFluentDescription(key, { condition: condition ? pf1.registry.conditions.get(condition)?.name : '' });
     }
 
     /**

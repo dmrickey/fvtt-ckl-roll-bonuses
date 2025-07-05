@@ -6,7 +6,7 @@ import { difference, intersection, intersects } from "../../../util/array-inters
 import { currentTargets } from '../../../util/get-current-targets.mjs';
 import { getTokenDisplayName } from '../../../util/get-token-display-name.mjs';
 import { listFormat } from '../../../util/list-format.mjs';
-import { localize, localizeConditionalTargetTooltipHint } from '../../../util/localize.mjs';
+import { localize, localizeFluentDescription } from '../../../util/localize.mjs';
 import { registerSetting } from "../../../util/settings.mjs";
 import { toArray } from '../../../util/to-array.mjs';
 import { truthiness } from "../../../util/truthiness.mjs";
@@ -62,7 +62,7 @@ export class TokenTarget extends BaseConditionalTarget {
 
         const key = !!source.getFlag(MODULE_NAME, this.#inversionKey) ? 'token-inverted' : 'token';
 
-        return localizeConditionalTargetTooltipHint(key, { token: listFormat(names, 'or') });
+        return localizeFluentDescription(key, { token: listFormat(names, 'or') });
     }
 
     /**

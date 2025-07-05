@@ -1,7 +1,7 @@
 import { MODULE_NAME } from '../../../consts.mjs';
 import { showActorInput } from '../../../handlebars-handlers/targeted/targets/actor-input.mjs';
 import { listFormat } from '../../../util/list-format.mjs';
-import { localize, localizeConditionalTargetTooltipHint } from '../../../util/localize.mjs';
+import { localize, localizeFluentDescription } from '../../../util/localize.mjs';
 import { PositionalHelper } from '../../../util/positional-helper.mjs';
 import { toArray } from '../../../util/to-array.mjs';
 import { truthiness } from '../../../util/truthiness.mjs';
@@ -58,7 +58,7 @@ export class WhileSharingSquareWithTarget extends BaseConditionalTarget {
     static fluentDescription(source) {
         const buddies = this.#withAllies(source);
         const names = listFormat(buddies?.map(x => x.name) || [], 'or');
-        return localizeConditionalTargetTooltipHint(this, { ally: names });
+        return localizeFluentDescription(this, { ally: names });
     }
 
     /**

@@ -3,7 +3,7 @@ import { showLabel } from '../../../handlebars-handlers/bonus-inputs/show-label.
 import { textInput } from '../../../handlebars-handlers/bonus-inputs/text-input.mjs';
 import { FormulaCacheHelper } from '../../../util/flag-helpers.mjs';
 import { currentTargets } from '../../../util/get-current-targets.mjs';
-import { localizeBonusLabel, localizeConditionalTargetTooltipHint } from '../../../util/localize.mjs';
+import { localizeBonusLabel, localizeFluentDescription } from '../../../util/localize.mjs';
 import { PositionalHelper } from '../../../util/positional-helper.mjs';
 import { BaseConditionalTarget } from './_base-conditional.target.mjs';
 
@@ -65,7 +65,7 @@ export class WhenTargetInRangeTarget extends BaseConditionalTarget {
         }
         range += units;
 
-        return localizeConditionalTargetTooltipHint(this, { range });
+        return localizeFluentDescription(this, { range });
     }
 
     /**

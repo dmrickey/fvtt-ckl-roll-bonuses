@@ -1,5 +1,5 @@
 import { showEnabledLabel } from '../../../handlebars-handlers/enabled-label.mjs';
-import { localizeConditionalTargetTooltipHint } from '../../../util/localize.mjs';
+import { localizeFluentDescription } from '../../../util/localize.mjs';
 import { BaseConditionalTarget } from './_base-conditional.target.mjs';
 
 /**
@@ -26,7 +26,7 @@ export class AllTarget extends BaseConditionalTarget {
      * @override
      * @returns {string}
      */
-    static fluentDescription() { return localizeConditionalTargetTooltipHint(this); }
+    static fluentDescription() { return localizeFluentDescription(this); }
 
     /**
      * @inheritdoc

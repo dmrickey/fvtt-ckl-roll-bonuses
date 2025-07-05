@@ -92,15 +92,17 @@ export class InitiativeBonus extends BaseConditionalBonus {
      *
      * @this CombatantPF
      * @param {string} [formula] Initiative formula override
-     * @param {string} [d20=null] D20 override
-     * @param {number} [bonus=null] Bonus to initiative
+     * @param {string | null} [d20=null] D20 override
+     * @param {number | null} [bonus=null] Bonus to initiative
      * @returns {D20RollPF} Initiative roll instance
      *
-     * Synchronized with Foundry VTT 10.291
+     * Synchronized with Foundry VTT 12.331
      */
-    static getInitiativeRoll(formula, d20 = undefined, bonus = undefined) {
+    static getInitiativeRoll(formula, d20 = null, bonus = null) {
+        const options = this.actor?.getInitiativeOptions?.() ?? {};
+
         formula ||= this._getInitiativeFormula(d20);
-        const rollData = this.actor?.getRollData({ refresh: true }) || {};
+        const rollData = this.actor?.getRollData({ refresh: true }) || {}; // force refresh for when conditional updates that don't trigger roll data change
         if (bonus) {
             rollData.bonus = bonus;
             formula += " + @bonus";
@@ -125,7 +127,7 @@ export class InitiativeBonus extends BaseConditionalBonus {
             }
         }
 
-        return new pf1.dice.D20RollPF(formula, rollData);
+        return new pf1.dice.D20RollPF(formula, rollData, options);
     }
 
     /**

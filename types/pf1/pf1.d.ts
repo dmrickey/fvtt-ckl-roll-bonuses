@@ -465,7 +465,7 @@ declare global {
 
     interface CombatantPF {
         actorId: string;
-        _getInitiativeFormula: (d20?: string) => string;
+        _getInitiativeFormula: (d20?: string | null) => string;
     }
 
     class Die {

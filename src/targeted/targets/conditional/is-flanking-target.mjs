@@ -6,7 +6,7 @@ import { FlankHelper } from '../../../util/flank-helper.mjs';
 import { currentTargets } from '../../../util/get-current-targets.mjs';
 import { getTokenDisplayName } from '../../../util/get-token-display-name.mjs';
 import { listFormat } from '../../../util/list-format.mjs';
-import { localize, localizeBonusLabel, localizeBonusTooltip, localizeConditionalTargetTooltipHint } from '../../../util/localize.mjs';
+import { localize, localizeBonusLabel, localizeBonusTooltip, localizeFluentDescription } from '../../../util/localize.mjs';
 import { toArray } from '../../../util/to-array.mjs';
 import { truthiness } from "../../../util/truthiness.mjs";
 import { BaseConditionalTarget } from './_base-conditional.target.mjs';
@@ -86,7 +86,7 @@ export class IsFlankingTarget extends BaseConditionalTarget {
         else {
             key = 'is-flanking';
         }
-        return localizeConditionalTargetTooltipHint(key, { ally: listFormat(names, 'or') });
+        return localizeFluentDescription(key, { ally: listFormat(names, 'or') });
     }
 
     /**

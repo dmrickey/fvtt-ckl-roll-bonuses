@@ -1,6 +1,6 @@
 import { showEnabledLabel } from '../../../handlebars-handlers/enabled-label.mjs';
 import { isActorInCombat } from '../../../util/is-actor-in-combat.mjs';
-import { localizeConditionalTargetTooltipHint } from '../../../util/localize.mjs';
+import { localizeFluentDescription } from '../../../util/localize.mjs';
 import { BaseConditionalTarget } from './_base-conditional.target.mjs';
 
 /** @extends {BaseConditionalTarget} */
@@ -25,7 +25,7 @@ export class WhenInCombatTarget extends BaseConditionalTarget {
      * @returns {string}
      */
     static fluentDescription() {
-        return localizeConditionalTargetTooltipHint(this);
+        return localizeFluentDescription(this);
     }
 
     /**

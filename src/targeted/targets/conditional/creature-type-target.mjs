@@ -3,7 +3,7 @@ import { traitInput } from '../../../handlebars-handlers/trait-input.mjs';
 import { intersects } from '../../../util/array-intersects.mjs';
 import { currentTargetedActors } from '../../../util/get-current-targets.mjs';
 import { listFormat } from '../../../util/list-format.mjs';
-import { localize, localizeConditionalTargetTooltipHint } from '../../../util/localize.mjs';
+import { localize, localizeFluentDescription } from '../../../util/localize.mjs';
 import { toArray } from '../../../util/to-array.mjs';
 import { Trait } from '../../../util/trait-builder.mjs';
 import { BaseConditionalTarget } from './_base-conditional.target.mjs';
@@ -33,7 +33,7 @@ export class CreatureTypeTarget extends BaseConditionalTarget {
      */
     static fluentDescription(source) {
         const hints = this.getHints(source);
-        return localizeConditionalTargetTooltipHint(this, { type: hints?.[0] || '' });
+        return localizeFluentDescription(this, { type: hints?.[0] || '' });
     }
 
     /**

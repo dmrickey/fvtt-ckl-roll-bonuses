@@ -1,7 +1,7 @@
 import { MODULE_NAME } from '../../../consts.mjs';
 import { showItemInput } from '../../../handlebars-handlers/targeted/targets/item-input.mjs';
 import { listFormat } from '../../../util/list-format.mjs';
-import { localizeConditionalTargetTooltipHint } from '../../../util/localize.mjs';
+import { localizeFluentDescription } from '../../../util/localize.mjs';
 import { truthiness } from '../../../util/truthiness.mjs';
 import { BaseConditionalTarget } from './_base-conditional.target.mjs';
 
@@ -47,7 +47,7 @@ export class WhenActiveTarget extends BaseConditionalTarget {
 
         const names = listFormat(items.map(x => x.name), 'or');
         const key = others.length ? 'when-active-feature' : 'when-active-equipment';
-        return localizeConditionalTargetTooltipHint(key, { item: names });
+        return localizeFluentDescription(key, { item: names });
     }
 
     /**
