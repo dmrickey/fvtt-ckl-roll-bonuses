@@ -150,10 +150,12 @@ export const migrateSyntheticActors = async () => {
 
     const synthetics = [...game.scenes].flatMap(s => [...s.tokens].filter(t => !t.isLinked && t.actor?.items?.size));
     for (const synthetic of synthetics) {
-        const updates = synthetic.actor.items.map(getItemUpdateData)
-            .filter(truthiness);
-        if (updates.length) {
-            await synthetic.actor.updateEmbeddedDocuments("Item", updates);
+        if (synthetic.actor) {
+            const updates = synthetic.actor.items.map(getItemUpdateData)
+                .filter(truthiness);
+            if (updates.length) {
+                await synthetic.actor.updateEmbeddedDocuments("Item", updates);
+            }
         }
     }
 

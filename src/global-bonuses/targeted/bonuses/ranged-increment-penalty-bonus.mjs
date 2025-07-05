@@ -117,7 +117,7 @@ export class RangedIncrementPenaltyBonus extends BaseBonus {
     /**
      *
      * @param {ItemHintsAPI["HintClass"]} hintCls
-     * @param {ActorPF} _actor
+     * @param {Nullable<ActorPF>} _actor
      * @param {ItemPF} item
      * @param {object} _data
      * @return {Hint | undefined}

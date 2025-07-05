@@ -28,6 +28,11 @@ export const getSkillFormula = (actor, rollData, skillId, {
         parts.push(`${value}[${name}]`);
     }
 
+    // Add armor check penalty
+    if (skl.acp && rollData.attributes.acp.skill !== 0) {
+        parts.push(`-@attributes.acp.skill[${game.i18n.localize("PF1.ACPLong")}]`);
+    }
+
     // Add Wound Thresholds info
     if (rollData.attributes.woundThresholds?.penalty > 0) {
         const label = pf1.config.woundThresholdConditions[rollData.attributes.woundThresholds.level];

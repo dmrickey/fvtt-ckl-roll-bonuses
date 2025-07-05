@@ -3,11 +3,12 @@ import { showLabel } from '../../../handlebars-handlers/bonus-inputs/show-label.
 import { textInput } from '../../../handlebars-handlers/bonus-inputs/text-input.mjs';
 import { FormulaCacheHelper } from '../../../util/flag-helpers.mjs';
 import { currentTargets } from '../../../util/get-current-targets.mjs';
-import { localizeBonusLabel } from '../../../util/localize.mjs';
+import { localizeBonusLabel, localizeFluentDescription } from '../../../util/localize.mjs';
 import { PositionalHelper } from '../../../util/positional-helper.mjs';
-import { BaseTarget } from '../_base-target.mjs';
+import { BaseConditionalTarget } from './_base-conditional.target.mjs';
 
-export class WhenTargetInRangeTarget extends BaseTarget {
+/** @extends {BaseConditionalTarget} */
+export class WhenTargetInRangeTarget extends BaseConditionalTarget {
 
     /**
      * @override
@@ -43,6 +44,31 @@ export class WhenTargetInRangeTarget extends BaseTarget {
     static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.IpRhJqZEX2TUarSX#within-range'; }
 
     /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} source
+     * @returns {string}
+     */
+    static fluentDescription(source) {
+        const min = this.#min(source);
+        const max = this.#max(source);
+        const units = this.#units;
+
+        let range = '';
+        if (min) range += min;
+        if (min && max) range += '-';
+        if (max === Number.POSITIVE_INFINITY) {
+            range += '∞';
+        }
+        else if (max) {
+            range += max;
+        }
+        range += units;
+
+        return localizeFluentDescription(this, { range });
+    }
+
+    /**
      * @override
      * @inheritdoc
      */
@@ -65,13 +91,14 @@ export class WhenTargetInRangeTarget extends BaseTarget {
     }
 
     /**
+     * @inheritdoc
      * @override
-     * @param {ItemPF & { actor: ActorPF }} item
+     * @param {ActorPF} actor
      * @param {ItemPF[]} sources
      * @returns {ItemPF[]}
      */
-    static _getSourcesFor(item, sources) {
-        const token = item.actor?.getActiveTokens()[0];
+    static _getConditionalActorSourcesFor(actor, sources) {
+        const token = actor.getActiveTokens()[0];
         if (!token) {
             return [];
         }
@@ -91,18 +118,6 @@ export class WhenTargetInRangeTarget extends BaseTarget {
         });
         return filtered;
     }
-
-    /**
-     * @override
-     * @inheritdoc
-     */
-    static get isConditionalTarget() { return true; }
-
-    /**
-     * @override
-     * @inheritdoc
-     */
-    static get isGenericTarget() { return true; }
 
     /**
      * @inheritdoc

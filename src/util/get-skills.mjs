@@ -24,6 +24,10 @@ api.config.knowledgeSkills = [
 ];
 
 /**
+ * @typedef {SkillId | 'all-knowledges'} SkillIdChoices
+ */
+
+/**
  * @param {Nullable<ActorPF>} actor
  * @param {object} options
  * @param {boolean} [options.includeAll]
@@ -45,7 +49,7 @@ export const getSkillChoices = (
     /** @type {boolean} */
     const backgroundEnabled = !!game.settings.get('pf1', 'allowBackgroundSkills');
 
-    /** @type {Partial<Record<SkillId | 'all-knowledges', string>>} */
+    /** @type {Partial<Record<SkillIdChoices, string>>} */
     let skills;
     if (actor) {
         let allSkills = actor.allSkills;
@@ -85,13 +89,13 @@ export const getSkillChoices = (
 };
 
 /**
- * @param {ActorPF} actor
+ * @param {Nullable<ActorPF>} actor
  * @param {ItemPF} item
  * @param {string} flag
  * @returns {string}
  */
 export const getSkillHints = (actor, item, flag) => {
-    /** @type {(SkillId | 'all-knowledges')[]} */
+    /** @type {(SkillIdChoices)[]} */
     const ids = foundry.utils.deepClone(getIdsFromItem(item, flag));
 
     const names = ids.map((id) => {
@@ -101,7 +105,7 @@ export const getSkillHints = (actor, item, flag) => {
             case 'pro': return localize(allProfessions);
             case allKnowledges: return localize(allKnowledges);
             default:
-                try { return actor.getSkillInfo(id).fullName; }
+                try { return getSkillName(actor, id, 'fullName'); }
                 catch { return id; }
         }
     });
@@ -117,7 +121,7 @@ export const getSkillHints = (actor, item, flag) => {
  * @returns {SkillId[]}
  */
 export const getFlaggedSkillIdsFromItem = (actor, item, flag) => {
-    /** @type {(SkillId | 'all-knowledges')[]} */
+    /** @type {(SkillIdChoices)[]} */
     var skills = foundry.utils.deepClone(getIdsFromItem(item, flag));
 
     {
@@ -148,13 +152,14 @@ export const getFlaggedSkillIdsFromItem = (actor, item, flag) => {
 /**
  * @param {ActorPF} actor
  * @param {string} flag
+ * @param {string} [skillKey]
  * @returns {{ source: ItemPF, ids: SkillId[]}[]}
  */
-export const getFlaggedSkillIdsBySourceFromActor = (actor, flag) => {
+export const getFlaggedSkillIdsBySourceFromActor = (actor, flag, skillKey = undefined) => {
     const sources = actor.itemFlags?.boolean[flag]?.sources ?? [];
     const mapped = sources.map((source) => ({
         source,
-        ids: getFlaggedSkillIdsFromItem(actor, source, flag),
+        ids: getFlaggedSkillIdsFromItem(actor, source, skillKey || flag),
     }))
     return mapped;
 }

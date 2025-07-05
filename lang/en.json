@@ -20,6 +20,7 @@
         "base-dice": "Base Dice",
         "bonus-header-labels": {
             "bonus": "Bonuses",
+            "conditional-bonus": "Conditional Bonuses",
             "target": "Targets",
             "target-override": "Target Overrides",
             "specific-bonus": "Specific Bonuses",
@@ -27,6 +28,7 @@
         },
         "bonuses": {
             "label": {
+                "ac": "Armor Class",
                 "action": "Specific Actions",
                 "action-type": "Action Type",
                 "action-type-radio": "Action Types Join",
@@ -43,7 +45,7 @@
                 },
                 "agile": "Agile",
                 "alignment": "Target has Alignment",
-                "all": "All Actions",
+                "all": "All",
                 "ammo-attack": "Generic Attack Bonus",
                 "ammo-damage": "Damage",
                 "ammo-effect": "Effect Note",
@@ -93,6 +95,7 @@
                 "gang-up": "Gang Up",
                 "has-boolean-flag": "Has Boolean Flag",
                 "has-boolean-flag-target": "Target for Boolean Flag",
+                "initiative": "Initiative",
                 "inspiration": "Inspiration",
                 "inspiration-amazing": "Amazing Inspiration",
                 "inspiration-extra-die": "Extra Inspiration Die",
@@ -121,12 +124,19 @@
                 "ranged-increment-penalty-penalty-offset": "Overall Penalty Reduction",
                 "roll-untrained": "Roll Skills Untrained",
                 "script-call": "Script Call",
+                "save": "Saving Throw",
+                "save-chosen": "Chosen Saves",
+                "save-input": "Save Change",
                 "self": "Self Target",
+                "skill": "Skill",
+                "skill-chosen": "Chosen Skills",
+                "skill-input": "Skill Change",
                 "skill-rank-override": "Skill Rank Override",
                 "skill-rank-override-formula": "Override Skill Ranks Formula",
                 "skill-rank-override-selected": "Skills to Override",
                 "snake-sidewind": "Snake Sidewind",
                 "solo-tactics": "Solo Tactics",
+                "solo-tactics-allies": "Specific Allies (optional)",
                 "spell": "Specific Spells",
                 "spell-descriptor": "Spell Descriptors",
                 "spell-focus": "Spell Focus",
@@ -160,12 +170,13 @@
                 "weapon-type": "Weapon Type",
                 "weapon-type-override": "Weapon Type",
                 "weapon": "Specific Weapons and Attacks",
-                "when-active": "When Item Is Active",
+                "when-active": "When Item Is Active/Equipped",
                 "when-in-combat": "When in Combat",
                 "while-adjacent-to": "While Adjacent To",
                 "while-sharing-with": "While Sharing Square With"
             },
             "tooltip": {
+                "ac": "Adds a conditional bonus to the actor's Armor Class.",
                 "action": "Grant bonuses to specific actions.",
                 "action-type": "Activates bonus whenever the given action types are matched.",
                 "action-type-radio": "Selects if the action types are evaluated as a group or individually.<br><br>All: Bonuses will be applied only if all action types are matched.<br><br>Any: Bonuses will be applied if any action type is matched.",
@@ -221,6 +232,7 @@
                 "furious-focus": "Negate the attack penalty of power attack on the first attack made each round.",
                 "gang-up": "You are considered threatening your target if at least two of your allies are threatening your target.",
                 "has-boolean-flag": "Activate bonuses based on whether a boolean flag is active.",
+                "initiative": "Modifies the actor's Iniative rolls",
                 "inspiration": "Freely roll Inspiration for specified skills.",
                 "inspiration-amazing": "Increase Inspiration die by one step.",
                 "inspiration-focused": "Increase Inspiration die by one step for chosen skills.",
@@ -248,12 +260,15 @@
                 "ranged-increment-penalty-penalty-offset": "Reduce the total penalty.",
                 "roll-untrained": "Marks skills as able to be rolled untrained.",
                 "script-call": "Configure Script Calls that are executed for the targeted actions. You can drag macros here as well.",
+                "save": "Apply bonuses to saving throws.",
                 "self": "Apply bonuses to all actions on this same Item.",
+                "skill": "Apply bonuses to skill rolls.",
                 "skill-rank-override": "Set skill rank for a chosen skill to a specific value. This is useful for an item such as a Headband of Vast Intellect.",
                 "skill-rank-override-formula": "Formula to set skill rank for chosen skill(s) to a specific value. This is useful for an item such as a Headband of Vast Intellect.",
                 "skill-rank-override-selected": "The skills to be overridden with the supplied formula.",
                 "snake-sidewind": "Use Sense Motive for critical confirmations when your maximum Sense Motive result is higher than your maximum attack roll.",
                 "solo-tactics": "Consider allies to have your Teamwork Feats (currently used for Outflank and Improved Outflank).",
+                "solo-tactics-allies": "Limit this to specific allies (or leave empty to apply to all allies).",
                 "spell-school": "Apply bonuses to spells of the chosen school(s).",
                 "spell-subschool": "Apply bonuses to spells of the chosen subschool(s).",
                 "spell-specialization": "Increase CL by 2 for a chosen spell from a school that you have Spell Focus for.",
@@ -286,7 +301,7 @@
                 "weapon-type": "Apply bonuses when using the chosen Weapon. Attacks and Weapons must be properly configured with Equipment Base Types.",
                 "weapon-type-override": "Adds a Weapon Type to an Item that normally can't have one. This is equivalent to a weapon's Equipment Base Type.",
                 "weapon": "Choose specific Attacks and Weapons for bonuses.",
-                "when-active": "Apply bonuses when specified Buff/Weapon/Feat/etc is active.",
+                "when-active": "Apply bonuses when specified Buff/Gear/Feat/etc is active or equipped.",
                 "when-in-combat": "Active when this actor is in combat.",
                 "while-adjacent-to": "Activates bonuses while adjacent to any of the specified allies.",
                 "while-sharing-with": "Activates bonuses while sharing a square with any of the specified allies."
@@ -325,6 +340,26 @@
         "enh-mod": "Enhancement Bonus -> {mod}",
         "effective-size": {
             "hint": "Size: {mod}"
+        },
+        "fluent-description": {
+            "alignment": "While target has alignment: {alignment}",
+            "all": "All",
+            "condition-self": "While you have condition: {condition}",
+            "condition-target": "While target has condition: {condition}",
+            "creature-subtype": "While target has creature subtype: {subtype}",
+            "creature-type": "While target has creature type: {type}",
+            "has-boolean-flag-self": "While you have boolean flag: {flag}",
+            "has-boolean-flag-target": "While {target} has boolean flag: {flag}",
+            "is-flanking": "While flanking target",
+            "is-flanking-with": "While flanking target with: {ally}",
+            "is-target-within-range": "While target is within range: {range}",
+            "token": "While targeting: {token}",
+            "token-inverted": "While targeting anyone except: {token}",
+            "when-active-equipment": "While equipped: {item}",
+            "when-active-feature": "While active: {item}",
+            "when-in-combat": "While in combat",
+            "while-adjacent-to": "While adjacent to: {ally}",
+            "while-sharing-with": "While sharing square with: {ally}"
         },
         "fortune": "Fortune",
         "global-bonus": {
@@ -395,12 +430,12 @@
         "invalid-uncanny-dodge-class": "Class Association must be configured.",
         "invalid-uncanny-dodge-item": "Must be placed on a class feature.",
         "invalid-override": "This does nothing for this item type—edit the item's details directly.",
-        "invalid-token-selection": "Must select a valid target.",
         "item-app": {
             "description": "Bonuses will apply only when using the selected items. Right click on any row to open that Item's sheet for further verification.",
             "description-actions": "Bonuses will apply only when using the selected actions. Right click on any row to open that action's sheet for further verification (or header to open the item).",
-            "description-when-active": "These bonuses will only be active when the targeted item is also active. For example, secondary bonuses that apply only while raging.",
-            "title": "Item Selector"
+            "description-when-active": "These bonuses will only be active when the targeted item is enabled or equipped. For example, secondary bonuses that apply only while raging.",
+            "title": "Item Selector",
+            "title-action": "Action Selector - {name}"
         },
         "item-hints": {
             "skill-rank-override": "{skills} (->{rank})"
@@ -421,6 +456,7 @@
         "maximized-total": "Maximized: {total}",
         "misfortune": "Misfortune",
         "missing-bonuses": "There are no Bonuses configured.",
+        "missing-conditional-target": "'{bonus}' bonus requires a Conditional Target to function properly.",
         "missing-targets": "There are no Targets configured.",
         "modifiers": "Modifiers",
         "ok": "OK",
@@ -495,7 +531,6 @@
         },
         "targets": "Targets",
         "to-hit-mod": "{mod} to hit",
-        "token-distance": "Distance between '{first}' and '{second}': {distance}",
         "versatile-performance": {
             "add": "Add Versatile Performance",
             "delete": "Delete Versatile Performance",
@@ -737,7 +772,7 @@
             "token": {
                 "gm-hint": "You can see all tokens because you're the GM. Players will only be able to select tokens that are visible to them.",
                 "no-tokens": "There are no tokens in this scene",
-                "player-hint": "Any currently targeted tokens in the scene are pre-selected. You can enable a setting to skip this window and automatically use those targets."
+                "player-hint": "Any currently targeted tokens in the scene are pre-selected. You can enable a setting to skip this window and automatically use those targets. Hovering over any option will highlight the associated token in the scene."
             }
         },
         "inputs": {
@@ -752,7 +787,23 @@
                 "dice": "Use of modifying the base dice for skills is deprecated and will be removed in a future version. See the documentation for how to configure skills for fortune/misfortune. If you have a need not covered by (mis)fortune, let me know."
             }
         },
-        "warnings": {
+        "hint": {
+            "select-action-for-flank": "Select an action to use for flanking. This will be used be used to verify it is melee and has the appropriate range."
+        },
+        "title": {
+            "flank-detector": "Flank Detector"
+        },
+        "info": {
+            "is-flanking": "'{meToken}' and '{allyToken}' are flanking '{targetToken}' with '{action}'.",
+            "is-not-flanking": "'{meToken}' is not flanking '{targetToken}' with '{action}'.",
+            "is-not-flanking-with-ally": "'{meToken}' and '{allyToken}' are not flanking '{targetToken}' with '{action}'.",
+            "token-distance": "Distance between '{first}' and '{second}': {distance}"
+        },
+        "warning": {
+            "action-is-not-melee": "'{action}' is not a melee action.",
+            "invalid-token-disposition": "Token dispositions incompatible for flanking.",
+            "invalid-token-selection": "Invalid tokens selected.",
+            "no-actor": "You must select a token or use this macro in a script call.",
             "pack-flanking": "Pack Flanking requires an ally to be configured.",
             "range-misconfigured": "Action ({actionName}) on Item '{itemName}' ({actionUuid}) has invalid range. Verify its max increments and range has been set up correctly. Automatically assuming it's in range.",
             "uncanny-dodge-improved": "Must be configured on a Class Feature with its Associated Class correctly configured."

@@ -6,7 +6,7 @@ import { ArmorFocusImproved } from './improved-armor-focus.mjs';
 
 // register hint on focused item
 registerItemHint((hintcls, actor, item, _data) => {
-    if (!(item instanceof pf1.documents.item.ItemEquipmentPF)) return;
+    if (!(item instanceof pf1.documents.item.ItemEquipmentPF) || !actor) return;
 
     const isArmor = item.isActive && item.system.slot === 'armor';
     const baseTypes = item.system.baseTypes;

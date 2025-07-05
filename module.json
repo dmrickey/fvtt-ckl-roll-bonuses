@@ -30,7 +30,10 @@
         "recommends": [
             {
                 "id": "mkah-pf1-item-hints",
-                "type": "module"
+                "type": "module",
+                "compatibility": {
+                    "minimum": "2.13"
+                }
             }
         ],
         "requires": [

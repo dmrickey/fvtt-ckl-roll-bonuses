@@ -7,16 +7,17 @@ import { itemHasCompendiumId } from './has-compendium-id.mjs';
  * @param {() => string} defaultName
  * @param {object} options
  * @param {string | string[]} [options.booleanKeys]
- * @param {(item: ItemPF) => boolean} [options.extraVerification]
  * @param {Record<string, any>} [options.flagValues]
+ * @param {(item: ItemPF) => boolean} [options.ignoreFunc]
  */
 export const onCreate = (
     compendiumId,
     defaultName,
     {
         booleanKeys = [],
-        extraVerification,
-        flagValues = undefined }
+        flagValues = undefined,
+        ignoreFunc = () => false,
+    }
 ) => {
     /**
      * @param {ItemPF} item
@@ -27,10 +28,7 @@ export const onCreate = (
     const handleOnCreate = (item, _data, { temporary }, id) => {
         if (!(item instanceof pf1.documents.item.ItemPF)) return;
         if (temporary) return;
-
-        if (extraVerification && !extraVerification(item)) {
-            return;
-        }
+        if (ignoreFunc(item)) return;
 
         if (!Array.isArray(booleanKeys)) {
             booleanKeys = booleanKeys ? [booleanKeys] : [];
@@ -63,6 +61,7 @@ export const onCreate = (
  * @param {(item: ItemPF, html: HTMLElement, isEditable: boolean) => void} [options.showInputsFunc]
  * @param {string[]} [options.extraBooleanFlags]
  * @param {(item: ItemPF) => Record<string, any> | undefined} [options.defaultFlagValuesFunc]
+ * @param {(item: ItemPF) => boolean} [options.ignoreFunc]
  */
 export const onRenderCreate = (
     key,
@@ -72,6 +71,7 @@ export const onRenderCreate = (
         showInputsFunc,
         extraBooleanFlags = [],
         defaultFlagValuesFunc,
+        ignoreFunc = () => false,
     } = {}
 ) => {
     Hooks.on(
@@ -86,7 +86,7 @@ export const onRenderCreate = (
             const allBooleanKeys = [key, ...extraBooleanFlags];
             const hasFlag = allBooleanKeys.every((k) => item.hasItemBooleanFlag(k));
             if (!hasFlag) {
-                if (isEditable) {
+                if (isEditable && !ignoreFunc(item)) {
                     const name = item?.name?.toLowerCase() ?? "";
                     const hasCompendiumId = itemHasCompendiumId(item, compendiumId);
                     const isItemMatch = isItemFunc(name, item);
@@ -126,6 +126,7 @@ export const onRenderCreate = (
     const handleOnCreate = (item, _data, { temporary }, id) => {
         if (!(item instanceof pf1.documents.item.ItemPF)) return;
         if (temporary) return;
+        if (ignoreFunc(item)) return;
 
         const name = item?.name?.toLowerCase() ?? '';
         const hasCompendiumId = itemHasCompendiumId(item, compendiumId);

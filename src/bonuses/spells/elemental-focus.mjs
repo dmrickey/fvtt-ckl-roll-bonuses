@@ -45,6 +45,7 @@ export class ElementalFocus extends BaseFocus {
         return {
             type: 'render-and-create',
             compendiumId: '1frgqDSnQFiTq0MC',
+            ignoreFunc: (item) => item.type !== 'feat' || item.subType !== 'feat',
             isItemMatchFunc: (name) => name === Settings.elementalFocus,
             showInputsFunc: (item, html, isEditable) => {
                 const elements = Object.fromEntries(damageElements.map(k => [k, pf1.registry.damageTypes.get(k)]));
@@ -222,7 +223,7 @@ Hooks.on(customGlobalHooks.itemGetTypeChatData, (
 
 // register on focused spell
 registerItemHint((hintcls, actor, item, _data) => {
-    if (!(item instanceof pf1.documents.item.ItemSpellPF)) {
+    if (!(item instanceof pf1.documents.item.ItemSpellPF) || !actor) {
         return;
     }
 
@@ -311,133 +312,11 @@ function getDcBonus(action) {
     return bonus;
 }
 
-// Hooks.on('pf1GetRollData', (
-//     /** @type {ItemAction} */ action,
-//     /** @type {RollData} */ rollData
-// ) => {
-//     const bonus = getDcBonus(action);
-//     rollData.dcBonus ||= 0;
-//     rollData.dcBonus += bonus;
-// });
-//
-// Hooks.on('renderItemSheet', (
-//     /** @type {ItemSheetPF} */ { actor, isEditable, item },
-//     /** @type {[HTMLElement]} */[html],
-//     /** @type {unknown} */ _data
-// ) => {
-//     if (!(item instanceof pf1.documents.item.ItemPF)) return;
-//
-//     /**
-//      * @type {string | undefined}
-//      */
-//     let key;
-//     let elements = Object.fromEntries(damageElements.map(k => [k, pf1.registry.damageTypes.get(k)]));
-//
-//     const name = item?.name?.toLowerCase() ?? '';
-//     const isElementalFocusFeat = item.hasItemBooleanFlag(ElementalFocus.key) || (name.includes(Settings.elementalFocus) && item.type === 'feat' && item.subType !== 'classFeat');
-//     const hasCompendiumId = itemHasCompendiumId(item, elementalFocusCompendiumId);
-//     if (isElementalFocusFeat || hasCompendiumId) {
-//         key = ElementalFocus.key;
-//     }
-//
-//     const isGreater = item.hasItemBooleanFlag(ElementalFocusGreater.key)
-//         || (isElementalFocusFeat && name.includes(LanguageSettings.greater))
-//         || itemHasCompendiumId(item, greaterElementalFocusCompendiumId);
-//     const isMythic = item.hasItemBooleanFlag(ElementalFocusMythic.key)
-//         || (isElementalFocusFeat && name.includes(LanguageSettings.mythic))
-//         || itemHasCompendiumId(item, mythicElementalFocusCompendiumId);
-//
-//     if (isGreater || isMythic) {
-//         key = isGreater ? ElementalFocusGreater.key : ElementalFocusMythic.key;
-//
-//         if (actor) {
-//             elements = {};
-//             const existingElementalFocuses = getFocusedElements(actor, ElementalFocus.key);
-//             existingElementalFocuses.forEach((focus) => {
-//                 elements[focus] = pf1.registry.damageTypes.get(focus);
-//             });
-//         }
-//     }
-//
-//     if (isEditable && key && !item.hasItemBooleanFlag(key)) {
-//         item.addItemBooleanFlag(key);
-//     }
-//
-//     if (!key) {
-//         return;
-//     }
-//
-//     const choices = Object.keys(elements).map((key) => ({ key, label: elements[key]?.name ?? '' }));
-//
-//     keyValueSelect({
-//         choices,
-//         item,
-//         journal,
-//         key,
-//         parent: html
-//     }, {
-//         canEdit: isEditable,
-//         inputType: 'specific-bonus',
-//     });
-// });
-//
-// /**
-//  * @param {ItemPF} item
-//  * @param {object} data
-//  * @param {{temporary: boolean}} param2
-//  * @param {string} id
-//  */
-// const onCreate = (item, data, { temporary }, id) => {
-//     if (!(item instanceof pf1.documents.item.ItemPF)) return;
-//     if (temporary) return;
-//
-//     const name = item?.name?.toLowerCase() ?? '';
-//
-//     const isRegular = (name.includes(Settings.elementalFocus) && item.type === 'feat' && item.subType !== 'classFeat')
-//         || itemHasCompendiumId(item, elementalFocusCompendiumId);
-//     const isGreater = (name.includes(Settings.elementalFocus) && name.includes(LanguageSettings.greater))
-//         || itemHasCompendiumId(item, greaterElementalFocusCompendiumId);
-//     const isMythic = (name.includes(Settings.elementalFocus) && name.includes(LanguageSettings.mythic))
-//         || itemHasCompendiumId(item, mythicElementalFocusCompendiumId);
-//
-//     /** @type {damageElements[number]} */
-//     let focused = damageElements[0];
-//     if (item.actor && (isGreater || isMythic)) {
-//         focused = getFocusedElements(item.actor, ElementalFocus.key)[0] || '';
-//     }
-//
-//     if (isMythic) {
-//         item.updateSource({
-//             [`system.flags.boolean.${ElementalFocusMythic.key}`]: true,
-//         });
-//
-//         if (focused && !item.flags[MODULE_NAME]?.[ElementalFocusMythic.key]) {
-//             item.updateSource({
-//                 [`flags.${MODULE_NAME}.${ElementalFocusMythic.key}`]: focused,
-//             });
-//         }
-//     }
-//     else if (isGreater) {
-//         item.updateSource({
-//             [`system.flags.boolean.${ElementalFocusGreater.key}`]: true,
-//         });
-//
-//         if (focused && !item.flags[MODULE_NAME]?.[ElementalFocusGreater.key]) {
-//             item.updateSource({
-//                 [`flags.${MODULE_NAME}.${ElementalFocusGreater.key}`]: focused,
-//             });
-//         }
-//     }
-//     else if (isRegular) {
-//         item.updateSource({
-//             [`system.flags.boolean.${ElementalFocus.key}`]: true,
-//         });
-//
-//         if (focused && !item.flags[MODULE_NAME]?.[ElementalFocus.key]) {
-//             item.updateSource({
-//                 [`flags.${MODULE_NAME}.${ElementalFocus.key}`]: focused,
-//             });
-//         }
-//     }
-// };
-// Hooks.on('preCreateItem', onCreate);
+Hooks.on('pf1GetRollData', (
+    /** @type {ItemAction} */ action,
+    /** @type {RollData} */ rollData
+) => {
+    const bonus = getDcBonus(action);
+    rollData.dcBonus ||= 0;
+    rollData.dcBonus += bonus;
+});

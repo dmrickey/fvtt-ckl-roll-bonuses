@@ -54,6 +54,9 @@
     - [Target](#target)
     - [Specific Bonuses](#specific-bonuses)
     - [Idea](#idea)
+    - [Bonus Types](#bonus-types)
+  - [Add included macros to documentation](#add-included-macros-to-documentation)
+  - [BugFixes](#bugfixes)
 
 # TODO
 - Figure out a way to support multiple target groups on a single Item (so I can add `Favored Enemy (Human) +4` and `Favored Enemy (goblin) +2` on a single Item)
@@ -238,15 +241,17 @@
 ### Target
 - `Size Target` (trait target) kicks in if target is a given size
 - `Relative Size` (kicks in if target is at least or exactly _N_ steps different from you larger/smaller)
+- While "Equipment Type" is equipped
+- While "Weapon Group" is equipped
 
 ### Specific Bonuses
 - ~~Migrate all keys to start with `specific_`~~ Do this later after SBC has a chance to update to only use the API
-  - update all journal entries to indicate what the key is
 - Add "get item hint" function to base class
 - **Damage Multiplier**
   - Brace - adhoc situations like the global charge bonus above
   - Litany of Righteousness (probably can't do but putting here for reference)
-  - 
+
+Add journal links to target/bonus headers within item sheet
 
 ### Idea
 - turn `LanguageSettings` into a base class that other classes extend (or create a base class that has shared logic)
@@ -256,3 +261,13 @@
     - This would allow for things like "+4 intimidate when targeting a creature type"
       - or "+4 initiative when in a city (using Fair's target)"
       - or possibly literally any change ¯\_(ツ)_/¯
+
+### Bonus Types
+- AC
+  - figure out appropriate way to apply AC bonus
+
+Expand "Action Type Target" to include CMB
+
+## Add included macros to documentation
+
+## BugFixes

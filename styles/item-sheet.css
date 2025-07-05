@@ -181,7 +181,7 @@ form .versatile-performance-selector .form-fields {
     text-align: end;
 }
 
-#ckl-roll-bonus-container .bonuses .form-group.roll-bonuses {
+#ckl-roll-bonus-container .bonuses .form-group.roll-bonuses:has(+ div label.bonus-label:not(.sub-label)) {
     border-bottom: 1px solid #37373711;
 }
 

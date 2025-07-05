@@ -17,6 +17,7 @@ import { ActorSelectorApp } from './actor-select-app.mjs';
  * @param {object} options
  * @param {boolean} options.canEdit
  * @param {boolean} [options.isSubLabel]
+ * @param {InputType} [options.inputType]
  */
 export function showActorInput({
     item,
@@ -28,6 +29,7 @@ export function showActorInput({
 }, {
     canEdit,
     isSubLabel = false,
+    inputType = 'target'
 }) {
     label ||= localizeBonusLabel(key);
     tooltip ||= localizeBonusTooltip(key);
@@ -93,7 +95,7 @@ export function showActorInput({
         }
     });
 
-    addNodeToRollBonus(parent, div, item, canEdit, 'target');
+    addNodeToRollBonus(parent, div, item, canEdit, inputType);
 }
 
 api.inputs.showActorInput = showActorInput;

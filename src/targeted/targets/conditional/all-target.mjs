@@ -1,10 +1,11 @@
-import { showEnabledLabel } from '../../handlebars-handlers/enabled-label.mjs';
-import { BaseTarget } from './_base-target.mjs';
+import { showEnabledLabel } from '../../../handlebars-handlers/enabled-label.mjs';
+import { localizeFluentDescription } from '../../../util/localize.mjs';
+import { BaseConditionalTarget } from './_base-conditional.target.mjs';
 
 /**
- * @abstract
+ * @extends BaseConditionalTarget
  */
-export class AllTarget extends BaseTarget {
+export class AllTarget extends BaseConditionalTarget {
 
     /**
      * @override
@@ -23,24 +24,19 @@ export class AllTarget extends BaseTarget {
     /**
      * @inheritdoc
      * @override
+     * @returns {string}
+     */
+    static fluentDescription() { return localizeFluentDescription(this); }
+
+    /**
+     * @inheritdoc
+     * @override
      * @param {ItemPF} _source
      * @returns {Nullable<string[]>}
      */
     static getHints(_source) {
         return [this.label];
     }
-
-    /**
-     * @override
-     * @inheritdoc
-     */
-    static get isConditionalTarget() { return true; }
-
-    /**
-     * @override
-     * @inheritdoc
-     */
-    static get isGenericTarget() { return true; }
 
     /**
      * @inheritdoc
@@ -67,11 +63,11 @@ export class AllTarget extends BaseTarget {
     /**
      * @inheritdoc
      * @override
-     * @param {ItemPF & { actor: ActorPF }} _item
+     * @param {ActorPF} _actor
      * @param {ItemPF[]} sources
      * @returns {ItemPF[]}
      */
-    static _getSourcesFor(_item, sources) {
+    static _getConditionalActorSourcesFor(_actor, sources) {
         return sources;
     };
 }

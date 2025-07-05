@@ -63,10 +63,11 @@ declare global {
     }
     class Dialog {
         constructor({
-            buttons: { [string]: DialogButton},
+            buttons: { [string]: DialogButton },
             content: string,
             default: string,
             title: string,
+            [render]: any,
         }) {}
         render(boolean): void;
     }

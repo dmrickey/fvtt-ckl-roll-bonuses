@@ -153,4 +153,10 @@ export class BaseBonus extends BaseSource {
      * @returns {ParsedContextNoteEntry[] | undefined}
      */
     static getFootnotes(source, item) { return []; }
+
+    /**
+     * Returns true if this bonus is a conditional bonus.
+     * @abstract
+     */
+    static get isConditionalBonus() { return false; }
 }

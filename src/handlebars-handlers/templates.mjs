@@ -27,7 +27,7 @@ export const templates = /** @type {const} */ ({
     scriptCallBonus: `modules/${MODULE_NAME}/hbs/targeted/bonuses/script-call-bonus-input.hbs`,
 
     // targeted - targets
-    actionsApp: `modules/${MODULE_NAME}/hbs/targeted/targets/actions-input-application.hbs`,
+    actionsAppV2: `modules/${MODULE_NAME}/hbs/targeted/targets/actions-input-application-v2.hbs`,
     actorSelectApp: `modules/${MODULE_NAME}/hbs/targeted/targets/actor-select-application.hbs`,
     checklist: `modules/${MODULE_NAME}/hbs/targeted/targets/checklist.hbs`,
     editableIcons: `modules/${MODULE_NAME}/hbs/targeted/targets/editable-icons.hbs`,

@@ -3,6 +3,7 @@ import { SpecificBonus } from '../bonuses/_specific-bonus.mjs';
 import { api } from '../util/api.mjs';
 import { intersection } from '../util/array-intersects.mjs';
 import { handleJournalClick } from '../util/handle-journal-click.mjs';
+import { includes } from '../util/includes.mjs';
 import { localize } from '../util/localize.mjs';
 import { LanguageSettings } from '../util/settings.mjs';
 import { templates } from './templates.mjs';
@@ -344,7 +345,7 @@ export class BonusPickerApp extends DocumentSheet {
                 }
 
                 if (this.sources.includes(prop)
-                    || (prop === 'specifics' && api.allSpecificBonusTypesKeys.includes(bonusData.key))
+                    || (prop === 'specifics' && includes(api.allSpecificBonusTypesKeys, bonusData.key))
                 ) {
                     // set to true if value is true, delete if value is false
                     if (value) {

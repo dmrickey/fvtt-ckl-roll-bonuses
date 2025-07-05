@@ -84,7 +84,7 @@ const migrateSyntheticActors = async () => {
 
     const synthetics = [...game.scenes].flatMap(s => [...s.tokens].filter(t => !t.isLinked && t.actor?.items?.size));
     for (const synthetic of synthetics) {
-        for (const item of synthetic.actor.items) {
+        for (const item of synthetic.actor?.items ?? []) {
             await migrateItem(item);
         }
     }

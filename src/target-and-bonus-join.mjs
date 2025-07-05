@@ -1,12 +1,15 @@
 import { MODULE_NAME } from './consts.mjs';
+import { registerGlobalBonuses } from './global-bonuses/_init-global-bonuses.mjs';
 import { BaseBonus } from './targeted/bonuses/_base-bonus.mjs';
+import { BaseConditionalBonus } from './targeted/bonuses/conditional-bonuses.mjs/_base-conditional-bonus.mjs';
+import { initSources } from './targeted/init-sources.mjs';
+import { BaseTarget } from './targeted/targets/_base-target.mjs';
+import { BaseConditionalTarget } from './targeted/targets/conditional/_base-conditional.target.mjs';
+import { api } from './util/api.mjs';
 import { LocalHookHandler, customGlobalHooks, localHooks } from "./util/hooks.mjs";
 import { registerItemHint } from "./util/item-hints.mjs";
 import { localize } from "./util/localize.mjs";
 import { truthiness } from "./util/truthiness.mjs";
-import { initSources } from './targeted/init-sources.mjs';
-import { api } from './util/api.mjs';
-import { registerGlobalBonuses } from './global-bonuses/_init-global-bonuses.mjs';
 
 initSources();
 
@@ -91,12 +94,17 @@ registerItemHint((hintcls, actor, item, _data) => {
             .forEach(([name, hint]) => allHints.push(hintcls.create(name, [], { hint })))
     }
 
-    if (item[MODULE_NAME].bonuses.length && !item[MODULE_NAME].targets.length) {
-        const hint = hintcls.create(localize('missing-targets'), ['ckl-missing-source'], { icon: 'fas fa-circle-exclamation' });
+    if (item[MODULE_NAME].bonuses.some(x => x.isConditionalBonus) && !item[MODULE_NAME].targets.some(x => x.isConditionalTarget)) {
+        const bonus = item[MODULE_NAME].bonuses.find(x => x.isConditionalBonus);
+        const hint = hintcls.create(localize('missing-conditional-target', { bonus: bonus?.label }), ['ckl-missing-source'], { icon: 'fas fa-circle-exclamation' });
         return [hint, ...allHints];
     }
     else if (item[MODULE_NAME].targets.length && !item[MODULE_NAME].bonuses.length) {
         const hint = hintcls.create(localize('missing-bonuses'), ['ckl-missing-source'], { icon: 'fas fa-circle-exclamation' });
+        return [hint, ...allHints];
+    }
+    else if (item[MODULE_NAME].bonuses.length && !item[MODULE_NAME].targets.length) {
+        const hint = hintcls.create(localize('missing-targets'), ['ckl-missing-source'], { icon: 'fas fa-circle-exclamation' });
         return [hint, ...allHints];
     }
     else {
@@ -172,15 +180,55 @@ export const handleBonusesFor = (
         .filter((sourceItem) => {
             const targets = sourceItem[MODULE_NAME].targets
                 .filter((targetType) => !skipGenericTarget || !targetType.isGenericTarget);
-            const func = sourceItem.getFlag(MODULE_NAME, 'target-toggle') === 'all' ? 'every' : 'some';
+            const someOrEvery = sourceItem.getFlag(MODULE_NAME, 'target-toggle') === 'all' ? 'every' : 'some';
             return !!targets.length
-                && targets[func]((sourceTarget) => things[thingsFilter]((thing) => sourceTarget.doesTargetInclude(sourceItem, thing)));
+                && targets[someOrEvery]((sourceTarget) => things[thingsFilter]((thing) => sourceTarget.doesTargetInclude(sourceItem, thing)));
         })
         .forEach((sourceItem) => sourceItem[MODULE_NAME].bonuses.forEach((bonusType) => {
             if (!specificBonusType || bonusType === specificBonusType) {
                 func(bonusType, sourceItem);
             }
         }));
+}
+
+/**
+ * @template {typeof BaseConditionalBonus} t
+ * @param {typeof BaseBonus} bonusType
+ * @param {t} specificBonusType
+ * @returns {bonusType is t}
+ */
+const isSpecifiedConditionalBonus = (bonusType, specificBonusType) => bonusType.key === specificBonusType.key;
+/**
+ * @param {typeof BaseTarget} targetType
+ * @returns {targetType is typeof BaseConditionalTarget}
+ */
+const isBaseConditionalTarget = (targetType) => targetType.prototype instanceof BaseConditionalTarget;
+
+/**
+ * @template {typeof BaseConditionalBonus} T
+ * @param {ActorPF} actor
+ * @param {T} specificBonusType
+ * @param {(bonusType: T, sourceItem: ItemPF) => void} func The type providing the bonus, and the Item providing the bonus
+ */
+export const handleConditionalBonusesFor = (
+    actor,
+    specificBonusType,
+    func,
+) => {
+    if (!actor || !actor.itemFlags?.boolean) return;
+
+    let sources = actor.itemFlags?.boolean[specificBonusType.key]?.sources || [];
+    sources
+        .filter((sourceItem) => {
+            const targets = sourceItem[MODULE_NAME].targets
+                .filter(isBaseConditionalTarget);
+            const someOrEvery = sourceItem.getFlag(MODULE_NAME, 'target-toggle') === 'all' ? 'every' : 'some';
+            return !!targets.length
+                && targets[someOrEvery]((sourceTarget) => sourceTarget.doesConditionalTargetInclude(sourceItem, actor));
+        })
+        .forEach((sourceItem) => sourceItem[MODULE_NAME].bonuses
+            .filter((bonusType) => isSpecifiedConditionalBonus(bonusType, specificBonusType))
+            .forEach((bonusType) => func(bonusType, sourceItem)));
 }
 
 api.utils.handleBonusesFor = handleBonusesFor;
@@ -354,15 +402,18 @@ Hooks.on('renderItemSheet', (
 
 Hooks.on('updateItem', (
     /** @type {ItemPF} */ item,
-    /** @type {{ system?: { active?: boolean, disabled?: boolean} }} */ change,
+    /** @type {{ system?: { equipped?: boolean, disabled?: boolean, active?: boolean } }} */ change,
     /** @type {object} */ _options,
     /** @type {string} */ userId,
 ) => {
-    if (game.userId !== userId) {
+    if (game.userId !== userId || !change.system) {
         return;
     }
 
-    if (!change?.system?.active || change?.system?.disabled === true) {
+    if (!('equipped' in change.system && change.system.equipped === true
+        || 'disabled' in change.system && change.system.disabled === false
+        || 'active' in change.system && change.system.active === true
+    )) {
         return;
     }
 
@@ -429,7 +480,6 @@ const prepare = (item, rollData) => {
             }
         }
     });
-
 };
 LocalHookHandler.registerHandler(localHooks.prepareData, prepare);
 

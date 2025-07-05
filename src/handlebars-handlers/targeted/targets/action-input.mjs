@@ -6,6 +6,8 @@ import { uniqueArray } from "../../../util/unique-array.mjs";
 import { addNodeToRollBonus } from "../../add-bonus-to-item-sheet.mjs";
 import { createTemplate, templates } from "../../templates.mjs";
 
+// saves <item id>.<action id>[]
+
 /**
  * @typedef {object} ActionSelectorOptions
  * @property {string} path
@@ -100,12 +102,20 @@ export function showActionInput({
         div.querySelectorAll('li,a,.error-text').forEach((element) => {
             element.addEventListener('click', (event) => {
                 event.preventDefault();
-                /** @type {ActionSelectorOptions} */
+
                 const options = {
-                    items,
-                    path: `flags.${MODULE_NAME}.${key}`,
+                    actor: item.actor,
+                    currentIds,
+                    hint: localize('item-app.description-actions'),
+                    window: { title: localize('item-app.title-action', { name: item.name }) },
+                    /** @param {ItemAction[]} actions */
+                    save: (actions) => {
+                        item.update({
+                            [`flags.${MODULE_NAME}.${key}`]: actions.map((action) => `${action.item.id}.${action.id}`),
+                        });
+                    }
                 };
-                new ActionSelector(item, options).render(true);
+                new ActionSelect(options).render(true);
             });
         });
     }
@@ -133,72 +143,242 @@ export function showActionInput({
     addNodeToRollBonus(parent, div, item, canEdit, 'target');
 }
 
-/** @ts-ignore */
-/** @extends {DocumentSheet<ActionSelectorOptions, ItemPF>} */
-export class ActionSelector extends DocumentSheet {
-    /** @override */
-    static get defaultOptions() {
-        const options = super.defaultOptions;
+api.inputs.showActionInput = showActionInput;
 
-        options.classes = ['item-based-list', 'action-selector'];
-        options.filters = [
-            {
-                inputSelector: 'input[name=filter]',
-                contentSelector: ".all-entities",
+const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
+
+export class ActionSelect extends HandlebarsApplicationMixin(ApplicationV2) {
+    constructor() {
+        super(...arguments);
+
+        this.#searchFilter = new SearchFilter({
+            inputSelector: 'input[type=search]',
+            contentSelector: '.all-entities',
+            callback: (
+                _event,
+                query,
+                rgx,
+                html,
+            ) => {
+                if (!html) return;
+
+                if (!query?.trim()) {
+                    /** @type {NodeListOf<HTMLElement>} */
+                    const currentHidden = html.querySelectorAll('.filtered-out');
+                    currentHidden.forEach((h) => h.classList.remove('filtered-out'));
+                    return;
+                }
+
+                /** @type {NodeListOf<HTMLElement>} */
+                const typeGroups = html.querySelectorAll('.type-section');
+                typeGroups.forEach((typeGroup) => {
+                    /** @type {NodeListOf<HTMLElement>} */
+                    const actions = typeGroup.querySelectorAll('.entity-selector-row[data-name]');
+                    actions.forEach((action) => {
+                        const name = action.dataset.name;
+                        const match = name && rgx.test(SearchFilter.cleanQuery(name));
+                        action.classList.toggle("filtered-out", !match);
+                        const forItem = html.querySelectorAll(`[data-item-id="${action.dataset.itemId}"]:not(.only-name)`);
+                        const forItemHidden = html.querySelectorAll(`[data-item-id="${action.dataset.itemId}"].filtered-out:not(.only-name)`);
+                        const item = html.querySelector(`[data-item-id="${action.dataset.itemId}"].only-name`);
+                        item?.classList.toggle("filtered-out", forItem.length === forItemHidden.length);
+                    });
+                });
             },
-        ];
-        options.height = 'auto';
-        options.template = templates.actionsApp;
-        options.title = localize('item-app.title');
-        options.width = 300;
+        });
+    }
 
-        return options;
+    static DEFAULT_OPTIONS = {
+        classes: ['item-based-list', 'action-selector'],
+        tag: "form",
+        form: {
+            handler: ActionSelect.#submitHandler,
+            submitOnChange: false,
+            closeOnSubmit: true,
+        },
+        position: {
+            width: 300,
+            height: 'auto',
+        },
+        window: {
+            icon: 'fas fa-dice-d20',
+        },
+    };
+
+    static PARTS = {
+        form: {
+            template: templates.actionsAppV2,
+        },
+        footer: {
+            template: 'templates/generic/form-footer.hbs',
+        },
+    };
+
+    /**
+     *
+     * @param {string} partId
+     * @param {*} context
+     * @param {*} options
+     * @returns
+     */
+    _preparePartContext(partId, context, options) {
+        switch (partId) {
+            case 'form': {
+                /** @type {{ hint: string,  groupedItems: {[key: string]: ActionSelectorOptions['items'][]} }} */
+                const templateData = {
+                    groupedItems: {},
+                    hint: this.options.hint,
+                };
+
+                const currentIds = this.options.currentIds || [];
+
+                this.#allItems = this.options.actor.items
+                    .filter(x => x.hasAction);
+                const items = this.#allItems.map((loopItem) => {
+
+                    const typeLabel = localize(CONFIG.Item.typeLabels[loopItem.type]);
+                    const hasAction = (/** @type {string} */ actionId) => currentIds.some(([iId, aId]) => loopItem.id === iId && actionId === aId);
+
+                    return {
+                        id: loopItem.id,
+                        name: loopItem.name,
+                        img: loopItem.img,
+                        type: loopItem.type,
+                        typeLabel,
+                        actions: loopItem.actions.map(({ id, name, img }) => {
+                            const checked = hasAction(id);
+                            const value = { checked, id, name, img };
+                            return value;
+                        }),
+                    };
+                });
+
+                items.forEach((item) => {
+                    item.actions.sort((a, b) => a.name.localeCompare(b.name))
+                });
+
+                items.sort((a, b) => {
+                    const first = a.typeLabel.localeCompare(b.typeLabel);
+                    return first
+                        ? first
+                        : a.name.localeCompare(b.name);
+                });
+
+                const labels = uniqueArray(items.map(({ typeLabel }) => typeLabel));
+                templateData.groupedItems = labels
+                    .reduce((acc, curr) => ({ ...acc, [curr]: items.filter(({ typeLabel }) => curr === typeLabel) }), {});
+
+                return templateData;
+            }
+            case 'footer':
+                return {
+                    buttons: [
+                        {
+                            type: 'submit',
+                            label: 'ckl-roll-bonuses.ok',
+                            icon: 'fa-solid fa-save fa-fw',
+                            default: true,
+                        },
+                        {
+                            action: 'close',
+                            type: 'reset',
+                            icon: 'fas fa-rotate-left fa-fw',
+                            label: 'ckl-roll-bonuses.cancel',
+                        },
+                    ],
+                };
+        }
+
+        return context;
+    }
+
+
+    /**
+     * Stored form data.
+     * @type {object|null}
+     */
+    #config = null;
+
+    #searchFilter;
+
+    /** @type {ItemPF[]} */
+    #allItems = [];
+
+    /**
+     * Getter for stored form data.
+     * @type {object|null}
+     */
+    get config() {
+        return this.#config;
     }
 
     /**
-     * Handle changes to search filtering controllers which are bound to the Application
-     * @param {KeyboardEvent} _event   The key-up event from keyboard input
-     * @param {string} query          The raw string input to the search field
-     * @param {RegExp} rgx            The regular expression to test against
-     * @param {HTMLElement} html      The HTML element which should be filtered
-     * @override
+     * Factory method for asynchronous behavior.
+     * @param {object} options            Application rendering options.
+     * @returns {Promise<object|null>}    A promise that resolves to the form data, or `null`
+     *                                    if the application was closed without submitting.
      */
-    _onSearchFilter(_event, query, rgx, html) {
-        if (!query?.trim()) {
-            /** @type {NodeListOf<HTMLElement>} */
-            const currentHidden = html.querySelectorAll('.filtered-out');
-            currentHidden.forEach((h) => h.classList.remove('filtered-out'));
-            return;
-        }
+    static async create(options) {
+        const { promise, resolve } = Promise.withResolvers();
+        const application = new this(options);
+        application.addEventListener("close", () => resolve(application.config), { once: true });
+        application.render({ force: true });
+        return promise;
+    }
+
+    /**
+     * Handle form submission. The basic usage of this function is to set `#config`
+     * when the form is valid and submitted, thus returning `config: null` when
+     * cancelled, or non-`null` when successfully submitted. The `#config` property
+     * should not be used to store data across re-renders of this application.
+     * @this {DSApplication}
+     * @param {SubmitEvent} event           The submit event.
+     * @param {HTMLFormElement} form        The form element.
+     * @param {FormDataExtended} formData   The form data.
+     */
+    static #submitHandler(event, form, formData) {
+        this.#config = this._processFormData(event, form, formData);
+        this.options.save?.(this.#config);
+    }
+
+    /**
+     * Perform processing of the submitted data. To prevent submission, throw an error.
+     * @param {SubmitEvent} event           The submit event.
+     * @param {HTMLFormElement} form        The form element.
+     * @param {FormDataExtended} formData   The form data.
+     * @returns {object}                    The data to return from this application.
+     */
+    _processFormData(event, form, formData) {
+        const data = Object.values(formData.object).filter(truthiness);
+        const actions = data.map((ids) => {
+            const [iId, aId] = ids.split('.');
+            const action = this.#allItems.find((x) => x.id === iId)?.actions.find(a => a.id === aId);
+            return action;
+        }).filter(truthiness);
+        return actions;
+    }
+
+    /**
+     * Actions performed after any render of the Application.
+     * Post-render steps are not awaited by the render process.
+     * @param {ApplicationRenderContext} context      Prepared context data
+     * @param {RenderOptions} options                 Provided render options
+     * @protected
+     */
+    _onRender(context, options) {
+        this.#searchFilter.bind(this.element);
 
         /** @type {NodeListOf<HTMLElement>} */
-        const typeGroups = html.querySelectorAll('.type-section');
-        typeGroups.forEach((typeGroup) => {
-            /** @type {NodeListOf<HTMLElement>} */
-            const actions = typeGroup.querySelectorAll('.entity-selector-row[data-name]');
-
-            actions.forEach((action) => {
-                const name = action.dataset.name;
-                const match = name && rgx.test(SearchFilter.cleanQuery(name));
-                action.classList.toggle("filtered-out", !match);
-                // if (match) {
-                const forItem = html.querySelectorAll(`[data-item-id="${action.dataset.itemId}"]:not(.only-name)`);
-                const forItemHidden = html.querySelectorAll(`[data-item-id="${action.dataset.itemId}"].filtered-out:not(.only-name)`);
-                // if (forItem.length === forItemHidden.length) {
-                const item = html.querySelector(`[data-item-id="${action.dataset.itemId}"].only-name`);
-                item?.classList.toggle("filtered-out", forItem.length === forItemHidden.length);
-                // }
-                // }
-
-            });
-
+        const items = this.element.querySelectorAll('.entity-selector-row, .action-selector-row.only-name')
+        items.forEach((item) => {
+            item.addEventListener('contextmenu', this.#rightClick.bind(this));
         });
     }
 
     /**
      * @param {MouseEvent} event
      */
-    rightClick(event) {
+    #rightClick(event) {
         event.preventDefault();
         const target = /** @type {HTMLElement?} */ (event.target);
         let parent = target;
@@ -206,82 +386,16 @@ export class ActionSelector extends DocumentSheet {
         const itemId = parent?.dataset.itemId;
         if (itemId) {
             const actionId = parent?.dataset.actionId
-            const action = actionId && this.object.actor?.items.get(itemId)?.actions.get(actionId);
+            const action = actionId && this.options.actor?.items.get(itemId)?.actions.get(actionId);
             if (action) {
                 action.sheet.render(true, { focus: true });
             }
             else {
-                this.object.actor?.items.get(itemId)?.sheet.render(true, { focus: true });
+                this.options.actor?.items.get(itemId)?.sheet.render(true, { focus: true });
             }
         }
         return false;
     }
-
-    /**
-     * @override
-     * @param {JQuery} jq
-     */
-    activateListeners(jq) {
-        super.activateListeners(jq);
-        jq.find('button[type=reset]')?.click(this.close.bind(this));
-
-        // @ts-ignore
-        const [html] = jq;
-        /** @type {NodeListOf<HTMLElement>} */
-        const items = html.querySelectorAll('.entity-selector-row, .action-selector-row.only-name')
-        items.forEach((item) => {
-            item.addEventListener('contextmenu', this.rightClick.bind(this));
-        });
-    }
-
-    /** @override */
-    async getData() {
-        /** @type {{ item: ItemPF, path: string, groupedItems: {[key: string]: ActionSelectorOptions['items'][]} }} */
-        const templateData = {
-            item: this.object,
-            path: this.options.path,
-            groupedItems: {},
-        };
-
-        const items = this.options.items;
-
-        items.forEach((item) => {
-            item.actions.sort((a, b) => a.name.localeCompare(b.name))
-        });
-
-        items.sort((a, b) => {
-            const first = a.typeLabel.localeCompare(b.typeLabel);
-            return first
-                ? first
-                : a.name.localeCompare(b.name);
-        });
-
-        const labels = uniqueArray(items.map(({ typeLabel }) => typeLabel));
-        templateData.groupedItems = labels
-            .reduce((acc, curr) => ({ ...acc, [curr]: items.filter(({ typeLabel }) => curr === typeLabel) }), {});
-
-        return templateData;
-    }
-
-    /**
-     * @override
-     * @param {Record<string, unknown>} updateData
-     * @returns
-     */
-    _getSubmitData(updateData) {
-        const path = this.options.path;
-
-        const formData = super._getSubmitData(updateData);
-        formData[path] = Array.isArray(formData[path])
-            ? formData[path]
-            : [formData[path]];
-        // @ts-ignore
-        formData[path] = formData[path].filter(truthiness);
-
-        const submitData = foundry.utils.expandObject(formData);
-        return submitData;
-    }
 }
 
-api.inputs.showActionInput = showActionInput;
-api.applications.ActionSelector = ActionSelector;
+api.applications.ActionSelect = ActionSelect;

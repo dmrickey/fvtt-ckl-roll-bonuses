@@ -94,13 +94,14 @@ export class FormulaCacheHelper {
      * Builds item hint for given key
      * @param {ItemPF} item
      * @param {string} key
-     * @param {(total: string | number) => string} format
+     * @param {(total: string | number) => string} [format]
      * @returns {string | undefined}
      */
     static getHint(item, key, format) {
         const formula = this.getModuleFlagFormula(item, key)[key];
         if (formula === '') return;
 
+        format ||= (x) => `${x}`;
         const roll = RollPF.create(formula + '');
         if (roll.isDeterministic) {
             const total = roll.evaluateSync({ maximize: true }).total;

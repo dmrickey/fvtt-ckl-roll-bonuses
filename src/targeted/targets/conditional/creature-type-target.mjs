@@ -2,15 +2,16 @@ import { MODULE_NAME } from '../../../consts.mjs';
 import { traitInput } from '../../../handlebars-handlers/trait-input.mjs';
 import { intersects } from '../../../util/array-intersects.mjs';
 import { currentTargetedActors } from '../../../util/get-current-targets.mjs';
-import { localize } from '../../../util/localize.mjs';
+import { listFormat } from '../../../util/list-format.mjs';
+import { localize, localizeFluentDescription } from '../../../util/localize.mjs';
 import { toArray } from '../../../util/to-array.mjs';
 import { Trait } from '../../../util/trait-builder.mjs';
-import { BaseTarget } from '../_base-target.mjs';
+import { BaseConditionalTarget } from './_base-conditional.target.mjs';
 
 /**
- * @extends BaseTarget
+ * @extends BaseConditionalTarget
  */
-export class CreatureTypeTarget extends BaseTarget {
+export class CreatureTypeTarget extends BaseConditionalTarget {
     /**
      * @inheritdoc
      * @override
@@ -25,22 +26,21 @@ export class CreatureTypeTarget extends BaseTarget {
     static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.IpRhJqZEX2TUarSX#creature-type'; }
 
     /**
-     * @override
      * @inheritdoc
+     * @override
+     * @param {ItemPF} source
+     * @returns {string}
      */
-    static get isConditionalTarget() { return true; }
+    static fluentDescription(source) {
+        const hints = this.getHints(source);
+        return localizeFluentDescription(this, { type: hints?.[0] || '' });
+    }
 
     /**
      * @override
      * @inheritdoc
      */
     static get label() { return localize('PF1.CreatureType'); }
-
-    /**
-     * @override
-     * @inheritdoc
-     */
-    static get isGenericTarget() { return true; }
 
     /**
      * @param {ItemPF} source
@@ -61,7 +61,7 @@ export class CreatureTypeTarget extends BaseTarget {
     static getHints(source) {
         const creatureTypes = this.#getCreatureTypes(source);
         if (creatureTypes.names.length) {
-            const hint = pf1.utils.i18n.join(creatureTypes.names, 'd', false);
+            const hint = listFormat(creatureTypes.names, 'or');
             return [hint];
         }
     }
@@ -69,11 +69,11 @@ export class CreatureTypeTarget extends BaseTarget {
     /**
      * @inheritdoc
      * @override
-     * @param {ItemPF & { actor: ActorPF }} _item
+     * @param {ActorPF} _actor
      * @param {ItemPF[]} sources
      * @returns {ItemPF[]}
      */
-    static _getSourcesFor(_item, sources) {
+    static _getConditionalActorSourcesFor(_actor, sources) {
         const currentTargets = currentTargetedActors();
         if (!currentTargets.length) return [];
 

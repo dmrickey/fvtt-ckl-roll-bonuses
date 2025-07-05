@@ -71,6 +71,7 @@ import { ShootIntoMeleeGlobalBonus } from '../src/global-bonuses/shoot-into-mele
 import { Outflank } from '../src/global-bonuses/specific/bonuses/flanking/outflank.mjs';
 import { PreciseShot } from '../src/global-bonuses/specific/bonuses/precise-shot-bonus.mjs';
 import { MenacingBonus } from '../src/global-bonuses/targeted/bonuses/menacing.mjs';
+import { RangedIncrementPenaltyBonus } from '../src/global-bonuses/targeted/bonuses/ranged-increment-penalty-bonus.mjs';
 import { addNodeToRollBonus } from '../src/handlebars-handlers/add-bonus-to-item-sheet.mjs';
 import { checkboxInput } from '../src/handlebars-handlers/bonus-inputs/chekbox-input.mjs';
 import { errorMessage } from '../src/handlebars-handlers/bonus-inputs/error-message.mjs';
@@ -89,7 +90,7 @@ import { modifiersInput } from '../src/handlebars-handlers/targeted/bonuses/cond
 import { damageInput } from '../src/handlebars-handlers/targeted/bonuses/damage.mjs';
 import { showScriptBonusEditor } from '../src/handlebars-handlers/targeted/bonuses/script-call-bonus-input.mjs';
 import {
-    ActionSelector,
+    ActionSelect,
     showActionInput,
 } from '../src/handlebars-handlers/targeted/targets/action-input.mjs';
 import { showActorInput } from '../src/handlebars-handlers/targeted/targets/actor-input.mjs';
@@ -109,6 +110,7 @@ import { AgileBonus } from '../src/targeted/bonuses/agile.mjs';
 import { AttackBonus } from '../src/targeted/bonuses/attack-bonus.mjs';
 import { BaneBonus } from '../src/targeted/bonuses/bane-bonus.mjs';
 import { CasterLevelBonus } from '../src/targeted/bonuses/caster-level-bonus.mjs';
+import { SaveBonus } from '../src/targeted/bonuses/conditional-bonuses.mjs/save-bonus.mjs';
 import { ConditionalModifiersBonus } from '../src/targeted/bonuses/conditional-modifiers-bonus.mjs';
 import { CritBonus } from '../src/targeted/bonuses/crit-bonus.mjs';
 import { DamageBonus } from '../src/targeted/bonuses/damage-bonus.mjs';
@@ -121,6 +123,7 @@ import { FootnoteBonus } from '../src/targeted/bonuses/footnote-bonus.mjs';
 import { FortuneBonus } from '../src/targeted/bonuses/fortune-bonus.mjs';
 import { MisfortuneBonus } from '../src/targeted/bonuses/misfortune-bonus.mjs';
 import { ScriptCallBonus } from '../src/targeted/bonuses/script-call-bonus.mjs';
+import { SkillBonus } from '../src/targeted/bonuses/skill-bonus.mjs';
 import { Sources } from '../src/targeted/source-registration.mjs';
 import { BaseTargetOverride } from '../src/targeted/target-overides/_base-target-override.mjs';
 import { FinesseOverride } from '../src/targeted/target-overides/finesse-override.mjs';
@@ -130,11 +133,13 @@ import { WeaponBaseTypeOverride } from '../src/targeted/target-overides/weapon-t
 import { BaseTarget } from '../src/targeted/targets/_base-target.mjs';
 import { ActionTarget } from '../src/targeted/targets/action-target.mjs';
 import { ActionTypeTarget } from '../src/targeted/targets/action-type-target.mjs';
-import { AllTarget } from '../src/targeted/targets/all-target.mjs';
+import { BaseConditionalTarget } from '../src/targeted/targets/conditional/_base-conditional.target.mjs';
 import { AlignmentTarget } from '../src/targeted/targets/conditional/alignment-target.mjs';
+import { AllTarget } from '../src/targeted/targets/conditional/all-target.mjs';
 import { ConditionTarget } from '../src/targeted/targets/conditional/condition-target.mjs';
 import { CreatureSubtypeTarget } from '../src/targeted/targets/conditional/creature-subtype-target.mjs';
 import { CreatureTypeTarget } from '../src/targeted/targets/conditional/creature-type-target.mjs';
+import { FunctionTarget } from '../src/targeted/targets/conditional/function-target.mjs';
 import { HasBooleanFlagTarget } from '../src/targeted/targets/conditional/has-boolean-flag-target.mjs';
 import { IsFlankingTarget } from '../src/targeted/targets/conditional/is-flanking-target.mjs';
 import { WhenTargetInRangeTarget } from '../src/targeted/targets/conditional/is-target-within-range.mjs';
@@ -145,7 +150,6 @@ import { WhileAdjacentToTarget } from '../src/targeted/targets/conditional/while
 import { WhileSharingSquareWithTarget } from '../src/targeted/targets/conditional/while-sharing-square-with-target.mjs';
 import { DamageTypeTarget } from '../src/targeted/targets/damage-type-target.mjs';
 import { FinesseTarget } from '../src/targeted/targets/finesse-target.mjs';
-import { FunctionTarget } from '../src/targeted/targets/function-target.mjs';
 import { SelfTarget } from '../src/targeted/targets/self-target.mjs';
 import { SpecificItemTarget } from '../src/targeted/targets/specific-item-target/specific-item-target.mjs';
 import { SpellTarget } from '../src/targeted/targets/specific-item-target/spell-target.mjs';
@@ -174,6 +178,7 @@ import { addCheckToAttackDialog } from '../src/util/attack-dialog-helper.mjs';
 import { confirmationDialog } from '../src/util/confirmation-dialog.mjs';
 import { getEnhancementBonusForAction } from '../src/util/enhancement-bonus-helper.mjs';
 import { FormulaCacheHelper, getDocFlags } from '../src/util/flag-helpers.mjs';
+import { FlankHelper } from '../src/util/flank-helper.mjs';
 import {
     currentTargetedActors,
     currentTargets,
@@ -191,10 +196,12 @@ import { getWeaponGroupsFromActor } from '../src/util/get-weapon-groups-from-act
 import { getWeaponTypesFromActor } from '../src/util/get-weapon-types-from-actor.mjs';
 import { itemHasCompendiumId } from '../src/util/has-compendium-id.mjs';
 import { ifDebug } from '../src/util/if-debug.mjs';
+import { includes } from '../src/util/includes.mjs';
 import { isActorInCombat } from '../src/util/is-actor-in-combat.mjs';
 import { isNotEmptyObject } from '../src/util/is-empty-object.mjs';
 import { registerItemHint } from '../src/util/item-hints.mjs';
 import { listFormat } from '../src/util/list-format.mjs';
+import { localize } from '../src/util/localize.mjs';
 import { onCreate, onRenderCreate } from '../src/util/on-create.mjs';
 import { onSkillSheetRender } from '../src/util/on-skill-sheet-render-handler.mjs';
 import { PositionalHelper } from '../src/util/positional-helper.mjs';
@@ -208,10 +215,10 @@ import { distinct, uniqueArray } from '../src/util/unique-array.mjs';
 export {};
 
 declare global {
-    interface RollBonusesAPI {
+    class RollBonusesAPI {
         /** Applications that the app uses that are used by various inputs */
         applications: {
-            ActionSelector: typeof ActionSelector;
+            ActionSelect: typeof ActionSelect;
             ActorSelectorApp: typeof ActorSelectorApp;
             BonusPickerApp: typeof BonusPickerApp;
             ItemSelector: typeof ItemSelector;
@@ -266,12 +273,17 @@ declare global {
             ['bonus_misfortune']: typeof MisfortuneBonus;
             ['bonus_script-call']: typeof ScriptCallBonus;
 
+            // conditional bonuses
+            ['bonus_skill']: typeof SkillBonus;
+            ['bonus_save']: typeof SaveBonus;
+
+            // bonuses that are only available when a global bonus is enabled
             ['bonus_menacing']?: typeof MenacingBonus;
-            ['bonus_ranged-increment-penalty']?: typeof RangedIncrementPenaltyGlobalBonus;
+            ['bonus_ranged-increment-penalty']?: typeof RangedIncrementPenaltyBonus;
         };
         /** Array of all targeted bonuses */
-        get allBonusTypes(): (typeof BaseBonus)[];
-        get allBonusTypesKeys(): string[];
+        get allBonusTypes(): ValueOf<RollBonusesAPI['bonusTypeMap']>[];
+        get allBonusTypesKeys(): Array<keyof RollBonusesAPI['bonusTypeMap']>;
 
         /** map of every targeted bonus from its key to its type */
         globalTypeMap: {
@@ -282,42 +294,65 @@ declare global {
             ['global-bonus_shoot-into-melee']: typeof ShootIntoMeleeGlobalBonus;
         };
         /** Array of all global bonuses */
-        get allGlobalTypes(): (typeof BaseGlobalBonus)[];
-        get allGlobalTypesKeys(): string[];
+        get allGlobalTypes(): ValueOf<RollBonusesAPI['globalTypeMap']>[];
+        get allGlobalTypesKeys(): Array<keyof RollBonusesAPI['globalTypeMap']>;
 
         /** map of every targeted target from its key to its type */
         targetTypeMap: {
-            ['target_']: typeof ActionTarget;
-            ['target_']: typeof ActionTypeTarget;
-            ['target_']: typeof AlignmentTarget;
-            ['target_']: typeof AllTarget;
-            ['target_']: typeof ConditionTarget;
-            ['target_']: typeof DamageTypeTarget;
-            ['target_']: typeof FinesseTarget;
-            ['target_']: typeof FunctionTarget;
-            ['target_']: typeof HasBooleanFlagTarget;
-            ['target_']: typeof IsFlankingTarget;
-            ['target_']: typeof CreatureTypeTarget;
-            ['target_']: typeof CreatureSubtypeTarget;
-            ['target_']: typeof SelfTarget;
-            ['target_']: typeof SpecificItemTarget;
-            ['target_']: typeof SpellDescriptorTarget;
-            ['target_']: typeof SpellSchoolTarget;
-            ['target_']: typeof SpellSubschoolTarget;
-            ['target_']: typeof SpellTarget;
-            ['target_']: typeof TokenTarget;
-            ['target_']: typeof WeaponGroupTarget;
-            ['target_']: typeof WeaponTarget;
-            ['target_']: typeof WeaponTypeTarget;
-            ['target_']: typeof WhenActiveTarget;
-            ['target_']: typeof WhenInCombatTarget;
-            ['target_']: typeof WhenTargetInRangeTarget;
-            ['target_']: typeof WhileAdjacentToTarget;
-            ['target_']: typeof WhileSharingSquareWithTarget;
+            ['target_action']: typeof ActionTarget;
+            ['target_action-type']: typeof ActionTypeTarget;
+            ['target_alignment']: typeof AlignmentTarget;
+            ['target_all']: typeof AllTarget;
+            ['target_condition']: typeof ConditionTarget;
+            ['target_damage-type']: typeof DamageTypeTarget;
+            ['target_finesse']: typeof FinesseTarget;
+            ['target_function']: typeof FunctionTarget;
+            ['target_has-boolean-flag']: typeof HasBooleanFlagTarget;
+            ['target_is-flanking']: typeof IsFlankingTarget;
+            ['target_creature-type']: typeof CreatureTypeTarget;
+            ['target_creature-subtype']: typeof CreatureSubtypeTarget;
+            ['target_self']: typeof SelfTarget;
+            ['target_item']: typeof SpecificItemTarget;
+            ['target_spell-descriptor']: typeof SpellDescriptorTarget;
+            ['target_spell-school']: typeof SpellSchoolTarget;
+            ['target_spell-subschool']: typeof SpellSubschoolTarget;
+            ['target_spell']: typeof SpellTarget;
+            ['target_token']: typeof TokenTarget;
+            ['target_weapon-group']: typeof WeaponGroupTarget;
+            ['target_weapon']: typeof WeaponTarget;
+            ['target_weapon-type']: typeof WeaponTypeTarget;
+            ['target_when-active']: typeof WhenActiveTarget;
+            ['target_when-in-combat']: typeof WhenInCombatTarget;
+            ['target_is-target-within-range']: typeof WhenTargetInRangeTarget;
+            ['target_while-adjacent-to']: typeof WhileAdjacentToTarget;
+            ['target_while-sharing-with']: typeof WhileSharingSquareWithTarget;
         };
         /** Array of all targeted targets */
-        get allTargetTypes(): (typeof BaseTarget)[];
-        get allTargetTypesKeys(): string[];
+        get allTargetTypes(): ValueOf<RollBonusesAPI['targetTypeMap']>[];
+        get allTargetTypesKeys(): Array<keyof RollBonusesAPI['targetTypeMap']>;
+
+        conditionalTargetTypeMap: {
+            ['alignment']: typeof AlignmentTarget;
+            ['all']: typeof AllTarget;
+            ['condition']: typeof ConditionTarget;
+            ['creature-subtype']: typeof CreatureSubtypeTarget;
+            ['creature-type']: typeof CreatureTypeTarget;
+            ['function']: typeof FunctionTarget;
+            ['has-boolean-flag']: typeof HasBooleanFlagTarget;
+            ['is-flanking']: typeof IsFlankingTarget;
+            ['is-target-within-range']: typeof WhenTargetInRangeTarget;
+            ['token']: typeof TokenTarget;
+            ['when-active']: typeof WhenActiveTarget;
+            ['when-in-combat']: typeof WhenInCombatTarget;
+            ['while-adjacent-to']: typeof WhileAdjacentToTarget;
+            ['while-sharing-with']: typeof WhileSharingSquareWithTarget;
+        };
+        get allConditionalTargetTypes(): ValueOf<
+            RollBonusesAPI['conditionalTargetTypeMap']
+        >[];
+        get allConditionalTargetTypesKeys(): Array<
+            keyof RollBonusesAPI['conditionalTargetTypeMap']
+        >;
 
         /** map of every target override from its key to its type */
         targetOverrideTypeMap: {
@@ -327,8 +362,12 @@ declare global {
             ['target-override_weapon-group-override']: typeof WeaponGroupOverride;
         };
         /** Array of all targeted targets */
-        get allTargetOverrideTypes(): (typeof BaseTargetOverride)[];
-        get allTargetOverrideTypesKeys(): string[];
+        get allTargetOverrideTypes(): ValueOf<
+            RollBonusesAPI['targetOverrideTypeMap']
+        >[];
+        get allTargetOverrideTypesKeys(): Array<
+            keyof RollBonusesAPI['targetOverrideTypeMap']
+        >;
 
         specificBonusTypeMap: {
             ['armor-focus']: typeof ArmorFocus;
@@ -383,8 +422,12 @@ declare global {
             ['precise-shot']?: typeof PreciseShot;
         };
         /** Array of all targeted targets */
-        get allSpecificBonusTypes(): (typeof SpecificBonus)[];
-        get allSpecificBonusTypesKeys(): string[];
+        get allSpecificBonusTypes(): ValueOf<
+            RollBonusesAPI['specificBonusTypeMap']
+        >[];
+        get allSpecificBonusTypesKeys(): Array<
+            keyof RollBonusesAPI['specificBonusTypeMap']
+        >;
 
         /** all the input helpers for adding various inputs for bonusees */
         inputs: {
@@ -424,6 +467,7 @@ declare global {
             BaseBonus: typeof BaseBonus;
             BaseSource: typeof BaseSource;
             BaseTarget: typeof BaseTarget;
+            BaseConditionalTarget: typeof BaseConditionalTarget;
             BaseTargetOverride: typeof BaseTargetOverride;
         };
         BaseGlobalBonus: typeof BaseGlobalBonus;
@@ -444,6 +488,7 @@ declare global {
             array: {
                 difference: typeof difference;
                 distinct: typeof distinct;
+                includes: typeof includes;
                 intersection: typeof intersection;
                 intersects: typeof intersects;
                 listFormat: typeof listFormat;
@@ -473,6 +518,7 @@ declare global {
             isEmptyObject: typeof isEmptyObject;
             isNotEmptyObject: typeof isNotEmptyObject;
             itemHasCompendiumId: typeof itemHasCompendiumId;
+            localize: typeof localize;
             onCreate: typeof onCreate;
             onRenderCreate: typeof onRenderCreate;
             onSkillSheetRender: typeof onSkillSheetRender;
@@ -483,6 +529,7 @@ declare global {
             toArray: typeof toArray;
             truthiness: typeof truthiness;
 
+            FlankHelper: typeof FlankHelper;
             FormulaCacheHelper: typeof FormulaCacheHelper;
             PositionalHelper: typeof PositionalHelper;
             Trait: typeof Trait;
@@ -496,6 +543,7 @@ declare global {
 
     type InputType =
         | 'bonus'
+        | 'conditional-bonus'
         | 'target'
         | 'target-override'
         | 'specific-bonus'
@@ -521,17 +569,17 @@ declare global {
 
     type Nullable<T> = T | null | undefined;
 
-    declare type DamageInputModel = {
+    type DamageInputModel = {
         crit: Nullable<'crit' | 'nonCrit' | 'normal'>;
         formula: string;
         types: Array<string>;
     };
 
-    declare type RecursivePartial<T> = {
+    type RecursivePartial<T> = {
         [P in keyof T]?: RecursivePartial<T[P]>;
     };
 
-    declare type ActionTypeFilterFunc = {
+    type ActionTypeFilterFunc = {
         (
             item?: ItemPF,
             action?: ItemAction,
@@ -539,16 +587,17 @@ declare global {
         ): boolean;
     };
 
-    declare type ShowInputsFunc = (
+    type ShowInputsFunc = (
         item: ItemPF,
         html: HTMLElement,
         isEditable: boolean
     ) => void;
 
-    declare type JustCreate = {
+    type JustCreate = {
         type: 'just-create';
         compendiumId: string;
         isItemMatchFunc: (name: string, item?: ItemPF) => boolean;
+        ignoreFunc?: (item: ItemPF) => boolean;
         options?: {
             extraBooleanFlags?: string[];
             defaultFlagValuesFunc?: (
@@ -557,15 +606,16 @@ declare global {
         };
     };
 
-    declare type JustRender = {
+    type JustRender = {
         type: 'just-render';
         showInputsFunc: ShowInputsFunc;
     };
 
-    declare type CreateAndRender = Omit<JustCreate, 'type'> &
+    type ValueOf<T> = NonNullable<T[keyof T]>;
+    type CreateAndRender = Omit<JustCreate, 'type'> &
         Omit<JustRender, 'type'> & { type: 'render-and-create' };
 
-    declare type ArrayOrSelf<T> = T | T[];
+    type ArrayOrSelf<T> = T | T[];
 
     interface Function {
         /** @deprecated Don't use this */

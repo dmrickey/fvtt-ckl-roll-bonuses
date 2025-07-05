@@ -398,13 +398,14 @@ function itemActionEnhancementBonus(wrapped) {
 
 /**
  * @this {ItemAction}
- * @param {(args: { rollData?: RollData}) => Record<string, string>} wrapped
+ * @param {(args: { rollData?: RollData, isolated?: boolean }) => Record<string, string>} wrapped
  * @param {object} [options]
+ * @param {boolean} [options.isolated] - Are these labels generated for isolated information (that is, need more details)
  * @param {RollData} [options.rollData] - Pre-determined roll data. If not provided, finds the action's own roll data.
  * @returns {Record<string, string>} This action's labels
  */
-function itemAction_getLabels(wrapped, { rollData } = {}) {
-    const labels = wrapped({ rollData });
+function itemAction_getLabels(wrapped, { rollData, isolated = false } = {}) {
+    const labels = wrapped({ rollData, isolated });
 
     // has been previously calculated if conditionals are already included
     const shouldSkip = !!rollData?.conditionals;
@@ -519,15 +520,43 @@ async function itemActionRollDamage(wrapped, ...args) {
 
 /**
  * @this {ActorPF}
- * @param {(skillId: SkillId, options: object) => ChatMessagePF|object|void} wrapped
+ * @param {(skillId: SkillId, options: object) => Promise<ChatMessagePF|object|void>} wrapped
  * @param {SkillId} skillId
  * @param {Object} options
- * @returns {ChatMessagePF|object|void} The chat message if one was created, or its data if not. `void` if the roll was cancelled.
+ * @returns {Promise<ChatMessagePF|object|void>} The chat message if one was created, or its data if not. `void` if the roll was cancelled.
  */
-function actorRollSkill(wrapped, skillId, options) {
+async function actorRollSkill(wrapped, skillId, options) {
+    const extraChanges = LocalHookHandler.fireHookWithReturnSync(localHooks.getActorSkillChanges, [], this, skillId);
+    this.changes ||= new Collection();
+    extraChanges.forEach((c) => this.changes?.set(c.id, c))
+
     const seed = { skillId, options };
     LocalHookHandler.fireHookNoReturnSync(localHooks.actorRollSkill, seed, this);
-    return wrapped(seed.skillId, seed.options);
+    const result = await wrapped(seed.skillId, seed.options);
+
+    // remove those extra changes
+    extraChanges.forEach((c) => this.changes?.delete(c.id));
+
+    return result;
+}
+
+/**
+ * @this {ActorPF}
+ * @param {(id: SavingThrow, options: object) => Promise<ChatMessagePF|object|void>} wrapped
+ * @param {*} savingThrowId
+ * @param {*} options
+ */
+async function actorRollSavingThrow(wrapped, savingThrowId, options = {}) {
+    const extraChanges = LocalHookHandler.fireHookWithReturnSync(localHooks.getActorSaveChanges, [], this, savingThrowId);
+    this.changes ||= new Collection();
+    extraChanges.forEach((c) => this.changes?.set(c.id, c))
+
+    const result = await wrapped(savingThrowId, options);
+
+    // remove those extra changes
+    extraChanges.forEach((c) => this.changes?.delete(c.id));
+
+    return result;
 }
 
 /**
@@ -660,6 +689,7 @@ Hooks.once('init', () => {
     libWrapper.register(MODULE_NAME, 'pf1.dice.d20Roll', async_d20RollWrapper, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorPF.prototype.getSkillInfo', actorGetSkillInfo, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorPF.prototype.rollSkill', actorRollSkill, libWrapper.WRAPPER);
+    libWrapper.register(MODULE_NAME, 'pf1.documents.actor.ActorPF.prototype.rollSavingThrow', actorRollSavingThrow, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemAttackPF.fromItem', itemAttackFromItem, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype.getAttackSources', itemGetAttackSources, libWrapper.WRAPPER);
     libWrapper.register(MODULE_NAME, 'pf1.documents.item.ItemPF.prototype.getTypeChatData', itemGetTypeChatData, libWrapper.WRAPPER);

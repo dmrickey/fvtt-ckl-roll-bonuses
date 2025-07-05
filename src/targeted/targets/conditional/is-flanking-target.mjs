@@ -4,13 +4,15 @@ import { showActorInput } from '../../../handlebars-handlers/targeted/targets/ac
 import { isMelee } from '../../../util/action-type-helpers.mjs';
 import { FlankHelper } from '../../../util/flank-helper.mjs';
 import { currentTargets } from '../../../util/get-current-targets.mjs';
+import { getTokenDisplayName } from '../../../util/get-token-display-name.mjs';
 import { listFormat } from '../../../util/list-format.mjs';
-import { localize, localizeBonusLabel, localizeBonusTooltip } from '../../../util/localize.mjs';
+import { localize, localizeBonusLabel, localizeBonusTooltip, localizeFluentDescription } from '../../../util/localize.mjs';
 import { toArray } from '../../../util/to-array.mjs';
 import { truthiness } from "../../../util/truthiness.mjs";
-import { BaseTarget } from "../_base-target.mjs";
+import { BaseConditionalTarget } from './_base-conditional.target.mjs';
 
-export class IsFlankingTarget extends BaseTarget {
+/** @extends {BaseConditionalTarget} */
+export class IsFlankingTarget extends BaseConditionalTarget {
 
     /**
      * @override
@@ -53,7 +55,7 @@ export class IsFlankingTarget extends BaseTarget {
         }
 
         const tokens = game.scenes.viewed?.tokens
-            .filter((token) => uuids.includes(token.actor.uuid))
+            .filter((token) => uuids.includes(token.actor?.uuid ?? '-1'))
             .map((token) => token.object);
         return tokens || [];
     }
@@ -64,6 +66,28 @@ export class IsFlankingTarget extends BaseTarget {
      * @returns {string}
      */
     static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.IpRhJqZEX2TUarSX#is-flanking'; }
+
+    /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} source
+     * @returns {string}
+     */
+    static fluentDescription(source) {
+        const tokens = this.#potentialFlankTokens(source);
+        let key;
+        /** @type {string[]} */
+        let names = [];
+        if (tokens) {
+            names = tokens.map((token) => getTokenDisplayName(token.document));
+            names[0] ||= '???';
+            key = 'is-flanking-with';
+        }
+        else {
+            key = 'is-flanking';
+        }
+        return localizeFluentDescription(key, { ally: listFormat(names, 'or') });
+    }
 
     /**
      * @override
@@ -79,22 +103,22 @@ export class IsFlankingTarget extends BaseTarget {
     }
 
     /**
-     * @override
      * @inheritdoc
-     * @param {ItemPF & { actor: ActorPF }} item
+     * @override
+     * @param {ActorPF} actor
      * @param {ItemPF[]} sources
-     * @param {ItemPF | ActionUse | ItemAction} doc - originating doc event in case a specific action is needed
+     * @param {ItemPF | ActionUse | ItemAction | undefined} doc - originating doc event in case a specific action is needed
      * @returns {ItemPF[]}
      */
-    static _getSourcesFor(item, sources, doc) {
+    static _getConditionalActorSourcesFor(actor, sources, doc) {
         if (!currentTargets().length) {
             return [];
         }
 
-        let current = canvas.tokens.controlled.find((token) => token.actor?.uuid === item.actor.uuid);
+        let current = canvas.tokens.controlled.find((token) => token.actor?.uuid === actor.uuid);
         const self = current
             ? [current]
-            : item.actor.getActiveTokens();
+            : actor.getActiveTokens();
 
         const action = doc instanceof pf1.documents.item.ItemPF
             ? undefined
@@ -102,7 +126,7 @@ export class IsFlankingTarget extends BaseTarget {
                 ? doc.action
                 : doc;
 
-        if (!isMelee(item, action)) return [];
+        if (action && !isMelee(/** @type {ItemPF}*/ /** @type {any} */(null), action)) return [];
 
         const bonusSources = sources.filter((source) =>
             self.some((meToken) =>
@@ -115,19 +139,6 @@ export class IsFlankingTarget extends BaseTarget {
 
         return bonusSources;
     }
-
-    /**
-     * @override
-     * @inheritdoc
-     */
-    static get isConditionalTarget() { return true; }
-
-    /**
-     * @override
-     * @inheritdoc
-     * @returns {boolean}
-     */
-    static get isGenericTarget() { return true; }
 
     /**
      * @inheritdoc

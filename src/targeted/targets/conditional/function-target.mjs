@@ -1,9 +1,9 @@
-import { MODULE_NAME } from '../../consts.mjs';
-import { showLabel } from '../../handlebars-handlers/bonus-inputs/show-label.mjs';
-import { textInput } from '../../handlebars-handlers/bonus-inputs/text-input.mjs';
-import { showEnabledLabel } from '../../handlebars-handlers/enabled-label.mjs';
-import { localizeBonusTooltip } from '../../util/localize.mjs';
-import { BaseTarget } from './_base-target.mjs';
+import { MODULE_NAME } from '../../../consts.mjs';
+import { showLabel } from '../../../handlebars-handlers/bonus-inputs/show-label.mjs';
+import { textInput } from '../../../handlebars-handlers/bonus-inputs/text-input.mjs';
+import { showEnabledLabel } from '../../../handlebars-handlers/enabled-label.mjs';
+import { localizeBonusTooltip } from '../../../util/localize.mjs';
+import { BaseConditionalTarget } from './_base-conditional.target.mjs';
 
 /**
  *
@@ -14,7 +14,7 @@ import { BaseTarget } from './_base-target.mjs';
        }
    }
  */
-export class FunctionTarget extends BaseTarget {
+export class FunctionTarget extends BaseConditionalTarget {
 
     static get #playerLabelKey() { return `${this.key}-player-label`; }
 
@@ -27,7 +27,17 @@ export class FunctionTarget extends BaseTarget {
      * @override
      * @returns {string}
      */
-    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.iurMG1TBoX3auh5z#*function'; }
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.IpRhJqZEX2TUarSX#*function'; }
+
+    /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} source
+     * @returns {string}
+     */
+    static fluentDescription(source) {
+        return this.getHints(source)?.[0] || '';
+    }
 
     /**
      * @inheritdoc

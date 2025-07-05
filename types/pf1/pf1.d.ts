@@ -127,6 +127,7 @@ declare global {
     type ItemTypeArrayCache<T> = T[] & { getId(string): T; getName(string): T };
 
     class ActorPF extends ActorBasePF {
+        getInitiativeOptions(): { check?: boolean };
         id: string;
 
         allItems: ItemPF[];
@@ -464,6 +465,7 @@ declare global {
 
     interface CombatantPF {
         actorId: string;
+        _getInitiativeFormula: (d20?: string | null) => string;
     }
 
     class Die {
@@ -661,7 +663,7 @@ declare global {
 
     interface TokenDocumentPF extends ItemDocument {
         id: string;
-        actor: ActorCharacterPF;
+        actor?: ActorCharacterPF;
         displayName: TOKEN_DISPLAY_MODES;
         disposition: DispositionLevel;
         elevation: number;
@@ -1315,6 +1317,7 @@ declare global {
             encumbrance: number;
             gear: number;
             shieldBonus: number;
+            skill: number;
             total: number;
         };
         attack: {
@@ -1631,6 +1634,9 @@ declare global {
         spells: Record<string, SpellBookRollData>;
         traits: TraitsRollData;
         // [key: string]: any,
+
+        // bonus built up during initiative rolls
+        bonus?: number;
 
         // item roll data
         dFlags?: DictionaryFlags;
@@ -2433,17 +2439,6 @@ declare global {
             type: SpellcastingType;
         };
         utils: {
-            i18n: {
-                /**
-                 * Convert string array into joined string according to current language.
-                 *
-                 * @param {Array<string>} strings - Array of strings to join
-                 * @param {"c"|"d"|"u"} [type] - conjunction = and, disjunction = or, unit = neither. Only the first letter matters.
-                 * @param {boolean} [short] - If true, effectively same as type being set to "u"
-                 * @returns {string} - Formatted string of all traits.
-                 */
-                join(strings, type = "u", short = true): string;
-            };
             formula: {
                 actionDamage: (action: ItemAction, { simplify, strict }?: {
                     simplify?: boolean | undefined;
@@ -2577,6 +2572,7 @@ declare global {
         vermin: 'Vermin';
     };
 
+    type SavingThrow = keyof SavingThrows;
     type SavingThrows = {
         fort: 'Fortitude';
         ref: 'Reflex';

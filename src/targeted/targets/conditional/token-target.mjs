@@ -4,11 +4,13 @@ import { showTokenInput } from "../../../handlebars-handlers/targeted/targets/to
 import { TokenSelectorApp } from "../../../handlebars-handlers/targeted/targets/token-select-app.mjs";
 import { difference, intersection, intersects } from "../../../util/array-intersects.mjs";
 import { currentTargets } from '../../../util/get-current-targets.mjs';
-import { localize } from '../../../util/localize.mjs';
+import { getTokenDisplayName } from '../../../util/get-token-display-name.mjs';
+import { listFormat } from '../../../util/list-format.mjs';
+import { localize, localizeFluentDescription } from '../../../util/localize.mjs';
 import { registerSetting } from "../../../util/settings.mjs";
 import { toArray } from '../../../util/to-array.mjs';
 import { truthiness } from "../../../util/truthiness.mjs";
-import { BaseTarget } from "../_base-target.mjs";
+import { BaseConditionalTarget } from './_base-conditional.target.mjs';
 
 class Settings {
     static get #tokenSettingKey() { return 'should-auto-target-tokens'; }
@@ -25,7 +27,8 @@ class Settings {
     }
 }
 
-export class TokenTarget extends BaseTarget {
+/** @extends {BaseConditionalTarget} */
+export class TokenTarget extends BaseConditionalTarget {
 
     static get #currentTargetUuids() { return currentTargets().map(x => x.document?.uuid).filter(truthiness); }
 
@@ -42,6 +45,25 @@ export class TokenTarget extends BaseTarget {
      * @returns {string}
      */
     static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.IpRhJqZEX2TUarSX#token'; }
+
+    /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} source
+     * @returns {string}
+     */
+    static fluentDescription(source) {
+        /** @type {string[]} */
+        const savedTargets = source.getFlag(MODULE_NAME, this.key) ?? [];
+        const names = savedTargets
+            .map((uuid) => fromUuidSync(uuid))
+            .filter(truthiness)
+            .map((token) => getTokenDisplayName(token));
+
+        const key = !!source.getFlag(MODULE_NAME, this.#inversionKey) ? 'token-inverted' : 'token';
+
+        return localizeFluentDescription(key, { token: listFormat(names, 'or') });
+    }
 
     /**
      * @override
@@ -70,13 +92,13 @@ export class TokenTarget extends BaseTarget {
     }
 
     /**
-     * @override
      * @inheritdoc
-     * @param {ItemPF & { actor: ActorPF }} _item
+     * @override
+     * @param {ActorPF} _actor
      * @param {ItemPF[]} sources
      * @returns {ItemPF[]}
      */
-    static _getSourcesFor(_item, sources) {
+    static _getConditionalActorSourcesFor(_actor, sources) {
         if (!this.#currentTargetUuids.length) {
             return [];
         }
@@ -92,19 +114,6 @@ export class TokenTarget extends BaseTarget {
 
         return bonusSources;
     }
-
-    /**
-     * @override
-     * @inheritdoc
-     */
-    static get isConditionalTarget() { return true; }
-
-    /**
-     * @override
-     * @inheritdoc
-     * @returns {boolean}
-     */
-    static get isGenericTarget() { return true; }
 
     /**
      * @inheritdoc

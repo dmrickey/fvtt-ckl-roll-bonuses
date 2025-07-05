@@ -127,7 +127,7 @@ function handleArmorFocusRollData(doc, rollData) {
         rollData.item.armor.value += 1;
     }
 }
-Hooks.on('pf1AddDefaultChanges', handleArmorFocusChange);
+Hooks.on('pf1GetRollData', handleArmorFocusRollData);
 
 /**
  * @param {ActorPF} actor
@@ -157,4 +157,4 @@ function handleArmorFocusChange(actor, tempChanges) {
         })
     );
 }
-Hooks.on('pf1GetRollData', handleArmorFocusRollData);
+Hooks.on('pf1AddDefaultChanges', handleArmorFocusChange);

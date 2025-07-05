@@ -1,8 +1,8 @@
 import { MODULE_NAME } from '../../../consts.mjs';
 import { keyValueSelect } from '../../../handlebars-handlers/bonus-inputs/key-value-select.mjs';
 import { currentTargetedActors } from '../../../util/get-current-targets.mjs';
-import { localize } from '../../../util/localize.mjs';
-import { BaseTarget } from '../_base-target.mjs';
+import { localize, localizeFluentDescription } from '../../../util/localize.mjs';
+import { BaseConditionalTarget } from './_base-conditional.target.mjs';
 
 const targetChoices =  /** @type {const} */ ({
     self: 'target-choice.self',
@@ -14,9 +14,9 @@ const targetChoices =  /** @type {const} */ ({
  */
 
 /**
- * @extends BaseTarget
+ * @extends BaseConditionalTarget
  */
-export class ConditionTarget extends BaseTarget {
+export class ConditionTarget extends BaseConditionalTarget {
     /**
      * @inheritdoc
      * @override
@@ -33,6 +33,18 @@ export class ConditionTarget extends BaseTarget {
     /**
      * @inheritdoc
      * @override
+     * @param {ItemPF} source
+     * @returns {string}
+     */
+    static fluentDescription(source) {
+        const key = this.#getTargetType(source) === 'self' ? 'condition-self' : 'condition-target';
+        const condition = source.getFlag(MODULE_NAME, this.key);
+        return localizeFluentDescription(key, { condition: condition ? pf1.registry.conditions.get(condition)?.name : '' });
+    }
+
+    /**
+     * @inheritdoc
+     * @override
      */
     static init() {
         Hooks.once('ready', () =>
@@ -40,18 +52,6 @@ export class ConditionTarget extends BaseTarget {
             Object.entries(targetChoices).forEach(([key, value]) => targetChoices[key] = localize(value))
         );
     }
-
-    /**
-     * @override
-     * @inheritdoc
-     */
-    static get isConditionalTarget() { return true; }
-
-    /**
-     * @override
-     * @inheritdoc
-     */
-    static get isGenericTarget() { return true; }
 
     /**
      * @override
@@ -72,13 +72,11 @@ export class ConditionTarget extends BaseTarget {
     /**
      * @inheritdoc
      * @override
-     * @param {ItemPF & { actor: ActorPF }} item
+     * @param {ActorPF} actor
      * @param {ItemPF[]} sources
      * @returns {ItemPF[]}
      */
-    static _getSourcesFor(item, sources) {
-        const { actor } = item;
-
+    static _getConditionalActorSourcesFor(actor, sources) {
         const currentTargets = currentTargetedActors();
 
         const bonusSources = sources.filter((source) => {

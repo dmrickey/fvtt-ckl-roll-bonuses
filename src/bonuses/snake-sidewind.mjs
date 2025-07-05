@@ -18,7 +18,7 @@ export class SnakeSidewind extends SpecificBonus {
     static get configuration() {
         return {
             type: 'render-and-create',
-            compendiumId: 'Cvgd7Dehxxj6Muup',
+            compendiumId: '6HVdbIFcRuTq8o7p',
             isItemMatchFunc: (name) => name === Settings.name,
             showInputsFunc: (item, html, isEditable) => {
                 showEnabledLabel({

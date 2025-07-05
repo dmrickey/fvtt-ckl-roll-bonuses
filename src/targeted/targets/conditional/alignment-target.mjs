@@ -1,8 +1,8 @@
 import { MODULE_NAME } from "../../../consts.mjs";
 import { keyValueSelect } from '../../../handlebars-handlers/bonus-inputs/key-value-select.mjs';
 import { currentTargetedActors } from '../../../util/get-current-targets.mjs';
-import { localize } from '../../../util/localize.mjs';
-import { BaseTarget } from "../_base-target.mjs";
+import { localize, localizeFluentDescription } from '../../../util/localize.mjs';
+import { BaseConditionalTarget } from './_base-conditional.target.mjs';
 
 const choices =  /** @type {const} */ ({
     lawful: 'alignment.lawful',
@@ -16,9 +16,9 @@ const choices =  /** @type {const} */ ({
  */
 
 /**
- * @extends BaseTarget
+ * @extends BaseConditionalTarget
  */
-export class AlignmentTarget extends BaseTarget {
+export class AlignmentTarget extends BaseConditionalTarget {
     /**
      * @inheritdoc
      * @override
@@ -31,6 +31,14 @@ export class AlignmentTarget extends BaseTarget {
      * @returns {string}
      */
     static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.IpRhJqZEX2TUarSX#alignment'; }
+
+    /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} source
+     * @returns {string}
+     */
+    static fluentDescription(source) { return localizeFluentDescription(this, { alignment: this.getHints(source)?.[0] || '' }); }
 
     /**
      * @inheritdoc
@@ -75,11 +83,11 @@ export class AlignmentTarget extends BaseTarget {
     /**
      * @inheritdoc
      * @override
-     * @param {ItemPF & { actor: ActorPF }} _item
+     * @param {ActorPF} _actor
      * @param {ItemPF[]} sources
      * @returns {ItemPF[]}
      */
-    static _getSourcesFor(_item, sources) {
+    static _getConditionalActorSourcesFor(_actor, sources) {
         if (!currentTargetedActors().length) {
             return [];
         }
@@ -93,18 +101,6 @@ export class AlignmentTarget extends BaseTarget {
 
         return bonusSources;
     }
-
-    /**
-     * @override
-     * @inheritdoc
-     */
-    static get isConditionalTarget() { return true; }
-
-    /**
-     * @override
-     * @returns {boolean}
-     */
-    static get isGenericTarget() { return true; }
 
     /**
      * @inheritdoc
