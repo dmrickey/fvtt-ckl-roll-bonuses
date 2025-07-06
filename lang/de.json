@@ -23,7 +23,8 @@
             "target": "Ziele",
             "target-override": "Zielüberschreibung",
             "specific-bonus": "Spezielle Boni",
-            "ammo": "Munitionsboni"
+            "ammo": "Munitionsboni",
+            "conditional-bonus": "Bedingte Boni"
         },
         "bonuses": {
             "label": {
@@ -149,7 +150,30 @@
                 "weapon-type-override": "Waffentyp",
                 "weapon": "Spezielle Waffen und Angriffe",
                 "when-active": "Wenn Gegenstand aktiv ist",
-                "when-in-combat": "Im Kampf"
+                "when-in-combat": "Im Kampf",
+                "ac": "RK",
+                "flanking-immunity": "Flankenimmunität",
+                "gang-up": "Gang Up",
+                "initiative": "Initiative",
+                "is-flanking": "Flankiert",
+                "is-flanking-with": "Mit Verbündeten",
+                "menacing": "Bedrohlich",
+                "outflank": "Umkreisen",
+                "outflank-improved": "Verbessertes Umkreisen",
+                "pack-flanking": "Flankieren im Rudel",
+                "save": "Rettungswurf",
+                "save-chosen": "Ausgewählte Rettungswürfe",
+                "save-input": "Rettungswurf-Modifikation",
+                "skill": "Fertigkeit",
+                "skill-chosen": "Ausgewählte Fertigkeiten",
+                "skill-input": "Fertigkeitsmodifikation",
+                "solo-tactics": "Solotaktiken",
+                "solo-tactics-allies": "Bestimmte Verbündete (optional)",
+                "swarming": "Schwärmen",
+                "uncanny-dodge-improved": "Verbessertes Uncanny Dodge",
+                "underfoot-assault": "Unterfußangriff",
+                "while-adjacent-to": "Während angrenzend zu",
+                "while-sharing-with": "Während ein Feld geteilt wird mit"
             },
             "tooltip": {
                 "action": "Gewährt Boni für bestimmte Aktionen.",
@@ -260,7 +284,27 @@
                 "weapon-type-override": "Fügt einem Gegenstand einen Waffentyp hinzu, der normalerweise keinen haben kann. Dies entspricht dem Grundwaffentyp einer Waffe.",
                 "weapon": "Wähle bestimmte Angriffe und Waffen für Boni aus.",
                 "when-active": "Wende Boni an, wenn ein bestimmter Buff/Waffe/Talent usw. aktiv ist.",
-                "when-in-combat": "Aktiv, wenn sich der Charakter im Kampf befindet."
+                "when-in-combat": "Aktiv, wenn sich der Charakter im Kampf befindet.",
+                "ac": "Fügt der RK des Charakters einen bedingten Bonus hinzu.",
+                "flanking-immunity": "Gewährt Immunität gegen die Bedingung 'Flankiert' und den globalen Flankierungsbonus",
+                "gang-up": "Du bedrohst dein Ziel, wenn mindestens zwei deiner Verbündeten es ebenfalls bedrohen.",
+                "initiative": "Verändert die Initiativwürfe des Charakters",
+                "is-flanking": "Aktiviere Boni, wenn du deine aktuellen Ziele flankierst.",
+                "is-flanking-with": "Aktiviere Boni, wenn du an einem der angegebenen Verbündeten angrenzst.",
+                "menacing": "Erhöhe jeden Flankierungsbonus um +2 gegen einen Gegner, den du bedrohst.",
+                "outflank": "Teamwork-Talent, das Flankierungsboni um +2 erhöht.",
+                "outflank-improved": "Teamwork-Talent, das Flankierungspositionen verbessert.",
+                "pack-flanking": "Du giltst als flankierend mit deinem Tiergefährten, wenn ihr beide dieses Talent besitzt und nebeneinander steht und dasselbe Ziel bedroht.",
+                "save": "Wendet Boni auf Rettungswürfe an.",
+                "skill": "Wendet Boni auf Fertigkeitswürfe an.",
+                "solo-tactics": "Betrachte Verbündete so, als besäßen sie deine Teamwork-Talente (derzeit für Umkreisen und Verbessertes Umkreisen verwendet).",
+                "solo-tactics-allies": "Beschränke dies auf bestimmte Verbündete (oder leer lassen, um alle Verbündeten einzuschließen).",
+                "swarming": "Wenn du ein Feld mit einem Verbündeten mit dieser Fähigkeit teilst, giltst du als flankierend gegen dein Ziel.",
+                "uncanny-dodge-improved": "Gewährt Immunität gegen Flankieren, außer von einem Schurken höheren Levels. Darf nur auf eine Klassenfähigkeit angewendet werden.",
+                "underfoot-assault": "Wenn du ein Feld mit einem Gegner teilst und an einen Verbündeten angrenzst, giltst du als flankierend gegen diesen Gegner.",
+                "vital-strike-enabled-current": "Derzeit standardmäßig aktiviert.",
+                "while-adjacent-to": "Aktiviert Boni, während du an einem der angegebenen Verbündeten angrenzst.",
+                "while-sharing-with": "Aktiviert Boni, während du ein Feld mit einem der angegebenen Verbündeten teilst."
             }
         },
         "cancel": "Abbrechen",
@@ -320,7 +364,8 @@
                 "higher-ground": "Höhenvorteil-Nahkampfbönus",
                 "range-increment-penalty": "Strafe für Reichweiteninkremente",
                 "shoot-into-melee": "Schuss in den Nahkampf",
-                "require-melee-threaten": "Nahkampfreichweite erforderlich"
+                "require-melee-threaten": "Nahkampfreichweite erforderlich",
+                "flanking": "Flankieren"
             },
             "warning": {
                 "range-increment-error-plural": "Das entfernteste Ziel ({distance}{units}) liegt außerhalb deiner maximalen Reichweite ({max}{units}).",
@@ -351,6 +396,10 @@
                     "require-melee-threaten": {
                         "description": "Verhindert einen Nahkampfangriff, wenn der Angreifer das Ziel nicht bedroht. Bei einer Nahkampfaktion wird der Angriff abgebrochen, wenn das Ziel außer Reichweite ist.",
                         "issues": "Der SL kann unter Umständen einen Nahkampfangriff außerhalb der Reichweite zulassen. Um dies zu umgehen, kannst du entweder kein Token anvisieren oder im Angriffsfenster die Checkbox \"Nahkampf-Reichweite ignorieren\" aktivieren."
+                    },
+                    "flanking": {
+                        "description": "Attempts to automatically add appropriate bonuses for flanking. The mod includes various bonuses to account for different feats/abilities that increase the bonus and modify how positioning works. Be sure to check out the journal for more details on those abilties.",
+                        "issues": "Flankieren über Diagonalen ohne angrenzend zu sein ist eventuell nicht regelkonform, sollte aber für die meisten Situationen ausreichen (würde man die Karte um 45° drehen, wäre es eindeutig Flankieren)."
                     }
                 }
             }
@@ -364,7 +413,8 @@
             "description": "Boni werden nur angewendet, wenn die ausgewählten Gegenstände verwendet werden. Rechtsklick auf eine Zeile öffnet das Blatt dieses Gegenstands zur weiteren Überprüfung.",
             "description-actions": "Boni werden nur angewendet, wenn die ausgewählten Aktionen verwendet werden. Rechtsklick auf eine Zeile öffnet das Blatt dieser Aktion zur weiteren Überprüfung (oder die Kopfzeile öffnet den Gegenstand).",
             "description-when-active": "Diese Boni sind nur aktiv, wenn der anvisierte Gegenstand ebenfalls aktiv ist. Zum Beispiel sekundäre Boni, die nur beim Rasen gelten.",
-            "title": "Gegenstandsauswahl"
+            "title": "Gegenstandsauswahl",
+            "title-action": "Aktionsauswahl - {name}"
         },
         "item-hints": {
             "skill-rank-override": "{skills} (->{rank})"
@@ -615,6 +665,42 @@
             "weapon-specialization": {
                 "name": "Waffenspezialisierung",
                 "default": "Waffenspezialisierung"
+            },
+            "flanking-immunity": {
+                "name": "Flankenimmunität",
+                "default": "Rundumsicht"
+            },
+            "gang-up": {
+                "name": "Gang Up",
+                "default": "Gang Up"
+            },
+            "outflank": {
+                "name": "Umkreisen",
+                "default": "Umkreisen"
+            },
+            "pack-flanking": {
+                "name": "Flankieren im Rudel",
+                "default": "Flankieren im Rudel"
+            },
+            "solo-tactics": {
+                "name": "Solotaktiken",
+                "default": "Solotaktiken"
+            },
+            "swarming": {
+                "name": "Schwärmen",
+                "default": "Schwärmen"
+            },
+            "uncanny-dodge": {
+                "name": "Uncanny Dodge",
+                "default": "Uncanny Dodge"
+            },
+            "underfoot-assault": {
+                "name": "Unterfußangriff",
+                "default": "Unterfußangriff"
+            },
+            "versatile-performance-expanded": {
+                "name": "Erweiterte Vielseitigkeit",
+                "default": "Erweiterte Vielseitigkeit"
             }
         },
         "settings": {
@@ -647,6 +733,10 @@
             "should-copy-flags": {
                 "name": "Item-Flags beim Angriffskopieren übernehmen",
                 "hint": "Beim Erstellen eines Angriffs aus einer Waffe kopiert das System standardmäßig keine Flags der Waffe. Dadurch fehlen diesen Angriffen die dort konfigurierten Boni. Diese Option kopiert die Flags beim Erstellen. Spätere Änderungen werden jedoch nicht synchronisiert. Standard ist false."
+            },
+            "allow-friendly-npc-selection": {
+                "name": "Spielern erlauben, alle befreundeten NSCs zu sehen",
+                "hint": "Wenn bedingte Ziele wie Flankieren (mit bestimmtem Verbündeten) oder Während angrenzend zu (verbündeter Charakter) genutzt werden, können Spieler bei Einstellung auf wahr alle befreundeten NSCs der Welt sehen. Bei falsch können sie nur Schauspieler wählen, die Spielern gehören."
             }
         },
         "applications": {
@@ -654,6 +744,13 @@
                 "gm-hint": "Du siehst alle Tokens und Namen, weil du SL bist. Spieler können nur Tokens auswählen, die sie sehen können.",
                 "no-tokens": "In dieser Szene befinden sich keine Tokens",
                 "player-hint": "Alle derzeit anvisierten Tokens in der Szene sind vorausgewählt. Du kannst eine Einstellung aktivieren, um dieses Fenster zu überspringen und automatisch diese Ziele zu verwenden."
+            },
+            "actor": {
+                "gm-hint": "Du siehst alle befreundeten Schauspieler, weil du SL bist. Spieler können nur Spielertokens und Tokens auswählen, für die sie Beobachterrechte haben. Eine Moduleinstellung erlaubt ihnen, jeden befreundeten NSC im Spiel zu wählen (was Tokens in anderen Szenen sichtbar machen könnte).",
+                "no-actors": "Keine Schauspieler gefunden.",
+                "npcs": "Befreundete NSCs",
+                "observed": "Beobachtete Schauspieler",
+                "players": "Spieler-Charaktere"
             }
         },
         "inputs": {
@@ -667,6 +764,51 @@
                 "inspiration": "Die direkt an der Fertigkeit konfigurierte Inspiration ist veraltet und wird in einer zukünftigen Version entfernt. Wechsle zu den inspirationsspezifischen Fertigkeiten auf den entsprechenden Fähigkeiten.",
                 "dice": "Das Modifizieren der Grundwürfel für Fertigkeiten ist veraltet und wird in einer zukünftigen Version entfernt. Sieh in die Dokumentation, wie Fertigkeiten für Glück/Pech konfiguriert werden. Wenn du einen Bedarf hast, der nicht abgedeckt ist, lass es mich wissen."
             }
+        },
+        "fluent-description": {
+            "alignment": "Solange das Ziel die Gesinnung {alignment} hat",
+            "all": "Alle",
+            "condition-self": "Solange du den Zustand {condition} hast",
+            "condition-target": "Solange das Ziel den Zustand {condition} hat",
+            "creature-subtype": "Solange das Ziel den Kreaturenuntertyp {subtype} hat",
+            "creature-type": "Solange das Ziel den Kreaturentyp {type} hat",
+            "has-boolean-flag-self": "Solange du das boolesche Flag {flag} hast",
+            "has-boolean-flag-target": "Solange {target} das boolesche Flag {flag} hat",
+            "is-flanking": "Während du das Ziel flankierst",
+            "is-flanking-with": "Während du das Ziel mit {ally} flankierst",
+            "is-target-within-range": "Solange das Ziel in Reichweite {range} ist",
+            "token": "Solange du {token} anvisierst",
+            "token-inverted": "Solange du jeden außer {token} anvisierst",
+            "when-active-equipment": "Solange {item} ausgerüstet ist",
+            "when-active-feature": "Solange {item} aktiv ist",
+            "when-in-combat": "Während im Kampf",
+            "while-adjacent-to": "Während angrenzend zu {ally}",
+            "while-sharing-with": "Während du ein Feld mit {ally} teilst"
+        },
+        "invalid-uncanny-dodge-class": "Die Klassen-Zuordnung muss konfiguriert sein.",
+        "invalid-uncanny-dodge-item": "Muss auf einer Klassenfähigkeit liegen.",
+        "missing-conditional-target": "Der Bonus '{bonus}' erfordert ein Bedingtes Ziel, um korrekt zu funktionieren.",
+        "with": "mit",
+        "hint": {
+            "select-action-for-flank": "Wähle eine Aktion zum Flankieren. Damit wird geprüft, ob es sich um einen Nahkampfangriff mit korrekter Reichweite handelt."
+        },
+        "title": {
+            "flank-detector": "Flankendetektor"
+        },
+        "info": {
+            "is-flanking": "'{meToken}' und '{allyToken}' flankieren '{targetToken}' mit '{action}'.",
+            "is-not-flanking": "'{meToken}' flankiert '{targetToken}' nicht mit '{action}'.",
+            "is-not-flanking-with-ally": "'{meToken}' und '{allyToken}' flankieren '{targetToken}' nicht mit '{action}'.",
+            "token-distance": "Entfernung zwischen '{first}' und '{second}': {distance}"
+        },
+        "warning": {
+            "action-is-not-melee": "'{action}' ist keine Nahkampfaktion.",
+            "invalid-token-disposition": "Token-Einstellungen nicht kompatibel zum Flankieren.",
+            "invalid-token-selection": "Ungültige Tokens ausgewählt.",
+            "no-actor": "Du musst ein Token auswählen oder dieses Makro in einem Skriptaufruf verwenden.",
+            "pack-flanking": "Rudel-Flankieren erfordert einen konfigurierten Verbündeten.",
+            "range-misconfigured": "Aktion ({actionName}) auf Gegenstand '{itemName}' ({actionUuid}) hat eine ungültige Reichweite. Überprüfe maximale Inkremente und Reichweite. Es wird automatisch angenommen, dass sie in Reichweite ist.",
+            "uncanny-dodge-improved": "Muss auf einer Klassenfähigkeit mit korrekt zugeordneter Klasse konfiguriert sein."
         }
     }
 }
