@@ -31,12 +31,12 @@
                 "ac": "RK",
                 "action": "Spezielle Aktionen",
                 "action-type": "Aktionstyp",
-                "action-type-radio": "Aktionstyp-Verknuepfung",
+                "action-type-radio": "Aktionstyp-Verknüpfung",
                 "action-type-types": "Aktionstypen",
                 "action-type-types-choices": {
                     "is-melee": "Nahkampfangriffe",
-                    "is-natural": "Natuerliche Angriffe",
-                    "is-natural-secondary": "Natuerliche Sekundaerangriffe",
+                    "is-natural": "Natürliche Angriffe",
+                    "is-natural-secondary": "Natürliche Sekundärangriffe",
                     "is-physical": "Physischer Gegenstand",
                     "is-ranged": "Fernkampfangriffe",
                     "is-spell": "Zauber",
@@ -51,17 +51,17 @@
                 "ammo-effect": "Effekthinweis",
                 "ammo-enhancement": "Grundlegender Verbesserungsbonus",
                 "ammo-enhancement-stacks": "Stapelbarer Verbesserungsbonus",
-                "armor-focus": "Ruestungsfokus",
-                "armor-focus-improved": "Verbesserter Ruestungsfokus",
+                "armor-focus": "Rüstungsfokus",
+                "armor-focus-improved": "Verbesserter Rüstungsfokus",
                 "attack": "Angriffsbonus",
-                "attack-crit-only": "Nur Krit-Bestaetigung",
+                "attack-crit-only": "Nur Krit-Bestätigung",
                 "bane": "Verderben",
-                "change-modification": "Modifikator aendern",
-                "change-modification-formula": "Formel fuer Modifikatoraenderung",
-                "change-modification-set-type": "Art des Modifikators aendern",
+                "change-modification": "Modifikator ändern",
+                "change-modification-formula": "Formel für Modifikatoränderung",
+                "change-modification-set-type": "Art des Modifikators ändern",
                 "cl": "Zauberstufe",
                 "condition": "Hat Zustand",
-                "condition-target": "Ziel fuer Zustand",
+                "condition-target": "Ziel für Zustand",
                 "conditional-modifiers": "Bedingte Modifikatoren",
                 "crit-keen": "Scharf",
                 "crit-mult": "Kritischer Multiplikator",
@@ -72,8 +72,8 @@
                 "dc": "SG",
                 "devastating-strike": "Vernichtender Schlag",
                 "devastating-strike-improved": "Verbesserter vernichtender Schlag",
-                "dice-transform": "Wuerfelumwandlung",
-                "dice-transform-priority": "Prioritaet",
+                "dice-transform": "Würfelumwandlung",
+                "dice-transform-priority": "Priorität",
                 "effective-size": "Effektive Groesse",
                 "elemental-cl": "Elementare ZS",
                 "elemental-dc": "Elementarer SG",
@@ -88,30 +88,30 @@
                 "finesse-target": "Finesse",
                 "flanking-immunity": "Flankenimmunität",
                 "footnote": "Fussnote",
-                "fortune": "Glueck",
+                "fortune": "Glück",
                 "function": "Benutzerdefinierte Zielfunktion",
-                "function-player-label": "Funktionsbezeichnung fuer Spieler",
-                "furious-focus": "Zorniger Fokus",
+                "function-player-label": "Funktionsbezeichnung für Spieler",
+                "furious-focus": "Konzentrierter Zorn",
                 "gang-up": "Gang Up",
                 "has-boolean-flag": "Hat boolesches Flag",
-                "has-boolean-flag-target": "Ziel fuer boolesches Flag",
+                "has-boolean-flag-target": "Ziel für boolesches Flag",
                 "initiative": "Initiative",
                 "inspiration": "Inspiration",
                 "inspiration-amazing": "Erstaunliche Inspiration",
-                "inspiration-extra-die": "Zusaetzlicher Inspirationswuerfel",
+                "inspiration-extra-die": "Zusätzlicher Inspirationswürfel",
                 "inspiration-focused": "Fokussierte Inspiration",
-                "inspiration-tenacious": "Hartnaeckige Inspiration",
+                "inspiration-tenacious": "Hartnäckige Inspiration",
                 "inspiration-true": "Wahre Inspiration",
                 "is-flanking": "Flankiert",
                 "is-flanking-with": "Mit Verbündeten",
                 "is-target-within-range": "Ziel in Reichweite",
                 "is-target-within-range-max": "Maximale Reichweite ({unit})",
                 "is-target-within-range-min": "Minimale Reichweite ({unit})",
-                "item": "Spezielle Gegenstaende",
+                "item": "Spezielle Gegenstände",
                 "martial-focus": "Kampf-Fokus",
                 "maximize-damage": "Schaden maximieren",
                 "menacing": "Bedrohlich",
-                "misfortune": "Unglueck",
+                "misfortune": "Unglück",
                 "outflank": "Umkreisen",
                 "outflank-improved": "Verbessertes Umkreisen",
                 "pack-flanking": "Flankieren im Rudel",
@@ -122,7 +122,7 @@
                 "ranged-increment-penalty-increment-range-offset": "Reichweitenabweichung",
                 "ranged-increment-penalty-max-increment-offset": "Maximale Reichweitenstufe",
                 "ranged-increment-penalty-penalty-offset": "Gesamte Strafreduktion",
-                "roll-untrained": "Fertigkeiten ungeuebt wuerfeln",
+                "roll-untrained": "Fertigkeiten ungeübt würfeln",
                 "script-call": "Skriptaufruf",
                 "save": "Rettungswurf",
                 "save-chosen": "Ausgewählte Rettungswürfe",
@@ -131,8 +131,8 @@
                 "skill": "Fertigkeit",
                 "skill-chosen": "Ausgewählte Fertigkeiten",
                 "skill-input": "Fertigkeitsmodifikation",
-                "skill-rank-override": "Fertigkeitsraenge ueberschreiben",
-                "skill-rank-override-formula": "Formel zur Ueberschreibung der Fertigkeitsraenge",
+                "skill-rank-override": "Fertigkeitsränge überschreiben",
+                "skill-rank-override-formula": "Formel zur Überschreibung der Fertigkeitsränge",
                 "skill-rank-override-selected": "Zu ueberschreibende Fertigkeiten",
                 "snake-sidewind": "Schlangen-Seitwind",
                 "solo-tactics": "Solotaktiken",
@@ -153,16 +153,16 @@
                 "versatile-performance": "Vielseitige Darbietung",
                 "versatile-performance-expanded": "Erweiterte vielseitige Darbietung",
                 "versatile-training": "Vielseitiges Training - Waffengruppe",
-                "versatile-training-selected": "Vielseitiges Training - Gewaehlte Fertigkeiten",
+                "versatile-training-selected": "Vielseitiges Training - Gewählte Fertigkeiten",
                 "vital-strike": "Wuchtiger Schlag",
-                "vital-strike-enabled": "Standardmaessig aktiviert",
+                "vital-strike-enabled": "Standardmässig aktiviert",
                 "vital-strike-greater": "Verbesserter Wuchtiger Schlag",
                 "vital-strike-improved": "Wuchtiger Schlag (verbessert)",
                 "vital-strike-mythic": "Mythischer Wuchtiger Schlag",
                 "weapon-focus": "Waffenfokus",
                 "weapon-focus-greater": "Verbesserter Waffenfokus",
                 "weapon-focus-mythic": "Mythischer Waffenfokus",
-                "weapon-focus-racial": "Rassen-Waffenfokus",
+                "weapon-focus-racial": "Volks-Waffenfokus",
                 "weapon-group": "Waffengruppe",
                 "weapon-group-override": "Waffengruppe",
                 "weapon-specialization": "Waffenspezialisierung",
@@ -229,7 +229,7 @@
                 "fortune": "Würfle zweimal und nimm das bessere Ergebnis. Mehrere Boni stapeln sich.",
                 "function": "Eine benutzerdefinierte Funktion, die bestimmt, welche Ziele ausgewählt werden. Siehe Dokumentation für Beispiele.",
                 "function-player-label": "Bezeichnung, die Spielern angezeigt wird. Spieler können die Funktion nicht bearbeiten.",
-                "furious-focus": "Negiert den Angriffsmalus von Mächtiger Angriff beim ersten Angriff jeder Runde.",
+                "furious-focus": "Negiert den Angriffsmalus von heftiger Angriff beim ersten Angriff jeder Runde.",
                 "gang-up": "Du bedrohst dein Ziel, wenn mindestens zwei deiner Verbündeten es ebenfalls bedrohen.",
                 "has-boolean-flag": "Aktiviert Boni, wenn ein bestimmtes boolesches Flag gesetzt ist.",
                 "initiative": "Verändert die Initiativwürfe des Charakters",
@@ -297,7 +297,7 @@
                 "weapon-specialization": "+2 auf Schadenswürfe mit dem gewählten Waffentyp. Angriffe und Waffen müssen korrekt mit Grundwaffentypen konfiguriert sein.",
                 "weapon-specialization-greater": "Erhöht den Schaden eines für Waffenspezialisierung gewählten Waffentyps um weitere +2.",
                 "weapon-focus-mythic": "Verdoppelt Angriffsboni aus Waffenfokus.",
-                "weapon-focus-racial": "+1 Bonus auf Angriffswürfe mit gewählten Rassenwaffen. Die Waffe muss mit der Rasse gekennzeichnet sein, um den Bonus zu erhalten.",
+                "weapon-focus-racial": "+1 Bonus auf Angriffswürfe mit gewählten Volkswaffen. Die Waffe muss mit dem Volk gekennzeichnet sein, um den Bonus zu erhalten.",
                 "weapon-type": "Wendet Boni an, wenn der gewählte Waffentyp verwendet wird. Angriffe und Waffen müssen korrekt mit Grundwaffentypen konfiguriert sein.",
                 "weapon-type-override": "Fügt einem Gegenstand einen Waffentyp hinzu, der normalerweise keinen haben kann. Dies entspricht dem Grundwaffentyp einer Waffe.",
                 "weapon": "Wähle bestimmte Angriffe und Waffen für Boni aus.",
@@ -361,7 +361,7 @@
             "while-adjacent-to": "Während angrenzend zu {ally}",
             "while-sharing-with": "Während du ein Feld mit {ally} teilst"
         },
-        "fortune": "Glueck",
+        "fortune": "Glück",
         "global-bonus": {
             "actor": {
                 "description": "Die vom SL für diese Welt aktivierten globalen Boni. Jede Einstellung kann hier für diesen Charakter einzeln deaktiviert werden, falls sie nicht passend ist.",
@@ -569,8 +569,8 @@
                 "default": "Legendär"
             },
             "armor-focus": {
-                "name": "Ruestungsfokus",
-                "default": "Ruestungsfokus"
+                "name": "Rüstungsfokus",
+                "default": "Rüstungsfokus"
             },
             "devastating-strike": {
                 "name": "Vernichtender Schlag",
@@ -593,8 +593,8 @@
                 "default": "Rundumsicht"
             },
             "furious-focus": {
-                "name": "Zorniger Fokus",
-                "default": "Zorniger Fokus"
+                "name": "Konzentrierter Zorn",
+                "default": "Konzentrierter Zorn"
             },
             "gang-up": {
                 "name": "Gang Up",
@@ -629,8 +629,8 @@
                 "default": "Inspirierte Intelligenz"
             },
             "inspiration-tenacious": {
-                "name": "Hartnaeckige Inspiration",
-                "default": "Hartnaeckige Inspiration"
+                "name": "Hartnäckige Inspiration",
+                "default": "Hartnäckige Inspiration"
             },
             "inspiration-true": {
                 "name": "Wahre Inspiration",
@@ -713,11 +713,11 @@
                 "default": "Waffenfokus"
             },
             "weapon-focus-racial": {
-                "name": "Rassen-Waffenfokus",
+                "name": "Volks-Waffenfokus",
                 "default": "Gnome Weapon Focus"
             },
             "weapon-focus-racial-default-race": {
-                "name": "Rassen-Waffenfokus (Standardrasse)",
+                "name": "Volks-Waffenfokus (Standardvolk)",
                 "default": "Gnomisch"
             },
             "weapon-specialization": {
@@ -743,13 +743,13 @@
                 "hint": "Bei true (Standard) stapeln sich mehrere Glücks- oder Unglücks-Effekte aus verschiedenen Quellen, sodass z.B. 4d20kh möglich sind. Bei false werden maximal zwei Würfel verwendet. Mehrere Unglücke und Glücke gleichen sich aus (z.B. 3 Glücke gegen 2 Unglücke bedeuten, du bist \"glücklicher\" und würfelst mit Vorteil. Bei gleicher Anzahl hebt es sich auf)."
             },
             "weapon-focus-racial": {
-                "name": "Rassen-Waffenfokus",
+                "name": "Volks-Waffenfokus",
                 "hint": "The name of your 'Racial Spell Focus' feat. Only 'Gnome Weapon Focus' officially exists, but this allows for other racial variations. This is to support translations without having to translate the mod.",
                 "default": "Gnome Weapon Focus"
             },
             "weapon-focus-racial-default-race": {
-                "name": "Rassen-Waffenfokus (Standardrasse)",
-                "hint": "Die Standardrasse, nach der gesucht wird. Dies unterstützt Übersetzungen, ohne das Modul selbst zu übersetzen.",
+                "name": "Volks-Waffenfokus (Standardvolk)",
+                "hint": "Die Standardvolk, nach der gesucht wird. Dies unterstützt Übersetzungen, ohne das Modul selbst zu übersetzen.",
                 "default": "Gnomisch"
             },
             "should-auto-target-tokens": {
