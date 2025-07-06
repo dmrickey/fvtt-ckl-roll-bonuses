@@ -807,8 +807,6 @@
             "pack-flanking": "Rudel-Flankieren erfordert einen konfigurierten Verbündeten.",
             "range-misconfigured": "Aktion ({actionName}) auf Gegenstand '{itemName}' ({actionUuid}) hat eine ungültige Reichweite. Überprüfe maximale Inkremente und Reichweite. Es wird automatisch angenommen, dass sie in Reichweite ist.",
             "uncanny-dodge-improved": "Muss auf einer Klassenfähigkeit mit korrekt zugeordneter Klasse konfiguriert sein."
-        },
-        "invalid-token-selection": "Es muss ein gültiges Ziel ausgewählt werden.",
-        "token-distance": "Entfernung zwischen '{first}' und '{second}': {distance}"
+        }
     }
 }
