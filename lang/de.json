@@ -71,14 +71,14 @@
                 "damage-type": "Schadensart",
                 "dc": "SG",
                 "devastating-strike": "Vernichtender Schlag",
-                "devastating-strike-improved": "Verbesserter vernichtender Schlag",
+                "devastating-strike-improved": "Verbesserter Vernichtender Schlag",
                 "dice-transform": "Würfelumwandlung",
                 "dice-transform-priority": "Priorität",
                 "effective-size": "Effektive Grösse",
                 "elemental-cl": "Elementare ZS",
                 "elemental-dc": "Elementarer SG",
                 "elemental-focus": "Elementarfokus",
-                "elemental-focus-greater": "Verbesserter Elementarfokus",
+                "elemental-focus-greater": "Mächtiger Elementarfokus",
                 "elemental-focus-mythic": "Mythischer Elementarfokus",
                 "enh": "Verbesserungsbonus",
                 "enh-stacks": "Verbesserungsbonus (stapelbar)",
@@ -148,17 +148,17 @@
                 "swarming": "Schwärmen",
                 "token": "Anvisierte Tokens",
                 "token-invert": "Anvisierte Tokens umkehren",
-                "uncanny-dodge-improved": "Verbessertes Uncanny Dodge",
+                "uncanny-dodge-improved": "Verbesserte Reflexbewegung",
                 "underfoot-assault": "Unterfußangriff",
                 "versatile-performance": "Vielseitige Darbietung",
                 "versatile-performance-expanded": "Erweiterte vielseitige Darbietung",
                 "versatile-training": "Vielseitiges Training - Waffengruppe",
                 "versatile-training-selected": "Vielseitiges Training - Gewählte Fertigkeiten",
-                "vital-strike": "Wuchtiger Schlag",
+                "vital-strike": "Konzentrierter Schlag",
                 "vital-strike-enabled": "Standardmässig aktiviert",
-                "vital-strike-greater": "Verbesserter Wuchtiger Schlag",
-                "vital-strike-improved": "Wuchtiger Schlag (verbessert)",
-                "vital-strike-mythic": "Mythischer Wuchtiger Schlag",
+                "vital-strike-greater": "Mächtiger Konzentrierter Schlag",
+                "vital-strike-improved": "Verbesserter Konzentrierter Schlag",
+                "vital-strike-mythic": "Mythischer Konzentrierter Schlag",
                 "weapon-focus": "Waffenfokus",
                 "weapon-focus-greater": "Verbesserter Waffenfokus",
                 "weapon-focus-mythic": "Mythischer Waffenfokus",
@@ -288,7 +288,7 @@
                 "versatile-training-selected": "Diese Fertigkeiten verwenden deinen Grund-Angriffsbonus als Ränge.",
                 "vital-strike": "Zusätzlicher Schaden bei Angriffsaktionen basierend auf dem Waffenschaden.",
                 "vital-strike-mythic": "Bei Einsatz einer Wuchtiger-Schlag-Fähigkeit werden zusätzlich alle anderen Boni multipliziert, die normalerweise bei einem kritischen Treffer vervielfacht würden.",
-                "vital-strike-enabled": "Legt fest, ob Wuchtiger Schlag in Angriffs-Dialogen standardmäßig aktiviert sein soll.",
+                "vital-strike-enabled": "Legt fest, ob Konzentrierter Schlag in Angriffs-Dialogen standardmäßig aktiviert sein soll.",
                 "vital-strike-enabled-current": "Derzeit standardmäßig aktiviert.",
                 "weapon-focus": "+1 Bonus auf Angriffswürfe mit dem gewählten Waffentyp. Angriffe und Waffen müssen korrekt mit Grundwaffentypen konfiguriert sein.",
                 "weapon-focus-greater": "Erhöht den Angriffswurf des mit Waffenfokus gewählten Waffentyps um weitere +1.",
@@ -402,7 +402,7 @@
                 "title": "Globale Boni",
                 "section": {
                     "flanking": {
-                        "description": "Attempts to automatically add appropriate bonuses for flanking. The mod includes various bonuses to account for different feats/abilities that increase the bonus and modify how positioning works. Be sure to check out the journal for more details on those abilties.",
+                        "description": "Versucht, automatisch passende Boni für das Flankieren hinzuzufügen. Das Modul enthält verschiedene Boni, um unterschiedliche Talente und Fähigkeiten zu berücksichtigen, die den Bonus erhöhen und die Positionierung beeinflussen. Sieh dir das Journal an, um weitere Details zu diesen Fähigkeiten zu erhalten.",
                         "issues": "Flankieren über Diagonalen ohne angrenzend zu sein ist eventuell nicht regelkonform, sollte aber für die meisten Situationen ausreichen (würde man die Karte um 45° drehen, wäre es eindeutig Flankieren)."
                     },
                     "higher-ground": {
@@ -681,8 +681,8 @@
                 "default": "Schwärmen"
             },
             "uncanny-dodge": {
-                "name": "Uncanny Dodge",
-                "default": "Uncanny Dodge"
+                "name": "Reflexbewegung",
+                "default": "Reflexbewegung"
             },
             "underfoot-assault": {
                 "name": "Unterfußangriff",
@@ -701,8 +701,8 @@
                 "default": "Vielseitiges Training"
             },
             "vital-strike": {
-                "name": "Wuchtiger Schlag",
-                "default": "Wuchtiger Schlag"
+                "name": "Konzentrierter Schlag",
+                "default": "Konzentrierter Schlag"
             },
             "weapon-finesse": {
                 "name": "Waffenfinesse",
@@ -714,7 +714,7 @@
             },
             "weapon-focus-racial": {
                 "name": "Volks-Waffenfokus",
-                "default": "Gnome Weapon Focus"
+                "default": "Gnomischer Waffenfokus"
             },
             "weapon-focus-racial-default-race": {
                 "name": "Volks-Waffenfokus (Standardvolk)",
@@ -744,8 +744,8 @@
             },
             "weapon-focus-racial": {
                 "name": "Volks-Waffenfokus",
-                "hint": "The name of your 'Racial Spell Focus' feat. Only 'Gnome Weapon Focus' officially exists, but this allows for other racial variations. This is to support translations without having to translate the mod.",
-                "default": "Gnome Weapon Focus"
+                "hint": "Der Name deines Talents 'Volks-Waffenfokus'. Offiziell existiert nur 'Gnomischer Waffenfokus', aber dies ermöglicht andere volksspezifische Varianten. Dies dient der Unterstützung von Übersetzungen, ohne das Modul selbst übersetzen zu müssen.",
+                "default": "Gnomischer Waffenfokus"
             },
             "weapon-focus-racial-default-race": {
                 "name": "Volks-Waffenfokus (Standardvolk)",
