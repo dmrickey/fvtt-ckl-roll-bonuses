@@ -74,7 +74,7 @@
                 "devastating-strike-improved": "Verbesserter vernichtender Schlag",
                 "dice-transform": "Würfelumwandlung",
                 "dice-transform-priority": "Priorität",
-                "effective-size": "Effektive Groesse",
+                "effective-size": "Effektive Grösse",
                 "elemental-cl": "Elementare ZS",
                 "elemental-dc": "Elementarer SG",
                 "elemental-focus": "Elementarfokus",
@@ -382,7 +382,7 @@
             },
             "label": {
                 "flanking": "Flankieren",
-                "higher-ground": "Höhenvorteil-Nahkampfbönus",
+                "higher-ground": "Höhenvorteil-Nahkampfbonus",
                 "range-increment-penalty": "Strafe für Reichweiteninkremente",
                 "shoot-into-melee": "Schuss in den Nahkampf",
                 "require-melee-threaten": "Nahkampfreichweite erforderlich"
