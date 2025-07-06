@@ -131,7 +131,8 @@
                 "inspiration-tenacious": "Inspiración tenaz",
                 "inspiration-true": "Inspiración verdadera",
                 "roll-untrained": "Tiradas de habilidades no entrenadas",
-                "spell-subschool": "Subescuelas de conjuro"
+                "spell-subschool": "Subescuelas de conjuro",
+                "ac": "Clase de armadura"
             },
             "tooltip": {
                 "action": "Otorga bonificadores a acciones específicas.",
@@ -257,7 +258,8 @@
             "target": "Objetivos",
             "target-override": "Sobrescritura de objetivos",
             "specific-bonus": "Bonificadores específicos",
-            "ammo": "Bonificadores a la munición"
+            "ammo": "Bonificadores a la munición",
+            "conditional-bonus": "Bonificadores Condicionales"
         },
         "cancel": "Cancelar",
         "cl-mod": "{mod} NL",
