@@ -402,7 +402,7 @@
                 "title": "Globale Boni",
                 "section": {
                     "flanking": {
-                        "description": "Attempts to automatically add appropriate bonuses for flanking. The mod includes various bonuses to account for different feats/abilities that increase the bonus and modify how positioning works. Be sure to check out the journal for more details on those abilties.",
+                        "description": "Versucht, automatisch passende Boni für das Flankieren hinzuzufügen. Das Modul enthält verschiedene Boni, um unterschiedliche Talente und Fähigkeiten zu berücksichtigen, die den Bonus erhöhen und die Positionierung beeinflussen. Sieh dir das Journal an, um weitere Details zu diesen Fähigkeiten zu erhalten.",
                         "issues": "Flankieren über Diagonalen ohne angrenzend zu sein ist eventuell nicht regelkonform, sollte aber für die meisten Situationen ausreichen (würde man die Karte um 45° drehen, wäre es eindeutig Flankieren)."
                     },
                     "higher-ground": {
@@ -744,7 +744,7 @@
             },
             "weapon-focus-racial": {
                 "name": "Volks-Waffenfokus",
-                "hint": "The name of your 'Racial Spell Focus' feat. Only 'Gnome Weapon Focus' officially exists, but this allows for other racial variations. This is to support translations without having to translate the mod.",
+                "hint": "Der Name deines Talents 'Volks-Waffenfokus'. Offiziell existiert nur 'Gnome Weapon Focus', aber dies ermöglicht andere volksspezifische Varianten. Dies dient der Unterstützung von Übersetzungen, ohne das Modul selbst übersetzen zu müssen.",
                 "default": "Gnome Weapon Focus"
             },
             "weapon-focus-racial-default-race": {
