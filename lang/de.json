@@ -20,14 +20,15 @@
         "base-dice": "Basiswürfel",
         "bonus-header-labels": {
             "bonus": "Boni",
+            "conditional-bonus": "Bedingte Boni",
             "target": "Ziele",
             "target-override": "Zielüberschreibung",
             "specific-bonus": "Spezielle Boni",
-            "ammo": "Munitionsboni",
-            "conditional-bonus": "Bedingte Boni"
+            "ammo": "Munitionsboni"
         },
         "bonuses": {
             "label": {
+                "ac": "RK",
                 "action": "Spezielle Aktionen",
                 "action-type": "Aktionstyp",
                 "action-type-radio": "Aktionstyp-Verknuepfung",
@@ -85,26 +86,35 @@
                 "finesse-bonus": "Finesse",
                 "finesse-override": "Finesse",
                 "finesse-target": "Finesse",
+                "flanking-immunity": "Flankenimmunität",
                 "footnote": "Fussnote",
                 "fortune": "Glueck",
                 "function": "Benutzerdefinierte Zielfunktion",
                 "function-player-label": "Funktionsbezeichnung fuer Spieler",
                 "furious-focus": "Zorniger Fokus",
+                "gang-up": "Gang Up",
                 "has-boolean-flag": "Hat boolesches Flag",
                 "has-boolean-flag-target": "Ziel fuer boolesches Flag",
+                "initiative": "Initiative",
                 "inspiration": "Inspiration",
                 "inspiration-amazing": "Erstaunliche Inspiration",
                 "inspiration-extra-die": "Zusaetzlicher Inspirationswuerfel",
                 "inspiration-focused": "Fokussierte Inspiration",
                 "inspiration-tenacious": "Hartnaeckige Inspiration",
                 "inspiration-true": "Wahre Inspiration",
+                "is-flanking": "Flankiert",
+                "is-flanking-with": "Mit Verbündeten",
                 "is-target-within-range": "Ziel in Reichweite",
                 "is-target-within-range-max": "Maximale Reichweite ({unit})",
                 "is-target-within-range-min": "Minimale Reichweite ({unit})",
                 "item": "Spezielle Gegenstaende",
                 "martial-focus": "Kampf-Fokus",
                 "maximize-damage": "Schaden maximieren",
+                "menacing": "Bedrohlich",
                 "misfortune": "Unglueck",
+                "outflank": "Umkreisen",
+                "outflank-improved": "Verbessertes Umkreisen",
+                "pack-flanking": "Flankieren im Rudel",
                 "precise-shot": "Gezielter Schuss",
                 "proficiency": "Beherrscht",
                 "ranged-increment-penalty": "Bonusse auf Fernkampfinkrement-Strafen",
@@ -114,11 +124,19 @@
                 "ranged-increment-penalty-penalty-offset": "Gesamte Strafreduktion",
                 "roll-untrained": "Fertigkeiten ungeuebt wuerfeln",
                 "script-call": "Skriptaufruf",
+                "save": "Rettungswurf",
+                "save-chosen": "Ausgewählte Rettungswürfe",
+                "save-input": "Rettungswurf-Modifikation",
                 "self": "Selbst",
+                "skill": "Fertigkeit",
+                "skill-chosen": "Ausgewählte Fertigkeiten",
+                "skill-input": "Fertigkeitsmodifikation",
                 "skill-rank-override": "Fertigkeitsraenge ueberschreiben",
                 "skill-rank-override-formula": "Formel zur Ueberschreibung der Fertigkeitsraenge",
                 "skill-rank-override-selected": "Zu ueberschreibende Fertigkeiten",
                 "snake-sidewind": "Schlangen-Seitwind",
+                "solo-tactics": "Solotaktiken",
+                "solo-tactics-allies": "Bestimmte Verbündete (optional)",
                 "spell": "Spezielle Zauber",
                 "spell-descriptor": "Zauber-Deskriptoren",
                 "spell-focus": "Zauberfokus",
@@ -127,8 +145,11 @@
                 "spell-school": "Zauberschulen",
                 "spell-subschool": "Zauber-Unterschulen",
                 "spell-specialization": "Zauberspezialisierung",
+                "swarming": "Schwärmen",
                 "token": "Anvisierte Tokens",
                 "token-invert": "Anvisierte Tokens umkehren",
+                "uncanny-dodge-improved": "Verbessertes Uncanny Dodge",
+                "underfoot-assault": "Unterfußangriff",
                 "versatile-performance": "Vielseitige Darbietung",
                 "versatile-performance-expanded": "Erweiterte vielseitige Darbietung",
                 "versatile-training": "Vielseitiges Training - Waffengruppe",
@@ -151,31 +172,11 @@
                 "weapon": "Spezielle Waffen und Angriffe",
                 "when-active": "Wenn Gegenstand aktiv ist",
                 "when-in-combat": "Im Kampf",
-                "ac": "RK",
-                "flanking-immunity": "Flankenimmunität",
-                "gang-up": "Gang Up",
-                "initiative": "Initiative",
-                "is-flanking": "Flankiert",
-                "is-flanking-with": "Mit Verbündeten",
-                "menacing": "Bedrohlich",
-                "outflank": "Umkreisen",
-                "outflank-improved": "Verbessertes Umkreisen",
-                "pack-flanking": "Flankieren im Rudel",
-                "save": "Rettungswurf",
-                "save-chosen": "Ausgewählte Rettungswürfe",
-                "save-input": "Rettungswurf-Modifikation",
-                "skill": "Fertigkeit",
-                "skill-chosen": "Ausgewählte Fertigkeiten",
-                "skill-input": "Fertigkeitsmodifikation",
-                "solo-tactics": "Solotaktiken",
-                "solo-tactics-allies": "Bestimmte Verbündete (optional)",
-                "swarming": "Schwärmen",
-                "uncanny-dodge-improved": "Verbessertes Uncanny Dodge",
-                "underfoot-assault": "Unterfußangriff",
                 "while-adjacent-to": "Während angrenzend zu",
                 "while-sharing-with": "Während ein Feld geteilt wird mit"
             },
             "tooltip": {
+                "ac": "Fügt der RK des Charakters einen bedingten Bonus hinzu.",
                 "action": "Gewährt Boni für bestimmte Aktionen.",
                 "action-type": "Aktiviert Boni, wenn die angegebenen Aktionstypen zutreffen.",
                 "action-type-radio": "Legt fest, ob die Aktionstypen gemeinsam oder einzeln ausgewertet werden.<br><br>Alle: Boni werden nur gewährt, wenn alle Aktionstypen zutreffen.<br><br>Irgendeiner: Boni werden gewährt, wenn mindestens ein Aktionstyp zutrifft.",
@@ -223,24 +224,33 @@
                 "finesse-bonus": "Verwendet Geschicklichkeit statt Stärke für Angriffswürfe.",
                 "finesse-override": "Verleiht einem Gegenstand die Eigenschaft Finesse, auch wenn dieser normalerweise keine Waffeneigenschaften besitzt.",
                 "finesse-target": "Aktiviert Boni für alle Finesse-fähigen Ziele. Erfordert eine Waffe mit Finesse-Eigenschaft, einen Natürlichen Angriff oder das Flag `finesse-override`.",
+                "flanking-immunity": "Gewährt Immunität gegen die Bedingung 'Flankiert' und den globalen Flankierungsbonus",
                 "footnote": "Zielangriffe enthalten diese Fußnote.",
                 "fortune": "Würfle zweimal und nimm das bessere Ergebnis. Mehrere Boni stapeln sich.",
                 "function": "Eine benutzerdefinierte Funktion, die bestimmt, welche Ziele ausgewählt werden. Siehe Dokumentation für Beispiele.",
                 "function-player-label": "Bezeichnung, die Spielern angezeigt wird. Spieler können die Funktion nicht bearbeiten.",
                 "furious-focus": "Negiert den Angriffsmalus von Mächtiger Angriff beim ersten Angriff jeder Runde.",
+                "gang-up": "Du bedrohst dein Ziel, wenn mindestens zwei deiner Verbündeten es ebenfalls bedrohen.",
                 "has-boolean-flag": "Aktiviert Boni, wenn ein bestimmtes boolesches Flag gesetzt ist.",
+                "initiative": "Verändert die Initiativwürfe des Charakters",
                 "inspiration": "Ermöglicht das freie Nutzen von Inspiration bei bestimmten Fertigkeiten.",
                 "inspiration-amazing": "Erhöht den Inspirationswürfel um eine Stufe.",
                 "inspiration-focused": "Erhöht den Inspirationswürfel für gewählte Fertigkeiten um eine Stufe.",
                 "inspiration-tenacious": "Beim Einsatz von Inspiration einen zusätzlichen Würfel werfen und das höchste Ergebnis behalten.",
                 "inspiration-true": "Inspiration kann für alle Fertigkeiten frei verwendet werden.",
+                "is-flanking": "Aktiviere Boni, wenn du deine aktuellen Ziele flankierst.",
+                "is-flanking-with": "Aktiviere Boni, wenn du an einem der angegebenen Verbündeten angrenzst.",
                 "is-target-within-range": "Aktiv, wenn sich alle Ziele innerhalb einer angegebenen Reichweite befinden.",
                 "is-target-within-range-min": "Aktiviere Boni, wenn alle ausgewählten Ziele mindestens so weit entfernt sind.",
                 "is-target-within-range-max": "Aktiviere Boni, wenn alle ausgewählten Ziele höchstens so weit entfernt sind.",
                 "item": "Wendet Boni an, wenn diese bestimmten Gegenstände benutzt werden.",
                 "martial-focus": "+1 Schaden mit der gewählten Waffengruppe. Angriffe und Waffen müssen korrekt mit Waffengruppen konfiguriert sein.",
                 "maximize-damage": "Maximiert die Schadenswürfe der ausgewählten Fähigkeiten.",
+                "menacing": "Erhöhe jeden Flankierungsbonus um +2 gegen einen Gegner, den du bedrohst.",
                 "misfortune": "Würfle zweimal und nimm das schlechtere Ergebnis. Mehrere Boni stapeln sich.",
+                "outflank": "Teamwork-Talent, das Flankierungsboni um +2 erhöht.",
+                "outflank-improved": "Teamwork-Talent, das Flankierungspositionen verbessert.",
+                "pack-flanking": "Du giltst als flankierend mit deinem Tiergefährten, wenn ihr beide dieses Talent besitzt und nebeneinander steht und dasselbe Ziel bedroht.",
                 "precise-shot": "Hebt den Abzug für Schüsse in den Nahkampf auf.",
                 "proficiency": "Gibt Fertigkeit mit diesem Gegenstand (oft zusammen mit einer Waffengruppen-Überschreibung erforderlich).",
                 "ranged-increment-penalty": "Verändert die Strafen, die mit Reichweiteninkrementen von Fernkampfwaffen verbunden sind.",
@@ -250,11 +260,15 @@
                 "ranged-increment-penalty-penalty-offset": "Verringert die Gesamtstrafe.",
                 "roll-untrained": "Erlaubt Fertigkeitenwürfe ohne Ausbildung.",
                 "script-call": "Konfiguriert Skriptaufrufe, die für die gewählten Aktionen ausgeführt werden. Makros können ebenfalls hierhin gezogen werden.",
+                "save": "Wendet Boni auf Rettungswürfe an.",
                 "self": "Wendet Boni auf alle Aktionen dieses Gegenstandes an.",
+                "skill": "Wendet Boni auf Fertigkeitswürfe an.",
                 "skill-rank-override": "Setzt den Fertigkeitsrang einer gewählten Fertigkeit auf einen festen Wert. Nützlich beispielsweise für ein Stirnband der gewaltigen Intelligenz.",
                 "skill-rank-override-formula": "Formel, um den Fertigkeitsrang der gewählten Fertigkeit(en) auf einen festen Wert zu setzen. Nützlich beispielsweise für ein Stirnband der gewaltigen Intelligenz.",
                 "skill-rank-override-selected": "Die Fertigkeiten, die mit der angegebenen Formel überschrieben werden.",
                 "snake-sidewind": "Verwendet Motiv erkennen für Kritbestätigungen, wenn dein maximales Motiv-erkennen-Ergebnis höher ist als dein maximaler Angriffswurf.",
+                "solo-tactics": "Betrachte Verbündete so, als besäßen sie deine Teamwork-Talente (derzeit für Umkreisen und Verbessertes Umkreisen verwendet).",
+                "solo-tactics-allies": "Beschränke dies auf bestimmte Verbündete (oder leer lassen, um alle Verbündeten einzuschließen).",
                 "spell-school": "Wendet Boni auf Zauber der gewählten Schule(n) an.",
                 "spell-subschool": "Wendet Boni auf Zauber der gewählten Unterschule(n) an.",
                 "spell-specialization": "Erhöht die Zauberstufe um 2 für einen gewählten Zauber aus einer Schule, für die du Zauberfokus besitzt.",
@@ -263,8 +277,11 @@
                 "spell-focus-greater": "Erhöht eine durch Zauberfokus gewählte Schule um weitere +1 SG.",
                 "spell-focus-mythic": "Verdoppelt die Boni aus Zauberfokus.",
                 "spell-descriptor": "Wendet Boni auf Zauber mit den gewählten Deskriptoren an.",
+                "swarming": "Wenn du ein Feld mit einem Verbündeten mit dieser Fähigkeit teilst, giltst du als flankierend gegen dein Ziel.",
                 "token": "Wendet Boni an, wenn bestimmte Tokens anvisiert sind. Beim Aktivieren erscheint ein Dialog zur Auswahl von Tokens in der Szene.",
                 "token-invert": "Kehrt die Auswahl um, sodass Boni gelten, wenn ein anderes als das gewählte Token anvisiert wird.",
+                "uncanny-dodge-improved": "Gewährt Immunität gegen Flankieren, außer von einem Schurken höheren Levels. Darf nur auf eine Klassenfähigkeit angewendet werden.",
+                "underfoot-assault": "Wenn du ein Feld mit einem Gegner teilst und an einen Verbündeten angrenzst, giltst du als flankierend gegen diesen Gegner.",
                 "versatile-performance": "Ersetzt zwei Fertigkeiten durch eine gewählte Darbietungs-Fertigkeit.",
                 "versatile-performance-expanded": "Wähle eine dritte Fertigkeit, die mit der gewählten Darbietungsfertigkeit verknüpft wird.",
                 "versatile-training": "Nutze den Grund-Angriffsbonus statt Rangpunkten für zwei mit einer Waffengruppe verbundene Fertigkeiten.",
@@ -272,6 +289,7 @@
                 "vital-strike": "Zusätzlicher Schaden bei Angriffsaktionen basierend auf dem Waffenschaden.",
                 "vital-strike-mythic": "Bei Einsatz einer Wuchtiger-Schlag-Fähigkeit werden zusätzlich alle anderen Boni multipliziert, die normalerweise bei einem kritischen Treffer vervielfacht würden.",
                 "vital-strike-enabled": "Legt fest, ob Wuchtiger Schlag in Angriffs-Dialogen standardmäßig aktiviert sein soll.",
+                "vital-strike-enabled-current": "Derzeit standardmäßig aktiviert.",
                 "weapon-focus": "+1 Bonus auf Angriffswürfe mit dem gewählten Waffentyp. Angriffe und Waffen müssen korrekt mit Grundwaffentypen konfiguriert sein.",
                 "weapon-focus-greater": "Erhöht den Angriffswurf des mit Waffenfokus gewählten Waffentyps um weitere +1.",
                 "weapon-group": "Wendet Boni an, wenn Waffen aus gewählten Waffengruppen verwendet werden. Angriffe und Waffen müssen korrekt mit Waffengruppen konfiguriert sein.",
@@ -285,24 +303,6 @@
                 "weapon": "Wähle bestimmte Angriffe und Waffen für Boni aus.",
                 "when-active": "Wende Boni an, wenn ein bestimmter Buff/Waffe/Talent usw. aktiv ist.",
                 "when-in-combat": "Aktiv, wenn sich der Charakter im Kampf befindet.",
-                "ac": "Fügt der RK des Charakters einen bedingten Bonus hinzu.",
-                "flanking-immunity": "Gewährt Immunität gegen die Bedingung 'Flankiert' und den globalen Flankierungsbonus",
-                "gang-up": "Du bedrohst dein Ziel, wenn mindestens zwei deiner Verbündeten es ebenfalls bedrohen.",
-                "initiative": "Verändert die Initiativwürfe des Charakters",
-                "is-flanking": "Aktiviere Boni, wenn du deine aktuellen Ziele flankierst.",
-                "is-flanking-with": "Aktiviere Boni, wenn du an einem der angegebenen Verbündeten angrenzst.",
-                "menacing": "Erhöhe jeden Flankierungsbonus um +2 gegen einen Gegner, den du bedrohst.",
-                "outflank": "Teamwork-Talent, das Flankierungsboni um +2 erhöht.",
-                "outflank-improved": "Teamwork-Talent, das Flankierungspositionen verbessert.",
-                "pack-flanking": "Du giltst als flankierend mit deinem Tiergefährten, wenn ihr beide dieses Talent besitzt und nebeneinander steht und dasselbe Ziel bedroht.",
-                "save": "Wendet Boni auf Rettungswürfe an.",
-                "skill": "Wendet Boni auf Fertigkeitswürfe an.",
-                "solo-tactics": "Betrachte Verbündete so, als besäßen sie deine Teamwork-Talente (derzeit für Umkreisen und Verbessertes Umkreisen verwendet).",
-                "solo-tactics-allies": "Beschränke dies auf bestimmte Verbündete (oder leer lassen, um alle Verbündeten einzuschließen).",
-                "swarming": "Wenn du ein Feld mit einem Verbündeten mit dieser Fähigkeit teilst, giltst du als flankierend gegen dein Ziel.",
-                "uncanny-dodge-improved": "Gewährt Immunität gegen Flankieren, außer von einem Schurken höheren Levels. Darf nur auf eine Klassenfähigkeit angewendet werden.",
-                "underfoot-assault": "Wenn du ein Feld mit einem Gegner teilst und an einen Verbündeten angrenzst, giltst du als flankierend gegen diesen Gegner.",
-                "vital-strike-enabled-current": "Derzeit standardmäßig aktiviert.",
                 "while-adjacent-to": "Aktiviert Boni, während du an einem der angegebenen Verbündeten angrenzst.",
                 "while-sharing-with": "Aktiviert Boni, während du ein Feld mit einem der angegebenen Verbündeten teilst."
             }
@@ -341,6 +341,26 @@
         "effective-size": {
             "hint": "Größe: {mod}"
         },
+        "fluent-description": {
+            "alignment": "Solange das Ziel die Gesinnung {alignment} hat",
+            "all": "Alle",
+            "condition-self": "Solange du den Zustand {condition} hast",
+            "condition-target": "Solange das Ziel den Zustand {condition} hat",
+            "creature-subtype": "Solange das Ziel den Kreaturenuntertyp {subtype} hat",
+            "creature-type": "Solange das Ziel den Kreaturentyp {type} hat",
+            "has-boolean-flag-self": "Solange du das boolesche Flag {flag} hast",
+            "has-boolean-flag-target": "Solange {target} das boolesche Flag {flag} hat",
+            "is-flanking": "Während du das Ziel flankierst",
+            "is-flanking-with": "Während du das Ziel mit {ally} flankierst",
+            "is-target-within-range": "Solange das Ziel in Reichweite {range} ist",
+            "token": "Solange du {token} anvisierst",
+            "token-inverted": "Solange du jeden außer {token} anvisierst",
+            "when-active-equipment": "Solange {item} ausgerüstet ist",
+            "when-active-feature": "Solange {item} aktiv ist",
+            "when-in-combat": "Während im Kampf",
+            "while-adjacent-to": "Während angrenzend zu {ally}",
+            "while-sharing-with": "Während du ein Feld mit {ally} teilst"
+        },
         "fortune": "Glueck",
         "global-bonus": {
             "actor": {
@@ -361,11 +381,11 @@
                 "require-melee-threaten": "Nahkampferfordernis übersprungen"
             },
             "label": {
+                "flanking": "Flankieren",
                 "higher-ground": "Höhenvorteil-Nahkampfbönus",
                 "range-increment-penalty": "Strafe für Reichweiteninkremente",
                 "shoot-into-melee": "Schuss in den Nahkampf",
-                "require-melee-threaten": "Nahkampfreichweite erforderlich",
-                "flanking": "Flankieren"
+                "require-melee-threaten": "Nahkampfreichweite erforderlich"
             },
             "warning": {
                 "range-increment-error-plural": "Das entfernteste Ziel ({distance}{units}) liegt außerhalb deiner maximalen Reichweite ({max}{units}).",
@@ -381,6 +401,10 @@
                 "label": "Globale Boni konfigurieren",
                 "title": "Globale Boni",
                 "section": {
+                    "flanking": {
+                        "description": "Attempts to automatically add appropriate bonuses for flanking. The mod includes various bonuses to account for different feats/abilities that increase the bonus and modify how positioning works. Be sure to check out the journal for more details on those abilties.",
+                        "issues": "Flankieren über Diagonalen ohne angrenzend zu sein ist eventuell nicht regelkonform, sollte aber für die meisten Situationen ausreichen (würde man die Karte um 45° drehen, wäre es eindeutig Flankieren)."
+                    },
                     "higher-ground": {
                         "description": "Gewährt +1 auf Nahkampfangriffe aus höherer Position.",
                         "issues": ""
@@ -396,10 +420,6 @@
                     "require-melee-threaten": {
                         "description": "Verhindert einen Nahkampfangriff, wenn der Angreifer das Ziel nicht bedroht. Bei einer Nahkampfaktion wird der Angriff abgebrochen, wenn das Ziel außer Reichweite ist.",
                         "issues": "Der SL kann unter Umständen einen Nahkampfangriff außerhalb der Reichweite zulassen. Um dies zu umgehen, kannst du entweder kein Token anvisieren oder im Angriffsfenster die Checkbox \"Nahkampf-Reichweite ignorieren\" aktivieren."
-                    },
-                    "flanking": {
-                        "description": "Attempts to automatically add appropriate bonuses for flanking. The mod includes various bonuses to account for different feats/abilities that increase the bonus and modify how positioning works. Be sure to check out the journal for more details on those abilties.",
-                        "issues": "Flankieren über Diagonalen ohne angrenzend zu sein ist eventuell nicht regelkonform, sollte aber für die meisten Situationen ausreichen (würde man die Karte um 45° drehen, wäre es eindeutig Flankieren)."
                     }
                 }
             }
@@ -407,8 +427,9 @@
         "hint-missing-bonus": "Fehlender Bonus, zum Hinzufügen klicken",
         "hint-missing-target": "Fehlendes Ziel, zum Hinzufügen klicken",
         "inspiration-amazing-die": "Inspirationswürfel: {die}",
+        "invalid-uncanny-dodge-class": "Die Klassen-Zuordnung muss konfiguriert sein.",
+        "invalid-uncanny-dodge-item": "Muss auf einer Klassenfähigkeit liegen.",
         "invalid-override": "Dies hat keinen Effekt für diesen Gegenstandstyp – bearbeite die Gegenstandsdaten direkt.",
-        "invalid-token-selection": "Es muss ein gültiges Ziel ausgewählt werden.",
         "item-app": {
             "description": "Boni werden nur angewendet, wenn die ausgewählten Gegenstände verwendet werden. Rechtsklick auf eine Zeile öffnet das Blatt dieses Gegenstands zur weiteren Überprüfung.",
             "description-actions": "Boni werden nur angewendet, wenn die ausgewählten Aktionen verwendet werden. Rechtsklick auf eine Zeile öffnet das Blatt dieser Aktion zur weiteren Überprüfung (oder die Kopfzeile öffnet den Gegenstand).",
@@ -435,6 +456,7 @@
         "maximized-total": "Maximiert: {total}",
         "misfortune": "Unglück",
         "missing-bonuses": "Es sind keine Boni konfiguriert.",
+        "missing-conditional-target": "Der Bonus '{bonus}' erfordert ein Bedingtes Ziel, um korrekt zu funktionieren.",
         "missing-targets": "Es sind keine Ziele konfiguriert.",
         "modifiers": "Modifikatoren",
         "ok": "OK",
@@ -509,7 +531,6 @@
         },
         "targets": "Ziele",
         "to-hit-mod": "{mod} Angriff",
-        "token-distance": "Entfernung zwischen '{first}' und '{second}': {distance}",
         "versatile-performance": {
             "add": "Vielseitige Darbietung hinzufügen",
             "delete": "Vielseitige Darbietung entfernen",
@@ -533,6 +554,7 @@
             "skill-tip": "Vielseitiges Training - verwendet GAB ({bab}) statt Rängen",
             "title": "{skill} - Vielseitiges Training"
         },
+        "with": "mit",
         "item-name-translations": {
             "improved": {
                 "name": "Verbessert",
@@ -566,9 +588,17 @@
                 "name": "Liebling des Schicksals",
                 "default": "Liebling des Schicksals"
             },
+            "flanking-immunity": {
+                "name": "Flankenimmunität",
+                "default": "Rundumsicht"
+            },
             "furious-focus": {
                 "name": "Zorniger Fokus",
                 "default": "Zorniger Fokus"
+            },
+            "gang-up": {
+                "name": "Gang Up",
+                "default": "Gang Up"
             },
             "inspiration": {
                 "name": "Inspiration",
@@ -618,6 +648,14 @@
                 "name": "Kampf-Fokus",
                 "default": "Kampf-Fokus"
             },
+            "outflank": {
+                "name": "Umkreisen",
+                "default": "Umkreisen"
+            },
+            "pack-flanking": {
+                "name": "Flankieren im Rudel",
+                "default": "Flankieren im Rudel"
+            },
             "precise-shot": {
                 "name": "Gezielter Schuss",
                 "default": "Gezielter Schuss"
@@ -625,6 +663,10 @@
             "snake-sidewind": {
                 "name": "Schlangen-Seitwind",
                 "default": "Schlangen-Seitwind"
+            },
+            "solo-tactics": {
+                "name": "Solotaktiken",
+                "default": "Solotaktiken"
             },
             "spell-focus": {
                 "name": "Zauberfokus",
@@ -634,9 +676,25 @@
                 "name": "Zauberspezialisierung",
                 "default": "Zauberspezialisierung"
             },
+            "swarming": {
+                "name": "Schwärmen",
+                "default": "Schwärmen"
+            },
+            "uncanny-dodge": {
+                "name": "Uncanny Dodge",
+                "default": "Uncanny Dodge"
+            },
+            "underfoot-assault": {
+                "name": "Unterfußangriff",
+                "default": "Unterfußangriff"
+            },
             "versatile-performance": {
                 "name": "Vielseitige Darbietung",
                 "default": "Vielseitige Darbietung"
+            },
+            "versatile-performance-expanded": {
+                "name": "Erweiterte Vielseitigkeit",
+                "default": "Erweiterte Vielseitigkeit"
             },
             "versatile-training": {
                 "name": "Vielseitiges Training",
@@ -665,45 +723,13 @@
             "weapon-specialization": {
                 "name": "Waffenspezialisierung",
                 "default": "Waffenspezialisierung"
-            },
-            "flanking-immunity": {
-                "name": "Flankenimmunität",
-                "default": "Rundumsicht"
-            },
-            "gang-up": {
-                "name": "Gang Up",
-                "default": "Gang Up"
-            },
-            "outflank": {
-                "name": "Umkreisen",
-                "default": "Umkreisen"
-            },
-            "pack-flanking": {
-                "name": "Flankieren im Rudel",
-                "default": "Flankieren im Rudel"
-            },
-            "solo-tactics": {
-                "name": "Solotaktiken",
-                "default": "Solotaktiken"
-            },
-            "swarming": {
-                "name": "Schwärmen",
-                "default": "Schwärmen"
-            },
-            "uncanny-dodge": {
-                "name": "Uncanny Dodge",
-                "default": "Uncanny Dodge"
-            },
-            "underfoot-assault": {
-                "name": "Unterfußangriff",
-                "default": "Unterfußangriff"
-            },
-            "versatile-performance-expanded": {
-                "name": "Erweiterte Vielseitigkeit",
-                "default": "Erweiterte Vielseitigkeit"
             }
         },
         "settings": {
+            "allow-friendly-npc-selection": {
+                "name": "Spielern erlauben, alle befreundeten NSCs zu sehen",
+                "hint": "Wenn bedingte Ziele wie Flankieren (mit bestimmtem Verbündeten) oder Während angrenzend zu (verbündeter Charakter) genutzt werden, können Spieler bei Einstellung auf wahr alle befreundeten NSCs der Welt sehen. Bei falsch können sie nur Schauspieler wählen, die Spielern gehören."
+            },
             "debug": {
                 "name": "Debug-Modus",
                 "hint": "Aktiviere dies, um zusätzliche Protokolle einzuschalten, die bei der Fehlersuche helfen können. Standard ist `false`."
@@ -733,24 +759,20 @@
             "should-copy-flags": {
                 "name": "Item-Flags beim Angriffskopieren übernehmen",
                 "hint": "Beim Erstellen eines Angriffs aus einer Waffe kopiert das System standardmäßig keine Flags der Waffe. Dadurch fehlen diesen Angriffen die dort konfigurierten Boni. Diese Option kopiert die Flags beim Erstellen. Spätere Änderungen werden jedoch nicht synchronisiert. Standard ist false."
-            },
-            "allow-friendly-npc-selection": {
-                "name": "Spielern erlauben, alle befreundeten NSCs zu sehen",
-                "hint": "Wenn bedingte Ziele wie Flankieren (mit bestimmtem Verbündeten) oder Während angrenzend zu (verbündeter Charakter) genutzt werden, können Spieler bei Einstellung auf wahr alle befreundeten NSCs der Welt sehen. Bei falsch können sie nur Schauspieler wählen, die Spielern gehören."
             }
         },
         "applications": {
-            "token": {
-                "gm-hint": "Du siehst alle Tokens und Namen, weil du SL bist. Spieler können nur Tokens auswählen, die sie sehen können.",
-                "no-tokens": "In dieser Szene befinden sich keine Tokens",
-                "player-hint": "Alle derzeit anvisierten Tokens in der Szene sind vorausgewählt. Du kannst eine Einstellung aktivieren, um dieses Fenster zu überspringen und automatisch diese Ziele zu verwenden."
-            },
             "actor": {
                 "gm-hint": "Du siehst alle befreundeten Schauspieler, weil du SL bist. Spieler können nur Spielertokens und Tokens auswählen, für die sie Beobachterrechte haben. Eine Moduleinstellung erlaubt ihnen, jeden befreundeten NSC im Spiel zu wählen (was Tokens in anderen Szenen sichtbar machen könnte).",
                 "no-actors": "Keine Schauspieler gefunden.",
                 "npcs": "Befreundete NSCs",
                 "observed": "Beobachtete Schauspieler",
                 "players": "Spieler-Charaktere"
+            },
+            "token": {
+                "gm-hint": "Du siehst alle Tokens und Namen, weil du SL bist. Spieler können nur Tokens auswählen, die sie sehen können.",
+                "no-tokens": "In dieser Szene befinden sich keine Tokens",
+                "player-hint": "Alle derzeit anvisierten Tokens in der Szene sind vorausgewählt. Du kannst eine Einstellung aktivieren, um dieses Fenster zu überspringen und automatisch diese Ziele zu verwenden."
             }
         },
         "inputs": {
@@ -765,30 +787,6 @@
                 "dice": "Das Modifizieren der Grundwürfel für Fertigkeiten ist veraltet und wird in einer zukünftigen Version entfernt. Sieh in die Dokumentation, wie Fertigkeiten für Glück/Pech konfiguriert werden. Wenn du einen Bedarf hast, der nicht abgedeckt ist, lass es mich wissen."
             }
         },
-        "fluent-description": {
-            "alignment": "Solange das Ziel die Gesinnung {alignment} hat",
-            "all": "Alle",
-            "condition-self": "Solange du den Zustand {condition} hast",
-            "condition-target": "Solange das Ziel den Zustand {condition} hat",
-            "creature-subtype": "Solange das Ziel den Kreaturenuntertyp {subtype} hat",
-            "creature-type": "Solange das Ziel den Kreaturentyp {type} hat",
-            "has-boolean-flag-self": "Solange du das boolesche Flag {flag} hast",
-            "has-boolean-flag-target": "Solange {target} das boolesche Flag {flag} hat",
-            "is-flanking": "Während du das Ziel flankierst",
-            "is-flanking-with": "Während du das Ziel mit {ally} flankierst",
-            "is-target-within-range": "Solange das Ziel in Reichweite {range} ist",
-            "token": "Solange du {token} anvisierst",
-            "token-inverted": "Solange du jeden außer {token} anvisierst",
-            "when-active-equipment": "Solange {item} ausgerüstet ist",
-            "when-active-feature": "Solange {item} aktiv ist",
-            "when-in-combat": "Während im Kampf",
-            "while-adjacent-to": "Während angrenzend zu {ally}",
-            "while-sharing-with": "Während du ein Feld mit {ally} teilst"
-        },
-        "invalid-uncanny-dodge-class": "Die Klassen-Zuordnung muss konfiguriert sein.",
-        "invalid-uncanny-dodge-item": "Muss auf einer Klassenfähigkeit liegen.",
-        "missing-conditional-target": "Der Bonus '{bonus}' erfordert ein Bedingtes Ziel, um korrekt zu funktionieren.",
-        "with": "mit",
         "hint": {
             "select-action-for-flank": "Wähle eine Aktion zum Flankieren. Damit wird geprüft, ob es sich um einen Nahkampfangriff mit korrekter Reichweite handelt."
         },
@@ -809,6 +807,8 @@
             "pack-flanking": "Rudel-Flankieren erfordert einen konfigurierten Verbündeten.",
             "range-misconfigured": "Aktion ({actionName}) auf Gegenstand '{itemName}' ({actionUuid}) hat eine ungültige Reichweite. Überprüfe maximale Inkremente und Reichweite. Es wird automatisch angenommen, dass sie in Reichweite ist.",
             "uncanny-dodge-improved": "Muss auf einer Klassenfähigkeit mit korrekt zugeordneter Klasse konfiguriert sein."
-        }
+        },
+        "invalid-token-selection": "Es muss ein gültiges Ziel ausgewählt werden.",
+        "token-distance": "Entfernung zwischen '{first}' und '{second}': {distance}"
     }
 }
