@@ -83,7 +83,7 @@
                 "ranged-increment-penalty-max-increment-offset": "Máximo intervalo de incremento",
                 "ranged-increment-penalty-penalty-offset": "Reducción del penalizador en general",
                 "script-call": "Llamada de script",
-                "self": "Objetivo como sí mismo/a",
+                "self": "Objetivo como sí mismo",
                 "skill-rank-override": "Sobrescritura de los rangos de habilidad",
                 "skill-rank-override-formula": "Fórmula de sobrescritura de los rangos de habilidad",
                 "skill-rank-override-selected": "Habilidades a sobrescribir",
@@ -132,7 +132,30 @@
                 "inspiration-true": "Inspiración verdadera",
                 "roll-untrained": "Tiradas de habilidades no entrenadas",
                 "spell-subschool": "Subescuelas de conjuro",
-                "ac": "Clase de armadura"
+                "ac": "Clase de armadura",
+                "gang-up": "Unir fuerzas",
+                "bane": "Perdición",
+                "initiative": "Iniciativa",
+                "is-flanking": "Está flanqueando",
+                "menacing": "Amenazando",
+                "outflank": "Flanqueo superior",
+                "outflank-improved": "Flanqueo superior mejorado",
+                "pack-flanking": "Flanqueo en manada",
+                "save": "Tirada de salvación",
+                "save-chosen": "Salvaciones elegidas",
+                "save-input": "Cambio en la Salvación",
+                "skill-chosen": "Habilidades elegidas",
+                "skill-input": "Cambio en la Habilidad",
+                "solo-tactics-allies": "Aliados específicos (opcional)",
+                "solo-tactics": "Tácticas individuales",
+                "swarming": "Plaga",
+                "underfoot-assault": "Ataque bajo los pies",
+                "while-adjacent-to": "Mientras se esté adyacente a",
+                "while-sharing-with": "Mientras se comparta casilla con",
+                "is-flanking-with": "Con aliado",
+                "flanking-immunity": "Inmunidad al flanqueo",
+                "skill": "Habilidad",
+                "uncanny-dodge-improved": "Esquiva asombrosa mejorada"
             },
             "tooltip": {
                 "action": "Otorga bonificadores a acciones específicas.",
@@ -231,7 +254,7 @@
                 "weapon-type": "Aplica los bonificadores cuando se use el arma elegida. Los ataques y las armas deben tener los Tipos de equipamiento base correctamente configurados.",
                 "weapon-type-override": "Añade un tipo de arma a un Artículo que normalmente no tendría. Esto es equivalente al Tipo de equipamiento base de un arma.",
                 "weapon": "Elegir ataques y armas específicas para los bonificadores.",
-                "when-active": "Aplica los bonificadores cuando el Potenciador (Buff)/Arma/Dote/Aptitud/etc esté activo.",
+                "when-active": "Aplica los bonificadores cuando el Potenciador (Buff)/Aptitud/etc esté activo o equipado.",
                 "when-in-combat": "Activo cuando este actor esté en combate.",
                 "devastating-strike": "Añade daño con Golpes vitales",
                 "devastating-strike-improved": "Añade a la confirmación de crítico con Golpes vitales",
@@ -243,7 +266,28 @@
                 "inspiration-tenacious": "Cuando tires inspiración, tira un dado extra y quédate con el resultado más alto.",
                 "inspiration-true": "Puedes usar libremente la inspiración en todas las habilidades.",
                 "roll-untrained": "Marca las habilidades como aptas para ser utilizadas sin entrenamiento.",
-                "spell-subschool": "Aplica bonificadores a los conjuros de la subescuela o subescuelas elegidas."
+                "spell-subschool": "Aplica bonificadores a los conjuros de la subescuela o subescuelas elegidas.",
+                "ac": "Añade un bonificador condicional a la Clase de Armadura del actor.",
+                "initiative": "Modifica las tiradas de Iniciativa del actor",
+                "is-flanking": "Activar los bonificadores mientras flanqueas a tu objetivos actuales.",
+                "is-flanking-with": "Activar los bonificadores cuando se está adyacente a cualquiera de los aliados especificados.",
+                "outflank": "Dote cooperativa para incrementar los bonificador por flanqueo en +2.",
+                "pack-flanking": "Se te considera estar flanqueando con tu mascota si ambos tenéis esta dote y estáis adyacentes y amenazando al mismo objetivo.",
+                "solo-tactics": "Considerar que tus aliados tienen las mismas dotes cooperativas que tú (usado por Flanqueo superior y Flanqueo superior mejorado actualmente).",
+                "underfoot-assault": "Mientras compartes una casilla con un adversario y estás adyacente a un aliado, se considera que flanqueas a ese adversario.",
+                "while-sharing-with": "Activa los bonificadores mientras se comparta una casilla con cualquiera de los aliados especificados.",
+                "solo-tactics-allies": "Limitar a estos aliados específicos (o dejar vacío para aplicar a todos los aliados).",
+                "swarming": "Mientras compartas casilla con cualquier aliado con esta aptitud, se te considera flanqueando al objetivo.",
+                "save": "Aplicar los bonificadores a las tiradas de salvación.",
+                "vital-strike-enabled-current": "Activado por defecto actualmente.",
+                "outflank-improved": "Dote cooperativa para incrementar las opciones de posicionamiento para flanqueo.",
+                "uncanny-dodge-improved": "Otorga inmunidad al flanqueo a menos que el atacante sea de un nivel de pícaro superior. Debe ser añadido solo a una aptitud de clase.",
+                "bane": "Añade un bonificador +2 por mejora y +2d6 al daño a los ataques con Objetivo cuando el actor objetivo tiene los Tipos de Criatura elegidos.",
+                "flanking-immunity": "Otorga inmunidad tanto al Objetivo Está flanqueando como al Bonificador global por flanqueo",
+                "skill": "Aplicar bonificadores a las tiradas de habilidad.",
+                "while-adjacent-to": "Activa los bonificadores cuando se está adyacente a cualquiera de los aliados especificados.",
+                "gang-up": "Se te considera amenazando al objetivo si al menos dos de tus aliados ya están amenazando al objetivo.",
+                "menacing": "Incrementa cualquier bonificador por flanqueo en +2 contra un enemigo al que ya amenaces."
             }
         },
         "all-spells": "Todos los conjuros",
@@ -317,7 +361,8 @@
                 "higher-ground": "Bonificador por terreno elevado",
                 "range-increment-penalty": "Penalizador de incremento de rango",
                 "shoot-into-melee": "Disparo en cuerpo a cuerpo",
-                "require-melee-threaten": "Requiere amenaza cuerpo a cuerpo"
+                "require-melee-threaten": "Requiere amenaza cuerpo a cuerpo",
+                "flanking": "Flanqueando"
             },
             "warning": {
                 "range-increment-error-plural": "El objetivo más alejado ({distance}{units}) está fuera de tu rango máximo ({max}{units}).",
@@ -348,6 +393,10 @@
                     "require-melee-threaten": {
                         "description": "Rechaza un ataque cuerpo a cuerpo si el atacante no amenaza al objetivo. Al usar una acción cuerpo a cuerpo, esta rechazará la acción si el objetivo está fuera de alcance.",
                         "issues": "Puede haber circunstancias en las que el DJ permita un ataque cuerpo a cuerpo contra un objetivo aunque no esté dentro del alcance. Para sortear esto, puedes omitir seleccionar una ficha o marcar la casilla \"Ignorar alcance cuerpo a cuerpo\" en el cuadro de diálogo de ataque."
+                    },
+                    "flanking": {
+                        "description": "Intenta añadir automáticamente los bonificadores adecuados para el flanqueo. El mod incluye varios bonificadores para tener en cuenta diferentes dotes/habilidades que aumentan el bonificador y modifican cómo funciona el posicionamiento. Asegúrate de consultar el diario para obtener más detalles sobre esas habilidades.",
+                        "issues": "Flanquear en diagonal cuando no se está adyacente al objetivo puede no ser técnicamente exacto, pero debería estar lo suficientemente cerca para la mayoría de los escenarios (es decir, si giras el mapa 45 grados, estaría definitivamente flanqueando)."
                     }
                 }
             }
@@ -359,7 +408,8 @@
             "description": "Los bonificadores solo se aplicarán cuando se utilicen los elementos seleccionados. Haz clic con el botón derecho en cualquier fila para abrir la hoja de personaje de ese elemento y verificarlo.",
             "title": "Selector de Artículos",
             "description-actions": "Los bonificadores solo se aplicarán cuando se utilicen las acciones seleccionadas. Haz clic con el botón derecho en cualquier fila para abrir la hoja de personaje de esa acción y verificarla (o en el encabezado para abrir el elemento).",
-            "description-when-active": "Estos bonificadores solo estarán activos cuando el elemento objetivo también lo esté. Por ejemplo, los bonificadores secundarios que solo se aplican mientras estás en furia."
+            "description-when-active": "Estos bonificadores solo estarán activos cuando el elemento objetivo esté activo o equipado. Por ejemplo, los bonificadores secundarios que solo se aplican mientras estás en furia.",
+            "title-action": "Selector de acción - {name}"
         },
         "item-hints": {
             "skill-rank-override": "{skills} (->{rank})"
@@ -594,6 +644,42 @@
             "inspiration-unconventional": {
                 "name": "Inspiración no convencional",
                 "default": "Inspiración no convencional"
+            },
+            "flanking-immunity": {
+                "name": "Inmunidad al flanqueo",
+                "default": "Visión periférica total"
+            },
+            "gang-up": {
+                "name": "Unir fuerzas",
+                "default": "Unir fuerzas"
+            },
+            "outflank": {
+                "name": "Flanqueo superior",
+                "default": "Flanqueo superior"
+            },
+            "pack-flanking": {
+                "default": "Flanqueo en manada",
+                "name": "Flanqueo en manada"
+            },
+            "solo-tactics": {
+                "name": "Tácticas individuales",
+                "default": "Tácticas individuales"
+            },
+            "swarming": {
+                "name": "Plaga",
+                "default": "Plaga"
+            },
+            "uncanny-dodge": {
+                "name": "Esquiva asombrosa",
+                "default": "Esquiva asombrosa"
+            },
+            "underfoot-assault": {
+                "name": "Ataque bajo los pies",
+                "default": "Ataque bajo los pies"
+            },
+            "versatile-performance-expanded": {
+                "name": "Versatilidad expandida",
+                "default": "Versatilidad expandida"
             }
         },
         "settings": {
@@ -626,13 +712,24 @@
             "should-copy-flags": {
                 "name": "Copiar las banderas (flags) de los Artículos al crear ataques",
                 "hint": "Cuando se crea un Ataque desde un Arma (a través del botón \"Crear Ataque\" para añadir un Ataque a tu pestaña de Combate), el sistema no copia ninguna bandera del Arma. Esto significa que por defecto cualquier bonificador creado en el arma no existe en los Ataques creados desde esa Arma. Activando esta opción se copiarán esas banderas al crear un Ataque. Esto sólo ocurre en la creación, no sincronizará ninguna bandera modificada después. Por defecto está desactivado."
+            },
+            "allow-friendly-npc-selection": {
+                "name": "Permitir a los jugadores ver todos los PNJs amistosos",
+                "hint": "Cuando utilices Objetivos Condicionales como Está Flanqueando (con un aliado específico) o Está Adyacente a (personaje aliado), si lo estableces a verdadero, tus jugadores podrán ver a todos los PNJ amistosos definidos en tu mundo. Si se establece en falso, sólo podrán apuntar a los actores que pertenezcan a los jugadores."
             }
         },
         "applications": {
             "token": {
-                "gm-hint": "Puedes ver todas la fichas (y nombres) porque eres el/la DJ. Los jugadores solo serán capaces de ver las fichas que sean visibles para ellos/as.",
+                "gm-hint": "Puedes ver todas la fichas porque eres el/la DJ. Los jugadores solo serán capaces de ver las fichas que sean visibles para ellos/as.",
                 "no-tokens": "No hay fichas en esta escena",
-                "player-hint": "Cualquier ficha ya marcada como objetivo está pre-seleccionada. Puede activar la configuración para saltarte este modal y usar los objetivo automáticamente."
+                "player-hint": "Cualquier ficha ya marcada como objetivo está pre-seleccionada. Puede activar la configuración para saltarte este modal y usar los objetivo automáticamente. Pasar el ratón por cualquiera de las opciones resaltará la ficha en la escena."
+            },
+            "actor": {
+                "no-actors": "No se han encontrado actores.",
+                "npcs": "PNJs amistosos",
+                "observed": "Actores observados",
+                "players": "Actores de jugador",
+                "gm-hint": "Puedes ver a todos los actores amigos porque eres el DJ. Los jugadores sólo pueden seleccionar fichas de jugador y fichas para las que tengan permisos de observador. Hay un ajuste del módulo que les permite seleccionar cualquier ficha de PNJ amistoso dentro del mundo (lo que podría revelar fichas en otras escenas)."
             }
         },
         "inputs": {
@@ -667,6 +764,58 @@
                 "skill-tip": "Puede hacer tiradas no entrenadas"
             }
         },
-        "token-distance": "Distancia entre '{first}' y '{second}': {distance}"
+        "token-distance": "Distancia entre '{first}' y '{second}': {distance}",
+        "fluent-description": {
+            "all": "Todo",
+            "condition-self": "Mientra tengas el estado: {condition}",
+            "condition-target": "Mientras el objetivo tenga el estado: {condition}",
+            "creature-type": "Mientras la criatura objetivo tenga el tipo: {type}",
+            "has-boolean-flag-self": "Mientras tengas la bandera booleana: {flag}",
+            "has-boolean-flag-target": "Mientras {target} tenga la bandera booleana: {flag}",
+            "is-flanking": "Mientras se flanquee al objetivo",
+            "is-flanking-with": "Mientras se flanquee al objetivo con: {ally}",
+            "token": "Mientras se tenga como objetivo: {token}",
+            "when-active-equipment": "Mientras esté equipado: {item}",
+            "when-active-feature": "Mientras esté activo: {item}",
+            "when-in-combat": "En combate",
+            "while-adjacent-to": "Mientras se esté adyacente a: {ally}",
+            "while-sharing-with": "Mientras se comparta casilla con: {ally}",
+            "alignment": "Mientras el objetivo tenga el alineamiento: {alignment}",
+            "creature-subtype": "Mientras la criatura objetivo tenga el subtipo: {subtype}",
+            "is-target-within-range": "Mientras el objetivo esté en rango: {range}",
+            "token-inverted": "Mientras se tenga como objetivo a cualquiera excepto: {token}"
+        },
+        "invalid-uncanny-dodge-class": "La asociación de clase debe ser configurada.",
+        "invalid-uncanny-dodge-item": "Debe ser puesto en una aptitud de clase.",
+        "deprecation": {
+            "dice": {
+                "bonus": "El uso de bonificadores de habilidad configurados directamente en el objeto está obsoleto y se eliminará en una versión futura. Configura los cambios directamente en la aptitud de origen que concede estos bonificadores.",
+                "inspiration": "El uso de la inspiración configurada directamente en la habilidad está obsoleto y se eliminará en una versión futura. Transición al uso de las habilidades específicas de Inspiración configuradas en las aptitudes adecuadas.",
+                "dice": "El uso de modificar los dados base para las habilidades está obsoleto y se eliminará en una versión futura. Consulta la documentación para saber cómo configurar las habilidades para fortuna/infortunio. Si tienes una necesidad no cubierta por fortuna/infortunio, házmelo saber."
+            }
+        },
+        "hint": {
+            "select-action-for-flank": "Selecciona una acción para flanquear. Se utilizará para comprobar que es cuerpo a cuerpo y que tiene el alcance adecuado."
+        },
+        "title": {
+            "flank-detector": "Detector de flanqueo"
+        },
+        "info": {
+            "is-flanking": "'{meToken}' y '{allyToken}' están flanqueando '{targetToken}' con '{action}'.",
+            "is-not-flanking": "'{meToken}' no está flanqueando '{targetToken}' con '{action}'.",
+            "is-not-flanking-with-ally": "'{meToken}' y '{allyToken}' no están flanqueando '{targetToken}' con '{action}'.",
+            "token-distance": "Distancia entre '{first}' y '{second}': {distance}"
+        },
+        "warning": {
+            "action-is-not-melee": "'{action}' no es una acción cuerpo a cuerpo.",
+            "invalid-token-disposition": "Disposición de las fichas incompatible para flanquear.",
+            "invalid-token-selection": "Fichas inválidas seleccionadas.",
+            "no-actor": "Debes seleccionar una ficha (token) o usar este macro en una Llamada a Script.",
+            "range-misconfigured": "La acción ({actionName}) en el artículo '{itemName}' ({actionUuid}) tiene un rango no válido. Comprueba que sus incrementos máximos y su rango se han configurado correctamente. Asume automáticamente que está dentro del rango.",
+            "uncanny-dodge-improved": "Debe configurarse en un Rasgo de clase con su Clase asociada correctamente configurada.",
+            "pack-flanking": "Flanque en manada requiere que se configure un aliado."
+        },
+        "missing-conditional-target": "Bonificador '{bonus}' requiere que un Objetivo Condicional funcione correctamente.",
+        "with": "con"
     }
 }
