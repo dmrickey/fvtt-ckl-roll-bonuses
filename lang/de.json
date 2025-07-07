@@ -1,0 +1,812 @@
+{
+    "ckl-roll-bonuses": {
+        "ac-mod": "{mod} RK",
+        "acp-mod": "{mod} RKM",
+        "add-healing-formula": "Füge Heilungsformel hinzu",
+        "alignment": {
+            "lawful": "Rechtschaffen",
+            "chaotic": "Chaotisch",
+            "good": "Gut",
+            "evil": "Böse"
+        },
+        "all-crafts": "Handwerk (alle)",
+        "all-knowledges": "Wissen (alle)",
+        "all-performs": "Auftreten (alle)",
+        "all-professions": "Beruf (alle)",
+        "all-spells": "Alle Zauber",
+        "any-target-except": "Jedes Ziel außer:",
+        "bane-type": "{type} verderben",
+        "bane-type-subtype": "{type} ({subtype}) verderben",
+        "base-dice": "Basiswürfel",
+        "bonus-header-labels": {
+            "bonus": "Boni",
+            "conditional-bonus": "Bedingte Boni",
+            "target": "Ziele",
+            "target-override": "Zielüberschreibung",
+            "specific-bonus": "Spezielle Boni",
+            "ammo": "Munitionsboni"
+        },
+        "bonuses": {
+            "label": {
+                "ac": "RK",
+                "action": "Spezielle Aktionen",
+                "action-type": "Aktionstyp",
+                "action-type-radio": "Aktionstyp-Verknüpfung",
+                "action-type-types": "Aktionstypen",
+                "action-type-types-choices": {
+                    "is-melee": "Nahkampfangriffe",
+                    "is-natural": "Natürliche Angriffe",
+                    "is-natural-secondary": "Natürliche Sekundärangriffe",
+                    "is-physical": "Physischer Gegenstand",
+                    "is-ranged": "Fernkampfangriffe",
+                    "is-spell": "Zauber",
+                    "is-thrown": "Wurfwaffen",
+                    "is-weapon": "Waffen"
+                },
+                "agile": "Wendig",
+                "alignment": "Ziel hat Gesinnung",
+                "all": "Alle Aktionen",
+                "ammo-attack": "Allgemeiner Angriffsbonus",
+                "ammo-damage": "Schaden",
+                "ammo-effect": "Effekthinweis",
+                "ammo-enhancement": "Grundlegender Verbesserungsbonus",
+                "ammo-enhancement-stacks": "Stapelbarer Verbesserungsbonus",
+                "armor-focus": "Rüstungsfokus",
+                "armor-focus-improved": "Verbesserter Rüstungsfokus",
+                "attack": "Angriffsbonus",
+                "attack-crit-only": "Nur Krit-Bestätigung",
+                "bane": "Verderben",
+                "change-modification": "Modifikator ändern",
+                "change-modification-formula": "Formel für Modifikatoränderung",
+                "change-modification-set-type": "Art des Modifikators ändern",
+                "cl": "Zauberstufe",
+                "condition": "Hat Zustand",
+                "condition-target": "Ziel für Zustand",
+                "conditional-modifiers": "Bedingte Modifikatoren",
+                "crit-keen": "Scharf",
+                "crit-mult": "Kritischer Multiplikator",
+                "crit-offset": "Krit-Offset",
+                "crit": "Kritisch",
+                "damage": "Schaden",
+                "damage-type": "Schadensart",
+                "dc": "SG",
+                "devastating-strike": "Vernichtender Schlag",
+                "devastating-strike-improved": "Verbesserter Vernichtender Schlag",
+                "dice-transform": "Würfelumwandlung",
+                "dice-transform-priority": "Priorität",
+                "effective-size": "Effektive Grösse",
+                "elemental-cl": "Elementare ZS",
+                "elemental-dc": "Elementarer SG",
+                "elemental-focus": "Elementarfokus",
+                "elemental-focus-greater": "Mächtiger Elementarfokus",
+                "elemental-focus-mythic": "Mythischer Elementarfokus",
+                "enh": "Verbesserungsbonus",
+                "enh-stacks": "Verbesserungsbonus (stapelbar)",
+                "fates-favored": "Liebling des Schicksals",
+                "finesse-bonus": "Finesse",
+                "finesse-override": "Finesse",
+                "finesse-target": "Finesse",
+                "flanking-immunity": "Flankenimmunität",
+                "footnote": "Fussnote",
+                "fortune": "Glück",
+                "function": "Benutzerdefinierte Zielfunktion",
+                "function-player-label": "Funktionsbezeichnung für Spieler",
+                "furious-focus": "Konzentrierter Zorn",
+                "gang-up": "Gang Up",
+                "has-boolean-flag": "Hat boolesches Flag",
+                "has-boolean-flag-target": "Ziel für boolesches Flag",
+                "initiative": "Initiative",
+                "inspiration": "Inspiration",
+                "inspiration-amazing": "Erstaunliche Inspiration",
+                "inspiration-extra-die": "Zusätzlicher Inspirationswürfel",
+                "inspiration-focused": "Fokussierte Inspiration",
+                "inspiration-tenacious": "Hartnäckige Inspiration",
+                "inspiration-true": "Wahre Inspiration",
+                "is-flanking": "Flankiert",
+                "is-flanking-with": "Mit Verbündeten",
+                "is-target-within-range": "Ziel in Reichweite",
+                "is-target-within-range-max": "Maximale Reichweite ({unit})",
+                "is-target-within-range-min": "Minimale Reichweite ({unit})",
+                "item": "Spezielle Gegenstände",
+                "martial-focus": "Kampf-Fokus",
+                "maximize-damage": "Schaden maximieren",
+                "menacing": "Bedrohlich",
+                "misfortune": "Unglück",
+                "outflank": "Umkreisen",
+                "outflank-improved": "Verbessertes Umkreisen",
+                "pack-flanking": "Flankieren im Rudel",
+                "precise-shot": "Gezielter Schuss",
+                "proficiency": "Beherrscht",
+                "ranged-increment-penalty": "Bonusse auf Fernkampfinkrement-Strafen",
+                "ranged-increment-penalty-increment-penalty-offset": "Reduktion der Reichweitenstrafe",
+                "ranged-increment-penalty-increment-range-offset": "Reichweitenabweichung",
+                "ranged-increment-penalty-max-increment-offset": "Maximale Reichweitenstufe",
+                "ranged-increment-penalty-penalty-offset": "Gesamte Strafreduktion",
+                "roll-untrained": "Fertigkeiten ungeübt würfeln",
+                "script-call": "Skriptaufruf",
+                "save": "Rettungswurf",
+                "save-chosen": "Ausgewählte Rettungswürfe",
+                "save-input": "Rettungswurf-Modifikation",
+                "self": "Selbst",
+                "skill": "Fertigkeit",
+                "skill-chosen": "Ausgewählte Fertigkeiten",
+                "skill-input": "Fertigkeitsmodifikation",
+                "skill-rank-override": "Fertigkeitsränge überschreiben",
+                "skill-rank-override-formula": "Formel zur Überschreibung der Fertigkeitsränge",
+                "skill-rank-override-selected": "Zu ueberschreibende Fertigkeiten",
+                "snake-sidewind": "Schlangen-Seitwind",
+                "solo-tactics": "Solotaktiken",
+                "solo-tactics-allies": "Bestimmte Verbündete (optional)",
+                "spell": "Spezielle Zauber",
+                "spell-descriptor": "Zauber-Deskriptoren",
+                "spell-focus": "Zauberfokus",
+                "spell-focus-greater": "Verbesserter Zauberfokus",
+                "spell-focus-mythic": "Mythischer Zauberfokus",
+                "spell-school": "Zauberschulen",
+                "spell-subschool": "Zauber-Unterschulen",
+                "spell-specialization": "Zauberspezialisierung",
+                "swarming": "Schwärmen",
+                "token": "Anvisierte Tokens",
+                "token-invert": "Anvisierte Tokens umkehren",
+                "uncanny-dodge-improved": "Verbesserte Reflexbewegung",
+                "underfoot-assault": "Unterfußangriff",
+                "versatile-performance": "Vielseitige Darbietung",
+                "versatile-performance-expanded": "Erweiterte vielseitige Darbietung",
+                "versatile-training": "Vielseitiges Training - Waffengruppe",
+                "versatile-training-selected": "Vielseitiges Training - Gewählte Fertigkeiten",
+                "vital-strike": "Konzentrierter Schlag",
+                "vital-strike-enabled": "Standardmässig aktiviert",
+                "vital-strike-greater": "Mächtiger Konzentrierter Schlag",
+                "vital-strike-improved": "Verbesserter Konzentrierter Schlag",
+                "vital-strike-mythic": "Mythischer Konzentrierter Schlag",
+                "weapon-focus": "Waffenfokus",
+                "weapon-focus-greater": "Verbesserter Waffenfokus",
+                "weapon-focus-mythic": "Mythischer Waffenfokus",
+                "weapon-focus-racial": "Volks-Waffenfokus",
+                "weapon-group": "Waffengruppe",
+                "weapon-group-override": "Waffengruppe",
+                "weapon-specialization": "Waffenspezialisierung",
+                "weapon-specialization-greater": "Verbesserte Waffenspezialisierung",
+                "weapon-type": "Waffentyp",
+                "weapon-type-override": "Waffentyp",
+                "weapon": "Spezielle Waffen und Angriffe",
+                "when-active": "Wenn Gegenstand aktiv ist",
+                "when-in-combat": "Im Kampf",
+                "while-adjacent-to": "Während angrenzend zu",
+                "while-sharing-with": "Während ein Feld geteilt wird mit"
+            },
+            "tooltip": {
+                "ac": "Fügt der RK des Charakters einen bedingten Bonus hinzu.",
+                "action": "Gewährt Boni für bestimmte Aktionen.",
+                "action-type": "Aktiviert Boni, wenn die angegebenen Aktionstypen zutreffen.",
+                "action-type-radio": "Legt fest, ob die Aktionstypen gemeinsam oder einzeln ausgewertet werden.<br><br>Alle: Boni werden nur gewährt, wenn alle Aktionstypen zutreffen.<br><br>Irgendeiner: Boni werden gewährt, wenn mindestens ein Aktionstyp zutrifft.",
+                "agile": "Gewährt Geschicklichkeit zum Schaden bei Angriffen.",
+                "alignment": "Aktiviert Boni, wenn Ziele mit der gewählten Gesinnung angegriffen werden.",
+                "all": "Aktiviere Boni für jede Aktion, die den Bonus anwenden kann.",
+                "ammo-attack": "Dieser Angriffsbonus wird zusätzlich zu allen anderen Angriffsboni angewendet, wenn diese Munition benutzt wird.",
+                "ammo-damage": "Ein typisierter Schadensbonus, der beim Einsatz dieser Munition hinzugefügt wird.",
+                "ammo-effect": "Beim Angriff mit diesem Pfeil wird dieser Effekthinweis angezeigt.",
+                "ammo-enhancement": "Der Grundverbesserungsbonus der Munition.",
+                "ammo-enhancement-stacks": "Für stapelbare Verbesserungsboni wie Verderben.",
+                "armor-focus": "Erhöht die RK der gewählten Rüstung um 1. Die Rüstung muss korrekt mit Grundausrüstungstypen konfiguriert sein.",
+                "armor-focus-improved": "Verringert den RK-Malus der gewählten Rüstung um 1. Die Rüstung muss korrekt mit Grundausrüstungstypen konfiguriert sein.",
+                "attack": "Formel zur Erhöhung des Angriffs.",
+                "attack-crit-only": "Legt fest, ob dieser Angriffsbonus nur für Kritbestätigungswürfe gelten soll.",
+                "bane": "Fügt Zielangriffen einen Verbesserungsbonus von +2 und +2W6 Schaden hinzu, wenn ein Ziel mit den gewählten Kreaturentypen angegriffen wird.",
+                "change-modification": "Verändert den gewählten Änderungswert. Ähnlich wie Liebling des Schicksals, aber mit frei wählbarem Effekt.",
+                "change-modification-formula": "Formel und Typ, um den angegebenen Änderungswert zu verändern.",
+                "change-modification-set-type": "Legt fest, ob der Änderungswert auf die Formel gesetzt oder von ihr modifiziert wird.",
+                "cl": "Verändert die Zauberstufe eines Zaubers.",
+                "condition": "Aktiviert Boni, wenn der Charakter einen Zustand hat.",
+                "conditional-modifiers": "Gewährt bedingte Modifikatoren auf ausgewählte Aktionen.",
+                "creature-type": "Wird angewendet, wenn das aktuelle Ziel einen der gewählten Kreaturentypen besitzt.",
+                "creature-subtype": "Wird angewendet, wenn das aktuelle Ziel einen der gewählten Kreaturenuntertypen besitzt.",
+                "crit-keen": "Verdoppelt den kritischen Bedrohungsbereich.",
+                "crit-mult": "Erhöht oder verringert den kritischen Multiplikator.",
+                "crit-offset": "Verändert den kritischen Bedrohungsbereich. Diese Veränderung erfolgt nach Scharf.",
+                "crit": "Verändert den kritischen Bereich und/oder Multiplikator.",
+                "damage": "Fügt den ausgewählten Aktionen Bonusschaden hinzu.",
+                "damage-type": "Boni gelten für Aktionen, die die gewählte Schadensart verursachen.",
+                "dc": "Verändert den SG von Zaubern und Fähigkeiten.",
+                "devastating-strike": "Fügt Schaden bei Wuchtigen Schlägen hinzu",
+                "devastating-strike-improved": "Erhöht die Kritbestätigung bei Wuchtigen Schlägen",
+                "dice-transform": "Wandelt den Basis-Schaden der ausgewählten Aktionen um.",
+                "dice-transform-priority": "Reihenfolge bei mehreren Umwandlungen. Höhere Zahlen werden zuerst verarbeitet.",
+                "effective-size": "Formel zur Erhöhung der effektiven Größe einer sizeRoll-Formel. Wird für Effekte wie Bleiklingen oder Gravitationsbogen genutzt.",
+                "elemental-cl": "Verändert die Zauberstufe für Zauber des gewählten Elements.",
+                "elemental-dc": "Verändert den SG für Zauber des gewählten Elements.",
+                "elemental-focus": "+1 SG für Zauber des gewählten Elements.",
+                "elemental-focus-greater": "Erhöht ein Element aus Elementarfokus um weitere +1 SG.",
+                "elemental-focus-mythic": "Verdoppelt Boni aus Elementarfokus.",
+                "enh": "Verändert den Verbesserungsbonus eines Angriffs oder einer Waffe.",
+                "enh-stacks": "Verändert den Verbesserungsbonus eines Angriffs oder einer Waffe.",
+                "fates-favored": "Erhöht alle Glücksboni um 1.",
+                "finesse-bonus": "Verwendet Geschicklichkeit statt Stärke für Angriffswürfe.",
+                "finesse-override": "Verleiht einem Gegenstand die Eigenschaft Finesse, auch wenn dieser normalerweise keine Waffeneigenschaften besitzt.",
+                "finesse-target": "Aktiviert Boni für alle Finesse-fähigen Ziele. Erfordert eine Waffe mit Finesse-Eigenschaft, einen Natürlichen Angriff oder das Flag `finesse-override`.",
+                "flanking-immunity": "Gewährt Immunität gegen die Bedingung 'Flankiert' und den globalen Flankierungsbonus",
+                "footnote": "Zielangriffe enthalten diese Fußnote.",
+                "fortune": "Würfle zweimal und nimm das bessere Ergebnis. Mehrere Boni stapeln sich.",
+                "function": "Eine benutzerdefinierte Funktion, die bestimmt, welche Ziele ausgewählt werden. Siehe Dokumentation für Beispiele.",
+                "function-player-label": "Bezeichnung, die Spielern angezeigt wird. Spieler können die Funktion nicht bearbeiten.",
+                "furious-focus": "Negiert den Angriffsmalus von heftiger Angriff beim ersten Angriff jeder Runde.",
+                "gang-up": "Du bedrohst dein Ziel, wenn mindestens zwei deiner Verbündeten es ebenfalls bedrohen.",
+                "has-boolean-flag": "Aktiviert Boni, wenn ein bestimmtes boolesches Flag gesetzt ist.",
+                "initiative": "Verändert die Initiativwürfe des Charakters",
+                "inspiration": "Ermöglicht das freie Nutzen von Inspiration bei bestimmten Fertigkeiten.",
+                "inspiration-amazing": "Erhöht den Inspirationswürfel um eine Stufe.",
+                "inspiration-focused": "Erhöht den Inspirationswürfel für gewählte Fertigkeiten um eine Stufe.",
+                "inspiration-tenacious": "Beim Einsatz von Inspiration einen zusätzlichen Würfel werfen und das höchste Ergebnis behalten.",
+                "inspiration-true": "Inspiration kann für alle Fertigkeiten frei verwendet werden.",
+                "is-flanking": "Aktiviere Boni, wenn du deine aktuellen Ziele flankierst.",
+                "is-flanking-with": "Aktiviere Boni, wenn du an einem der angegebenen Verbündeten angrenzst.",
+                "is-target-within-range": "Aktiv, wenn sich alle Ziele innerhalb einer angegebenen Reichweite befinden.",
+                "is-target-within-range-min": "Aktiviere Boni, wenn alle ausgewählten Ziele mindestens so weit entfernt sind.",
+                "is-target-within-range-max": "Aktiviere Boni, wenn alle ausgewählten Ziele höchstens so weit entfernt sind.",
+                "item": "Wendet Boni an, wenn diese bestimmten Gegenstände benutzt werden.",
+                "martial-focus": "+1 Schaden mit der gewählten Waffengruppe. Angriffe und Waffen müssen korrekt mit Waffengruppen konfiguriert sein.",
+                "maximize-damage": "Maximiert die Schadenswürfe der ausgewählten Fähigkeiten.",
+                "menacing": "Erhöhe jeden Flankierungsbonus um +2 gegen einen Gegner, den du bedrohst.",
+                "misfortune": "Würfle zweimal und nimm das schlechtere Ergebnis. Mehrere Boni stapeln sich.",
+                "outflank": "Teamwork-Talent, das Flankierungsboni um +2 erhöht.",
+                "outflank-improved": "Teamwork-Talent, das Flankierungspositionen verbessert.",
+                "pack-flanking": "Du giltst als flankierend mit deinem Tiergefährten, wenn ihr beide dieses Talent besitzt und nebeneinander steht und dasselbe Ziel bedroht.",
+                "precise-shot": "Hebt den Abzug für Schüsse in den Nahkampf auf.",
+                "proficiency": "Gibt Fertigkeit mit diesem Gegenstand (oft zusammen mit einer Waffengruppen-Überschreibung erforderlich).",
+                "ranged-increment-penalty": "Verändert die Strafen, die mit Reichweiteninkrementen von Fernkampfwaffen verbunden sind.",
+                "ranged-increment-penalty-increment-penalty-offset": "Ändert die Anzahl maximaler Reichweiteninkremente.",
+                "ranged-increment-penalty-increment-range-offset": "Ändert die Reichweite pro Inkrement.",
+                "ranged-increment-penalty-max-increment-offset": "Reduziert die Strafe pro Inkrement.",
+                "ranged-increment-penalty-penalty-offset": "Verringert die Gesamtstrafe.",
+                "roll-untrained": "Erlaubt Fertigkeitenwürfe ohne Ausbildung.",
+                "script-call": "Konfiguriert Skriptaufrufe, die für die gewählten Aktionen ausgeführt werden. Makros können ebenfalls hierhin gezogen werden.",
+                "save": "Wendet Boni auf Rettungswürfe an.",
+                "self": "Wendet Boni auf alle Aktionen dieses Gegenstandes an.",
+                "skill": "Wendet Boni auf Fertigkeitswürfe an.",
+                "skill-rank-override": "Setzt den Fertigkeitsrang einer gewählten Fertigkeit auf einen festen Wert. Nützlich beispielsweise für ein Stirnband der gewaltigen Intelligenz.",
+                "skill-rank-override-formula": "Formel, um den Fertigkeitsrang der gewählten Fertigkeit(en) auf einen festen Wert zu setzen. Nützlich beispielsweise für ein Stirnband der gewaltigen Intelligenz.",
+                "skill-rank-override-selected": "Die Fertigkeiten, die mit der angegebenen Formel überschrieben werden.",
+                "snake-sidewind": "Verwendet Motiv erkennen für Kritbestätigungen, wenn dein maximales Motiv-erkennen-Ergebnis höher ist als dein maximaler Angriffswurf.",
+                "solo-tactics": "Betrachte Verbündete so, als besäßen sie deine Teamwork-Talente (derzeit für Umkreisen und Verbessertes Umkreisen verwendet).",
+                "solo-tactics-allies": "Beschränke dies auf bestimmte Verbündete (oder leer lassen, um alle Verbündeten einzuschließen).",
+                "spell-school": "Wendet Boni auf Zauber der gewählten Schule(n) an.",
+                "spell-subschool": "Wendet Boni auf Zauber der gewählten Unterschule(n) an.",
+                "spell-specialization": "Erhöht die Zauberstufe um 2 für einen gewählten Zauber aus einer Schule, für die du Zauberfokus besitzt.",
+                "spell": "Wendet Boni auf Aktionen dieser bestimmten Zauber an.",
+                "spell-focus": "+1 SG für die gewählten Zauberschulen.",
+                "spell-focus-greater": "Erhöht eine durch Zauberfokus gewählte Schule um weitere +1 SG.",
+                "spell-focus-mythic": "Verdoppelt die Boni aus Zauberfokus.",
+                "spell-descriptor": "Wendet Boni auf Zauber mit den gewählten Deskriptoren an.",
+                "swarming": "Wenn du ein Feld mit einem Verbündeten mit dieser Fähigkeit teilst, giltst du als flankierend gegen dein Ziel.",
+                "token": "Wendet Boni an, wenn bestimmte Tokens anvisiert sind. Beim Aktivieren erscheint ein Dialog zur Auswahl von Tokens in der Szene.",
+                "token-invert": "Kehrt die Auswahl um, sodass Boni gelten, wenn ein anderes als das gewählte Token anvisiert wird.",
+                "uncanny-dodge-improved": "Gewährt Immunität gegen Flankieren, außer von einem Schurken höheren Levels. Darf nur auf eine Klassenfähigkeit angewendet werden.",
+                "underfoot-assault": "Wenn du ein Feld mit einem Gegner teilst und an einen Verbündeten angrenzst, giltst du als flankierend gegen diesen Gegner.",
+                "versatile-performance": "Ersetzt zwei Fertigkeiten durch eine gewählte Darbietungs-Fertigkeit.",
+                "versatile-performance-expanded": "Wähle eine dritte Fertigkeit, die mit der gewählten Darbietungsfertigkeit verknüpft wird.",
+                "versatile-training": "Nutze den Grund-Angriffsbonus statt Rangpunkten für zwei mit einer Waffengruppe verbundene Fertigkeiten.",
+                "versatile-training-selected": "Diese Fertigkeiten verwenden deinen Grund-Angriffsbonus als Ränge.",
+                "vital-strike": "Zusätzlicher Schaden bei Angriffsaktionen basierend auf dem Waffenschaden.",
+                "vital-strike-mythic": "Bei Einsatz einer Wuchtiger-Schlag-Fähigkeit werden zusätzlich alle anderen Boni multipliziert, die normalerweise bei einem kritischen Treffer vervielfacht würden.",
+                "vital-strike-enabled": "Legt fest, ob Konzentrierter Schlag in Angriffs-Dialogen standardmäßig aktiviert sein soll.",
+                "vital-strike-enabled-current": "Derzeit standardmäßig aktiviert.",
+                "weapon-focus": "+1 Bonus auf Angriffswürfe mit dem gewählten Waffentyp. Angriffe und Waffen müssen korrekt mit Grundwaffentypen konfiguriert sein.",
+                "weapon-focus-greater": "Erhöht den Angriffswurf des mit Waffenfokus gewählten Waffentyps um weitere +1.",
+                "weapon-group": "Wendet Boni an, wenn Waffen aus gewählten Waffengruppen verwendet werden. Angriffe und Waffen müssen korrekt mit Waffengruppen konfiguriert sein.",
+                "weapon-group-override": "Fügt einem Gegenstand Waffengruppen hinzu, die normalerweise keine haben können.",
+                "weapon-specialization": "+2 auf Schadenswürfe mit dem gewählten Waffentyp. Angriffe und Waffen müssen korrekt mit Grundwaffentypen konfiguriert sein.",
+                "weapon-specialization-greater": "Erhöht den Schaden eines für Waffenspezialisierung gewählten Waffentyps um weitere +2.",
+                "weapon-focus-mythic": "Verdoppelt Angriffsboni aus Waffenfokus.",
+                "weapon-focus-racial": "+1 Bonus auf Angriffswürfe mit gewählten Volkswaffen. Die Waffe muss mit dem Volk gekennzeichnet sein, um den Bonus zu erhalten.",
+                "weapon-type": "Wendet Boni an, wenn der gewählte Waffentyp verwendet wird. Angriffe und Waffen müssen korrekt mit Grundwaffentypen konfiguriert sein.",
+                "weapon-type-override": "Fügt einem Gegenstand einen Waffentyp hinzu, der normalerweise keinen haben kann. Dies entspricht dem Grundwaffentyp einer Waffe.",
+                "weapon": "Wähle bestimmte Angriffe und Waffen für Boni aus.",
+                "when-active": "Wende Boni an, wenn ein bestimmter Buff/Waffe/Talent usw. aktiv ist.",
+                "when-in-combat": "Aktiv, wenn sich der Charakter im Kampf befindet.",
+                "while-adjacent-to": "Aktiviert Boni, während du an einem der angegebenen Verbündeten angrenzst.",
+                "while-sharing-with": "Aktiviert Boni, während du ein Feld mit einem der angegebenen Verbündeten teilst."
+            }
+        },
+        "cancel": "Abbrechen",
+        "cl-mod": "{mod} ZS",
+        "cl-label": "ZS ({label})",
+        "cl-label-mod": "{mod} ZS ({label})",
+        "crit-damage-label": {
+            "crit": " (Nur Kritisch)",
+            "nonCrit": " (Nur nicht kritisch)",
+            "normal": ""
+        },
+        "crit-mult-mod": "Kritischer Multiplikator ({mod})",
+        "crit-mult-offset-all": "Crit Multiplier Offset (alle)",
+        "crit-mult-offset-self": "Kritischer Multiplikator-Offset (selbst)",
+        "crit-mult-offset-targeted": "Kritischer Multiplikator-Offset ({id})",
+        "crit-mult": "Kritischer Multiplikator",
+        "crit-offset-all": "Crit Offset (alle)",
+        "crit-offset-mod": "Kritische Bedrohung ({mod})",
+        "crit-offset-self": "Krit-Offset (selbst)",
+        "crit-offset-targeted": "Krit-Offset ({id})",
+        "crit-offset": "Krit-Offset",
+        "damage-app": {
+            "add-effect-damage": "Effektschaden hinzufügen",
+            "add-typed-damage": "Typisierten Schaden hinzufügen",
+            "effect-formula": "Effektschaden-Formel",
+            "typed-formula": "Formel für typisierten Schaden"
+        },
+        "damage-formula": "Schadensbonus-Formel",
+        "dc-label-mod": "{mod} SG ({label})",
+        "dc-mod": "{mod} SG",
+        "driver": "Beruf (Kutscher)",
+        "enh-mod-stacks": "{mod} Verbesserungsbonus (stapelbar)",
+        "enh-mod": "Verbesserungsbonus -> {mod}",
+        "effective-size": {
+            "hint": "Größe: {mod}"
+        },
+        "fluent-description": {
+            "alignment": "Solange das Ziel die Gesinnung {alignment} hat",
+            "all": "Alle",
+            "condition-self": "Solange du den Zustand {condition} hast",
+            "condition-target": "Solange das Ziel den Zustand {condition} hat",
+            "creature-subtype": "Solange das Ziel den Kreaturenuntertyp {subtype} hat",
+            "creature-type": "Solange das Ziel den Kreaturentyp {type} hat",
+            "has-boolean-flag-self": "Solange du das boolesche Flag {flag} hast",
+            "has-boolean-flag-target": "Solange {target} das boolesche Flag {flag} hat",
+            "is-flanking": "Während du das Ziel flankierst",
+            "is-flanking-with": "Während du das Ziel mit {ally} flankierst",
+            "is-target-within-range": "Solange das Ziel in Reichweite {range} ist",
+            "token": "Solange du {token} anvisierst",
+            "token-inverted": "Solange du jeden außer {token} anvisierst",
+            "when-active-equipment": "Solange {item} ausgerüstet ist",
+            "when-active-feature": "Solange {item} aktiv ist",
+            "when-in-combat": "Während im Kampf",
+            "while-adjacent-to": "Während angrenzend zu {ally}",
+            "while-sharing-with": "Während du ein Feld mit {ally} teilst"
+        },
+        "fortune": "Glück",
+        "global-bonus": {
+            "actor": {
+                "description": "Die vom SL für diese Welt aktivierten globalen Boni. Jede Einstellung kann hier für diesen Charakter einzeln deaktiviert werden, falls sie nicht passend ist.",
+                "disable": "Globale Boni für diesen Charakter deaktivieren"
+            },
+            "attack-label": {
+                "higher-ground": "Höhenvorteil",
+                "range-increment-penalty": "Fernkampfstrafe ({range}{units})",
+                "shoot-into-melee": "In den Nahkampf"
+            },
+            "dialog-disable": {
+                "range-increment-penalty": "Reichweitenprüfungen überspringen",
+                "require-melee-threaten": "Nahkampfreichweite ignorieren"
+            },
+            "disabled-footnote": {
+                "range-increment-penalty": "Reichweitenprüfung übersprungen",
+                "require-melee-threaten": "Nahkampferfordernis übersprungen"
+            },
+            "label": {
+                "flanking": "Flankieren",
+                "higher-ground": "Höhenvorteil-Nahkampfbonus",
+                "range-increment-penalty": "Strafe für Reichweiteninkremente",
+                "shoot-into-melee": "Schuss in den Nahkampf",
+                "require-melee-threaten": "Nahkampfreichweite erforderlich"
+            },
+            "warning": {
+                "range-increment-error-plural": "Das entfernteste Ziel ({distance}{units}) liegt außerhalb deiner maximalen Reichweite ({max}{units}).",
+                "range-increment-error-singular": "Das Ziel ({distance}{units}) liegt außerhalb deiner maximalen Reichweite ({max}{units}).",
+                "require-melee-threaten-plural": "Du bedrohst mindestens eines der Ziele nicht.",
+                "require-melee-threaten-singular": "Du bedrohst das Ziel nicht."
+            }
+        },
+        "global-settings": {
+            "application": {
+                "description": "Dies versucht globale Boni zu automatisieren, die manuell lästig wären. Einige davon sind nur ein Best-Effort und sollten unter den meisten Umständen funktionieren, können aber kleinere Macken haben.",
+                "hint": "Konfiguriert bestimmte Kampfboni, die automatisiert werden können. Diese globalen Optionen sind nicht für einzelne Talente oder Fähigkeiten gedacht, sondern gelten für alle.",
+                "label": "Globale Boni konfigurieren",
+                "title": "Globale Boni",
+                "section": {
+                    "flanking": {
+                        "description": "Versucht, automatisch passende Boni für das Flankieren hinzuzufügen. Das Modul enthält verschiedene Boni, um unterschiedliche Talente und Fähigkeiten zu berücksichtigen, die den Bonus erhöhen und die Positionierung beeinflussen. Sieh dir das Journal an, um weitere Details zu diesen Fähigkeiten zu erhalten.",
+                        "issues": "Flankieren über Diagonalen ohne angrenzend zu sein ist eventuell nicht regelkonform, sollte aber für die meisten Situationen ausreichen (würde man die Karte um 45° drehen, wäre es eindeutig Flankieren)."
+                    },
+                    "higher-ground": {
+                        "description": "Gewährt +1 auf Nahkampfangriffe aus höherer Position.",
+                        "issues": ""
+                    },
+                    "range-increment-penalty": {
+                        "description": "Fügt Strafen für Fernkampf-Inkremente hinzu. Aktiviert gleichzeitig Boni, die diese Strafen oder Reichweiteninkremente verändern können.",
+                        "issues": "Dies sollte in den meisten Fällen korrekt funktionieren. Falsch berechnete Strafen können auftreten, wenn ein großes Ziel teilweise von einer Wand verdeckt ist und der sichtbare Teil weiter entfernt liegt als der nächste Punkt. Das Modul berechnet stets vom nächsten Punkt des Ziels aus, unabhängig von Wänden."
+                    },
+                    "shoot-into-melee": {
+                        "description": "Fügt Abzüge für Schüsse in den Nahkampf hinzu. Dafür muss ein Verbündeter an das Ziel angrenzen, das Ziel eine andere Gesinnung haben und mindestens du oder dein Verbündeter den anderen bedrohen (erfordert eine ausgerüstete Nahkampfwaffe oder einen natürlichen Angriff). Außerdem wird ein spezieller Bonus für Gezielter Schuss hinzugefügt. Öffne das Talent Gezielter Schuss, um es zu konfigurieren. Größenunterschiede werden korrekt berücksichtigt.",
+                        "issues": "Normalerweise kann dieser Abzug ignoriert werden (außer bei Gezielter Schuss), wenn du auf eine Kreatur schießt, die groß genug ist, um einen Punkt mindestens 3 m von deinen Verbündeten entfernt anzuvisieren. Ob diese Stellen erreichbar oder sichtbar sind, wird nicht geprüft – ist die Kreatur groß genug, entfällt der Abzug automatisch."
+                    },
+                    "require-melee-threaten": {
+                        "description": "Verhindert einen Nahkampfangriff, wenn der Angreifer das Ziel nicht bedroht. Bei einer Nahkampfaktion wird der Angriff abgebrochen, wenn das Ziel außer Reichweite ist.",
+                        "issues": "Der SL kann unter Umständen einen Nahkampfangriff außerhalb der Reichweite zulassen. Um dies zu umgehen, kannst du entweder kein Token anvisieren oder im Angriffsfenster die Checkbox \"Nahkampf-Reichweite ignorieren\" aktivieren."
+                    }
+                }
+            }
+        },
+        "hint-missing-bonus": "Fehlender Bonus, zum Hinzufügen klicken",
+        "hint-missing-target": "Fehlendes Ziel, zum Hinzufügen klicken",
+        "inspiration-amazing-die": "Inspirationswürfel: {die}",
+        "invalid-uncanny-dodge-class": "Die Klassen-Zuordnung muss konfiguriert sein.",
+        "invalid-uncanny-dodge-item": "Muss auf einer Klassenfähigkeit liegen.",
+        "invalid-override": "Dies hat keinen Effekt für diesen Gegenstandstyp – bearbeite die Gegenstandsdaten direkt.",
+        "item-app": {
+            "description": "Boni werden nur angewendet, wenn die ausgewählten Gegenstände verwendet werden. Rechtsklick auf eine Zeile öffnet das Blatt dieses Gegenstands zur weiteren Überprüfung.",
+            "description-actions": "Boni werden nur angewendet, wenn die ausgewählten Aktionen verwendet werden. Rechtsklick auf eine Zeile öffnet das Blatt dieser Aktion zur weiteren Überprüfung (oder die Kopfzeile öffnet den Gegenstand).",
+            "description-when-active": "Diese Boni sind nur aktiv, wenn der anvisierte Gegenstand ebenfalls aktiv ist. Zum Beispiel sekundäre Boni, die nur beim Rasen gelten.",
+            "title": "Gegenstandsauswahl",
+            "title-action": "Aktionsauswahl - {name}"
+        },
+        "item-hints": {
+            "skill-rank-override": "{skills} (->{rank})"
+        },
+        "item-name-app": {
+            "description": "Verschiedene Talente und Fähigkeiten versuchen sich beim ersten Einsatz automatisch zu konfigurieren. Dies basiert auf ihrer internen ID oder ihrem Namen. Wenn keine passende ID vorhanden ist, wird der Name verwendet, um zu bestimmen, welche Werte initialisiert werden müssen. Da dieses Modul derzeit nur auf Englisch verfügbar ist, kannst du hier Übersetzungen angeben, die automatisch für die Konfiguration dieser Talente und Fähigkeiten genutzt werden.",
+            "english-name": "Englischer Name",
+            "hint": "Trage Übersetzungen für Fähigkeiten ein, die <b>Roll Bonuses</b> automatisch konfigurieren möchte, wenn du nicht auf Englisch spielst.",
+            "label": "Konfiguration öffnen",
+            "title": "Konfiguration der Gegenstandsnamen",
+            "translation": "Übersetzung"
+        },
+        "keen": "Scharf",
+        "keen-all": "Scharf (alle)",
+        "keen-id": "scharf ({id})",
+        "keen-self": "Scharf (selbst)",
+        "maximized": "Maximiert",
+        "maximized-total": "Maximiert: {total}",
+        "misfortune": "Unglück",
+        "missing-bonuses": "Es sind keine Boni konfiguriert.",
+        "missing-conditional-target": "Der Bonus '{bonus}' erfordert ein Bedingtes Ziel, um korrekt zu funktionieren.",
+        "missing-targets": "Es sind keine Ziele konfiguriert.",
+        "modifiers": "Modifikatoren",
+        "ok": "OK",
+        "picker": {
+            "tabs": {
+                "specific": "Spezielle Boni",
+                "specific-description": "Diese sind für Boni, die entweder zu speziell oder zu allgemein für einen Ziel-Bonus sind. Die meisten betreffen einzigartige Fähigkeiten oder Talente oder wirken sehr breit und passen nicht in das \"Targeted\"-System.",
+                "targeted": "Gezielte Boni",
+                "targeted-description": "Gezielte Boni erfordern mindestens einen Bonus und mindestens ein Ziel."
+            },
+            "bonuses": {
+                "label": "Boni",
+                "tooltip": "Dies sind die verschiedenen Boni, die auf deine Fähigkeiten angewendet werden können."
+            },
+            "conditional-targets": {
+                "label": "Bedingte Ziele",
+                "tooltip": "Bedingte Ziele wenden Boni auf alle passenden Fähigkeiten an, wenn ihre spezifischen Bedingungen erfüllt sind."
+            },
+            "specific-bonuses": {
+                "label": "Spezielle Boni",
+                "tooltip": "Spezielle Boni sind spezifischer und weniger konfigurierbar als generische Boni. Sie sind nach der Fähigkeit benannt, die sie umsetzen."
+            },
+            "target-overrides": {
+                "label": "Ziel-Überschreibungen",
+                "tooltip": "Fügt Gegenstandstypen Daten hinzu, die sie normalerweise nicht besitzen, damit sie mit anderen Zielen funktionieren. Z. B. einem Zauber den Waffentyp \"Strahl\" zuweisen oder einer Attacke die Eigenschaft Finesse geben."
+            },
+            "targets": {
+                "label": "Ziele",
+                "tooltip": "Ziele bestimmen genau, welche Fähigkeiten von Boni betroffen sind."
+            }
+        },
+        "roll-bonuses": "Würfelboni",
+        "script-call-default-name": "Skriptaufruf",
+        "script-call-dialog": {
+            "delete-script-message": "Sobald dieses Skript gelöscht wird, kann es nicht wiederhergestellt werden.<br>Möchtest du dieses Skript wirklich löschen?",
+            "delete-script-title": "Skript löschen - {name}",
+            "edit-macro-message": "Du versuchst ein verknüpftes Makro zu bearbeiten, das diesem Gegenstand nicht gehört.<br><br>Wenn du dieses Makro änderst, bearbeitest du direkt das Makro der Welt. Jede andere Verwendung dieses Makros wird ebenfalls geändert.<br><br>Möchtest du dieses Makro wirklich bearbeiten?",
+            "edit-macro-title": "Makro bearbeiten - {name}"
+        },
+        "skill-rank-override": {
+            "skill-card-name": "{skillName} - ({sourceName} Ränge: {rank})",
+            "skill-sheet-tip": "{itemName}\nSetzt Fertigkeitsränge auf {rank}."
+        },
+        "skills": {
+            "config": "Fertigkeitskonfiguration",
+            "inspiration": "Inspiration"
+        },
+        "skill-sheet": {
+            "inspiration": {
+                "invalid-skill-tip": "Muss geübt sein, um kostenlos würfeln zu können ({die})",
+                "skill-tip": "Freie Inspiration ({die})"
+            },
+            "inspiration-focused": {
+                "skill-tip": "Erhöht den Inspirationswürfel um eine Stufe"
+            },
+            "inspiration-tenacious": {
+                "skill-tip": "Wirf einen zusätzlichen Inspirationswürfel, behalte das höchste Ergebnis"
+            },
+            "roll-untrained": {
+                "skill-tip": "Kann ungeübt gewürfelt werden"
+            }
+        },
+        "string-select.no-choices": "Keine gültigen Auswahlmöglichkeiten.",
+        "target-choice": {
+            "self": "Selbst",
+            "target": "Anvisierte Tokens"
+        },
+        "target-toggle": {
+            "all": "Alle",
+            "any": "Beliebig",
+            "tooltip": "Legt fest, ob die Bonus-Ziele gemeinsam oder einzeln ausgewertet werden.<br><br>Alle: Boni werden nur angewendet, wenn alle Ziele übereinstimmen.<br><br>Beliebig: Boni werden angewendet, wenn eines der Ziele übereinstimmt."
+        },
+        "targets": "Ziele",
+        "to-hit-mod": "{mod} Angriff",
+        "versatile-performance": {
+            "add": "Vielseitige Darbietung hinzufügen",
+            "delete": "Vielseitige Darbietung entfernen",
+            "error": "Vielseitige Darbietung - ungültige Fertigkeits-IDs",
+            "header": "Vielseitige Darbietung",
+            "hint": "{base} -> {skills}",
+            "label": {
+                "expanded": "Erweitert",
+                "perform": "Auftreten",
+                "skill1": "Fertigkeit 1",
+                "skill2": "Fertigkeit 2"
+            },
+            "replace-label": "{skill} (ersetzt durch {base})",
+            "skill-tip": "Kann mit Vielseitiger Darbietung - {base} ({enabled}) verwendet werden",
+            "title": "{skill} - Vielseitige Darbietung"
+        },
+        "versatile-training": {
+            "description": "Wähle zwei Fertigkeiten, die statt ihrer Ränge den Grund-Angriffsbonus verwenden.",
+            "header": "Vielseitiges Training",
+            "hint": "{skills}",
+            "skill-tip": "Vielseitiges Training - verwendet GAB ({bab}) statt Rängen",
+            "title": "{skill} - Vielseitiges Training"
+        },
+        "with": "mit",
+        "item-name-translations": {
+            "improved": {
+                "name": "Verbessert",
+                "default": "Verbessert"
+            },
+            "greater": {
+                "name": "Mächtig",
+                "default": "Mächtig"
+            },
+            "mythic": {
+                "name": "Legendär",
+                "default": "Legendär"
+            },
+            "armor-focus": {
+                "name": "Rüstungsfokus",
+                "default": "Rüstungsfokus"
+            },
+            "devastating-strike": {
+                "name": "Vernichtender Schlag",
+                "default": "Vernichtender Schlag"
+            },
+            "elemental-focus": {
+                "name": "Elementarfokus",
+                "default": "Elementarfokus"
+            },
+            "extreme-mood-swings": {
+                "name": "Extreme Stimmungsschwankungen",
+                "default": "Extreme Stimmungsschwankungen"
+            },
+            "fates-favored": {
+                "name": "Liebling des Schicksals",
+                "default": "Liebling des Schicksals"
+            },
+            "flanking-immunity": {
+                "name": "Flankenimmunität",
+                "default": "Rundumsicht"
+            },
+            "furious-focus": {
+                "name": "Konzentrierter Zorn",
+                "default": "Konzentrierter Zorn"
+            },
+            "gang-up": {
+                "name": "Gang Up",
+                "default": "Gang Up"
+            },
+            "inspiration": {
+                "name": "Inspiration",
+                "default": "Inspiration"
+            },
+            "inspiration-amazing": {
+                "name": "Erstaunliche Inspiration",
+                "default": "Erstaunliche Inspiration"
+            },
+            "inspiration-device-talent": {
+                "name": "Geräte-Talent",
+                "default": "Geräte-Talent"
+            },
+            "inspiration-empathy": {
+                "name": "Empathie",
+                "default": "Empathie"
+            },
+            "inspiration-expanded": {
+                "name": "Erweiterte Inspiration",
+                "default": "Erweiterte Inspiration"
+            },
+            "inspiration-focused": {
+                "name": "Fokussierte Inspiration",
+                "default": "Fokussierte Inspiration"
+            },
+            "inspiration-inspired-intelligence": {
+                "name": "Inspirierte Intelligenz",
+                "default": "Inspirierte Intelligenz"
+            },
+            "inspiration-tenacious": {
+                "name": "Hartnäckige Inspiration",
+                "default": "Hartnäckige Inspiration"
+            },
+            "inspiration-true": {
+                "name": "Wahre Inspiration",
+                "default": "Wahre Inspiration"
+            },
+            "inspiration-underworld": {
+                "name": "Unterwelt-Inspiration",
+                "default": "Unterwelt-Inspiration"
+            },
+            "inspiration-unconventional": {
+                "name": "Unkonventionelle Inspiration",
+                "default": "Unkonventionelle Inspiration"
+            },
+            "martial-focus": {
+                "name": "Kampf-Fokus",
+                "default": "Kampf-Fokus"
+            },
+            "outflank": {
+                "name": "Umkreisen",
+                "default": "Umkreisen"
+            },
+            "pack-flanking": {
+                "name": "Flankieren im Rudel",
+                "default": "Flankieren im Rudel"
+            },
+            "precise-shot": {
+                "name": "Gezielter Schuss",
+                "default": "Gezielter Schuss"
+            },
+            "snake-sidewind": {
+                "name": "Schlangen-Seitwind",
+                "default": "Schlangen-Seitwind"
+            },
+            "solo-tactics": {
+                "name": "Solotaktiken",
+                "default": "Solotaktiken"
+            },
+            "spell-focus": {
+                "name": "Zauberfokus",
+                "default": "Zauberfokus"
+            },
+            "spell-specialization": {
+                "name": "Zauberspezialisierung",
+                "default": "Zauberspezialisierung"
+            },
+            "swarming": {
+                "name": "Schwärmen",
+                "default": "Schwärmen"
+            },
+            "uncanny-dodge": {
+                "name": "Reflexbewegung",
+                "default": "Reflexbewegung"
+            },
+            "underfoot-assault": {
+                "name": "Unterfußangriff",
+                "default": "Unterfußangriff"
+            },
+            "versatile-performance": {
+                "name": "Vielseitige Darbietung",
+                "default": "Vielseitige Darbietung"
+            },
+            "versatile-performance-expanded": {
+                "name": "Erweiterte Vielseitigkeit",
+                "default": "Erweiterte Vielseitigkeit"
+            },
+            "versatile-training": {
+                "name": "Vielseitiges Training",
+                "default": "Vielseitiges Training"
+            },
+            "vital-strike": {
+                "name": "Konzentrierter Schlag",
+                "default": "Konzentrierter Schlag"
+            },
+            "weapon-finesse": {
+                "name": "Waffenfinesse",
+                "default": "Waffenfinesse"
+            },
+            "weapon-focus": {
+                "name": "Waffenfokus",
+                "default": "Waffenfokus"
+            },
+            "weapon-focus-racial": {
+                "name": "Volks-Waffenfokus",
+                "default": "Gnomischer Waffenfokus"
+            },
+            "weapon-focus-racial-default-race": {
+                "name": "Volks-Waffenfokus (Standardvolk)",
+                "default": "Gnomisch"
+            },
+            "weapon-specialization": {
+                "name": "Waffenspezialisierung",
+                "default": "Waffenspezialisierung"
+            }
+        },
+        "settings": {
+            "allow-friendly-npc-selection": {
+                "name": "Spielern erlauben, alle befreundeten NSCs zu sehen",
+                "hint": "Wenn bedingte Ziele wie Flankieren (mit bestimmtem Verbündeten) oder Während angrenzend zu (verbündeter Charakter) genutzt werden, können Spieler bei Einstellung auf wahr alle befreundeten NSCs der Welt sehen. Bei falsch können sie nur Schauspieler wählen, die Spielern gehören."
+            },
+            "debug": {
+                "name": "Debug-Modus",
+                "hint": "Aktiviere dies, um zusätzliche Protokolle einzuschalten, die bei der Fehlersuche helfen können. Standard ist `false`."
+            },
+            "elephant-in-the-room": {
+                "name": "Elephant in the Room",
+                "hint": "Aktiviere dies (standardmäßig aus), wenn du die optionale Hausregel \"Elephant in the Room\" verwendest. Dadurch wird die automatische Konfiguration deaktiviert, die einige Talente auf die normalen Pathfinder-Regeln festlegt (z.B. Waffenfokus) und erlaubt dir, sie manuell mit Zielen und Boni anzupassen."
+            },
+            "fortuneStacks": {
+                "name": "Glück stapelt sich",
+                "hint": "Bei true (Standard) stapeln sich mehrere Glücks- oder Unglücks-Effekte aus verschiedenen Quellen, sodass z.B. 4d20kh möglich sind. Bei false werden maximal zwei Würfel verwendet. Mehrere Unglücke und Glücke gleichen sich aus (z.B. 3 Glücke gegen 2 Unglücke bedeuten, du bist \"glücklicher\" und würfelst mit Vorteil. Bei gleicher Anzahl hebt es sich auf)."
+            },
+            "weapon-focus-racial": {
+                "name": "Volks-Waffenfokus",
+                "hint": "Der Name deines Talents 'Volks-Waffenfokus'. Offiziell existiert nur 'Gnomischer Waffenfokus', aber dies ermöglicht andere volksspezifische Varianten. Dies dient der Unterstützung von Übersetzungen, ohne das Modul selbst übersetzen zu müssen.",
+                "default": "Gnomischer Waffenfokus"
+            },
+            "weapon-focus-racial-default-race": {
+                "name": "Volks-Waffenfokus (Standardvolk)",
+                "hint": "Die Standardvolk, nach der gesucht wird. Dies unterstützt Übersetzungen, ohne das Modul selbst zu übersetzen.",
+                "default": "Gnomisch"
+            },
+            "should-auto-target-tokens": {
+                "name": "Tokens automatisch anvisieren",
+                "hint": "Wenn aktiviert und das generische \"Tokenziel\" verwendet wird, wird der Dialog übersprungen, sofern bereits Tokens anvisiert sind, und diese Tokens werden automatisch genutzt. Standard (false) öffnet den Dialog mit vorausgewählten Zielen zur Bestätigung."
+            },
+            "should-copy-flags": {
+                "name": "Item-Flags beim Angriffskopieren übernehmen",
+                "hint": "Beim Erstellen eines Angriffs aus einer Waffe kopiert das System standardmäßig keine Flags der Waffe. Dadurch fehlen diesen Angriffen die dort konfigurierten Boni. Diese Option kopiert die Flags beim Erstellen. Spätere Änderungen werden jedoch nicht synchronisiert. Standard ist false."
+            }
+        },
+        "applications": {
+            "actor": {
+                "gm-hint": "Du siehst alle befreundeten Schauspieler, weil du SL bist. Spieler können nur Spielertokens und Tokens auswählen, für die sie Beobachterrechte haben. Eine Moduleinstellung erlaubt ihnen, jeden befreundeten NSC im Spiel zu wählen (was Tokens in anderen Szenen sichtbar machen könnte).",
+                "no-actors": "Keine Schauspieler gefunden.",
+                "npcs": "Befreundete NSCs",
+                "observed": "Beobachtete Schauspieler",
+                "players": "Spieler-Charaktere"
+            },
+            "token": {
+                "gm-hint": "Du siehst alle Tokens und Namen, weil du SL bist. Spieler können nur Tokens auswählen, die sie sehen können.",
+                "no-tokens": "In dieser Szene befinden sich keine Tokens",
+                "player-hint": "Alle derzeit anvisierten Tokens in der Szene sind vorausgewählt. Du kannst eine Einstellung aktivieren, um dieses Fenster zu überspringen und automatisch diese Ziele zu verwenden."
+            }
+        },
+        "inputs": {
+            "icon-input": {
+                "no-selection": "Keine aktuellen Ziele"
+            }
+        },
+        "deprecation": {
+            "dice": {
+                "bonus": "Die Verwendung von direkt am Gegenstand konfigurierten Fertigkeitsboni ist veraltet und wird in einer zukünftigen Version entfernt. Konfiguriere Änderungen direkt an der Quelle, die diese Boni gewährt.",
+                "inspiration": "Die direkt an der Fertigkeit konfigurierte Inspiration ist veraltet und wird in einer zukünftigen Version entfernt. Wechsle zu den inspirationsspezifischen Fertigkeiten auf den entsprechenden Fähigkeiten.",
+                "dice": "Das Modifizieren der Grundwürfel für Fertigkeiten ist veraltet und wird in einer zukünftigen Version entfernt. Sieh in die Dokumentation, wie Fertigkeiten für Glück/Pech konfiguriert werden. Wenn du einen Bedarf hast, der nicht abgedeckt ist, lass es mich wissen."
+            }
+        },
+        "hint": {
+            "select-action-for-flank": "Wähle eine Aktion zum Flankieren. Damit wird geprüft, ob es sich um einen Nahkampfangriff mit korrekter Reichweite handelt."
+        },
+        "title": {
+            "flank-detector": "Flankendetektor"
+        },
+        "info": {
+            "is-flanking": "'{meToken}' und '{allyToken}' flankieren '{targetToken}' mit '{action}'.",
+            "is-not-flanking": "'{meToken}' flankiert '{targetToken}' nicht mit '{action}'.",
+            "is-not-flanking-with-ally": "'{meToken}' und '{allyToken}' flankieren '{targetToken}' nicht mit '{action}'.",
+            "token-distance": "Entfernung zwischen '{first}' und '{second}': {distance}"
+        },
+        "warning": {
+            "action-is-not-melee": "'{action}' ist keine Nahkampfaktion.",
+            "invalid-token-disposition": "Token-Einstellungen nicht kompatibel zum Flankieren.",
+            "invalid-token-selection": "Ungültige Tokens ausgewählt.",
+            "no-actor": "Du musst ein Token auswählen oder dieses Makro in einem Skriptaufruf verwenden.",
+            "pack-flanking": "Rudel-Flankieren erfordert einen konfigurierten Verbündeten.",
+            "range-misconfigured": "Aktion ({actionName}) auf Gegenstand '{itemName}' ({actionUuid}) hat eine ungültige Reichweite. Überprüfe maximale Inkremente und Reichweite. Es wird automatisch angenommen, dass sie in Reichweite ist.",
+            "uncanny-dodge-improved": "Muss auf einer Klassenfähigkeit mit korrekt zugeordneter Klasse konfiguriert sein."
+        }
+    }
+}
