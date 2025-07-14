@@ -72,8 +72,9 @@ export class FinesseTarget extends BaseTarget {
     static _getSourcesFor(item, sources) {
         const isNatural = !!item.system.weaponGroups?.total?.has('natural') || item.system.subType === 'natural';
         const isFinesse = !!item.system.properties?.fin;
+        const ability = item.defaultAction?.ability.attack ?? '';
 
-        if (isNatural || isFinesse) {
+        if (ability === 'str' && (isNatural || isFinesse)) {
             return sources;
         }
     };

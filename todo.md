@@ -55,7 +55,6 @@
     - [Specific Bonuses](#specific-bonuses)
     - [Idea](#idea)
     - [Bonus Types](#bonus-types)
-  - [Add included macros to documentation](#add-included-macros-to-documentation)
   - [BugFixes](#bugfixes)
 
 # TODO
@@ -268,6 +267,11 @@ Add journal links to target/bonus headers within item sheet
 
 Expand "Action Type Target" to include CMB
 
-## Add included macros to documentation
+Figure out a way to better communicate what changes are being affected by "Change Modifier Bonus". E.g.:
+- add an item hint on the item that has the affected change
+- indicate on an items changes tab next to an affected change
+- list out the currently targeted abilities
+- maybe add a context note on the roll itself, but if the above is done, probably the least helpful
+    - all of these are assuming the change stems from the system, if it stems from RB those won't work
 
 ## BugFixes

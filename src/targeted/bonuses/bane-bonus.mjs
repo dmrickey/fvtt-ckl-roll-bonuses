@@ -32,15 +32,16 @@ export class BaneBonus extends BaseBonus {
 
     /**
      * @param {ItemPF} source
+     * @param {ActorPF[]} [targets]
      * @returns {boolean}
      */
-    static itemHasBaneTarget(source) {
+    static itemHasBaneTarget(source, targets) {
         let isBaneTarget = false;
         const creatureTypes = getIdsFromItem(source, this.creatureTypeKey);
         const creatureSubtypes = getIdsFromItem(source, this.creatureSubtypeKey);
-        const targets = currentTargets();
+        targets ||= currentTargets().map(x => x.actor);
         if (targets.length && (creatureTypes.length || creatureSubtypes.length)) {
-            isBaneTarget = targets.map(x => x.actor).every((a) =>
+            isBaneTarget = targets.every((a) =>
                 (!creatureTypes.length || intersects(creatureTypes, a?.race?.system.creatureTypes.total))
                 && (!creatureSubtypes.length || intersects(creatureSubtypes, a?.race?.system.creatureSubtypes.total))
             );
@@ -51,14 +52,15 @@ export class BaneBonus extends BaseBonus {
 
     /**
      * @param {ItemAction} action
+     * @param {ActorPF[]} [targets]
      * @returns {ItemPF | undefined}
      */
-    static actionHasBaneTarget(action) {
+    static actionHasBaneTarget(action, targets) {
         let hasBonus;
         handleBonusesFor(
             action,
             (bonusType, sourceItem) => {
-                if (bonusType.itemHasBaneTarget(sourceItem)) {
+                if (bonusType.itemHasBaneTarget(sourceItem, targets)) {
                     hasBonus = sourceItem;
                 }
             },
