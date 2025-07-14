@@ -4,6 +4,7 @@ import { api } from './api.mjs';
 import { intersects } from './array-intersects.mjs';
 import { FormulaCacheHelper } from './flag-helpers.mjs';
 import { getIdsFromItem } from './get-id-array-from-flag.mjs';
+import { truthiness } from './truthiness.mjs';
 
 /**
  * @typedef {{base?: number, stacks?: number, hasBane: boolean}} EnhDataArgs
@@ -36,8 +37,10 @@ class EnhBonusResult {
         return (this.ammo?.stacks || 0) + (this.action?.stacks || 0);
     }
 
+    get hasBane() { return this.ammo?.hasBane || this.action?.hasBane || false; }
+
     get total() {
-        return this.base + this.stacks
+        return this.base + this.stacks + (this.hasBane ? 2 : 0);
     }
 }
 
@@ -45,10 +48,17 @@ class EnhBonusResult {
  * @param {object} args
  * @param {ItemAction} [args.action]
  * @param {ItemLootPF} [args.ammo]
- * @param {TokenPF[]} [args.targets]
+ * @param {TokenPF[] | ActorPF[] | TokenPF | ActorPF} [args.targets]
  * @returns {EnhBonusResult}
  */
 const getEnhancementBonusForAction = ({ action, ammo, targets }) => {
+    targets ||= [];
+    if (!Array.isArray(targets)) {
+        targets = targets ? [] : [targets];
+    }
+
+    targets = targets.map(x => x instanceof pf1.documents.actor.ActorPF ? x : x.actor).filter(truthiness);
+
     const enhData = new EnhBonusResult();
 
     if (action) {
@@ -59,7 +69,7 @@ const getEnhancementBonusForAction = ({ action, ammo, targets }) => {
         let { base, stacks } = action[MODULE_NAME]?.enhancement ?? {};
         base ||= 0;
         stacks ||= 0;
-        const hasBane = !!api.bonusTypeMap['bonus_bane'].actionHasBaneTarget(action);
+        const hasBane = !!api.bonusTypeMap['bonus_bane'].actionHasBaneTarget(action, targets);
         enhData.action = new EnhData({ base, hasBane, stacks });
     }
 
@@ -72,19 +82,15 @@ const getEnhancementBonusForAction = ({ action, ammo, targets }) => {
         let stacks = FormulaCacheHelper.getModuleFlagValue(ammo, ammoEnhancementStacksKey);
 
         let hasBane = false;
-        if (targets?.length && !enhData.action?.hasBane) {
+        if (targets.length) {
             const creatureTypes = getIdsFromItem(ammo, ammoBaneCreatureType);
             const creatureSubtypes = getIdsFromItem(ammo, ammoBaneCreatureSubtype);
 
             if (creatureTypes.length || creatureSubtypes.length) {
-                hasBane = targets.map(x => x.actor).every((a) =>
+                hasBane = targets.every((a) =>
                     (!creatureTypes.length || intersects(creatureTypes, a?.race?.system.creatureTypes.total))
                     && (!creatureSubtypes.length || intersects(creatureSubtypes, a?.race?.system.creatureSubtypes.total))
                 );
-
-                if (hasBane) {
-                    stacks += 2;
-                }
             }
         }
 
@@ -99,3 +105,4 @@ api.utils.getEnhancementBonusForAction = getEnhancementBonusForAction;
 export {
     getEnhancementBonusForAction,
 };
+
