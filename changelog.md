@@ -1,9 +1,16 @@
+## Roll Bonuses 2.22.1
+
+### Bugfixes
+- Finesse Target was incorrectly applying to attacks that didn't use Strength
+
+---
+
 ## Roll Bonuses 2.22.0
 
 ### New Bonus Types
 - Conditional Bonuses
   - Until now, every bonus has applied only to a specific action (more damage, different size, increased DC, etc). Now I've added these new "Conditional Bonuses" that grant bonuses to more generic actor actions that aren't just "attacks" or "spells". These bonuses work alongside any "Conditional Target" to enable those bonuses. Conditional Targets still work alongside all bonuses as before, they just also now work for Conditional Bonuses.
-  - **Initiatve Bonus**
+  - **Initiative Bonus**
     - When the specified Conditional Targets are met, get a bonus to initiative rolls.
   - **Saving Throw Conditional Bonus**
     - When the specified Conditional Targets are met, get a bonus to the chosen saving throws.
