@@ -211,6 +211,7 @@ import { signed } from '../src/util/to-signed-string.mjs';
 import { Trait } from '../src/util/trait-builder.mjs';
 import { truthiness } from '../src/util/truthiness.mjs';
 import { distinct, uniqueArray } from '../src/util/unique-array.mjs';
+import { pipe } from '../src/util/pipe.mjs';
 
 export {};
 
@@ -522,6 +523,7 @@ declare global {
             onCreate: typeof onCreate;
             onRenderCreate: typeof onRenderCreate;
             onSkillSheetRender: typeof onSkillSheetRender;
+            pipe: typeof pipe;
             registerItemHint: typeof registerItemHint;
             registerSource: (typeof Sources)['registerSource'];
             signed: typeof signed;
