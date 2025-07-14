@@ -1,7 +1,18 @@
-## Roll Bonuses 2.22.1
+## Roll Bonuses 2.22.3
 
 ### Bugfixes
 - Finesse Target was incorrectly applying to attacks that didn't use Strength
+- Updated bane api to accept passed in targets instead of solely relying on the player's current targets
+
+---
+
+## Roll Bonuses 2.22.2
+Added German translation from McGregor
+
+---
+
+## Roll Bonuses 2.22.1
+Updated Spanish translation from LeCuay (Chechu on discord)
 
 ---
 
