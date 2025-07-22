@@ -284,18 +284,18 @@ async function actionUse_handleConditionals() {
 
     // This needs to happen after all other conditionals have been gathered so it can double any extra
     // excluding default conditionals because those are already included in action's damage sources
-    const vital = new api.utils.VitalStrikeData(this.actor, { actionUse: this });
-    if (vital.enabled) {
-        const mythic = vital.buildMythicConditional([
+    const multipliers = LocalHookHandler.fireHookWithReturnSync(
+        localHooks.buildFinalDamageMultiplierConditionals,
+        [],
+        this,
+        [
             ...conditionals,
             ...actionConditionals
                 .filter(truthiness)
                 .filter(x => !x.default),
-        ]);
-        if (mythic) {
-            conditionalData.push(mythic);
-        }
-    }
+        ],
+    );
+    conditionalData.push(...multipliers);
 
     await handleConditionals(this, conditionalData);
 }

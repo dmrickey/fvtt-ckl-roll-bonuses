@@ -452,3 +452,21 @@ function actionUseHandleConditionals(actionUse, conditionals) {
     conditionals.push(...vital.conditionals);
 }
 LocalHookHandler.registerHandler(localHooks.actionUse_handleConditionals, actionUseHandleConditionals);
+
+/**
+ *
+ * @param {ItemConditional[]} seed
+ * @param {ActionUse} actionUse
+ * @param {ItemConditional[]} conditionals
+ */
+function buildMythicConditional(seed, actionUse, conditionals) {
+    const vital = new api.utils.VitalStrikeData(actionUse.actor, { actionUse });
+    if (vital.enabled) {
+        const mythic = vital.buildMythicConditional(conditionals);
+        if (mythic) {
+            seed.push(mythic);
+        }
+    }
+    return seed;
+}
+LocalHookHandler.registerHandler(localHooks.buildFinalDamageMultiplierConditionals, buildMythicConditional);

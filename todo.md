@@ -275,3 +275,4 @@ Figure out a way to better communicate what changes are being affected by "Chang
     - all of these are assuming the change stems from the system, if it stems from RB those won't work
 
 ## BugFixes
+- Furious Focus errors when trying to open the journal
