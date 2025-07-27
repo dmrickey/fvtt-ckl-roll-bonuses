@@ -30,7 +30,14 @@ class EnhBonusResult {
     action = null;
 
     get base() {
-        return Math.max(this.ammo?.base || 0, this.action?.base || 0);
+        if (!this.ammo) {
+            return this.action?.base || 0;
+        }
+        if (!this.action) {
+            return this.ammo?.base || 0;
+        }
+
+        return Math.max(this.ammo.base || 0, this.action.base || 0);
     }
 
     get stacks() {

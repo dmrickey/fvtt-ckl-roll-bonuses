@@ -36,9 +36,9 @@ export class EnhancementBonus extends BaseBonus {
      * @inheritdoc
      * @param {ItemPF} source
      * @param {{base: number, stacks: number}} seed
-     * @param {ItemAction} action
+     * @param {ItemAction} _action
      */
-    static itemActionEnhancementBonus(source, seed, action) {
+    static itemActionEnhancementBonus(source, seed, _action) {
         const baseEnh = FormulaCacheHelper.getModuleFlagValue(source, this.key);
         const stackingEnh = FormulaCacheHelper.getModuleFlagValue(source, this.#stacksKey);
 
