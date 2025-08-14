@@ -34,6 +34,8 @@
                 "action-type-radio": "Action Types Join",
                 "action-type-types": "Action Types",
                 "action-type-types-choices": {
+                    "is-heal": "Healing",
+                    "is-maneuver": "Combat Maneuvers",
                     "is-melee": "Melee Attacks",
                     "is-natural": "Natural Attacks",
                     "is-natural-secondary": "Natural Secondary Attacks",

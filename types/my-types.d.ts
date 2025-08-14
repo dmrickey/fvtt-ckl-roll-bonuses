@@ -160,6 +160,8 @@ import { SpellSubschoolTarget } from '../src/targeted/targets/spell-subschool-ta
 import { WeaponGroupTarget } from '../src/targeted/targets/weapon-group-target.mjs';
 import { WeaponTypeTarget } from '../src/targeted/targets/weapon-type-target.mjs';
 import {
+    isHeal,
+    isManeuver,
     isMelee,
     isNatural,
     isNaturalSecondary,
@@ -477,6 +479,8 @@ declare global {
         /** various utility helper methods and classes used throughout the mod */
         utils: {
             actionTypeHelpers: {
+                isHeal: typeof isHeal;
+                isManeuver: typeof isManeuver;
                 isMelee: typeof isMelee;
                 isNatural: typeof isNatural;
                 isNaturalSecondary: typeof isNaturalSecondary;

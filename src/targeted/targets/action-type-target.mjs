@@ -1,7 +1,7 @@
 import { MODULE_NAME } from '../../consts.mjs';
 import { radioInput } from '../../handlebars-handlers/bonus-inputs/radio-input.mjs';
 import { traitInput } from '../../handlebars-handlers/trait-input.mjs';
-import { isMelee, isNatural, isNaturalSecondary, isPhysical, isRanged, isSpell, isThrown, isWeapon } from '../../util/action-type-helpers.mjs';
+import { isHeal, isManeuver, isMelee, isNatural, isNaturalSecondary, isPhysical, isRanged, isSpell, isThrown, isWeapon } from '../../util/action-type-helpers.mjs';
 import { listFormat } from '../../util/list-format.mjs';
 import { localize, localizeBonusLabel } from '../../util/localize.mjs';
 import { toArray } from '../../util/to-array.mjs';
@@ -11,6 +11,8 @@ import { BaseTarget } from './_base-target.mjs';
 /** @typedef {keyof typeof filterTypes} FilterType */
 
 const filterTypes = /** @type {const} */ ({
+    ['is-heal']: { label: '', filter: isHeal },
+    ['is-maneuver']: { label: '', filter: isManeuver },
     ['is-melee']: { label: '', filter: isMelee },
     ['is-natural']: { label: '', filter: isNatural },
     ['is-natural-secondary']: { label: '', filter: isNaturalSecondary },
