@@ -121,6 +121,13 @@ export class FlankHelper {
      * @param {undefined | TokenPF[]} flankingWith
      */
     #calculatFlanking(action, flankingWith) {
+        if (!this.attacker || !this.target) {
+            if (this.debug) {
+                console.log('There is no token for calculating flanking.');
+            }
+            return;
+        }
+
         if (this.#cannotBeFlanked(this.attacker, this.target)) {
             if (this.debug) {
                 console.log('Target is unabled to be flanked by the attacker.');
@@ -289,7 +296,7 @@ export class FlankHelper {
      * @returns {boolean}
      */
     #hasOutflank(token) {
-        return Outflank.has(token);
+        return !!token && Outflank.has(token);
     }
 
     /**
