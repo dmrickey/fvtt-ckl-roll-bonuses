@@ -276,3 +276,10 @@ Figure out a way to better communicate what changes are being affected by "Chang
 
 ## BugFixes
 - Furious Focus errors when trying to open the journal
+- collecting tokens should ignore secret disposition for non-players
+- Update "can't be flanked by target" to be a bit more descriptive about why for abilities like Uncanny Dodge or All Around Vision
+- Lepidstadt Thrust (Ustalavic Duelist)
+- update agile to modify action damage ability instead of swapping out formula
+
+- Add an "ignore Item Hints" util flag
+- Prompt for Item Targets when toggled active
