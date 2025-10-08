@@ -167,4 +167,14 @@ export class FunctionTarget extends BaseConditionalTarget {
 
     /** @override @returns { boolean } */
     static get gmOnlyForPicker() { return true; }
+
+    /**
+     * @override
+     * @inheritdoc
+     * @param {ActorPF} _actor
+     * @param {ItemPF[]} sources
+     * @param {ItemPF | ActionUse | ItemAction | undefined} _doc - originating doc event in case a specific action is needed
+     * @returns {ItemPF[]}
+     */
+    static _filterToApplicableSources(_actor, sources, _doc) { return sources; }
 }

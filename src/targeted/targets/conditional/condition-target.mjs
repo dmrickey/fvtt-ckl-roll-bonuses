@@ -76,7 +76,7 @@ export class ConditionTarget extends BaseConditionalTarget {
      * @param {ItemPF[]} sources
      * @returns {ItemPF[]}
      */
-    static _getConditionalActorSourcesFor(actor, sources) {
+    static _filterToApplicableSources(actor, sources) {
         const currentTargets = currentTargetedActors();
 
         const bonusSources = sources.filter((source) => {

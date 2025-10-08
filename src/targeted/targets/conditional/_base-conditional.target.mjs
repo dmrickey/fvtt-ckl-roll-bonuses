@@ -26,7 +26,7 @@ export class BaseConditionalTarget extends BaseTarget {
      * @returns {ItemPF[]}
      */
     static _getSourcesFor(item, sources, doc) {
-        return this._getConditionalActorSourcesFor(item.actor, sources, doc);
+        return this._filterToApplicableSources(item.actor, sources, doc);
     }
 
     /**
@@ -36,7 +36,7 @@ export class BaseConditionalTarget extends BaseTarget {
      * @returns {boolean} True if this target source applies to the `thing`
      */
     static doesConditionalTargetInclude(targetSource, actor) {
-        return !!this.getConditionalActorSourcesFor(actor).find((bonusSource) => bonusSource.id === targetSource.id);
+        return !!this.getActiveConditionalActorSourcesFor(actor).find((bonusSource) => bonusSource.id === targetSource.id);
     }
 
     /**
@@ -54,7 +54,7 @@ export class BaseConditionalTarget extends BaseTarget {
      * @param {ActorPF} actor
      * @returns {ItemPF[]}
      */
-    static getConditionalActorSourcesFor(actor) {
+    static getActiveConditionalActorSourcesFor(actor) {
         if (!actor) {
             return [];
         }
@@ -63,7 +63,7 @@ export class BaseConditionalTarget extends BaseTarget {
         if (!sources.length) return [];
 
         // @ts-ignore checked above to make sure actor is defined
-        return this._getConditionalActorSourcesFor(actor, sources) || [];
+        return this._filterToApplicableSources(actor, sources) || [];
     };
 
     /**
@@ -73,5 +73,5 @@ export class BaseConditionalTarget extends BaseTarget {
      * @param {ItemPF | ActionUse | ItemAction | undefined} doc - originating doc event in case a specific action is needed
      * @returns {ItemPF[]}
      */
-    static _getConditionalActorSourcesFor(actor, sources, doc) { throw new Error('must be overridden'); }
+    static _filterToApplicableSources(actor, sources, doc) { throw new Error('must be overridden'); }
 }

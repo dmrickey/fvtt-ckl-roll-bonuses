@@ -110,7 +110,7 @@ export class IsFlankingTarget extends BaseConditionalTarget {
      * @param {ItemPF | ActionUse | ItemAction | undefined} doc - originating doc event in case a specific action is needed
      * @returns {ItemPF[]}
      */
-    static _getConditionalActorSourcesFor(actor, sources, doc) {
+    static _filterToApplicableSources(actor, sources, doc) {
         if (!currentTargets().length) {
             return [];
         }

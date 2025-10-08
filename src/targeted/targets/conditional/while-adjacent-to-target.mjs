@@ -82,7 +82,7 @@ export class WhileAdjacentToTarget extends BaseConditionalTarget {
      * @param {ItemPF | ActionUse | ItemAction | undefined} doc - originating doc event in case a specific action is needed
      * @returns {ItemPF[]}
      */
-    static _getConditionalActorSourcesFor(actor, sources, doc) {
+    static _filterToApplicableSources(actor, sources, doc) {
         const token = doc instanceof pf1.actionUse.ActionUse
             ? doc.token.object
             : actor.getActiveTokens()[0];

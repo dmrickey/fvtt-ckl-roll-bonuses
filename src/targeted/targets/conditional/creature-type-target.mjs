@@ -73,7 +73,7 @@ export class CreatureTypeTarget extends BaseConditionalTarget {
      * @param {ItemPF[]} sources
      * @returns {ItemPF[]}
      */
-    static _getConditionalActorSourcesFor(_actor, sources) {
+    static _filterToApplicableSources(_actor, sources) {
         const currentTargets = currentTargetedActors();
         if (!currentTargets.length) return [];
 

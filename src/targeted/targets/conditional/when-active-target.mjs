@@ -110,7 +110,7 @@ export class WhenActiveTarget extends BaseConditionalTarget {
      * @param {ItemPF[]} sources
      * @returns {ItemPF[]}
      */
-    static _getConditionalActorSourcesFor(_actor, sources) {
+    static _filterToApplicableSources(_actor, sources) {
         const filtered = sources.filter((flagged) => {
             /** @type {string[]} */
             const targetedItemIds = this.#getIdsFromItem(flagged);

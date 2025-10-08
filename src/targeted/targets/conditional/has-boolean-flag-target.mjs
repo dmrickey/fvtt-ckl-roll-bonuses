@@ -76,7 +76,7 @@ export class HasBooleanFlagTarget extends BaseConditionalTarget {
      * @param {ItemPF[]} sources
      * @returns {ItemPF[]}
      */
-    static _getConditionalActorSourcesFor(actor, sources) {
+    static _filterToApplicableSources(actor, sources) {
         const currentTargets = currentTargetedActors();
 
         const filteredSources = sources.filter((source) => {

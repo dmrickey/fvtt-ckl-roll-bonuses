@@ -98,7 +98,7 @@ export class TokenTarget extends BaseConditionalTarget {
      * @param {ItemPF[]} sources
      * @returns {ItemPF[]}
      */
-    static _getConditionalActorSourcesFor(_actor, sources) {
+    static _filterToApplicableSources(_actor, sources) {
         if (!this.#currentTargetUuids.length) {
             return [];
         }

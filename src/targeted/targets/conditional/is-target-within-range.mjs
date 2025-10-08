@@ -97,7 +97,7 @@ export class WhenTargetInRangeTarget extends BaseConditionalTarget {
      * @param {ItemPF[]} sources
      * @returns {ItemPF[]}
      */
-    static _getConditionalActorSourcesFor(actor, sources) {
+    static _filterToApplicableSources(actor, sources) {
         const token = actor.getActiveTokens()[0];
         if (!token) {
             return [];

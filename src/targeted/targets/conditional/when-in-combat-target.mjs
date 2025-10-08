@@ -45,7 +45,7 @@ export class WhenInCombatTarget extends BaseConditionalTarget {
      * @param {ItemPF[]} sources
      * @returns {ItemPF[]}
      */
-    static _getConditionalActorSourcesFor(actor, sources) {
+    static _filterToApplicableSources(actor, sources) {
         if (!isActorInCombat(actor)) {
             return [];
         }
