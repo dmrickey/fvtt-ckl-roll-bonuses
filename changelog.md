@@ -1,3 +1,19 @@
+## Roll Bonuses 2.22.5
+
+### Bugfixes
+
+- Fixed uncanny dodge applying to rogues of all levels
+
+---
+
+## Roll Bonuses 2.22.4
+
+### Bugfixes
+
+- Fixed issue with conditional targets that would sometimes try to call code that wasn't implemented
+
+---
+
 ## Roll Bonuses 2.22.3
 
 ### Bugfixes

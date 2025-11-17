@@ -74,10 +74,12 @@ export class UncannyDodgeImproved extends SpecificBonus {
      * @returns {boolean}
      */
     static has(doc) {
-        return super.has(doc)
-            && doc instanceof pf1.documents.item.ItemFeatPF
-            && doc.system.subType === 'classFeat'
-            && !!doc.system.class;
+        let has = super.has(doc);
+        if (doc instanceof pf1.documents.item.ItemFeatPF) {
+            has &&= doc.system.subType === 'classFeat';
+            has &&= !!doc.system.class;
+        }
+        return has;
     }
 
     /**
@@ -92,7 +94,7 @@ export class UncannyDodgeImproved extends SpecificBonus {
         attacker = attacker instanceof pf1.canvas.TokenPF
             ? attacker.actor
             : attacker;
-        if (!target || !attacker) return false;
+        if (!target || !attacker || !this.has(target)) return false;
 
         /** @param {ActorPF} actor @returns {number} */
         const getDodgeLevel = (actor) => {
