@@ -7,7 +7,7 @@
 ### Bugfixes
 
 - Better handling for abnormal formulas for Vital Strike
-- When determing flanking, ignore actions on spells
+- When calculating flanking, ignore actions on spells for determining if an actor threatens the target
 
 ---
 
