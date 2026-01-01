@@ -1,3 +1,12 @@
+## Roll Bonuses 2.22.6
+
+### Bugfixes
+
+- Better handling for abnormal formulas for Vital Strike
+- When determing flanking, ignore actions on spells
+
+---
+
 ## Roll Bonuses 2.22.5
 
 ### Bugfixes
