@@ -186,7 +186,7 @@ export class PositionalHelper {
             actions = [specificAction];
         } else {
             actions = attacker.actor.items
-                .filter((item) => item.canUse && item.activeState)
+                .filter((item) => item.type !== 'spell' && item.canUse && item.activeState)
                 .flatMap((item) => item.actions.contents);
         }
         actions = actions
