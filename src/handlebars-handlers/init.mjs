@@ -1,3 +1,3 @@
 import { templates } from "./templates.mjs";
 
-Hooks.on('ready', () => loadTemplates(Object.values(templates)));
+Hooks.on('ready', () => foundry.applications.handlebars.loadTemplates(Object.values(templates)));

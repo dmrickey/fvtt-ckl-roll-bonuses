@@ -28,10 +28,25 @@ declare global {
         abstract: {
             TypeDataModel: any;
         };
+        applications: {
+            handlebars: {
+                /**
+                 * Load and cache a set of templates by providing an Array of paths
+                 * @param paths - An array of template file paths to load
+                 */
+                loadTemplates(paths: string[]): Promise<Handlebars.TemplateDelegate[]>;
+            }
+        };
         CONST: {
             GRID_TYPES: {
                 GRIDLESS: number;
             };
+        };
+        dice: {
+            terms: {
+                OperatorTerm: class;
+                ParentheticalTerm: class;
+            }
         };
         utils: {
             /**

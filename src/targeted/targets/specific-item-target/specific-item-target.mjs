@@ -1,5 +1,7 @@
 import { MODULE_NAME } from "../../../consts.mjs";
 import { showItemInput } from "../../../handlebars-handlers/targeted/targets/item-input.mjs";
+import { api } from "../../../util/api.mjs";
+import { localize } from "../../../util/localize.mjs";
 import { toArray } from '../../../util/to-array.mjs';
 import { truthiness } from "../../../util/truthiness.mjs";
 import { BaseTarget } from "../_base-target.mjs";
@@ -41,6 +43,13 @@ export class SpecificItemTarget extends BaseTarget {
     static getItemsFromActor(actor) {
         return actor.allItems.filter(x => x.hasAction);
     }
+
+    /**
+     * @override
+     * @inheritdoc
+     * @returns {boolean}
+     */
+    static get showOnActive() { return true; }
 
     /**
      * @override
@@ -111,5 +120,38 @@ export class SpecificItemTarget extends BaseTarget {
         }, {
             canEdit: isEditable,
         });
+    }
+
+    /**
+     * @override
+     * @inheritdoc
+     * @param {ItemPF} item
+     */
+    static showTargetEditor(item) {
+        if (!item.actor) return;
+
+        // mostly copied from item-input
+        const current = [];
+        const currentIds = (/** @type {string[]} */ (item.getFlag(MODULE_NAME, this.key) || []))
+            .map((x) => x.split('.').at(-1))
+            .filter(truthiness);
+        const items = this.getItemsFromActor(item.actor)
+            .map(({ id, name, img, type, uuid }) => {
+                const typeLabel = localize(CONFIG.Item.typeLabels[type]);
+                const checked = currentIds.includes(id);
+                const value = { checked, id, name, img, typeLabel, uuid };
+                if (checked) {
+                    current.push(value);
+                }
+                return value;
+            });
+
+        /** @type {ConstructorParameters<typeof api.applications.ItemSelector>[1]} */
+        const options = {
+            description: localize('item-app.description'),
+            items,
+            path: `flags.${MODULE_NAME}.${this.key}`,
+        };
+        new api.applications.ItemSelector(item, options).render(true);
     }
 }

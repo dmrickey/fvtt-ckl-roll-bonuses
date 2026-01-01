@@ -159,12 +159,12 @@
 ## Bonus Improvements
 - Enhancement Bonus
   - add checkbox for "applies for DR" (some spell buffs don't appy for DR (e.g. Greater Magic Weapon))
+- Lepidstadt Thrust (Ustalavic Duelist)
 
 # Housekeeping
 - Consolidate weapon hints (Weapon Focus, Specialization, Martial) - find a way to make them more concise
 
 ## Remove Skill Config
-- currently deprecated as of Apr 26, 2025
 - also remove warpgate as this is the last part using it.
 
 # Checklist for new (and existing features)
@@ -275,3 +275,7 @@ Figure out a way to better communicate what changes are being affected by "Chang
     - all of these are assuming the change stems from the system, if it stems from RB those won't work
 
 ## BugFixes
+- collecting tokens should ignore secret disposition for non-players
+
+- Add an "ignore Item Hints" util flag
+- Prompt for Item Targets when toggled active
