@@ -1,5 +1,9 @@
 ## Roll Bonuses 2.22.6
 
+### Improvements
+
+- Show item input when bonus is activated -- Better handling for buffs that target weapons
+
 ### Bugfixes
 
 - Better handling for abnormal formulas for Vital Strike
