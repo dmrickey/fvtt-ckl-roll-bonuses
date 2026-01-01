@@ -275,3 +275,9 @@ Figure out a way to better communicate what changes are being affected by "Chang
     - all of these are assuming the change stems from the system, if it stems from RB those won't work
 
 ## BugFixes
+- collecting tokens should ignore secret disposition for non-players
+- Update "can't be flanked by target" to be a bit more descriptive about why for abilities like Uncanny Dodge or All Around Vision
+- Lepidstadt Thrust (Ustalavic Duelist)
+
+- Add an "ignore Item Hints" util flag
+- Prompt for Item Targets when toggled active

@@ -197,40 +197,19 @@ registerItemHint((hintcls, _actor, item, _data) => {
 });
 
 /**
- * @param {string} str
- * @returns {boolean}
- */
-function hasPairedParens(str) {
-    const left = (str.match(/\(/g) || []).length;
-    const right = (str.match(/\)/g) || []).length;
-    return left === right;
-}
-
-/**
  * @param {string} formula
+ * @param {RollData} rollData
  * @returns {string}
  */
-const getFirstTermFormula = (formula) => {
-    const roll = RollPF.create(formula);
-    const terms = roll.terms;
-    const operatorTerm = terms.slice(1).find(x => x instanceof OperatorTerm);
-    if (!operatorTerm) return formula;
+const getFirstTermFormula = (formula, rollData) => {
+    const roll = RollPF.create(formula, rollData);
+    const terms = roll.terms.filter(x => !(x instanceof foundry.dice.terms.OperatorTerm));
+    const term = terms[0] || { formula: ''};
+    const output = term.formula?.trim() || '';
 
-    const operatorFormula = operatorTerm.formula.trim();
-    const potentials = formula.split(operatorFormula).filter(truthiness);
-
-    let potential = '';
-    for (const p of potentials) {
-        potential += p;
-        if (hasPairedParens(potential)) {
-            if (terms[0] instanceof OperatorTerm && terms[0].formula.trim() === operatorFormula)
-                return `${operatorFormula} ${potential}`;
-            return potential;
-        }
-        potential += ` ${operatorFormula} `;
-    }
-
-    return formula;
+    return term instanceof foundry.dice.terms.ParentheticalTerm
+        ? `(${output})`
+        : output;
 }
 
 class Settings {
@@ -291,7 +270,7 @@ export class VitalStrikeData {
                 if (actionUse) {
                     const part = actionUse.action.damage?.parts[0];
                     const partFormula = part?.formula || '';
-                    const firstDice = getFirstTermFormula(partFormula);
+                    const firstDice = getFirstTermFormula(partFormula, actionUse.shared?.rollData ?? {});
 
                     if (firstDice) {
                         const formula =
