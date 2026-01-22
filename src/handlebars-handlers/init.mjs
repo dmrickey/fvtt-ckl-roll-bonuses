@@ -6,6 +6,6 @@ Hooks.on('ready', () => {
         loadTemplates(Object.values(templates));
     }
     else {
-        Hooks.on('ready', () => foundry.applications.handlebars.loadTemplates(Object.values(templates)));
+        foundry.applications.handlebars.loadTemplates(Object.values(templates));
     }
 });
