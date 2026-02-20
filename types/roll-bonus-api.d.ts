@@ -13,6 +13,7 @@ import { UncannyDodgeImproved } from '../src/bonuses/flanking/uncanny-dodge-impr
 import { UnderfootAssault } from '../src/bonuses/flanking/underfoot-assault.mjs';
 import { FuriousFocus } from '../src/bonuses/furious-focus.mjs';
 import { InspirationAmazing } from '../src/bonuses/inspiration/inspiration-amazing.mjs';
+import { InspirationBonus } from '../src/bonuses/inspiration/inspiration-bonus.mjs';
 import { InspirationExtraDie } from '../src/bonuses/inspiration/inspiration-extra-die.mjs';
 import { InspirationFocused } from '../src/bonuses/inspiration/inspiration-focused.mjs';
 import { InspirationTenacious } from '../src/bonuses/inspiration/inspiration-tenacious.mjs';
@@ -130,11 +131,13 @@ import { WeaponBaseTypeOverride } from '../src/targeted/target-overides/weapon-t
 import { BaseTarget } from '../src/targeted/targets/_base-target.mjs';
 import { ActionTarget } from '../src/targeted/targets/action-target.mjs';
 import { ActionTypeTarget } from '../src/targeted/targets/action-type-target.mjs';
+import { BaseConditionalTarget } from '../src/targeted/targets/conditional/_base-conditional.target.mjs';
 import { AlignmentTarget } from '../src/targeted/targets/conditional/alignment-target.mjs';
 import { AllTarget } from '../src/targeted/targets/conditional/all-target.mjs';
 import { ConditionTarget } from '../src/targeted/targets/conditional/condition-target.mjs';
 import { CreatureSubtypeTarget } from '../src/targeted/targets/conditional/creature-subtype-target.mjs';
 import { CreatureTypeTarget } from '../src/targeted/targets/conditional/creature-type-target.mjs';
+import { FunctionTarget } from '../src/targeted/targets/conditional/function-target.mjs';
 import { HasBooleanFlagTarget } from '../src/targeted/targets/conditional/has-boolean-flag-target.mjs';
 import { IsFlankingTarget } from '../src/targeted/targets/conditional/is-flanking-target.mjs';
 import { WhenTargetInRangeTarget } from '../src/targeted/targets/conditional/is-target-within-range.mjs';
@@ -145,7 +148,6 @@ import { WhileAdjacentToTarget } from '../src/targeted/targets/conditional/while
 import { WhileSharingSquareWithTarget } from '../src/targeted/targets/conditional/while-sharing-square-with-target.mjs';
 import { DamageTypeTarget } from '../src/targeted/targets/damage-type-target.mjs';
 import { FinesseTarget } from '../src/targeted/targets/finesse-target.mjs';
-import { FunctionTarget } from '../src/targeted/targets/conditional/function-target.mjs';
 import { SelfTarget } from '../src/targeted/targets/self-target.mjs';
 import { SpecificItemTarget } from '../src/targeted/targets/specific-item-target/specific-item-target.mjs';
 import { SpellTarget } from '../src/targeted/targets/specific-item-target/spell-target.mjs';
@@ -205,7 +207,6 @@ import { signed } from '../src/util/to-signed-string.mjs';
 import { Trait } from '../src/util/trait-builder.mjs';
 import { truthiness } from '../src/util/truthiness.mjs';
 import { distinct, uniqueArray } from '../src/util/unique-array.mjs';
-import { BaseConditionalTarget } from '../src/targeted/targets/conditional/_base-conditional.target.mjs';
 
 export class _RollBonusesAPI {
     es: any;
@@ -351,6 +352,7 @@ export class _RollBonusesAPI {
         ['gang-up']: typeof GangUp;
         ['inspiration']: typeof Inspiration;
         ['inspiration-amazing']: typeof InspirationAmazing;
+        ['inspiration-bonus']: typeof InspirationBonus;
         ['inspiration-extra-die']: typeof InspirationExtraDie;
         ['inspiration-focused']: typeof InspirationFocused;
         ['inspiration-tenacious']: typeof InspirationTenacious;

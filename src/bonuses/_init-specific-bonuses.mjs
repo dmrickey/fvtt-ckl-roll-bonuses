@@ -11,6 +11,7 @@ import { UncannyDodgeImproved } from './flanking/uncanny-dodge-improved.mjs';
 import { UnderfootAssault } from './flanking/underfoot-assault.mjs';
 import { FuriousFocus } from './furious-focus.mjs';
 import { InspirationAmazing } from './inspiration/inspiration-amazing.mjs';
+import { InspirationBonus } from './inspiration/inspiration-bonus.mjs';
 import { InspirationExtraDie } from './inspiration/inspiration-extra-die.mjs';
 import { InspirationFocused } from './inspiration/inspiration-focused.mjs';
 import { InspirationTenacious } from './inspiration/inspiration-tenacious.mjs';
@@ -62,6 +63,7 @@ const allSpecificBonuses = [
     GangUp,
     Inspiration,
     InspirationAmazing,
+    InspirationBonus,
     InspirationExtraDie,
     InspirationFocused,
     InspirationTenacious,

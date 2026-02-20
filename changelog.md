@@ -1,3 +1,19 @@
+## Roll Bonuses 2.23.0
+
+### New Bonuses
+- **Inspiration Bonus**
+  - Add a bonus to all inspiration rolls. E.g. Gain a +1/4 bonus on all inspiration rolls from Half-Elf investigator favored class option.
+
+---
+
+## Roll Bonuses 2.22.7
+
+### Bugfixes
+
+- Fixed v12 compatibility
+
+---
+
 ## Roll Bonuses 2.22.6
 
 ### Improvements
@@ -463,3 +479,5 @@ _**Lots of data changed internally. Anything necessary should automatically migr
     - CL/DC bonuses for specific elements remain unchanged
 - Some Specific bonuses were removed as they're better suited as Targeted Bonuses
   - Critical "specific bonuses" were removed and automatically migrated to targeted bonuses.
+
+promote roll bonuses to the global scope

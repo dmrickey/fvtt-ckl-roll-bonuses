@@ -191,7 +191,7 @@ import {
     getTraitsFromItem,
 } from '../src/util/get-id-array-from-flag.mjs';
 import { getSkillFormula } from '../src/util/get-skill-formula.mjs';
-import { getSourceFlag } from '../src/util/get-source-flag.mjs';
+import { getSourceFlag, getSourceFlags } from '../src/util/get-source-flag.mjs';
 import { getWeaponGroupsFromActor } from '../src/util/get-weapon-groups-from-actor.mjs';
 import { getWeaponTypesFromActor } from '../src/util/get-weapon-types-from-actor.mjs';
 import { itemHasCompendiumId } from '../src/util/has-compendium-id.mjs';
@@ -212,7 +212,7 @@ import { Trait } from '../src/util/trait-builder.mjs';
 import { truthiness } from '../src/util/truthiness.mjs';
 import { distinct, uniqueArray } from '../src/util/unique-array.mjs';
 
-export {};
+export { };
 
 declare global {
     class RollBonusesAPI {
@@ -510,6 +510,7 @@ declare global {
             getEnhancementBonusForAction: typeof getEnhancementBonusForAction;
             getSkillFormula: typeof getSkillFormula;
             getSourceFlag: typeof getSourceFlag;
+            getSourceFlags: typeof getSourceFlags;
             getWeaponGroupsFromActor: typeof getWeaponGroupsFromActor;
             getWeaponTypesFromActor: typeof getWeaponTypesFromActor;
             handleBonusesFor: typeof handleBonusesFor;
