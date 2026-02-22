@@ -721,6 +721,9 @@ Hooks.once('init', () => {
     game.modules.get(MODULE_NAME).api = api;
     game.modules.get(MODULE_NAME).ready = true;
     Hooks.callAll(`${MODULE_NAME}.ready`, api);
+
+    // @ts-ignore
+    globalThis.RollBonuses = { api };
 });
 
 /**

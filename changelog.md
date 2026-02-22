@@ -9,6 +9,9 @@
 - **Condition Target**
   - Can now specify multiple conditions to trigger off of
 
+### Misc
+- Promoted RollBonuses to the global namespace. You can now access the `api` directly from typing `RollBonuses.api` into the console (or a macro/script/etc)
+
 ---
 
 ## Roll Bonuses 2.22.7
