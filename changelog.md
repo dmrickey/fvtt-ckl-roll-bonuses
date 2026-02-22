@@ -1,6 +1,8 @@
 ## Roll Bonuses 2.23.0
 
 ### New Bonuses
+- **Damage Multiplier**
+  - Multiplies damage for the targeted action. E.g. a mounted lance charge or Spirited Charge.
 - **Inspiration Bonus**
   - Add a bonus to all inspiration rolls. E.g. Gain a +1/4 bonus on all inspiration rolls from Half-Elf investigator favored class option.
 
@@ -11,16 +13,16 @@
 - **Condition Target**
   - Can now specify multiple conditions to trigger off of
 - **Custom Function Target**
-  - Now easier to write. You no longer have to use inline arrow function (e.g. `() => { ... }`), but now only have to write the `...`. You now write these the same you write a script macro or pf1's script calls. Four variables are passed directly to the function for you: `item`, `actor`, `action`, and `actionUse`. Check out the in game documentation for updated examples. _old functions will still work, but the documentation does not mention the old syntax and only gives new examples as they're more straight forward.
+  - Now easier to write. You no longer have to use inline arrow function (e.g. `() => { ... }`), but now only have to write the `...`. You now write these the same you write a script macro or pf1's script calls. Four variables are passed directly to the function for you: `item`, `actor`, `action`, and `actionUse`. Check out the in game documentation for updated examples. _Old_ functions will still work, but the documentation no longer mentions the old syntax and only gives new examples.
 - **Improved Critical**
   - Added Improved Critical auto-configuration. It will now automatically add Weapon Type Target (preconfigured for the first weapon it finds on the actor) and Critical Bonus (preconfigured for keen)
 
 ### Misc
-- Promoted RollBonuses to the global namespace. You can now access the `api` directly from typing `RollBonuses.api` into the console (or a macro/script/etc)
+- Promoted RollBonuses to the global namespace. You can now access the `api` directly from typing `RollBonuses.api` into the console (or a macro/script/etc).
 
 ### Bugfixes
 
-- Token targets no long show tokens with SECRET disposition to players
+- Token targets no long show tokens with SECRET disposition to players.
 
 ---
 

@@ -212,6 +212,7 @@ import { signed } from '../src/util/to-signed-string.mjs';
 import { Trait } from '../src/util/trait-builder.mjs';
 import { truthiness } from '../src/util/truthiness.mjs';
 import { distinct, uniqueArray } from '../src/util/unique-array.mjs';
+import { DamageMultiplierBonus } from '../src/targeted/bonuses/damage-multiplier-bonus.mjs';
 
 export { };
 
@@ -264,6 +265,7 @@ declare global {
             ['bonus_conditional-modifiers']: typeof ConditionalModifiersBonus;
             ['bonus_crit']: typeof CritBonus;
             ['bonus_damage']: typeof DamageBonus;
+            ['bonus_damage-multiplier']: typeof DamageMultiplierBonus;
             ['bonus_dc']: typeof DCBonus;
             ['bonus_dice-transform']: typeof DiceTransformBonus;
             ['bonus_effective-size']: typeof EffectiveSizeBonus;

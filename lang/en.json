@@ -70,6 +70,7 @@
                 "crit-offset": "Crit Offset",
                 "crit": "Critical",
                 "damage": "Damage",
+                "damage-multiplier": "Damage Multiplier",
                 "damage-type": "Damage Type",
                 "dc": "DC",
                 "devastating-strike": "Devastating Strike",
@@ -210,6 +211,7 @@
                 "crit-offset": "Modify the critical threat range. This modification happens after Keen.",
                 "crit": "Modify the crit range and/or multiplier.",
                 "damage": "Add bonus damage to the targeted actions.",
+                "damage-multiplier": "Multiply the damage of targeted actions (e.g. Mounted charge).",
                 "damage-type": "Bonuses will be applied to actions that deal the chosen damage type.",
                 "dc": "Modify the DC for spells and abilities.",
                 "devastating-strike": "Adds damage with Vital Strikes",
@@ -338,6 +340,7 @@
             "typed-formula": "Typed Damage Formula"
         },
         "damage-formula": "Damage Bonus Formula",
+        "damage-multiplier-mod": "Damage Multiplier ({mod})",
         "dc-label-mod": "{mod} DC ({label})",
         "dc-mod": "{mod} DC",
         "driver": "Profession (Driver)",

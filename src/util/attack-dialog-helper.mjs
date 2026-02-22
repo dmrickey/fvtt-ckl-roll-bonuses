@@ -126,11 +126,11 @@ class DialogBooleanTracker {
 api.utils.addCheckToAttackDialog = addCheckToAttackDialog;
 
 /**
- * @param {ActionUse} actionUse
+ * @param {ActionUse | ActionUseShared } actionUse
  * @param {keyof ActionUseFormData} key
  * @returns {boolean | undefined}
  */
 export const getFormData = (actionUse, key) => {
-    const formValue = actionUse.formData[key];
+    const formValue = actionUse.formData?.[key];
     return formValue;
 }

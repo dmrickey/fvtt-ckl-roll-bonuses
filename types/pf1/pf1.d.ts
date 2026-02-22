@@ -314,6 +314,7 @@ declare global {
         cost?: null;
         damageBonus: string[];
         dice: string;
+        formData?: ActionUseFormData;
         fullAttack?: boolean;
         item: ItemPF;
         reject: boolean;

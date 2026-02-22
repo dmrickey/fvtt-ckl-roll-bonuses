@@ -2,13 +2,28 @@ import { localize } from './localize.mjs';
 import { truthiness } from './truthiness.mjs';
 
 /**
+ * Adds damage parts that are the equivalent of multiplying out critical damage. E.g. Mythic Vital Strike or a lance charge.
+ * 
  * @param {ActionUse} actionUse
  * @param {ItemConditional[]} conditionals
  * @param {string} label
- * @param {number} [multiplier]
+ * @param {object} [options]
+ * @param {string[]} [options.seededFormulaParts]
+ * @param {number} [options.multiplier]
  * @returns {ItemConditional| undefined}
  */
-export const buildDamageMultiplierConditional = (actionUse, conditionals, label, multiplier = 1) => {
+export const buildDamageMultiplierConditional = (
+    actionUse,
+    conditionals,
+    label,
+    {
+        seededFormulaParts = [],
+        multiplier = 1
+    } = {
+            seededFormulaParts: [],
+            multiplier: 1
+        },
+) => {
 
     const formulaParts = [];
 
@@ -69,7 +84,7 @@ export const buildDamageMultiplierConditional = (actionUse, conditionals, label,
         modifiers: [{
             _id: foundry.utils.randomID(),
             critical: 'nonCrit',
-            formula: `{${formulaParts.join(', ')}}[${label}]`,
+            formula: `{${[...Array(multiplier).fill(seededFormulaParts).flat(), ...formulaParts].join(', ')}}[${label}]`,
             subTarget: 'attack_0',
             target: 'damage',
             type: '',
