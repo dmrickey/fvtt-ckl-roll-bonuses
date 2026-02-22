@@ -5,6 +5,7 @@ import * as v3 from './migrate-v3.mjs';
 import * as v4 from './migrate-v4.mjs';
 import * as v5 from './migrate-v5.mjs';
 import { MigrateV6 as v6 } from './migrate-v6.mjs';
+import { MigrateV23 as v23 } from './migrate-v23.mjs';
 import { MODULE_NAME } from '../consts.mjs';
 import { api } from '../util/api.mjs';
 import { registerSetting } from '../util/settings.mjs';
@@ -71,6 +72,9 @@ const migrations = [
 
     // 2.20 (race type -> creature type)
     { label: 'frost worm', migrate: () => v6.migrateWorld() },
+
+    // 2.23 (contion target -> [condition target])
+    { label: 'hill giant', migrate: () => v23.migrateWorld() },
 ];
 
 // should always be one more than the
@@ -132,4 +136,5 @@ api.migrate = {
     v4,
     v5,
     v6,
+    v23,
 };

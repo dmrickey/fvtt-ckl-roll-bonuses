@@ -460,6 +460,7 @@ declare global {
             v4: {};
             v5: {};
             v6: BaseMigrate;
+            v23: BaseMigrate;
         };
 
         /** Base source classes for extending */

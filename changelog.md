@@ -4,6 +4,11 @@
 - **Inspiration Bonus**
   - Add a bonus to all inspiration rolls. E.g. Gain a +1/4 bonus on all inspiration rolls from Half-Elf investigator favored class option.
 
+### Improvements
+
+- **Condition Target**
+  - Can now specify multiple conditions to trigger off of
+
 ---
 
 ## Roll Bonuses 2.22.7
