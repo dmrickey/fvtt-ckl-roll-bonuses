@@ -604,6 +604,10 @@
                 "name": "Gang Up",
                 "default": "Gang Up"
             },
+            "improved-critical": {
+                "name": "Improved Critical",
+                "default": "Improved Critical"
+            },
             "inspiration": {
                 "name": "Inspiration",
                 "default": "Inspiration"
