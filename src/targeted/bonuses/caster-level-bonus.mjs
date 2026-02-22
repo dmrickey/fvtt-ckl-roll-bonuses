@@ -93,7 +93,7 @@ export class CasterLevelBonus extends BaseBonus {
         await item.update({
             system: { flags: { boolean: { [this.key]: true } } },
             flags: {
-                [MODULE_NAME]: { [this.key]: (formula || '') + '' },
+                [MODULE_NAME]: { [this.key]: `${formula || ''}` },
             },
         });
     }
