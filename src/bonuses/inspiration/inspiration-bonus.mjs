@@ -21,6 +21,20 @@ export class InspirationBonus extends SpecificBonus {
     /** @inheritdoc @override */
     static get parent() { return Inspiration.key; }
 
+    /**
+     * @inheritdoc
+     * @override
+     * @param {ItemPF} item
+     * @param {string | number} formula
+     * @returns {Promise<void>}
+     */
+    static async configure(item, formula) {
+        await item.update({
+            system: { flags: { boolean: { [this.key]: true } } },
+            flags: { [MODULE_NAME]: { [this.key]: `${formula}` } },
+        });
+    }
+
     /** @inheritdoc @override @returns {JustRender} */
     static get configuration() {
         return {
