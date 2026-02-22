@@ -10,7 +10,6 @@ import { LocalHookHandler, localHooks } from '../../util/hooks.mjs';
 import { registerItemHint } from '../../util/item-hints.mjs';
 import { localize, localizeBonusLabel, localizeBonusTooltip } from '../../util/localize.mjs';
 import { LanguageSettings } from '../../util/settings.mjs';
-import { truthiness } from '../../util/truthiness.mjs';
 import { SpecificBonus } from '../_specific-bonus.mjs';
 import { DevastatingStrike, DevastatingStrikeImproved } from './devastating-strike.mjs';
 
@@ -204,7 +203,7 @@ registerItemHint((hintcls, _actor, item, _data) => {
 const getFirstTermFormula = (formula, rollData) => {
     const roll = RollPF.create(formula, rollData);
     const terms = roll.terms.filter(x => !(x instanceof foundry.dice.terms.OperatorTerm));
-    const term = terms[0] || { formula: ''};
+    const term = terms[0] || { formula: '' };
     const output = term.formula?.trim() || '';
 
     return term instanceof foundry.dice.terms.ParentheticalTerm

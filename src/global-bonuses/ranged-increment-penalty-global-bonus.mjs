@@ -5,9 +5,7 @@ import { customGlobalHooks, LocalHookHandler, localHooks } from '../util/hooks.m
 import { BaseGlobalBonus } from './base-global-bonus.mjs';
 import { RangedIncrementPenaltyBonus } from './targeted/bonuses/ranged-increment-penalty-bonus.mjs';
 import { addCheckToAttackDialog, getFormData } from '../util/attack-dialog-helper.mjs';
-
-/** @type {ActionType[]} */
-const rangedTypes = ['rcman', 'rwak', 'twak', 'rsak'];
+import { isRanged } from '../util/action-type-helpers.mjs';
 
 /** @extends {BaseGlobalBonus} */
 export class RangedIncrementPenaltyGlobalBonus extends BaseGlobalBonus {
@@ -36,7 +34,7 @@ export class RangedIncrementPenaltyGlobalBonus extends BaseGlobalBonus {
             return;
         }
 
-        const isRangedAttack = rangedTypes.includes(action.actionType);
+        const isRangedAttack = isRanged(action?.item, action);
         if (!isRangedAttack) {
             return;
         }

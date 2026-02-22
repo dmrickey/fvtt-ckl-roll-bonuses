@@ -101,6 +101,6 @@ export class RequireMeleeThreatenGlobalBonus extends BaseGlobalBonus {
     static {
         Hooks.on('renderApplication', RequireMeleeThreatenGlobalBonus.addSkipMeleeThreatenToDialog);
         Hooks.on(customGlobalHooks.actionUseAlterRollData, RequireMeleeThreatenGlobalBonus.requireMelee);
-        LocalHookHandler.registerHandler(localHooks.actionUseFootnotes, RequireMeleeThreatenGlobalBonus.addSkipFootnote)
+        LocalHookHandler.registerHandler(localHooks.actionUseFootnotes, RequireMeleeThreatenGlobalBonus.addSkipFootnote);
     }
 }
