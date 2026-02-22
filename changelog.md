@@ -16,6 +16,10 @@
 ### Misc
 - Promoted RollBonuses to the global namespace. You can now access the `api` directly from typing `RollBonuses.api` into the console (or a macro/script/etc)
 
+### Bugfixes
+
+- Token targets no long show tokens with SECRET disposition to players
+
 ---
 
 ## Roll Bonuses 2.22.7

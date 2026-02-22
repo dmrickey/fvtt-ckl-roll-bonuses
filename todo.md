@@ -274,8 +274,6 @@ Figure out a way to better communicate what changes are being affected by "Chang
 - maybe add a context note on the roll itself, but if the above is done, probably the least helpful
     - all of these are assuming the change stems from the system, if it stems from RB those won't work
 
-## BugFixes
-- collecting tokens should ignore secret disposition for non-players
-
 - Add an "ignore Item Hints" util flag
-- Prompt for Item Targets when toggled active
+
+mounted charge and lance conditionals
