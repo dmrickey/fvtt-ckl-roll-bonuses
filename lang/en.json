@@ -34,14 +34,15 @@
                 "action-type-radio": "Action Types Join",
                 "action-type-types": "Action Types",
                 "action-type-types-choices": {
+                    "is-cmb": "Combat Maneuvers",
                     "is-melee": "Melee Attacks",
                     "is-natural": "Natural Attacks",
                     "is-natural-secondary": "Natural Secondary Attacks",
                     "is-physical": "Physical Item",
                     "is-ranged": "Ranged Attacks",
-                    "is-spell": "Spells",
+                    "is-spell": "All Spells",
                     "is-thrown": "Thrown Weapons",
-                    "is-weapon": "Weapons"
+                    "is-weapon": "All Weapons"
                 },
                 "agile": "Agile",
                 "alignment": "Target has Alignment",

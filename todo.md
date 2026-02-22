@@ -265,8 +265,6 @@ Add journal links to target/bonus headers within item sheet
 - AC
   - figure out appropriate way to apply AC bonus
 
-Expand "Action Type Target" to include CMB
-
 Figure out a way to better communicate what changes are being affected by "Change Modifier Bonus". E.g.:
 - add an item hint on the item that has the affected change
 - indicate on an items changes tab next to an affected change
@@ -276,4 +274,4 @@ Figure out a way to better communicate what changes are being affected by "Chang
 
 - Add an "ignore Item Hints" util flag
 
-mounted charge and lance conditionals
+TODO - mounted charge and lance conditionals

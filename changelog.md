@@ -6,6 +6,8 @@
 
 ### Improvements
 
+- **Action Type Target**
+  - Can also target Combat Maneuvers
 - **Condition Target**
   - Can now specify multiple conditions to trigger off of
 - **Custom Function Target**

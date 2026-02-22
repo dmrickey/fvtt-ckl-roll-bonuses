@@ -1,6 +1,9 @@
 import { api } from './api.mjs';
 
 /** @type {ActionTypeFilterFunc} */
+export const isCmb = (_item, action) => ['mcman', 'rcman'].includes(action?.actionType ?? '');
+
+/** @type {ActionTypeFilterFunc} */
 export const isMelee = (_item, action) => ['mwak', 'msak', 'mcman'].includes(action?.actionType ?? '');
 
 /** @type {ActionTypeFilterFunc} */
@@ -36,6 +39,7 @@ export const isThrown = (_item, action) => action?.actionType === 'twak';
 export const isWeapon = (item, action) => ['mwak', 'rwak', 'twak'].includes(action?.actionType ?? '') || isNatural(item);
 
 api.utils.actionTypeHelpers = {
+    isCmb,
     isMelee,
     isNatural,
     isNaturalSecondary,
