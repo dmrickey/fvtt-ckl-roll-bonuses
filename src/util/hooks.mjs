@@ -16,6 +16,7 @@ export const localHooks = /** @type {const} */ ({
     actionUseProcess: `${MODULE_NAME}_actionUseProcess`,
     actorGetSkillInfo: `${MODULE_NAME}_actorGetSkillInfo`,
     actorRollSkill: `${MODULE_NAME}_actorRollSkill`,
+    buildFinalDamageMultiplierConditionals: `${MODULE_NAME}_buildFinalDamageMultiplierConditionals`,
     cacheBonusTypeOnActor: `${MODULE_NAME}_cacheBonusTypeOnActor`,
     chatAttackAddAttack: `${MODULE_NAME}_chatAttackAddAttack`,
     preRollChatAttackAddAttack: `${MODULE_NAME}_preRollChatAttackAddAttack`,
@@ -191,6 +192,13 @@ export class LocalHookHandler {
      */
 
     /**
+     * @overload
+     * @param {typeof localHooks.buildFinalDamageMultiplierConditionals} hook
+     * @param {(seed: ItemConditional[], actionUse: ActionUse, conditionals: ItemConditional[]) => ItemConditional[]} func
+     * @returns {void}
+     */
+
+    /**
      * @param {Hook} hook
      * @param {*} func
      * @returns {void}
@@ -241,6 +249,15 @@ export class LocalHookHandler {
      * @param {ActorPF} actor
      * @param {SkillId} skillId
      * @returns {ItemChange[]}
+     */
+
+    /**
+     * @overload
+     * @param {typeof localHooks.buildFinalDamageMultiplierConditionals} hook
+     * @param {ItemConditional[]} seed
+     * @param {ActionUse} actionUse
+     * @param {ItemConditional[]} conditionals
+     * @returns {ItemConditional[]}
      */
 
     /**
