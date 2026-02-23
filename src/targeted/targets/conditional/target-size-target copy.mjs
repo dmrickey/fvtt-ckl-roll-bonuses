@@ -28,14 +28,14 @@ export class TargetSizeTarget extends BaseConditionalTarget {
      * @inheritdoc
      * @override
      */
-    static get sourceKey() { return 'target-size'; }
+    static get sourceKey() { return 'size'; }
 
     /**
      * @todo
      * @override
      * @returns {string}
      */
-    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.IpRhJqZEX2TUarSX#target-size'; }
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.IpRhJqZEX2TUarSX#size'; }
 
     /**
      * @inheritdoc

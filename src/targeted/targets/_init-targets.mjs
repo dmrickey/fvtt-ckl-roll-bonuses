@@ -10,7 +10,7 @@ import { FunctionTarget } from './conditional/function-target.mjs';
 import { HasBooleanFlagTarget } from './conditional/has-boolean-flag-target.mjs';
 import { IsFlankingTarget } from './conditional/is-flanking-target.mjs';
 import { WhenTargetInRangeTarget } from './conditional/is-target-within-range.mjs';
-import { TargetSizeTarget } from './conditional/target-size-target.mjs';
+import { SizeTarget } from './conditional/size-target.mjs';
 import { TokenTarget } from "./conditional/token-target.mjs";
 import { WhenActiveTarget } from './conditional/when-active-target.mjs';
 import { WhenInCombatTarget } from './conditional/when-in-combat-target.mjs';
@@ -47,7 +47,7 @@ export const registerTargets = () => [
     SpellSchoolTarget,
     SpellSubschoolTarget,
     SpellTarget,
-    TargetSizeTarget,
+    SizeTarget,
     TokenTarget,
     WeaponGroupTarget,
     WeaponTarget,
