@@ -2395,6 +2395,17 @@ declare global {
                 swm: 'Swim';
                 umd: 'Use Magic Device';
             };
+            sizeChart: {
+                fine: 'F';
+                dim: 'D';
+                tiny: 'T';
+                sm: 'S';
+                med: 'M';
+                lg: 'L';
+                huge: 'H';
+                grg: 'G';
+                col: 'C';
+            };
             spellDescriptors: SpellDescriptors;
             spellSchools: SpellSchools;
             spellSubschools: SpellSubschools;

@@ -6,6 +6,10 @@
 - **Inspiration Bonus**
   - Add a bonus to all inspiration rolls. E.g. Gain a +1/4 bonus on all inspiration rolls from Half-Elf investigator favored class option.
 
+### New Targets
+- **Size Target**
+  - Activate bonus when targeting a token of a specific size.
+
 ### Improvements
 
 - **Action Type Target**
