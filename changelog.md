@@ -1,12 +1,14 @@
 ## Roll Bonuses 2.23.0
 
 ### New Bonuses
+
 - **Damage Multiplier**
   - Multiplies damage for the targeted action. E.g. a mounted lance charge or Spirited Charge.
 - **Inspiration Bonus**
   - Add a bonus to all inspiration rolls. E.g. Gain a +1/4 bonus on all inspiration rolls from Half-Elf investigator favored class option.
 
 ### New Targets
+
 - **Relative Size Target**
   - Target tokens based off of their size relative to your own current size.
 - **Size Target**
@@ -24,11 +26,13 @@
   - Added Improved Critical auto-configuration. It will now automatically add Weapon Type Target (preconfigured for the first weapon it finds on the actor) and Critical Bonus (preconfigured for keen)
 
 ### Misc
+
 - Promoted RollBonuses to the global namespace. You can now access the `api` directly from typing `RollBonuses.api` into the console (or a macro/script/etc).
 
 ### Bugfixes
 
 - Token targets no long show tokens with SECRET disposition to players.
+- Multiple skill bonuses now show up directly on the actor's skill sheet instead of just the first one found.
 
 ---
 
