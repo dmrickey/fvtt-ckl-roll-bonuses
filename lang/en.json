@@ -126,6 +126,10 @@
                 "ranged-increment-penalty-increment-range-offset": "Increment Range Offset",
                 "ranged-increment-penalty-max-increment-offset": "Maximum Increment Offset",
                 "ranged-increment-penalty-penalty-offset": "Overall Penalty Reduction",
+                "relative-size": "Relative Size",
+                "relative-size-diff": "Size Difference",
+                "relative-size-specificty": "Relative to You",
+                "relative-size-direction": "Size Direction",
                 "roll-untrained": "Roll Skills Untrained",
                 "script-call": "Script Call",
                 "save": "Saving Throw",
@@ -150,7 +154,6 @@
                 "spell-subschool": "Spell Subschools",
                 "spell-specialization": "Spell Specialization",
                 "swarming": "Swarming",
-                "size": "Size",
                 "token": "Targeted Tokens",
                 "token-invert": "Invert Targeted Tokens",
                 "uncanny-dodge-improved": "Improved Uncanny Dodge",
@@ -266,6 +269,10 @@
                 "ranged-increment-penalty-increment-range-offset": "Modify the range for each increment.",
                 "ranged-increment-penalty-max-increment-offset": "Reduce the penalty per increment.",
                 "ranged-increment-penalty-penalty-offset": "Reduce the total penalty.",
+                "relative-size": "Enables bonuses based on the relative size of the target compared to the user.",
+                "relative-size-diff": "The number of size steps the target is larger or smaller than the user.",
+                "relative-size-specificty": "Whether the target must be at least this size difference, or exactly this size difference.",
+                "relative-size-direction": "Whether the target is larger or smaller than the user.",
                 "roll-untrained": "Marks skills as able to be rolled untrained.",
                 "script-call": "Configure Script Calls that are executed for the targeted actions. You can drag macros here as well.",
                 "save": "Apply bonuses to saving throws.",
@@ -775,6 +782,19 @@
                 "name": "Copy Item Flags on Attack Creation",
                 "hint": "When creating an Attack from a Weapon (via the \"Create Attack\" button to add an Attack to your Combat tab), the system does not copy over any flags from the Weapon. This means that by default any bonuses created on the weapon do not exist on Attacks created from that Weapon. Turning this on will copy those flags when creating an Attack. This only happens at creation, this will not sync any flags modified on either after the fact. Default is false."
             }
+        },
+        "size-choice": {
+            "exactly": "The Same As",
+            "larger-than": "Larger Than",
+            "smaller-than": "Smaller Than",
+            "larger": "Larger",
+            "smaller": "Smaller"
+        },
+        "relative-size-description": {
+            "equal": "While target is {specific} your size.",
+            "single": "While target is {specific} one size {direction} than you.",
+            "plural": "While target is {specific} {diff} sizes {direction} than you.",
+            "preview": "You ({actorSize}) -> Target ({targetSizes})"
         },
         "applications": {
             "actor": {

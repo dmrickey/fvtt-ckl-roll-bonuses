@@ -1,14 +1,14 @@
-2026/02/22-11:16:44.800 98d0 Recovering log #1519
-2026/02/22-11:16:44.808 98d0 Delete type=0 #1519
-2026/02/22-11:16:44.808 98d0 Delete type=3 #1517
-2026/02/22-20:47:06.927 9674 Level-0 table #1525: started
-2026/02/22-20:47:06.931 9674 Level-0 table #1525: 14343 bytes OK
-2026/02/22-20:47:06.933 9674 Delete type=0 #1523
-2026/02/22-20:47:06.933 9674 Manual compaction at level-0 from '!journal!FrG2K3YAM1jdSxcC' @ 72057594037927935 : 1 .. '!journal.pages!FrG2K3YAM1jdSxcC.zHKvVEnQ3jAyUiKn' @ 0 : 0; will stop at '!journal.pages!FrG2K3YAM1jdSxcC.IpRhJqZEX2TUarSX' @ 6869 : 1
-2026/02/22-20:47:06.933 9674 Compacting 1@0 + 1@1 files
-2026/02/22-20:47:06.937 9674 Generated table #1526@0: 14 keys, 53251 bytes
-2026/02/22-20:47:06.937 9674 Compacted 1@0 + 1@1 files => 53251 bytes
-2026/02/22-20:47:06.940 9674 compacted to: files[ 0 1 0 0 0 0 0 ]
-2026/02/22-20:47:06.940 9674 Delete type=2 #1521
-2026/02/22-20:47:06.940 9674 Delete type=2 #1525
-2026/02/22-20:47:06.948 9674 Manual compaction at level-0 from '!journal.pages!FrG2K3YAM1jdSxcC.IpRhJqZEX2TUarSX' @ 6869 : 1 .. '!journal.pages!FrG2K3YAM1jdSxcC.zHKvVEnQ3jAyUiKn' @ 0 : 0; will stop at (end)
+2026/02/22-20:47:12.535 78ec Recovering log #1524
+2026/02/22-20:47:12.543 78ec Delete type=0 #1524
+2026/02/22-20:47:12.543 78ec Delete type=3 #1522
+2026/02/23-21:23:34.210 9674 Level-0 table #1530: started
+2026/02/23-21:23:34.213 9674 Level-0 table #1530: 166620 bytes OK
+2026/02/23-21:23:34.217 9674 Delete type=0 #1528
+2026/02/23-21:23:34.217 9674 Manual compaction at level-0 from '!journal!FrG2K3YAM1jdSxcC' @ 72057594037927935 : 1 .. '!journal.pages!FrG2K3YAM1jdSxcC.zHKvVEnQ3jAyUiKn' @ 0 : 0; will stop at '!journal.pages!FrG2K3YAM1jdSxcC.zHKvVEnQ3jAyUiKn' @ 6878 : 1
+2026/02/23-21:23:34.217 9674 Compacting 1@0 + 1@1 files
+2026/02/23-21:23:34.222 9674 Generated table #1531@0: 14 keys, 53498 bytes
+2026/02/23-21:23:34.222 9674 Compacted 1@0 + 1@1 files => 53498 bytes
+2026/02/23-21:23:34.225 9674 compacted to: files[ 0 1 0 0 0 0 0 ]
+2026/02/23-21:23:34.225 9674 Delete type=2 #1526
+2026/02/23-21:23:34.225 9674 Delete type=2 #1530
+2026/02/23-21:23:34.241 9674 Manual compaction at level-0 from '!journal.pages!FrG2K3YAM1jdSxcC.zHKvVEnQ3jAyUiKn' @ 6878 : 1 .. '!journal.pages!FrG2K3YAM1jdSxcC.zHKvVEnQ3jAyUiKn' @ 0 : 0; will stop at (end)
