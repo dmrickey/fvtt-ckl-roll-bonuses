@@ -273,6 +273,9 @@ export class FlankHelper {
      * @returns {boolean}
      */
     #cannotBeFlanked(attacker, target) {
+        if (this.debug && FlankingImmunity.has(target)) {
+            console.log(`Target ${target.actor.name} has ${FlankingImmunity.label} and cannot be flanked.`);
+        }
         return FlankingImmunity.has(target) || UncannyDodgeImproved.isImmuneToFlank(target, attacker);
     }
 

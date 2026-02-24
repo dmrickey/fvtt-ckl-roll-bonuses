@@ -238,7 +238,6 @@
   - Global Bonus kicks off when both "mounted" and "charge" is checked
 
 ### Target
-- `Relative Size` (kicks in if target is at least or exactly _N_ steps different from you larger/smaller)
 - While "Equipment Type" is equipped
 - While "Weapon Group" is equipped
 
@@ -274,3 +273,5 @@ Figure out a way to better communicate what changes are being affected by "Chang
 - Add an "ignore Item Hints" util flag
 
 TODO - mounted charge and lance conditionals
+
+optional rule for hitting large adjacent creatures with a reach weapon?

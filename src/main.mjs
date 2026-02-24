@@ -748,7 +748,7 @@ Hooks.once('init', () => {
     Hooks.callAll(`${MODULE_NAME}.ready`, api);
 
     // @ts-ignore
-    globalThis.RollBonuses = { api };
+    globalThis.RollBonuses = api;
 });
 
 /**
