@@ -5,7 +5,7 @@
 - **Damage Multiplier**
   - Multiplies damage for the targeted action. E.g. a mounted lance charge or Spirited Charge.
 - **Inspiration Bonus**
-  - Add a bonus to all inspiration rolls. E.g. Gain a +1/4 bonus on all inspiration rolls from Half-Elf investigator favored class option.
+  - Add a bonus to all inspiration rolls. E.g. Gain a +1/4 bonus on all inspiration rolls from Half-Elf investigator favored class option. Investigator macros provided have been upgraded -- if you have made local copies you will need to update those copies to make use of this bonus.
 
 ### New Targets
 
