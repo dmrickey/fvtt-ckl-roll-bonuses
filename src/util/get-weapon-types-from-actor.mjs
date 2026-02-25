@@ -1,6 +1,5 @@
 import { api } from './api.mjs';
 import { getActorItemsByTypes } from './get-actor-items-by-type.mjs';
-import { isEquipped } from './is-equipped.mjs';
 import { truthiness } from './truthiness.mjs';
 import { uniqueArray } from './unique-array.mjs';
 
@@ -22,7 +21,7 @@ export const getWeaponTypesFromActor = (actor, { onlyEquipped = false } = {}) =>
                 ...(actor.itemFlags?.boolean[api.targetOverrideTypeMap['target-override_weapon-type-override'].key]?.sources ?? []),
             ]
         ))
-            .filter((item) => !onlyEquipped || isEquipped(item))
+            .filter((item) => !onlyEquipped || item.isActive)
             .flatMap(x => x.system.baseTypes)
     ).filter(truthiness);
     types.sort();

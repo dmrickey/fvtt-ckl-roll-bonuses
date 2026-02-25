@@ -1,6 +1,7 @@
 import { MODULE_NAME } from '../../../consts.mjs';
 import { traitInput } from '../../../handlebars-handlers/trait-input.mjs';
 import { intersects } from '../../../util/array-intersects.mjs';
+import { getActorItemsByTypes } from '../../../util/get-actor-items-by-type.mjs';
 import { currentTargetedActors } from '../../../util/get-current-targets.mjs';
 import { getWeaponTypesFromActor } from '../../../util/get-weapon-types-from-actor.mjs';
 import { localizeFluentDescription } from '../../../util/localize.mjs';
@@ -12,19 +13,19 @@ import { BaseConditionalTarget } from './_base-conditional.target.mjs';
 /**
  * @extends BaseConditionalTarget
  */
-export class WhileWeaponTypeTarget extends BaseConditionalTarget {
+export class WhileEquippedTarget extends BaseConditionalTarget {
     /**
      * @inheritdoc
      * @override
      */
-    static get sourceKey() { return 'while-weapon-type-equipped'; }
+    static get sourceKey() { return 'while-equipped'; }
 
     /**
      * @todo
      * @override
      * @returns {string}
      */
-    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.IpRhJqZEX2TUarSX#while-weapon-type-equipped'; }
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.IpRhJqZEX2TUarSX#while-equipped'; }
 
     /**
      * @inheritdoc
@@ -51,10 +52,23 @@ export class WhileWeaponTypeTarget extends BaseConditionalTarget {
      * @returns {Nullable<string[]>}
      */
     static getHints(source) {
-        const weaponTypes = this.#getTypes(source);
-        if (weaponTypes.length) {
-            return weaponTypes;
+        const equipmentTypes = this.#getTypes(source);
+        if (equipmentTypes.length) {
+            return equipmentTypes;
         }
+    }
+
+    /**
+     * @param {ActorPF} actor
+     * @returns {string[]}
+     */
+    static #getEquippedChoices(actor) {
+        const equippedWeapons = getWeaponTypesFromActor(actor, { onlyEquipped: true });
+        const equippedArmor = getActorItemsByTypes(actor, 'equipment')
+            .filter(item => item.isActive)
+            .flatMap(item => item.system.baseTypes)
+            .filter(truthiness);
+        return uniqueArray([...equippedWeapons, ...equippedArmor]);
     }
 
     /**
@@ -69,9 +83,9 @@ export class WhileWeaponTypeTarget extends BaseConditionalTarget {
         if (!currentTargets.length) return [];
 
         const bonusSources = sources.filter((source) => {
-            const weaponTypes = this.#getTypes(source);
-            const equipped = getWeaponTypesFromActor(actor, { onlyEquipped: true });
-            return intersects(weaponTypes, equipped);
+            const equipmentTypes = this.#getTypes(source);
+            const equipped = this.#getEquippedChoices(actor);
+            return intersects(equipmentTypes, equipped);
         });
 
         return bonusSources;
@@ -105,9 +119,9 @@ export class WhileWeaponTypeTarget extends BaseConditionalTarget {
      * @param {ItemPF} options.item
      */
     static showInputOnItemSheet({ html, isEditable, item }) {
-        const typesOnActor = getWeaponTypesFromActor(item?.actor);
+        const equipped = item?.actor ? this.#getEquippedChoices(item.actor) : [];
         const currentTypes = this.#getTypes(item);
-        const choices = uniqueArray([...typesOnActor, ...currentTypes]);
+        const choices = uniqueArray([...equipped, ...currentTypes]);
         choices.sort();
 
         traitInput({

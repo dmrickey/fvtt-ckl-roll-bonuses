@@ -168,15 +168,15 @@
                 "weapon-group": "Weapon Group",
                 "weapon-group-override": "Weapon Group",
                 "weapon-specialization": "Weapon Specialization",
+                "weapon": "Specific Weapons and Attacks",
                 "weapon-specialization-greater": "Greater Weapon Specialization",
                 "weapon-type": "Weapon Type",
                 "weapon-type-override": "Weapon Type",
-                "weapon": "Specific Weapons and Attacks",
                 "when-active": "When Item Is Active/Equipped",
                 "when-in-combat": "When in Combat",
                 "while-adjacent-to": "While Adjacent To",
-                "while-sharing-with": "While Sharing Square With",
-                "while-weapon-type-equipped": "While Weapon Type Equipped"
+                "while-equipped": "While Equipped",
+                "while-sharing-with": "While Sharing Square With"
             },
             "tooltip": {
                 "ac": "Adds a conditional bonus to the actor's Armor Class.",
@@ -315,8 +315,8 @@
                 "when-active": "Apply bonuses when specified Buff/Gear/Feat/etc is active or equipped.",
                 "when-in-combat": "Active when this actor is in combat.",
                 "while-adjacent-to": "Activates bonuses while adjacent to any of the specified allies.",
-                "while-sharing-with": "Activates bonuses while sharing a square with any of the specified allies.",
-                "while-weapon-type-equipped": "Activate bonuses while having a weapon of the chosen type equipped. Attacks and Weapons must be properly configured with Equipment Base Types."
+                "while-equipped": "Activate bonuses while having a weapon or armor of the chosen type equipped.",
+                "while-sharing-with": "Activates bonuses while sharing a square with any of the specified allies."
             }
         },
         "cancel": "Cancel",

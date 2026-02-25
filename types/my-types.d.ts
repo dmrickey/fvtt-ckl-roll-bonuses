@@ -201,7 +201,6 @@ import { ifDebug } from '../src/util/if-debug.mjs';
 import { includes } from '../src/util/includes.mjs';
 import { isActorInCombat } from '../src/util/is-actor-in-combat.mjs';
 import { isNotEmptyObject } from '../src/util/is-empty-object.mjs';
-import { isEquipped } from '../src/util/is-equipped.mjs';
 import { registerItemHint } from '../src/util/item-hints.mjs';
 import { listFormat } from '../src/util/list-format.mjs';
 import { localize } from '../src/util/localize.mjs';
@@ -523,7 +522,6 @@ declare global {
             ifDebug: typeof ifDebug;
             isActorInCombat: typeof isActorInCombat;
             isEmptyObject: typeof isEmptyObject;
-            isEquipped: typeof isEquipped;
             isNotEmptyObject: typeof isNotEmptyObject;
             itemHasCompendiumId: typeof itemHasCompendiumId;
             localize: typeof localize;

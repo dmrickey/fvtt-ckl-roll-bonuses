@@ -234,7 +234,6 @@
   - Global Bonus kicks off when both "mounted" and "charge" is checked
 
 ### Target
-- While "Equipment Type" is equipped
 - While "Weapon Group" is equipped
 
 ### Specific Bonuses

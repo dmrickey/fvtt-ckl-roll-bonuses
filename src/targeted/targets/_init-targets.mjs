@@ -16,8 +16,8 @@ import { TokenTarget } from "./conditional/token-target.mjs";
 import { WhenActiveTarget } from './conditional/when-active-target.mjs';
 import { WhenInCombatTarget } from './conditional/when-in-combat-target.mjs';
 import { WhileAdjacentToTarget } from './conditional/while-adjacent-to-target.mjs';
+import { WhileEquippedTarget } from './conditional/while-equipped-target.mjs';
 import { WhileSharingSquareWithTarget } from './conditional/while-sharing-square-with-target.mjs';
-import { WhileWeaponTypeTarget } from './conditional/while-weapon-type-equipped-target.mjs';
 import { DamageTypeTarget } from "./damage-type-target.mjs";
 import { FinesseTarget } from './finesse-target.mjs';
 import { SelfTarget } from './self-target.mjs';
@@ -36,8 +36,8 @@ export const registerTargets = () => [
     AlignmentTarget,
     AllTarget,
     ConditionTarget,
-    CreatureTypeTarget,
     CreatureSubtypeTarget,
+    CreatureTypeTarget,
     DamageTypeTarget,
     FinesseTarget,
     FunctionTarget,
@@ -45,12 +45,12 @@ export const registerTargets = () => [
     IsFlankingTarget,
     RelativeSizeTarget,
     SelfTarget,
+    SizeTarget,
     SpecificItemTarget,
     SpellDescriptorTarget,
     SpellSchoolTarget,
     SpellSubschoolTarget,
     SpellTarget,
-    SizeTarget,
     TokenTarget,
     WeaponGroupTarget,
     WeaponTarget,
@@ -59,6 +59,6 @@ export const registerTargets = () => [
     WhenInCombatTarget,
     WhenTargetInRangeTarget,
     WhileAdjacentToTarget,
+    WhileEquippedTarget,
     WhileSharingSquareWithTarget,
-    WhileWeaponTypeTarget,
 ].forEach(Sources.registerSource);
