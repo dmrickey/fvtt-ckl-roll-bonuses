@@ -114,6 +114,7 @@ import { SaveBonus } from '../src/targeted/bonuses/conditional-bonuses.mjs/save-
 import { ConditionalModifiersBonus } from '../src/targeted/bonuses/conditional-modifiers-bonus.mjs';
 import { CritBonus } from '../src/targeted/bonuses/crit-bonus.mjs';
 import { DamageBonus } from '../src/targeted/bonuses/damage-bonus.mjs';
+import { DamageMultiplierBonus } from '../src/targeted/bonuses/damage-multiplier-bonus.mjs';
 import { DCBonus } from '../src/targeted/bonuses/dc-bonus.mjs';
 import { DiceTransformBonus } from '../src/targeted/bonuses/dice-transform-bonus.mjs';
 import { EffectiveSizeBonus } from '../src/targeted/bonuses/effective-size-bonus.mjs';
@@ -200,6 +201,7 @@ import { ifDebug } from '../src/util/if-debug.mjs';
 import { includes } from '../src/util/includes.mjs';
 import { isActorInCombat } from '../src/util/is-actor-in-combat.mjs';
 import { isNotEmptyObject } from '../src/util/is-empty-object.mjs';
+import { isEquipped } from '../src/util/is-equipped.mjs';
 import { registerItemHint } from '../src/util/item-hints.mjs';
 import { listFormat } from '../src/util/list-format.mjs';
 import { localize } from '../src/util/localize.mjs';
@@ -212,7 +214,6 @@ import { signed } from '../src/util/to-signed-string.mjs';
 import { Trait } from '../src/util/trait-builder.mjs';
 import { truthiness } from '../src/util/truthiness.mjs';
 import { distinct, uniqueArray } from '../src/util/unique-array.mjs';
-import { DamageMultiplierBonus } from '../src/targeted/bonuses/damage-multiplier-bonus.mjs';
 
 export { };
 
@@ -522,6 +523,7 @@ declare global {
             ifDebug: typeof ifDebug;
             isActorInCombat: typeof isActorInCombat;
             isEmptyObject: typeof isEmptyObject;
+            isEquipped: typeof isEquipped;
             isNotEmptyObject: typeof isNotEmptyObject;
             itemHasCompendiumId: typeof itemHasCompendiumId;
             localize: typeof localize;

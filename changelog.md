@@ -7,12 +7,15 @@
 - **Inspiration Bonus**
   - Add a bonus to all inspiration rolls. E.g. Gain a +1/4 bonus on all inspiration rolls from Half-Elf investigator favored class option. Investigator macros provided have been upgraded -- if you have made local copies you will need to update those copies to make use of this bonus.
 
-### New Targets
+### New Conditional Targets
 
 - **Relative Size Target**
   - Target tokens based off of their size relative to your own current size.
 - **Size Target**
   - Activate bonus when targeting a token of a specific size.
+- **While Weapon Type Equipped**
+  - Activates bonus while a specified weapon type is equipped (this is useful for cases like "+2 Intimidate when using a Longsword)
+    - Do not confuse this with "Weapon Type Target" which grants bonuses only to specific weapons -- this will grant bonuses _even if using a different weapon_ as long as you have the specified weapon type equipped in your inventory tab.
 
 ### Improvements
 

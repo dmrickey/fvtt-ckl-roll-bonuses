@@ -17,6 +17,7 @@ import { WhenActiveTarget } from './conditional/when-active-target.mjs';
 import { WhenInCombatTarget } from './conditional/when-in-combat-target.mjs';
 import { WhileAdjacentToTarget } from './conditional/while-adjacent-to-target.mjs';
 import { WhileSharingSquareWithTarget } from './conditional/while-sharing-square-with-target.mjs';
+import { WhileWeaponTypeTarget } from './conditional/while-weapon-type-equipped-target.mjs';
 import { DamageTypeTarget } from "./damage-type-target.mjs";
 import { FinesseTarget } from './finesse-target.mjs';
 import { SelfTarget } from './self-target.mjs';
@@ -59,4 +60,5 @@ export const registerTargets = () => [
     WhenTargetInRangeTarget,
     WhileAdjacentToTarget,
     WhileSharingSquareWithTarget,
+    WhileWeaponTypeTarget,
 ].forEach(Sources.registerSource);

@@ -175,7 +175,8 @@
                 "when-active": "When Item Is Active/Equipped",
                 "when-in-combat": "When in Combat",
                 "while-adjacent-to": "While Adjacent To",
-                "while-sharing-with": "While Sharing Square With"
+                "while-sharing-with": "While Sharing Square With",
+                "while-weapon-type-equipped": "While Weapon Type Equipped"
             },
             "tooltip": {
                 "ac": "Adds a conditional bonus to the actor's Armor Class.",
@@ -314,7 +315,8 @@
                 "when-active": "Apply bonuses when specified Buff/Gear/Feat/etc is active or equipped.",
                 "when-in-combat": "Active when this actor is in combat.",
                 "while-adjacent-to": "Activates bonuses while adjacent to any of the specified allies.",
-                "while-sharing-with": "Activates bonuses while sharing a square with any of the specified allies."
+                "while-sharing-with": "Activates bonuses while sharing a square with any of the specified allies.",
+                "while-weapon-type-equipped": "Activate bonuses while having a weapon of the chosen type equipped. Attacks and Weapons must be properly configured with Equipment Base Types."
             }
         },
         "cancel": "Cancel",

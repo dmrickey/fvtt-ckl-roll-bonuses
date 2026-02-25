@@ -207,6 +207,7 @@ import { signed } from '../src/util/to-signed-string.mjs';
 import { Trait } from '../src/util/trait-builder.mjs';
 import { truthiness } from '../src/util/truthiness.mjs';
 import { distinct, uniqueArray } from '../src/util/unique-array.mjs';
+import { WhileWeaponTypeTarget } from '../src/targeted/targets/conditional/while-weapon-type-equipped-target.mjs';
 
 export class _RollBonusesAPI {
     es: any;
@@ -315,6 +316,7 @@ export class _RollBonusesAPI {
         ['target_is-target-within-range']: typeof WhenTargetInRangeTarget;
         ['target_while-adjacent-to']: typeof WhileAdjacentToTarget;
         ['target_while-sharing-with']: typeof WhileSharingSquareWithTarget;
+        ['target_while-weapon-type-equipped']: typeof WhileWeaponTypeTarget;
     };
     /** Array of all targeted targets */
     get allTargetTypes(): (typeof BaseTarget)[];

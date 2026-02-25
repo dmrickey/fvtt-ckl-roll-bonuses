@@ -1272,6 +1272,7 @@ declare global {
     class SystemItemDataWeaponPF extends SystemItemData {
         baseTypes: string[];
         enh: number;
+        equipped: boolean;
         // links: { children: { name: string; id: string }[] };
         masterwork: boolean;
         proficient: boolean;
