@@ -125,7 +125,7 @@ export class VersatileTraining extends SpecificBonus {
                 defaultFlagValuesFunc: (item) => {
                     if (!item?.actor) return;
 
-                    const group = getWeaponGroupsFromActor(item.actor)[0];
+                    const group = getWeaponGroupsFromActor(item.actor, { onlyEquipped: true })[0];
                     if (group) {
                         return {
                             [this.key]: group,

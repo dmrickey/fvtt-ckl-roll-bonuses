@@ -145,6 +145,7 @@ import { TokenTarget } from '../src/targeted/targets/conditional/token-target.mj
 import { WhenActiveTarget } from '../src/targeted/targets/conditional/when-active-target.mjs';
 import { WhenInCombatTarget } from '../src/targeted/targets/conditional/when-in-combat-target.mjs';
 import { WhileAdjacentToTarget } from '../src/targeted/targets/conditional/while-adjacent-to-target.mjs';
+import { WhileWeaponTypeTarget } from '../src/targeted/targets/conditional/while-equipped-target.mjs';
 import { WhileSharingSquareWithTarget } from '../src/targeted/targets/conditional/while-sharing-square-with-target.mjs';
 import { DamageTypeTarget } from '../src/targeted/targets/damage-type-target.mjs';
 import { FinesseTarget } from '../src/targeted/targets/finesse-target.mjs';
@@ -188,7 +189,7 @@ import {
     getTraitsFromItem,
 } from '../src/util/get-id-array-from-flag.mjs';
 import { getSkillFormula } from '../src/util/get-skill-formula.mjs';
-import { getSourceFlag } from '../src/util/get-source-flag.mjs';
+import { getSourceFlag, getSourceFlags } from '../src/util/get-source-flag.mjs';
 import { getWeaponGroupsFromActor } from '../src/util/get-weapon-groups-from-actor.mjs';
 import { getWeaponTypesFromActor } from '../src/util/get-weapon-types-from-actor.mjs';
 import { itemHasCompendiumId } from '../src/util/has-compendium-id.mjs';
@@ -207,7 +208,6 @@ import { signed } from '../src/util/to-signed-string.mjs';
 import { Trait } from '../src/util/trait-builder.mjs';
 import { truthiness } from '../src/util/truthiness.mjs';
 import { distinct, uniqueArray } from '../src/util/unique-array.mjs';
-import { WhileWeaponTypeTarget } from '../src/targeted/targets/conditional/while-equipped-target.mjs';
 
 export class _RollBonusesAPI {
     es: any;
@@ -474,6 +474,7 @@ export class _RollBonusesAPI {
         getEnhancementBonusForAction: typeof getEnhancementBonusForAction;
         getSkillFormula: typeof getSkillFormula;
         getSourceFlag: typeof getSourceFlag;
+        getSourceFlags: typeof getSourceFlags;
         getWeaponGroupsFromActor: typeof getWeaponGroupsFromActor;
         getWeaponTypesFromActor: typeof getWeaponTypesFromActor;
         handleBonusesFor: typeof handleBonusesFor;

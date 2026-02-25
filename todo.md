@@ -51,7 +51,6 @@
 - [Other Ideas](#other-ideas)
 - [vnext](#vnext)
     - [Global Bonuses](#global-bonuses)
-    - [Target](#target)
     - [Specific Bonuses](#specific-bonuses)
     - [Idea](#idea)
     - [Bonus Types](#bonus-types)
@@ -232,9 +231,6 @@
   - Detect "lance" weapon type and double damage
   - Global Bonus will need to add a "mounted" checkbox
   - Global Bonus kicks off when both "mounted" and "charge" is checked
-
-### Target
-- While "Weapon Group" is equipped
 
 ### Specific Bonuses
 - ~~Migrate all keys to start with `specific_`~~ Do this later after SBC has a chance to update to only use the API

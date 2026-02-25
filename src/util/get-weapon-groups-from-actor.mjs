@@ -1,19 +1,27 @@
 import { api } from './api.mjs'
+import { truthiness } from './truthiness.mjs';
 import { uniqueArray } from './unique-array.mjs';
 
 /**
  * @param {Nullable<ActorPF>} actor
- * @param {boolean} [includeSystem]
+ * @param {object} [options]
+ * @param {boolean} [options.onlyEquipped] - if true, only return weapon groups for equipped items
  * @returns {WeaponGroup[]}
  */
-export const getWeaponGroupsFromActor = (actor, includeSystem = true) => {
+export const getWeaponGroupsFromActor = (actor, { onlyEquipped = false } = {}) => {
     if (!actor) {
         return /** @type {WeaponGroup[]} */ (Object.keys(pf1.config.weaponGroups));
     }
 
+    const equiped = [...actor.items]
+        .filter((item) => !onlyEquipped || item.isActive)
+        .flatMap((item) => [...(item.system.weaponGroups?.total ?? [])])
+        .map(x => x.trim())
+        .filter(truthiness);
+
     const groups = uniqueArray([
-        ...[...actor.items].flatMap((item) => [...(item.system.weaponGroups?.total ?? [])]),
-        ...(includeSystem ? Object.keys(pf1.config.weaponGroups) : []),
+        ...equiped,
+        ...(onlyEquipped ? [] : Object.keys(pf1.config.weaponGroups)),
     ]);
     groups.sort((a, b) => a.toLocaleLowerCase().localeCompare(b.toLocaleLowerCase()));
     return /** @type {WeaponGroup[]} */ (groups);

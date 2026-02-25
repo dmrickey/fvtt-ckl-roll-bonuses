@@ -16,6 +16,9 @@
 - **While Equipped**
   - Activates bonus while a specified weapon or armor type is equipped (or while having a specified natural attack type) (this is useful for cases like "+2 Intimidate when using a Longsword)
     - Do not confuse this with "Weapon Type Target" which grants bonuses only to specific weapons -- this will grant bonuses _even if using a different weapon_ as long as you have the specified weapon type equipped in your inventory tab.
+- **While Weapon Group Equipped**
+  - Actives bonuses when a weapon from the specified weapon group(s) is equipped.
+    - Like above, don't confuse this "Weapon Group Target"
 
 ### Improvements
 
