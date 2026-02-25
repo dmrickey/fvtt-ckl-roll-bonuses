@@ -18,12 +18,15 @@
 
 - **Action Type Target**
   - Can also target Combat Maneuvers
+- **Alignment target**
+  - Can now target specific alignment combinations (including true neutral) instead of just good/evil/law/chaos. This allows you to also target things like "only good" (with no law/chaos) whereas before it would trigger off of any good alignment. A configuration of "any good" would now require selecting all three good alignments.
 - **Condition Target**
   - Can now specify multiple conditions to trigger off of
 - **Custom Function Target**
   - Now easier to write. You no longer have to use inline arrow function (e.g. `() => { ... }`), but now only have to write the `...`. You now write these the same you write a script macro or pf1's script calls. Four variables are passed directly to the function for you: `item`, `actor`, `action`, and `actionUse`. Check out the in game documentation for updated examples. _Old_ functions will still work, but the documentation no longer mentions the old syntax and only gives new examples.
 - **Improved Critical**
   - Added Improved Critical auto-configuration. It will now automatically add Weapon Type Target (preconfigured for the first weapon it finds on the actor) and Critical Bonus (preconfigured for keen)
+    - I thought I did this a while ago, sorry McGregor 😅
 
 ### Misc
 

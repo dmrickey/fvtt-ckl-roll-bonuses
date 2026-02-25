@@ -55,8 +55,7 @@
     - [Specific Bonuses](#specific-bonuses)
     - [Idea](#idea)
     - [Bonus Types](#bonus-types)
-  - [BugFixes](#bugfixes)
-
+ 
 # TODO
 - Figure out a way to support multiple target groups on a single Item (so I can add `Favored Enemy (Human) +4` and `Favored Enemy (goblin) +2` on a single Item)
   - (see 3.0 scaffolding branch for a super rought start on this)
@@ -205,9 +204,6 @@
       - or when targeted by any enemy except specified enemy
 - Initial popup with brief tutorial/explanation 
   - Specifically include "automatic" things like Global Bonuses
-- Alignment Target
-  - Refactor so that it's an array
-  - allow neutral to be chosen
 - Create new "Roll Bonuses" section for attack dialog inputs
 - Add "Fortune configuration app" to help with configuring specific fortune abilities
 - Targeting

@@ -1,14 +1,22 @@
 import { MODULE_NAME } from "../../../consts.mjs";
-import { keyValueSelect } from '../../../handlebars-handlers/bonus-inputs/key-value-select.mjs';
+import { traitInput } from "../../../handlebars-handlers/trait-input.mjs";
+import { intersects } from "../../../util/array-intersects.mjs";
 import { currentTargetedActors } from '../../../util/get-current-targets.mjs';
+import { listFormat } from "../../../util/list-format.mjs";
 import { localize, localizeFluentDescription } from '../../../util/localize.mjs';
+import { toArray } from "../../../util/to-array.mjs";
 import { BaseConditionalTarget } from './_base-conditional.target.mjs';
 
 const choices =  /** @type {const} */ ({
-    lawful: 'alignment.lawful',
-    chaotic: 'alignment.chaotic',
-    good: 'alignment.good',
-    evil: 'alignment.evil',
+    "lg": "PF1.Alignments.lg",
+    "ng": "PF1.Alignments.ng",
+    "cg": "PF1.Alignments.cg",
+    "ln": "PF1.Alignments.ln",
+    "tn": "PF1.Alignments.tn",
+    "cn": "PF1.Alignments.cn",
+    "le": "PF1.Alignments.le",
+    "ne": "PF1.Alignments.ne",
+    "ce": "PF1.Alignments.ce",
 });
 
 /**
@@ -53,18 +61,12 @@ export class AlignmentTarget extends BaseConditionalTarget {
 
     /**
      * @param {ItemPF} item
-     * @returns {Nullable<string>}
+     * @returns {AlignmentOptions[]}
      */
-    static #getFlagLetter(item) {
-        /** @type {AlignmentOptions} */
+    static #getConfigured(item) {
+        /** @type {AlignmentOptions[]} */
         const current = item.getFlag(MODULE_NAME, this.key);
-        switch (current) {
-            case 'chaotic': return 'c';
-            case 'evil': return 'e';
-            case 'good': return 'g';
-            case 'lawful': return 'l';
-            default: return null;
-        }
+        return current || [];
     }
 
     /**
@@ -73,10 +75,9 @@ export class AlignmentTarget extends BaseConditionalTarget {
      * @returns {Nullable<string[]>}
      */
     static getHints(source) {
-        /** @type {AlignmentOptions} */
-        const alignment = source.getFlag(MODULE_NAME, this.key);
-        if (alignment) {
-            return [choices[alignment]];
+        const alignments = this.#getConfigured(source);
+        if (alignments.length) {
+            return [listFormat(alignments.map(alignment => choices[alignment]), "or")];
         }
     }
 
@@ -93,10 +94,10 @@ export class AlignmentTarget extends BaseConditionalTarget {
         }
 
         const bonusSources = sources.filter((source) => {
-            const bonusAlignment = this.#getFlagLetter(source);
-            if (!bonusAlignment) return false;
+            const alignments = this.#getConfigured(source);
+            if (!alignments.length) return false;
 
-            return currentTargetedActors().some((actor) => actor.system.details.alignment?.includes(bonusAlignment));
+            return currentTargetedActors().some((actor) => intersects(actor.system.details.alignment, alignments));
         });
 
         return bonusSources;
@@ -106,14 +107,14 @@ export class AlignmentTarget extends BaseConditionalTarget {
      * @inheritdoc
      * @override
      * @param {ItemPF} item
-     * @param {keyof typeof choices} alignment
+     * @param {ArrayOrSelf<keyof typeof choices>} alignment
      * @returns {Promise<void>}
      */
     static async configure(item, alignment) {
         await item.update({
             system: { flags: { boolean: { [this.key]: true } } },
             flags: {
-                [MODULE_NAME]: { [this.key]: alignment || Object.keys(choices)[0] },
+                [MODULE_NAME]: { [this.key]: alignment ? toArray(alignment) : [Object.keys(choices)[0]] },
             },
         });
     }
@@ -128,7 +129,7 @@ export class AlignmentTarget extends BaseConditionalTarget {
      * @param {ItemPF} options.item
      */
     static showInputOnItemSheet({ html, isEditable, item }) {
-        keyValueSelect({
+        traitInput({
             choices,
             item,
             journal: this.journal,

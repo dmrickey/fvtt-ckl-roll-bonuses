@@ -3,12 +3,6 @@
         "ac-mod": "{mod} AC",
         "acp-mod": "{mod} ACP",
         "add-healing-formula": "Add Healing Formula",
-        "alignment": {
-            "lawful": "Lawful",
-            "chaotic": "Chaotic",
-            "good": "Good",
-            "evil": "Evil"
-        },
         "all-crafts": "Craft (All)",
         "all-knowledges": "Knowledge (All)",
         "all-performs": "Perform (All)",
@@ -189,7 +183,7 @@
                 "action-type": "Activates bonus whenever the given action types are matched.",
                 "action-type-radio": "Selects if the action types are evaluated as a group or individually.<br><br>All: Bonuses will be applied only if all action types are matched.<br><br>Any: Bonuses will be applied if any action type is matched.",
                 "agile": "Grant dex to damage for attacks.",
-                "alignment": "Activates bonuses when targeting tokens with the chosen alignment.",
+                "alignment": "Activates bonuses when targeting tokens with any of the chosen alignments.",
                 "all": "Activate bonuses for any action that can accept the bonus.",
                 "ammo-attack": "This attack bonus will be added on top of any other attack bonuses when using this ammo.",
                 "ammo-damage": "A typed damage bonus added when using this ammo.",
