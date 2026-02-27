@@ -130,11 +130,7 @@ export class PositionalHelper {
     isFlankingWith(ally, {
         hasImprovedOutflank = false,
         specificAction = undefined,
-    } = {
-            hasImprovedOutflank: false,
-            specificAction: undefined,
-        }
-    ) {
+    } = {}) {
         return PositionalHelper.#isFlankingWith(this.token1, ally, this.token2, { hasImprovedOutflank, specificAction });
     }
 

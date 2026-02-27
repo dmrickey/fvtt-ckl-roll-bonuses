@@ -14,8 +14,8 @@ import { RelativeSizeTarget } from './conditional/relative-size-target.mjs';
 import { SizeTarget } from './conditional/size-target.mjs';
 import { TokenTarget } from "./conditional/token-target.mjs";
 import { WhenActiveTarget } from './conditional/when-active-target.mjs';
-import { WhenInCombatTarget } from './conditional/when-in-combat-target.mjs';
 import { WhileAdjacentToTarget } from './conditional/while-adjacent-to-target.mjs';
+import { CombatStateTarget } from './conditional/combat-state-target.mjs';
 import { WhileEquippedTarget } from './conditional/while-equipped-target.mjs';
 import { WhileSharingSquareWithTarget } from './conditional/while-sharing-square-with-target.mjs';
 import { WhileWeaponGroupEquippedTarget } from './conditional/while-weapon-group-equipped-target.mjs';
@@ -36,6 +36,7 @@ export const registerTargets = () => [
     ActionTypeTarget,
     AlignmentTarget,
     AllTarget,
+    CombatStateTarget,
     ConditionTarget,
     CreatureSubtypeTarget,
     CreatureTypeTarget,
@@ -57,7 +58,6 @@ export const registerTargets = () => [
     WeaponTarget,
     WeaponTypeTarget,
     WhenActiveTarget,
-    WhenInCombatTarget,
     WhenTargetInRangeTarget,
     WhileAdjacentToTarget,
     WhileEquippedTarget,

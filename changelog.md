@@ -11,6 +11,8 @@
 
 ### New Conditional Targets
 
+- **Combat State**
+  - Previously you could define a target to be active while you were in combat. Now you can flip that and have a bonus defined for when you're out of combat. E.g. [Scarred by War](https://www.aonprd.com/TraitDisplay.aspx?ItemName=Scarred%20by%20War)
 - **Relative Size Target**
   - Target tokens based off of their size relative to your own current size.
 - **Size Target**
@@ -35,6 +37,8 @@
 - **Improved Critical**
   - Added Improved Critical auto-configuration. It will now automatically add Weapon Type Target (preconfigured for the first weapon it finds on the actor) and Critical Bonus (preconfigured for keen)
     - I thought I did this a while ago, sorry McGregor 😅
+- **When in Combat**
+  - Transformed into **Combat State**. See above.
 
 ### Misc
 

@@ -21,11 +21,8 @@
 - [Class Features](#class-features)
   - [Cleric](#cleric)
     - [Healing Domain - Healer's Blessing](#healing-domain---healers-blessing)
-  - [Ranger](#ranger)
-    - [Favored Terrain](#favored-terrain)
 - [Feats](#feats)
   - [Spell Perfection](#spell-perfection)
-  - [Spirited Charge](#spirited-charge)
   - [Scarred by War](#scarred-by-war)
 - [Buffs](#buffs)
 - [Racial Features](#racial-features)
@@ -107,16 +104,10 @@
 - Cure Spells are treated as if they're empowered (+50% healing)
   - IsHealing target
   - Empowered Bonus
-## Ranger
-### Favored Terrain
-  - Add a button to chat cards to increase the skill/initiative/whatever roll when applicable
 
 # Feats
 ## [Spell Perfection](https://www.d20pfsrd.com/feats/general-feats/spell-perfection/)
-## Spirited Charge
-- Double Damage without critting
 ## [Scarred by War](https://www.aonprd.com/TraitDisplay.aspx?ItemName=Scarred%20by%20War)
- - (used to grant diplomacy bonus while not in combat)
 
 # Buffs
 
@@ -263,8 +254,4 @@ Figure out a way to better communicate what changes are being affected by "Chang
 
 - Add an "ignore Item Hints" util flag
 
-TODO - mounted charge and lance conditionals
-
 optional rule for hitting large adjacent creatures with a reach weapon?
-
-alphabetize "Item Name Translation Config"

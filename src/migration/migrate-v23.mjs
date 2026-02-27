@@ -8,8 +8,12 @@ export class MigrateV23 extends BaseMigrate {
      * @returns {RecursivePartial<ItemPF> | undefined}
      */
     static getItemUpdateData(item) {
+        /** @type {Record<string, true | null>} */
+        const boolean = {};
+
         /** @type {Record<string, any>} */
         const updatedFlags = {};
+
         let hasUpdate = false;
 
         const condition = item.getFlag(MODULE_NAME, 'target_condition');
@@ -42,10 +46,24 @@ export class MigrateV23 extends BaseMigrate {
             updatedFlags['target_alignment'] = values;
         }
 
+        const combat = item.hasItemBooleanFlag('target_when-in-combat');
+        if (combat) {
+            hasUpdate = true;
+            boolean['-=target_when-in-combat'] = null;
+            boolean['target_combat-state'] = true;
+            updatedFlags['target_combat-state'] = 'in-combat';
+        }
+
         if (hasUpdate) {
             /** @type {RecursivePartial<ItemPF>} */
             const update = {
                 _id: item.id,
+                system: {
+                    flags: {
+                        // @ts-ignore
+                        boolean
+                    }
+                },
                 flags: {
                     [MODULE_NAME]: updatedFlags,
                 },

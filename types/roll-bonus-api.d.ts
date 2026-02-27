@@ -71,6 +71,7 @@ import { RequireMeleeThreatenGlobalBonus } from '../src/global-bonuses/require-m
 import { ShootIntoMeleeGlobalBonus } from '../src/global-bonuses/shoot-into-melee-global-bonus.mjs';
 import { Outflank } from '../src/global-bonuses/specific/bonuses/flanking/outflank.mjs';
 import { PreciseShot } from '../src/global-bonuses/specific/bonuses/precise-shot-bonus.mjs';
+import { SpiritedCharge } from '../src/global-bonuses/specific/bonuses/spirited-charge-bonus.mjs';
 import { MenacingBonus } from '../src/global-bonuses/targeted/bonuses/menacing.mjs';
 import { addNodeToRollBonus } from '../src/handlebars-handlers/add-bonus-to-item-sheet.mjs';
 import { checkboxInput } from '../src/handlebars-handlers/bonus-inputs/chekbox-input.mjs';
@@ -134,6 +135,7 @@ import { ActionTypeTarget } from '../src/targeted/targets/action-type-target.mjs
 import { BaseConditionalTarget } from '../src/targeted/targets/conditional/_base-conditional.target.mjs';
 import { AlignmentTarget } from '../src/targeted/targets/conditional/alignment-target.mjs';
 import { AllTarget } from '../src/targeted/targets/conditional/all-target.mjs';
+import { CombatStateTarget } from '../src/targeted/targets/conditional/combat-state-target.mjs';
 import { ConditionTarget } from '../src/targeted/targets/conditional/condition-target.mjs';
 import { CreatureSubtypeTarget } from '../src/targeted/targets/conditional/creature-subtype-target.mjs';
 import { CreatureTypeTarget } from '../src/targeted/targets/conditional/creature-type-target.mjs';
@@ -143,7 +145,6 @@ import { IsFlankingTarget } from '../src/targeted/targets/conditional/is-flankin
 import { WhenTargetInRangeTarget } from '../src/targeted/targets/conditional/is-target-within-range.mjs';
 import { TokenTarget } from '../src/targeted/targets/conditional/token-target.mjs';
 import { WhenActiveTarget } from '../src/targeted/targets/conditional/when-active-target.mjs';
-import { WhenInCombatTarget } from '../src/targeted/targets/conditional/when-in-combat-target.mjs';
 import { WhileAdjacentToTarget } from '../src/targeted/targets/conditional/while-adjacent-to-target.mjs';
 import { WhileWeaponTypeTarget } from '../src/targeted/targets/conditional/while-equipped-target.mjs';
 import { WhileSharingSquareWithTarget } from '../src/targeted/targets/conditional/while-sharing-square-with-target.mjs';
@@ -208,7 +209,6 @@ import { signed } from '../src/util/to-signed-string.mjs';
 import { Trait } from '../src/util/trait-builder.mjs';
 import { truthiness } from '../src/util/truthiness.mjs';
 import { distinct, uniqueArray } from '../src/util/unique-array.mjs';
-import { SpiritedCharge } from '../src/global-bonuses/specific/bonuses/spirited-charge-bonus.mjs';
 
 export class _RollBonusesAPI {
     es: any;
@@ -294,27 +294,27 @@ export class _RollBonusesAPI {
         ['target_action-type']: typeof ActionTypeTarget;
         ['target_alignment']: typeof AlignmentTarget;
         ['target_all']: typeof AllTarget;
+        ['target_combat-state']: typeof CombatStateTarget;
         ['target_condition']: typeof ConditionTarget;
+        ['target_creature-subtype']: typeof CreatureSubtypeTarget;
+        ['target_creature-type']: typeof CreatureTypeTarget;
         ['target_damage-type']: typeof DamageTypeTarget;
         ['target_finesse']: typeof FinesseTarget;
         ['target_function']: typeof FunctionTarget;
         ['target_has-boolean-flag']: typeof HasBooleanFlagTarget;
         ['target_is-flanking']: typeof IsFlankingTarget;
-        ['target_creature-type']: typeof CreatureTypeTarget;
-        ['target_creature-subtype']: typeof CreatureSubtypeTarget;
-        ['target_self']: typeof SelfTarget;
+        ['target_is-target-within-range']: typeof WhenTargetInRangeTarget;
         ['target_item']: typeof SpecificItemTarget;
+        ['target_self']: typeof SelfTarget;
+        ['target_spell']: typeof SpellTarget;
         ['target_spell-descriptor']: typeof SpellDescriptorTarget;
         ['target_spell-school']: typeof SpellSchoolTarget;
         ['target_spell-subschool']: typeof SpellSubschoolTarget;
-        ['target_spell']: typeof SpellTarget;
         ['target_token']: typeof TokenTarget;
-        ['target_weapon-group']: typeof WeaponGroupTarget;
         ['target_weapon']: typeof WeaponTarget;
+        ['target_weapon-group']: typeof WeaponGroupTarget;
         ['target_weapon-type']: typeof WeaponTypeTarget;
         ['target_when-active']: typeof WhenActiveTarget;
-        ['target_when-in-combat']: typeof WhenInCombatTarget;
-        ['target_is-target-within-range']: typeof WhenTargetInRangeTarget;
         ['target_while-adjacent-to']: typeof WhileAdjacentToTarget;
         ['target_while-sharing-with']: typeof WhileSharingSquareWithTarget;
         ['target_while-weapon-type-equipped']: typeof WhileWeaponTypeTarget;
