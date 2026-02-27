@@ -1,12 +1,15 @@
 import './_all-bonuses.mjs';
 import './auto-recognition/init.mjs';
 import { FRIENDLY_MODULE_NAME, MODULE_NAME } from './consts.mjs';
+import { DamageMultiplierGlobalBonus } from './global-bonuses/damage-multiplier-global-bonus.mjs';
 import { addNodeToRollBonus } from './handlebars-handlers/add-bonus-to-item-sheet.mjs';
 import './handlebars-handlers/init.mjs';
 import migrate from './migration/index.mjs';
 import { handleConditionals } from './patch/action-use_handle-conditionals.mjs';
 import './patch/init.mjs';
 import { handleBonusesFor } from './target-and-bonus-join.mjs';
+import { BaneBonus } from './targeted/bonuses/bane-bonus.mjs';
+import { DamageMultiplierBonus } from './targeted/bonuses/damage-multiplier-bonus.mjs';
 import { FinesseOverride } from './targeted/target-overides/finesse-override.mjs';
 import { api } from './util/api.mjs';
 import { emptyObject } from './util/empty-object.mjs';
@@ -245,7 +248,6 @@ async function actionUse_handleConditionals() {
     const conditionals = [];
     LocalHookHandler.fireHookNoReturnSync(localHooks.actionUse_handleConditionals, this, conditionals);
 
-    const BaneBonus = api.bonusTypeMap['bonus_bane'];
     const baneProvider = BaneBonus.actionHasBaneTarget(this.action);
     if (baneProvider) {
         const label = BaneBonus.getLabelForTargetsFromSource(baneProvider) || localizeBonusLabel(BaneBonus.key);
@@ -283,44 +285,42 @@ async function actionUse_handleConditionals() {
         });
     }
 
+    const finalConditionals = [
+        ...conditionals,
+        ...actionConditionals
+            .filter(truthiness)
+            .filter(x => !x.default),
+    ];
+
     // This needs to happen after all other conditionals have been gathered so it can double any extra
     // excluding default conditionals because those are already included in action's damage sources
     const vital = new api.utils.VitalStrikeData(this.actor, { actionUse: this });
     /** @type {ItemConditional | undefined} */
     let mythic;
     if (vital.enabled) {
-        mythic = vital.buildMythicConditional([
-            ...conditionals,
-            ...actionConditionals
-                .filter(truthiness)
-                .filter(x => !x.default),
-        ]);
+        mythic = vital.buildMythicConditional(finalConditionals);
     }
 
     /** @type {ItemConditional[]} */
     const damageMults = [];
     handleBonusesFor(
         this.action,
-        (bonusType, source) => {
-            const condtinonal = bonusType.buildCondtional(source, [
-                ...conditionals,
-                ...actionConditionals
-                    .filter(truthiness)
-                    .filter(x => !x.default),
-            ], this);
+        (damageMultiplierBonus, source) => {
+            const condtinonal = damageMultiplierBonus.buildCondtional(source, finalConditionals, this);
             if (condtinonal) {
                 damageMults.push(condtinonal);
             }
         },
-        { specificBonusType: api.bonusTypeMap['bonus_damage-multiplier'] },
-    )
+        { specificBonusType: DamageMultiplierBonus },
+    );
+
+    const globalDamageMultiplier = DamageMultiplierGlobalBonus.getMultiplier(this, finalConditionals);
+    conditionalData.push(...globalDamageMultiplier);
 
     if (mythic) {
         conditionalData.push(mythic);
     }
-    if (damageMults.length) {
-        conditionalData.push(...damageMults);
-    }
+    conditionalData.push(...damageMults);
 
     await handleConditionals(this, conditionalData);
 }

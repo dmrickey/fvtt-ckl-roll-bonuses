@@ -344,7 +344,10 @@ export class VitalStrikeData {
             this.actionUse,
             conditionals,
             VitalStrikeMythic.label,
-            { multiplier: this.multiplier }
+            {
+                multiplier: this.multiplier + 1,
+                subTarget: 'attack_0',
+            },
         );
     }
 
@@ -360,7 +363,6 @@ export class VitalStrikeData {
 api.utils.VitalStrikeData = VitalStrikeData;
 
 /**
- * @this {ActionUse}
  * @param {AttackDialog} dialog
  * @param {[HTMLElement]} html
  * @param {AttackDialogData} data

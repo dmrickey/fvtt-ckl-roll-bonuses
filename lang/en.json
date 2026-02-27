@@ -125,10 +125,10 @@
                 "relative-size-specificty": "Relative to You",
                 "relative-size-direction": "Size Direction",
                 "roll-untrained": "Roll Skills Untrained",
-                "script-call": "Script Call",
                 "save": "Saving Throw",
                 "save-chosen": "Chosen Saves",
                 "save-input": "Save Change",
+                "script-call": "Script Call",
                 "self": "Self Target",
                 "skill": "Skill",
                 "skill-chosen": "Chosen Skills",
@@ -147,6 +147,7 @@
                 "spell-school": "Spell Schools",
                 "spell-subschool": "Spell Subschools",
                 "spell-specialization": "Spell Specialization",
+                "spirited-charge": "Spirited Charge",
                 "swarming": "Swarming",
                 "token": "Targeted Tokens",
                 "token-invert": "Invert Targeted Tokens",
@@ -288,6 +289,7 @@
                 "spell-focus-greater": "Further increase a school from Spell Focus by +1 DC.",
                 "spell-focus-mythic": "Double Spell Focus bonuses.",
                 "spell-descriptor": "Apply bonuses for spells with the chosen descriptors.",
+                "spirited-charge": "Double damage with melee weapons when charging while mounted (use conditional checkboxes in attack dialog).",
                 "swarming": "While sharing a square with an ally with this ability, you are considered flanking your target.",
                 "size": "Apply bonuses for actions when targeting creatures of a specific size.",
                 "token": "Apply bonuses for actions while specific tokens are targeted. When this buff is activated, a dialog will show up that allows you to choose from tokens in the scene.",
@@ -397,6 +399,7 @@
                 "require-melee-threaten": "Skipped Melee Requiremnt"
             },
             "label": {
+                "damage-multiplier": "Damage Multiplier",
                 "flanking": "Flanking",
                 "higher-ground": "High Ground Melee Bonus",
                 "range-increment-penalty": "Ranged Increment Penalty",
@@ -417,12 +420,16 @@
                 "label": "Configure Global Bonuses",
                 "title": "Global Bonuses",
                 "section": {
+                    "damage-multiplier": {
+                        "description": "This adds an attack multiplier on the attack dialog which will multiply the final damage result by that amount (not including critical damage). Separately this adds a \"Spirited Charge\" specific bonus and also adds a \"Mounted\" Miscellaneous checkbox that appears when you enable \"Charge\". When checking \"Mounted\" while charging it will automatically attempt to apply bonuses for \"Lance Charging\" and \"Spirited Charge\".",
+                        "issues": "To detect if the attack is happening with a \"Lance\" weapon, the mod checks if the weapon has the \"Lance\" Equipment Base Type (Weapon Type). If you're using a translation that changes the name of that type, you'll have to update the translation config in the mod's settings for \"Lance\"."
+                    },
                     "flanking": {
                         "description": "Attempts to automatically add appropriate bonuses for flanking. The mod includes various bonuses to account for different feats/abilities that increase the bonus and modify how positioning works. Be sure to check out the journal for more details on those abilties.",
                         "issues": "Flanking on diagonals when not adjacent to the target may not be technically accurate, but should be close enough for most scenarios (i.e. if you rotated the map 45 degrees, it would definitely be flanking)."
                     },
                     "higher-ground": {
-                        "description": "Add +1 to melee attacks when made from a higher elevation.",
+                        "description": "Automatically enables the system's +1 to melee attacks when made from a higher elevation.",
                         "issues": ""
                     },
                     "range-increment-penalty": {
@@ -468,6 +475,7 @@
         "keen-all": "Keen (all)",
         "keen-id": "keen ({id})",
         "keen-self": "Keen (self)",
+        "lance-charge": "Lance Charge",
         "maximized": "Maximized",
         "maximized-total": "Maximized: {total}",
         "misfortune": "Misfortune",
@@ -475,6 +483,8 @@
         "missing-conditional-target": "'{bonus}' bonus requires a Conditional Target to function properly.",
         "missing-targets": "There are no Targets configured.",
         "modifiers": "Modifiers",
+        "mounted": "Mounted",
+        "mounted-title": "Used for automatically multiplying when using a Lance and/or Spirited Charge.",
         "ok": "OK",
         "picker": {
             "tabs": {
@@ -664,6 +674,10 @@
                 "name": "Unconventional Inspiration",
                 "default": "Unconventional Inspiration"
             },
+            "lance": {
+                "name": "Lance",
+                "default": "Lance"
+            },
             "martial-focus": {
                 "name": "Martial Focus",
                 "default": "Martial Focus"
@@ -695,6 +709,10 @@
             "spell-specialization": {
                 "name": "Spell Specialization",
                 "default": "Spell Specialization"
+            },
+            "spirited-charge": {
+                "name": "Spirited Charge",
+                "default": "Spirited Charge"
             },
             "swarming": {
                 "name": "Swarming",

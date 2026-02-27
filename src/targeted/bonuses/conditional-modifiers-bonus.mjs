@@ -190,7 +190,6 @@ export class ConditionalModifiersBonus extends BaseBonus {
     }
 
     /**
-     * @this {ActionUse}
      * @param {AttackDialog} dialog
      * @param {[HTMLElement]} html
      * @param {AttackDialogData} data

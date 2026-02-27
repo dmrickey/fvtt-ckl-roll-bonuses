@@ -14,7 +14,7 @@ export const isNatural = (item) => {
 }
 
 /** @type {ActionTypeFilterFunc} */
-export const isNaturalSecondary = (item, action, actionUse) => {
+export const isNaturalSecondary = (item, action) => {
     const _isNatural = isNatural(item);
     const isPrimary = !!action?.naturalAttack.primary;
     return _isNatural && !isPrimary;

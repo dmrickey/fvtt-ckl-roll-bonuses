@@ -266,3 +266,5 @@ Figure out a way to better communicate what changes are being affected by "Chang
 TODO - mounted charge and lance conditionals
 
 optional rule for hitting large adjacent creatures with a reach weapon?
+
+alphabetize "Item Name Translation Config"

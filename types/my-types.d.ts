@@ -176,7 +176,7 @@ import {
     intersection,
     intersects,
 } from '../src/util/array-intersects.mjs';
-import { addCheckToAttackDialog } from '../src/util/attack-dialog-helper.mjs';
+import { addCheckToAttackDialog, addTextInputToAttackDialog, getFormData } from '../src/util/attack-dialog-helper.mjs';
 import { confirmationDialog } from '../src/util/confirmation-dialog.mjs';
 import { getEnhancementBonusForAction } from '../src/util/enhancement-bonus-helper.mjs';
 import { FormulaCacheHelper, getDocFlags } from '../src/util/flag-helpers.mjs';
@@ -213,6 +213,7 @@ import { signed } from '../src/util/to-signed-string.mjs';
 import { Trait } from '../src/util/trait-builder.mjs';
 import { truthiness } from '../src/util/truthiness.mjs';
 import { distinct, uniqueArray } from '../src/util/unique-array.mjs';
+import { SpiritedCharge } from '../src/global-bonuses/specific/bonuses/spirited-charge-bonus.mjs';
 
 export { };
 
@@ -421,8 +422,10 @@ declare global {
             ['weapon-specialization']: typeof WeaponSpecialization;
             ['weapon-specialization-greater']: typeof WeaponSpecializationGreater;
 
+            /** specific bonuses gratned from enabling global bonuses  */
             ['outflank']?: typeof Outflank;
             ['precise-shot']?: typeof PreciseShot;
+            ['spirited-charge']?: typeof SpiritedCharge;
         };
         /** Array of all targeted targets */
         get allSpecificBonusTypes(): ValueOf<
@@ -507,11 +510,13 @@ declare global {
             };
 
             addCheckToAttackDialog: typeof addCheckToAttackDialog;
+            addTextInputToAttackDialog: typeof addTextInputToAttackDialog;
             confirmationDialog: typeof confirmationDialog;
             currentTargetedActors: typeof currentTargetedActors;
             currentTargets: typeof currentTargets;
             getActionDamageTypes: typeof getActionDamageTypes;
             getDocFlags: typeof getDocFlags;
+            getFormData: typeof getFormData;
             getEnhancementBonusForAction: typeof getEnhancementBonusForAction;
             getSkillFormula: typeof getSkillFormula;
             getSourceFlag: typeof getSourceFlag;
@@ -589,7 +594,6 @@ declare global {
         (
             item?: ItemPF,
             action?: ItemAction,
-            actionUse?: ActionUse | null
         ): boolean;
     };
 

@@ -3,7 +3,9 @@
 ### New Bonuses
 
 - **Damage Multiplier**
-  - Multiplies damage for the targeted action. E.g. a mounted lance charge or Spirited Charge.
+  - Multiplies damage for the targeted action.
+- **Damage Multiplier (Global Bonus)**
+  - Adds a multiplier input on the attack dialog for adhoc multipliers. This includes support for mounted charging with a Lance and/or *Spirited Charge* -- this is supported with a new Specific Bonus and also with a new "Mounted" checkbox that appears after checking "charge". When both "charge" and "mounted" are checked, it then checks if the attacker has the feat and/or a lance to multiple the damage as expected.
 - **Inspiration Bonus**
   - Add a bonus to all inspiration rolls. E.g. Gain a +1/4 bonus on all inspiration rolls from Half-Elf investigator favored class option. Investigator macros provided have been upgraded -- if you have made local copies you will need to update those copies to make use of this bonus.
 

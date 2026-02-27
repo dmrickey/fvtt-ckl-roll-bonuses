@@ -1,11 +1,16 @@
 import { api } from './api.mjs';
+import { toArray } from './to-array.mjs';
 
 /**
  * @template T
  * @param {T | T[] | Set<T>} a
  * @returns {Set<T>}
  */
-const toSet = (a) => a instanceof Set ? a : Array.isArray(a) ? new Set(a) : new Set([a])
+const toSet = (a) => !a
+    ? new Set()
+    : a instanceof Set
+        ? a
+        : new Set(toArray(a));
 
 /**
  * @template T
@@ -27,8 +32,8 @@ export const intersects = (a, b) => {
 
 /**
  * @template T
- * @param {T[]} a
- * @param {T[]} b
+ * @param {Nullable<T | T[] | Set<T>>} a
+ * @param {Nullable<T | T[] | Set<T>>} b
  * @returns {T[]} Intersection of both arrays
  */
 export const intersection = (a, b) => {

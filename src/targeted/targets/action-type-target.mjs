@@ -109,7 +109,7 @@ export class ActionTypeTarget extends BaseTarget {
             if (!filters.length) return false;
 
             /** @param {FilterType} f */
-            const hasType = (f) => filterTypes[f].filter(item, action, actionUse);
+            const hasType = (f) => filterTypes[f].filter(item, action);
             return filters[func](hasType);
         });
 

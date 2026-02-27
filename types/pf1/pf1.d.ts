@@ -285,19 +285,28 @@ declare global {
 
     interface ActionUseFormData {
         'attack-bonus': string;
+        charge: undefined | boolean;
         'cl-check': undefined;
         d20: string;
         'damage-ability-multiplier': undefined;
-        fullAttack: boolean;
+        'damage-bonus': ""
+        flanking: undefined | boolean;
+        fullAttack: undefined | boolean;
+        'global-bonus_damage-multiplier': string;
+        'global-bonus.dialog-disable.require-melee-threaten': false
         'haste-attack': boolean;
+        held: "1h"
+        highGround: false
         manyshot: undefined | boolean;
         'measure-template': undefined | boolean;
+        'point-blank-shot': undefined | boolean;
         'power-attack': undefined | boolean;
         'primary-attack': undefined | boolean;
         'rapid-shot': undefined | boolean;
         rollMode: 'publicroll' | RollMode;
 
-        [key: string]: undefined | boolean;
+
+        [key: string]: undefined | boolean | string;
     }
 
     class ActionUseShared<T extends SystemItemData = SystemItemData> {

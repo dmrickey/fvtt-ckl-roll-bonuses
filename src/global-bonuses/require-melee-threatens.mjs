@@ -1,8 +1,8 @@
-import { PositionalHelper } from '../util/positional-helper.mjs';
-import { currentTargets } from '../util/get-current-targets.mjs';
-import { customGlobalHooks, LocalHookHandler, localHooks } from '../util/hooks.mjs'
-import { BaseGlobalBonus } from './base-global-bonus.mjs';
 import { addCheckToAttackDialog, getFormData } from '../util/attack-dialog-helper.mjs';
+import { currentTargets } from '../util/get-current-targets.mjs';
+import { customGlobalHooks, LocalHookHandler, localHooks } from '../util/hooks.mjs';
+import { PositionalHelper } from '../util/positional-helper.mjs';
+import { BaseGlobalBonus } from './base-global-bonus.mjs';
 
 /** @extends {BaseGlobalBonus} */
 export class RequireMeleeThreatenGlobalBonus extends BaseGlobalBonus {
@@ -21,7 +21,6 @@ export class RequireMeleeThreatenGlobalBonus extends BaseGlobalBonus {
     static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.4A4bCh8VsQVbTsAY#require-melee-threatens'; }
 
     /**
-     * @this {ActionUse}
      * @param {AttackDialog} dialog
      * @param {[HTMLElement]} html
      * @param {AttackDialogData} data

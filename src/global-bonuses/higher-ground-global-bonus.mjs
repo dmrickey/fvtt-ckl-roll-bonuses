@@ -1,3 +1,4 @@
+import { isMelee } from '../util/action-type-helpers.mjs';
 import { currentTargets } from '../util/get-current-targets.mjs';
 import { PositionalHelper } from '../util/positional-helper.mjs';
 import { BaseGlobalBonus } from './base-global-bonus.mjs';
@@ -32,8 +33,7 @@ export class HigherGroundGlobalBonus extends BaseGlobalBonus {
             return;
         }
 
-        const isMelee = ['mcman', 'mwak', 'msak'].includes(action.actionType);
-        if (!isMelee) {
+        if (!isMelee(action.item, action)) {
             return;
         }
 

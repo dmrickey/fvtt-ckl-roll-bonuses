@@ -91,22 +91,8 @@ export class DamageMultiplierBonus extends BaseBonus {
      * @returns {ItemConditional| undefined}
      */
     static buildCondtional(source, conditionals, action) {
-        const part = action.action.damage?.parts[0];
-        const partFormula = part?.formula || '';
-        const firstDice = getFirstTermFormula(partFormula, action.shared?.rollData ?? {});
-
-        if (!firstDice) return;
-
-        const mult = FormulaCacheHelper.getModuleFlagValue(source, this.key) - 1;
-
-        if (mult <= 0) return;
-
-        return buildDamageMultiplierConditional(
-            action,
-            conditionals,
-            this.label,
-            { multiplier: mult, seededFormulaParts: [firstDice] }
-        );
+        const multiplier = FormulaCacheHelper.getModuleFlagValue(source, this.key) || 0;
+        return buildDamageMultiplierConditional(action, conditionals, `${source.name} ×${multiplier}`, { includeActionDamage: true, multiplier });
     }
 
     /**

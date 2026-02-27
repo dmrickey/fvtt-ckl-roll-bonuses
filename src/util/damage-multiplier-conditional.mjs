@@ -1,3 +1,4 @@
+import { getFirstTermFormula } from './get-first-term-formula.mjs';
 import { localize } from './localize.mjs';
 import { truthiness } from './truthiness.mjs';
 
@@ -7,9 +8,10 @@ import { truthiness } from './truthiness.mjs';
  * @param {ActionUse} actionUse
  * @param {ItemConditional[]} conditionals
  * @param {string} label
- * @param {object} [options]
- * @param {string[]} [options.seededFormulaParts]
- * @param {number} [options.multiplier]
+ * @param {object} options
+ * @param {boolean} [options.includeActionDamage]
+ * @param {number} options.multiplier
+ * @param {ItemConditionalModifierSourceData['subTarget']} [options.subTarget]
  * @returns {ItemConditional| undefined}
  */
 export const buildDamageMultiplierConditional = (
@@ -17,15 +19,13 @@ export const buildDamageMultiplierConditional = (
     conditionals,
     label,
     {
-        seededFormulaParts = [],
-        multiplier = 1
-    } = {
-            seededFormulaParts: [],
-            multiplier: 1
-        },
+        includeActionDamage = false,
+        multiplier = 1,
+        subTarget = undefined,
+    },
 ) => {
-
-    const formulaParts = [];
+    multiplier -= 1;
+    if (multiplier <= 0) return;
 
     /**
      * @param {string | number} f
@@ -33,6 +33,17 @@ export const buildDamageMultiplierConditional = (
      * @returns {string}
     */
     const toFormula = (f, l) => `{${new Array(multiplier).fill(f).join(', ')}}${(l ? `[${l}]` : '')}`;
+
+    const formulaParts = [];
+
+    if (includeActionDamage) {
+        const part = actionUse.action.damage?.parts[0];
+        const partFormula = part?.formula || '';
+        const firstDice = getFirstTermFormula(partFormula, actionUse.shared?.rollData ?? {});
+        if (firstDice) {
+            formulaParts.push(toFormula(firstDice));
+        }
+    }
 
     // this.action.allDamageSources
     formulaParts.push(...actionUse.action.allDamageSources.map(x => toFormula(x.formula, x.flavor)));
@@ -84,8 +95,8 @@ export const buildDamageMultiplierConditional = (
         modifiers: [{
             _id: foundry.utils.randomID(),
             critical: 'nonCrit',
-            formula: `{${[...Array(multiplier).fill(seededFormulaParts).flat(), ...formulaParts].join(', ')}}[${label}]`,
-            subTarget: 'attack_0',
+            formula: `{${formulaParts.join(', ')}}[${label}]`,
+            subTarget,
             target: 'damage',
             type: '',
             damageType: [...actionUse.action.damage?.parts[0]?.types],
