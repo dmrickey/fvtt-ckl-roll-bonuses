@@ -635,7 +635,7 @@
                 "default": "Inspiration"
             },
             "inspiration-amazing": {
-                "name": "Amazing Inspiration",
+                "name": "Inspiration, Amazing",
                 "default": "Amazing Inspiration"
             },
             "inspiration-device-talent": {
@@ -647,11 +647,11 @@
                 "default": "Empathy"
             },
             "inspiration-expanded": {
-                "name": "Expanded Inspiration",
+                "name": "Inspiration, Expanded",
                 "default": "Expanded Inspiration"
             },
             "inspiration-focused": {
-                "name": "Focused Inspiration",
+                "name": "Inspiration, Focused",
                 "default": "Focused Inspiration"
             },
             "inspiration-inspired-intelligence": {
@@ -659,19 +659,19 @@
                 "default": "Inspired Intelligence"
             },
             "inspiration-tenacious": {
-                "name": "Tenacious Inspiration",
+                "name": "Inspiration, Tenacious",
                 "default": "Tenacious Inspiration"
             },
             "inspiration-true": {
-                "name": "True Inspiration",
+                "name": "Inspiration, True",
                 "default": "True Inspiration"
             },
             "inspiration-underworld": {
-                "name": "Underworld Inspiration",
+                "name": "Inspiration, Underworld",
                 "default": "Underworld Inspiration"
             },
             "inspiration-unconventional": {
-                "name": "Unconventional Inspiration",
+                "name": "Inspiration, Unconventional",
                 "default": "Unconventional Inspiration"
             },
             "lance": {
@@ -731,7 +731,7 @@
                 "default": "Versatile Performance"
             },
             "versatile-performance-expanded": {
-                "name": "Expanded Versatility",
+                "name": "Versatile Performance: Expanded Versatility",
                 "default": "Expanded Versatility"
             },
             "versatile-training": {
@@ -751,11 +751,11 @@
                 "default": "Weapon Focus"
             },
             "weapon-focus-racial": {
-                "name": "Racial Weapon Focus",
+                "name": "Weapon Focus, Racial",
                 "default": "Gnome Weapon Focus"
             },
             "weapon-focus-racial-default-race": {
-                "name": "Racial Weapon Focus (default race)",
+                "name": "Weapon Focus, Racial (default race)",
                 "default": "Gnomish"
             },
             "weapon-specialization": {

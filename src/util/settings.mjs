@@ -152,7 +152,7 @@ class ItemNameTranslationConfig extends FormApplication {
             key,
             label: localize(`item-name-translations.${key}.name`),
             value: current[key] || localize(`item-name-translations.${key}.default`),
-        }));
+        })).sort((a, b) => a.label.localeCompare(b.label));
 
         context.improved = {
             key: 'improved',
