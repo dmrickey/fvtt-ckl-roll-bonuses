@@ -1,7 +1,3 @@
-// https://www.d20pfsrd.com/classes/hybrid-classes/investigator/investigator-talents/paizo-investigator-talents/amazing-inspiration/
-
-// When using inspiration, the investigator rolls a d8 instead of a d6. At 20th level, the investigator rolls 2d8 and adds both dice to the result.
-
 import { MODULE_NAME } from '../../consts.mjs';
 import { textInput } from '../../handlebars-handlers/bonus-inputs/text-input.mjs';
 import { getSourceFlags } from '../../util/get-source-flag.mjs';

@@ -101,8 +101,6 @@ export class ActionTypeTarget extends BaseTarget {
                 ? doc.action
                 : doc;
 
-        const actionUse = doc instanceof pf1.actionUse.ActionUse ? doc : null;
-
         const filteredSources = sources.filter((source) => {
             const func = this.#getFilterArrayFunc(source);
             const filters = this.#getFilterTypes(source);

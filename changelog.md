@@ -44,6 +44,7 @@
 
 - Added `greatestDistanceBetween` helper function in the PositionalHelper util that can tell you the greatest distance between any two out of a group of tokens. There is a new macro available with examples on how to use this. One example on how to use this is to add a Use Script Call that does `if (RollBonuses.utils.PositionalHelper.greatestDistanceBetweenTokens(game.user.targets) > 30) shared.reject = true;`. This would cancel the spell if targets are too far apart (I'd also include a ui notification that warns the user the spell was rejected). And yes, this accounts for elevation.
 - Promoted RollBonuses to the global namespace. You can now access the `api` directly from typing `RollBonuses` into the console (or a macro/script/etc). Included macros have been updated to reflect this.
+- Cleaned up translation setting UX for setting Ability names (for auto-recognition/configuration) for non-English users
 
 ### Bugfixes
 

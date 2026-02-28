@@ -57,7 +57,6 @@
     font-weight: bold;
     text-align: right;
 }
-
 #ckl-roll-bonus-container .editable-icon-input .error-text {
     margin-inline-end: 0.5rem;
 }
@@ -70,12 +69,14 @@
     min-width: fit-content;
     padding-inline: 0.25rem;
 }
-
-#ckl-roll-bonus-container .damage-type-visual .damage-type:not(:has(.name)) {
+#ckl-roll-bonus-container
+    .damage-type-visual
+    .damage-type:not(:has(.name)) {
     padding-block: 0.25rem;
 }
-
-#ckl-roll-bonus-container .damage-type-visual .damage-type:not(:last-child) {
+#ckl-roll-bonus-container
+    .damage-type-visual
+    .damage-type:not(:last-child) {
     padding-inline-end: 0.25rem;
 }
 
@@ -92,7 +93,6 @@
     text-align: right;
     color: #7a7971;
 }
-
 .pf1.sheet .roll-bonuses .damage-control {
     color: var(--pf1-tan);
 }
@@ -172,11 +172,14 @@ form .versatile-performance-selector .form-fields {
     white-space: nowrap;
 }
 
-#ckl-roll-bonus-container .script-bonus-input .form-fields>* {
+#ckl-roll-bonus-container .script-bonus-input .form-fields > * {
     width: 100%;
 }
-
-#ckl-roll-bonus-container .script-bonus-input .form-fields .script-row>*:not(:last-child) {
+#ckl-roll-bonus-container
+    .script-bonus-input
+    .form-fields
+    .script-row
+    > *:not(:last-child) {
     margin-inline-end: 0.5rem;
 }
 
@@ -190,491 +193,240 @@ form .versatile-performance-selector .form-fields {
     border-bottom: 1px solid #37373711;
 }
 
-/* copied from pf1 */
-#ckl-roll-bonus-container .conditional-modifier-inputs .conditionals {
-    /* copied from pf1 */
-    list-style: none;
-    /* copied from pf1 */
-    margin: 0;
-    /* copied from pf1 */
-    padding: 0;
-    /* copied from pf1 */
-    display: block;
-    /* copied from pf1 */
-}
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs .conditionals {
+/* copied from pf1 */     list-style: none;
+/* copied from pf1 */     margin: 0;
+/* copied from pf1 */     padding: 0;
+/* copied from pf1 */     display: block;
+/* copied from pf1 */ }
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .change,
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .context-note {
+/* copied from pf1 */     flex: 0 0 100%;
+/* copied from pf1 */     padding: 1px;
+/* copied from pf1 */ }
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .change input,
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .context-note input {
+/* copied from pf1 */     flex: 3;
+/* copied from pf1 */     border: 1px solid var(--pf1-tan);
+/* copied from pf1 */     background: var(--pf1-bg-dark-0);
+/* copied from pf1 */     height: var(--form-field-height);
+/* copied from pf1 */ }
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .change input[type="text"]:invalid,
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .context-note input[type="text"]:invalid {
+/* copied from pf1 */     border: var(--pf1-invalid-input-border);
+/* copied from pf1 */     background: url(sheets/actions/icons/misc/hazard-sign.svg) no-repeat 95% 50%
+/* copied from pf1 */         var(--pf1-bg-dark-0);
+/* copied from pf1 */     background-size: contain;
+/* copied from pf1 */ }
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .change select,
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .context-note select {
+/* copied from pf1 */     background: var(--pf1-bg-dark-0);
+/* copied from pf1 */ }
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .change select:invalid,
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .context-note select:invalid {
+/* copied from pf1 */     border: var(--pf1-invalid-input-border);
+/* copied from pf1 */     background: url(sheets/actions/icons/misc/hazard-sign.svg) no-repeat 75% 50%
+/* copied from pf1 */         var(--pf1-bg-dark-0);
+/* copied from pf1 */     background-size: contain;
+/* copied from pf1 */ }
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .change button.edit-change-contents,
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .context-note button.edit-change-contents {
+/* copied from pf1 */     height: var(--form-field-height);
+/* copied from pf1 */     line-height: var(--form-field-height);
+/* copied from pf1 */ }
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs
+/* copied from pf1 */     .conditionals
+/* copied from pf1 */     .change
+/* copied from pf1 */     :is(.change-priority, .change-operator),
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs
+/* copied from pf1 */     .conditionals
+/* copied from pf1 */     .context-note
+/* copied from pf1 */     :is(.change-priority, .change-operator) {
+/* copied from pf1 */     flex: 0 0 24px;
+/* copied from pf1 */ }
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .change .change-target,
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .context-note .change-target,
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .change .context-note-target,
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .context-note .context-note-target {
+/* copied from pf1 */     border: 1px solid var(--pf1-tan);
+/* copied from pf1 */     background: var(--pf1-bg-dark-0);
+/* copied from pf1 */     white-space: nowrap;
+/* copied from pf1 */     overflow: hidden;
+/* copied from pf1 */     height: var(--form-field-height);
+/* copied from pf1 */     line-height: var(--form-field-height);
+/* copied from pf1 */     border-radius: 4px;
+/* copied from pf1 */     text-align: center;
+/* copied from pf1 */     cursor: pointer;
+/* copied from pf1 */     font-size: var(--font-size-12);
+/* copied from pf1 */ }
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .change .change-target:hover,
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .context-note .change-target:hover,
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .change .context-note-target:hover,
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .context-note .context-note-target:hover {
+/* copied from pf1 */     box-shadow: 0 0 8px var(--pf1-red);
+/* copied from pf1 */ }
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .change .change-target.invalid,
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .context-note .change-target.invalid,
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .change .context-note-target.invalid,
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs
+/* copied from pf1 */     .conditionals
+/* copied from pf1 */     .context-note
+/* copied from pf1 */     .context-note-target.invalid {
+/* copied from pf1 */     border: var(--pf1-invalid-input-border);
+/* copied from pf1 */     background: url(sheets/actions/icons/misc/hazard-sign.svg) no-repeat 95% 50%
+/* copied from pf1 */         var(--pf1-bg-dark-0);
+/* copied from pf1 */ }
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .change .conditional-default,
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .context-note .conditional-default {
+/* copied from pf1 */     flex: 0 0 18px;
+/* copied from pf1 */ }
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .change .conditional-modifier,
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .context-note .conditional-modifier {
+/* copied from pf1 */     display: flex;
+/* copied from pf1 */     gap: 2px;
+/* copied from pf1 */ }
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .conditional,
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .conditional-modifier {
+/* copied from pf1 */     padding: 1px;
+/* copied from pf1 */     gap: 2px;
+/* copied from pf1 */ }
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .conditional > :is(select, input),
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs
+/* copied from pf1 */     .conditionals
+/* copied from pf1 */     .conditional-modifier
+/* copied from pf1 */     > :is(select, input) {
+/* copied from pf1 */     height: var(--form-field-height);
+/* copied from pf1 */ }
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .conditional select,
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .conditional-modifier select {
+/* copied from pf1 */     max-width: max-content;
+/* copied from pf1 */     min-width: 80px;
+/* copied from pf1 */     flex: 1;
+/* copied from pf1 */     border: 1px solid var(--pf1-tan);
+/* copied from pf1 */     background: var(--pf1-bg-dark-0);
+/* copied from pf1 */ }
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .conditional select:invalid,
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .conditional-modifier select:invalid {
+/* copied from pf1 */     border: var(--pf1-invalid-input-border);
+/* copied from pf1 */     background: url(sheets/actions/icons/misc/hazard-sign.svg) no-repeat 80% 50%
+/* copied from pf1 */         var(--pf1-bg-dark-0);
+/* copied from pf1 */ }
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .conditional input[type="text"]:invalid,
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs
+/* copied from pf1 */     .conditionals
+/* copied from pf1 */     .conditional-modifier
+/* copied from pf1 */     input[type="text"]:invalid {
+/* copied from pf1 */     border: var(--pf1-invalid-input-border);
+/* copied from pf1 */     background: url(sheets/actions/icons/misc/hazard-sign.svg) no-repeat 100%
+/* copied from pf1 */         50% var(--pf1-bg-dark-0);
+/* copied from pf1 */ }
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .conditional .conditional-name,
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .conditional-modifier .conditional-name,
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .conditional .conditional-formula,
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs
+/* copied from pf1 */     .conditionals
+/* copied from pf1 */     .conditional-modifier
+/* copied from pf1 */     .conditional-formula {
+/* copied from pf1 */     min-width: 140px;
+/* copied from pf1 */ }
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .conditional .conditional-damage-type,
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs
+/* copied from pf1 */     .conditionals
+/* copied from pf1 */     .conditional-modifier
+/* copied from pf1 */     .conditional-damage-type {
+/* copied from pf1 */     min-width: 90px;
+/* copied from pf1 */     max-width: 200px;
+/* copied from pf1 */ }
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .conditional .form-group,
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .conditional-modifier .form-group {
+/* copied from pf1 */     padding-left: 30px;
+/* copied from pf1 */ }
 
-/* copied from pf1 */
-#ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .change,
-/* copied from pf1 */
-#ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .context-note {
-    /* copied from pf1 */
-    flex: 0 0 100%;
-    /* copied from pf1 */
-    padding: 1px;
-    /* copied from pf1 */
-}
-
-/* copied from pf1 */
-#ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .change input,
-/* copied from pf1 */
-#ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .context-note input {
-    /* copied from pf1 */
-    flex: 3;
-    /* copied from pf1 */
-    border: 1px solid var(--pf1-tan);
-    /* copied from pf1 */
-    background: var(--pf1-bg-dark-0);
-    /* copied from pf1 */
-    height: var(--form-field-height);
-    /* copied from pf1 */
-}
-
-/* copied from pf1 */
-#ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .change input[type="text"]:invalid,
-/* copied from pf1 */
-#ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .context-note input[type="text"]:invalid {
-    /* copied from pf1 */
-    border: var(--pf1-invalid-input-border);
-    /* copied from pf1 */
-    background: url(sheets/actions/icons/misc/hazard-sign.svg) no-repeat 95% 50%
-        /* copied from pf1 */
-        var(--pf1-bg-dark-0);
-    /* copied from pf1 */
-    background-size: contain;
-    /* copied from pf1 */
-}
-
-/* copied from pf1 */
-#ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .change select,
-/* copied from pf1 */
-#ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .context-note select {
-    /* copied from pf1 */
-    background: var(--pf1-bg-dark-0);
-    /* copied from pf1 */
-}
-
-/* copied from pf1 */
-#ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .change select:invalid,
-/* copied from pf1 */
-#ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .context-note select:invalid {
-    /* copied from pf1 */
-    border: var(--pf1-invalid-input-border);
-    /* copied from pf1 */
-    background: url(sheets/actions/icons/misc/hazard-sign.svg) no-repeat 75% 50%
-        /* copied from pf1 */
-        var(--pf1-bg-dark-0);
-    /* copied from pf1 */
-    background-size: contain;
-    /* copied from pf1 */
-}
-
-/* copied from pf1 */
-#ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .change button.edit-change-contents,
-/* copied from pf1 */
-#ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .context-note button.edit-change-contents {
-    /* copied from pf1 */
-    height: var(--form-field-height);
-    /* copied from pf1 */
-    line-height: var(--form-field-height);
-    /* copied from pf1 */
-}
-
-/* copied from pf1 */
-#ckl-roll-bonus-container .conditional-modifier-inputs
-/* copied from pf1 */
-.conditionals
-/* copied from pf1 */
-.change
-/* copied from pf1 */
-:is(.change-priority, .change-operator),
-/* copied from pf1 */
-#ckl-roll-bonus-container .conditional-modifier-inputs
-/* copied from pf1 */
-.conditionals
-/* copied from pf1 */
-.context-note
-
-/* copied from pf1 */
-:is(.change-priority, .change-operator) {
-    /* copied from pf1 */
-    flex: 0 0 24px;
-    /* copied from pf1 */
-}
-
-/* copied from pf1 */
-#ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .change .change-target,
-/* copied from pf1 */
-#ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .context-note .change-target,
-/* copied from pf1 */
-#ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .change .context-note-target,
-/* copied from pf1 */
-#ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .context-note .context-note-target {
-    /* copied from pf1 */
-    border: 1px solid var(--pf1-tan);
-    /* copied from pf1 */
-    background: var(--pf1-bg-dark-0);
-    /* copied from pf1 */
-    white-space: nowrap;
-    /* copied from pf1 */
-    overflow: hidden;
-    /* copied from pf1 */
-    height: var(--form-field-height);
-    /* copied from pf1 */
-    line-height: var(--form-field-height);
-    /* copied from pf1 */
-    border-radius: 4px;
-    /* copied from pf1 */
-    text-align: center;
-    /* copied from pf1 */
-    cursor: pointer;
-    /* copied from pf1 */
-    font-size: var(--font-size-12);
-    /* copied from pf1 */
-}
-
-/* copied from pf1 */
-#ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .change .change-target:hover,
-/* copied from pf1 */
-#ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .context-note .change-target:hover,
-/* copied from pf1 */
-#ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .change .context-note-target:hover,
-/* copied from pf1 */
-#ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .context-note .context-note-target:hover {
-    /* copied from pf1 */
-    box-shadow: 0 0 8px var(--pf1-red);
-    /* copied from pf1 */
-}
-
-/* copied from pf1 */
-#ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .change .change-target.invalid,
-/* copied from pf1 */
-#ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .context-note .change-target.invalid,
-/* copied from pf1 */
-#ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .change .context-note-target.invalid,
-/* copied from pf1 */
-#ckl-roll-bonus-container .conditional-modifier-inputs
-/* copied from pf1 */
-.conditionals
-/* copied from pf1 */
-.context-note
-
-/* copied from pf1 */
-.context-note-target.invalid {
-    /* copied from pf1 */
-    border: var(--pf1-invalid-input-border);
-    /* copied from pf1 */
-    background: url(sheets/actions/icons/misc/hazard-sign.svg) no-repeat 95% 50%
-        /* copied from pf1 */
-        var(--pf1-bg-dark-0);
-    /* copied from pf1 */
-}
-
-/* copied from pf1 */
-#ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .change .conditional-default,
-/* copied from pf1 */
-#ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .context-note .conditional-default {
-    /* copied from pf1 */
-    flex: 0 0 18px;
-    /* copied from pf1 */
-}
-
-/* copied from pf1 */
-#ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .change .conditional-modifier,
-/* copied from pf1 */
-#ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .context-note .conditional-modifier {
-    /* copied from pf1 */
-    display: flex;
-    /* copied from pf1 */
-    gap: 2px;
-    /* copied from pf1 */
-}
-
-/* copied from pf1 */
-#ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .conditional,
-/* copied from pf1 */
-#ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .conditional-modifier {
-    /* copied from pf1 */
-    padding: 1px;
-    /* copied from pf1 */
-    gap: 2px;
-    /* copied from pf1 */
-}
-
-/* copied from pf1 */
-#ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .conditional> :is(select, input),
-/* copied from pf1 */
-#ckl-roll-bonus-container .conditional-modifier-inputs
-/* copied from pf1 */
-.conditionals
-/* copied from pf1 */
-.conditional-modifier
-
-/* copied from pf1 */
-> :is(select, input) {
-    /* copied from pf1 */
-    height: var(--form-field-height);
-    /* copied from pf1 */
-}
-
-/* copied from pf1 */
-#ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .conditional select,
-/* copied from pf1 */
-#ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .conditional-modifier select {
-    /* copied from pf1 */
-    max-width: max-content;
-    /* copied from pf1 */
-    min-width: 80px;
-    /* copied from pf1 */
-    flex: 1;
-    /* copied from pf1 */
-    border: 1px solid var(--pf1-tan);
-    /* copied from pf1 */
-    background: var(--pf1-bg-dark-0);
-    /* copied from pf1 */
-}
-
-/* copied from pf1 */
-#ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .conditional select:invalid,
-/* copied from pf1 */
-#ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .conditional-modifier select:invalid {
-    /* copied from pf1 */
-    border: var(--pf1-invalid-input-border);
-    /* copied from pf1 */
-    background: url(sheets/actions/icons/misc/hazard-sign.svg) no-repeat 80% 50%
-        /* copied from pf1 */
-        var(--pf1-bg-dark-0);
-    /* copied from pf1 */
-}
-
-/* copied from pf1 */
-#ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .conditional input[type="text"]:invalid,
-/* copied from pf1 */
-#ckl-roll-bonus-container .conditional-modifier-inputs
-/* copied from pf1 */
-.conditionals
-/* copied from pf1 */
-.conditional-modifier
-
-/* copied from pf1 */
-input[type="text"]:invalid {
-    /* copied from pf1 */
-    border: var(--pf1-invalid-input-border);
-    /* copied from pf1 */
-    background: url(sheets/actions/icons/misc/hazard-sign.svg) no-repeat 100%
-        /* copied from pf1 */
-        50% var(--pf1-bg-dark-0);
-    /* copied from pf1 */
-}
-
-/* copied from pf1 */
-#ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .conditional .conditional-name,
-/* copied from pf1 */
-#ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .conditional-modifier .conditional-name,
-/* copied from pf1 */
-#ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .conditional .conditional-formula,
-/* copied from pf1 */
-#ckl-roll-bonus-container .conditional-modifier-inputs
-/* copied from pf1 */
-.conditionals
-/* copied from pf1 */
-.conditional-modifier
-
-/* copied from pf1 */
-.conditional-formula {
-    /* copied from pf1 */
-    min-width: 140px;
-    /* copied from pf1 */
-}
-
-/* copied from pf1 */
-#ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .conditional .conditional-damage-type,
-/* copied from pf1 */
-#ckl-roll-bonus-container .conditional-modifier-inputs
-/* copied from pf1 */
-.conditionals
-/* copied from pf1 */
-.conditional-modifier
-
-/* copied from pf1 */
-.conditional-damage-type {
-    /* copied from pf1 */
-    min-width: 90px;
-    /* copied from pf1 */
-    max-width: 200px;
-    /* copied from pf1 */
-}
-
-/* copied from pf1 */
-#ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .conditional .form-group,
-/* copied from pf1 */
-#ckl-roll-bonus-container .conditional-modifier-inputs .conditionals .conditional-modifier .form-group {
-    /* copied from pf1 */
-    padding-left: 30px;
-    /* copied from pf1 */
-}
-
-/* copied from pf1 */
-#ckl-roll-bonus-container .conditional-modifier-inputs .damage-type-visual {
-    /* copied from pf1 */
-    display: flex;
-    /* copied from pf1 */
-    flex-flow: row nowrap;
-    /* copied from pf1 */
-    justify-content: center;
-    /* copied from pf1 */
-    align-content: center;
-    /* copied from pf1 */
-    border: 1px solid var(--pf1-tan);
-    /* copied from pf1 */
-    border-radius: 3px;
-    /* copied from pf1 */
-    background-color: var(--pf1-bg-dark-0);
-    /* copied from pf1 */
-    vertical-align: middle;
-    /* copied from pf1 */
-    line-height: 1.7;
-    /* copied from pf1 */
-    white-space: nowrap;
-    /* copied from pf1 */
-    overflow: hidden;
-    /* copied from pf1 */
-}
-
-/* copied from pf1 */
-#ckl-roll-bonus-container .conditional-modifier-inputs .damage-type-visual.empty {
-    /* copied from pf1 */
-    display: flex;
-    /* copied from pf1 */
-    white-space: nowrap;
-    /* copied from pf1 */
-}
-
-/* copied from pf1 */
-#ckl-roll-bonus-container .conditional-modifier-inputs .damage-type-visual:hover:not(.disabled) {
-    /* copied from pf1 */
-    cursor: pointer;
-    /* copied from pf1 */
-    box-shadow: 0 0 8px red;
-    /* copied from pf1 */
-}
-
-/* copied from pf1 */
-#ckl-roll-bonus-container .conditional-modifier-inputs .damage-type-visual>span {
-    /* copied from pf1 */
-    text-align: center;
-    /* copied from pf1 */
-    word-break: keep-all;
-    /* copied from pf1 */
-}
-
-/* copied from pf1 */
-#ckl-roll-bonus-container .conditional-modifier-inputs .damage-type-visual .damage-type {
-    /* copied from pf1 */
-    display: flex;
-    /* copied from pf1 */
-    flex-flow: row nowrap;
-    /* copied from pf1 */
-    align-items: center;
-    /* copied from pf1 */
-}
-
-/* copied from pf1 */
-#ckl-roll-bonus-container .conditional-modifier-inputs .damage-type-visual .damage-type .icon-pf {
-    /* copied from pf1 */
-    background: none;
-    /* copied from pf1 */
-    border: none;
-    /* copied from pf1 */
-    font-size: var(--font-size-16);
-    /* copied from pf1 */
-    text-shadow: 0 0 1px black;
-    /* copied from pf1 */
-    width: 16px;
-    /* copied from pf1 */
-    height: 16px;
-    /* copied from pf1 */
-}
-
-/* copied from pf1 */
-#ckl-roll-bonus-container .damage-parts,
-/* copied from pf1 */
-#ckl-roll-bonus-container .attack-parts {
-    /* copied from pf1 */
-    list-style: none;
-    /* copied from pf1 */
-    margin: 0;
-    /* copied from pf1 */
-    padding: 0;
-    /* copied from pf1 */
-}
-
-/* copied from pf1 */
-#ckl-roll-bonus-container .damage-parts .damage-part,
-/* copied from pf1 */
-#ckl-roll-bonus-container .attack-parts .damage-part,
-/* copied from pf1 */
-#ckl-roll-bonus-container .damage-parts .attack-part,
-/* copied from pf1 */
-#ckl-roll-bonus-container .attack-parts .attack-part {
-    /* copied from pf1 */
-    flex: 0 0 100%;
-    /* copied from pf1 */
-}
-
-/* copied from pf1 */
-#ckl-roll-bonus-container .damage-parts .damage-part input,
-/* copied from pf1 */
-#ckl-roll-bonus-container .attack-parts .damage-part input,
-/* copied from pf1 */
-#ckl-roll-bonus-container .damage-parts .attack-part input,
-/* copied from pf1 */
-#ckl-roll-bonus-container .attack-parts .attack-part input {
-    /* copied from pf1 */
-    flex: 3;
-    /* copied from pf1 */
-}
-
-/* copied from pf1 */
-#ckl-roll-bonus-container .damage-parts .damage-part select,
-/* copied from pf1 */
-#ckl-roll-bonus-container .attack-parts .damage-part select,
-/* copied from pf1 */
-#ckl-roll-bonus-container .damage-parts .attack-part select,
-/* copied from pf1 */
-#ckl-roll-bonus-container .attack-parts .attack-part select {
-    /* copied from pf1 */
-    flex: 1;
-    /* copied from pf1 */
-}
+/* copied from pf1 */#ckl-roll-bonus-container .conditional-modifier-inputs .damage-type-visual {
+/* copied from pf1 */     display: flex;
+/* copied from pf1 */     flex-flow: row nowrap;
+/* copied from pf1 */     justify-content: center;
+/* copied from pf1 */     align-content: center;
+/* copied from pf1 */     border: 1px solid var(--pf1-tan);
+/* copied from pf1 */     border-radius: 3px;
+/* copied from pf1 */     background-color: var(--pf1-bg-dark-0);
+/* copied from pf1 */     vertical-align: middle;
+/* copied from pf1 */     line-height: 1.7;
+/* copied from pf1 */     white-space: nowrap;
+/* copied from pf1 */     overflow: hidden;
+/* copied from pf1 */ }
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs .damage-type-visual.empty {
+/* copied from pf1 */   display: flex;
+/* copied from pf1 */   white-space: nowrap;
+/* copied from pf1 */ }
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs .damage-type-visual:hover:not(.disabled) {
+/* copied from pf1 */   cursor: pointer;
+/* copied from pf1 */   box-shadow: 0 0 8px red;
+/* copied from pf1 */ }
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs .damage-type-visual > span {
+/* copied from pf1 */   text-align: center;
+/* copied from pf1 */   word-break: keep-all;
+/* copied from pf1 */ }
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs .damage-type-visual .damage-type {
+/* copied from pf1 */   display: flex;
+/* copied from pf1 */   flex-flow: row nowrap;
+/* copied from pf1 */   align-items: center;
+/* copied from pf1 */ }
+/* copied from pf1 */ #ckl-roll-bonus-container .conditional-modifier-inputs .damage-type-visual .damage-type .icon-pf {
+/* copied from pf1 */   background: none;
+/* copied from pf1 */   border: none;
+/* copied from pf1 */   font-size: var(--font-size-16);
+/* copied from pf1 */   text-shadow: 0 0 1px black;
+/* copied from pf1 */   width: 16px;
+/* copied from pf1 */   height: 16px;
+/* copied from pf1 */ }
+/* copied from pf1 */ #ckl-roll-bonus-container .damage-parts,
+/* copied from pf1 */ #ckl-roll-bonus-container .attack-parts {
+/* copied from pf1 */   list-style: none;
+/* copied from pf1 */   margin: 0;
+/* copied from pf1 */   padding: 0;
+/* copied from pf1 */ }
+/* copied from pf1 */ #ckl-roll-bonus-container .damage-parts .damage-part,
+/* copied from pf1 */ #ckl-roll-bonus-container .attack-parts .damage-part,
+/* copied from pf1 */ #ckl-roll-bonus-container .damage-parts .attack-part,
+/* copied from pf1 */ #ckl-roll-bonus-container .attack-parts .attack-part {
+/* copied from pf1 */   flex: 0 0 100%;
+/* copied from pf1 */ }
+/* copied from pf1 */ #ckl-roll-bonus-container .damage-parts .damage-part input,
+/* copied from pf1 */ #ckl-roll-bonus-container .attack-parts .damage-part input,
+/* copied from pf1 */ #ckl-roll-bonus-container .damage-parts .attack-part input,
+/* copied from pf1 */ #ckl-roll-bonus-container .attack-parts .attack-part input {
+/* copied from pf1 */   flex: 3;
+/* copied from pf1 */ }
+/* copied from pf1 */ #ckl-roll-bonus-container .damage-parts .damage-part select,
+/* copied from pf1 */ #ckl-roll-bonus-container .attack-parts .damage-part select,
+/* copied from pf1 */ #ckl-roll-bonus-container .damage-parts .attack-part select,
+/* copied from pf1 */ #ckl-roll-bonus-container .attack-parts .attack-part select {
+/* copied from pf1 */   flex: 1;
+/* copied from pf1 */ }
 
 #ckl-roll-bonus-container .conditional-modifier-inputs {
     flex-direction: column;
 }
-
 #ckl-roll-bonus-container .conditional-modifier-inputs label.bonus-label {
     align-self: start;
 }
-
 #ckl-roll-bonus-container .conditionals.form-group {
     width: 100%;
 }
-
 #ckl-roll-bonus-container .conditional.flexcolumn::marker {
     content: "";
 }
-
 #ckl-roll-bonus-container .conditionals.form-group {
     padding: unset;
 }
-
 .pf1.sheet.item form .conditionals .conditional select:not(:first-child),
 .pf1.sheet.item form .conditionals .conditional-modifier select:not(:first-child) {
     /* margin-left: 5px; */
     margin-left: unset;
 }
-
 #ckl-roll-bonus-container .conditional-modifier-inputs .damage-type-visual {
-    height: var(--form-field-height);
+  height: var(--form-field-height);
 }
 
 
@@ -685,29 +437,27 @@ input[type="text"]:invalid {
 #ckl-roll-bonus-container .conditional-modifier-inputs .delete-note,
 #ckl-roll-bonus-container .conditional-modifier-inputs .delete-conditional,
 #ckl-roll-bonus-container .conditional-modifier-inputs .delete-conditional-modifier {
-    width: 18px;
-    flex: 0 0 18px;
-    line-height: var(--form-field-height);
-    text-align: right;
-    color: var(--pf1-tan);
+  width: 18px;
+  flex: 0 0 18px;
+  line-height: var(--form-field-height);
+  text-align: right;
+  color: var(--pf1-tan);
 }
-
 #ckl-roll-bonus-container .conditional-modifier-inputs .add-attack,
 #ckl-roll-bonus-container .conditional-modifier-inputs .add-damage,
 #ckl-roll-bonus-container .conditional-modifier-inputs .add-note,
 #ckl-roll-bonus-container .conditional-modifier-inputs .add-conditional,
 #ckl-roll-bonus-container .conditional-modifier-inputs .add-conditional-modifier {
-    flex: 0 0 auto;
-    line-height: var(--form-field-height);
-    color: var(--pf1-tan);
-    margin-left: 2px;
+  flex: 0 0 auto;
+  line-height: var(--form-field-height);
+  color: var(--pf1-tan);
+  margin-left: 2px;
 }
 
 #ckl-roll-bonus-container .damage-part.flexrow {
     gap: 2px;
 }
-
-#ckl-roll-bonus-container .damage-part.flexrow>* {
+#ckl-roll-bonus-container .damage-part.flexrow > * {
     height: var(--form-field-height);
     margin: 0;
 }

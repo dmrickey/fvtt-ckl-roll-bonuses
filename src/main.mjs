@@ -280,6 +280,8 @@ async function actionUse_handleConditionals() {
             .filter(x => !x.default),
     ];
 
+    // TODO everything below this line should use localhooks.buildFinalDamageMultiplierConditionals
+
     // This needs to happen after all other conditionals have been gathered so it can double any extra
     // excluding default conditionals because those are already included in action's damage sources
     const vital = new api.utils.VitalStrikeData(this.actor, { actionUse: this });
