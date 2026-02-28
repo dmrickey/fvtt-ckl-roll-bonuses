@@ -30,7 +30,7 @@ import { BaseTarget } from '../../src/targeted/targets/_base-target.mjs';
 import { SpellSubschoolTarget } from '../../src/targeted/targets/spell-subschool-target.mjs';
 import Document from '../foundry/common/abstract/document.mjs';
 
-export {};
+export { };
 
 declare global {
     abstract class BaseDocument extends Document {
@@ -51,7 +51,7 @@ declare global {
         toObject(): any;
     }
 
-    abstract class ItemDocument extends BaseDocument {}
+    abstract class ItemDocument extends BaseDocument { }
 
     interface Abilities {
         str: 'Strength';
@@ -91,7 +91,7 @@ declare global {
         };
 
         get hasPlayerOwner(): boolean;
-        prototypeToken: { disposition: DispositionLevel};
+        prototypeToken: { disposition: DispositionLevel };
     }
 
     class Macro extends BaseDocument {
@@ -100,7 +100,7 @@ declare global {
         };
         name: string;
 
-        constructor(args?:{
+        constructor(args?: {
             type: 'script' | 'macro',
             command: string,
             name: string,
@@ -179,7 +179,7 @@ declare global {
         getSourceDetails(path: string): SourceInfo;
     }
 
-    class ActorCharacterPF extends ActorPF {}
+    class ActorCharacterPF extends ActorPF { }
 
     type ArmorType = 'lgt' | 'med' | 'hvy' | 'shl' | 'twr';
 
@@ -285,19 +285,28 @@ declare global {
 
     interface ActionUseFormData {
         'attack-bonus': string;
+        charge: undefined | boolean;
         'cl-check': undefined;
         d20: string;
         'damage-ability-multiplier': undefined;
-        fullAttack: boolean;
+        'damage-bonus': ""
+        flanking: undefined | boolean;
+        fullAttack: undefined | boolean;
+        'global-bonus_damage-multiplier': string;
+        'global-bonus.dialog-disable.require-melee-threaten': false
         'haste-attack': boolean;
+        held: "1h"
+        highGround: false
         manyshot: undefined | boolean;
         'measure-template': undefined | boolean;
+        'point-blank-shot': undefined | boolean;
         'power-attack': undefined | boolean;
         'primary-attack': undefined | boolean;
         'rapid-shot': undefined | boolean;
         rollMode: 'publicroll' | RollMode;
 
-        [key: string]: undefined | boolean;
+
+        [key: string]: undefined | boolean | string;
     }
 
     class ActionUseShared<T extends SystemItemData = SystemItemData> {
@@ -314,6 +323,7 @@ declare global {
         cost?: null;
         damageBonus: string[];
         dice: string;
+        formData?: ActionUseFormData;
         fullAttack?: boolean;
         item: ItemPF;
         reject: boolean;
@@ -1176,7 +1186,7 @@ declare global {
                 tr: boolean;
                 ts: number;
             };
-            size: { base: ActorSize, value: number};
+            size: { base: ActorSize, value: number };
             stature: ActorStature;
             type: 'humanoid';
             weaponProf: {
@@ -1226,26 +1236,26 @@ declare global {
         masterwork: boolean;
         weaponGroups: TraitSelector<keyof WeaponGroups>;
     }
-    class SystemItemDataContainerPF extends SystemItemData {}
+    class SystemItemDataContainerPF extends SystemItemData { }
     class SystemItemDataBuffPF extends SystemItemData {
         level: number;
     }
     class SystemItemDataClassPF extends SystemItemData {
         level: number;
     }
-    class SystemItemDataConsumablePF extends SystemItemData {}
+    class SystemItemDataConsumablePF extends SystemItemData { }
     class SystemItemDataEquipmentPF extends SystemItemData {
         armor: {
             acp: number;
             dex: number | null;
             enh: number;
             value: number;
-            material : {
+            material: {
                 addon: Array<unknown>
-                base: {value: string, custom: boolean}
-                normal: {value: string, custom: boolean}
+                base: { value: string, custom: boolean }
+                normal: { value: string, custom: boolean }
             }
-            total : number;
+            total: number;
         };
         baseTypes: string[];
         // links: { children: { name: string; id: string }[] };
@@ -1271,6 +1281,7 @@ declare global {
     class SystemItemDataWeaponPF extends SystemItemData {
         baseTypes: string[];
         enh: number;
+        equipped: boolean;
         // links: { children: { name: string; id: string }[] };
         masterwork: boolean;
         proficient: boolean;
@@ -1687,6 +1698,8 @@ declare global {
                 base: string;
                 /** Roll one more and keep high. Default 2d6kh */
                 baseExtra: string;
+                /** Bonus to be used for inspiration rolls. */
+                bonus: string;
                 /** Investigator upgraded inspiration die. Default 1d8 */
                 improved: string;
                 /** One higher and keep high. Default 2d8kh */
@@ -1803,7 +1816,7 @@ declare global {
         evaluateSync(options: (RecursivePartial<Option> & { forceSync: true } | { maximize: true } | { minimize: true })): Evaluated<this>;
     }
 
-    interface DamageRoll extends RollPF {}
+    interface DamageRoll extends RollPF { }
 
     type BonusTypes =
         | 'alchemical'
@@ -2007,13 +2020,13 @@ declare global {
             | '' // size
             | undefined; // no subtarget for 'size'
         target:
-        | 'attack'
-        | 'charges'
-        | 'cl'
-        | 'critMult'
-        | 'damage'
-        | 'dc'
-        | 'size';
+            | 'attack'
+            | 'charges'
+            | 'cl'
+            | 'critMult'
+            | 'damage'
+            | 'dc'
+            | 'size';
         type: GenericDamageType;
         _id: string;
     }
@@ -2079,7 +2092,7 @@ declare global {
         get hide(): boolean;
         get category(): string;
 
-        constructor(data: Partial<ItemScriptCallData>, options: { parent: ItemPF});
+        constructor(data: Partial<ItemScriptCallData>, options: { parent: ItemPF });
         execute(
             shared: Partial<ActionUseShared<SystemItemData>>,
             extraParams: { [x: string]: object } = {}
@@ -2267,12 +2280,12 @@ declare global {
         };
         applications: {
             ScriptEditor: any;
-            AttackDialog: { new (): AttackDialog };
+            AttackDialog: { new(): AttackDialog };
             ActorTraitSelector: {
-                new (options: Partial<ActorTraitSelectorOptions>): ActorTraitSelector;
+                new(options: Partial<ActorTraitSelectorOptions>): ActorTraitSelector;
             };
             DamageTypeSelector: {
-                new (
+                new(
                     object: { uuid: string },
                     dataPath: string,
                     data: ItemConditionalModifierSourceData['damageType'],
@@ -2392,6 +2405,17 @@ declare global {
                 swm: 'Swim';
                 umd: 'Use Magic Device';
             };
+            sizeChart: {
+                fine: 'F';
+                dim: 'D';
+                tiny: 'T';
+                sm: 'S';
+                med: 'M';
+                lg: 'L';
+                huge: 'H';
+                grg: 'G';
+                col: 'C';
+            };
             spellDescriptors: SpellDescriptors;
             spellSchools: SpellSchools;
             spellSubschools: SpellSubschools;
@@ -2411,19 +2435,19 @@ declare global {
                      */
                     getHighestChanges(changes, options = { ignoreTarget: false }): ItemChange[];
                 }
-                ActorBasePF: { new (): ActorBasePF };
-                ActorPF: { new (): ActorPF };
+                ActorBasePF: { new(): ActorBasePF };
+                ActorPF: { new(): ActorPF };
             };
             item: {
-                ItemAttackPF: { new (): ItemAttackPF };
-                ItemEquipmentPF: { new (): ItemEquipmentPF };
-                ItemFeatPF: { new (): ItemFeatPF };
-                ItemLootPF: { new (): ItemLootPF };
-                ItemPF: { new (): ItemPF };
-                ItemSpellPF: { new (): ItemSpellPF };
-                ItemWeaponPF: { new (): ItemWeaponPF };
+                ItemAttackPF: { new(): ItemAttackPF };
+                ItemEquipmentPF: { new(): ItemEquipmentPF };
+                ItemFeatPF: { new(): ItemFeatPF };
+                ItemLootPF: { new(): ItemLootPF };
+                ItemPF: { new(): ItemPF };
+                ItemSpellPF: { new(): ItemSpellPF };
+                ItemWeaponPF: { new(): ItemWeaponPF };
             };
-            TokenDocumentPF: { new (): TokenDocumentPF };
+            TokenDocumentPF: { new(): TokenDocumentPF };
         };
         registry: {
             scriptCalls: ScriptCallRegistry;
@@ -2465,7 +2489,7 @@ declare global {
         get name(): string;
         get info(): string;
     }
-    class ScriptCallRegistry extends Collection<ScriptCallCategory> {}
+    class ScriptCallRegistry extends Collection<ScriptCallCategory> { }
 
     type CreatureSubtype = keyof CreatureSubtypes;
     type CreatureSubtypes = {
@@ -2658,7 +2682,7 @@ declare global {
         trp: 'Trip';
     };
 
-    interface ParsedContextNoteEntry  {
+    interface ParsedContextNoteEntry {
         /** Source label if any */
         source?: string;
 

@@ -19,14 +19,8 @@
 - [Affect other tokens](#affect-other-tokens)
 - [Figure out how to embed buffs directly into a scene](#figure-out-how-to-embed-buffs-directly-into-a-scene)
 - [Class Features](#class-features)
-  - [Cleric](#cleric)
-    - [Healing Domain - Healer's Blessing](#healing-domain---healers-blessing)
-  - [Ranger](#ranger)
-    - [Favored Terrain](#favored-terrain)
 - [Feats](#feats)
   - [Spell Perfection](#spell-perfection)
-  - [Spirited Charge](#spirited-charge)
-  - [Scarred by War](#scarred-by-war)
 - [Buffs](#buffs)
 - [Racial Features](#racial-features)
   - [Sylph](#sylph)
@@ -50,13 +44,10 @@
 - [Not Possible](#not-possible)
 - [Other Ideas](#other-ideas)
 - [vnext](#vnext)
-    - [Global Bonuses](#global-bonuses)
-    - [Target](#target)
     - [Specific Bonuses](#specific-bonuses)
     - [Idea](#idea)
     - [Bonus Types](#bonus-types)
-  - [BugFixes](#bugfixes)
-
+ 
 # TODO
 - Figure out a way to support multiple target groups on a single Item (so I can add `Favored Enemy (Human) +4` and `Favored Enemy (goblin) +2` on a single Item)
   - (see 3.0 scaffolding branch for a super rought start on this)
@@ -104,21 +95,9 @@
 # Figure out how to embed buffs directly into a scene
 
 # Class Features
-## Cleric
-### Healing Domain - Healer's Blessing
-- Cure Spells are treated as if they're empowered (+50% healing)
-  - IsHealing target
-  - Empowered Bonus
-## Ranger
-### Favored Terrain
-  - Add a button to chat cards to increase the skill/initiative/whatever roll when applicable
 
 # Feats
 ## [Spell Perfection](https://www.d20pfsrd.com/feats/general-feats/spell-perfection/)
-## Spirited Charge
-- Double Damage without critting
-## [Scarred by War](https://www.aonprd.com/TraitDisplay.aspx?ItemName=Scarred%20by%20War)
- - (used to grant diplomacy bonus while not in combat)
 
 # Buffs
 
@@ -149,7 +128,6 @@
 - Add item hints for ammo
 
 ## UX
-- Add method for sources to say "I have a source key but no value" and show a broken item hint
 ### Targeting
 - show warning if target has an inappropriate bonus
 
@@ -205,9 +183,6 @@
       - or when targeted by any enemy except specified enemy
 - Initial popup with brief tutorial/explanation 
   - Specifically include "automatic" things like Global Bonuses
-- Alignment Target
-  - Refactor so that it's an array
-  - allow neutral to be chosen
 - Create new "Roll Bonuses" section for attack dialog inputs
 - Add "Fortune configuration app" to help with configuring specific fortune abilities
 - Targeting
@@ -223,32 +198,16 @@
     - IAF - `-1` untyped ACP (Armor)
   - CL
   - DC
+  - Spell Specialization
 
 # vnext
 - Add Fortune/Misfortune checkboxes to attack/roll dialogs
 
 - Remove `greater`/`improved`/`mythic` getters from LanguageSettings and use the new `is` methods
 
-### Global Bonuses
-- Mounted Charge Global Bonus
-  - Refactor `VitalStrikeData.buildMythicConditional` because that already has the logic necessary
-  - Include Spirited Charge Specific Bonus (when global bonus is enabled) to double damage
-  - Detect "lance" weapon type and double damage
-  - Global Bonus will need to add a "mounted" checkbox
-  - Global Bonus kicks off when both "mounted" and "charge" is checked
-
-### Target
-- `Size Target` (trait target) kicks in if target is a given size
-- `Relative Size` (kicks in if target is at least or exactly _N_ steps different from you larger/smaller)
-- While "Equipment Type" is equipped
-- While "Weapon Group" is equipped
-
 ### Specific Bonuses
 - ~~Migrate all keys to start with `specific_`~~ Do this later after SBC has a chance to update to only use the API
 - Add "get item hint" function to base class
-- **Damage Multiplier**
-  - Brace - adhoc situations like the global charge bonus above
-  - Litany of Righteousness (probably can't do but putting here for reference)
 
 Add journal links to target/bonus headers within item sheet
 
@@ -265,8 +224,6 @@ Add journal links to target/bonus headers within item sheet
 - AC
   - figure out appropriate way to apply AC bonus
 
-Expand "Action Type Target" to include CMB
-
 Figure out a way to better communicate what changes are being affected by "Change Modifier Bonus". E.g.:
 - add an item hint on the item that has the affected change
 - indicate on an items changes tab next to an affected change
@@ -274,8 +231,6 @@ Figure out a way to better communicate what changes are being affected by "Chang
 - maybe add a context note on the roll itself, but if the above is done, probably the least helpful
     - all of these are assuming the change stems from the system, if it stems from RB those won't work
 
-## BugFixes
-- collecting tokens should ignore secret disposition for non-players
-
 - Add an "ignore Item Hints" util flag
-- Prompt for Item Targets when toggled active
+
+optional rule for hitting large adjacent creatures with a reach weapon?

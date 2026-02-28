@@ -344,8 +344,8 @@
         "fluent-description": {
             "alignment": "Solange das Ziel die Gesinnung {alignment} hat",
             "all": "Alle",
-            "condition-self": "Solange du den Zustand {condition} hast",
-            "condition-target": "Solange das Ziel den Zustand {condition} hat",
+            "condition-self": "Solange du den Zustand {conditions} hast",
+            "condition-target": "Solange das Ziel den Zustand {conditions} hat",
             "creature-subtype": "Solange das Ziel den Kreaturenuntertyp {subtype} hat",
             "creature-type": "Solange das Ziel den Kreaturentyp {type} hat",
             "has-boolean-flag-self": "Solange du das boolesche Flag {flag} hast",

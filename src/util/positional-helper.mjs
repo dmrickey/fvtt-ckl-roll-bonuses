@@ -39,6 +39,32 @@ export class PositionalHelper {
         this.token2 = token2;
     }
 
+    /**
+     * @param {TokenPF[]} tokens 
+     * @returns {number}
+     */
+    static greatestDistanceBetweenTokens(...tokens) {
+        // @ts-ignore
+        if (tokens[0] instanceof UserTargets) tokens = [...tokens[0]];
+        if (Array.isArray(tokens[0])) tokens = [...tokens[0]];
+
+        let maxVal = -Infinity; // Initialize with the lowest possible value
+        if (!Array.isArray(tokens)) return maxVal;
+
+        for (let i = 0; i < tokens.length; i++) {
+            for (let j = i + 1; j < tokens.length; j++) {
+                const helper = new PositionalHelper(tokens[i], tokens[j]);
+                const result = helper.distance();
+
+                if (result > maxVal) {
+                    maxVal = result;
+                }
+            }
+        }
+
+        return maxVal;
+    }
+
     /** @returns {number} */
     distance() {
         return PositionalHelper.#distance(this.token1, this.token2);
@@ -104,11 +130,7 @@ export class PositionalHelper {
     isFlankingWith(ally, {
         hasImprovedOutflank = false,
         specificAction = undefined,
-    } = {
-            hasImprovedOutflank: false,
-            specificAction: undefined,
-        }
-    ) {
+    } = {}) {
         return PositionalHelper.#isFlankingWith(this.token1, ally, this.token2, { hasImprovedOutflank, specificAction });
     }
 

@@ -60,8 +60,8 @@ export class MartialFocus extends SpecificBonus {
             options: {
                 defaultFlagValuesFunc: (item) => {
                     const systemGroupKeys = Object.keys(pf1.config.weaponGroups);
-                    const choices = getWeaponGroupsFromActor(item.actor, false);
-                    const choice = choices[0] || systemGroupKeys[0];
+                    const equipped = getWeaponGroupsFromActor(item.actor, { onlyEquipped: true });
+                    const choice = equipped[0] || systemGroupKeys[0];
                     return {
                         [this.key]: choice,
                     }

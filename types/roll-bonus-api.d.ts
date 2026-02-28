@@ -13,6 +13,7 @@ import { UncannyDodgeImproved } from '../src/bonuses/flanking/uncanny-dodge-impr
 import { UnderfootAssault } from '../src/bonuses/flanking/underfoot-assault.mjs';
 import { FuriousFocus } from '../src/bonuses/furious-focus.mjs';
 import { InspirationAmazing } from '../src/bonuses/inspiration/inspiration-amazing.mjs';
+import { InspirationBonus } from '../src/bonuses/inspiration/inspiration-bonus.mjs';
 import { InspirationExtraDie } from '../src/bonuses/inspiration/inspiration-extra-die.mjs';
 import { InspirationFocused } from '../src/bonuses/inspiration/inspiration-focused.mjs';
 import { InspirationTenacious } from '../src/bonuses/inspiration/inspiration-tenacious.mjs';
@@ -70,6 +71,7 @@ import { RequireMeleeThreatenGlobalBonus } from '../src/global-bonuses/require-m
 import { ShootIntoMeleeGlobalBonus } from '../src/global-bonuses/shoot-into-melee-global-bonus.mjs';
 import { Outflank } from '../src/global-bonuses/specific/bonuses/flanking/outflank.mjs';
 import { PreciseShot } from '../src/global-bonuses/specific/bonuses/precise-shot-bonus.mjs';
+import { SpiritedCharge } from '../src/global-bonuses/specific/bonuses/spirited-charge-bonus.mjs';
 import { MenacingBonus } from '../src/global-bonuses/targeted/bonuses/menacing.mjs';
 import { addNodeToRollBonus } from '../src/handlebars-handlers/add-bonus-to-item-sheet.mjs';
 import { checkboxInput } from '../src/handlebars-handlers/bonus-inputs/chekbox-input.mjs';
@@ -130,22 +132,24 @@ import { WeaponBaseTypeOverride } from '../src/targeted/target-overides/weapon-t
 import { BaseTarget } from '../src/targeted/targets/_base-target.mjs';
 import { ActionTarget } from '../src/targeted/targets/action-target.mjs';
 import { ActionTypeTarget } from '../src/targeted/targets/action-type-target.mjs';
+import { BaseConditionalTarget } from '../src/targeted/targets/conditional/_base-conditional.target.mjs';
 import { AlignmentTarget } from '../src/targeted/targets/conditional/alignment-target.mjs';
 import { AllTarget } from '../src/targeted/targets/conditional/all-target.mjs';
+import { CombatStateTarget } from '../src/targeted/targets/conditional/combat-state-target.mjs';
 import { ConditionTarget } from '../src/targeted/targets/conditional/condition-target.mjs';
 import { CreatureSubtypeTarget } from '../src/targeted/targets/conditional/creature-subtype-target.mjs';
 import { CreatureTypeTarget } from '../src/targeted/targets/conditional/creature-type-target.mjs';
+import { FunctionTarget } from '../src/targeted/targets/conditional/function-target.mjs';
 import { HasBooleanFlagTarget } from '../src/targeted/targets/conditional/has-boolean-flag-target.mjs';
 import { IsFlankingTarget } from '../src/targeted/targets/conditional/is-flanking-target.mjs';
 import { WhenTargetInRangeTarget } from '../src/targeted/targets/conditional/is-target-within-range.mjs';
 import { TokenTarget } from '../src/targeted/targets/conditional/token-target.mjs';
 import { WhenActiveTarget } from '../src/targeted/targets/conditional/when-active-target.mjs';
-import { WhenInCombatTarget } from '../src/targeted/targets/conditional/when-in-combat-target.mjs';
 import { WhileAdjacentToTarget } from '../src/targeted/targets/conditional/while-adjacent-to-target.mjs';
+import { WhileWeaponTypeTarget } from '../src/targeted/targets/conditional/while-equipped-target.mjs';
 import { WhileSharingSquareWithTarget } from '../src/targeted/targets/conditional/while-sharing-square-with-target.mjs';
 import { DamageTypeTarget } from '../src/targeted/targets/damage-type-target.mjs';
 import { FinesseTarget } from '../src/targeted/targets/finesse-target.mjs';
-import { FunctionTarget } from '../src/targeted/targets/conditional/function-target.mjs';
 import { SelfTarget } from '../src/targeted/targets/self-target.mjs';
 import { SpecificItemTarget } from '../src/targeted/targets/specific-item-target/specific-item-target.mjs';
 import { SpellTarget } from '../src/targeted/targets/specific-item-target/spell-target.mjs';
@@ -156,6 +160,7 @@ import { SpellSubschoolTarget } from '../src/targeted/targets/spell-subschool-ta
 import { WeaponGroupTarget } from '../src/targeted/targets/weapon-group-target.mjs';
 import { WeaponTypeTarget } from '../src/targeted/targets/weapon-type-target.mjs';
 import {
+    isHealing,
     isMelee,
     isNatural,
     isNaturalSecondary,
@@ -170,7 +175,7 @@ import {
     intersection,
     intersects,
 } from '../src/util/array-intersects.mjs';
-import { addCheckToAttackDialog } from '../src/util/attack-dialog-helper.mjs';
+import { addCheckToAttackDialog, addTextInputToAttackDialog, getFormData } from '../src/util/attack-dialog-helper.mjs';
 import { confirmationDialog } from '../src/util/confirmation-dialog.mjs';
 import { getEnhancementBonusForAction } from '../src/util/enhancement-bonus-helper.mjs';
 import { FormulaCacheHelper, getDocFlags } from '../src/util/flag-helpers.mjs';
@@ -186,7 +191,7 @@ import {
     getTraitsFromItem,
 } from '../src/util/get-id-array-from-flag.mjs';
 import { getSkillFormula } from '../src/util/get-skill-formula.mjs';
-import { getSourceFlag } from '../src/util/get-source-flag.mjs';
+import { getSourceFlag, getSourceFlags } from '../src/util/get-source-flag.mjs';
 import { getWeaponGroupsFromActor } from '../src/util/get-weapon-groups-from-actor.mjs';
 import { getWeaponTypesFromActor } from '../src/util/get-weapon-types-from-actor.mjs';
 import { itemHasCompendiumId } from '../src/util/has-compendium-id.mjs';
@@ -205,7 +210,6 @@ import { signed } from '../src/util/to-signed-string.mjs';
 import { Trait } from '../src/util/trait-builder.mjs';
 import { truthiness } from '../src/util/truthiness.mjs';
 import { distinct, uniqueArray } from '../src/util/unique-array.mjs';
-import { BaseConditionalTarget } from '../src/targeted/targets/conditional/_base-conditional.target.mjs';
 
 export class _RollBonusesAPI {
     es: any;
@@ -291,29 +295,30 @@ export class _RollBonusesAPI {
         ['target_action-type']: typeof ActionTypeTarget;
         ['target_alignment']: typeof AlignmentTarget;
         ['target_all']: typeof AllTarget;
+        ['target_combat-state']: typeof CombatStateTarget;
         ['target_condition']: typeof ConditionTarget;
+        ['target_creature-subtype']: typeof CreatureSubtypeTarget;
+        ['target_creature-type']: typeof CreatureTypeTarget;
         ['target_damage-type']: typeof DamageTypeTarget;
         ['target_finesse']: typeof FinesseTarget;
         ['target_function']: typeof FunctionTarget;
         ['target_has-boolean-flag']: typeof HasBooleanFlagTarget;
         ['target_is-flanking']: typeof IsFlankingTarget;
-        ['target_creature-type']: typeof CreatureTypeTarget;
-        ['target_creature-subtype']: typeof CreatureSubtypeTarget;
-        ['target_self']: typeof SelfTarget;
+        ['target_is-target-within-range']: typeof WhenTargetInRangeTarget;
         ['target_item']: typeof SpecificItemTarget;
+        ['target_self']: typeof SelfTarget;
+        ['target_spell']: typeof SpellTarget;
         ['target_spell-descriptor']: typeof SpellDescriptorTarget;
         ['target_spell-school']: typeof SpellSchoolTarget;
         ['target_spell-subschool']: typeof SpellSubschoolTarget;
-        ['target_spell']: typeof SpellTarget;
         ['target_token']: typeof TokenTarget;
-        ['target_weapon-group']: typeof WeaponGroupTarget;
         ['target_weapon']: typeof WeaponTarget;
+        ['target_weapon-group']: typeof WeaponGroupTarget;
         ['target_weapon-type']: typeof WeaponTypeTarget;
         ['target_when-active']: typeof WhenActiveTarget;
-        ['target_when-in-combat']: typeof WhenInCombatTarget;
-        ['target_is-target-within-range']: typeof WhenTargetInRangeTarget;
         ['target_while-adjacent-to']: typeof WhileAdjacentToTarget;
         ['target_while-sharing-with']: typeof WhileSharingSquareWithTarget;
+        ['target_while-weapon-type-equipped']: typeof WhileWeaponTypeTarget;
     };
     /** Array of all targeted targets */
     get allTargetTypes(): (typeof BaseTarget)[];
@@ -351,6 +356,7 @@ export class _RollBonusesAPI {
         ['gang-up']: typeof GangUp;
         ['inspiration']: typeof Inspiration;
         ['inspiration-amazing']: typeof InspirationAmazing;
+        ['inspiration-bonus']: typeof InspirationBonus;
         ['inspiration-extra-die']: typeof InspirationExtraDie;
         ['inspiration-focused']: typeof InspirationFocused;
         ['inspiration-tenacious']: typeof InspirationTenacious;
@@ -383,8 +389,10 @@ export class _RollBonusesAPI {
         ['weapon-specialization']: typeof WeaponSpecialization;
         ['weapon-specialization-greater']: typeof WeaponSpecializationGreater;
 
+        /** specific bonuses gratned from enabling global bonuses  */
         ['outflank']?: typeof Outflank;
         ['precise-shot']?: typeof PreciseShot;
+        ['spirited-charge']?: typeof SpiritedCharge;
     };
     /** Array of all targeted targets */
     get allSpecificBonusTypes(): (typeof SpecificBonus)[];
@@ -437,6 +445,7 @@ export class _RollBonusesAPI {
     /** various utility helper methods and classes used throughout the mod */
     utils: {
         actionTypeHelpers: {
+            isHealing: typeof isHealing;
             isMelee: typeof isMelee;
             isNatural: typeof isNatural;
             isNaturalSecondary: typeof isNaturalSecondary;
@@ -462,14 +471,17 @@ export class _RollBonusesAPI {
         };
 
         addCheckToAttackDialog: typeof addCheckToAttackDialog;
+        addTextInputToAttackDialog: typeof addTextInputToAttackDialog;
         confirmationDialog: typeof confirmationDialog;
         currentTargetedActors: typeof currentTargetedActors;
         currentTargets: typeof currentTargets;
         getActionDamageTypes: typeof getActionDamageTypes;
         getDocFlags: typeof getDocFlags;
+        getFormData: typeof getFormData;
         getEnhancementBonusForAction: typeof getEnhancementBonusForAction;
         getSkillFormula: typeof getSkillFormula;
         getSourceFlag: typeof getSourceFlag;
+        getSourceFlags: typeof getSourceFlags;
         getWeaponGroupsFromActor: typeof getWeaponGroupsFromActor;
         getWeaponTypesFromActor: typeof getWeaponTypesFromActor;
         handleBonusesFor: typeof handleBonusesFor;

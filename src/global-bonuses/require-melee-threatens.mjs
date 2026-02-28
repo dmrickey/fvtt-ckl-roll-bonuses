@@ -1,8 +1,9 @@
-import { PositionalHelper } from '../util/positional-helper.mjs';
-import { currentTargets } from '../util/get-current-targets.mjs';
-import { customGlobalHooks, LocalHookHandler, localHooks } from '../util/hooks.mjs'
-import { BaseGlobalBonus } from './base-global-bonus.mjs';
+import { isMelee } from '../util/action-type-helpers.mjs';
 import { addCheckToAttackDialog, getFormData } from '../util/attack-dialog-helper.mjs';
+import { currentTargets } from '../util/get-current-targets.mjs';
+import { customGlobalHooks, LocalHookHandler, localHooks } from '../util/hooks.mjs';
+import { PositionalHelper } from '../util/positional-helper.mjs';
+import { BaseGlobalBonus } from './base-global-bonus.mjs';
 
 /** @extends {BaseGlobalBonus} */
 export class RequireMeleeThreatenGlobalBonus extends BaseGlobalBonus {
@@ -21,7 +22,6 @@ export class RequireMeleeThreatenGlobalBonus extends BaseGlobalBonus {
     static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.4A4bCh8VsQVbTsAY#require-melee-threatens'; }
 
     /**
-     * @this {ActionUse}
      * @param {AttackDialog} dialog
      * @param {[HTMLElement]} html
      * @param {AttackDialogData} data
@@ -34,8 +34,7 @@ export class RequireMeleeThreatenGlobalBonus extends BaseGlobalBonus {
             return;
         }
 
-        const isMelee = ['mcman', 'mwak', 'msak'].includes(data.action.actionType);
-        if (!isMelee) {
+        if (!isMelee(data.action.item, data.action)) {
             return;
         }
 
@@ -61,8 +60,7 @@ export class RequireMeleeThreatenGlobalBonus extends BaseGlobalBonus {
             return;
         }
 
-        const isMelee = ['mcman', 'mwak', 'msak'].includes(action.actionType);
-        if (!isMelee) {
+        if (!isMelee(action.item, action)) {
             return;
         }
 
@@ -101,6 +99,6 @@ export class RequireMeleeThreatenGlobalBonus extends BaseGlobalBonus {
     static {
         Hooks.on('renderApplication', RequireMeleeThreatenGlobalBonus.addSkipMeleeThreatenToDialog);
         Hooks.on(customGlobalHooks.actionUseAlterRollData, RequireMeleeThreatenGlobalBonus.requireMelee);
-        LocalHookHandler.registerHandler(localHooks.actionUseFootnotes, RequireMeleeThreatenGlobalBonus.addSkipFootnote)
+        LocalHookHandler.registerHandler(localHooks.actionUseFootnotes, RequireMeleeThreatenGlobalBonus.addSkipFootnote);
     }
 }

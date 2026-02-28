@@ -3,12 +3,6 @@
         "ac-mod": "{mod} AC",
         "acp-mod": "{mod} ACP",
         "add-healing-formula": "Add Healing Formula",
-        "alignment": {
-            "lawful": "Lawful",
-            "chaotic": "Chaotic",
-            "good": "Good",
-            "evil": "Evil"
-        },
         "all-crafts": "Craft (All)",
         "all-knowledges": "Knowledge (All)",
         "all-performs": "Perform (All)",
@@ -34,14 +28,16 @@
                 "action-type-radio": "Action Types Join",
                 "action-type-types": "Action Types",
                 "action-type-types-choices": {
+                    "is-cmb": "Combat Maneuvers",
+                    "is-healing": "Healing Abilities",
                     "is-melee": "Melee Attacks",
                     "is-natural": "Natural Attacks",
                     "is-natural-secondary": "Natural Secondary Attacks",
                     "is-physical": "Physical Item",
                     "is-ranged": "Ranged Attacks",
-                    "is-spell": "Spells",
+                    "is-spell": "All Spells",
                     "is-thrown": "Thrown Weapons",
-                    "is-weapon": "Weapons"
+                    "is-weapon": "All Weapons"
                 },
                 "agile": "Agile",
                 "alignment": "Target has Alignment",
@@ -60,7 +56,9 @@
                 "change-modification-formula": "Change Mod. Formula",
                 "change-modification-set-type": "Change Mod. Type",
                 "cl": "Caster Level",
+                "combat-state": "Combat State",
                 "condition": "Has Condition",
+                "condition-any-or-all": "Has Condition Join",
                 "condition-target": "Target for Condition",
                 "conditional-modifiers": "Conditional Modifiers",
                 "crit-keen": "Keen",
@@ -68,6 +66,7 @@
                 "crit-offset": "Crit Offset",
                 "crit": "Critical",
                 "damage": "Damage",
+                "damage-multiplier": "Damage Multiplier",
                 "damage-type": "Damage Type",
                 "dc": "DC",
                 "devastating-strike": "Devastating Strike",
@@ -98,12 +97,14 @@
                 "initiative": "Initiative",
                 "inspiration": "Inspiration",
                 "inspiration-amazing": "Amazing Inspiration",
+                "inspiration-bonus": "Inspiration Bonus",
                 "inspiration-extra-die": "Extra Inspiration Die",
                 "inspiration-focused": "Focused Inspiration",
                 "inspiration-tenacious": "Tenacious Inspiration",
                 "inspiration-true": "True Inspiration",
                 "is-flanking": "Is Flanking",
                 "is-flanking-with": "With Ally",
+                "is-healing": "Is Healing",
                 "is-target-within-range": "Target within Range",
                 "is-target-within-range-max": "Maximum Range ({unit})",
                 "is-target-within-range-min": "Minimum Range ({unit})",
@@ -122,11 +123,15 @@
                 "ranged-increment-penalty-increment-range-offset": "Increment Range Offset",
                 "ranged-increment-penalty-max-increment-offset": "Maximum Increment Offset",
                 "ranged-increment-penalty-penalty-offset": "Overall Penalty Reduction",
+                "relative-size": "Relative Size",
+                "relative-size-diff": "Size Difference",
+                "relative-size-specificty": "Relative to You",
+                "relative-size-direction": "Size Direction",
                 "roll-untrained": "Roll Skills Untrained",
-                "script-call": "Script Call",
                 "save": "Saving Throw",
                 "save-chosen": "Chosen Saves",
                 "save-input": "Save Change",
+                "script-call": "Script Call",
                 "self": "Self Target",
                 "skill": "Skill",
                 "skill-chosen": "Chosen Skills",
@@ -145,6 +150,7 @@
                 "spell-school": "Spell Schools",
                 "spell-subschool": "Spell Subschools",
                 "spell-specialization": "Spell Specialization",
+                "spirited-charge": "Spirited Charge",
                 "swarming": "Swarming",
                 "token": "Targeted Tokens",
                 "token-invert": "Invert Targeted Tokens",
@@ -166,14 +172,15 @@
                 "weapon-group": "Weapon Group",
                 "weapon-group-override": "Weapon Group",
                 "weapon-specialization": "Weapon Specialization",
+                "weapon": "Specific Weapons and Attacks",
                 "weapon-specialization-greater": "Greater Weapon Specialization",
                 "weapon-type": "Weapon Type",
                 "weapon-type-override": "Weapon Type",
-                "weapon": "Specific Weapons and Attacks",
                 "when-active": "When Item Is Active/Equipped",
-                "when-in-combat": "When in Combat",
                 "while-adjacent-to": "While Adjacent To",
-                "while-sharing-with": "While Sharing Square With"
+                "while-equipped": "While Equipped",
+                "while-sharing-with": "While Sharing Square With",
+                "while-weapon-group-equipped": "While Weapon Group Equipped"
             },
             "tooltip": {
                 "ac": "Adds a conditional bonus to the actor's Armor Class.",
@@ -181,7 +188,7 @@
                 "action-type": "Activates bonus whenever the given action types are matched.",
                 "action-type-radio": "Selects if the action types are evaluated as a group or individually.<br><br>All: Bonuses will be applied only if all action types are matched.<br><br>Any: Bonuses will be applied if any action type is matched.",
                 "agile": "Grant dex to damage for attacks.",
-                "alignment": "Activates bonuses when targeting tokens with the chosen alignment.",
+                "alignment": "Activates bonuses when targeting tokens with any of the chosen alignments.",
                 "all": "Activate bonuses for any action that can accept the bonus.",
                 "ammo-attack": "This attack bonus will be added on top of any other attack bonuses when using this ammo.",
                 "ammo-damage": "A typed damage bonus added when using this ammo.",
@@ -197,7 +204,9 @@
                 "change-modification-formula": "Formula and type to modify the specified change type.",
                 "change-modification-set-type": "Determines if the change modification will be set to or modified by the formula.",
                 "cl": "Modify a spell's Caster Level.",
+                "combat-state": "Whether or not this actor is in combat.",
                 "condition": "Activate bonuses when actor has condition.",
+                "condition-any-or-all": "Selects if the conditions are checked as a group or individually.<br><br>All: Bonuses will be applied only if the target has all conditions.<br><br>Any: Bonuses will be applied if the target has at least one of the conditions.",
                 "conditional-modifiers": "Grants Conditional Modifiers to targeted actions.",
                 "creature-type": "Will be applied when current target has any of the chosen creature types.",
                 "creature-subtype": "Will be applied when current target has any of the chosen creature subtypes.",
@@ -205,7 +214,8 @@
                 "crit-mult": "Increase or Decrease the critical multiplier.",
                 "crit-offset": "Modify the critical threat range. This modification happens after Keen.",
                 "crit": "Modify the crit range and/or multiplier.",
-                "damage": "Add bonus damage to the targeted actions.",
+                "damage": "Add bonus damage (or healing) to the targeted actions.",
+                "damage-multiplier": "Multiply the damage of targeted actions (e.g. Mounted charge).",
                 "damage-type": "Bonuses will be applied to actions that deal the chosen damage type.",
                 "dc": "Modify the DC for spells and abilities.",
                 "devastating-strike": "Adds damage with Vital Strikes",
@@ -235,11 +245,13 @@
                 "initiative": "Modifies the actor's Iniative rolls",
                 "inspiration": "Freely roll Inspiration for specified skills.",
                 "inspiration-amazing": "Increase Inspiration die by one step.",
+                "inspiration-bonus": "Bonus added to Inspiration rolls.",
                 "inspiration-focused": "Increase Inspiration die by one step for chosen skills.",
                 "inspiration-tenacious": "When rolling Inspiration, roll an extra die and keep the highest.",
                 "inspiration-true": "Can freely use Inspiration on all skills.",
                 "is-flanking": "Activate bonuses while flanking your current targets.",
                 "is-flanking-with": "Activate bonuses while adjacent to any of the specified allies.",
+                "is-healing": "Activates bonuses when using a healing ability.",
                 "is-target-within-range": "Active when all targets are within a specified range.",
                 "is-target-within-range-min": "Activate bonuses whenever all targeted tokens are at least this far away.",
                 "is-target-within-range-max": "Activate bonuses whenever all targeted tokens are at most this far away.",
@@ -258,6 +270,10 @@
                 "ranged-increment-penalty-increment-range-offset": "Modify the range for each increment.",
                 "ranged-increment-penalty-max-increment-offset": "Reduce the penalty per increment.",
                 "ranged-increment-penalty-penalty-offset": "Reduce the total penalty.",
+                "relative-size": "Enables bonuses based on the relative size of the target compared to the user.",
+                "relative-size-diff": "The number of size steps the target is larger or smaller than the user.",
+                "relative-size-specificty": "Whether the target must be at least this size difference, or exactly this size difference.",
+                "relative-size-direction": "Whether the target is larger or smaller than the user.",
                 "roll-untrained": "Marks skills as able to be rolled untrained.",
                 "script-call": "Configure Script Calls that are executed for the targeted actions. You can drag macros here as well.",
                 "save": "Apply bonuses to saving throws.",
@@ -277,7 +293,9 @@
                 "spell-focus-greater": "Further increase a school from Spell Focus by +1 DC.",
                 "spell-focus-mythic": "Double Spell Focus bonuses.",
                 "spell-descriptor": "Apply bonuses for spells with the chosen descriptors.",
+                "spirited-charge": "Double damage with melee weapons when charging while mounted (use conditional checkboxes in attack dialog).",
                 "swarming": "While sharing a square with an ally with this ability, you are considered flanking your target.",
+                "size": "Apply bonuses for actions when targeting creatures of a specific size.",
                 "token": "Apply bonuses for actions while specific tokens are targeted. When this buff is activated, a dialog will show up that allows you to choose from tokens in the scene.",
                 "token-invert": "Invert the selection, meaning bonuses will apply when any token is targeted that is not the chosen token.",
                 "uncanny-dodge-improved": "Grants immunity to flank unless attacked by a higher level rogue. Must only be placed on a class feature.",
@@ -302,9 +320,10 @@
                 "weapon-type-override": "Adds a Weapon Type to an Item that normally can't have one. This is equivalent to a weapon's Equipment Base Type.",
                 "weapon": "Choose specific Attacks and Weapons for bonuses.",
                 "when-active": "Apply bonuses when specified Buff/Gear/Feat/etc is active or equipped.",
-                "when-in-combat": "Active when this actor is in combat.",
                 "while-adjacent-to": "Activates bonuses while adjacent to any of the specified allies.",
-                "while-sharing-with": "Activates bonuses while sharing a square with any of the specified allies."
+                "while-equipped": "Activate bonuses while having a weapon or armor of the chosen type equipped.",
+                "while-sharing-with": "Activates bonuses while sharing a square with any of the specified allies.",
+                "while-weapon-group-equipped": "Activate bonuses while having a weapon from the chosen weapon group equipped."
             }
         },
         "cancel": "Cancel",
@@ -333,6 +352,7 @@
             "typed-formula": "Typed Damage Formula"
         },
         "damage-formula": "Damage Bonus Formula",
+        "damage-multiplier-mod": "Damage Multiplier ({mod})",
         "dc-label-mod": "{mod} DC ({label})",
         "dc-mod": "{mod} DC",
         "driver": "Profession (Driver)",
@@ -344,8 +364,10 @@
         "fluent-description": {
             "alignment": "While target has alignment: {alignment}",
             "all": "All",
-            "condition-self": "While you have condition: {condition}",
-            "condition-target": "While target has condition: {condition}",
+            "combat-state.in-combat": "While in combat",
+            "combat-state.out-of-combat": "While out of combat",
+            "condition-self": "While you have condition(s): {conditions}",
+            "condition-target": "While target has condition(s): {conditions}",
             "creature-subtype": "While target has creature subtype: {subtype}",
             "creature-type": "While target has creature type: {type}",
             "has-boolean-flag-self": "While you have boolean flag: {flag}",
@@ -353,11 +375,11 @@
             "is-flanking": "While flanking target",
             "is-flanking-with": "While flanking target with: {ally}",
             "is-target-within-range": "While target is within range: {range}",
+            "size": "While targeting a {size} creature",
             "token": "While targeting: {token}",
             "token-inverted": "While targeting anyone except: {token}",
             "when-active-equipment": "While equipped: {item}",
             "when-active-feature": "While active: {item}",
-            "when-in-combat": "While in combat",
             "while-adjacent-to": "While adjacent to: {ally}",
             "while-sharing-with": "While sharing square with: {ally}"
         },
@@ -368,7 +390,6 @@
                 "disable": "Disable Global Bonuses for this Actor"
             },
             "attack-label": {
-                "higher-ground": "High Ground",
                 "range-increment-penalty": "Ranged Penalty ({range}{units})",
                 "shoot-into-melee": "Into Melee"
             },
@@ -381,6 +402,8 @@
                 "require-melee-threaten": "Skipped Melee Requiremnt"
             },
             "label": {
+                "damage-multiplier": "Damage Multiplier",
+                "damage-multiplier-healing": "Healing Multiplier",
                 "flanking": "Flanking",
                 "higher-ground": "High Ground Melee Bonus",
                 "range-increment-penalty": "Ranged Increment Penalty",
@@ -401,12 +424,16 @@
                 "label": "Configure Global Bonuses",
                 "title": "Global Bonuses",
                 "section": {
+                    "damage-multiplier": {
+                        "description": "This adds an attack multiplier on the attack dialog which will multiply the final damage result by that amount (not including critical damage). Separately this adds a \"Spirited Charge\" specific bonus and also adds a \"Mounted\" Miscellaneous checkbox that appears when you enable \"Charge\". When checking \"Mounted\" while charging it will automatically attempt to apply bonuses for \"Lance Charging\" and \"Spirited Charge\".",
+                        "issues": "To detect if the attack is happening with a \"Lance\" weapon, the mod checks if the weapon has the \"Lance\" Equipment Base Type (Weapon Type). If you're using a translation that changes the name of that type, you'll have to update the translation config in the mod's settings for \"Lance\"."
+                    },
                     "flanking": {
                         "description": "Attempts to automatically add appropriate bonuses for flanking. The mod includes various bonuses to account for different feats/abilities that increase the bonus and modify how positioning works. Be sure to check out the journal for more details on those abilties.",
                         "issues": "Flanking on diagonals when not adjacent to the target may not be technically accurate, but should be close enough for most scenarios (i.e. if you rotated the map 45 degrees, it would definitely be flanking)."
                     },
                     "higher-ground": {
-                        "description": "Add +1 to melee attacks when made from a higher elevation.",
+                        "description": "Automatically enables the system's +1 to melee attacks when made from a higher elevation.",
                         "issues": ""
                     },
                     "range-increment-penalty": {
@@ -452,6 +479,7 @@
         "keen-all": "Keen (all)",
         "keen-id": "keen ({id})",
         "keen-self": "Keen (self)",
+        "lance-charge": "Lance Charge",
         "maximized": "Maximized",
         "maximized-total": "Maximized: {total}",
         "misfortune": "Misfortune",
@@ -459,6 +487,8 @@
         "missing-conditional-target": "'{bonus}' bonus requires a Conditional Target to function properly.",
         "missing-targets": "There are no Targets configured.",
         "modifiers": "Modifiers",
+        "mounted": "Mounted",
+        "mounted-title": "Used for automatically multiplying when using a Lance and/or Spirited Charge.",
         "ok": "OK",
         "picker": {
             "tabs": {
@@ -600,12 +630,16 @@
                 "name": "Gang Up",
                 "default": "Gang Up"
             },
+            "improved-critical": {
+                "name": "Improved Critical",
+                "default": "Improved Critical"
+            },
             "inspiration": {
                 "name": "Inspiration",
                 "default": "Inspiration"
             },
             "inspiration-amazing": {
-                "name": "Amazing Inspiration",
+                "name": "Inspiration, Amazing",
                 "default": "Amazing Inspiration"
             },
             "inspiration-device-talent": {
@@ -617,11 +651,11 @@
                 "default": "Empathy"
             },
             "inspiration-expanded": {
-                "name": "Expanded Inspiration",
+                "name": "Inspiration, Expanded",
                 "default": "Expanded Inspiration"
             },
             "inspiration-focused": {
-                "name": "Focused Inspiration",
+                "name": "Inspiration, Focused",
                 "default": "Focused Inspiration"
             },
             "inspiration-inspired-intelligence": {
@@ -629,20 +663,24 @@
                 "default": "Inspired Intelligence"
             },
             "inspiration-tenacious": {
-                "name": "Tenacious Inspiration",
+                "name": "Inspiration, Tenacious",
                 "default": "Tenacious Inspiration"
             },
             "inspiration-true": {
-                "name": "True Inspiration",
+                "name": "Inspiration, True",
                 "default": "True Inspiration"
             },
             "inspiration-underworld": {
-                "name": "Underworld Inspiration",
+                "name": "Inspiration, Underworld",
                 "default": "Underworld Inspiration"
             },
             "inspiration-unconventional": {
-                "name": "Unconventional Inspiration",
+                "name": "Inspiration, Unconventional",
                 "default": "Unconventional Inspiration"
+            },
+            "lance": {
+                "name": "Lance",
+                "default": "Lance"
             },
             "martial-focus": {
                 "name": "Martial Focus",
@@ -676,6 +714,10 @@
                 "name": "Spell Specialization",
                 "default": "Spell Specialization"
             },
+            "spirited-charge": {
+                "name": "Spirited Charge",
+                "default": "Spirited Charge"
+            },
             "swarming": {
                 "name": "Swarming",
                 "default": "Swarming"
@@ -693,7 +735,7 @@
                 "default": "Versatile Performance"
             },
             "versatile-performance-expanded": {
-                "name": "Expanded Versatility",
+                "name": "Versatile Performance: Expanded Versatility",
                 "default": "Expanded Versatility"
             },
             "versatile-training": {
@@ -713,11 +755,11 @@
                 "default": "Weapon Focus"
             },
             "weapon-focus-racial": {
-                "name": "Racial Weapon Focus",
+                "name": "Weapon Focus, Racial",
                 "default": "Gnome Weapon Focus"
             },
             "weapon-focus-racial-default-race": {
-                "name": "Racial Weapon Focus (default race)",
+                "name": "Weapon Focus, Racial (default race)",
                 "default": "Gnomish"
             },
             "weapon-specialization": {
@@ -760,6 +802,19 @@
                 "name": "Copy Item Flags on Attack Creation",
                 "hint": "When creating an Attack from a Weapon (via the \"Create Attack\" button to add an Attack to your Combat tab), the system does not copy over any flags from the Weapon. This means that by default any bonuses created on the weapon do not exist on Attacks created from that Weapon. Turning this on will copy those flags when creating an Attack. This only happens at creation, this will not sync any flags modified on either after the fact. Default is false."
             }
+        },
+        "size-choice": {
+            "exactly": "The Same As",
+            "larger-than": "Larger Than",
+            "smaller-than": "Smaller Than",
+            "larger": "Larger",
+            "smaller": "Smaller"
+        },
+        "relative-size-description": {
+            "equal": "While target is {specific} your size.",
+            "single": "While target is {specific} one size {direction} than you.",
+            "plural": "While target is {specific} {diff} sizes {direction} than you.",
+            "preview": "You ({actorSize}) -> Target ({targetSizes})"
         },
         "applications": {
             "actor": {

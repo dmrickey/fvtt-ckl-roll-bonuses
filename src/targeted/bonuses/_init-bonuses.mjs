@@ -9,6 +9,7 @@ import { SkillBonus } from './conditional-bonuses.mjs/skill-bonus.mjs';
 import { ConditionalModifiersBonus } from './conditional-modifiers-bonus.mjs';
 import { CritBonus } from './crit-bonus.mjs';
 import { DamageBonus } from "./damage-bonus.mjs";
+import { DamageMultiplierBonus } from './damage-multiplier-bonus.mjs';
 import { DCBonus } from './dc-bonus.mjs';
 import { DiceTransformBonus } from './dice-transform-bonus.mjs';
 import { EffectiveSizeBonus } from './effective-size-bonus.mjs';
@@ -29,6 +30,7 @@ export const registerBonuses = () => [
     ConditionalModifiersBonus,
     CritBonus,
     DamageBonus,
+    DamageMultiplierBonus,
     DCBonus,
     DiceTransformBonus,
     EffectiveSizeBonus,

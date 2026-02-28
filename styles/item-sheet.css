@@ -11,6 +11,14 @@
     position: relative;
 }
 
+#ckl-roll-bonus-container .ta-c {
+    text-align: center;
+}
+
+#ckl-roll-bonus-container .fs-i {
+    font-style: italic;
+}
+
 #ckl-roll-bonus-container .target-header .target-toggle {
     position: absolute;
     right: 10px;

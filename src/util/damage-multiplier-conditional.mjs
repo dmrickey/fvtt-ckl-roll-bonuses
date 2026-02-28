@@ -1,16 +1,31 @@
+import { getFirstTermFormula } from './get-first-term-formula.mjs';
 import { localize } from './localize.mjs';
 import { truthiness } from './truthiness.mjs';
 
 /**
+ * Adds damage parts that are the equivalent of multiplying out critical damage. E.g. Mythic Vital Strike or a lance charge.
+ * 
  * @param {ActionUse} actionUse
  * @param {ItemConditional[]} conditionals
  * @param {string} label
- * @param {number} [multiplier]
+ * @param {object} options
+ * @param {boolean} [options.includeActionDamage]
+ * @param {number} options.multiplier
+ * @param {ItemConditionalModifierSourceData['subTarget']} [options.subTarget]
  * @returns {ItemConditional| undefined}
  */
-export const buildDamageMultiplierConditional = (actionUse, conditionals, label, multiplier = 1) => {
-
-    const formulaParts = [];
+export const buildDamageMultiplierConditional = (
+    actionUse,
+    conditionals,
+    label,
+    {
+        includeActionDamage = false,
+        multiplier = 1,
+        subTarget = undefined,
+    },
+) => {
+    multiplier -= 1;
+    if (multiplier <= 0) return;
 
     /**
      * @param {string | number} f
@@ -18,6 +33,35 @@ export const buildDamageMultiplierConditional = (actionUse, conditionals, label,
      * @returns {string}
     */
     const toFormula = (f, l) => `{${new Array(multiplier).fill(f).join(', ')}}${(l ? `[${l}]` : '')}`;
+
+    const formulaParts = [];
+
+    if (includeActionDamage) {
+        let actionFormula = '';
+
+        const part = actionUse.action.damage?.parts[0];
+        const partFormula = part?.formula || '';
+        const firstDice = getFirstTermFormula(partFormula, actionUse.shared?.rollData ?? {});
+
+        if (firstDice) {
+            actionFormula += firstDice;
+        }
+
+        const { OperatorTerm } = foundry.dice.terms;
+        const remainingDeterministic = new Roll(partFormula, actionUse.shared?.rollData).terms // TODO need Roll Data
+            .slice(1)
+            .filter((term) => term.isDeterministic)
+            .filter((term, i, arr) => !(term instanceof OperatorTerm) || !(arr[i + 1] instanceof OperatorTerm))
+            .map((term) => term.formula.trim())
+            .join(' ');
+        if (remainingDeterministic) {
+            actionFormula += remainingDeterministic;
+        }
+
+        if (actionFormula) {
+            formulaParts.push(toFormula(actionFormula));
+        }
+    }
 
     // this.action.allDamageSources
     formulaParts.push(...actionUse.action.allDamageSources.map(x => toFormula(x.formula, x.flavor)));
@@ -70,7 +114,7 @@ export const buildDamageMultiplierConditional = (actionUse, conditionals, label,
             _id: foundry.utils.randomID(),
             critical: 'nonCrit',
             formula: `{${formulaParts.join(', ')}}[${label}]`,
-            subTarget: 'attack_0',
+            subTarget,
             target: 'damage',
             type: '',
             damageType: [...actionUse.action.damage?.parts[0]?.types],

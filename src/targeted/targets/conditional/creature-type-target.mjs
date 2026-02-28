@@ -2,7 +2,6 @@ import { MODULE_NAME } from '../../../consts.mjs';
 import { traitInput } from '../../../handlebars-handlers/trait-input.mjs';
 import { intersects } from '../../../util/array-intersects.mjs';
 import { currentTargetedActors } from '../../../util/get-current-targets.mjs';
-import { listFormat } from '../../../util/list-format.mjs';
 import { localize, localizeFluentDescription } from '../../../util/localize.mjs';
 import { toArray } from '../../../util/to-array.mjs';
 import { Trait } from '../../../util/trait-builder.mjs';
@@ -61,7 +60,7 @@ export class CreatureTypeTarget extends BaseConditionalTarget {
     static getHints(source) {
         const creatureTypes = this.#getCreatureTypes(source);
         if (creatureTypes.names.length) {
-            const hint = listFormat(creatureTypes.names, 'or');
+            const hint = creatureTypes.namesOr;
             return [hint];
         }
     }

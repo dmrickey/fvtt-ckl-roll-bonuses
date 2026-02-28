@@ -6,9 +6,6 @@ import { BaseGlobalBonus } from './base-global-bonus.mjs';
 import { Outflank } from './specific/bonuses/flanking/outflank.mjs';
 import { MenacingBonus } from './targeted/bonuses/menacing.mjs';
 
-/** @type {ActionType[]} */
-const rangedTypes = ['rwak', 'rcman', 'rsak', 'twak'];
-
 /** @extends {BaseGlobalBonus} */
 export class FlankingGlobalBonus extends BaseGlobalBonus {
     /**

@@ -6,11 +6,11 @@ import { api } from '../../util/api.mjs';
 import { addCheckToAttackDialog, getFormData } from '../../util/attack-dialog-helper.mjs';
 import { buildDamageMultiplierConditional } from '../../util/damage-multiplier-conditional.mjs';
 import { getCachedBonuses } from '../../util/get-cached-bonuses.mjs';
+import { getFirstTermFormula } from '../../util/get-first-term-formula.mjs';
 import { LocalHookHandler, localHooks } from '../../util/hooks.mjs';
 import { registerItemHint } from '../../util/item-hints.mjs';
 import { localize, localizeBonusLabel, localizeBonusTooltip } from '../../util/localize.mjs';
 import { LanguageSettings } from '../../util/settings.mjs';
-import { truthiness } from '../../util/truthiness.mjs';
 import { SpecificBonus } from '../_specific-bonus.mjs';
 import { DevastatingStrike, DevastatingStrikeImproved } from './devastating-strike.mjs';
 
@@ -196,22 +196,6 @@ registerItemHint((hintcls, _actor, item, _data) => {
     });
 });
 
-/**
- * @param {string} formula
- * @param {RollData} rollData
- * @returns {string}
- */
-const getFirstTermFormula = (formula, rollData) => {
-    const roll = RollPF.create(formula, rollData);
-    const terms = roll.terms.filter(x => !(x instanceof foundry.dice.terms.OperatorTerm));
-    const term = terms[0] || { formula: ''};
-    const output = term.formula?.trim() || '';
-
-    return term instanceof foundry.dice.terms.ParentheticalTerm
-        ? `(${output})`
-        : output;
-}
-
 class Settings {
     static get name() { return LanguageSettings.getTranslation(VitalStrike.key); }
 
@@ -360,7 +344,10 @@ export class VitalStrikeData {
             this.actionUse,
             conditionals,
             VitalStrikeMythic.label,
-            this.multiplier
+            {
+                multiplier: this.multiplier + 1,
+                subTarget: 'attack_0',
+            },
         );
     }
 
@@ -376,7 +363,6 @@ export class VitalStrikeData {
 api.utils.VitalStrikeData = VitalStrikeData;
 
 /**
- * @this {ActionUse}
  * @param {AttackDialog} dialog
  * @param {[HTMLElement]} html
  * @param {AttackDialogData} data

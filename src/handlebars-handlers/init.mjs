@@ -1,7 +1,6 @@
 import { templates } from "./templates.mjs";
 
 Hooks.on('ready', () => {
-    // @ts-ignore
     if (game.release.generation === 12) {
         loadTemplates(Object.values(templates));
     }

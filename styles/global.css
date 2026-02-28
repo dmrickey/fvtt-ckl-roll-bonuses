@@ -1,0 +1,8 @@
+/**
+ * Corrective stylings across the board for all Font Awesome icons used by the system.
+ */
+.pf1 {
+    i.roll-bonus-icon.fa-fw {
+        flex: 0 1.25em;
+    }
+}

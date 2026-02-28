@@ -1,11 +1,9 @@
-import { PositionalHelper } from '../util/positional-helper.mjs';
+import { isRanged } from '../util/action-type-helpers.mjs';
 import { currentTargets } from '../util/get-current-targets.mjs';
-import { customGlobalHooks } from '../util/hooks.mjs'
+import { customGlobalHooks } from '../util/hooks.mjs';
+import { PositionalHelper } from '../util/positional-helper.mjs';
 import { BaseGlobalBonus } from './base-global-bonus.mjs';
 import { PreciseShot } from './specific/bonuses/precise-shot-bonus.mjs';
-
-/** @type {ActionType[]} */
-const rangedTypes = ['rwak', 'rcman', 'rsak', 'twak'];
 
 /** @extends {BaseGlobalBonus} */
 export class ShootIntoMeleeGlobalBonus extends BaseGlobalBonus {
@@ -43,8 +41,7 @@ export class ShootIntoMeleeGlobalBonus extends BaseGlobalBonus {
             return;
         }
 
-        const isRanged = rangedTypes.includes(action.actionType);
-        if (!isRanged) {
+        if (!isRanged(action.item, action)) {
             return;
         }
 

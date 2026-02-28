@@ -7,7 +7,7 @@ export class PreciseShot extends SpecificBonus {
     static get sourceKey() { return 'precise-shot'; }
 
     /** @inheritdoc @override */
-    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.4A4bCh8VsQVbTsAY#precise-shot-bonus'; }
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.4A4bCh8VsQVbTsAY#precise-shot'; }
 
     /** @inheritdoc @override @returns {CreateAndRender} */
     static get configuration() {

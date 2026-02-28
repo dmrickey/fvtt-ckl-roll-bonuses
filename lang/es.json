@@ -767,8 +767,8 @@
         "token-distance": "Distancia entre '{first}' y '{second}': {distance}",
         "fluent-description": {
             "all": "Todo",
-            "condition-self": "Mientra tengas el estado: {condition}",
-            "condition-target": "Mientras el objetivo tenga el estado: {condition}",
+            "condition-self": "Mientra tengas el estado: {conditions}",
+            "condition-target": "Mientras el objetivo tenga el estado: {conditions}",
             "creature-type": "Mientras la criatura objetivo tenga el tipo: {type}",
             "has-boolean-flag-self": "Mientras tengas la bandera booleana: {flag}",
             "has-boolean-flag-target": "Mientras {target} tenga la bandera booleana: {flag}",

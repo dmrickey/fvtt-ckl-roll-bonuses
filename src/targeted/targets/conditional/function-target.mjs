@@ -62,18 +62,35 @@ export class FunctionTarget extends BaseConditionalTarget {
         const item = doc instanceof pf1.documents.item.ItemPF
             ? doc
             : doc.item;
+        const actor = item?.actor;
 
-        if (!item?.actor) {
+        if (!actor) {
             return [];
         }
 
-        const sources = item.actor.itemFlags?.boolean[this.key]?.sources ?? [];
+        const action =
+            doc instanceof pf1.actionUse.ActionUse
+                ? doc.action
+                : doc instanceof pf1.documents.item.ItemPF
+                    ? doc.defaultAction
+                    : doc;
+
+        const actionUse = doc instanceof pf1.actionUse.ActionUse ? doc : undefined;
+
+        const sources = actor.itemFlags?.boolean[this.key]?.sources ?? [];
         const filtered = sources.filter((source) => {
-            const custom = source.getFlag(MODULE_NAME, this.key);
+            /** @type {string} */
+            const custom = source.getFlag(MODULE_NAME, this.key) || '';
             if (custom) {
                 try {
-                    const func = eval(custom);
-                    return !!func(doc);
+                    if (custom.trim().startsWith('(')) {
+                        const func = eval(custom);
+                        return !!func(doc);
+                    }
+                    else {
+                        const func = new Function('item', 'actor', 'action', 'actionUse', custom);
+                        return !!func(item, actor, action, actionUse);
+                    }
                 }
                 catch {
                     console.error('invalid function target', source.uuid, source);

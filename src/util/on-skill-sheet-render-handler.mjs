@@ -40,25 +40,27 @@ export const onSkillSheetRender = ({
 
             const skillId = getSkillId();
             if (!skillId) return;
-            const source = sourceItems.find((source) => source.ids.includes(skillId))?.source;
-            if (!source) return;
+            const sources = sourceItems.filter((source) => source.ids.includes(skillId)).map(x => x.source);
+            if (!sources.length) return;
 
             if (tooltip) {
-                const icon = createSkillIcon(
-                    tooltip.getText(actor, skillId, source),
-                    tooltip.classes(actor, skillId, source),
-                    source,
-                );
-
-                if (tooltip.onClick) {
-                    icon.addEventListener(
-                        'click',
-                        () => tooltip.onClick?.(actor, skillId, source),
+                sources.forEach(source => {
+                    const icon = createSkillIcon(
+                        tooltip.getText(actor, skillId, source),
+                        tooltip.classes(actor, skillId, source),
+                        source,
                     );
-                }
 
-                const name = li.querySelector('.skill-name');
-                name?.appendChild(icon);
+                    if (tooltip.onClick) {
+                        icon.addEventListener(
+                            'click',
+                            () => tooltip.onClick?.(actor, skillId, source),
+                        );
+                    }
+
+                    const name = li.querySelector('.skill-name');
+                    name?.appendChild(icon);
+                });
             }
 
             rowCallback?.(skillId, li);

@@ -25,7 +25,7 @@ export class CritBonus extends BaseBonus {
      */
     static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.PiyJbkTuzKHugPSk#critical-bonuses'; }
 
-    static get #critKeenKey() { return `${this.key}-keen`; }
+    static get critKeenKey() { return `${this.key}-keen`; }
     static get #critMultKey() { return `${this.key}-mult`; }
     static get #critOffsetKey() { return `${this.key}-offset`; }
 
@@ -34,7 +34,7 @@ export class CritBonus extends BaseBonus {
      * @param {ItemPF} source
      * @returns {boolean}
      */
-    static hasKeen(source) { return !!source.getFlag(MODULE_NAME, this.#critKeenKey); }
+    static hasKeen(source) { return !!source.getFlag(MODULE_NAME, this.critKeenKey); }
 
     /**
      * The value of the bonus source's mult
@@ -274,7 +274,7 @@ export class CritBonus extends BaseBonus {
         const getRange = () => {
             if (isBroken) return 20;
 
-            const hasKeen = !!source.getFlag(MODULE_NAME, this.#critKeenKey);
+            const hasKeen = !!source.getFlag(MODULE_NAME, this.critKeenKey);
 
             let range = hasKeen
                 ? originalCritRange * 2 - 21
@@ -314,7 +314,7 @@ export class CritBonus extends BaseBonus {
             system: { flags: { boolean: { [this.key]: true } } },
             flags: {
                 [MODULE_NAME]: {
-                    [this.#critKeenKey]: !!keen,
+                    [this.critKeenKey]: !!keen,
                     [this.#critMultKey]: (mult || '') + '',
                     [this.#critOffsetKey]: (offset || '') + '',
                 },
@@ -342,7 +342,7 @@ export class CritBonus extends BaseBonus {
         checkboxInput({
             item,
             journal: this.journal,
-            key: this.#critKeenKey,
+            key: this.critKeenKey,
             parent: html,
         }, {
             canEdit: isEditable,

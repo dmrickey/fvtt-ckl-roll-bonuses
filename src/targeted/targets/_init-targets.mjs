@@ -6,17 +6,21 @@ import { AllTarget } from './conditional/all-target.mjs';
 import { ConditionTarget } from './conditional/condition-target.mjs';
 import { CreatureSubtypeTarget } from './conditional/creature-subtype-target.mjs';
 import { CreatureTypeTarget } from './conditional/creature-type-target.mjs';
+import { FunctionTarget } from './conditional/function-target.mjs';
 import { HasBooleanFlagTarget } from './conditional/has-boolean-flag-target.mjs';
 import { IsFlankingTarget } from './conditional/is-flanking-target.mjs';
 import { WhenTargetInRangeTarget } from './conditional/is-target-within-range.mjs';
+import { RelativeSizeTarget } from './conditional/relative-size-target.mjs';
+import { SizeTarget } from './conditional/size-target.mjs';
 import { TokenTarget } from "./conditional/token-target.mjs";
 import { WhenActiveTarget } from './conditional/when-active-target.mjs';
-import { WhenInCombatTarget } from './conditional/when-in-combat-target.mjs';
 import { WhileAdjacentToTarget } from './conditional/while-adjacent-to-target.mjs';
+import { CombatStateTarget } from './conditional/combat-state-target.mjs';
+import { WhileEquippedTarget } from './conditional/while-equipped-target.mjs';
 import { WhileSharingSquareWithTarget } from './conditional/while-sharing-square-with-target.mjs';
+import { WhileWeaponGroupEquippedTarget } from './conditional/while-weapon-group-equipped-target.mjs';
 import { DamageTypeTarget } from "./damage-type-target.mjs";
 import { FinesseTarget } from './finesse-target.mjs';
-import { FunctionTarget } from './conditional/function-target.mjs';
 import { SelfTarget } from './self-target.mjs';
 import { SpecificItemTarget } from "./specific-item-target/specific-item-target.mjs";
 import { SpellTarget } from "./specific-item-target/spell-target.mjs";
@@ -32,15 +36,18 @@ export const registerTargets = () => [
     ActionTypeTarget,
     AlignmentTarget,
     AllTarget,
+    CombatStateTarget,
     ConditionTarget,
+    CreatureSubtypeTarget,
+    CreatureTypeTarget,
     DamageTypeTarget,
     FinesseTarget,
     FunctionTarget,
     HasBooleanFlagTarget,
     IsFlankingTarget,
-    CreatureTypeTarget,
-    CreatureSubtypeTarget,
+    RelativeSizeTarget,
     SelfTarget,
+    SizeTarget,
     SpecificItemTarget,
     SpellDescriptorTarget,
     SpellSchoolTarget,
@@ -51,8 +58,9 @@ export const registerTargets = () => [
     WeaponTarget,
     WeaponTypeTarget,
     WhenActiveTarget,
-    WhenInCombatTarget,
     WhenTargetInRangeTarget,
     WhileAdjacentToTarget,
+    WhileEquippedTarget,
     WhileSharingSquareWithTarget,
+    WhileWeaponGroupEquippedTarget,
 ].forEach(Sources.registerSource);

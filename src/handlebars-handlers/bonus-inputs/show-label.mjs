@@ -6,13 +6,14 @@ import { createTemplate, templates } from '../templates.mjs';
  * @overload
  * @param {object} args
  * @param {ItemPF} args.item
- * @param {string} args.journal
+ * @param {string} [args.journal]
  * @param {string} args.label
  * @param {HTMLElement} args.parent,
- * @param {string} args.tooltip
+ * @param {string} [args.tooltip]
  * @param {object} options
  * @param {InputType} options.inputType
  * @param {boolean} [options.isSubLabel]
+ * @param {string} [options.extraClasses]
  * @returns {void}
  */
 
@@ -20,7 +21,7 @@ import { createTemplate, templates } from '../templates.mjs';
  * @overload
  * @param {object} args
  * @param {ItemPF} args.item
- * @param {string} args.journal
+ * @param {string | undefined} args.journal
  * @param {string} args.key
  * @param {string} [args.label]
  * @param {HTMLElement} args.parent,
@@ -28,13 +29,14 @@ import { createTemplate, templates } from '../templates.mjs';
  * @param {object} options
  * @param {InputType} options.inputType
  * @param {boolean} [options.isSubLabel]
+ * @param {string} [options.extraClasses]
  * @returns {void}
  */
 
 /**
  * @param {object} args
  * @param {ItemPF} args.item
- * @param {string} args.journal
+ * @param {string | undefined} [args.journal]
  * @param {string | undefined} [args.key]
  * @param {string} [args.label]
  * @param {HTMLElement} args.parent,
@@ -42,10 +44,11 @@ import { createTemplate, templates } from '../templates.mjs';
  * @param {object} options
  * @param {InputType} options.inputType
  * @param {boolean} [options.isSubLabel]
+ * @param {string} [options.extraClasses]
  */
 export function showLabel({
     item,
-    journal,
+    journal = undefined,
     key,
     label = '',
     parent,
@@ -53,6 +56,7 @@ export function showLabel({
 }, {
     inputType,
     isSubLabel = false,
+    extraClasses = '',
 }) {
     if (key) {
         label ||= localizeBonusLabel(key);
@@ -66,6 +70,7 @@ export function showLabel({
             journal,
             label,
             tooltip,
+            extraClasses,
         },
     );
 

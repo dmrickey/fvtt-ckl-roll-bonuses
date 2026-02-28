@@ -55,6 +55,11 @@ interface Game {
         players: Array<User & { isGM: false }>;
     } & EmbeddedCollection<User>;
     userId: string;
+
+    release: {
+        /** The current version of Foundry VTT which is running */
+        generation: number;
+    };
 }
 
 interface Pack<T extends Document = Document> {

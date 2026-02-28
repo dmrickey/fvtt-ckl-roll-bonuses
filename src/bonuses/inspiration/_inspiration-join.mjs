@@ -6,6 +6,7 @@ import { onSkillSheetRender } from '../../util/on-skill-sheet-render-handler.mjs
 import { LanguageSettings } from '../../util/settings.mjs';
 import { RollSkillUntrained } from '../roll-untrained.mjs';
 import { InspirationAmazing } from './inspiration-amazing.mjs';
+import { InspirationBonus } from './inspiration-bonus.mjs';
 import { InspirationExtraDie } from './inspiration-extra-die.mjs';
 import { InspirationFocused } from './inspiration-focused.mjs';
 import { InspirationTenacious } from './inspiration-tenacious.mjs';
@@ -159,6 +160,7 @@ onSkillSheetRender({
 /**
  * @typedef {object} InspirationDice
  * @property {string} inspiration
+ * @property {string} inspirationBonus
  * @property {string} inspirationImproved
  * @property {string} inspirationExtra
  * @property {string} inspirationImprovedExtra
@@ -166,9 +168,10 @@ onSkillSheetRender({
 
 /**
  * @param {Nullable<ActorPF>} actor
+ * @param {RollData} rollData
  * @returns {InspirationDice | undefined}
  */
-const getDie = (actor) => {
+const getDie = (actor, rollData) => {
     if (!actor) return;
 
     const hasInspiration = Inspiration.has(actor);
@@ -198,10 +201,11 @@ const getDie = (actor) => {
         mod = 'kh';
     }
 
-    let inspiration = `${qty}d${faces}${mod}`;
-    let inspirationExtra = `${qty + 1}d${faces}kh`;
-    let inspirationImproved = `${qty}d${faces + 2}${mod}`;
-    let inspirationImprovedExtra = `${qty + 1}d${faces + 2}kh`;
+    const inspiration = `${qty}d${faces}${mod}`;
+    const inspirationBonus = InspirationBonus.getInspirationBonuses(actor, rollData);
+    const inspirationExtra = `${qty + 1}d${faces}kh`;
+    const inspirationImproved = `${qty}d${faces + 2}${mod}`;
+    const inspirationImprovedExtra = `${qty + 1}d${faces + 2}kh`;
 
     // only when spending inspiration
     // if (hasTrue) {
@@ -211,6 +215,7 @@ const getDie = (actor) => {
 
     return {
         inspiration,
+        inspirationBonus,
         inspirationExtra,
         inspirationImproved,
         inspirationImprovedExtra,
@@ -218,7 +223,6 @@ const getDie = (actor) => {
 }
 
 /**
- *
  * @param {ActorPF} actor
  * @param {SkillId} skill
  */
@@ -261,11 +265,12 @@ function onGetRollData(thing, rollData) {
     // this fires for actor -> item -> action
     if (thing instanceof pf1.documents.actor.ActorPF) {
         const actor = thing;
-        const die = getDie(actor);
+        const die = getDie(actor, rollData);
         if (die) {
             rollData.rb ||= {};
             rollData.rb.inspiration = {
                 base: die.inspiration,
+                bonus: die.inspirationBonus,
                 improved: die.inspirationImproved,
                 baseExtra: die.inspirationExtra,
                 improvedExtra: die.inspirationImprovedExtra,

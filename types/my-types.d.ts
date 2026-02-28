@@ -70,6 +70,7 @@ import { RequireMeleeThreatenGlobalBonus } from '../src/global-bonuses/require-m
 import { ShootIntoMeleeGlobalBonus } from '../src/global-bonuses/shoot-into-melee-global-bonus.mjs';
 import { Outflank } from '../src/global-bonuses/specific/bonuses/flanking/outflank.mjs';
 import { PreciseShot } from '../src/global-bonuses/specific/bonuses/precise-shot-bonus.mjs';
+import { SpiritedCharge } from '../src/global-bonuses/specific/bonuses/spirited-charge-bonus.mjs';
 import { MenacingBonus } from '../src/global-bonuses/targeted/bonuses/menacing.mjs';
 import { RangedIncrementPenaltyBonus } from '../src/global-bonuses/targeted/bonuses/ranged-increment-penalty-bonus.mjs';
 import { addNodeToRollBonus } from '../src/handlebars-handlers/add-bonus-to-item-sheet.mjs';
@@ -114,6 +115,7 @@ import { SaveBonus } from '../src/targeted/bonuses/conditional-bonuses.mjs/save-
 import { ConditionalModifiersBonus } from '../src/targeted/bonuses/conditional-modifiers-bonus.mjs';
 import { CritBonus } from '../src/targeted/bonuses/crit-bonus.mjs';
 import { DamageBonus } from '../src/targeted/bonuses/damage-bonus.mjs';
+import { DamageMultiplierBonus } from '../src/targeted/bonuses/damage-multiplier-bonus.mjs';
 import { DCBonus } from '../src/targeted/bonuses/dc-bonus.mjs';
 import { DiceTransformBonus } from '../src/targeted/bonuses/dice-transform-bonus.mjs';
 import { EffectiveSizeBonus } from '../src/targeted/bonuses/effective-size-bonus.mjs';
@@ -136,6 +138,7 @@ import { ActionTypeTarget } from '../src/targeted/targets/action-type-target.mjs
 import { BaseConditionalTarget } from '../src/targeted/targets/conditional/_base-conditional.target.mjs';
 import { AlignmentTarget } from '../src/targeted/targets/conditional/alignment-target.mjs';
 import { AllTarget } from '../src/targeted/targets/conditional/all-target.mjs';
+import { CombatStateTarget } from '../src/targeted/targets/conditional/combat-state-target.mjs';
 import { ConditionTarget } from '../src/targeted/targets/conditional/condition-target.mjs';
 import { CreatureSubtypeTarget } from '../src/targeted/targets/conditional/creature-subtype-target.mjs';
 import { CreatureTypeTarget } from '../src/targeted/targets/conditional/creature-type-target.mjs';
@@ -145,7 +148,6 @@ import { IsFlankingTarget } from '../src/targeted/targets/conditional/is-flankin
 import { WhenTargetInRangeTarget } from '../src/targeted/targets/conditional/is-target-within-range.mjs';
 import { TokenTarget } from '../src/targeted/targets/conditional/token-target.mjs';
 import { WhenActiveTarget } from '../src/targeted/targets/conditional/when-active-target.mjs';
-import { WhenInCombatTarget } from '../src/targeted/targets/conditional/when-in-combat-target.mjs';
 import { WhileAdjacentToTarget } from '../src/targeted/targets/conditional/while-adjacent-to-target.mjs';
 import { WhileSharingSquareWithTarget } from '../src/targeted/targets/conditional/while-sharing-square-with-target.mjs';
 import { DamageTypeTarget } from '../src/targeted/targets/damage-type-target.mjs';
@@ -160,6 +162,8 @@ import { SpellSubschoolTarget } from '../src/targeted/targets/spell-subschool-ta
 import { WeaponGroupTarget } from '../src/targeted/targets/weapon-group-target.mjs';
 import { WeaponTypeTarget } from '../src/targeted/targets/weapon-type-target.mjs';
 import {
+    isCmb,
+    isHealing,
     isMelee,
     isNatural,
     isNaturalSecondary,
@@ -174,7 +178,7 @@ import {
     intersection,
     intersects,
 } from '../src/util/array-intersects.mjs';
-import { addCheckToAttackDialog } from '../src/util/attack-dialog-helper.mjs';
+import { addCheckToAttackDialog, addTextInputToAttackDialog, getFormData } from '../src/util/attack-dialog-helper.mjs';
 import { confirmationDialog } from '../src/util/confirmation-dialog.mjs';
 import { getEnhancementBonusForAction } from '../src/util/enhancement-bonus-helper.mjs';
 import { FormulaCacheHelper, getDocFlags } from '../src/util/flag-helpers.mjs';
@@ -191,7 +195,7 @@ import {
     getTraitsFromItem,
 } from '../src/util/get-id-array-from-flag.mjs';
 import { getSkillFormula } from '../src/util/get-skill-formula.mjs';
-import { getSourceFlag } from '../src/util/get-source-flag.mjs';
+import { getSourceFlag, getSourceFlags } from '../src/util/get-source-flag.mjs';
 import { getWeaponGroupsFromActor } from '../src/util/get-weapon-groups-from-actor.mjs';
 import { getWeaponTypesFromActor } from '../src/util/get-weapon-types-from-actor.mjs';
 import { itemHasCompendiumId } from '../src/util/has-compendium-id.mjs';
@@ -212,7 +216,7 @@ import { Trait } from '../src/util/trait-builder.mjs';
 import { truthiness } from '../src/util/truthiness.mjs';
 import { distinct, uniqueArray } from '../src/util/unique-array.mjs';
 
-export {};
+export { };
 
 declare global {
     class RollBonusesAPI {
@@ -263,6 +267,7 @@ declare global {
             ['bonus_conditional-modifiers']: typeof ConditionalModifiersBonus;
             ['bonus_crit']: typeof CritBonus;
             ['bonus_damage']: typeof DamageBonus;
+            ['bonus_damage-multiplier']: typeof DamageMultiplierBonus;
             ['bonus_dc']: typeof DCBonus;
             ['bonus_dice-transform']: typeof DiceTransformBonus;
             ['bonus_effective-size']: typeof EffectiveSizeBonus;
@@ -303,27 +308,27 @@ declare global {
             ['target_action-type']: typeof ActionTypeTarget;
             ['target_alignment']: typeof AlignmentTarget;
             ['target_all']: typeof AllTarget;
+            ['target_combat-state']: typeof CombatStateTarget;
             ['target_condition']: typeof ConditionTarget;
+            ['target_creature-subtype']: typeof CreatureSubtypeTarget;
+            ['target_creature-type']: typeof CreatureTypeTarget;
             ['target_damage-type']: typeof DamageTypeTarget;
             ['target_finesse']: typeof FinesseTarget;
             ['target_function']: typeof FunctionTarget;
             ['target_has-boolean-flag']: typeof HasBooleanFlagTarget;
             ['target_is-flanking']: typeof IsFlankingTarget;
-            ['target_creature-type']: typeof CreatureTypeTarget;
-            ['target_creature-subtype']: typeof CreatureSubtypeTarget;
-            ['target_self']: typeof SelfTarget;
+            ['target_is-target-within-range']: typeof WhenTargetInRangeTarget;
             ['target_item']: typeof SpecificItemTarget;
+            ['target_self']: typeof SelfTarget;
+            ['target_spell']: typeof SpellTarget;
             ['target_spell-descriptor']: typeof SpellDescriptorTarget;
             ['target_spell-school']: typeof SpellSchoolTarget;
             ['target_spell-subschool']: typeof SpellSubschoolTarget;
-            ['target_spell']: typeof SpellTarget;
             ['target_token']: typeof TokenTarget;
-            ['target_weapon-group']: typeof WeaponGroupTarget;
             ['target_weapon']: typeof WeaponTarget;
+            ['target_weapon-group']: typeof WeaponGroupTarget;
             ['target_weapon-type']: typeof WeaponTypeTarget;
             ['target_when-active']: typeof WhenActiveTarget;
-            ['target_when-in-combat']: typeof WhenInCombatTarget;
-            ['target_is-target-within-range']: typeof WhenTargetInRangeTarget;
             ['target_while-adjacent-to']: typeof WhileAdjacentToTarget;
             ['target_while-sharing-with']: typeof WhileSharingSquareWithTarget;
         };
@@ -334,6 +339,7 @@ declare global {
         conditionalTargetTypeMap: {
             ['alignment']: typeof AlignmentTarget;
             ['all']: typeof AllTarget;
+            ['combat-state']: typeof CombatStateTarget;
             ['condition']: typeof ConditionTarget;
             ['creature-subtype']: typeof CreatureSubtypeTarget;
             ['creature-type']: typeof CreatureTypeTarget;
@@ -343,7 +349,6 @@ declare global {
             ['is-target-within-range']: typeof WhenTargetInRangeTarget;
             ['token']: typeof TokenTarget;
             ['when-active']: typeof WhenActiveTarget;
-            ['when-in-combat']: typeof WhenInCombatTarget;
             ['while-adjacent-to']: typeof WhileAdjacentToTarget;
             ['while-sharing-with']: typeof WhileSharingSquareWithTarget;
         };
@@ -418,8 +423,10 @@ declare global {
             ['weapon-specialization']: typeof WeaponSpecialization;
             ['weapon-specialization-greater']: typeof WeaponSpecializationGreater;
 
+            /** specific bonuses gratned from enabling global bonuses  */
             ['outflank']?: typeof Outflank;
             ['precise-shot']?: typeof PreciseShot;
+            ['spirited-charge']?: typeof SpiritedCharge;
         };
         /** Array of all targeted targets */
         get allSpecificBonusTypes(): ValueOf<
@@ -460,6 +467,7 @@ declare global {
             v4: {};
             v5: {};
             v6: BaseMigrate;
+            v23: BaseMigrate;
         };
 
         /** Base source classes for extending */
@@ -476,6 +484,8 @@ declare global {
         /** various utility helper methods and classes used throughout the mod */
         utils: {
             actionTypeHelpers: {
+                isCmb: typeof isCmb;
+                isHealing: typeof isHealing;
                 isMelee: typeof isMelee;
                 isNatural: typeof isNatural;
                 isNaturalSecondary: typeof isNaturalSecondary;
@@ -502,14 +512,17 @@ declare global {
             };
 
             addCheckToAttackDialog: typeof addCheckToAttackDialog;
+            addTextInputToAttackDialog: typeof addTextInputToAttackDialog;
             confirmationDialog: typeof confirmationDialog;
             currentTargetedActors: typeof currentTargetedActors;
             currentTargets: typeof currentTargets;
             getActionDamageTypes: typeof getActionDamageTypes;
             getDocFlags: typeof getDocFlags;
+            getFormData: typeof getFormData;
             getEnhancementBonusForAction: typeof getEnhancementBonusForAction;
             getSkillFormula: typeof getSkillFormula;
             getSourceFlag: typeof getSourceFlag;
+            getSourceFlags: typeof getSourceFlags;
             getWeaponGroupsFromActor: typeof getWeaponGroupsFromActor;
             getWeaponTypesFromActor: typeof getWeaponTypesFromActor;
             handleBonusesFor: typeof handleBonusesFor;
@@ -583,7 +596,6 @@ declare global {
         (
             item?: ItemPF,
             action?: ItemAction,
-            actionUse?: ActionUse | null
         ): boolean;
     };
 

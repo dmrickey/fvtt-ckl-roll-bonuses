@@ -6,9 +6,11 @@ import { initSources } from './targeted/init-sources.mjs';
 import { BaseTarget } from './targeted/targets/_base-target.mjs';
 import { BaseConditionalTarget } from './targeted/targets/conditional/_base-conditional.target.mjs';
 import { api } from './util/api.mjs';
+import { intersection } from './util/array-intersects.mjs';
 import { LocalHookHandler, customGlobalHooks, localHooks } from "./util/hooks.mjs";
 import { registerItemHint } from "./util/item-hints.mjs";
 import { localize } from "./util/localize.mjs";
+import { toArray } from './util/to-array.mjs';
 import { truthiness } from "./util/truthiness.mjs";
 
 initSources();
@@ -113,35 +115,41 @@ registerItemHint((hintcls, actor, item, _data) => {
 });
 
 /**
+ * @template {typeof BaseTarget} U
  * @overload
  * @param {ArrayOrSelf<ArrayOrSelf<ActionUse | ItemPF | ItemAction>>} things
  * @param {(bonusType: typeof BaseBonus, sourceItem: ItemPF) => void} func The type providing the bonus, and the Item providing the bonus
  * @param {object} [options]
  * @param {boolean} [options.skipGenericTarget]
  * @param {never} [options.specificBonusType]
+ * @param {U} [options.specificTargetType]
  * @param {'some' | 'every'} [options.thingsFilter]
  * @returns {void}
  */
 
 /**
  * @template {typeof BaseBonus} T
+ * @template {typeof BaseTarget} U
  * @overload
  * @param {ArrayOrSelf<ActionUse | ItemPF | ItemAction>} things
  * @param {(bonusType: T, sourceItem: ItemPF) => void} func The type providing the bonus, and the Item providing the bonus
  * @param {object} [options]
  * @param {boolean} [options.skipGenericTarget]
  * @param {T} [options.specificBonusType]
+ * @param {U} [options.specificTargetType]
  * @param {'some' | 'every'} [options.thingsFilter]
  * @returns {void}
  */
 
 /**
  * @template {typeof BaseBonus} T
+ * @template {typeof BaseTarget} U
  * @param {ArrayOrSelf<ActionUse | ItemPF | ItemAction>} things
  * @param {(bonusType: T | typeof BaseBonus, sourceItem: ItemPF) => void} func The type providing the bonus, and the Item providing the bonus
  * @param {object} [options]
  * @param {boolean} [options.skipGenericTarget]
  * @param {T | never} [options.specificBonusType]
+ * @param {U} [options.specificTargetType]
  * @param {'some' | 'every'} [options.thingsFilter]
  */
 export const handleBonusesFor = (
@@ -150,12 +158,11 @@ export const handleBonusesFor = (
     {
         skipGenericTarget = false,
         specificBonusType = undefined,
+        specificTargetType = undefined,
         thingsFilter = 'some',
     } = {}
 ) => {
-    if (!Array.isArray(things)) {
-        things = [things];
-    }
+    things = toArray(things);
 
     const actor = things.find(x => !!x?.actor)?.actor;
     if (!actor || !actor.itemFlags?.boolean) return;
@@ -163,13 +170,18 @@ export const handleBonusesFor = (
     let sources = [];
     if (specificBonusType) {
         sources = actor.itemFlags?.boolean[specificBonusType.key]?.sources || [];
-    } else {
-        const targetKeys = api.allTargetTypes
-            .filter((targetType) => !skipGenericTarget || !targetType.isGenericTarget)
-            .map((targetType) => targetType.key);
 
-        sources = Object.keys(actor.itemFlags.boolean)
-            .filter((key) => key.startsWith('target_') && targetKeys.includes(key))
+        if (specificTargetType) {
+            sources = sources.filter((source) => source.hasItemBooleanFlag(specificTargetType.key));
+        }
+    } else {
+        const targetKeys = specificTargetType
+            ? [specificTargetType.key]
+            : (api.allTargetTypes
+                .filter((targetType) => !skipGenericTarget || !targetType.isGenericTarget)
+                .map((targetType) => targetType.key));
+
+        sources = intersection(Object.keys(actor.itemFlags.boolean), targetKeys)
             .flatMap((key) => actor.itemFlags?.boolean[key].sources)
             .filter(truthiness)
             // filter down to unique items in case one source item is affecting this target item through multiple "targets"

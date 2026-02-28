@@ -1,3 +1,67 @@
+## Roll Bonuses 2.23.0
+
+### New Bonuses
+
+- **Damage Multiplier**
+  - Multiplies damage (or healing) for the targeted action.
+- **Damage Multiplier (Global Bonus)**
+  - Adds a multiplier input on the attack dialog for adhoc multipliers. This includes support for mounted charging with a Lance and/or *Spirited Charge* -- this is supported with a new Specific Bonus and also with a new "Mounted" checkbox that appears after checking "charge". When both "charge" and "mounted" are checked, it then checks if the attacker has the feat and/or a lance to multiple the damage as expected.
+- **Inspiration Bonus**
+  - Add a bonus to all inspiration rolls. E.g. Gain a +1/4 bonus on all inspiration rolls from Half-Elf investigator favored class option. Investigator macros provided have been upgraded -- if you have made local copies you will need to update those copies to make use of this bonus.
+
+### New Conditional Targets
+
+- **Combat State**
+  - Previously you could define a target to be active while you were in combat. Now you can flip that and have a bonus defined for when you're out of combat. E.g. [Scarred by War](https://www.aonprd.com/TraitDisplay.aspx?ItemName=Scarred%20by%20War)
+- **Relative Size Target**
+  - Target tokens based off of their size relative to your own current size.
+- **Size Target**
+  - Activate bonus when targeting a token of a specific size.
+- **While Equipped**
+  - Activates bonus while a specified weapon or armor type is equipped (or while having a specified natural attack type) (this is useful for cases like "+2 Intimidate when using a Longsword)
+    - Do not confuse this with "Weapon Type Target" which grants bonuses only to specific weapons -- this will grant bonuses _even if using a different weapon_ as long as you have the specified weapon type equipped in your inventory tab.
+- **While Weapon Group Equipped**
+  - Actives bonuses when a weapon from the specified weapon group(s) is equipped. E.g. This is useful for a few Advanced Weapon Training techniques for Fighters that grant other bonuses while using a weapon from the chosen group.
+    - Like above, don't confuse this "Weapon Group Target"
+
+### Improvements
+
+- **Action Type Target**
+  - Can now also target Combat Maneuvers and Healing abilities.
+- **Alignment target**
+  - Can now target specific alignment combinations (including true neutral) instead of just good/evil/law/chaos. This allows you to also target things like "only good" (with no law/chaos) whereas before it would trigger off of any good alignment. A configuration of "any good" would now require selecting all three good alignments.
+- **Condition Target**
+  - Can now specify multiple conditions to trigger off of
+- **Custom Function Target**
+  - Now easier to write. You no longer have to use inline arrow function (e.g. `() => { ... }`), but now only have to write the `...`. You now write these the same you write a script macro or pf1's script calls. Four variables are passed directly to the function for you: `item`, `actor`, `action`, and `actionUse`. Check out the in game documentation for updated examples. _Old_ functions will still work, but the documentation no longer mentions the old syntax and only gives new examples.
+- **Improved Critical**
+  - Added Improved Critical auto-configuration. It will now automatically add Weapon Type Target (preconfigured for the first weapon it finds on the actor) and Critical Bonus (preconfigured for keen)
+    - I thought I did this a while ago, sorry McGregor 😅
+- **When in Combat**
+  - Transformed into **Combat State**. See above.
+
+### Misc
+
+- Added `greatestDistanceBetween` helper function in the PositionalHelper util that can tell you the greatest distance between any two out of a group of tokens. There is a new macro available with examples on how to use this. One example on how to use this is to add a Use Script Call that does `if (RollBonuses.utils.PositionalHelper.greatestDistanceBetweenTokens(game.user.targets) > 30) shared.reject = true;`. This would cancel the spell if targets are too far apart (I'd also include a ui notification that warns the user the spell was rejected). And yes, this accounts for elevation.
+- Promoted RollBonuses to the global namespace. You can now access the `api` directly from typing `RollBonuses` into the console (or a macro/script/etc). Included macros have been updated to reflect this.
+- Cleaned up translation setting UX for setting Ability names (for auto-recognition/configuration) for non-English users
+
+### Bugfixes
+
+- Token targets no long show tokens with SECRET disposition to players.
+- Multiple skill bonuses now show up directly on the actor's skill sheet instead of just the first one found.
+- Damage Bonus will now also grant bonusus _healing_ when using "Typed Damage" instead of only when using "Effect Damage"
+
+---
+
+## Roll Bonuses 2.22.7
+
+### Bugfixes
+
+- Fixed v12 compatibility
+
+---
+
 ## Roll Bonuses 2.22.6
 
 ### Improvements
@@ -463,3 +527,5 @@ _**Lots of data changed internally. Anything necessary should automatically migr
     - CL/DC bonuses for specific elements remain unchanged
 - Some Specific bonuses were removed as they're better suited as Targeted Bonuses
   - Critical "specific bonuses" were removed and automatically migrated to targeted bonuses.
+
+promote roll bonuses to the global scope
