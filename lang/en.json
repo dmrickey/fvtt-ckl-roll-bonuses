@@ -214,7 +214,7 @@
                 "crit-mult": "Increase or Decrease the critical multiplier.",
                 "crit-offset": "Modify the critical threat range. This modification happens after Keen.",
                 "crit": "Modify the crit range and/or multiplier.",
-                "damage": "Add bonus damage to the targeted actions.",
+                "damage": "Add bonus damage (or healing) to the targeted actions.",
                 "damage-multiplier": "Multiply the damage of targeted actions (e.g. Mounted charge).",
                 "damage-type": "Bonuses will be applied to actions that deal the chosen damage type.",
                 "dc": "Modify the DC for spells and abilities.",
@@ -390,7 +390,6 @@
                 "disable": "Disable Global Bonuses for this Actor"
             },
             "attack-label": {
-                "higher-ground": "High Ground",
                 "range-increment-penalty": "Ranged Penalty ({range}{units})",
                 "shoot-into-melee": "Into Melee"
             },
@@ -404,6 +403,7 @@
             },
             "label": {
                 "damage-multiplier": "Damage Multiplier",
+                "damage-multiplier-healing": "Healing Multiplier",
                 "flanking": "Flanking",
                 "higher-ground": "High Ground Melee Bonus",
                 "range-increment-penalty": "Ranged Increment Penalty",

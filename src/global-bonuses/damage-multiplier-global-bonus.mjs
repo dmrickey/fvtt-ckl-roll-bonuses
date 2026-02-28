@@ -22,6 +22,9 @@ export class DamageMultiplierGlobalBonus extends BaseGlobalBonus {
     /** @returns {string} */
     static get mountedKey() { return `${this.key}-mounted`; }
 
+    /** @returns {string} */
+    static get healingLabel() { return localize(`global-bonus.label.${this.bonusKey}-healing`); }
+
     /**
      * @inheritdoc
      * @override
@@ -56,7 +59,7 @@ export class DamageMultiplierGlobalBonus extends BaseGlobalBonus {
             dialog,
             {
                 iconClasses: ['ra', 'ra-crossed-swords'],
-                label: DamageMultiplierGlobalBonus.label,
+                label: data.isHealing ? DamageMultiplierGlobalBonus.healingLabel : DamageMultiplierGlobalBonus.label,
                 placeholder: 'e.g. 2',
             }
         );
