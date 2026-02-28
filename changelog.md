@@ -48,7 +48,7 @@
 
 ### Bugfixes
 
-- Token targets no long show tokens with SECRET disposition to players.
+- Token targets no longer show tokens with SECRET disposition to players.
 - Multiple skill bonuses now show up directly on the actor's skill sheet instead of just the first one found.
 - Damage Bonus will now also grant bonusus _healing_ when using "Typed Damage" instead of only when using "Effect Damage"
 
