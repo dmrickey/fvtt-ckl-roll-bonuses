@@ -19,11 +19,8 @@
 - [Affect other tokens](#affect-other-tokens)
 - [Figure out how to embed buffs directly into a scene](#figure-out-how-to-embed-buffs-directly-into-a-scene)
 - [Class Features](#class-features)
-  - [Cleric](#cleric)
-    - [Healing Domain - Healer's Blessing](#healing-domain---healers-blessing)
 - [Feats](#feats)
   - [Spell Perfection](#spell-perfection)
-  - [Scarred by War](#scarred-by-war)
 - [Buffs](#buffs)
 - [Racial Features](#racial-features)
   - [Sylph](#sylph)
@@ -47,7 +44,6 @@
 - [Not Possible](#not-possible)
 - [Other Ideas](#other-ideas)
 - [vnext](#vnext)
-    - [Global Bonuses](#global-bonuses)
     - [Specific Bonuses](#specific-bonuses)
     - [Idea](#idea)
     - [Bonus Types](#bonus-types)
@@ -99,15 +95,9 @@
 # Figure out how to embed buffs directly into a scene
 
 # Class Features
-## Cleric
-### Healing Domain - Healer's Blessing
-- Cure Spells are treated as if they're empowered (+50% healing)
-  - IsHealing target
-  - Empowered Bonus
 
 # Feats
 ## [Spell Perfection](https://www.d20pfsrd.com/feats/general-feats/spell-perfection/)
-## [Scarred by War](https://www.aonprd.com/TraitDisplay.aspx?ItemName=Scarred%20by%20War)
 
 # Buffs
 
@@ -138,7 +128,6 @@
 - Add item hints for ammo
 
 ## UX
-- Add method for sources to say "I have a source key but no value" and show a broken item hint
 ### Targeting
 - show warning if target has an inappropriate bonus
 
@@ -209,26 +198,16 @@
     - IAF - `-1` untyped ACP (Armor)
   - CL
   - DC
+  - Spell Specialization
 
 # vnext
 - Add Fortune/Misfortune checkboxes to attack/roll dialogs
 
 - Remove `greater`/`improved`/`mythic` getters from LanguageSettings and use the new `is` methods
 
-### Global Bonuses
-- Mounted Charge Global Bonus
-  - Refactor `VitalStrikeData.buildMythicConditional` because that already has the logic necessary
-  - Include Spirited Charge Specific Bonus (when global bonus is enabled) to double damage
-  - Detect "lance" weapon type and double damage
-  - Global Bonus will need to add a "mounted" checkbox
-  - Global Bonus kicks off when both "mounted" and "charge" is checked
-
 ### Specific Bonuses
 - ~~Migrate all keys to start with `specific_`~~ Do this later after SBC has a chance to update to only use the API
 - Add "get item hint" function to base class
-- **Damage Multiplier**
-  - Brace - adhoc situations like the global charge bonus above
-  - Litany of Righteousness (probably can't do but putting here for reference)
 
 Add journal links to target/bonus headers within item sheet
 

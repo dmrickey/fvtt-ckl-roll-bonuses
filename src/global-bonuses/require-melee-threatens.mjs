@@ -1,3 +1,4 @@
+import { isMelee } from '../util/action-type-helpers.mjs';
 import { addCheckToAttackDialog, getFormData } from '../util/attack-dialog-helper.mjs';
 import { currentTargets } from '../util/get-current-targets.mjs';
 import { customGlobalHooks, LocalHookHandler, localHooks } from '../util/hooks.mjs';
@@ -33,8 +34,7 @@ export class RequireMeleeThreatenGlobalBonus extends BaseGlobalBonus {
             return;
         }
 
-        const isMelee = ['mcman', 'mwak', 'msak'].includes(data.action.actionType);
-        if (!isMelee) {
+        if (!isMelee(data.action.item, data.action)) {
             return;
         }
 
@@ -60,8 +60,7 @@ export class RequireMeleeThreatenGlobalBonus extends BaseGlobalBonus {
             return;
         }
 
-        const isMelee = ['mcman', 'mwak', 'msak'].includes(action.actionType);
-        if (!isMelee) {
+        if (!isMelee(action.item, action)) {
             return;
         }
 

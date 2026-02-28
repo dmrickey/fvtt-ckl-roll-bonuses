@@ -92,7 +92,9 @@ export class DamageMultiplierBonus extends BaseBonus {
      */
     static buildCondtional(source, conditionals, action) {
         const multiplier = FormulaCacheHelper.getModuleFlagValue(source, this.key) || 0;
-        return buildDamageMultiplierConditional(action, conditionals, `${source.name} ×${multiplier}`, { includeActionDamage: true, multiplier });
+        const isNumber = !isNaN(+multiplier);
+        const label = '×' + (isNumber ? multiplier : `(${multiplier})`);
+        return buildDamageMultiplierConditional(action, conditionals, `${source.name} ${label}`, { includeActionDamage: true, multiplier });
     }
 
     /**

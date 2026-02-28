@@ -163,6 +163,7 @@ import { WeaponGroupTarget } from '../src/targeted/targets/weapon-group-target.m
 import { WeaponTypeTarget } from '../src/targeted/targets/weapon-type-target.mjs';
 import {
     isCmb,
+    isHealing,
     isMelee,
     isNatural,
     isNaturalSecondary,
@@ -484,6 +485,7 @@ declare global {
         utils: {
             actionTypeHelpers: {
                 isCmb: typeof isCmb;
+                isHealing: typeof isHealing;
                 isMelee: typeof isMelee;
                 isNatural: typeof isNatural;
                 isNaturalSecondary: typeof isNaturalSecondary;

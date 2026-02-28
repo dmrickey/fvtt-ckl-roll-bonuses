@@ -29,6 +29,7 @@
                 "action-type-types": "Action Types",
                 "action-type-types-choices": {
                     "is-cmb": "Combat Maneuvers",
+                    "is-healing": "Healing Abilities",
                     "is-melee": "Melee Attacks",
                     "is-natural": "Natural Attacks",
                     "is-natural-secondary": "Natural Secondary Attacks",
@@ -103,6 +104,7 @@
                 "inspiration-true": "True Inspiration",
                 "is-flanking": "Is Flanking",
                 "is-flanking-with": "With Ally",
+                "is-healing": "Is Healing",
                 "is-target-within-range": "Target within Range",
                 "is-target-within-range-max": "Maximum Range ({unit})",
                 "is-target-within-range-min": "Minimum Range ({unit})",
@@ -249,6 +251,7 @@
                 "inspiration-true": "Can freely use Inspiration on all skills.",
                 "is-flanking": "Activate bonuses while flanking your current targets.",
                 "is-flanking-with": "Activate bonuses while adjacent to any of the specified allies.",
+                "is-healing": "Activates bonuses when using a healing ability.",
                 "is-target-within-range": "Active when all targets are within a specified range.",
                 "is-target-within-range-min": "Activate bonuses whenever all targeted tokens are at least this far away.",
                 "is-target-within-range-max": "Activate bonuses whenever all targeted tokens are at most this far away.",

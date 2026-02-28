@@ -1,6 +1,7 @@
 import { MODULE_NAME } from "../../consts.mjs";
 import { damageInput } from "../../handlebars-handlers/targeted/bonuses/damage.mjs";
 import { handleBonusesFor } from '../../target-and-bonus-join.mjs';
+import { isHealing } from "../../util/action-type-helpers.mjs";
 import { changeTypeLabel } from '../../util/change-type-label.mjs';
 import { conditionalModToItemChangeForDamageTooltip, createChange, damageTypesToString } from "../../util/conditional-helpers.mjs";
 import { LocalHookHandler, localHooks } from "../../util/hooks.mjs";
@@ -71,7 +72,7 @@ export class DamageBonus extends BaseBonus {
      * @returns {Nullable<string[]>}
      */
     static getHints(source) {
-        const changes = this.#getCachedDamageItemChange(source);
+        const changes = this.#getCachedDamageItemChanges(source);
         const damages = this.#getCachedDamageBonuses(source);
 
         /**
@@ -252,7 +253,7 @@ export class DamageBonus extends BaseBonus {
      * @param {ItemPF} source
      * @returns {ItemChange[]}
      */
-    static #getCachedDamageItemChange(source) {
+    static #getCachedDamageItemChanges(source) {
         /** @type {{formula: string, type: BonusTypes}[]} */
         const flags = (source.getFlag(MODULE_NAME, this.#changeKey) || []);
         const changes = flags
@@ -288,7 +289,7 @@ export class DamageBonus extends BaseBonus {
             handleBonusesFor(
                 action,
                 (bonusType, sourceItem) => {
-                    const changes = bonusType.#getCachedDamageItemChange(sourceItem);
+                    const changes = bonusType.#getCachedDamageItemChanges(sourceItem);
                     damageSources.push(...changes);
                 },
                 { specificBonusType: DamageBonus }
@@ -298,5 +299,26 @@ export class DamageBonus extends BaseBonus {
         Hooks.once('init', () => {
             LocalHookHandler.registerHandler(localHooks.itemAction_damageSources, itemAction_damageSources);
         });
+
+        /**
+         * Healing doesn't use `itemAction.damageSources` so they have to be manually patched in via this hook
+         * 
+         * @param {ItemAction} action
+         * @param {RollData} _rollData
+         * @param {PreDamageRollPart[]} _parts
+         * @param {ItemChange[]} [changes]
+         */
+        const preDamageRoll = (action, _rollData, _parts, changes) => {
+            /** @type {ItemPF[]} */
+            if (isHealing(action.item, action)) {
+                handleBonusesFor(
+                    action,
+                    (bonusType, sourceItem) => changes?.push(...bonusType.#getCachedDamageItemChanges(sourceItem)),
+                    { specificBonusType: DamageBonus },
+                );
+            }
+        }
+        Hooks.on('pf1PreDamageRoll', preDamageRoll);
+
     }
 }

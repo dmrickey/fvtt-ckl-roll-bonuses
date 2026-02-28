@@ -37,11 +37,29 @@ export const buildDamageMultiplierConditional = (
     const formulaParts = [];
 
     if (includeActionDamage) {
+        let actionFormula = '';
+
         const part = actionUse.action.damage?.parts[0];
         const partFormula = part?.formula || '';
         const firstDice = getFirstTermFormula(partFormula, actionUse.shared?.rollData ?? {});
+
         if (firstDice) {
-            formulaParts.push(toFormula(firstDice));
+            actionFormula += firstDice;
+        }
+
+        const { OperatorTerm } = foundry.dice.terms;
+        const remainingDeterministic = new Roll(partFormula, actionUse.shared?.rollData).terms // TODO need Roll Data
+            .slice(1)
+            .filter((term) => term.isDeterministic)
+            .filter((term, i, arr) => !(term instanceof OperatorTerm) || !(arr[i + 1] instanceof OperatorTerm))
+            .map((term) => term.formula.trim())
+            .join(' ');
+        if (remainingDeterministic) {
+            actionFormula += remainingDeterministic;
+        }
+
+        if (actionFormula) {
+            formulaParts.push(toFormula(actionFormula));
         }
     }
 

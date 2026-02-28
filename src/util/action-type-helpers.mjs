@@ -4,6 +4,9 @@ import { api } from './api.mjs';
 export const isCmb = (_item, action) => ['mcman', 'rcman'].includes(action?.actionType ?? '');
 
 /** @type {ActionTypeFilterFunc} */
+export const isHealing = (_item, action) => action?.actionType === 'heal';
+
+/** @type {ActionTypeFilterFunc} */
 export const isMelee = (_item, action) => ['mwak', 'msak', 'mcman'].includes(action?.actionType ?? '');
 
 /** @type {ActionTypeFilterFunc} */
@@ -40,6 +43,7 @@ export const isWeapon = (item, action) => ['mwak', 'rwak', 'twak'].includes(acti
 
 api.utils.actionTypeHelpers = {
     isCmb,
+    isHealing,
     isMelee,
     isNatural,
     isNaturalSecondary,

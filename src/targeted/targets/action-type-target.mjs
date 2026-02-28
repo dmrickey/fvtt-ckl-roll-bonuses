@@ -1,7 +1,7 @@
 import { MODULE_NAME } from '../../consts.mjs';
 import { radioInput } from '../../handlebars-handlers/bonus-inputs/radio-input.mjs';
 import { traitInput } from '../../handlebars-handlers/trait-input.mjs';
-import { isCmb, isMelee, isNatural, isNaturalSecondary, isPhysical, isRanged, isSpell, isThrown, isWeapon } from '../../util/action-type-helpers.mjs';
+import { isCmb, isHealing, isMelee, isNatural, isNaturalSecondary, isPhysical, isRanged, isSpell, isThrown, isWeapon } from '../../util/action-type-helpers.mjs';
 import { listFormat } from '../../util/list-format.mjs';
 import { localize, localizeBonusLabel } from '../../util/localize.mjs';
 import { toArray } from '../../util/to-array.mjs';
@@ -10,8 +10,9 @@ import { BaseTarget } from './_base-target.mjs';
 
 /** @typedef {keyof typeof filterTypes} FilterType */
 
-const filterTypes = /** @type {const} */ ({
+const filterTypes = {
     ['is-cmb']: { label: '', filter: isCmb },
+    ['is-healing']: { label: '', filter: isHealing },
     ['is-melee']: { label: '', filter: isMelee },
     ['is-natural']: { label: '', filter: isNatural },
     ['is-natural-secondary']: { label: '', filter: isNaturalSecondary },
@@ -20,7 +21,7 @@ const filterTypes = /** @type {const} */ ({
     ['is-spell']: { label: '', filter: isSpell },
     ['is-thrown']: { label: '', filter: isThrown },
     ['is-weapon']: { label: '', filter: isWeapon },
-});
+};
 
 const all = 'all';
 const any = 'any';
@@ -35,7 +36,6 @@ export class ActionTypeTarget extends BaseTarget {
         Hooks.once("i18nInit", () => {
             Object.keys(filterTypes).forEach((f) => {
                 const key = /** @type {FilterType} */ (f);
-                // @ts-expect-error overwrite readonly label with translation
                 filterTypes[key].label = localizeBonusLabel(`action-type-types-choices.${f}`);
             });
         });

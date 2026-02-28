@@ -160,6 +160,7 @@ import { SpellSubschoolTarget } from '../src/targeted/targets/spell-subschool-ta
 import { WeaponGroupTarget } from '../src/targeted/targets/weapon-group-target.mjs';
 import { WeaponTypeTarget } from '../src/targeted/targets/weapon-type-target.mjs';
 import {
+    isHealing,
     isMelee,
     isNatural,
     isNaturalSecondary,
@@ -444,6 +445,7 @@ export class _RollBonusesAPI {
     /** various utility helper methods and classes used throughout the mod */
     utils: {
         actionTypeHelpers: {
+            isHealing: typeof isHealing;
             isMelee: typeof isMelee;
             isNatural: typeof isNatural;
             isNaturalSecondary: typeof isNaturalSecondary;

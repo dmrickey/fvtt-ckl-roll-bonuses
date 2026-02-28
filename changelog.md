@@ -3,7 +3,7 @@
 ### New Bonuses
 
 - **Damage Multiplier**
-  - Multiplies damage for the targeted action.
+  - Multiplies damage (or healing) for the targeted action.
 - **Damage Multiplier (Global Bonus)**
   - Adds a multiplier input on the attack dialog for adhoc multipliers. This includes support for mounted charging with a Lance and/or *Spirited Charge* -- this is supported with a new Specific Bonus and also with a new "Mounted" checkbox that appears after checking "charge". When both "charge" and "mounted" are checked, it then checks if the attacker has the feat and/or a lance to multiple the damage as expected.
 - **Inspiration Bonus**
@@ -21,13 +21,13 @@
   - Activates bonus while a specified weapon or armor type is equipped (or while having a specified natural attack type) (this is useful for cases like "+2 Intimidate when using a Longsword)
     - Do not confuse this with "Weapon Type Target" which grants bonuses only to specific weapons -- this will grant bonuses _even if using a different weapon_ as long as you have the specified weapon type equipped in your inventory tab.
 - **While Weapon Group Equipped**
-  - Actives bonuses when a weapon from the specified weapon group(s) is equipped.
+  - Actives bonuses when a weapon from the specified weapon group(s) is equipped. E.g. This is useful for a few Advanced Weapon Training techniques for Fighters that grant other bonuses while using a weapon from the chosen group.
     - Like above, don't confuse this "Weapon Group Target"
 
 ### Improvements
 
 - **Action Type Target**
-  - Can also target Combat Maneuvers
+  - Can now also target Combat Maneuvers and Healing abilities.
 - **Alignment target**
   - Can now target specific alignment combinations (including true neutral) instead of just good/evil/law/chaos. This allows you to also target things like "only good" (with no law/chaos) whereas before it would trigger off of any good alignment. A configuration of "any good" would now require selecting all three good alignments.
 - **Condition Target**
@@ -49,6 +49,7 @@
 
 - Token targets no long show tokens with SECRET disposition to players.
 - Multiple skill bonuses now show up directly on the actor's skill sheet instead of just the first one found.
+- Damage Bonus will now also grant bonusus _healing_ when using "Typed Damage" instead of only when using "Effect Damage"
 
 ---
 
