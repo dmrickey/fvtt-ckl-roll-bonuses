@@ -34,7 +34,7 @@ declare global {
         updateAll(func: (T) => void): Promise<void>;
     }
 
-    class HbsTemplate {}
+    class HbsTemplate { }
     interface RenderOptions {
         notes: string[];
         css: string;
@@ -68,7 +68,7 @@ declare global {
             default: string,
             title: string,
             [render]: any,
-        }) {}
+        }) { }
         render(boolean): void;
     }
 
@@ -83,7 +83,7 @@ declare global {
          */
         map<V>(transform: (value: T, index: number, set: Set<T>) => V): Set<V>;
 
-        union<T, U>(set: Set<U>): Set<T|U>;
+        union<T, U>(set: Set<U>): Set<T | U>;
     }
 
     type GridMeasurePathResultWaypoint = {
@@ -129,5 +129,22 @@ declare global {
         spaces: number;
         /** The total cost of the direct path ({@link BaseGrid#getDirectPath}) through all waypoints. */
         cost: number;
+    }
+
+    type DiceNode = {
+        class: "Node";
+        operands: [DiceNode | DiceTerm | StringTerm, DiceNode | DiceTerm | StringTerm];
+        operator: '+' | '-' | '*' | '/';
+        formula: string;
+    };
+    type DiceTerm = {
+        // just a few of the types to make ts happy
+        class: 'DiceTerm' | 'ParentheticalTerm' | 'OperatorTerm';
+        formula: string;
+    };
+    type StringTerm = {
+        class: 'StringTerm';
+        term: string;
+        options?: { flavor?: string };
     }
 }

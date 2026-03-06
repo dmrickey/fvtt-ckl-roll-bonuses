@@ -98,7 +98,7 @@ export class DamageMultiplierGlobalBonus extends BaseGlobalBonus {
         if (formula) {
             const multiplier = RollPF.safeTotal(formula, action.shared?.rollData) || 0;
             if (multiplier > 1) {
-                const conditional = buildDamageMultiplierConditional(action, conditionals, this.label, { includeActionDamage: true, multiplier });
+                const conditional = buildDamageMultiplierConditional(action, conditionals, this.label, { multiplier });
                 if (conditional) {
                     multiplierConditionals.push(conditional);
                 }
@@ -111,7 +111,7 @@ export class DamageMultiplierGlobalBonus extends BaseGlobalBonus {
 
         if (isMountedCharging) {
             if (SpiritedCharge.has(action.actor)) {
-                const mountedConditional = buildDamageMultiplierConditional(action, conditionals, SpiritedCharge.label, { includeActionDamage: true, multiplier: 2 });
+                const mountedConditional = buildDamageMultiplierConditional(action, conditionals, SpiritedCharge.label);
                 if (mountedConditional) {
                     multiplierConditionals.push(mountedConditional);
                 }
@@ -119,7 +119,7 @@ export class DamageMultiplierGlobalBonus extends BaseGlobalBonus {
 
             const lanceIntersection = intersection(action.item?.system.baseTypes, [LanguageSettings.getTranslation(DamageMultiplierGlobalBonus.lanceKey), 'lance', 'Lance'])[0];
             if (lanceIntersection) {
-                const lanceConditional = buildDamageMultiplierConditional(action, conditionals, localize('lance-charge'), { includeActionDamage: true, multiplier: 2 });
+                const lanceConditional = buildDamageMultiplierConditional(action, conditionals, localize('lance-charge'));
                 if (lanceConditional) {
                     multiplierConditionals.push(lanceConditional);
                 }

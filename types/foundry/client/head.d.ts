@@ -1,4 +1,4 @@
-export {};
+export { };
 
 import { Document } from '../common/abstract/document.mjs';
 import './core/hooks';
@@ -43,6 +43,9 @@ declare global {
             };
         };
         dice: {
+            RollGrammar: {
+                parse: (formula: string) => DiceNode | DiceTerm | StringTerm;
+            };
             terms: {
                 OperatorTerm: class;
                 ParentheticalTerm: class;
@@ -89,7 +92,7 @@ declare global {
         };
     };
 
-    class JournalEntryPage extends Document {}
+    class JournalEntryPage extends Document { }
 }
 
 interface ui {

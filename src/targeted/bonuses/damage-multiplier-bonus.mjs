@@ -2,7 +2,6 @@ import { MODULE_NAME } from '../../consts.mjs';
 import { textInput } from '../../handlebars-handlers/bonus-inputs/text-input.mjs';
 import { buildDamageMultiplierConditional } from '../../util/damage-multiplier-conditional.mjs';
 import { FormulaCacheHelper } from '../../util/flag-helpers.mjs';
-import { getFirstTermFormula } from '../../util/get-first-term-formula.mjs';
 import { localize } from '../../util/localize.mjs';
 import { signed } from '../../util/to-signed-string.mjs';
 import { BaseBonus } from './_base-bonus.mjs';
@@ -94,7 +93,7 @@ export class DamageMultiplierBonus extends BaseBonus {
         const multiplier = FormulaCacheHelper.getModuleFlagValue(source, this.key) || 0;
         const isNumber = !isNaN(+multiplier);
         const label = '×' + (isNumber ? multiplier : `(${multiplier})`);
-        return buildDamageMultiplierConditional(action, conditionals, `${source.name} ${label}`, { includeActionDamage: true, multiplier });
+        return buildDamageMultiplierConditional(action, conditionals, `${source.name} ${label}`, { multiplier });
     }
 
     /**

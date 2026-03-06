@@ -1,6 +1,14 @@
-import { getFirstTermFormula } from './get-first-term-formula.mjs';
+import { getDeterministicPartsFormula, getFirstTermFormula } from './generic-formula-helpers.mjs';
 import { localize } from './localize.mjs';
 import { truthiness } from './truthiness.mjs';
+
+/**
+ * @template T
+ * @param {T[]} array 
+ * @param {number} times 
+ * @returns {T[]}
+ */
+const repeatArray = (array, times) => Array(times).fill(array).flat();
 
 /**
  * Adds damage parts that are the equivalent of multiplying out critical damage. E.g. Mythic Vital Strike or a lance charge.
@@ -8,63 +16,53 @@ import { truthiness } from './truthiness.mjs';
  * @param {ActionUse} actionUse
  * @param {ItemConditional[]} conditionals
  * @param {string} label
- * @param {object} options
- * @param {boolean} [options.includeActionDamage]
- * @param {number} options.multiplier
+ * @param {object} [options]
+ * @param {boolean} [options.includeBaseAttackDamage]
+ * @param {number} [options.multiplier]
  * @param {ItemConditionalModifierSourceData['subTarget']} [options.subTarget]
- * @returns {ItemConditional| undefined}
+ * @returns {ItemConditional | undefined}
  */
 export const buildDamageMultiplierConditional = (
     actionUse,
     conditionals,
     label,
     {
-        includeActionDamage = false,
-        multiplier = 1,
+        includeBaseAttackDamage = true,
+        // includeCritParts = false,
+        multiplier = 2,
         subTarget = undefined,
-    },
+    } = {},
 ) => {
     multiplier -= 1;
     if (multiplier <= 0) return;
 
-    /**
-     * @param {string | number} f
-     * @param {string?} [l]
-     * @returns {string}
-    */
-    const toFormula = (f, l) => `{${new Array(multiplier).fill(f).join(', ')}}${(l ? `[${l}]` : '')}`;
-
     const formulaParts = [];
+    /** @param {string[]} parts */
+    const pushParts = (parts, excludeFirst = false) =>
+        formulaParts.push(getDeterministicPartsFormula(parts.join(' + '), { ensureLeadingSign: true, excludeFirst }));
 
-    if (includeActionDamage) {
-        let actionFormula = '';
+    const firstPartFormula = actionUse.action.damage?.parts[0]?.formula || '';
 
-        const part = actionUse.action.damage?.parts[0];
-        const partFormula = part?.formula || '';
-        const firstDice = getFirstTermFormula(partFormula, actionUse.shared?.rollData ?? {});
-
+    // first part is usually the weapon damage. It's the only nondeterministic part we want to multiply, 
+    // so we add it separately before the deterministic extraction to avoid accidentally excluding it. 
+    if (includeBaseAttackDamage) {
+        const firstDice = getFirstTermFormula(firstPartFormula);
         if (firstDice) {
-            actionFormula += firstDice;
-        }
-
-        const { OperatorTerm } = foundry.dice.terms;
-        const remainingDeterministic = new Roll(partFormula, actionUse.shared?.rollData).terms // TODO need Roll Data
-            .slice(1)
-            .filter((term) => term.isDeterministic)
-            .filter((term, i, arr) => !(term instanceof OperatorTerm) || !(arr[i + 1] instanceof OperatorTerm))
-            .map((term) => term.formula.trim())
-            .join(' ');
-        if (remainingDeterministic) {
-            actionFormula += remainingDeterministic;
-        }
-
-        if (actionFormula) {
-            formulaParts.push(toFormula(actionFormula));
+            let firstDiceWithLabel = firstDice;
+            if (!firstDice.includes('[')) {
+                const l = `${actionUse.item.name} (${actionUse.action.name})`;
+                firstDiceWithLabel = `${firstDice}[${l}]`;
+            }
+            formulaParts.push(firstDiceWithLabel);
         }
     }
 
+    // excludes the first term by default so it doesn't duplicate the weapon damage above
+    pushParts([firstPartFormula], true);
+    actionUse.action.damage?.parts.slice(1).forEach(p => pushParts([p.formula]));
+
     // this.action.allDamageSources
-    formulaParts.push(...actionUse.action.allDamageSources.map(x => toFormula(x.formula, x.flavor)));
+    pushParts(actionUse.action.allDamageSources.map(x => `${x.formula}[${x.flavor}]`));
 
     // and ability source
     const abl = actionUse.shared.rollData.action?.ability.damage;
@@ -81,29 +79,30 @@ export const buildDamageMultiplierConditional = (
             : Math.floor(Math.min(max, ability.mod) * ablMult);
 
         if (ablDamage) {
-            formulaParts.push(toFormula(ablDamage, pf1.config.abilities[abl]));
+            formulaParts.push(`${ablDamage}[${pf1.config.abilities[abl]}]`);
         }
     }
 
     // actionUse.shared.damageBonus
-    formulaParts.push(...actionUse.shared.damageBonus.map(x => toFormula(x)));
+    pushParts(actionUse.shared.damageBonus);
 
     // filter all conditions // conditions.where target = damage and critial = normal
-    formulaParts.push(...conditionals
+    pushParts(conditionals
         .filter(truthiness)
         .flatMap((c) => [...c.modifiers])
         .filter((m) => m.target === 'damage' && m.critical === 'normal')
-        .map((m) => toFormula(m.formula))
+        .map((m) => `${m.formula}`.includes('[') ? `${m.formula}` : `${m.formula}[${m.type}]`)
     );
 
     if (actionUse.shared.rollData.powerAttackBonus) {
         const label = ["rwak", "twak", "rsak"].includes(actionUse.shared.action.actionType)
             ? localize("PF1.DeadlyAim")
             : localize("PF1.PowerAttack");
-        formulaParts.push(toFormula(actionUse.shared.rollData.powerAttackBonus, label));
+        formulaParts.push(`${actionUse.shared.rollData.powerAttackBonus}[${label}]`);
     }
 
-    if (!formulaParts.length) {
+    const finalParts = formulaParts.filter(truthiness);
+    if (!finalParts.length) {
         return;
     }
 
@@ -113,7 +112,7 @@ export const buildDamageMultiplierConditional = (
         modifiers: [{
             _id: foundry.utils.randomID(),
             critical: 'nonCrit',
-            formula: `{${formulaParts.join(', ')}}[${label}]`,
+            formula: repeatArray(finalParts, multiplier).join(' + '),
             subTarget,
             target: 'damage',
             type: '',

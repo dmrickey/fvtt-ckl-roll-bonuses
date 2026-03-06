@@ -5,8 +5,8 @@ import { isWeapon } from '../../util/action-type-helpers.mjs';
 import { api } from '../../util/api.mjs';
 import { addCheckToAttackDialog, getFormData } from '../../util/attack-dialog-helper.mjs';
 import { buildDamageMultiplierConditional } from '../../util/damage-multiplier-conditional.mjs';
+import { getFirstTermFormula } from '../../util/generic-formula-helpers.mjs';
 import { getCachedBonuses } from '../../util/get-cached-bonuses.mjs';
-import { getFirstTermFormula } from '../../util/get-first-term-formula.mjs';
 import { LocalHookHandler, localHooks } from '../../util/hooks.mjs';
 import { registerItemHint } from '../../util/item-hints.mjs';
 import { localize, localizeBonusLabel, localizeBonusTooltip } from '../../util/localize.mjs';
@@ -254,7 +254,7 @@ export class VitalStrikeData {
                 if (actionUse) {
                     const part = actionUse.action.damage?.parts[0];
                     const partFormula = part?.formula || '';
-                    const firstDice = getFirstTermFormula(partFormula, actionUse.shared?.rollData ?? {});
+                    const firstDice = getFirstTermFormula(partFormula);
 
                     if (firstDice) {
                         const formula =
@@ -345,6 +345,7 @@ export class VitalStrikeData {
             conditionals,
             VitalStrikeMythic.label,
             {
+                includeBaseAttackDamage: false,
                 multiplier: this.multiplier + 1,
                 subTarget: 'attack_0',
             },

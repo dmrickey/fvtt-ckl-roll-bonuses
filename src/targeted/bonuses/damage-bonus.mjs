@@ -72,8 +72,6 @@ export class DamageBonus extends BaseBonus {
      * @returns {Nullable<string[]>}
      */
     static getHints(source) {
-        const changes = this.#getCachedDamageItemChanges(source);
-        const damages = this.#getCachedDamageBonuses(source);
 
         /**
          * @param {string[]} types
@@ -90,6 +88,7 @@ export class DamageBonus extends BaseBonus {
          */
         const critLabel = (crit) => crit ? localize(`crit-damage-label.${crit}`) : '';
 
+        const damages = this.#getCachedDamageBonuses(source);
         const damageHints = damages
             .filter((d) => !!d.formula?.trim())
             .map(({ formula, types, crit }) => ({
@@ -110,6 +109,7 @@ export class DamageBonus extends BaseBonus {
          */
         const changeTypeValue = (value) => typeof value === 'string' ? `(${value})` : signed(value);
 
+        const changes = this.#getCachedDamageItemChanges(source);
         const changeHints = changes
             .filter((d) => !!d.value)
             .map(({ value, type }) => `${changeTypeValue(value)}[${changeTypeLabel(/** @type {BonusTypes} */(type))}]`);
@@ -233,6 +233,8 @@ export class DamageBonus extends BaseBonus {
      * @returns {ItemConditionalSourceData}
      */
     static #createConditionalData(damageBonuses, name) {
+        /** @param {string} formula */
+        const addLabel = (formula) => formula.includes('[') ? formula : `${formula}[${name}]`;
         return {
             _id: foundry.utils.randomID(),
             default: true,
@@ -241,7 +243,7 @@ export class DamageBonus extends BaseBonus {
                 _id: foundry.utils.randomID(),
                 critical: bonus.crit || 'normal', // normal | crit | nonCrit
                 damageType: bonus.types,
-                formula: bonus.formula,
+                formula: addLabel(bonus.formula),
                 subTarget: 'allDamage',
                 target: 'damage',
                 type: damageTypesToString(bonus.types),

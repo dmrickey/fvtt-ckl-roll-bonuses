@@ -1,3 +1,10 @@
+## Roll Bonuses 2.23.1
+
+### Bugfixes
+
+- Damage Multipliers now use the expected roll variable instead of a cached version of it (e.g. when using a Size bonus, it will actually use the bonus instead of the base version)
+  - (so that's the Damage Multiplier Bonus, all Vital Strike bonuses, and the global bonus multiplier)
+
 ## Roll Bonuses 2.23.0
 
 ### New Bonuses
