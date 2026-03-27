@@ -34,16 +34,22 @@ export class ScriptCallBonus extends BaseBonus {
         async function executeScriptCalls(category, extraParams = {}, shared = {}) {
             /** @type {ItemScriptCall[]} */
             const scripts = this.scriptCalls?.filter((o) => o.category === category) ?? [];
+            const addedKeys = new Set(scripts.map((s) => `${s.parent?.uuid ?? this.uuid}:${s.id}:${s.category}:${s.type}:${s.value}`));
 
             // BEGIN MY OVERRIDE
-            if (shared.action) {
+            const rbShared = /** @type {any} */ (shared);
+            const contexts = [rbShared.actionUse, shared.action, this].filter((c, i, arr) => c && arr.indexOf(c) === i);
+            if (contexts.length) {
                 handleBonusesFor(
                     shared.action,
                     (bonusType, sourceItem) => {
-                        const scriptCalls = bonusType.getScriptCalls(sourceItem, this);
-                        scriptCalls
-                            .filter((s) => s.category === category)
-                            .forEach((s) => {
+                        const scriptCalls = /** @type {typeof ScriptCallBonus} */ (bonusType).getScriptCalls(sourceItem, this);
+                        const matching = scriptCalls.filter((/** @type {ItemScriptCall} */ s) => s.category === category);
+                        matching
+                            .forEach((/** @type {ItemScriptCall} */ s) => {
+                                const key = `${sourceItem.uuid}:${s.id}:${s.category}:${s.type}:${s.value}`;
+                                if (addedKeys.has(key)) return;
+                                addedKeys.add(key);
                                 scripts.push(s);
                             });
                     },
@@ -184,3 +190,4 @@ export class ScriptCallBonus extends BaseBonus {
         });
     }
 }
+
