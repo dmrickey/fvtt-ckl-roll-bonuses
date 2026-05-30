@@ -2,6 +2,12 @@
 
 ### Bugfixes
 
+- Bane will now look for _any_ creature type/subtype instead of just those provided by the target's race. (e.g. if a buff changes the target's type, Roll Bonuses will respect that type as far as Bane and Creature Type/Subtype target is concerned)
+
+## Roll Bonuses 2.23.1
+
+### Bugfixes
+
 - Damage Multipliers now use the expected roll variable instead of a cached version of it (e.g. when using a Size bonus, it will actually use the bonus instead of the base version)
   - (so that's the Damage Multiplier Bonus, all Vital Strike bonuses, and the global bonus multiplier)
 
