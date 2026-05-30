@@ -88,8 +88,8 @@ const getEnhancementBonusForAction = ({ action, ammo, targets }) => {
 
             if (creatureTypes.length || creatureSubtypes.length) {
                 hasBane = targets.every((a) =>
-                    (!creatureTypes.length || intersects(creatureTypes, a?.race?.system.creatureTypes.total))
-                    && (!creatureSubtypes.length || intersects(creatureSubtypes, a?.race?.system.creatureSubtypes.total))
+                    (!creatureTypes.length || intersects(creatureTypes, a?.system.traits.creatureTypes.total))
+                    && (!creatureSubtypes.length || intersects(creatureSubtypes, a?.system.traits.creatureSubtypes.total))
                 );
             }
         }

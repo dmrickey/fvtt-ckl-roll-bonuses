@@ -25,14 +25,14 @@ export const getBaneLabelForTargetsFromSource = (source, creatureTypeKey, creatu
     }
 
     const targetTypeMap = targets
-        .map(target => target.actor?.race?.system.creatureTypes.base)
+        .map(target => target.actor?.system.traits.creatureTypes.base)
         .filter(truthiness);
     const targetTypes = targetTypeMap.reduce((acc, curr) => intersection(acc, curr), targetTypeMap[0]);
     const type = intersection(targetTypes, creatureTypes)[0];
     const typeLabel = type && pf1.config.creatureTypes[type] || type;
 
     const targetSubtypesMap = targets
-        .map(target => target.actor?.race?.system.creatureSubtypes.base)
+        .map(target => target.actor?.system.traits.creatureSubtypes.base)
         .filter(truthiness);
     const targetSubtypes = targetSubtypesMap.reduce((acc, curr) => intersection(acc, curr), targetSubtypesMap[0]);
     const subtype = intersection(targetSubtypes, creatureSubtypes)[0];
