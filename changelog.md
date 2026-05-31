@@ -1,4 +1,4 @@
-## Roll Bonuses 2.23.1
+## Roll Bonuses 2.23.2
 
 ### Bugfixes
 
