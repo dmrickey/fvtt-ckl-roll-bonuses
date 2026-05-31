@@ -1,3 +1,7 @@
-2026/03/06-16:34:08.173 56f8 Recovering log #1609
-2026/03/06-16:34:08.181 56f8 Delete type=0 #1609
-2026/03/06-16:34:08.181 56f8 Delete type=3 #1607
+2026/05/30-10:49:19.517 6d80 Recovering log #1654
+2026/05/30-10:49:19.524 6d80 Delete type=0 #1654
+2026/05/30-10:49:19.524 6d80 Delete type=3 #1653
+2026/05/30-18:58:38.219 bbac Level-0 table #1658: started
+2026/05/30-18:58:38.219 bbac Level-0 table #1658: 0 bytes OK
+2026/05/30-18:58:38.221 bbac Delete type=0 #1656
+2026/05/30-18:58:38.221 bbac Manual compaction at level-0 from '!items!3p2PtsJOLjsF390z' @ 72057594037927935 : 1 .. '!items!bExfitM1TiM3jNPv' @ 0 : 0; will stop at (end)

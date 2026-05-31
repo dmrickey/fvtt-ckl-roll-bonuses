@@ -78,7 +78,7 @@ export class CreatureSubtypeTarget extends BaseConditionalTarget {
 
         const bonusSources = sources.filter((source) => {
             const subtypes = this.#getCreatureSubtypesTraits(source);
-            return currentTargets.every((a) => intersects(subtypes.total, a.race?.system.creatureSubtypes.total));
+            return currentTargets.every((a) => intersects(subtypes.total, a.system.traits.creatureSubtypes.total));
         });
 
         return bonusSources;

@@ -1140,6 +1140,8 @@ declare global {
         >;
         skills: Record<string, SkillData>;
         traits: {
+            creatureTypes: TraitSelector<CreatureType>;
+            creatureSubtypes: TraitSelector<CreatureSubtype>;
             armorProf: {
                 value: [];
                 custom: string;

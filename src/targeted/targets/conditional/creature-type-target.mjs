@@ -79,7 +79,7 @@ export class CreatureTypeTarget extends BaseConditionalTarget {
         const flaggedSources = sources;
         const bonusSources = flaggedSources.filter((source) => {
             const creatureTypes = this.#getCreatureTypes(source);
-            return currentTargets.every((a) => intersects(creatureTypes.total, a.race?.system.creatureTypes.total));
+            return currentTargets.every((a) => intersects(creatureTypes.total, a.system.traits.creatureTypes.total));
         });
 
         return bonusSources;
