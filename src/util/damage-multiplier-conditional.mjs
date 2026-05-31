@@ -62,7 +62,7 @@ export const buildDamageMultiplierConditional = (
     actionUse.action.damage?.parts.slice(1).forEach(p => pushParts([p.formula]));
 
     // this.action.allDamageSources
-    pushParts(actionUse.action.allDamageSources.map(x => `${x.formula}[${x.flavor}]`));
+    pushParts(actionUse.action.allDamageSources.map(x => x.formula.includes('[') ? x.formula : `${x.formula}[${x.flavor}]`));
 
     // and ability source
     const abl = actionUse.shared.rollData.action?.ability.damage;
