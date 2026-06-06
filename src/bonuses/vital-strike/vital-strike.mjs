@@ -10,7 +10,7 @@ import { getCachedBonuses } from '../../util/get-cached-bonuses.mjs';
 import { LocalHookHandler, localHooks } from '../../util/hooks.mjs';
 import { registerItemHint } from '../../util/item-hints.mjs';
 import { localize, localizeBonusLabel, localizeBonusTooltip } from '../../util/localize.mjs';
-import { LanguageSettings } from '../../util/settings.mjs';
+import { LanguageSettings, registerSetting } from '../../util/settings.mjs';
 import { SpecificBonus } from '../_specific-bonus.mjs';
 import { DevastatingStrike, DevastatingStrikeImproved } from './devastating-strike.mjs';
 
@@ -197,10 +197,16 @@ registerItemHint((hintcls, _actor, item, _data) => {
 });
 
 class Settings {
+    static #getSetting(/** @type {string} */key) { return game.settings.get(MODULE_NAME, key); }
+
     static get name() { return LanguageSettings.getTranslation(VitalStrike.key); }
+    static get #vitalStrikeDisabledFullAttack() { return 'vitalStrikeDisabledFullAttack'; }
+
+    static get vitalStrikeDisabledFullAttack() { return Settings.#getSetting(this.#vitalStrikeDisabledFullAttack); }
 
     static {
         LanguageSettings.registerItemNameTranslation(VitalStrike.key);
+        registerSetting({ key: this.#vitalStrikeDisabledFullAttack, settingType: Boolean, defaultValue: false });
     }
 }
 
@@ -246,7 +252,9 @@ export class VitalStrikeData {
                 this.enabledByDefault = vital.enabled;
                 this.multiplier = amount;
 
-                if (actionUse?.shared.attacks.length !== 1) {
+                if (actionUse?.shared.attacks.length !== 1
+                    || (getFormData(actionUse, 'fullAttack') === true && Settings.vitalStrikeDisabledFullAttack)
+                ) {
                     this.enabled = false;
                     return false;
                 }

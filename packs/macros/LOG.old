@@ -1,3 +1,7 @@
-2026/04/15-11:19:17.156 34a0 Recovering log #368
-2026/04/15-11:19:17.163 34a0 Delete type=0 #368
-2026/04/15-11:19:17.163 34a0 Delete type=3 #366
+2026/05/30-10:49:19.541 6d80 Recovering log #371
+2026/05/30-10:49:19.549 6d80 Delete type=0 #371
+2026/05/30-10:49:19.549 6d80 Delete type=3 #370
+2026/05/30-18:58:38.215 bbac Level-0 table #375: started
+2026/05/30-18:58:38.215 bbac Level-0 table #375: 0 bytes OK
+2026/05/30-18:58:38.219 bbac Delete type=0 #373
+2026/05/30-18:58:38.221 bbac Manual compaction at level-0 from '!folders!j0GO4jiN0r9psDun' @ 72057594037927935 : 1 .. '!macros!ty8poHEqxqetqP3g' @ 0 : 0; will stop at (end)
