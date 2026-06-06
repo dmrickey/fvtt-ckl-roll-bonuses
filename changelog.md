@@ -1,3 +1,9 @@
+## Roll Bonuses 2.23.3
+
+### Update
+
+- By default, Vital Strike checks if Vital Strike is checked and attack, it includes the Vital Strike damage when you perform a single attack (even if that single attack happened from hitting the "full attack" button). It behaves this way because this is the normal way the system assumes you want to use Attacks, even if you only have a single attack. I added an option to explicitly disable Vital Strike damage from being added when you Full Attack -- this is whenever you hit the Full Attack button in the dialog ***and also when you skip the dialog as it assumes you want to use a full attack***. Enabling this means that you have use the attack dialog if you want to Vital Strike. It is disabled by default as it provides a worse experience for most characters that use Vital Strike. However, it can be useful if you're a GM or a summoner that deals with lots of creatures mixing individual attacks as part of a full attack.
+
 ## Roll Bonuses 2.23.2
 
 ### Bugfixes
