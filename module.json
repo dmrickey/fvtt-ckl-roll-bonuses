@@ -13,7 +13,7 @@
     ],
     "compatibility": {
         "minimum": "12",
-        "verified": "12"
+        "verified": "13"
     },
     "esmodules": [
         "src/main.mjs"
