@@ -574,6 +574,7 @@ declare global {
     class ItemAction {
         [MODULE_NAME]: {
             enhancement?: {
+                bane: 0 | 2;
                 base: number;
                 stacks: number;
                 total: number;

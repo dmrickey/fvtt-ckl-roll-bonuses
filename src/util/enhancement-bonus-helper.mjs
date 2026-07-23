@@ -66,10 +66,10 @@ const getEnhancementBonusForAction = ({ action, ammo, targets }) => {
             console.error(`"action" is not an "ItemAction"`, action);
         }
 
-        let { base, stacks } = action[MODULE_NAME]?.enhancement ?? {};
+        let { base, stacks, bane } = action[MODULE_NAME]?.enhancement ?? {};
         base ||= 0;
         stacks ||= 0;
-        const hasBane = !!api.bonusTypeMap['bonus_bane'].actionHasBaneTarget(action, targets);
+        const hasBane = !!bane || !!api.bonusTypeMap['bonus_bane'].actionHasBaneTarget(action, targets);
         enhData.action = new EnhData({ base, hasBane, stacks });
     }
 

@@ -402,7 +402,9 @@ function itemAction_damageSources(wrapped) {
 function itemActionEnhancementBonus(wrapped) {
     const base = wrapped();
     const stacks = 0;
-    const seed = { base, stacks };
+    const bane = 0;
+    /** @type {typeof this[MODULE_NAME]['enhancement']} */
+    const seed = { base, stacks, bane, total: 0 };
 
     this[MODULE_NAME] ||= emptyObject();
 
@@ -410,13 +412,14 @@ function itemActionEnhancementBonus(wrapped) {
 
     const hasBane = api.bonusTypeMap['bonus_bane'].actionHasBaneTarget(this);
     if (hasBane) {
-        seed.stacks += 2;
+        seed.bane = 2;
     }
 
-    const total = seed.base + seed.stacks
+    const total = seed.base + seed.stacks + seed.bane;
     this[MODULE_NAME].enhancement = {
         base: seed.base,
         stacks: seed.stacks,
+        bane: seed.bane,
         total,
     };
 
