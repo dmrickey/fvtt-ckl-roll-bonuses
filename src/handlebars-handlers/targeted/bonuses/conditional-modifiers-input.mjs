@@ -188,7 +188,7 @@ export function modifiersInput({
     }
 
     setTimeout(() => {
-        const conditionalInput = document.querySelector(`#${createId(item, key)}`);
+        const conditionalInput = document.getElementById(createId(item, key));
         // @ts-ignore
         const jq = $(conditionalInput);
         // jq.find('.conditional.flexrow')?.hide();
