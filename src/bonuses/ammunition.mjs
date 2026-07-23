@@ -57,7 +57,7 @@ function getConditionalParts(actionUse, result, atk, index) {
             if (itemMw && !itemEnh && enhData.ammo.total) {
                 itemMwOffset = 1;
             }
-            const diff = enhData.total - enhData.action.total;
+            const diff = (enhData.ammo.total > enhData.action.total) ? (enhData.total - enhData.action.total) : 0;
             if (diff > 0) {
                 const label = `${localize('PF1.AmmunitionAbbr')} ${localize('PF1.EnhancementBonus')}`;
                 if (enhData.total - itemMwOffset) {
