@@ -1,6 +1,6 @@
 ## Roll Bonuses 2.23.5
 
-### Bugfix
+### Bugfixes
 
 - Using a Bane bonus on a ranged weapon while using ammo would cause the enhancement portion of the bane bonus to be counted twice (once for the weapon and a second time for the ammo)
 - Fixed query selector that was breaking when looking up some html elements on the page (thanks Hamilcar Barca for finding the issue and developing the fix)
