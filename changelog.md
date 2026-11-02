@@ -1,3 +1,14 @@
+## Roll Bonuses 2.24.0
+
+### New Bonuses
+
+- **Versatile Skill**
+  - Allows you to swap any skill(s) with a separate source skill. Basically a bard's Versatile Performance but lets you map any source skill to any target skill
+
+### Bugfixes
+
+- Versatile Performance now shows the item hint if you configure on something like a Buff (instead of on the assumed Class Feature)
+
 ## Roll Bonuses 2.23.5
 
 ### Bugfixes

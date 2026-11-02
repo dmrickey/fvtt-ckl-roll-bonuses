@@ -27,6 +27,7 @@ import { ElementalFocus, ElementalFocusGreater, ElementalFocusMythic } from './s
 import { SpellFocus, SpellFocusGreater, SpellFocusMythic } from './spells/spell-focus.mjs';
 import { SpellSpecialization } from './spells/spell-specialization.mjs';
 import { VersatilePerformance, VersatilePerformanceExpanded } from './versatile-performance.mjs';
+import { VersatileSkill } from './versatile-skill.mjs';
 import { VersatileTraining } from './versatile-training.mjs';
 import { DevastatingStrike, DevastatingStrikeImproved } from './vital-strike/devastating-strike.mjs';
 import { VitalStrike, VitalStrikeGreater, VitalStrikeImproved, VitalStrikeMythic } from './vital-strike/vital-strike.mjs';
@@ -84,6 +85,7 @@ const allSpecificBonuses = [
     UnderfootAssault,
     VersatilePerformance,
     VersatilePerformanceExpanded,
+    VersatileSkill,
     VersatileTraining,
     VitalStrike,
     VitalStrikeGreater,

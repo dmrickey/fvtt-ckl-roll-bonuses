@@ -43,6 +43,7 @@ import {
     VersatilePerformance,
     VersatilePerformanceExpanded,
 } from '../src/bonuses/versatile-performance.mjs';
+import { VersatileSkill } from '../src/bonuses/versatile-skill.mjs';
 import { VersatileTraining } from '../src/bonuses/versatile-training.mjs';
 import {
     DevastatingStrike,
@@ -377,6 +378,7 @@ export class _RollBonusesAPI {
         ['underfoot-assault']: typeof UnderfootAssault;
         ['versatile-performance']: typeof VersatilePerformance;
         ['versatile-performance-expanded']: typeof VersatilePerformanceExpanded;
+        ['versatile-skill']: typeof VersatileSkill;
         ['versatile-training']: typeof VersatileTraining;
         ['vital-strike']: typeof VitalStrike;
         ['vital-strike-greater']: typeof VitalStrikeGreater;
