@@ -28,8 +28,11 @@ export class DamageTypeTarget extends BaseTarget {
      * @returns {Nullable<string[]>}
      */
     static getHints(source) {
-        const groups = source.getFlag(MODULE_NAME, this.key) ?? [];
-        return groups.filter(truthiness);
+        /** @type {string[]} */
+        const damageTypes = source.getFlag(MODULE_NAME, this.key) ?? [];
+        return damageTypes
+            .filter(truthiness)
+            .map((type) => pf1.registry.damageTypes.get(type)?.name ?? type);
     }
 
     /**
