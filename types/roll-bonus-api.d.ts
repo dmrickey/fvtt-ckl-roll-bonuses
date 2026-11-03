@@ -65,6 +65,7 @@ import {
 import { WeaponSpecializationGreater } from '../src/bonuses/weapon-specialization/greater-weapon-specialization.mjs';
 import { WeaponSpecialization } from '../src/bonuses/weapon-specialization/weapon-specialization.mjs';
 import { BaseGlobalBonus } from '../src/global-bonuses/base-global-bonus.mjs';
+import { DamageMultiplierGlobalBonus } from '../src/global-bonuses/damage-multiplier-global-bonus.mjs';
 import { FlankingGlobalBonus } from '../src/global-bonuses/flanking-global-bonus.mjs';
 import { HigherGroundGlobalBonus } from '../src/global-bonuses/higher-ground-global-bonus.mjs';
 import { RangedIncrementPenaltyGlobalBonus } from '../src/global-bonuses/ranged-increment-penalty-global-bonus.mjs';
@@ -112,9 +113,11 @@ import { AgileBonus } from '../src/targeted/bonuses/agile.mjs';
 import { AttackBonus } from '../src/targeted/bonuses/attack-bonus.mjs';
 import { BaneBonus } from '../src/targeted/bonuses/bane-bonus.mjs';
 import { CasterLevelBonus } from '../src/targeted/bonuses/caster-level-bonus.mjs';
+import { InitiativeBonus } from '../src/targeted/bonuses/conditional-bonuses.mjs/initiative-bonus.mjs';
 import { ConditionalModifiersBonus } from '../src/targeted/bonuses/conditional-modifiers-bonus.mjs';
 import { CritBonus } from '../src/targeted/bonuses/crit-bonus.mjs';
 import { DamageBonus } from '../src/targeted/bonuses/damage-bonus.mjs';
+import { DamageMultiplierBonus } from '../src/targeted/bonuses/damage-multiplier-bonus.mjs';
 import { DCBonus } from '../src/targeted/bonuses/dc-bonus.mjs';
 import { DiceTransformBonus } from '../src/targeted/bonuses/dice-transform-bonus.mjs';
 import { EffectiveSizeBonus } from '../src/targeted/bonuses/effective-size-bonus.mjs';
@@ -122,8 +125,11 @@ import { EnhancementBonus } from '../src/targeted/bonuses/enhancement-bonus.mjs'
 import { FinesseBonus } from '../src/targeted/bonuses/finesse-bonus.mjs';
 import { FootnoteBonus } from '../src/targeted/bonuses/footnote-bonus.mjs';
 import { FortuneBonus } from '../src/targeted/bonuses/fortune-bonus.mjs';
+import { MaximizeDamageBonus } from '../src/targeted/bonuses/maximize-damage-bonus.mjs';
 import { MisfortuneBonus } from '../src/targeted/bonuses/misfortune-bonus.mjs';
+import { SaveBonus } from '../src/targeted/bonuses/conditional-bonuses.mjs/save-bonus.mjs';
 import { ScriptCallBonus } from '../src/targeted/bonuses/script-call-bonus.mjs';
+import { SkillBonus } from '../src/targeted/bonuses/conditional-bonuses.mjs/skill-bonus.mjs';
 import { Sources } from '../src/targeted/source-registration.mjs';
 import { BaseTargetOverride } from '../src/targeted/target-overides/_base-target-override.mjs';
 import { FinesseOverride } from '../src/targeted/target-overides/finesse-override.mjs';
@@ -143,12 +149,15 @@ import { CreatureTypeTarget } from '../src/targeted/targets/conditional/creature
 import { FunctionTarget } from '../src/targeted/targets/conditional/function-target.mjs';
 import { HasBooleanFlagTarget } from '../src/targeted/targets/conditional/has-boolean-flag-target.mjs';
 import { IsFlankingTarget } from '../src/targeted/targets/conditional/is-flanking-target.mjs';
+import { RelativeSizeTarget } from '../src/targeted/targets/conditional/relative-size-target.mjs';
+import { SizeTarget } from '../src/targeted/targets/conditional/size-target.mjs';
 import { WhenTargetInRangeTarget } from '../src/targeted/targets/conditional/is-target-within-range.mjs';
 import { TokenTarget } from '../src/targeted/targets/conditional/token-target.mjs';
 import { WhenActiveTarget } from '../src/targeted/targets/conditional/when-active-target.mjs';
 import { WhileAdjacentToTarget } from '../src/targeted/targets/conditional/while-adjacent-to-target.mjs';
-import { WhileWeaponTypeTarget } from '../src/targeted/targets/conditional/while-equipped-target.mjs';
+import { WhileEquippedTarget } from '../src/targeted/targets/conditional/while-equipped-target.mjs';
 import { WhileSharingSquareWithTarget } from '../src/targeted/targets/conditional/while-sharing-square-with-target.mjs';
+import { WhileWeaponGroupEquippedTarget } from '../src/targeted/targets/conditional/while-weapon-group-equipped-target.mjs';
 import { DamageTypeTarget } from '../src/targeted/targets/damage-type-target.mjs';
 import { FinesseTarget } from '../src/targeted/targets/finesse-target.mjs';
 import { SelfTarget } from '../src/targeted/targets/self-target.mjs';
@@ -161,6 +170,7 @@ import { SpellSubschoolTarget } from '../src/targeted/targets/spell-subschool-ta
 import { WeaponGroupTarget } from '../src/targeted/targets/weapon-group-target.mjs';
 import { WeaponTypeTarget } from '../src/targeted/targets/weapon-type-target.mjs';
 import {
+    isCmb,
     isHealing,
     isMelee,
     isNatural,
@@ -197,6 +207,7 @@ import { getWeaponGroupsFromActor } from '../src/util/get-weapon-groups-from-act
 import { getWeaponTypesFromActor } from '../src/util/get-weapon-types-from-actor.mjs';
 import { itemHasCompendiumId } from '../src/util/has-compendium-id.mjs';
 import { ifDebug } from '../src/util/if-debug.mjs';
+import { includes } from '../src/util/includes.mjs';
 import { isActorInCombat } from '../src/util/is-actor-in-combat.mjs';
 import { isNotEmptyObject } from '../src/util/is-empty-object.mjs';
 import { registerItemHint } from '../src/util/item-hints.mjs';
@@ -205,7 +216,7 @@ import { localize } from '../src/util/localize.mjs';
 import { onCreate, onRenderCreate } from '../src/util/on-create.mjs';
 import { onSkillSheetRender } from '../src/util/on-skill-sheet-render-handler.mjs';
 import { PositionalHelper } from '../src/util/positional-helper.mjs';
-import { simplifyRollFormula } from '../src/util/simplify-roll-formula.mjs';
+import { simplify, simplifyRollFormula } from '../src/util/simplify-roll-formula.mjs';
 import { toArray } from '../src/util/to-array.mjs';
 import { signed } from '../src/util/to-signed-string.mjs';
 import { Trait } from '../src/util/trait-builder.mjs';
@@ -261,6 +272,8 @@ export class _RollBonusesAPI {
         ['bonus_conditional-modifiers']: typeof ConditionalModifiersBonus;
         ['bonus_crit']: typeof CritBonus;
         ['bonus_damage']: typeof DamageBonus;
+        ['bonus_damage-multiplier']: typeof DamageMultiplierBonus;
+        ['bonus_initiative']: typeof InitiativeBonus;
         ['bonus_dc']: typeof DCBonus;
         ['bonus_dice-transform']: typeof DiceTransformBonus;
         ['bonus_effective-size']: typeof EffectiveSizeBonus;
@@ -268,8 +281,13 @@ export class _RollBonusesAPI {
         ['bonus_finesse']: typeof FinesseBonus;
         ['bonus_footnote']: typeof FootnoteBonus;
         ['bonus_fortune']: typeof FortuneBonus;
+        ['bonus_maximize-damage']: typeof MaximizeDamageBonus;
         ['bonus_misfortune']: typeof MisfortuneBonus;
         ['bonus_script-call']: typeof ScriptCallBonus;
+
+        // conditional bonuses
+        ['bonus_skill']: typeof SkillBonus;
+        ['bonus_save']: typeof SaveBonus;
 
         ['bonus_menacing']?: typeof MenacingBonus;
         ['bonus_ranged-increment-penalty']?: typeof RangedIncrementPenaltyGlobalBonus;
@@ -280,6 +298,7 @@ export class _RollBonusesAPI {
 
     /** map of every targeted bonus from its key to its type */
     globalTypeMap: {
+        ['global-bonus_damage-multiplier']: typeof DamageMultiplierGlobalBonus;
         ['global-bonus_flanking']: typeof FlankingGlobalBonus;
         ['global-bonus_higher-ground']: typeof HigherGroundGlobalBonus;
         ['global-bonus_range-increment-penalty']: typeof RangedIncrementPenaltyGlobalBonus;
@@ -307,7 +326,9 @@ export class _RollBonusesAPI {
         ['target_is-flanking']: typeof IsFlankingTarget;
         ['target_is-target-within-range']: typeof WhenTargetInRangeTarget;
         ['target_item']: typeof SpecificItemTarget;
+        ['target_relative-size']: typeof RelativeSizeTarget;
         ['target_self']: typeof SelfTarget;
+        ['target_size']: typeof SizeTarget;
         ['target_spell']: typeof SpellTarget;
         ['target_spell-descriptor']: typeof SpellDescriptorTarget;
         ['target_spell-school']: typeof SpellSchoolTarget;
@@ -318,16 +339,36 @@ export class _RollBonusesAPI {
         ['target_weapon-type']: typeof WeaponTypeTarget;
         ['target_when-active']: typeof WhenActiveTarget;
         ['target_while-adjacent-to']: typeof WhileAdjacentToTarget;
+        ['target_while-equipped']: typeof WhileEquippedTarget;
         ['target_while-sharing-with']: typeof WhileSharingSquareWithTarget;
-        ['target_while-weapon-type-equipped']: typeof WhileWeaponTypeTarget;
+        ['target_while-weapon-group-equipped']: typeof WhileWeaponGroupEquippedTarget;
     };
     /** Array of all targeted targets */
     get allTargetTypes(): (typeof BaseTarget)[];
     get allTargetTypesKeys(): string[];
 
+    conditionalTargetTypeMap: {
+        ['alignment']: typeof AlignmentTarget;
+        ['all']: typeof AllTarget;
+        ['combat-state']: typeof CombatStateTarget;
+        ['condition']: typeof ConditionTarget;
+        ['creature-subtype']: typeof CreatureSubtypeTarget;
+        ['creature-type']: typeof CreatureTypeTarget;
+        ['function']: typeof FunctionTarget;
+        ['has-boolean-flag']: typeof HasBooleanFlagTarget;
+        ['is-flanking']: typeof IsFlankingTarget;
+        ['is-target-within-range']: typeof WhenTargetInRangeTarget;
+        ['relative-size']: typeof RelativeSizeTarget;
+        ['size']: typeof SizeTarget;
+        ['token']: typeof TokenTarget;
+        ['when-active']: typeof WhenActiveTarget;
+        ['while-adjacent-to']: typeof WhileAdjacentToTarget;
+        ['while-equipped']: typeof WhileEquippedTarget;
+        ['while-sharing-with']: typeof WhileSharingSquareWithTarget;
+        ['while-weapon-group-equipped']: typeof WhileWeaponGroupEquippedTarget;
+    };
     get allConditionalTargetTypes(): (typeof BaseConditionalTarget)[];
-
-    get allTargetTypesKeys(): (typeof BaseConditionalTarget)[];
+    get allConditionalTargetTypesKeys(): string[];
 
     /** map of every target override from its key to its type */
     targetOverrideTypeMap: {
@@ -431,6 +472,7 @@ export class _RollBonusesAPI {
         v4: {};
         v5: {};
         v6: BaseMigrate;
+        v23: BaseMigrate;
     };
 
     /** Base source classes for extending */
@@ -447,6 +489,7 @@ export class _RollBonusesAPI {
     /** various utility helper methods and classes used throughout the mod */
     utils: {
         actionTypeHelpers: {
+            isCmb: typeof isCmb;
             isHealing: typeof isHealing;
             isMelee: typeof isMelee;
             isNatural: typeof isNatural;
@@ -460,6 +503,7 @@ export class _RollBonusesAPI {
         array: {
             difference: typeof difference;
             distinct: typeof distinct;
+            includes: typeof includes;
             intersection: typeof intersection;
             intersects: typeof intersects;
             listFormat: typeof listFormat;
@@ -499,6 +543,7 @@ export class _RollBonusesAPI {
         registerItemHint: typeof registerItemHint;
         registerSource: (typeof Sources)['registerSource'];
         signed: typeof signed;
+        simplify: typeof simplify;
         simplifyRollFormula: typeof simplifyRollFormula;
         toArray: typeof toArray;
         truthiness: typeof truthiness;

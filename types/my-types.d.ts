@@ -13,6 +13,7 @@ import { UncannyDodgeImproved } from '../src/bonuses/flanking/uncanny-dodge-impr
 import { UnderfootAssault } from '../src/bonuses/flanking/underfoot-assault.mjs';
 import { FuriousFocus } from '../src/bonuses/furious-focus.mjs';
 import { InspirationAmazing } from '../src/bonuses/inspiration/inspiration-amazing.mjs';
+import { InspirationBonus } from '../src/bonuses/inspiration/inspiration-bonus.mjs';
 import { InspirationExtraDie } from '../src/bonuses/inspiration/inspiration-extra-die.mjs';
 import { InspirationFocused } from '../src/bonuses/inspiration/inspiration-focused.mjs';
 import { InspirationTenacious } from '../src/bonuses/inspiration/inspiration-tenacious.mjs';
@@ -42,6 +43,7 @@ import {
     VersatilePerformance,
     VersatilePerformanceExpanded,
 } from '../src/bonuses/versatile-performance.mjs';
+import { VersatileSkill } from '../src/bonuses/versatile-skill.mjs';
 import { VersatileTraining } from '../src/bonuses/versatile-training.mjs';
 import {
     DevastatingStrike,
@@ -63,6 +65,7 @@ import {
 import { WeaponSpecializationGreater } from '../src/bonuses/weapon-specialization/greater-weapon-specialization.mjs';
 import { WeaponSpecialization } from '../src/bonuses/weapon-specialization/weapon-specialization.mjs';
 import { BaseGlobalBonus } from '../src/global-bonuses/base-global-bonus.mjs';
+import { DamageMultiplierGlobalBonus } from '../src/global-bonuses/damage-multiplier-global-bonus.mjs';
 import { FlankingGlobalBonus } from '../src/global-bonuses/flanking-global-bonus.mjs';
 import { HigherGroundGlobalBonus } from '../src/global-bonuses/higher-ground-global-bonus.mjs';
 import { RangedIncrementPenaltyGlobalBonus } from '../src/global-bonuses/ranged-increment-penalty-global-bonus.mjs';
@@ -111,6 +114,7 @@ import { AgileBonus } from '../src/targeted/bonuses/agile.mjs';
 import { AttackBonus } from '../src/targeted/bonuses/attack-bonus.mjs';
 import { BaneBonus } from '../src/targeted/bonuses/bane-bonus.mjs';
 import { CasterLevelBonus } from '../src/targeted/bonuses/caster-level-bonus.mjs';
+import { InitiativeBonus } from '../src/targeted/bonuses/conditional-bonuses.mjs/initiative-bonus.mjs';
 import { SaveBonus } from '../src/targeted/bonuses/conditional-bonuses.mjs/save-bonus.mjs';
 import { ConditionalModifiersBonus } from '../src/targeted/bonuses/conditional-modifiers-bonus.mjs';
 import { CritBonus } from '../src/targeted/bonuses/crit-bonus.mjs';
@@ -123,6 +127,7 @@ import { EnhancementBonus } from '../src/targeted/bonuses/enhancement-bonus.mjs'
 import { FinesseBonus } from '../src/targeted/bonuses/finesse-bonus.mjs';
 import { FootnoteBonus } from '../src/targeted/bonuses/footnote-bonus.mjs';
 import { FortuneBonus } from '../src/targeted/bonuses/fortune-bonus.mjs';
+import { MaximizeDamageBonus } from '../src/targeted/bonuses/maximize-damage-bonus.mjs';
 import { MisfortuneBonus } from '../src/targeted/bonuses/misfortune-bonus.mjs';
 import { ScriptCallBonus } from '../src/targeted/bonuses/script-call-bonus.mjs';
 import { SkillBonus } from '../src/targeted/bonuses/skill-bonus.mjs';
@@ -145,11 +150,15 @@ import { CreatureTypeTarget } from '../src/targeted/targets/conditional/creature
 import { FunctionTarget } from '../src/targeted/targets/conditional/function-target.mjs';
 import { HasBooleanFlagTarget } from '../src/targeted/targets/conditional/has-boolean-flag-target.mjs';
 import { IsFlankingTarget } from '../src/targeted/targets/conditional/is-flanking-target.mjs';
+import { RelativeSizeTarget } from '../src/targeted/targets/conditional/relative-size-target.mjs';
+import { SizeTarget } from '../src/targeted/targets/conditional/size-target.mjs';
 import { WhenTargetInRangeTarget } from '../src/targeted/targets/conditional/is-target-within-range.mjs';
 import { TokenTarget } from '../src/targeted/targets/conditional/token-target.mjs';
 import { WhenActiveTarget } from '../src/targeted/targets/conditional/when-active-target.mjs';
 import { WhileAdjacentToTarget } from '../src/targeted/targets/conditional/while-adjacent-to-target.mjs';
 import { WhileSharingSquareWithTarget } from '../src/targeted/targets/conditional/while-sharing-square-with-target.mjs';
+import { WhileEquippedTarget } from '../src/targeted/targets/conditional/while-equipped-target.mjs';
+import { WhileWeaponGroupEquippedTarget } from '../src/targeted/targets/conditional/while-weapon-group-equipped-target.mjs';
 import { DamageTypeTarget } from '../src/targeted/targets/damage-type-target.mjs';
 import { FinesseTarget } from '../src/targeted/targets/finesse-target.mjs';
 import { SelfTarget } from '../src/targeted/targets/self-target.mjs';
@@ -209,7 +218,7 @@ import { localize } from '../src/util/localize.mjs';
 import { onCreate, onRenderCreate } from '../src/util/on-create.mjs';
 import { onSkillSheetRender } from '../src/util/on-skill-sheet-render-handler.mjs';
 import { PositionalHelper } from '../src/util/positional-helper.mjs';
-import { simplifyRollFormula } from '../src/util/simplify-roll-formula.mjs';
+import { simplify, simplifyRollFormula } from '../src/util/simplify-roll-formula.mjs';
 import { toArray } from '../src/util/to-array.mjs';
 import { signed } from '../src/util/to-signed-string.mjs';
 import { Trait } from '../src/util/trait-builder.mjs';
@@ -268,6 +277,7 @@ declare global {
             ['bonus_crit']: typeof CritBonus;
             ['bonus_damage']: typeof DamageBonus;
             ['bonus_damage-multiplier']: typeof DamageMultiplierBonus;
+            ['bonus_initiative']: typeof InitiativeBonus;
             ['bonus_dc']: typeof DCBonus;
             ['bonus_dice-transform']: typeof DiceTransformBonus;
             ['bonus_effective-size']: typeof EffectiveSizeBonus;
@@ -275,6 +285,7 @@ declare global {
             ['bonus_finesse']: typeof FinesseBonus;
             ['bonus_footnote']: typeof FootnoteBonus;
             ['bonus_fortune']: typeof FortuneBonus;
+            ['bonus_maximize-damage']: typeof MaximizeDamageBonus;
             ['bonus_misfortune']: typeof MisfortuneBonus;
             ['bonus_script-call']: typeof ScriptCallBonus;
 
@@ -292,6 +303,7 @@ declare global {
 
         /** map of every targeted bonus from its key to its type */
         globalTypeMap: {
+            ['global-bonus_damage-multiplier']: typeof DamageMultiplierGlobalBonus;
             ['global-bonus_flanking']: typeof FlankingGlobalBonus;
             ['global-bonus_higher-ground']: typeof HigherGroundGlobalBonus;
             ['global-bonus_range-increment-penalty']: typeof RangedIncrementPenaltyGlobalBonus;
@@ -319,7 +331,9 @@ declare global {
             ['target_is-flanking']: typeof IsFlankingTarget;
             ['target_is-target-within-range']: typeof WhenTargetInRangeTarget;
             ['target_item']: typeof SpecificItemTarget;
+            ['target_relative-size']: typeof RelativeSizeTarget;
             ['target_self']: typeof SelfTarget;
+            ['target_size']: typeof SizeTarget;
             ['target_spell']: typeof SpellTarget;
             ['target_spell-descriptor']: typeof SpellDescriptorTarget;
             ['target_spell-school']: typeof SpellSchoolTarget;
@@ -330,7 +344,9 @@ declare global {
             ['target_weapon-type']: typeof WeaponTypeTarget;
             ['target_when-active']: typeof WhenActiveTarget;
             ['target_while-adjacent-to']: typeof WhileAdjacentToTarget;
+            ['target_while-equipped']: typeof WhileEquippedTarget;
             ['target_while-sharing-with']: typeof WhileSharingSquareWithTarget;
+            ['target_while-weapon-group-equipped']: typeof WhileWeaponGroupEquippedTarget;
         };
         /** Array of all targeted targets */
         get allTargetTypes(): ValueOf<RollBonusesAPI['targetTypeMap']>[];
@@ -347,10 +363,14 @@ declare global {
             ['has-boolean-flag']: typeof HasBooleanFlagTarget;
             ['is-flanking']: typeof IsFlankingTarget;
             ['is-target-within-range']: typeof WhenTargetInRangeTarget;
+            ['relative-size']: typeof RelativeSizeTarget;
+            ['size']: typeof SizeTarget;
             ['token']: typeof TokenTarget;
             ['when-active']: typeof WhenActiveTarget;
             ['while-adjacent-to']: typeof WhileAdjacentToTarget;
+            ['while-equipped']: typeof WhileEquippedTarget;
             ['while-sharing-with']: typeof WhileSharingSquareWithTarget;
+            ['while-weapon-group-equipped']: typeof WhileWeaponGroupEquippedTarget;
         };
         get allConditionalTargetTypes(): ValueOf<
             RollBonusesAPI['conditionalTargetTypeMap']
@@ -391,6 +411,7 @@ declare global {
             ['gang-up']: typeof GangUp;
             ['inspiration']: typeof Inspiration;
             ['inspiration-amazing']: typeof InspirationAmazing;
+            ['inspiration-bonus']: typeof InspirationBonus;
             ['inspiration-extra-die']: typeof InspirationExtraDie;
             ['inspiration-focused']: typeof InspirationFocused;
             ['inspiration-tenacious']: typeof InspirationTenacious;
@@ -411,6 +432,7 @@ declare global {
             ['underfoot-assault']: typeof UnderfootAssault;
             ['versatile-performance']: typeof VersatilePerformance;
             ['versatile-performance-expanded']: typeof VersatilePerformanceExpanded;
+            ['versatile-skill']: typeof VersatileSkill;
             ['versatile-training']: typeof VersatileTraining;
             ['vital-strike']: typeof VitalStrike;
             ['vital-strike-greater']: typeof VitalStrikeGreater;
@@ -538,6 +560,7 @@ declare global {
             registerItemHint: typeof registerItemHint;
             registerSource: (typeof Sources)['registerSource'];
             signed: typeof signed;
+            simplify: typeof simplify;
             simplifyRollFormula: typeof simplifyRollFormula;
             toArray: typeof toArray;
             truthiness: typeof truthiness;
