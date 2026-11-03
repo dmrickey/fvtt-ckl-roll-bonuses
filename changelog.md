@@ -12,6 +12,7 @@
 ### Bugfixes
 
 - Versatile Performance now shows the item hint if you configure on something like a Buff (instead of on the assumed Class Feature)
+- Fixed Damage Type Target item hint so it shows the types' labels instead of the type id.
 
 ## Roll Bonuses 2.23.5
 
