@@ -5,6 +5,10 @@
 - **Versatile Skill**
   - Allows you to swap any skill(s) with a separate source skill. Basically a bard's Versatile Performance but lets you map any source skill to any target skill
 
+### Update
+
+- Allow damage types provided by a Damage Bonus be targeted by Damage Type Target, Elemental CL/DC Targets, and Elemental Focus.
+
 ### Bugfixes
 
 - Versatile Performance now shows the item hint if you configure on something like a Buff (instead of on the assumed Class Feature)

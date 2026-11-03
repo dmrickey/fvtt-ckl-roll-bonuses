@@ -123,6 +123,7 @@ registerItemHint((hintcls, actor, item, _data) => {
  * @param {boolean} [options.skipGenericTarget]
  * @param {never} [options.specificBonusType]
  * @param {U} [options.specificTargetType]
+ * @param {(targetType: typeof BaseTarget, source: ItemPF, thing: ActionUse | ItemPF | ItemAction) => boolean} [options.targetMatcher]
  * @param {'some' | 'every'} [options.thingsFilter]
  * @returns {void}
  */
@@ -137,6 +138,7 @@ registerItemHint((hintcls, actor, item, _data) => {
  * @param {boolean} [options.skipGenericTarget]
  * @param {T} [options.specificBonusType]
  * @param {U} [options.specificTargetType]
+ * @param {(targetType: typeof BaseTarget, source: ItemPF, thing: ActionUse | ItemPF | ItemAction) => boolean} [options.targetMatcher]
  * @param {'some' | 'every'} [options.thingsFilter]
  * @returns {void}
  */
@@ -150,6 +152,7 @@ registerItemHint((hintcls, actor, item, _data) => {
  * @param {boolean} [options.skipGenericTarget]
  * @param {T | never} [options.specificBonusType]
  * @param {U} [options.specificTargetType]
+ * @param {(targetType: typeof BaseTarget, source: ItemPF, thing: ActionUse | ItemPF | ItemAction) => boolean} [options.targetMatcher]
  * @param {'some' | 'every'} [options.thingsFilter]
  */
 export const handleBonusesFor = (
@@ -159,8 +162,9 @@ export const handleBonusesFor = (
         skipGenericTarget = false,
         specificBonusType = undefined,
         specificTargetType = undefined,
+        targetMatcher = (targetType, source, thing) => targetType.doesTargetInclude(source, thing),
         thingsFilter = 'some',
-    } = {}
+    } = {},
 ) => {
     things = toArray(things);
 
@@ -177,9 +181,9 @@ export const handleBonusesFor = (
     } else {
         const targetKeys = specificTargetType
             ? [specificTargetType.key]
-            : (api.allTargetTypes
+            : api.allTargetTypes
                 .filter((targetType) => !skipGenericTarget || !targetType.isGenericTarget)
-                .map((targetType) => targetType.key));
+                .map((targetType) => targetType.key);
 
         sources = intersection(Object.keys(actor.itemFlags.boolean), targetKeys)
             .flatMap((key) => actor.itemFlags?.boolean[key].sources)
@@ -194,14 +198,14 @@ export const handleBonusesFor = (
                 .filter((targetType) => !skipGenericTarget || !targetType.isGenericTarget);
             const someOrEvery = sourceItem.getFlag(MODULE_NAME, 'target-toggle') === 'all' ? 'every' : 'some';
             return !!targets.length
-                && targets[someOrEvery]((sourceTarget) => things[thingsFilter]((thing) => sourceTarget.doesTargetInclude(sourceItem, thing)));
+                && targets[someOrEvery]((sourceTarget) => things[thingsFilter]((thing) => targetMatcher(sourceTarget, sourceItem, thing)));
         })
         .forEach((sourceItem) => sourceItem[MODULE_NAME].bonuses.forEach((bonusType) => {
             if (!specificBonusType || bonusType === specificBonusType) {
                 func(bonusType, sourceItem);
             }
         }));
-}
+};
 
 /**
  * @template {typeof BaseConditionalBonus} t

@@ -33,6 +33,16 @@ export class DamageBonus extends BaseBonus {
     static get label() { return localize('PF1.DamageBonus'); }
 
     /**
+     * @param {ItemPF} source
+     * @returns {string[]}
+     */
+    static getAddedDamageTypes(source) {
+        return this.#getCachedDamageBonuses(source)
+            .filter(({ formula }) => !!formula?.trim())
+            .flatMap(({ types }) => types ?? []);
+    }
+
+    /**
      * @override
      * @inheritdoc
      * @param {ItemPF} item

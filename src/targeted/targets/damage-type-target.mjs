@@ -33,6 +33,16 @@ export class DamageTypeTarget extends BaseTarget {
     }
 
     /**
+     * @param {ItemPF} source
+     * @param {string[] | Set<string>} damageTypes
+     * @returns {boolean}
+     */
+    static matchesDamageTypes(source, damageTypes) {
+        const targetedTypes = source.getFlag(MODULE_NAME, this.key);
+        return intersects(damageTypes, targetedTypes);
+    }
+
+    /**
      * @override
      * @inheritdoc
      * @param {ItemPF & {actor: ActorPF}} _item
@@ -41,12 +51,8 @@ export class DamageTypeTarget extends BaseTarget {
      * @returns {ItemPF[]}
      */
     static _getSourcesFor(_item, sources, doc) {
-        const filteredSources = sources.filter((source) => {
-            const targetedTypes = source.getFlag(MODULE_NAME, this.key);
-            const actionDamageTypes = getActionDamageTypes(doc);
-            return intersects(actionDamageTypes, targetedTypes);
-        });
-
+        const actionDamageTypes = getActionDamageTypes(doc);
+        const filteredSources = sources.filter((source) => this.matchesDamageTypes(source, actionDamageTypes));
         return filteredSources;
     }
 
