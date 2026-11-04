@@ -4,6 +4,16 @@ import { CklSkillConfig } from './ckl-skill-config.mjs';
 import { CklSkillData } from './ckl-skill-data.mjs';
 
 /**
+ * @deprecated
+ *
+ *  DDDD   EEEEE  PPPP   RRRR   EEEEE   CCCC   AAAAA  TTTTT  EEEEE  DDDD
+ *  D   D  E      P   P  R   R  E       C      A   A    T    E      D   D
+ *  D   D  EEEE   PPPP   RRRR   EEEE    C      AAAAA    T    EEEE   D   D
+ *  D   D  E      P      R  R   E       C      A   A    T    E      D   D
+ *  DDDD   EEEEE  P      R   R  EEEEE   CCCC   A   A    T    EEEEE  DDDD
+ *
+ *  THIS DOCUMENTATION IS DEPRECATED.
+ * 
  * @param {string} id
  * @returns Created button @see {@link HTMLAnchorElement}
  */
