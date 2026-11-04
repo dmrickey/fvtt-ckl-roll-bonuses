@@ -4,6 +4,8 @@
 
 - **Versatile Skill**
   - Allows you to swap any skill(s) with a separate source skill. Basically a bard's Versatile Performance but lets you map any source skill to any target skill
+- **Take 10**
+  - Allows you to define bonuses to skills when taking 10.
 
 ### Update
 

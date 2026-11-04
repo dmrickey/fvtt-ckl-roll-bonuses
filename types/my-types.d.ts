@@ -39,6 +39,7 @@ import {
     SpellFocusMythic,
 } from '../src/bonuses/spells/spell-focus.mjs';
 import { SpellSpecialization } from '../src/bonuses/spells/spell-specialization.mjs';
+import { TakeTenBonus } from '../src/bonuses/take-ten.mjs';
 import {
     VersatilePerformance,
     VersatilePerformanceExpanded,
@@ -150,14 +151,14 @@ import { CreatureTypeTarget } from '../src/targeted/targets/conditional/creature
 import { FunctionTarget } from '../src/targeted/targets/conditional/function-target.mjs';
 import { HasBooleanFlagTarget } from '../src/targeted/targets/conditional/has-boolean-flag-target.mjs';
 import { IsFlankingTarget } from '../src/targeted/targets/conditional/is-flanking-target.mjs';
+import { WhenTargetInRangeTarget } from '../src/targeted/targets/conditional/is-target-within-range.mjs';
 import { RelativeSizeTarget } from '../src/targeted/targets/conditional/relative-size-target.mjs';
 import { SizeTarget } from '../src/targeted/targets/conditional/size-target.mjs';
-import { WhenTargetInRangeTarget } from '../src/targeted/targets/conditional/is-target-within-range.mjs';
 import { TokenTarget } from '../src/targeted/targets/conditional/token-target.mjs';
 import { WhenActiveTarget } from '../src/targeted/targets/conditional/when-active-target.mjs';
 import { WhileAdjacentToTarget } from '../src/targeted/targets/conditional/while-adjacent-to-target.mjs';
-import { WhileSharingSquareWithTarget } from '../src/targeted/targets/conditional/while-sharing-square-with-target.mjs';
 import { WhileEquippedTarget } from '../src/targeted/targets/conditional/while-equipped-target.mjs';
+import { WhileSharingSquareWithTarget } from '../src/targeted/targets/conditional/while-sharing-square-with-target.mjs';
 import { WhileWeaponGroupEquippedTarget } from '../src/targeted/targets/conditional/while-weapon-group-equipped-target.mjs';
 import { DamageTypeTarget } from '../src/targeted/targets/damage-type-target.mjs';
 import { FinesseTarget } from '../src/targeted/targets/finesse-target.mjs';
@@ -423,6 +424,7 @@ declare global {
             ['skill-rank-override']: typeof SkillRankOverride;
             ['snake-sidewind']: typeof SnakeSidewind;
             ['solo-tactics']: typeof SoloTactics;
+            ['take-ten']: typeof TakeTenBonus;
             ['spell-focus']: typeof SpellFocus;
             ['spell-focus-greater']: typeof SpellFocusGreater;
             ['spell-focus-mythic']: typeof SpellFocusMythic;

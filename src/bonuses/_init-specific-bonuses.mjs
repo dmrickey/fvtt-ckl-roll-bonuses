@@ -22,6 +22,7 @@ import { RollSkillUntrained } from './roll-untrained.mjs';
 import { SkillRankOverride } from './skill-rank-override.mjs';
 import { SnakeSidewind } from './snake-sidewind.mjs';
 import { SoloTactics } from './solo-tactics.mjs';
+import { TakeTenBonus } from './take-ten.mjs';
 import { ElementalCl, ElementalDc } from './spells/base-elemental-cl-dc.mjs';
 import { ElementalFocus, ElementalFocusGreater, ElementalFocusMythic } from './spells/elemental-focus.mjs';
 import { SpellFocus, SpellFocusGreater, SpellFocusMythic } from './spells/spell-focus.mjs';
@@ -76,6 +77,7 @@ const allSpecificBonuses = [
     SkillRankOverride,
     SnakeSidewind,
     SoloTactics,
+    TakeTenBonus,
     SpellFocus,
     SpellFocusGreater,
     SpellFocusMythic,

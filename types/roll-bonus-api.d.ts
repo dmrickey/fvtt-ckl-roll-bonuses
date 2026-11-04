@@ -39,6 +39,7 @@ import {
     SpellFocusMythic,
 } from '../src/bonuses/spells/spell-focus.mjs';
 import { SpellSpecialization } from '../src/bonuses/spells/spell-specialization.mjs';
+import { TakeTenBonus } from '../src/bonuses/take-ten.mjs';
 import {
     VersatilePerformance,
     VersatilePerformanceExpanded,
@@ -114,6 +115,8 @@ import { AttackBonus } from '../src/targeted/bonuses/attack-bonus.mjs';
 import { BaneBonus } from '../src/targeted/bonuses/bane-bonus.mjs';
 import { CasterLevelBonus } from '../src/targeted/bonuses/caster-level-bonus.mjs';
 import { InitiativeBonus } from '../src/targeted/bonuses/conditional-bonuses.mjs/initiative-bonus.mjs';
+import { SaveBonus } from '../src/targeted/bonuses/conditional-bonuses.mjs/save-bonus.mjs';
+import { SkillBonus } from '../src/targeted/bonuses/conditional-bonuses.mjs/skill-bonus.mjs';
 import { ConditionalModifiersBonus } from '../src/targeted/bonuses/conditional-modifiers-bonus.mjs';
 import { CritBonus } from '../src/targeted/bonuses/crit-bonus.mjs';
 import { DamageBonus } from '../src/targeted/bonuses/damage-bonus.mjs';
@@ -127,9 +130,7 @@ import { FootnoteBonus } from '../src/targeted/bonuses/footnote-bonus.mjs';
 import { FortuneBonus } from '../src/targeted/bonuses/fortune-bonus.mjs';
 import { MaximizeDamageBonus } from '../src/targeted/bonuses/maximize-damage-bonus.mjs';
 import { MisfortuneBonus } from '../src/targeted/bonuses/misfortune-bonus.mjs';
-import { SaveBonus } from '../src/targeted/bonuses/conditional-bonuses.mjs/save-bonus.mjs';
 import { ScriptCallBonus } from '../src/targeted/bonuses/script-call-bonus.mjs';
-import { SkillBonus } from '../src/targeted/bonuses/conditional-bonuses.mjs/skill-bonus.mjs';
 import { Sources } from '../src/targeted/source-registration.mjs';
 import { BaseTargetOverride } from '../src/targeted/target-overides/_base-target-override.mjs';
 import { FinesseOverride } from '../src/targeted/target-overides/finesse-override.mjs';
@@ -149,9 +150,9 @@ import { CreatureTypeTarget } from '../src/targeted/targets/conditional/creature
 import { FunctionTarget } from '../src/targeted/targets/conditional/function-target.mjs';
 import { HasBooleanFlagTarget } from '../src/targeted/targets/conditional/has-boolean-flag-target.mjs';
 import { IsFlankingTarget } from '../src/targeted/targets/conditional/is-flanking-target.mjs';
+import { WhenTargetInRangeTarget } from '../src/targeted/targets/conditional/is-target-within-range.mjs';
 import { RelativeSizeTarget } from '../src/targeted/targets/conditional/relative-size-target.mjs';
 import { SizeTarget } from '../src/targeted/targets/conditional/size-target.mjs';
-import { WhenTargetInRangeTarget } from '../src/targeted/targets/conditional/is-target-within-range.mjs';
 import { TokenTarget } from '../src/targeted/targets/conditional/token-target.mjs';
 import { WhenActiveTarget } from '../src/targeted/targets/conditional/when-active-target.mjs';
 import { WhileAdjacentToTarget } from '../src/targeted/targets/conditional/while-adjacent-to-target.mjs';
@@ -410,6 +411,7 @@ export class _RollBonusesAPI {
         ['skill-rank-override']: typeof SkillRankOverride;
         ['snake-sidewind']: typeof SnakeSidewind;
         ['solo-tactics']: typeof SoloTactics;
+        ['take-ten']: typeof TakeTenBonus;
         ['spell-focus']: typeof SpellFocus;
         ['spell-focus-greater']: typeof SpellFocusGreater;
         ['spell-focus-mythic']: typeof SpellFocusMythic;
