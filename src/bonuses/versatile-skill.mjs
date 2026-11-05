@@ -1,6 +1,7 @@
 
 import { MODULE_NAME } from '../consts.mjs';
 import { keyValueSelect } from '../handlebars-handlers/bonus-inputs/key-value-select.mjs';
+import { showLabel } from '../handlebars-handlers/bonus-inputs/show-label.mjs';
 import { traitInput } from '../handlebars-handlers/trait-input.mjs';
 import { getCachedBonuses } from '../util/get-cached-bonuses.mjs';
 import { getSkillName } from '../util/get-skill-name.mjs';
@@ -14,6 +15,8 @@ export class VersatileSkill extends SpecificBonus {
     /** @inheritdoc @override */
     static get sourceKey() { return 'versatile-skill'; }
     static get selectedKey() { return `${this.key}-selected`; }
+    /** @inheritdoc @override */
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#versatile-skill'; }
 
     /**
      * @inheritdoc
@@ -37,11 +40,20 @@ export class VersatileSkill extends SpecificBonus {
                 const choices = getSkillChoices(item.actor, { includeAll: false, isEditable: true });
                 const base = /** @type {SkillId | undefined} */ (item.getFlag(MODULE_NAME, this.key));
 
+                showLabel({
+                    item,
+                    journal: this.journal,
+                    key: this.key,
+                    parent: html,
+                }, {
+                    inputType: 'specific-bonus',
+                });
+
                 keyValueSelect({
                     choices,
                     current: isEditable ? base : /** @type {any} */ ({ label: base ? (choices[base] ?? base) : '' }),
                     item,
-                    journal: '',
+                    journal: this.journal,
                     key: this.key,
                     label: localize('versatile-skill.source'),
                     parent: html,
@@ -49,6 +61,7 @@ export class VersatileSkill extends SpecificBonus {
                 }, {
                     canEdit: isEditable,
                     inputType: 'specific-bonus',
+                    isSubLabel: true,
                 });
 
                 traitInput({
@@ -56,7 +69,7 @@ export class VersatileSkill extends SpecificBonus {
                     description: localize('versatile-skill.description'),
                     hasCustom: false,
                     item,
-                    journal: '',
+                    journal: this.journal,
                     key: this.selectedKey,
                     label: localize('versatile-skill.targets'),
                     parent: html,
@@ -64,6 +77,7 @@ export class VersatileSkill extends SpecificBonus {
                 }, {
                     canEdit: isEditable,
                     inputType: 'specific-bonus',
+                    isSubLabel: true,
                 });
             },
         };

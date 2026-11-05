@@ -17,7 +17,7 @@ export class TakeTenBonus extends SpecificBonus {
     static get sourceKey() { return 'take-ten'; }
 
     /** @inheritdoc @override */
-    static get journal() { return ''; }
+    static get journal() { return 'Compendium.ckl-roll-bonuses.roll-bonuses-documentation.JournalEntry.FrG2K3YAM1jdSxcC.JournalEntryPage.ez01dzSQxPTiyXor#take-10'; }
 
     static get formulaKey() { return `${this.key}-formula`; }
     static get changeTypeKey() { return `${this.key}-type`; }
