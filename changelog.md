@@ -1,3 +1,21 @@
+## Roll Bonuses 2.24.0
+
+### New Bonuses
+
+- **Versatile Skill**
+  - Allows you to swap any skill(s) with a separate source skill. Basically a bard's Versatile Performance but lets you map any source skill to any target skill
+- **Take 10**
+  - Allows you to define bonuses to skills when taking 10.
+
+### Update
+
+- Allow damage types provided by a Damage Bonus be targeted by Damage Type Target, Elemental CL/DC Targets, and Elemental Focus.
+
+### Bugfixes
+
+- Versatile Performance now shows the item hint if you configure on something like a Buff (instead of on the assumed Class Feature)
+- Fixed Damage Type Target item hint so it shows the types' labels instead of the type id.
+
 ## Roll Bonuses 2.23.5
 
 ### Bugfixes

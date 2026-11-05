@@ -22,11 +22,13 @@ import { RollSkillUntrained } from './roll-untrained.mjs';
 import { SkillRankOverride } from './skill-rank-override.mjs';
 import { SnakeSidewind } from './snake-sidewind.mjs';
 import { SoloTactics } from './solo-tactics.mjs';
+import { TakeTenBonus } from './take-ten.mjs';
 import { ElementalCl, ElementalDc } from './spells/base-elemental-cl-dc.mjs';
 import { ElementalFocus, ElementalFocusGreater, ElementalFocusMythic } from './spells/elemental-focus.mjs';
 import { SpellFocus, SpellFocusGreater, SpellFocusMythic } from './spells/spell-focus.mjs';
 import { SpellSpecialization } from './spells/spell-specialization.mjs';
 import { VersatilePerformance, VersatilePerformanceExpanded } from './versatile-performance.mjs';
+import { VersatileSkill } from './versatile-skill.mjs';
 import { VersatileTraining } from './versatile-training.mjs';
 import { DevastatingStrike, DevastatingStrikeImproved } from './vital-strike/devastating-strike.mjs';
 import { VitalStrike, VitalStrikeGreater, VitalStrikeImproved, VitalStrikeMythic } from './vital-strike/vital-strike.mjs';
@@ -75,6 +77,7 @@ const allSpecificBonuses = [
     SkillRankOverride,
     SnakeSidewind,
     SoloTactics,
+    TakeTenBonus,
     SpellFocus,
     SpellFocusGreater,
     SpellFocusMythic,
@@ -84,6 +87,7 @@ const allSpecificBonuses = [
     UnderfootAssault,
     VersatilePerformance,
     VersatilePerformanceExpanded,
+    VersatileSkill,
     VersatileTraining,
     VitalStrike,
     VitalStrikeGreater,

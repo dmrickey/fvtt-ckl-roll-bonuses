@@ -28,8 +28,21 @@ export class DamageTypeTarget extends BaseTarget {
      * @returns {Nullable<string[]>}
      */
     static getHints(source) {
-        const groups = source.getFlag(MODULE_NAME, this.key) ?? [];
-        return groups.filter(truthiness);
+        /** @type {string[]} */
+        const damageTypes = source.getFlag(MODULE_NAME, this.key) ?? [];
+        return damageTypes
+            .filter(truthiness)
+            .map((type) => pf1.registry.damageTypes.get(type)?.name ?? type);
+    }
+
+    /**
+     * @param {ItemPF} source
+     * @param {string[] | Set<string>} damageTypes
+     * @returns {boolean}
+     */
+    static matchesDamageTypes(source, damageTypes) {
+        const targetedTypes = source.getFlag(MODULE_NAME, this.key);
+        return intersects(damageTypes, targetedTypes);
     }
 
     /**
@@ -41,12 +54,8 @@ export class DamageTypeTarget extends BaseTarget {
      * @returns {ItemPF[]}
      */
     static _getSourcesFor(_item, sources, doc) {
-        const filteredSources = sources.filter((source) => {
-            const targetedTypes = source.getFlag(MODULE_NAME, this.key);
-            const actionDamageTypes = getActionDamageTypes(doc);
-            return intersects(actionDamageTypes, targetedTypes);
-        });
-
+        const actionDamageTypes = getActionDamageTypes(doc);
+        const filteredSources = sources.filter((source) => this.matchesDamageTypes(source, actionDamageTypes));
         return filteredSources;
     }
 

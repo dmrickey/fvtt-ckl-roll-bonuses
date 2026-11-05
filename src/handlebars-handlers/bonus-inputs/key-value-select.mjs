@@ -57,11 +57,14 @@ export function keyValueSelect({
         errorMsg = localize('string-select.no-choices');
     }
 
+    const currentLabel = choices.find((choice) => choice.key === current)?.label ?? current ?? '';
+
     const div = createTemplate(
         templates.keyValueSelect,
         {
             choices,
             current,
+            currentLabel,
             errorMsg,
             isSubLabel,
             journal,
